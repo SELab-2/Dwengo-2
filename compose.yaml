@@ -1,40 +1,41 @@
 version: '3.9'
 
 services:
-  frontend:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile
-    volumes:
-      - ./frontend:/workspace/frontend
-    working_dir: /workspace/frontend
-    command: npm start
-    ports:
-      - "4200:4200"
-
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
-    volumes:
-      - ./backend:/workspace/backend
-    working_dir: /workspace/backend
-    command: npm run dev
+      context: .
+      target: backend
     ports:
       - "3000:3000"
     depends_on:
       - database
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./backend:/workspace/backend
+
+  frontend:
+    build:
+      context: .
+      target: frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./frontend:/workspace/frontend
 
   database:
-    image: postgres:alpine
+    build:
+      context: .
+      target: database
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database:/workspace/database
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=dwengo-database
-    volumes:
-      - dwengo-database:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-
-volumes:
-  dwengo-database:
