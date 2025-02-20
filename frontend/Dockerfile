@@ -1,11 +1,15 @@
-FROM node:22-alpine
+FROM node:alpine
+WORKDIR /workspace/frontend
+COPY package.json package-lock.json ./
 
-WORKDIR /usr/src/app
-
-COPY . /usr/src/app
-
-RUN npm install -g @angular/cli
-
+# Install dependencies
 RUN npm install
 
-CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "12288"]
+# Copy the rest of the application files
+COPY . .
+
+# Expose the port Angular uses
+EXPOSE 4200
+
+# Default command to start the frontend
+CMD ["npm", "start"]

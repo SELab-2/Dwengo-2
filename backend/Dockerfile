@@ -1,28 +1,15 @@
-# This Dockerfile was generated using ChatGPT
-FROM node:alpine AS builder
-
-WORKDIR /app
-
+FROM node:alpine
+WORKDIR /workspace/backend
 COPY package.json package-lock.json ./
 
-RUN npm ci
-RUN npm install express
-RUN npm install -D typescript ts-node-dev @types/express @types/cors
+# Install dependencies
+RUN npm install
 
-COPY tsconfig.json ./
-COPY src ./src
+# Copy the rest of the application files
+COPY . .
 
-RUN npm run build
-
-FROM node:alpine AS runtime
-
-WORKDIR /app
-
-COPY --from=builder /app/package.json /app/package-lock.json ./
-COPY --from=builder /app/dist ./dist
-
-RUN npm ci --omit=dev
-
+# Expose the port for the backend
 EXPOSE 3000
 
-CMD ["node", "dist/index.js"]
+# Default command to start the backend
+CMD ["npm", "run", "dev"]
