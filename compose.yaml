@@ -34,7 +34,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./database:/workspace/database
+      - ./backend/src/infrastructure/database:/workspace/database
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
