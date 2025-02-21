@@ -1,14 +1,12 @@
 # Backend set-up
-FROM node:alpine AS backend
+FROM node:22-alpine AS backend
 WORKDIR /workspace/backend
-COPY ./backend/package.json ./backend/package-lock.json ./
+COPY ./backend/ ./
 
 RUN npm install
-RUN apk update && apk add git
+RUN npm install -g nodemon ts-node typescript tsconfig-paths
 
-COPY .git/ /workspace/.git/
 
-COPY ./backend/ ./
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
@@ -29,15 +27,11 @@ CMD ["npm", "start"]
 # Database set-up
 FROM postgres:alpine AS database
 WORKDIR /workspace/database
+COPY ./database/ ./
 
 ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=postgres
 ENV POSTGRES_DB=dwengo-database
 
-RUN apk update && apk add git
-
-COPY .git/ /workspace/.git/
-
 EXPOSE 5432
-COPY ./database/ ./
 CMD ["postgres"]

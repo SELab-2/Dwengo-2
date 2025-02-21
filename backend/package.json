@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -26,14 +26,20 @@
   },
   "homepage": "https://github.com/SELab-2/Dwengo-2#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "nodemon": "^3.1.9"
+    "reflect-metadata": "^0.2.1",
+    "typeorm": "^0.3.17"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^5.0.0",
-    "ts-node-dev": "^2.0.0",
+    "@types/node": "^20.8.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.0.0",
     "typescript": "^5.7.3"
   }
 }
