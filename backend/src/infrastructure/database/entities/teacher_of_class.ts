@@ -5,12 +5,12 @@ import { Class } from "./class.ts"
 @Entity()
 export class TeacherOfClass {
     @PrimaryColumn()
-    @OneToOne(type => Teacher)
+    @OneToOne(() => Teacher)
     @JoinColumn()
     teacher: Teacher
 
     @PrimaryColumn()
-    @OneToOne(type => Class)
+    @OneToOne(() => Class)
     @JoinColumn()
     class: Class
 

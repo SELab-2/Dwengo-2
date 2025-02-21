@@ -1,4 +1,4 @@
-import { DataSource } from "typeorm"
+import { DataSource, TypeORMError } from "typeorm"
 
 /**
  * A TypeORM DataSource holds all the database connection settings and establishes
