@@ -4,7 +4,7 @@ WORKDIR /workspace/backend
 COPY ./backend/ ./
 
 RUN npm install
-RUN npm install -g nodemon ts-node typescript tsconfig-paths pg@^8.13.3
+RUN npm install -g nodemon ts-node typescript tsconfig-paths pg
 
 
 EXPOSE 3000
