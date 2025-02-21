@@ -227,16 +227,8 @@ paths:
             schema:
               type: object
               required:
-                - operation
                 - data
               properties:
-                operation:
-                  type: string
-                  enum:
-                    - accept
-                    - reject
-                    - addRequest
-                  description: Type of operation to perform
                 data:
                   $ref: '#/components/schemas/ClassUpdate'
       responses:
@@ -364,16 +356,8 @@ paths:
             schema:
               type: object
               required:
-                - operation
                 - data
               properties:
-                operation:
-                  type: string
-                  enum:
-                    - accept
-                    - reject
-                    - addRequest
-                  description: Type of operation to perform
                 data:
                   $ref: '#/components/schemas/GroupUpdate'
       responses:
@@ -474,7 +458,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  '/objects/{id}':
+  '/paths/{idPath}/objects/{idObject}':
     get:
       tags:
         - objects
@@ -483,7 +467,13 @@ paths:
       operationId: getObjectById
       parameters:
         - in: path
-          name: id
+          name: idPath
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idObject
           required: true
           schema:
             type: string
@@ -503,7 +493,13 @@ paths:
       operationId: updateObject
       parameters:
         - in: path
-          name: id
+          name: idPath
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idObject
           required: true
           schema:
             type: string
@@ -529,7 +525,13 @@ paths:
       operationId: deleteObject
       parameters:
         - in: path
-          name: id
+          name: idPath
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idObject
           required: true
           schema:
             type: string
@@ -541,13 +543,20 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  /objects:
+  '/paths/{id}/objects':
     get:
       tags:
         - objects
       summary: Get all learning objects
       description: Retrieve a list of all learning objects in the system.
       operationId: getObjects
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           $ref: '#/components/responses/LearningObjectsOK'
@@ -559,6 +568,13 @@ paths:
       summary: Create new object
       description: Create a new learning object.
       operationId: createObject
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -841,16 +857,8 @@ paths:
             schema:
               type: object
               required:
-                - operation
                 - data
               properties:
-                operation:
-                  type: string
-                  enum:
-                    - accept
-                    - reject
-                    - addRequest
-                  description: Type of operation to perform
                 data:
                   $ref: '#/components/schemas/CourseUpdate'
       responses:
