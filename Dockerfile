@@ -1,19 +1,24 @@
 # Backend set-up
-FROM node:alpine AS backend
+FROM node:22-alpine AS backend
 WORKDIR /workspace/backend
 COPY ./backend/ ./
 
 RUN npm install
+RUN npm install -g nodemon ts-node typescript tsconfig-paths
+
 
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
 # Frontend set-up
-FROM node:alpine AS frontend
+FROM node:22-alpine AS frontend
 WORKDIR /workspace/frontend
-COPY ./frontend/ ./
+COPY ./frontend/package.json ./frontend/package-lock.json ./
 
 RUN npm install
+RUN npm install -g @angular/cli
+
+COPY ./backend/ ./
 
 EXPOSE 4200
 CMD ["npm", "start"]
