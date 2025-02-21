@@ -13,16 +13,16 @@ EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
 # Frontend set-up
-FROM node:alpine AS frontend
+# Frontend setup
+FROM node:18-alpine AS frontend 
+# Use stable LTS Node version
 WORKDIR /workspace/frontend
-COPY ./frontend/package.json ./frontend/package-lock.json ./
+# Copy application files
+COPY ./frontend/ ./
 
 RUN npm install
-RUN apk update && apk add git
+RUN npm install -g @angular/cli
 
-COPY .git/ /workspace/.git/
-
-COPY ./frontend/ ./
 EXPOSE 4200
 CMD ["npm", "start"]
 

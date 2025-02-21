@@ -13,13 +13,13 @@
                 "eamodio.gitlens"
             ],
             "settings": {
-                "terminal.integrated.shell.linux": "/bin/bash",
+                "terminal.integrated.shell.linux": "/bin/sh",
                 "editor.formatOnSave": true,
                 "typescript.tsdk": "/workspace/frontend/node_modules/typescript/lib",
                 "eslint.nodePath": "/workspace/frontend/node_modules"
             }
         },
         "postCreateCommand": "npm install",
-        "forwardPorts": [3000, 4200, 5432]
+        "forwardPorts": [4200]
     }
 }
