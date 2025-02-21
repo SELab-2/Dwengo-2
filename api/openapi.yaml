@@ -1,0 +1,1074 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: Dwengo API
+  description: |
+    The Dwengo API facilitates user authentication, management of users, classes, groups, courses, learning objects, learning paths, assignments, and interactive Q&A features for the Dwengo learning platform.
+  contact:
+    email: you@your-company.com
+  license:
+    name: MIT
+    url: 'https://mit-license.org/'
+# TODO - Email update
+# TODO - Check if we can reuse request bodies
+# TODO - Create a schema for the operations field in bodies
+# TODO - Url query parameters like ?page=<nr>
+# TODO - Defining the resources structures
+# TODO - Should we add courses as resource is this an optional feature
+# TODO - We have assignments but what about interactive learning objects that act as tasks
+# TODO - Think of how to handle the questions/chat, operations or not
+# TODO - Code for joining a class, maybe /<method> endpoint (e.g. join)
+# TODO - How to handle token expiration, how to detect it and how to refresh it, sign out and in or ...
+# TODO - Examples I guess
+# TODO - Groups this is an example we need a generic operations schema if we wish to simplify as it differs from the classes operations if we want the group assignment to not go through a code but instead through teacher assignment
+# TODO - Were multiple teachers an option?
+# TODO - For those generic schemas using anyOf when referencing can we define "which of" for the local $ref
+tags:
+  - name: authentication
+    description: User registration and authentication endpoints
+  - name: users
+    description: User management operations
+  - name: classes
+    description: Class management and enrollment
+  - name: groups
+    description: Class group management and assignment
+  - name: courses
+    description: Course management and student participation
+  - name: objects
+    description: Educational content and materials
+  - name: paths
+    description: Educational content and materials paths
+  - name: assignments
+    description: Assignment creation and management
+  - name: questions
+    description: Q&A functionality and interactions
+security:
+  - apiKeyAuth: []  # This applies the security scheme globally
+paths:
+  /register:
+    post:
+      tags:
+        - authentication
+      security: []
+      summary: Register a new user
+      description: Create a new user account. No authentication required.
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /login:
+    post:
+      tags:
+        - authentication
+      security: []
+      summary: Login user
+      description: Authenticate a user and obtain an API token. No authentication required.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: Get user by ID
+      description: Retrieves detailed information about a specific user by their unique identifier.
+      operationId: getUserById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      tags:
+        - users
+      summary: Update user data
+      description: Modify user information. Only accessible by the user themselves or administrators.
+      operationId: updateUser
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags:
+        - users
+      summary: Delete user
+      description: Delete a user account by their unique identifier.
+      operationId: deleteUser
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get all users
+      description: Retrieve a list of all users in the system.
+      operationId: getUsers
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - users
+      summary: Create new user
+      description: Create a new user account, typically used by administrators.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /classes/{id}:
+    get:
+      tags:
+        - classes
+      summary: Get class by ID
+      description: Retrieve detailed information about a specific class by its unique identifier.
+      operationId: getClassById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      tags:
+        - classes
+      summary: Update class data
+      description: Modify class information. Supports operations such as accepting or rejecting requests, or adding a new request.
+      operationId: updateClass
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - operation
+                - data
+              properties:
+                operation:
+                  type: string
+                  enum: [accept, reject, addRequest]
+                  description: Type of operation to perform
+                data:
+                  $ref: '#/components/schemas/ClassUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags:
+        - classes
+      summary: Delete class
+      description: Delete a class by its unique identifier.
+      operationId: deleteClass
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /classes:
+    get:
+      tags:
+        - classes
+      summary: Get all classes
+      description: Retrieve a list of all classes in the system.
+      operationId: getClasses
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - classes
+      summary: Create new class
+      description: Create a new class.
+      operationId: createClass
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /groups/{id}:
+    get:
+      tags:
+        - groups
+      summary: Get class group by ID
+      description: Retrieve detailed information about a specific class group by its unique identifier.
+      operationId: getGroupById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      tags:
+        - groups
+      summary: Update class group data
+      description: Modify class group information. Supports operations such as accepting or rejecting requests, or adding a new request.
+      operationId: updateGroup
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - operation
+                - data
+              properties:
+                operation:
+                  type: string
+                  enum: [accept, reject, addRequest]
+                  description: Type of operation to perform
+                data:
+                  $ref: '#/components/schemas/GroupUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags:
+        - groups
+      summary: Delete class group
+      description: Delete a class group by its unique identifier.
+      operationId: deleteGroup
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /groups:
+    get:
+      tags:
+        - groups
+      summary: Get all class groups
+      description: Retrieve a list of all class groups in the system.
+      operationId: getGroups
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - groups
+      summary: Create new class group
+      description: Create a new class group.
+      operationId: createGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /objects/{id}:
+    get:
+      tags:
+        - objects
+      summary: Get learning object by ID
+      description: Retrieve detailed information about a specific learning object by its unique identifier.
+      operationId: getObjectById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      tags:
+        - objects
+      summary: Update learning object
+      description: Modify a learning object.
+      operationId: updateObject
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LearningObjectUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags:
+        - objects
+      summary: Delete learning object
+      description: Delete a learning object by its unique identifier.
+      operationId: deleteObject
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /objects:
+    get:
+      tags:
+        - objects
+      summary: Get all learning objects
+      description: Retrieve a list of all learning objects in the system.
+      operationId: getObjects
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - objects
+      summary: Create new object
+      description: Create a new learning object.
+      operationId: createObject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LearningObjectCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /paths/{id}:
+    get:
+      tags:
+        - paths
+      summary: Get learning path by ID
+      description: Retrieve detailed information about a specific learning path by its unique identifier.
+      operationId: getPathById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      tags:
+        - paths
+      summary: Update learning path
+      description: Modify a learning path.
+      operationId: updatePath
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LearningPathUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags:
+        - paths
+      summary: Delete learning path
+      description: Delete a learning path by its unique identifier.
+      operationId: deletePath
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /paths:
+    get:
+      tags:
+        - paths
+      summary: Get all learning path
+      description: Retrieve a list of all learning paths in the system.
+      operationId: getPaths
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - paths
+      summary: Create new path
+      description: Create a new learning path.
+      operationId: createPath
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LearningPathCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /assignments/{id}:
+    get:
+      tags:
+        - assignments
+      summary: Get assignment by ID
+      description: Retrieve detailed information about a specific assignment by its unique identifier.
+      operationId: getAssignmentById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      tags:
+        - assignments
+      summary: Update assignment
+      description: Modify an assignment.
+      operationId: updateAssignment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignmentUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags:
+        - assignments
+      summary: Delete assignment
+      description: Delete an assignment by its unique identifier.
+      operationId: deleteAssignment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /assignments:
+    get:
+      tags:
+        - assignments
+      summary: Get all assignments
+      description: Retrieve a list of all assignments in the system.
+      operationId: getAssignments
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - assignments
+      summary: Create new assignment
+      description: Create a new assignment.
+      operationId: createAssignment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignmentCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /courses/{id}:
+    get:
+      tags:
+        - courses
+      summary: Get course by ID
+      description: Retrieve detailed information about a specific course by its unique identifier.
+      operationId: getCourseById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      tags:
+        - courses
+      summary: Update course
+      description: Modify course information. Supports operations such as accepting or rejecting requests, or adding a new request.
+      operationId: updateCourse
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - operation
+                - data
+              properties:
+                operation:
+                  type: string
+                  enum: [accept, reject, addRequest]
+                  description: Type of operation to perform
+                data:
+                  $ref: '#/components/schemas/CourseUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags:
+        - courses
+      summary: Delete course
+      description: Delete a course by its unique identifier.
+      operationId: deleteCourse
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /courses:
+    get:
+      tags:
+        - courses
+      summary: Get all courses
+      description: Retrieve a list of all courses in the system.
+      operationId: getCourses
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - courses
+      summary: Create new course
+      description: Create a new course.
+      operationId: createCourse
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /questions/{id}:
+    get:
+      tags:
+        - questions
+      summary: Get question by ID
+      description: Retrieve detailed information about a specific question by its unique identifier.
+      operationId: getQuestionById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      tags:
+        - questions
+      summary: Update question (answer or add remarks)
+      description: Modify a question, such as adding an answer or remarks.
+      operationId: updateQuestion
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags:
+        - questions
+      summary: Delete question
+      description: Delete a question by its unique identifier.
+      operationId: deleteQuestion
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /questions:
+    get:
+      tags:
+        - questions
+      summary: Get all questions
+      description: Retrieve a list of all questions in the system.
+      operationId: getQuestions
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - questions
+      summary: Create new question
+      description: Create a new question.
+      operationId: createQuestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Token
+      description: Custom authentication token obtained after login
+
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    OK:
+      description: Request completed successfully
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/User'
+              - $ref: '#/components/schemas/Class'
+              - $ref: '#/components/schemas/Group'
+              - $ref: '#/components/schemas/LearningObject'
+              - $ref: '#/components/schemas/LearningPath'
+              - $ref: '#/components/schemas/Assignment'
+              - $ref: '#/components/schemas/Course'
+              - $ref: '#/components/schemas/Question'
+              - $ref: '#/components/schemas/LoginResponse'
+              - type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/User'
+                    - $ref: '#/components/schemas/Class'
+                    - $ref: '#/components/schemas/Group'
+                    - $ref: '#/components/schemas/LearningObject'
+                    - $ref: '#/components/schemas/LearningPath'
+                    - $ref: '#/components/schemas/Assignment'
+                    - $ref: '#/components/schemas/Course'
+                    - $ref: '#/components/schemas/Question'
+    Created:
+      description: Resource created successfully
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/User'
+              - $ref: '#/components/schemas/Class'
+              - $ref: '#/components/schemas/Group'
+              - $ref: '#/components/schemas/LearningObject'
+              - $ref: '#/components/schemas/LearningPath'
+              - $ref: '#/components/schemas/Assignment'
+              - $ref: '#/components/schemas/Course'
+              - $ref: '#/components/schemas/Question'
+              - $ref: '#/components/schemas/RegisterResponse'
+    NoContent:
+      description: Resource deleted successfully
+
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error code identifier
+        message:
+          type: string
+          description: Human-readable error message
+
+    LoginResponse:
+      type: object
+    LoginRequest:
+      type: object
+    
+    RegisterResponse:
+      type: object
+    RegisterRequest:
+      type: object
+
+    User:
+      type: object
+    UserUpdate:
+      type: object
+    UserCreate:
+      type: object
+
+    Class:
+      type: object
+    ClassUpdate:
+      type: object
+    ClassCreate:
+      type: object
+
+    Group:
+      type: object
+    GroupUpdate:
+      type: object
+    GroupCreate:
+      type: object
+
+    LearningObject:
+      type: object
+    LearningObjectUpdate:
+      type: object
+    LearningObjectCreate:
+      type: object
+
+    LearningPath:
+      type: object
+    LearningPathUpdate:
+      type: object
+    LearningPathCreate:
+      type: object
+
+    Assignment:
+      type: object
+    AssignmentCreate:
+      type: object
+    AssignmentUpdate:
+      type: object
+  
+    Course:
+      type: object
+    CourseCreate:
+      type: object
+    CourseUpdate:
+      type: object
+
+    Question:
+      type: object
+    QuestionCreate:
+      type: object
+    QuestionUpdate:
+      type: object
