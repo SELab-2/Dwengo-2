@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  lint-and-test:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        service: [backend, frontend]  # Beide in één job met matrix
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.service }}
+        run: npm ci  
+
+      - name: Run Linter
+        working-directory: ${{ matrix.service }}
+        run: npm run lint  
+
+      - name: Run Tests
+        working-directory: ${{ matrix.service }}
+        run: npm test  
