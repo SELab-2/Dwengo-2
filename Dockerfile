@@ -1,28 +1,20 @@
 # Backend set-up
 FROM node:alpine AS backend
 WORKDIR /workspace/backend
-COPY ./backend/package.json ./backend/package-lock.json ./
+COPY ./backend/ ./
 
 RUN npm install
-RUN apk update && apk add git
 
-COPY .git/ /workspace/.git/
-
-COPY ./backend/ ./
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
 # Frontend set-up
 FROM node:alpine AS frontend
 WORKDIR /workspace/frontend
-COPY ./frontend/package.json ./frontend/package-lock.json ./
+COPY ./frontend/ ./
 
 RUN npm install
-RUN apk update && apk add git
 
-COPY .git/ /workspace/.git/
-
-COPY ./frontend/ ./
 EXPOSE 4200
 CMD ["npm", "start"]
 
@@ -33,10 +25,6 @@ WORKDIR /workspace/database
 ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=postgres
 ENV POSTGRES_DB=dwengo-database
-
-RUN apk update && apk add git
-
-COPY .git/ /workspace/.git/
 
 EXPOSE 5432
 COPY ./database/ ./
