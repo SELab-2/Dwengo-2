@@ -227,16 +227,8 @@ paths:
             schema:
               type: object
               required:
-                - operation
                 - data
               properties:
-                operation:
-                  type: string
-                  enum:
-                    - accept
-                    - reject
-                    - addRequest
-                  description: Type of operation to perform
                 data:
                   $ref: '#/components/schemas/ClassUpdate'
       responses:
@@ -299,7 +291,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  '/classes/{idClass}/groups/{idGroup}':
+  '/classes/{idClass}/assignments/{idAssignment}/groups/{idGroup}':
     get:
       tags:
         - groups
@@ -309,6 +301,12 @@ paths:
       parameters:
         - in: path
           name: idClass
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idAssignment
           required: true
           schema:
             type: string
@@ -340,6 +338,12 @@ paths:
             type: string
             format: uuid
         - in: path
+          name: idAssignment
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
           name: idGroup
           required: true
           schema:
@@ -352,16 +356,8 @@ paths:
             schema:
               type: object
               required:
-                - operation
                 - data
               properties:
-                operation:
-                  type: string
-                  enum:
-                    - accept
-                    - reject
-                    - addRequest
-                  description: Type of operation to perform
                 data:
                   $ref: '#/components/schemas/GroupUpdate'
       responses:
@@ -387,6 +383,12 @@ paths:
             type: string
             format: uuid
         - in: path
+          name: idAssignment
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
           name: idGroup
           required: true
           schema:
@@ -399,7 +401,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/classes/{id}/groups':
+  '/classes/{idClass}/assignments/{idAssignment}/groups':
     get:
       tags:
         - groups
@@ -408,7 +410,13 @@ paths:
       operationId: getGroups
       parameters:
         - in: path
-          name: id
+          name: idClass
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idAssignment
           required: true
           schema:
             type: string
@@ -426,7 +434,13 @@ paths:
       operationId: createGroup
       parameters:
         - in: path
-          name: id
+          name: idClass
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idAssignment
           required: true
           schema:
             type: string
@@ -444,7 +458,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  '/objects/{id}':
+  '/paths/{idPath}/objects/{idObject}':
     get:
       tags:
         - objects
@@ -453,7 +467,13 @@ paths:
       operationId: getObjectById
       parameters:
         - in: path
-          name: id
+          name: idPath
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idObject
           required: true
           schema:
             type: string
@@ -473,7 +493,13 @@ paths:
       operationId: updateObject
       parameters:
         - in: path
-          name: id
+          name: idPath
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idObject
           required: true
           schema:
             type: string
@@ -499,7 +525,13 @@ paths:
       operationId: deleteObject
       parameters:
         - in: path
-          name: id
+          name: idPath
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idObject
           required: true
           schema:
             type: string
@@ -511,13 +543,20 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  /objects:
+  '/paths/{id}/objects':
     get:
       tags:
         - objects
       summary: Get all learning objects
       description: Retrieve a list of all learning objects in the system.
       operationId: getObjects
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           $ref: '#/components/responses/LearningObjectsOK'
@@ -529,6 +568,13 @@ paths:
       summary: Create new object
       description: Create a new learning object.
       operationId: createObject
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -640,7 +686,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  '/assignments/{id}':
+  '/classes/{idClass}/assignments/{idAssignment}':
     get:
       tags:
         - assignments
@@ -649,7 +695,13 @@ paths:
       operationId: getAssignmentById
       parameters:
         - in: path
-          name: id
+          name: idClass
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idAssignment
           required: true
           schema:
             type: string
@@ -669,7 +721,13 @@ paths:
       operationId: updateAssignment
       parameters:
         - in: path
-          name: id
+          name: idClass
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idAssignment
           required: true
           schema:
             type: string
@@ -695,7 +753,13 @@ paths:
       operationId: deleteAssignment
       parameters:
         - in: path
-          name: id
+          name: idClass
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idAssignment
           required: true
           schema:
             type: string
@@ -707,13 +771,20 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  /assignments:
+  '/classes/{id}/assignments':
     get:
       tags:
         - assignments
       summary: Get all assignments
       description: Retrieve a list of all assignments in the system.
       operationId: getAssignments
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           $ref: '#/components/responses/AssignmentsOK'
@@ -725,6 +796,13 @@ paths:
       summary: Create new assignment
       description: Create a new assignment.
       operationId: createAssignment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -779,16 +857,8 @@ paths:
             schema:
               type: object
               required:
-                - operation
                 - data
               properties:
-                operation:
-                  type: string
-                  enum:
-                    - accept
-                    - reject
-                    - addRequest
-                  description: Type of operation to perform
                 data:
                   $ref: '#/components/schemas/CourseUpdate'
       responses:
