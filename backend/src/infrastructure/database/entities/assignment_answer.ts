@@ -3,8 +3,8 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 @Entity()
 export class AssignmentAnswer {
     @PrimaryGeneratedColumn("uuid")
-    answer_id: number
+    answer_id!: number
 
     @Column({ type: "bytea" }) // Equivalent to a blob
-    answer: Buffer // TODO: should be fixed in container if types are installed
+    answer!: Buffer
 }

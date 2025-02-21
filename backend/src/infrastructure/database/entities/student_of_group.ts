@@ -7,13 +7,13 @@ export class StudentOfGroup {
     @PrimaryColumn()
     @OneToOne(type => Student)
     @JoinColumn()
-    student: Student
+    student!: Student
 
     @PrimaryColumn()
     @OneToOne(type => Class)
     @JoinColumn()
-    class: Class
+    class!: Class
 
     @CreateDateColumn()
-    since: Date
+    since!: Date
 }

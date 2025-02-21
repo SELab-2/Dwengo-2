@@ -3,11 +3,11 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 @Entity()
 export class Class {
     @PrimaryGeneratedColumn("uuid")
-    class_id: number
+    class_id!: number
 
     @Column({ type: "varchar", length: 200 })
-    name: string
+    name!: string
 
     @Column({ type: "smallint" })
-    year: number
+    year!: number
 }

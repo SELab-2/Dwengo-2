@@ -7,10 +7,10 @@ export class TeacherGroupAssignment {
     @PrimaryColumn()
     @OneToOne(() => Teacher)
     @JoinColumn()
-    teacher: Teacher
+    teacher!: Teacher
 
     @PrimaryColumn()
     @OneToOne(() => Assignment)
     @JoinColumn()
-    class: Assignment
+    class!: Assignment
 }

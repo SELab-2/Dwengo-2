@@ -13,31 +13,31 @@ export enum StudentProgressStatus {
 @Entity()
 export class StudentProgress {
     @PrimaryColumn()
-    super_so_uuid: string
+    super_so_uuid!: string
 
     @PrimaryColumn()
-    so_uuid: string
+    so_uuid!: string
 
     @OneToOne(() => Assignment)
     @JoinColumn()
-    assignment: Assignment
+    assignment!: Assignment
 
     @OneToOne(() => Student)
     @JoinColumn()
-    student: Student
+    student!: Student
 
     @OneToOne(() => StudentQuestion)
-    @JoinColumn({ nullable: true }) // TODO: hope this works
-    question: StudentQuestion
+    @JoinColumn() // TODO: should be able to be null
+    question!: StudentQuestion
 
     @OneToOne(() => Student)
-    @JoinColumn({ nullable: true })
-    answer: AssignmentAnswer
+    @JoinColumn()
+    answer!: AssignmentAnswer
 
     @Column({
         type: "enum",
         enum: StudentProgressStatus,
         default: StudentProgressStatus.NOT_DONE
     })
-    progress_status: StudentProgressStatus
+    progress_status!: StudentProgressStatus
 }

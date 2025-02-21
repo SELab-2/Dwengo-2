@@ -3,20 +3,20 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeor
 @Entity()
 export class StudentQuestion {
     @PrimaryGeneratedColumn("uuid")
-    question_id: number
+    question_id!: number
 
     @PrimaryGeneratedColumn("uuid")
-    question_sub_id: number
+    question_sub_id!: number
 
     @Column({ type: "text" })
-    question: string
+    question!: string
 
     @Column({ type: "text", nullable: true })
-    answer: string
+    answer!: string
 
     @CreateDateColumn()
-    question_date: Date
+    question_date!: Date
 
     @Column({ type: "date", nullable: true })
-    answer_date: Date
+    answer_date!: Date
 }

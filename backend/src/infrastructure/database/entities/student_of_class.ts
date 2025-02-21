@@ -1,19 +1,19 @@
 import { Entity, PrimaryColumn, OneToOne, JoinColumn, CreateDateColumn } from "typeorm"
-import { Student } from "./student.ts"
-import { Class } from "./class.ts"
+import { Student } from "./student"
+import { Class } from "./class"
 
 @Entity()
 export class StudentOfClass {
     @PrimaryColumn()
     @OneToOne(type => Student)
     @JoinColumn()
-    student: Student
+    student!: Student
 
     @PrimaryColumn()
     @OneToOne(type => Class)
     @JoinColumn()
-    class: Class
+    class!: Class
 
     @CreateDateColumn() // Automatically sets this field to the date of insertion
-    since: Date
+    since!: Date
 }
