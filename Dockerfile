@@ -26,6 +26,7 @@ CMD ["npm", "start"]
 # Database set-up
 FROM postgres:alpine AS database
 WORKDIR /workspace/database
+#Moved database to infrastructure in backend
 COPY ./backend/src/infrastructure/database/ ./
 
 ENV POSTGRES_USER=postgres
