@@ -299,7 +299,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  '/groups/{id}':
+  '/classes/{idClass}/groups/{idGroup}':
     get:
       tags:
         - groups
@@ -308,7 +308,13 @@ paths:
       operationId: getGroupById
       parameters:
         - in: path
-          name: id
+          name: idClass
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idGroup
           required: true
           schema:
             type: string
@@ -328,7 +334,13 @@ paths:
       operationId: updateGroup
       parameters:
         - in: path
-          name: id
+          name: idClass
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idGroup
           required: true
           schema:
             type: string
@@ -369,7 +381,13 @@ paths:
       operationId: deleteGroup
       parameters:
         - in: path
-          name: id
+          name: idClass
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idGroup
           required: true
           schema:
             type: string
@@ -381,13 +399,20 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  /groups:
+  '/classes/{id}/groups':
     get:
       tags:
         - groups
       summary: Get all class groups
       description: Retrieve a list of all class groups in the system.
       operationId: getGroups
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           $ref: '#/components/responses/GroupsOK'
@@ -399,6 +424,13 @@ paths:
       summary: Create new class group
       description: Create a new class group.
       operationId: createGroup
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
