@@ -5,12 +5,13 @@ services:
       target: backend
     ports:
       - "3000:3000"
-    depends_on:
-      - database
     environment:
       - NODE_ENV=development
+    depends_on:
+      - database
     volumes:
-      - ./backend:/workspace/backend
+      - /workspace/backend/node_modules
+    restart: always
 
   frontend:
     build:
@@ -18,12 +19,13 @@ services:
       target: frontend
     ports:
       - "4200:4200"
-    depends_on:
-      - backend
     environment:
       - NODE_ENV=development
+    depends_on:
+      - backend
     volumes:
-      - ./frontend:/workspace/frontend
+      - /workspace/frontend/node_modules
+    restart: always
 
   database:
     build:

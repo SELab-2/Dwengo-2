@@ -10,7 +10,6 @@ RUN npm install -g nodemon ts-node typescript tsconfig-paths
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
-# Frontend set-up
 # Frontend setup
 FROM node:18-alpine AS frontend 
 # Use stable LTS Node version
