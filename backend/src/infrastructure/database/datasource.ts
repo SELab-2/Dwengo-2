@@ -21,7 +21,7 @@ import { User } from "./entities/user";
  */
 export const DwengoPostgreSQLDataSource = new DataSource({
     type: "postgres",           // PostgreSQL database
-    host: "localhost",          // Hostname
+    host: "database",           // Hostname -- is the name of the service created in the compose.yaml file
     port: 5432,                 // Port
     username: "postgres",       // Username to login to the database
     password: "postgres",       // Password //TODO: properties file?
