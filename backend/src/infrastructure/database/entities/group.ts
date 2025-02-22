@@ -4,9 +4,9 @@ import { Class } from "./class"
 @Entity()
 export class Group {
     @PrimaryGeneratedColumn("uuid")
-    group_id!: number
+    id!: string
 
-    @OneToOne(type => Class)
-    @JoinColumn()
+    @OneToOne(() => Class)
+    @JoinColumn({ name: "class_id" })
     class!: Class
 }

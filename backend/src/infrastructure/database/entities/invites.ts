@@ -1,21 +1,35 @@
-import { Entity, PrimaryColumn, OneToOne, JoinColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, Column } from "typeorm"
 import { User } from "./user"
 import { Class } from "./class"
 
+export enum InviteType {
+    TEACHER_TEACHER = "teacher_teacher",
+    TEACHER_STUDENT = "teacher_student"
+}
+
 @Entity()
 export class Invites {
-    @PrimaryColumn()
-    @OneToOne(type => User)
-    @JoinColumn()
+    @PrimaryGeneratedColumn("uuid")
+    id!: string
+    
+    @OneToOne(() => User)
+    @JoinColumn({ name: "inviter_id" })
     inviter!: User
 
-    @PrimaryColumn()
-    @OneToOne(type => User)
-    @JoinColumn()
+    @OneToOne(() => User)
+    @JoinColumn({ name: "invitee_id" })
     invitee!: User
 
-    @PrimaryColumn()
-    @OneToOne(type => Class)
-    @JoinColumn()
+    @OneToOne(() => Class)
+    @JoinColumn({ name: "class_id" })
     class!: Class
+
+    @CreateDateColumn()
+    invitation_date!: Date
+
+    @Column({
+        type: "enum",
+        enum: InviteType
+    })
+    type!: InviteType
 }

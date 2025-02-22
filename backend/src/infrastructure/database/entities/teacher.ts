@@ -1,10 +1,12 @@
-import { Entity, PrimaryColumn, OneToOne, JoinColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
 import { User } from "./user"
 
 @Entity()
 export class Teacher {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn("uuid")
+    id!: string
+
     @OneToOne(() => User)
-    @JoinColumn()
-    teacher!: User // TODO: User of number??
+    @JoinColumn({ name: "user_id" })
+    teacher!: User
 }

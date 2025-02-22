@@ -1,17 +1,18 @@
-import { Entity, PrimaryColumn, OneToOne, JoinColumn, CreateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn } from "typeorm"
 import { Student } from "./student"
 import { Class } from "./class"
 
 @Entity()
 export class StudentOfGroup {
-    @PrimaryColumn()
-    @OneToOne(type => Student)
-    @JoinColumn()
+    @PrimaryGeneratedColumn("uuid")
+    id!: string
+
+    @OneToOne(() => Student)
+    @JoinColumn({ name: "student_id" })
     student!: Student
 
-    @PrimaryColumn()
-    @OneToOne(type => Class)
-    @JoinColumn()
+    @OneToOne(() => Class)
+    @JoinColumn({ name: "class_id" })
     class!: Class
 
     @CreateDateColumn()

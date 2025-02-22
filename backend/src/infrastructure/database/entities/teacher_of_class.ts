@@ -1,17 +1,18 @@
-import { Entity, PrimaryColumn, OneToOne, JoinColumn, CreateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn } from "typeorm"
 import { Teacher } from "./teacher"
 import { Class } from "./class"
 
 @Entity()
 export class TeacherOfClass {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn("uuid")
+    id!: string
+
     @OneToOne(() => Teacher)
-    @JoinColumn()
+    @JoinColumn({ name: "teacher_id" })
     teacher!: Teacher
 
-    @PrimaryColumn()
     @OneToOne(() => Class)
-    @JoinColumn()
+    @JoinColumn({ name: "class_id" })
     class!: Class
 
     @CreateDateColumn() // Automatically sets this field to the date of insertion
