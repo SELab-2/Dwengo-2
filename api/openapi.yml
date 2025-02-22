@@ -807,7 +807,7 @@ paths:
       operationId: getPathObjects
       parameters:
         - in: path
-          name: id
+          name: idParent
           required: true
           schema:
             type: string
@@ -1091,13 +1091,6 @@ paths:
       summary: Create new assignment
       description: Create a new assignment with specified start date, deadline and instructions.
       operationId: createAssignment
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
       requestBody:
         required: true
         content:
