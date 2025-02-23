@@ -1,20 +1,20 @@
 import { DataSource, TypeORMError } from "typeorm"
-import { AssignmentAnswer } from "../data_models/assignment_answer";
-import { AssignmentGroup } from "../data_models/assignment_group";
-import { Assignment } from "../data_models/assignment";
-import { Class } from "../data_models/class";
-import { Group } from "../data_models/group";
-import { PendingInvite } from "../data_models/invite";
-import { StudentOfClass } from "../data_models/student_of_class";
-import { StudentOfGroup } from "../data_models/student_of_group";
-import { StudentProgress } from "../data_models/student_progress";
-import { QuestionThread } from "../data_models/question_thread";
-import { Student } from "../data_models/student";
-import { TeacherGroupAssignment } from "../data_models/teacher_group_assignment";
-import { TeacherOfClass } from "../data_models/teacher_of_class";
-import { Teacher } from "../data_models/teacher";
-import { User } from "../data_models/user";
-import { ThreadQuestions } from "../data_models/thread_question";
+import { AssignmentAnswer } from "../data_models/assignment_answer_typeorm";
+import { AssignmentGroup } from "../data_models/assignment_group_typeorm";
+import { Assignment } from "../data_models/assignment_typeorm";
+import { Class } from "../data_models/class_typeorm";
+import { Group } from "../data_models/group_typeorm";
+import { PendingInvite } from "../data_models/invite_typeorm";
+import { StudentOfClass } from "../data_models/student_of_class_typeorm";
+import { StudentOfGroup } from "../data_models/student_of_group_typeorm";
+import { StudentProgress } from "../data_models/student_progress_typeorm";
+import { QuestionThread } from "../data_models/question_thread_typeorm";
+import { Student } from "../data_models/student_typeorm";
+import { TeacherGroupAssignment } from "../data_models/teacher_group_assignment_typeorm";
+import { TeacherOfClass } from "../data_models/teacher_of_class_typeorm";
+import { Teacher } from "../data_models/teacher_typeorm";
+import { User } from "../data_models/user_typeorm";
+import { ThreadQuestions } from "../data_models/thread_question_typeorm";
 import { DatasourceInterface } from "./datasource_interface";
 
 export class DatasourcePostgreSQL implements DatasourceInterface {

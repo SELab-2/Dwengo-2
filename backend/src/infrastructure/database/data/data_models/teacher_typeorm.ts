@@ -1,12 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
-import { User } from "./user"
+import { User } from "./user_typeorm"
 
 @Entity()
-export class Student {
+export class Teacher {
     @PrimaryGeneratedColumn("uuid")
-    id!: string;
+    id!: string
 
     @OneToOne(() => User)
     @JoinColumn({ name: "user_id" })
-    student!: User
+    teacher!: User
 }

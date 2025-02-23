@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn } from "typeorm"
-import { Student } from "./student"
-import { Class } from "./class"
+import { Student } from "./student_typeorm"
+import { Class } from "./class_typeorm"
 
 @Entity()
 export class StudentOfGroup {

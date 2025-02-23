@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
-import { Teacher } from "./teacher"
-import { Assignment } from "./assignment"
+import { Teacher } from "./teacher_typeorm"
+import { Assignment } from "./assignment_typeorm"
 
 @Entity()
 export class TeacherGroupAssignment {

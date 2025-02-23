@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, Column } from "typeorm"
-import { User } from "./user"
-import { Class } from "./class"
+import { User } from "./user_typeorm"
+import { Class } from "./class_typeorm"
 
 export enum InviteType {
     TEACHER_TEACHER = "teacher_teacher",
