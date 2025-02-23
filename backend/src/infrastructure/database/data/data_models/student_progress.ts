@@ -26,11 +26,11 @@ export class StudentProgress {
     @JoinColumn({ name: "student_id" })
     student!: Student
 
-    @OneToOne(() => QuestionThread)
+    @OneToOne(() => QuestionThread, { nullable: true })
     @JoinColumn({ name: "question_thread_id" })
     question_thread!: QuestionThread
 
-    @OneToOne(() => AssignmentAnswer)
+    @OneToOne(() => AssignmentAnswer, { nullable: true })
     @JoinColumn({ name: "answer_id" })
     answer!: AssignmentAnswer
 

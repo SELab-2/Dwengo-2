@@ -9,7 +9,7 @@ export class User {
     email!: string
 
     @Column({ type: "varchar", length: 50 })
-    forename!: string
+    first_name!: string
 
     @Column({ type: "varchar", length: 50 })
     family_name!: string
@@ -17,6 +17,6 @@ export class User {
     @Column({ type: "varchar", length: 150, nullable: true }) // Optional
     name_school!: string
 
-    @Column({ type: "bigint" })
-    password_hash!: string // `number` is unsafe for 64-bit integers
+    @Column({ type: "varchar", length: 64 }) // 256-bit hash => 32 bytes => 64 hexadecimals
+    password_hash!: string
 }
