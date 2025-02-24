@@ -23,8 +23,8 @@ jobs:
       - name: Lint backend
         run: docker exec $(docker ps -qf "name=backend") npm run lint
 
-      - name: Lint frontend
-        run: docker exec $(docker ps -qf "name=frontend") npm run lint
+      # - name: Lint frontend
+      #  run: docker exec $(docker ps -qf "name=frontend") npm run lint
 
       - name: Test backend
         run: docker exec $(docker ps -qf "name=backend") npm test

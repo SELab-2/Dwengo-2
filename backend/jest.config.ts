@@ -9,7 +9,7 @@ const config: Config = {
   moduleFileExtensions: ['ts', 'js'],
   collectCoverage: true, // Enable code coverage
   coverageDirectory: 'coverage',
-  testMatch: ['**/__tests__/**/*.test.ts'], // Only test files ending in .test.ts
+  testMatch: ['**/tests/**/*.test.ts'], // Only test files ending in .test.ts
 };
 
 export default config;
