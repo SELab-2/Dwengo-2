@@ -1,4 +1,4 @@
-export interface TeacherInterface {
+export interface ITeacher {
     // Necessary variables
     id: string;     // Teacher id
     email: string;  // Teacher's email
