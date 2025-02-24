@@ -1,0 +1,1 @@
+/*Basic interface for errorhandling*/

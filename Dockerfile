@@ -26,7 +26,7 @@ CMD ["npm", "start"]
 # Database set-up
 FROM postgres:alpine AS database
 WORKDIR /workspace/database
-COPY ./database/ ./
+COPY ./backend/src/infrastructure/database/ ./
 
 ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=postgres

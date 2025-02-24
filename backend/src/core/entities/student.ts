@@ -1,1 +1,1 @@
-mock
+/*Define Domain model for Student*/
