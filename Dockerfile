@@ -4,14 +4,14 @@ WORKDIR /workspace/backend
 COPY ./backend/ ./
 
 RUN npm install
-RUN npm install -g nodemon ts-node typescript tsconfig-paths
+RUN npm install -g nodemon ts-node typescript tsconfig-paths pg
 
 
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
 # Frontend setup
-FROM node:18-alpine AS frontend 
+FROM node:22-alpine AS frontend 
 # Use stable LTS Node version
 WORKDIR /workspace/frontend
 # Copy application files
@@ -26,6 +26,7 @@ CMD ["npm", "start"]
 # Database set-up
 FROM postgres:alpine AS database
 WORKDIR /workspace/database
+#Moved database to infrastructure in backend
 COPY ./backend/src/infrastructure/database/ ./
 
 ENV POSTGRES_USER=postgres

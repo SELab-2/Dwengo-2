@@ -7,6 +7,10 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    // Otherwise TypeScript can complain with TypeORM
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
   }
 }
