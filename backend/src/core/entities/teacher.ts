@@ -10,6 +10,7 @@ export class Teacher implements TeacherInterface {
     family_name: string;    // Teacher's family name
     password_hash: string;  // Teacher's hashed password
     get_classes: () => [ClassInterface];
+    create_class: () => ClassInterface;
 
     // Optional variables
     name_school?: string;   // Teacher's school
@@ -21,6 +22,7 @@ export class Teacher implements TeacherInterface {
         family_name: string, 
         password_hash: string, 
         get_classes: () => [ClassInterface],
+        create_class: () => ClassInterface,
         name_school?: string) {
         this.id = id;
         this.email = email;
@@ -29,5 +31,7 @@ export class Teacher implements TeacherInterface {
         this.password_hash = password_hash;
         this.name_school = name_school;
         this.get_classes = get_classes;
+        this.create_class = create_class;
     }
+    
 }

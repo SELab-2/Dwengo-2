@@ -1,11 +1,7 @@
-import { ClassInterface } from "./class_interface";
+import { AssignmentInterface } from "./assignment_interface";
+import { UserInterface } from "./user_interface";
 
-export interface StudentInterface {
-    // Necessary variables
-    id: string;     // User id
-    email: string;  // User's email
-    first_name: string;     // User's first name
-    family_name: string;    // User's family name
-    password_hash: string;  // User's hashed password
-    get_classes: () => [ClassInterface];
+export interface StudentInterface extends UserInterface {
+    ask_question_for_assignment: (assignment: AssignmentInterface) => void; // TODO: correct arguments.
+    send_submission_for_assignment: (assignment: AssignmentInterface) => void;
 }
