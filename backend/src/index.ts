@@ -2,7 +2,7 @@
 
 import express from "express";
 import dotenv from "dotenv";
-import { DatasourcePostgreSQL } from "./infrastructure/database/data/data_sources/datasource_postgres";
+import { DatasourcePostgreSQL } from "./infrastructure/database/data/data_sources/datasource";
 
 dotenv.config();
 

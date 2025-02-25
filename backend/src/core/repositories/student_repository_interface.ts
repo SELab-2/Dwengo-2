@@ -1,0 +1,1 @@
+/*Here comes the interface for the repository for User entity -> Get's implemented in infrastructure/repositories*/
