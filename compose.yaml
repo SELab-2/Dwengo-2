@@ -11,7 +11,8 @@ services:
       database:
         condition: service_healthy
     volumes:
-      - /workspace/backend/node_modules
+      - ./backend:/workspace/backend  # Bind local backend folder to container
+      - /workspace/backend/node_modules  # Anonymous volume for node_modules
     restart: always
 
   frontend:
@@ -25,7 +26,8 @@ services:
     depends_on:
       - backend
     volumes:
-      - /workspace/frontend/node_modules
+      - ./frontend:/workspace/frontend  # Bind local frontend folder to container
+      - /workspace/frontend/node_modules  # Anonymous volume for node_modules
     restart: always
 
   database:
@@ -35,7 +37,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./backend/src/infrastructure/database:/workspace/database
+      - ./backend/src/infrastructure/database:/workspace/database  # Bind local database folder
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
