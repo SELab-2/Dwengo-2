@@ -21,9 +21,11 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: frontend
 
       - name: Build Angular project
         run: npm run build
+        working-directory: frontend
 
       - name: Move files to /var/www/dwengo
         run: |
