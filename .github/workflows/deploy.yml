@@ -1,0 +1,40 @@
+name: Build & Deploy application
+
+on:
+  push:
+    branches:
+      - main
+      - checkout 21-application-deployment # Test branch
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular project
+        run: npm run build
+
+      - name: Move files to /var/www/dwengo
+        run: |
+          sudo rm -rf /var/www/dwengo/*
+          sudo cp -r frontend/dist/frontend/browser/* /var/www/dwengo/
+
+      - name: Build Docker image
+        run: docker compose -f compose.prod.yaml build
+
+      - name: Stop old containers
+        run: docker compose -f compose.prod.yaml down
+
+      - name: Start new containers
+        run: docker compose -f compose.prod.yaml up -d
