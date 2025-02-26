@@ -2,7 +2,15 @@
  * The HTTP methods as defined in: https://www.rfc-editor.org/rfc/rfc9110.html
  */
 export enum HttpMethod {
-  GET, HEAD, OPTIONS, TRACE, PUT, DELETE, POST, PATCH, CONNECT
+  GET     = "GET"     ,
+  HEAD    = "HEAD"    ,
+  OPTIONS = "OPTIONS" ,
+  TRACE   = "TRACE"   ,
+  PUT     = "PUT"     ,
+  DELETE  = "DELETE"  ,  
+  POST    = "POST"    ,
+  PATCH   = "PATCH"   ,
+  CONNECT = "CONNECT" ,
 }
 
 /**

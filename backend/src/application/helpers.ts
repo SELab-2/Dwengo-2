@@ -8,8 +8,11 @@ import { Request, Response, HttpMethod } from "./types";
  */
 export function requestFromExpress(req: ExpressRequest): Request {
   return {
-    method: HttpMethod[req.method as keyof typeof HttpMethod], // convert the string method to the enum value
-    headers: Object.fromEntries(Object.entries(req.headers).map(([key, value]) => [key, value?.toString() || ""])),
+    // convert the string method to the enum value
+    method: HttpMethod[req.method as keyof typeof HttpMethod],
+    // these headers already have the correct type, but they should be converted to a Record instead of an IncommingHttpHeaders object
+    headers: req.headers as Record<string, string>,
+    // convert the body to a string, or an empty string if it is undefined
     body: req.body ? JSON.stringify(req.body) : ""
   };
 }
