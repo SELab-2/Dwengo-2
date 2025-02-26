@@ -8,9 +8,6 @@ jobs:
   lint-and-test:
     runs-on: self-hosted
     steps:
-      - name: Force cleanup with sudo
-        run: |
-          sudo rm -rf /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2/*
 
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -22,7 +19,7 @@ jobs:
         run: docker compose down
 
       - name: Start new containers
-        run: docker compose up -d
+        run: docker compose up -d --user $(id -u):$(id -g)
 
       - name: Lint backend
         run: docker exec $(docker ps -qf "name=backend") npm run lint
