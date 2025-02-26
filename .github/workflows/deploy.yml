@@ -11,6 +11,9 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: Fix permissions
+        run: sudo chown -R $USER:$USER /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2 || true
+
       - name: Checkout code
         uses: actions/checkout@v4
 
