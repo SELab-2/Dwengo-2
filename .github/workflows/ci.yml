@@ -8,6 +8,8 @@ jobs:
   lint-and-test:
     runs-on: self-hosted
     steps:
+      - name: Force clean workspace
+        run: sudo git clean -ffdx
       - name: Checkout repo
         uses: actions/checkout@v4
       
