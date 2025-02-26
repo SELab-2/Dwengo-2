@@ -10,7 +10,7 @@ jobs:
     steps:
       
       - name: Fix permissions
-        run: sudo chown -R $(whoami):$(whoami) $GITHUB_WORKSPACE
+        run: chown -R $(whoami):$(whoami) $GITHUB_WORKSPACE || true
 
       - name: Checkout repo
         uses: actions/checkout@v4
