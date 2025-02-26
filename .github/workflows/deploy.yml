@@ -23,17 +23,17 @@ jobs:
         run: npm ci
         working-directory: frontend
 
-      - name: Build Angular project
+      - name: Build Angular project # Build the frontend 
         run: npm run build
         working-directory: frontend
 
-      - name: Move files to /var/www/dwengo
+      - name: Move files to /var/www/dwengo # Move the files to /var/www/dwengo were we statically serve the frontend
         run: |
           rm -rf /var/www/dwengo/*
           cp -r frontend/dist/frontend/browser/* /var/www/dwengo/
 
-      - name: Build Docker image
-        run: docker compose -f compose.prod.yaml build
+      - name: Build Docker image 
+        run: docker compose -f compose.prod.yaml build # This docker container will serve the backend + DB
 
       - name: Stop old containers
         run: docker compose -f compose.prod.yaml down
