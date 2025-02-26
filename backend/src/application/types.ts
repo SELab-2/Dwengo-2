@@ -19,9 +19,9 @@ export enum HttpMethod {
  * See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
  */
 export interface Request {
-  method: HttpMethod;
   headers: Record<string, string>;
-  body: string;
+  method: HttpMethod;
+  body: object;
 }
 
 /**
@@ -31,6 +31,6 @@ export interface Request {
  */
 export interface Response {
   headers: Record<string, string>;
-  status: number;
   body: Record<string, string>;
+  status: number;
 }

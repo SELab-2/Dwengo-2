@@ -8,12 +8,9 @@ import { Request, Response, HttpMethod } from "./types";
  */
 export function requestFromExpress(req: ExpressRequest): Request {
   return {
-    // convert the string method to the enum value
     method: HttpMethod[req.method as keyof typeof HttpMethod],
-    // these headers already have the correct type, but they should be converted to a Record instead of an IncommingHttpHeaders object
     headers: req.headers as Record<string, string>,
-    // convert the body to a string, or an empty string if it is undefined
-    body: req.body ? JSON.stringify(req.body) : ""
+    body: req.body
   };
 }
 
@@ -26,7 +23,7 @@ export function requestToExpress(req: Request): Partial<ExpressRequest> {
   return {
     method: HttpMethod[req.method],
     headers: req.headers,
-    body: req.body ? JSON.parse(req.body) : undefined
+    body: req.body
   };
 }
 
@@ -37,22 +34,26 @@ export function requestToExpress(req: Request): Partial<ExpressRequest> {
  */
 export function responseFromExpress(res: ExpressResponse): Response {
   return {
-    headers: Object.fromEntries(Object.entries(res.getHeaders()).map(([key, value]) => [key, value?.toString() || ""])),
+    headers: res.getHeaders() as Record<string, string>,
     status: res.statusCode,
-    body: {} // Express does not provide direct access to response body
+    body: {}
   };
 }
 
 /**
  * Convert a Response object to an Express Response object
  * @param res the Response object
- * @returns the Express Response object
+ * @param expressRes the Express Response object to modify
+ * We have to "modify" the Express Response object because it is not possible to create a new one
+ * @returns the modified Express Response object
  */
 export function responseToExpress(res: Response, expressRes: ExpressResponse): ExpressResponse {
+  expressRes.status(res.status);
+  expressRes.json(res.body);
+
   Object.entries(res.headers).forEach(([key, value]) => {
     expressRes.setHeader(key, value);
   });
-  expressRes.status(res.status);
-  expressRes.json(res.body);
+  
   return expressRes;
 }
