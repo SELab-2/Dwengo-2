@@ -36,5 +36,9 @@ jobs:
       - name: Test frontend
         run: docker exec $(docker ps -qf "name=frontend") npm test
 
+      - name: Fix coverage permissions
+        run: chown -R $(whoami):$(whoami) backend/coverage || true
+      
+
       - name: Stop containers
         run: docker compose down
