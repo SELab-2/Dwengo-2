@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Force cleanup with sudo
         run: |
-          rm -rf /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2/*
+          sudo rm -rf /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2/*
 
       - name: Checkout repo
         uses: actions/checkout@v4
