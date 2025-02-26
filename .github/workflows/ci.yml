@@ -19,19 +19,19 @@ jobs:
         run: docker compose down
 
       - name: Start new containers
-        run: docker compose up -d --user $(id -u):$(id -g)
+        run: docker compose up -d
 
       - name: Lint backend
-        run: docker exec $(docker ps -qf "name=backend") npm run lint
+        run: docker exec -u $(id -u):$(id -g) $(docker ps -qf "name=backend") npm run lint
 
       - name: Lint frontend
-        run: docker exec $(docker ps -qf "name=frontend") npm run lint
+        run: docker exec -u $(id -u):$(id -g) $(docker ps -qf "name=frontend") npm run lint
 
       - name: Test backend
-        run: docker exec $(docker ps -qf "name=backend") npm test
+        run: docker exec -u $(id -u):$(id -g) $(docker ps -qf "name=backend") npm test
 
       - name: Test frontend
-        run: docker exec $(docker ps -qf "name=frontend") npm test
+        run: docker exec -u $(id -u):$(id -g) $(docker ps -qf "name=frontend") npm test
       
       - name: Stop containers
         run: docker compose down
