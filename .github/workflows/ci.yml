@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-and-test:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Start containers
+        run: docker compose up -d --build
+
+      - name: Lint backend
+        run: docker exec $(docker ps -qf "name=backend") npm run lint
+
+      - name: Lint frontend
+        run: docker exec $(docker ps -qf "name=frontend") npm run lint
+
+      - name: Test backend
+        run: docker exec $(docker ps -qf "name=backend") npm test
+
+      - name: Test frontend
+        run: docker exec $(docker ps -qf "name=frontend") npm test
+
+      - name: Stop containers
+        run: docker compose down
