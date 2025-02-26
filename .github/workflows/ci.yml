@@ -8,11 +8,20 @@ jobs:
   lint-and-test:
     runs-on: self-hosted
     steps:
+      - name: Fix permissions
+        run: sudo chown -R $USER:$USER /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2 || true
+
       - name: Checkout repo
         uses: actions/checkout@v4
+      
+      - name: Build Docker image
+        run: docker compose build
 
-      - name: Start containers
-        run: docker compose up -d --build
+      - name: Stop old containers
+        run: docker compose down
+
+      - name: Start new containers
+        run: docker compose up -d
 
       - name: Lint backend
         run: docker exec $(docker ps -qf "name=backend") npm run lint
@@ -25,6 +34,6 @@ jobs:
 
       - name: Test frontend
         run: docker exec $(docker ps -qf "name=frontend") npm test
-
+      
       - name: Stop containers
         run: docker compose down
