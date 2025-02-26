@@ -29,8 +29,8 @@ jobs:
 
       - name: Move files to /var/www/dwengo
         run: |
-          sudo rm -rf /var/www/dwengo/*
-          sudo cp -r frontend/dist/frontend/browser/* /var/www/dwengo/
+          rm -rf /var/www/dwengo/*
+          cp -r frontend/dist/frontend/browser/* /var/www/dwengo/
 
       - name: Build Docker image
         run: docker compose -f compose.prod.yaml build
