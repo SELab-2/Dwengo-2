@@ -1,7 +1,7 @@
 import { ClassInterface } from "./class_interface";
 import { TeacherInterface } from "./teacher_interface";
 
-export class Teacher implements TeacherInterface {
+export class Teacher implements ITeacher {
 
     // Necessary variables
     id: string;     // Teacher id

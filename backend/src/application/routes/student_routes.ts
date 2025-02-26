@@ -1,0 +1,1 @@
+/*Here we define the routes for User entity*/
