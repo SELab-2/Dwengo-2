@@ -8,14 +8,6 @@ jobs:
   lint-and-test:
     runs-on: self-hosted
     steps:
-
-      - name: Force cleanup with sudo
-        run: |
-          sudo rm -rf /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2
-
-      - name: Create new workdir
-        run: mkdir -p /home/selab2/actions-runner/_work/Dwengo-2
-        
       
       - name: Checkout repo
         uses: actions/checkout@v4
