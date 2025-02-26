@@ -9,6 +9,9 @@ jobs:
     runs-on: self-hosted
     steps:
       
+      - name: Fix permissions
+        run: sudo chown -R $(whoami):$(whoami) $GITHUB_WORKSPACE
+
       - name: Checkout repo
         uses: actions/checkout@v4
       
