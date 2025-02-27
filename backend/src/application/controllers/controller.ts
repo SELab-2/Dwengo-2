@@ -1,4 +1,4 @@
-import { Request, Response, RouteHandlers} from '../types';
+import { ApiError, Request, Response, RouteHandlers} from '../types';
 import { extractPathParams } from '../helpersExpress';
 import { Services } from '../services/service';
 
@@ -57,7 +57,7 @@ export abstract class Controller {
    * @param headers - Optional additional HTTP headers
    * @returns Complete response object
    */
-  protected response(status: number, body: any, headers: Record<string, string> = {}): Response {
+  protected response(status: number, body: object, headers: Record<string, string> = {}): Response {
     return {status, headers: { 'Content-Type': 'application/json', ...headers }, body};
   }
 
@@ -68,13 +68,17 @@ export abstract class Controller {
    * @param error - Error object, preferably with code and message properties
    * @returns Error response with appropriate status and formatted message
    */
-  protected handleError(error: any): Response {
+  protected handleError(error: ApiError | unknown): Response {
     const statusMap: Record<string, number> = {
       NOT_FOUND: 404, UNAUTHORIZED: 401, BAD_REQUEST: 400, FORBIDDEN: 403, CONFLICT: 409
     };
-    const status = statusMap[error.code] || 500;
+    if (!(error && typeof error === 'object' && 'code' in error && 'message' in error)) {
+      return this.response(500, { code: 'INTERNAL_ERROR', message: 'Unexpected server error' });
+    }
+    const apiError = error as ApiError;
+    const status = statusMap[apiError.code] || 500;
     return this.response(status, {
-      code: error.code || "INTERNAL_ERROR", message: error.message || "Server error"
+      code: apiError.code || "INTERNAL_ERROR", message: apiError.message || "Server error"
     });
   }
 }
