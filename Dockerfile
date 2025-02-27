@@ -20,6 +20,11 @@ COPY ./frontend/ ./
 RUN npm install
 RUN npm install -g @angular/cli
 
+# Install chromium for headless browser testing
+RUN apk add --no-cache chromium harfbuzz ttf-freefont
+# Set the chromium binary path
+ENV CHROME_BIN=/usr/bin/chromium
+
 EXPOSE 4200
 CMD ["npm", "start"]
 

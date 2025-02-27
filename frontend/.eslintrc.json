@@ -1,0 +1,26 @@
+{
+    "root": true,
+    "overrides": [
+      {
+        "files": ["*.ts"],
+        "extends": [
+          "eslint:recommended",
+          "plugin:@typescript-eslint/recommended",
+          "plugin:@angular-eslint/recommended"
+        ],
+        "parserOptions": {
+          "project": ["tsconfig.json"],
+          "createDefaultProgram": true
+        },
+        "rules": {
+          "@typescript-eslint/explicit-function-return-type": "off"
+        }
+      },
+      {
+        "files": ["*.html"],
+        "extends": ["plugin:@angular-eslint/template/recommended"],
+        "rules": {}
+      }
+    ]
+  }
+  

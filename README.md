@@ -2,12 +2,11 @@
 
 ## Configuration and Deployement
 
-This project is configured to have 3 modules, each forming a subproject:
+This project is configured to have 2 modules, each forming a subproject:
 
 ```
 .
 ├── backend
-├── database
 ├── frontend
 ├── LICENSE
 └── README.md
@@ -46,9 +45,9 @@ We link to the [Docker Compose documentation](https://docs.docker.com/compose/in
 
 ### Dev Containers
 
-The team makes use of [VSCode Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) to streamline development.
-Each of the subprojects can be opened in a container,
-where the developer can then make use of the running (containerized) services.
+If you want to develop inside one of the containers,
+you can attach your running VSCode session to this container using ``CTRL + SHIFT + P``,
+then selecting ``Attach to running container``.
 
 ### Caveats and Debug tips:
 
