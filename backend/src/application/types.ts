@@ -31,8 +31,24 @@ export interface Request {
  */
 export interface Response {
   headers: Record<string, string>;
-  body: Record<string, string>;
+  body: Record<string, any>;
   status: number;
+}
+
+/**
+ * Interface defining a structured error object for API responses.
+ * Used to standardize error handling across controllers and services.
+ *
+ * @example
+ * ```typescript
+ * throw { code: 'BAD_REQUEST', message: 'Missing required fields' };
+ * ```
+ * @see {@link Controller.handleError} for error handling implementation
+ */
+export interface ApiError {
+  code: string; // e.g., 'BAD_REQUEST', 'NOT_FOUND'
+  message: string; // Human-readable error message
+  [key: string]: any; // Optional additional properties (for flexibility)
 }
 
 /**
