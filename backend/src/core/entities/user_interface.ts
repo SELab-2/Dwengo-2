@@ -7,5 +7,5 @@ export interface UserInterface {
     first_name: string;     // User's first name
     family_name: string;    // User's family name
     password_hash: string;  // User's hashed password
-    get_classes: () => [ClassInterface];
+    get_classes: () => Promise<[ClassInterface]>;
 }
