@@ -7,7 +7,7 @@ export enum HttpMethod {
   OPTIONS = "OPTIONS" ,
   TRACE   = "TRACE"   ,
   PUT     = "PUT"     ,
-  DELETE  = "DELETE"  ,  
+  DELETE  = "DELETE"  ,
   POST    = "POST"    ,
   PATCH   = "PATCH"   ,
   CONNECT = "CONNECT" ,
@@ -34,3 +34,28 @@ export interface Response {
   body: Record<string, string>;
   status: number;
 }
+
+/**
+ * Interface representing path parameters extracted from URL segments.
+ * Used for RESTful route pattern matching and parameter extraction.
+ */
+export interface PathParams {
+  entity?: string;
+  parent?: string;
+  id?: string;
+  idParent?: string;
+}
+
+/**
+ * Route pattern definition for declarative routing.
+ * Used to match incoming requests to their appropriate handler functions
+ * based on URL structure and parameters.
+ */
+export interface RoutePattern {
+  parent?: string;
+  hasId: boolean;
+  hasParentId: boolean;
+  handler: (req: Request) => Response;
+};
+
+export type RouteHandlers = Partial<Record<HttpMethod, RoutePattern[]>>;
