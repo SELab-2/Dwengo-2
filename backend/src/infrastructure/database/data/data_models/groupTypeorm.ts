@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
-import { Class } from "./class_typeorm"
+import { Class } from "./classTypeorm"
 
 @Entity()
 export class Group {
