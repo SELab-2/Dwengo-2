@@ -1,18 +1,28 @@
 /**
- * Service is an abstract class defining the base structure of a service.
- * It is used to define the structure of a service and will provide common functionality to all services.
- * A service is meant to group together related use cases and provide a single point of access to them in the controllers.
+ * Service is an abstract class defining the base structure of all service implementations.
+ * Services provide a clean interface between controllers and use cases, encapsulating
+ * business logic execution while allowing for composition of use cases.
+ *
+ * Each service implementation should focus on a single responsibility, with its
+ * use cases injected through the constructor for testability.
+ *
+ * @template ServiceOutput The type returned by the service's execute method
  */
-export abstract class Service {
-  public constructor(usecases: object) {
-    // TODO: add an object with generic use cases
+export abstract class Service<ServiceOutput = void> {
+  protected usecases: Record<string, any>;
+
+  public constructor(usecases: Record<string, any>) {
+    this.usecases = usecases;
   }
 
   /**
-   * Execute the service.   * 
-   * TODO: add more specific return type
+   * Executes the service's primary function with the provided arguments.
+   * Each service implementation defines its own parameter signature.
+   *
+   * @param args Arguments required by the specific service implementation
+   * @returns Result of type ServiceOutput as defined by the implementing class
    */
-  public abstract execute(): void|object;
+  public abstract execute(...args: any[]): ServiceOutput;
 }
 
-export type Services = Record<string, Service>;
+export type Services = Record<string, Service<any>>;
