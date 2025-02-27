@@ -31,7 +31,7 @@ export interface Request {
  */
 export interface Response {
   headers: Record<string, string>;
-  body: Record<string, any>;
+  body: Record<string, unknown>;
   status: number;
 }
 
@@ -48,7 +48,7 @@ export interface Response {
 export interface ApiError {
   code: string; // e.g., 'BAD_REQUEST', 'NOT_FOUND'
   message: string; // Human-readable error message
-  [key: string]: any; // Optional additional properties (for flexibility)
+  [key: string]: unknown; // Optional additional properties (for flexibility)
 }
 
 /**
@@ -72,6 +72,6 @@ export interface RoutePattern {
   hasId: boolean;
   hasParentId: boolean;
   handler: (req: Request) => Response;
-};
+}
 
 export type RouteHandlers = Partial<Record<HttpMethod, RoutePattern[]>>;
