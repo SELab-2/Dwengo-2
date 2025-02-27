@@ -1,5 +1,5 @@
-import { AssignmentInterface } from "./assignment_interface";
-import { IUser } from "./user_interface";
+import { AssignmentInterface } from "./assignmentInterface";
+import { IUser } from "./userInterface";
 
 export interface IStudent extends IUser {
     

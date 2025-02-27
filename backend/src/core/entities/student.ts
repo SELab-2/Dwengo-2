@@ -1,6 +1,6 @@
-import { AssignmentInterface } from "./assignment_interface";
-import { ClassInterface } from "./class_interface";
-import { IStudent } from "./student_interface";
+import { AssignmentInterface } from "./assignmentInterface";
+import { ClassInterface } from "./classInterface";
+import { IStudent } from "./studentInterface";
 
 export class Student implements IStudent {
     public constructor(

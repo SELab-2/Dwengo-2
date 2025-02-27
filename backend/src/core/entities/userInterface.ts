@@ -1,4 +1,4 @@
-import { ClassInterface } from "./class_interface";
+import { ClassInterface } from "./classInterface";
 
 export interface IUser {
     // Necessary variables

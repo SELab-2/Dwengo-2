@@ -1,6 +1,6 @@
 /*Here comes the interface for the repository for User entity -> Get's implemented in infrastructure/repositories*/
 
-import { ClassInterface } from "../entities/class_interface";
+import { ClassInterface } from "../entities/classInterface";
 
 
 export interface StudentRepositoryInterface {
