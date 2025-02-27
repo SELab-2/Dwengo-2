@@ -23,7 +23,7 @@ export interface StudentRepositoryInterface {
      * 
      * @param studentId the id of the student submitting a step in a assignment.
      * @param assignmentID the assignment that contains the step on which the student wants to submit their answer.
-     * @param objectId the id of the student-object.
+     * @param objectId the id of the object.
      * @param answer the answer provided by the student.
      */
     sendSubmissionForAssignment(
@@ -34,7 +34,7 @@ export interface StudentRepositoryInterface {
     ): Promise<void>;
 
     /**
-     * Fuction to make a join request for a class.
+     * Function to make a join request for a class.
      * 
      * @param studentId the id of the student that wants to join a class.
      * @param classCode the code of the class you want to join.
