@@ -7,5 +7,4 @@ export interface IUser {
     first_name: string;     // User's first name
     family_name: string;    // User's family name
     password_hash: string;  // User's hashed password
-    getClasses: () => Promise<ClassInterface[]>;
 }
