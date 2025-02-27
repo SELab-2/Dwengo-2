@@ -1902,7 +1902,6 @@ components:
         id:
           type: string
           format: uuid
-          readOnly: true
           description: Unique identifier for the user.
 
     Invite:
@@ -2091,7 +2090,6 @@ components:
         group:
           type: string
           format: uuid
-          readOnly: true
           description: Unique identifier for the assignment's group.
         start:
           type: string
