@@ -25,7 +25,7 @@ export class Student implements StudentInterface {
 
     async askQuestionForAssignment(
         assignment: AssignmentInterface,
-        studentObjectId: string,
+        objectId: string,
         question: string
     ): Promise<void> {
         // TODO
@@ -34,7 +34,7 @@ export class Student implements StudentInterface {
 
     async sendSubmissionForAssignment(
         assignment: AssignmentInterface,
-        studentObjectId: string,
+        objectId: string,
         answer: string
     ): Promise<void> {
         // TODO
