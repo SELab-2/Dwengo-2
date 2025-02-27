@@ -46,5 +46,5 @@ export interface StudentRepositoryInterface {
      * @param studentId the student id.
      * @returns every class where the student is part of
      */
-     getClasses: (studentId: string) => Promise<[ClassInterface]>;
+     getClasses: (studentId: string) => Promise<ClassInterface[]>;
 }

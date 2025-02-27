@@ -1,29 +1,17 @@
 import { AssignmentInterface } from "./assignment_interface";
 import { ClassInterface } from "./class_interface";
-import { StudentInterface } from "./student_interface";
+import { IStudent } from "./student_interface";
 
-export class Student implements StudentInterface {
-    id: string;
-    email: string;
-    first_name: string;
-    family_name: string;
-    password_hash: string;
+export class Student implements IStudent {
+    public constructor(
+        public readonly id: string,
+        public readonly email: string,
+        public first_name: string,
+        public family_name: string,
+        public readonly password_hash: string
+    ) {}
 
-    constructor(
-        id: string,
-        email: string,
-        first_name: string,
-        family_name: string,
-        password_hash: string
-    ) {
-        this.id = id;
-        this.email = email;
-        this.first_name = first_name;
-        this.family_name = family_name;
-        this.password_hash = password_hash;
-    }
-
-    async askQuestionForAssignment(
+    public async askQuestionForAssignment(
         assignment: AssignmentInterface,
         objectId: string,
         question: string
@@ -32,7 +20,7 @@ export class Student implements StudentInterface {
         return;
     }
 
-    async sendSubmissionForAssignment(
+    public async sendSubmissionForAssignment(
         assignment: AssignmentInterface,
         objectId: string,
         answer: string
@@ -41,12 +29,12 @@ export class Student implements StudentInterface {
         return;
     }
 
-    async requestToJoinClass(classCode: string): Promise<void> {
+    public async requestToJoinClass(classCode: string): Promise<void> {
         // TODO
         return;
     }
 
-    async getClasses(): Promise<ClassInterface[]> {
+    public async getClasses(): Promise<ClassInterface[]> {
         // TODO
         return [];
     }

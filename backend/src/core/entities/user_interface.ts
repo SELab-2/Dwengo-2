@@ -1,6 +1,6 @@
 import { ClassInterface } from "./class_interface";
 
-export interface UserInterface {
+export interface IUser {
     // Necessary variables
     id: string;     // User's id
     email: string;  // User's email

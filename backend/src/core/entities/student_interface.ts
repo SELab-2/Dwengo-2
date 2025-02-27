@@ -1,7 +1,7 @@
 import { AssignmentInterface } from "./assignment_interface";
-import { UserInterface } from "./user_interface";
+import { IUser } from "./user_interface";
 
-export interface StudentInterface extends UserInterface {
+export interface IStudent extends IUser {
     
     /**
      * Function takes an assignment and the object (via id) on which the student wants to ask a question about.
