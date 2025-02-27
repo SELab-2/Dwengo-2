@@ -46,7 +46,7 @@ export class Student implements StudentInterface {
         return;
     }
 
-    async get_classes(): Promise<[ClassInterface]> {
+    async getClasses(): Promise<ClassInterface[]> {
         // TODO
         return [];
     }
