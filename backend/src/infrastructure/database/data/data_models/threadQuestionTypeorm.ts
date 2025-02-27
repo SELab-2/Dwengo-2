@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, Column, CreateDateColumn } from "typeorm"
-import { User } from "./user_typeorm"
-import { QuestionThread } from "./question_thread_typeorm"
+import { User } from "./userTypeorm"
+import { QuestionThread } from "./questionThreadTypeorm"
 
 @Entity()
 export class ThreadQuestions {
