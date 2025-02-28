@@ -20,7 +20,7 @@ export function assignmentRoutes(app: Express, controller: AssignmentController)
     const response = controller.handle(request);
     responseToExpress(response, res);
   });
-
+  
   app.get('/groups/:idParent/assignments', (req, res) => {
     const request = requestFromExpress(req);
     const response = controller.handle(request);

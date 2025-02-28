@@ -37,13 +37,13 @@ export abstract class Controller {
 
     const methodHandlers = this.handlers[method];
     if (!methodHandlers)
-      return this.respond(404, { code: "NOT_FOUND", message: "Method not supported" });
+      return this.response(404, { code: "NOT_FOUND", message: "Method not supported" });
 
     const match = methodHandlers.find(
       p => p.hasId === !!id && p.hasParentId === !!idParent && (!p.parent || p.parent === parent)
     );
 
-    if (!match) return this.respond(404, { code: "NOT_FOUND", message: "Endpoint not found" });
+    if (!match) return this.response(404, { code: "NOT_FOUND", message: "Endpoint not found" });
 
     try { return match.handler(req); }
     catch (error) { return this.handleError(error); }

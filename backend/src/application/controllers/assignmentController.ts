@@ -73,7 +73,7 @@ export class AssignmentController extends Controller {
     const { id } = extractPathParams(req);
     const data = req.body;
     if (!data) throw { code: 'BAD_REQUEST', message: 'Missing request body' };
-    return this.respond(200, this.services.update.execute(id, data));
+    return this.response(200, this.services.update.execute(id, data));
   }
 
   /**
@@ -83,7 +83,7 @@ export class AssignmentController extends Controller {
    */
   private delete(req: Request): Response {
     const { id } = extractPathParams(req);
-    return this.respond(204, this.services.remove.execute(id));
+    return this.response(204, this.services.remove.execute(id));
   }
 
   /**
@@ -94,6 +94,6 @@ export class AssignmentController extends Controller {
   private create(req: Request): Response {
     const data = req.body;
     if (!data) throw { code: 'BAD_REQUEST', message: 'Missing request body' };
-    return this.respond(201, this.services.create.execute(data));
+    return this.response(201, this.services.create.execute(data));
   }
 }
