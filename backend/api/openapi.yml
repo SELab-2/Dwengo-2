@@ -1278,13 +1278,13 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  '/progresses/{idParent}/questions/{id}':
+  '/assignment/{idParent}/questions/{id}':
     get:
       tags:
         - questions
-      summary: Get progress question by ID
-      description: Retrieve detailed information about a specific question within a progress entry by their unique identifiers.
-      operationId: getProgressQuestionById
+      summary: Get assignment question by ID
+      description: Retrieve detailed information about a specific question within an assignment entry by their unique identifiers.
+      operationId: getAssignmentQuestionById
       parameters:
         - in: path
           name: id
@@ -1308,9 +1308,9 @@ paths:
     patch:
       tags:
         - questions
-      summary: Update progress question
-      description: Modify a question within a progress entry, such as providing an answer or adding remarks.
-      operationId: updateProgressQuestion
+      summary: Update assignment question
+      description: Modify a question within an assignment entry, such as providing an answer or adding remarks.
+      operationId: updateAssignmentQuestionbyId
       parameters:
         - in: path
           name: id
@@ -1340,9 +1340,9 @@ paths:
     delete:
       tags:
         - questions
-      summary: Delete progress question
-      description: Permanently delete a question from a progress entry by its unique identifier.
-      operationId: deleteProgressQuestion
+      summary: Delete asignment question
+      description: Permanently delete a question from an assignment entry by its unique identifier.
+      operationId: deleteAssignmentQuestionbyId
       parameters:
         - in: path
           name: id
@@ -1363,13 +1363,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/progresses/{idParent}/questions':
+  '/assignment/{idParent}/questions':
     get:
       tags:
         - questions
-      summary: Get all progress questions
-      description: Retrieve a list of all questions associated with a specific progress entry.
-      operationId: getProgressQuestions
+      summary: Get all assignment questions
+      description: Retrieve a list of all questions associated with a specific assignment entry.
+      operationId: getAssignmentQuestions
       parameters:
         - in: path
           name: idParent
@@ -1387,9 +1387,9 @@ paths:
     post:
       tags:
         - questions
-      summary: Create new progress question
-      description: Create a new question within a specific progress entry.
-      operationId: createProgressQuestion
+      summary: Create new assignment question
+      description: Create a new question within a specific assignment entry.
+      operationId: createAssignmentQuestion
       parameters:
         - in: path
           name: idParent
