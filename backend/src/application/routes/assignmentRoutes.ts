@@ -1,6 +1,5 @@
-// src/application/routes/assignment_routes.ts
 import { Express } from 'express';
-import { requestFromExpress, responseToExpress } from '../helpers';
+import { requestFromExpress, responseToExpress } from '../helpersExpress';
 import { AssignmentController } from '../controllers/assignmentController';
 
 /**
@@ -16,35 +15,30 @@ import { AssignmentController } from '../controllers/assignmentController';
  * - POST /assignments - Create new assignment
  */
 export function assignmentRoutes(app: Express, controller: AssignmentController): void {
-  // Get specific assignment in a group
   app.get('/groups/:idParent/assignments/:id', (req, res) => {
     const request = requestFromExpress(req);
     const response = controller.handle(request);
     responseToExpress(response, res);
   });
 
-  // Get all assignments in a group
   app.get('/groups/:idParent/assignments', (req, res) => {
     const request = requestFromExpress(req);
     const response = controller.handle(request);
     responseToExpress(response, res);
   });
 
-  // Update assignment
   app.patch('/assignments/:id', (req, res) => {
     const request = requestFromExpress(req);
     const response = controller.handle(request);
     responseToExpress(response, res);
   });
 
-  // Delete assignment
   app.delete('/assignments/:id', (req, res) => {
     const request = requestFromExpress(req);
     const response = controller.handle(request);
     responseToExpress(response, res);
   });
 
-  // Create new assignment
   app.post('/assignments', (req, res) => {
     const request = requestFromExpress(req);
     const response = controller.handle(request);
