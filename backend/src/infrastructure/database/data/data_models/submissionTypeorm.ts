@@ -21,13 +21,13 @@ export class Submission {
     assignment!: Assignment
 
     @Column()
-    learning_object_uuid!: string
+    learning_object_id!: string
 
     @CreateDateColumn()
     time!: Date
     
     @Column({ type: "bytea" }) // Equivalent to a blob
-    answer!: Buffer
+    contents!: Buffer
 
     @Column({
         type: "enum",

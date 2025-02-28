@@ -20,9 +20,6 @@ export class JoinRequest {
     @JoinColumn({ name: "class_id" })
     class!: Class
 
-    @CreateDateColumn()
-    invitation_date!: Date
-
     @Column({
         type: "enum",
         enum: JoinAsType
