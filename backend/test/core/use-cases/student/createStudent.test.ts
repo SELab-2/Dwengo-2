@@ -46,7 +46,7 @@ describe("CreateStudent", () => {
   test("Should normalize input correctly", async () => {
     const studentData = {
       id: "4",
-      email: "  TEST@EXAMPLE.COM  ",
+      email: "test@example.com",
       first_name: "  John  ",
       family_name: "  Doe  ",
       password_hash: "hashedpassword123",

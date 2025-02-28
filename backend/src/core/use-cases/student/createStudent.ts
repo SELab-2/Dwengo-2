@@ -1,10 +1,9 @@
 import { useCase } from "../../../config/usecase";
-import { IStudent } from "../../entities/studentInterface";
-
-export class CreateStudent implements useCase<IStudent> {
+import { Student } from "../../entities/student"
+export class CreateStudent implements useCase<Student> {
     constructor() {}
 
-    private async validateInput(input: IStudent): Promise<void> {
+    private async validateInput(input: Student): Promise<void> {
         // Use of general errors, specific errors to be added when interface is defined
         if (!input.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email)) {
             throw new Error("Invalid email");
@@ -30,11 +29,10 @@ export class CreateStudent implements useCase<IStudent> {
         }
 
     
-    async execute(input: IStudent): Promise<void> {
+    async execute(input: Student): Promise<void> {
         // Business logic here
         try {
             // Normalize input
-            input.email = input.email!.trim().toLowerCase();
             input.first_name = input.first_name!.trim();
             input.family_name = input.family_name!.trim();
 
@@ -43,7 +41,7 @@ export class CreateStudent implements useCase<IStudent> {
 
             // Save the student to the database
             /* 
-                IStudent createdStudent = await studentRepository.save(input); // returns a IStudent but with ID.
+                Student createdStudent = await studentRepository.save(input); // returns a Student but with ID.
                 return createdStudent;
             */ 
         } catch (error) {
