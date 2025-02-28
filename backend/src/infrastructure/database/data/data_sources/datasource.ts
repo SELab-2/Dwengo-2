@@ -3,7 +3,7 @@ import { AssignmentForGroup } from "../data_models/assignmentForGroupTypeorm";
 import { Assignment } from "../data_models/assignmentTypeorm";
 import { Class } from "../data_models/classTypeorm";
 import { Group } from "../data_models/groupTypeorm";
-import { PendingInvite } from "../data_models/joinRequestTypeorm";
+import { JoinRequest } from "../data_models/joinRequestTypeorm";
 import { StudentOfClass } from "../data_models/studentOfClassTypeorm";
 import { StudentOfGroup } from "../data_models/studentInGroupTypeorm";
 import { QuestionThread } from "../data_models/questionThreadTypeorm";
@@ -37,7 +37,7 @@ export class DatasourcePostgreSQL implements DatasourceInterface {
                 User, 
                 Student, 
                 Teacher,
-                PendingInvite,
+                JoinRequest,
                 Class,
                 TeacherOfClass,
                 StudentOfClass,
