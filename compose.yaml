@@ -4,7 +4,7 @@ services:
       context: .
       target: backend
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - NODE_ENV=development
     depends_on:
@@ -20,7 +20,7 @@ services:
       context: .
       target: frontend
     ports:
-      - "4200:4200"
+      - "4201:4200"
     environment:
       - NODE_ENV=development
     depends_on:
