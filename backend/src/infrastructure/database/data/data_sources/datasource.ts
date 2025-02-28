@@ -5,7 +5,7 @@ import { Class } from "../data_models/classTypeorm";
 import { Group } from "../data_models/groupTypeorm";
 import { JoinRequest } from "../data_models/joinRequestTypeorm";
 import { StudentOfClass } from "../data_models/studentOfClassTypeorm";
-import { StudentOfGroup } from "../data_models/studentInGroupTypeorm";
+import { StudentOfGroup } from "../data_models/studentOfGroupTypeorm";
 import { QuestionThread } from "../data_models/questionThreadTypeorm";
 import { Student } from "../data_models/studentTypeorm";
 import { TeacherOfClass } from "../data_models/teacherOfClassTypeorm";
