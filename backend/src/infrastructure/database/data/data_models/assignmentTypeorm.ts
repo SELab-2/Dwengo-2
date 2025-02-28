@@ -11,10 +11,10 @@ export class Assignment {
     class!: Class
 
     @Column({ type: "varchar", length: 100 }) // In the Dwengo API docs a uuid is a string
-    uuid!: string // uuid of corresponding learning path
+    learning_path_id!: string // uuid of corresponding learning path
 
     @Column({ type: "date" })
-    start_date!: Date
+    start!: Date
 
     @Column({ type: "date" })
     deadline!: Date

@@ -20,8 +20,8 @@ export class Submission {
     @JoinColumn({ name: "assignment_id" })
     assignment!: Assignment
 
-    @Column()
-    learning_object_id!: string
+    @Column({ type: "varchar"}) // In the Dwengo API docs a uuid is a string
+    learning_object_id!: string // uuid of corresponding learning object
 
     @CreateDateColumn()
     time!: Date
