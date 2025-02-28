@@ -1,11 +1,11 @@
 import { DataSource } from "typeorm";
-import { Teacher } from "../../../../core/entities/teacher";
-import { UserTypeORM } from "../data_models/userTypeorm";
-import { TeacherTypeORM } from "../data_models/teacherTypeorm";
+import { Teacher } from "../../../../../core/entities/teacher";
+import { UserTypeORM } from "../../data_models/userTypeorm";
+import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { DatasourceTypeORMPostgreSQLSingleton } from "./datasourceTypeORMSingleton";
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
 import { DatasourceTypeORMConnectionSettingsFactory } from "./datasourceTypeORMConnectionSettingsFactory";
-import { IDatasource } from "./datasourceInterface";
+import { IDatasource } from "../datasourceInterface";
 
 export class DatasourceTypeORMPostgreSQL implements IDatasource {
 

@@ -3,7 +3,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import { IDatasource } from "./infrastructure/database/data/data_sources/datasourceInterface";
-import { DatasourceTypeORMPostgreSQL } from "./infrastructure/database/data/data_sources/datasourceTypeORMPostgreSQL";
+import { DatasourceTypeORMPostgreSQL } from "./infrastructure/database/data/data_sources/typeorm/datasourceTypeORMPostgreSQL";
+import { TeacherRepositoryTypeORM } from "./infrastructure/repositories/teacherRepositoryTypeORM";
+import { DatasourceFactoryTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM";
 
 
 dotenv.config();

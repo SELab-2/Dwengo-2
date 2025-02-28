@@ -1,11 +1,11 @@
 import { Teacher } from "../../core/entities/teacher";
 import { ITeacherRepository } from "../../core/repositories/teacherRepositoryInterface";
 import { IDatasourceFactory } from "../database/data/data_sources/datasourceFactoryInterface";
-import { DatasourceTypeORMPostgreSQL } from "../database/data/data_sources/datasourceTypeORMPostgreSQL";
+import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 
 export class TeacherRepositoryTypeORM extends ITeacherRepository {
 
-    private datasource: DatasourceTypeORMPostgreSQL;
+    private datasource: IDatasource;
 
     public constructor(
         datasourceFactory: IDatasourceFactory
@@ -15,7 +15,6 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
     }
 
     async createTeacher(teacher: Teacher): Promise<Teacher> {
-        console.log("Teacher repo: create");
         return await this.datasource.createTeacher(teacher);
     }
 

@@ -1,7 +1,7 @@
-import { DatasourceTypeORMPostgreSQL } from "./datasourceTypeORMPostgreSQL";
+import { IDatasource } from "./datasourceInterface";
 
 export interface IDatasourceFactory {
     
-    createDatasource(): DatasourceTypeORMPostgreSQL;
+    createDatasource(): IDatasource;
 
 }

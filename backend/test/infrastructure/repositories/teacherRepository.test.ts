@@ -1,6 +1,6 @@
-import { DatasourceTypeORMConnectionSettings } from "../../../src/infrastructure/database/data/data_sources/datasourceTypeORMConnectionSettings";
-import { DatasourceTypeORMConnectionSettingsFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceTypeORMConnectionSettingsFactory";
-import { DatasourceTypeORMPostgreSQLSingleton } from "../../../src/infrastructure/database/data/data_sources/datasourceTypeORMSingleton";
+import { DatasourceTypeORMConnectionSettings } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
+import { DatasourceTypeORMConnectionSettingsFactory } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
+import { DatasourceTypeORMPostgreSQLSingleton } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMSingleton";
 
 beforeAll(async (): Promise<void> => {
     const connectionSettings: DatasourceTypeORMConnectionSettings = DatasourceTypeORMConnectionSettingsFactory.createDatasourceTypeORMConnectionSettings(

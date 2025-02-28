@@ -1,4 +1,4 @@
-import { IDatasourceFactory } from "./datasourceFactoryInterface";
+import { IDatasourceFactory } from "../datasourceFactoryInterface";
 import { DatasourceTypeORMPostgreSQL } from "./datasourceTypeORMPostgreSQL";
 
 export class DatasourceFactoryTypeORM implements IDatasourceFactory {
