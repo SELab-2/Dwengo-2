@@ -6,7 +6,7 @@ import { Student } from "../entities/student";
 
 export interface StudentRepositoryInterface {
     /**
-     * Ask a question about a step in an assignment.
+     * Create a new student in the DB.
      * @param student the student to be created
      * @returns the id of the created student in the DB.
      */
@@ -15,7 +15,7 @@ export interface StudentRepositoryInterface {
     ): Promise<string>;
 
     /**
-     * Ask a question about a step in an assignment.
+     * Find a student in the DB by email.
      * @param email email of the student to be found
      * @returns true if the student is present in the DB, false otherwise.
      */
