@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 
 @Entity()
-export class Assignment {
+export class AssignmentTypeORM {
     @PrimaryGeneratedColumn("uuid")
     assignment_id!: string
 

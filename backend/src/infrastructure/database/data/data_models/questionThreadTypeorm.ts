@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 
 export enum QuestionThreadVisibility {
     GROUP = "group",
@@ -6,7 +6,7 @@ export enum QuestionThreadVisibility {
 }
 
 @Entity()
-export class QuestionThread {
+export class QuestionThreadTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 

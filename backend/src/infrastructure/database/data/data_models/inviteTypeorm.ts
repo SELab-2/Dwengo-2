@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, Column } from "typeorm"
-import { User } from "./userTypeorm"
-import { Class } from "./classTypeorm"
+import { UserTypeORM } from "./userTypeorm"
+import { ClassTypeORM } from "./classTypeorm"
 
 export enum InviteType {
     TEACHER_TEACHER = "teacher_teacher",
@@ -12,17 +12,17 @@ export class PendingInvite {
     @PrimaryGeneratedColumn("uuid")
     id!: string
     
-    @OneToOne(() => User)
+    @OneToOne(() => UserTypeORM)
     @JoinColumn({ name: "inviter_id" })
-    inviter!: User
+    inviter!: UserTypeORM
 
-    @OneToOne(() => User)
+    @OneToOne(() => UserTypeORM)
     @JoinColumn({ name: "invitee_id" })
-    invitee!: User
+    invitee!: UserTypeORM
 
-    @OneToOne(() => Class)
+    @OneToOne(() => ClassTypeORM)
     @JoinColumn({ name: "class_id" })
-    class!: Class
+    class!: ClassTypeORM
 
     @CreateDateColumn()
     invitation_date!: Date
