@@ -17,7 +17,7 @@ export class TeacherTypeORM {
 
     public toTeacherEntity(userModel: UserTypeORM): Teacher {
         return new Teacher(
-            userModel.id,
+            this.id, // Important that it's the id from the Teacher table and not User!
             userModel.email,
             userModel.first_name,
             userModel.family_name,

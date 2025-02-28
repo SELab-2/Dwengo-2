@@ -5,19 +5,20 @@ import { User } from "./user";
 export class Teacher extends User {
 
     constructor(
-        id: string, 
         email: string, 
         first_name: string, 
         family_name: string, 
         password_hash: string, 
-        name_school?: string) {
+        name_school?: string,
+        id?: string
+    ) {
         super(
-            id,
             email,
             first_name,
             family_name,
             password_hash,
-            name_school
+            name_school,
+            id
         );
     }
     

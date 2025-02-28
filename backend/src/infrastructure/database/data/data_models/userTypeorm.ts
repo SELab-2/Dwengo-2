@@ -22,7 +22,6 @@ export class UserTypeORM {
     password_hash!: string
 
     public constructor(user: User) {
-        this.id = user.id
         this.email = user.email
         this.first_name = user.first_name
         this.family_name = user.family_name

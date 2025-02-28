@@ -5,6 +5,7 @@ import { DatasourceTypeORMPostgreSQL } from "../database/data/data_sources/datas
 export class TeacherRepositoryTypeORM extends ITeacherRepository {
 
     createTeacher(teacher: Teacher): Promise<Teacher> {
+        console.log("Teacher repo: create");
         return DatasourceTypeORMPostgreSQL.createTeacher(teacher);
     }
 
