@@ -35,5 +35,6 @@ jobs:
       - name: Test frontend
         run: docker exec $(docker ps -qf "name=frontend") npm test
       
-      - name: Stop containers
+      - name: Stop containers # Make sure containers will be stopped even if testing/linting fails
+        if: always()
         run: docker compose down
