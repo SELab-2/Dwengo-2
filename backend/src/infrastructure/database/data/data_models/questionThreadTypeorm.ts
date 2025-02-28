@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm"
 
-export enum QuestionThreadVisibility {
+export enum ThreadVisibility {
     GROUP = "group",
     STUDENT= "student"
 }
@@ -12,10 +12,10 @@ export class QuestionThread {
 
     @Column({
         type: "enum",
-        enum: QuestionThreadVisibility,
-        default: QuestionThreadVisibility.GROUP
+        enum: ThreadVisibility,
+        default: ThreadVisibility.GROUP
     })
-    visibility!: QuestionThreadVisibility
+    visibility!: ThreadVisibility
 
     @Column({ type: "boolean" })
     is_closed!: boolean
