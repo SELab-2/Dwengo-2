@@ -24,16 +24,16 @@ jobs:
         run: docker compose -f compose.yaml up -d
 
       - name: Lint backend
-        run: docker exec $(docker ps -qf "name=backend") npm run lint
+        run: docker exec $(docker ps -qf "name=dwengo-2-backend") npm run lint
 
       - name: Lint frontend
-        run: docker exec $(docker ps -qf "name=frontend") npm run lint
+        run: docker exec $(docker ps -qf "name=dwengo-2-frontend") npm run lint
 
       - name: Test backend
-        run: docker exec $(docker ps -qf "name=backend") npm test
+        run: docker exec $(docker ps -qf "name=dwengo-2-backend") npm test
 
       - name: Test frontend
-        run: docker exec $(docker ps -qf "name=frontend") npm test
+        run: docker exec $(docker ps -qf "name=dwengo-2-frontend") npm test
       
       - name: Stop containers # Make sure containers will be stopped even if testing/linting fails
         if: always()
