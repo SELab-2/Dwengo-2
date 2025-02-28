@@ -1,4 +1,5 @@
-import { DataSource, TypeORMError } from "typeorm"
+import { DataSource } from "typeorm";
+import { ITeacher } from "../../../../core/entities/teacherInterface";
 import { AssignmentAnswer } from "../data_models/assignmentAnswerTypeorm";
 import { AssignmentGroup } from "../data_models/assignmentGroupTypeorm";
 import { Assignment } from "../data_models/assignmentTypeorm";
@@ -12,21 +13,17 @@ import { QuestionThread } from "../data_models/questionThreadTypeorm";
 import { Student } from "../data_models/studentTypeorm";
 import { TeacherGroupAssignment } from "../data_models/teacherGroupAssignmentTypeorm";
 import { TeacherOfClass } from "../data_models/teacherOfClassTypeorm";
-import { Teacher } from "../data_models/teacherTypeorm";
-import { User } from "../data_models/userTypeorm";
+import { TeacherTypeORM } from "../data_models/teacherTypeorm";
+import { UserTypeORM } from "../data_models/userTypeorm";
 import { ThreadQuestions } from "../data_models/threadQuestionTypeorm";
-import { DatasourceInterface } from "./datasourceInterface";
+import { Teacher } from "../../../../core/entities/teacher";
 
-export class DatasourcePostgreSQL implements DatasourceInterface {
+export class DatasourceTypeORMPostgreSQL {
+    
+    static datasource: DataSource;
 
-    /**
-     * A TypeORM DataSource holds all the database connection settings and establishes
-     * a connection with the database.
-     */
-    dwengoPostgreSQLDataSource: DataSource;
-
-    constructor() {
-        this.dwengoPostgreSQLDataSource = new DataSource({
+    public constructor(){
+        DatasourceTypeORMPostgreSQL.datasource = new DataSource({
             type: "postgres",           // PostgreSQL database
             host: "database",           // Hostname -- is the name of the service created in the compose.yaml file
             port: 5432,                 // Port
@@ -36,9 +33,9 @@ export class DatasourcePostgreSQL implements DatasourceInterface {
             synchronize: true,          // Sync the database schema
             logging: true,              // SQL logging
             entities: [
-                User, 
+                UserTypeORM, 
                 Student, 
-                Teacher,
+                TeacherTypeORM,
                 PendingInvite,
                 Class,
                 TeacherOfClass,
@@ -56,42 +53,18 @@ export class DatasourcePostgreSQL implements DatasourceInterface {
         });
     }
 
-    /**
-     * Initialize the connection with the PostgreSQL database.
-     * It is meant that this gets called during the application bootstrap,
-     * calling `DwengoPostgreSQLDataSource.destroy()` stops the connection,
-     * in production this should not happen.
-     */
-    initialize_datasource(): void {
-        console.log("Initializing Dwengo's PostgreSQL database through TypeORM");
+    public static async createTeacher(teacher: Teacher): Promise<Teacher> {
+        const userModel: UserTypeORM = await DatasourceTypeORMPostgreSQL
+            .datasource
+            .getRepository(UserTypeORM)
+            .save(new UserTypeORM(teacher));
 
-        this.dwengoPostgreSQLDataSource.initialize()
-        .then(async () => {
-            console.log("Initialization successful");
-        })
-        .catch((error: TypeORMError) => {
-            console.log("Initialization unsuccessful");
-            //console.error("Error message: ", error);
-            throw error;
-        });
-    }
+        const teacherModel: TeacherTypeORM = await DatasourceTypeORMPostgreSQL
+            .datasource
+            .getRepository(TeacherTypeORM)
+            .save(new TeacherTypeORM(userModel));
 
-    /**
-     * Gracefully close the connection to the PostgreSQL database.
-     * This should not happen in production.
-     */
-    shutdown_datasource(): void {
-        console.log("Shutting down Dwengo's PostgreSQL database through TypeORM");
-
-        this.dwengoPostgreSQLDataSource.destroy()
-        .then(async () => {
-            console.log("Shutdown of PostgreSQL database successful");
-        })
-        .catch((error: TypeORMError) => {
-            console.log("Shutdown of PostgreSQL database unsuccessful");
-            //console.error("Error message: ", error);
-            throw error;
-        });
+        return teacherModel.toTeacherEntity(userModel);
     }
 
 }

@@ -1,7 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { User } from "../../../../core/entities/user"
 
 @Entity()
-export class User {
+export class UserTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 
@@ -15,8 +16,17 @@ export class User {
     family_name!: string
 
     @Column({ type: "varchar", length: 150, nullable: true }) // Optional
-    name_school!: string
+    name_school?: string
 
     @Column({ type: "varchar", length: 64 }) // 256-bit hash => 32 bytes => 64 hexadecimals
     password_hash!: string
+
+    public constructor(user: User) {
+        this.id = user.id
+        this.email = user.email
+        this.first_name = user.first_name
+        this.family_name = user.family_name
+        this.name_school = user.name_school
+        this.password_hash = user.password_hash
+    }
 }

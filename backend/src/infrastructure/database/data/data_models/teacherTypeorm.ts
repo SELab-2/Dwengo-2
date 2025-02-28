@@ -1,12 +1,28 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
-import { User } from "./userTypeorm"
+import { UserTypeORM } from "./userTypeorm"
+import { Teacher } from "../../../../core/entities/teacher"
 
 @Entity()
-export class Teacher {
+export class TeacherTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 
-    @OneToOne(() => User)
+    @OneToOne(() => UserTypeORM)
     @JoinColumn({ name: "user_id" })
-    teacher!: User
+    teacher!: UserTypeORM
+
+    public constructor(teacherUserObject: UserTypeORM) {
+        this.teacher = teacherUserObject
+    }
+
+    public toTeacherEntity(userModel: UserTypeORM): Teacher {
+        return new Teacher(
+            userModel.id,
+            userModel.email,
+            userModel.first_name,
+            userModel.family_name,
+            userModel.password_hash,
+            userModel.name_school,
+        )
+    }
 }

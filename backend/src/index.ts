@@ -2,7 +2,7 @@
 
 import express from "express";
 import dotenv from "dotenv";
-import { DatasourcePostgreSQL } from "./infrastructure/database/data/data_sources/datasource";
+import { DatasourceInitializePostgreSQL } from "./infrastructure/database/data/data_sources/datasourceInitializePostgreSQL";
 
 dotenv.config();
 
@@ -12,8 +12,8 @@ const port = process.env.PORT || 3000;
 // TODO: implement backend application
 
 // Initialize the datasource
-const datasource = new DatasourcePostgreSQL();
-datasource.initialize_datasource();
+const datasource = new DatasourceInitializePostgreSQL();
+datasource.initialize_database();
 
 app.get('/', (req, res) => {
   res.send("Hello, World!\n");
