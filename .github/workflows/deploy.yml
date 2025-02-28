@@ -35,10 +35,10 @@ jobs:
           cp -r frontend/dist/frontend/browser/* /var/www/dwengo/
 
       - name: Build Docker image 
-        run: docker compose -f compose.prod.yaml build # This docker container will serve the backend + DB
+        run: docker compose -f compose.prod.yaml -p prod build # This docker container will serve the backend + DB
 
       - name: Stop old containers
-        run: docker compose -f compose.prod.yaml down
+        run: docker compose -f compose.prod.yaml -p prod down
 
       - name: Start new containers
-        run: docker compose -f compose.prod.yaml up -d
+        run: docker compose -f compose.prod.yaml -p prod up -d

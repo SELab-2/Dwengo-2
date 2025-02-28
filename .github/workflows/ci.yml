@@ -36,4 +36,4 @@ jobs:
         run: docker exec $(docker ps -qf "name=frontend") npm test
       
       - name: Stop containers
-        run: docker compose down
+        run: docker compose -f compose.yaml down
