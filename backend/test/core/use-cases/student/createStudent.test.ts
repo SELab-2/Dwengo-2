@@ -1,10 +1,16 @@
 import { CreateStudent } from "../../../../src/core/use-cases/student/createStudent";
 
+const mockStudentRepository = {
+  findByEmail: jest.fn().mockResolvedValue(false), // Simuleert dat e-mail nog niet in gebruik is
+  createStudent: jest.fn().mockResolvedValue("mock-student-id"), // Simuleert student aanmaken
+};
+
+
 describe("CreateStudent", () => {
   let createStudent: CreateStudent;
 
   beforeEach(() => {
-    createStudent = new CreateStudent();
+    createStudent = new CreateStudent(mockStudentRepository as any);
   });
 
   test("Should throw error because of invalid email", async () => {
@@ -60,4 +66,22 @@ describe("CreateStudent", () => {
     expect(studentData.first_name).toBe("John");
     expect(studentData.family_name).toBe("Doe");
   });
+
+  test("Should throw error if email is already in use", async () => {
+    mockStudentRepository.findByEmail.mockResolvedValue(true);
+  
+    await expect(
+      createStudent.execute({
+        id: "5",
+        email: "test@example.com",
+        first_name: "John",
+        family_name: "Doe",
+        password_hash: "hashedpassword123",
+      })
+    ).rejects.toThrow("Email already in use");
+  
+    // Controleer of findByEmail is aangeroepen met het juiste e-mailadres
+    expect(mockStudentRepository.findByEmail).toHaveBeenCalledWith("test@example.com");
+  });
+  
 });
