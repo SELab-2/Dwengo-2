@@ -1,8 +1,14 @@
 import { useCase } from "../../../config/usecase";
 import { Student } from "../../entities/student"
+import {StudentRepositoryInterface} from "../../repositories/studentRepositoryInterface";
 export class CreateStudent implements useCase<Student> {
-    constructor() {}
-
+    public constructor(private studentRepository: StudentRepositoryInterface) {}
+    /**
+     * 
+     * @param input student object to be validated.
+     * @returns void
+     * @throws Error if input is invalid.
+     */
     private async validateInput(input: Student): Promise<void> {
         // Use of general errors, specific errors to be added when interface is defined
         if (!input.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email)) {
@@ -18,19 +24,21 @@ export class CreateStudent implements useCase<Student> {
         }
 
         // Check if email not already in use
-        /*
-            IStudent student = await studentRepository.findByEmail(input.email);
-            if (student) {
-                throw new Error("Email already in use");
-            }
-        */
         
-        // Check if password is valid, how to check with hashed password?
+        const present: boolean = await this.studentRepository.findByEmail(input.email);
+        if (present) {
+            throw new Error("Email already in use");
         }
-
+        
+    }
     
+    /**
+     * 
+     * @param input student to be created.
+     * @returns void
+     * @throws Error if input is invalid.
+     */
     async execute(input: Student): Promise<void> {
-        // Business logic here
         try {
             // Normalize input
             input.first_name = input.first_name!.trim();
@@ -40,10 +48,7 @@ export class CreateStudent implements useCase<Student> {
             await this.validateInput(input);
 
             // Save the student to the database
-            /* 
-                Student createdStudent = await studentRepository.save(input); // returns a Student but with ID.
-                return createdStudent;
-            */ 
+            const id: string = await this.studentRepository.createStudent(input);
         } catch (error) {
             console.error("Error creating new student:", error);
             throw error;

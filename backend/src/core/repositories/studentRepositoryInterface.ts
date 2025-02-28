@@ -1,9 +1,28 @@
 /*Here comes the interface for the repository for User entity -> Get's implemented in infrastructure/repositories*/
 
 import { ClassInterface } from "../entities/classInterface";
+import { Student } from "../entities/student";
 
 
 export interface StudentRepositoryInterface {
+    /**
+     * Ask a question about a step in an assignment.
+     * @param student the student to be created
+     * @returns the id of the created student in the DB.
+     */
+    createStudent(
+        student: Student
+    ): Promise<string>;
+
+    /**
+     * Ask a question about a step in an assignment.
+     * @param email email of the student to be found
+     * @returns true if the student is present in the DB, false otherwise.
+     */
+    findByEmail(
+        email: string
+    ): Promise<boolean>;
+
     /**
      * Ask a question about a step in an assignment.
      * @param studentId the id of the student asking the question.
