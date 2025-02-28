@@ -1,6 +1,11 @@
+import { IDatasourceFactory } from "../../infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { Teacher } from "../entities/teacher";
 
 export abstract class ITeacherRepository {
+
+    public constructor(
+        protected datasourceFactory: IDatasourceFactory
+    ) {}
 
     // TODO: crud operations
 

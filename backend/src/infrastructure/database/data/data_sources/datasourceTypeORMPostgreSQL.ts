@@ -5,8 +5,9 @@ import { TeacherTypeORM } from "../data_models/teacherTypeorm";
 import { DatasourceTypeORMPostgreSQLSingleton } from "./datasourceTypeORMSingleton";
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
 import { DatasourceTypeORMConnectionSettingsFactory } from "./datasourceTypeORMConnectionSettingsFactory";
+import { IDatasource } from "./datasourceInterface";
 
-export class DatasourceTypeORMPostgreSQL {
+export class DatasourceTypeORMPostgreSQL implements IDatasource {
 
     private static datasourceConnectionSettings: DatasourceTypeORMConnectionSettings = 
         DatasourceTypeORMConnectionSettingsFactory
@@ -20,18 +21,13 @@ export class DatasourceTypeORMPostgreSQL {
     
     private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMPostgreSQLSingleton.getInstance(this.datasourceConnectionSettings);
 
-    public static async createTeacher(teacher: Teacher): Promise<Teacher> {
+    public async createTeacher(teacher: Teacher): Promise<Teacher> {
+        const datasource: DataSource = await DatasourceTypeORMPostgreSQL.datasourcePromise;
 
-        const datasource: DataSource = await this.datasourcePromise;
-
-        console.log(teacher);
-
-        console.log("Datasource: create teacher: user");
         const userModel: UserTypeORM = await datasource
             .getRepository(UserTypeORM)
             .save(UserTypeORM.createUserTypeORM(teacher));
 
-        console.log("Datasource: create teacher: teacher");
         const teacherModel: TeacherTypeORM = await datasource
             .getRepository(TeacherTypeORM)
             .save(TeacherTypeORM.createTeacherTypeORM(teacher, userModel));
