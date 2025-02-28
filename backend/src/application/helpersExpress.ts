@@ -9,7 +9,10 @@ import { Request, Response, HttpMethod, PathParams } from "./types";
 export function requestFromExpress(req: ExpressRequest): Request {
   return {
     method: HttpMethod[req.method as keyof typeof HttpMethod],
-    headers: req.headers as Record<string, string>,
+    headers: {
+      ...req.headers as Record<string, string>,
+      'path': req.path
+    },
     body: req.body
   };
 }
@@ -60,18 +63,40 @@ export function responseToExpress(res: Response, expressRes: ExpressResponse): E
 
 /**
  * Extracts path parameters from a Request object's path header.
+ * Removes specified prefixes from `id` when entity matches and from `idParent` when parent matches,
+ * based on a predefined mapping of entity types to prefix patterns.
  *
  * @param req - The Request object containing a `headers` property with a `path` field.
  * @returns A `PathParams` object with `id` and optionally `idParent` properties, or an empty object if no valid path is found.
  * @example
- * // For req.headers['path'] = "/users/123" or "/users/123/groups"
- * extractPathParams(req) // Returns { id: "123" }
+ * // For req.headers['path'] = "/users/t-123"
+ * extractPathParams(req) // Returns { entity: "users", id: "123" }
  *
- * // For req.headers['path'] = "/users/123/orders/456"
- * extractPathParams(req) // Returns { id: "456", idParent: "123" }
+ * // For req.headers['path'] = "/users/s-123/orders/456"
+ * extractPathParams(req) // Returns { parent: "users", idParent: "123", entity: "orders", id: "456" }
+ *
+ * // For req.headers['path'] = "/classes/789/users/x-012"
+ * extractPathParams(req) // Returns { parent: "classes", idParent: "789", entity: "users", id: "012" }
  */
 export function extractPathParams(req: Request): PathParams {
-  // Remove query string if present before splitting
+  const prefixPatterns: Record<string, string[]> = {
+    'users': ['t-', 's-']
+  };
+
+  // Function to remove prefixes from an ID based on entity type
+  const removePrefixes = (id: string, entityType: string | undefined): string => {
+    if (!entityType || !prefixPatterns[entityType] || !id) return id;
+    let result = id;
+    for (const prefix of prefixPatterns[entityType]) {
+      const regex = new RegExp(`^${prefix}`);
+      if (regex.test(result)) {
+        result = result.replace(regex, '');
+        break;
+      }
+    }
+    return result;
+  };
+
   const path = req.headers['path']?.split('?')[0] || '';
   const pathParts = path.split('/').slice(1).filter(Boolean);
   const params: PathParams = {};
@@ -79,12 +104,14 @@ export function extractPathParams(req: Request): PathParams {
   if (pathParts.length === 2 || pathParts.length === 3) {
     params.entity = pathParts[0];
     params.id = pathParts[1];
-  }
-  else if (pathParts.length === 4) {
+    params.id = removePrefixes(params.id, params.entity);
+  } else if (pathParts.length === 4) {
     params.parent = pathParts[0];
     params.idParent = pathParts[1];
     params.entity = pathParts[2];
     params.id = pathParts[3];
+    params.id = removePrefixes(params.id, params.entity);
+    params.idParent = removePrefixes(params.idParent, params.parent);
   }
 
   return params;
