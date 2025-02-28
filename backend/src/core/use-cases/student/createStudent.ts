@@ -4,7 +4,7 @@ import {StudentRepositoryInterface} from "../../repositories/studentRepositoryIn
 export class CreateStudent implements useCase<Student> {
     public constructor(private studentRepository: StudentRepositoryInterface) {}
     /**
-     * 
+     * Validates student input.
      * @param input student object to be validated.
      * @returns void
      * @throws Error if input is invalid.
@@ -33,7 +33,7 @@ export class CreateStudent implements useCase<Student> {
     }
     
     /**
-     * 
+     * Creates a new student.
      * @param input student to be created.
      * @returns void
      * @throws Error if input is invalid.
