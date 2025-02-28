@@ -16,7 +16,7 @@ import { GroupController } from '../controllers/groupController';
  * - DELETE /groups/:id - Delete group
  * - POST /groups - Create new group
  */
-export function assignmentRoutes(app: Express, controller: GroupController): void {
+export function groupRoutes(app: Express, controller: GroupController): void {
   app.get('/users/:idParent/groups/:id', (req, res) => {
     const request = requestFromExpress(req);
     const response = controller.handle(request);
