@@ -7,7 +7,7 @@ RUN npm install
 RUN npm install -g nodemon ts-node typescript tsconfig-paths pg
 
 
-EXPOSE 3000
+EXPOSE 3001
 CMD ["npm", "run", "dev"]
 
 # Frontend setup
@@ -25,7 +25,7 @@ RUN apk add --no-cache chromium harfbuzz ttf-freefont
 # Set the chromium binary path
 ENV CHROME_BIN=/usr/bin/chromium
 
-EXPOSE 4200
+EXPOSE 4201
 CMD ["npm", "start"]
 
 # Database set-up
@@ -38,5 +38,5 @@ ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=postgres
 ENV POSTGRES_DB=dwengo-database
 
-EXPOSE 5432
+EXPOSE 5433
 CMD ["postgres"]
