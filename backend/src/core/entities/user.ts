@@ -18,12 +18,12 @@ export class User {
         name_school?: string,
         id?: string
     ) {
-        this.id = id;
         this.email = email;
         this.first_name = first_name;
         this.family_name = family_name;
         this.password_hash = password_hash;
         this.name_school = name_school;
+        this.id = id;
     }
 
 }

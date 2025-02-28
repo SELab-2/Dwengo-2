@@ -1,5 +1,3 @@
-import { ClassInterface } from "./classInterface";
-import { ITeacher } from "./teacherInterface";
 import { User } from "./user";
 
 export class Teacher extends User {

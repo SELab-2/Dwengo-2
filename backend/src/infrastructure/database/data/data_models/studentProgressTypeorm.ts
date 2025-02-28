@@ -1,6 +1,6 @@
 import { Entity, PrimaryColumn, OneToOne, JoinColumn, Column } from "typeorm"
 import { AssignmentTypeORM } from "./assignmentTypeorm"
-import { Student } from "./studentTypeorm"
+import { StudentTypeORM } from "./studentTypeorm"
 import { AssignmentAnswerTypeORM } from "./assignmentAnswerTypeorm"
 import { QuestionThreadTypeORM } from "./questionThreadTypeorm"
 
@@ -11,7 +11,7 @@ export enum StudentProgressStatus {
 }
 
 @Entity()
-export class StudentProgress {
+export class StudentProgressTypeORM {
     @PrimaryColumn()
     super_so_uuid!: string
 
@@ -22,9 +22,9 @@ export class StudentProgress {
     @JoinColumn({ name: "assignment_id" })
     assignment!: AssignmentTypeORM
 
-    @OneToOne(() => Student)
+    @OneToOne(() => StudentTypeORM)
     @JoinColumn({ name: "student_id" })
-    student!: Student
+    student!: StudentTypeORM
 
     @OneToOne(() => QuestionThreadTypeORM, { nullable: true })
     @JoinColumn({ name: "question_thread_id" })

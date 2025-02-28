@@ -3,7 +3,7 @@ import { TeacherTypeORM } from "./teacherTypeorm"
 import { ClassTypeORM } from "./classTypeorm"
 
 @Entity()
-export class TeacherOfClass {
+export class TeacherOfClassTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 

@@ -8,7 +8,7 @@ export enum InviteType {
 }
 
 @Entity()
-export class PendingInvite {
+export class PendingInviteTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
     

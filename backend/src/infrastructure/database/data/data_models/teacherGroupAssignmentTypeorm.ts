@@ -3,7 +3,7 @@ import { TeacherTypeORM } from "./teacherTypeorm"
 import { AssignmentTypeORM } from "./assignmentTypeorm"
 
 @Entity()
-export class TeacherGroupAssignment {
+export class TeacherGroupAssignmentTypeORM {
     @PrimaryGeneratedColumn()
 
     @OneToOne(() => TeacherTypeORM)

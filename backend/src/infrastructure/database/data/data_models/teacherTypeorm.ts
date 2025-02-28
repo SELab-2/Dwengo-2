@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
 import { UserTypeORM } from "./userTypeorm"
 import { Teacher } from "../../../../core/entities/teacher"
+import { User } from "../../../../core/entities/user"
 
 @Entity()
 export class TeacherTypeORM {
@@ -11,8 +12,10 @@ export class TeacherTypeORM {
     @JoinColumn({ name: "user_id" })
     teacher!: UserTypeORM
 
-    public constructor(teacherUserObject: UserTypeORM) {
-        this.teacher = teacherUserObject
+    public static createTeacherTypeORM(teacher: Teacher, correspondingUser: UserTypeORM): TeacherTypeORM {
+        let teacherTypeORM: TeacherTypeORM = new TeacherTypeORM();
+        teacherTypeORM.teacher = correspondingUser;
+        return teacherTypeORM;
     }
 
     public toTeacherEntity(userModel: UserTypeORM): Teacher {

@@ -2,38 +2,29 @@ import { DataSource } from "typeorm";
 import { Teacher } from "../../../../core/entities/teacher";
 import { UserTypeORM } from "../data_models/userTypeorm";
 import { TeacherTypeORM } from "../data_models/teacherTypeorm";
+import { DatasourceTypeORMPostgreSQLSingleton } from "./datasourceTypeORMSingleton";
 
 export class DatasourceTypeORMPostgreSQL {
     
-    private static datasource: DataSource = new DataSource({
-        type: "postgres",           // PostgreSQL database
-        host: "database",           // Hostname -- is the name of the service created in the compose.yaml file
-        port: 5432,                 // Port
-        username: "postgres",       // Username to login to the database
-        password: "postgres",       // Password //TODO: use a '.env' file along with dotenv package
-        database: "dwengo-database",// Database name
-        synchronize: true,          // Sync the database schema
-        logging: true,              // SQL logging
-        entities: [
-            "../data_models/*.ts",
-        ]
-    });
+    private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMPostgreSQLSingleton.getInstance();
 
     public static async createTeacher(teacher: Teacher): Promise<Teacher> {
 
+        const datasource: DataSource = await DatasourceTypeORMPostgreSQL.datasourcePromise;
+
+        console.log(teacher);
+
         console.log("Datasource: create teacher: user");
-        const userModel: UserTypeORM = await DatasourceTypeORMPostgreSQL
-            .datasource
+        const userModel: UserTypeORM = await datasource
             .getRepository(UserTypeORM)
-            .save(new UserTypeORM(teacher));
+            .save(UserTypeORM.createUserTypeORM(teacher));
 
         console.log("Datasource: create teacher: teacher");
-        const teacherModel: TeacherTypeORM = await DatasourceTypeORMPostgreSQL
-            .datasource
+        const teacherModel: TeacherTypeORM = await datasource
             .getRepository(TeacherTypeORM)
-            .save(new TeacherTypeORM(userModel));
+            .save(TeacherTypeORM.createTeacherTypeORM(teacher, userModel));
 
-        return teacherModel.toTeacherEntity(userModel);
+        return teacherModel.toTeacherEntity(teacherModel.teacher);
     }
 
 }
