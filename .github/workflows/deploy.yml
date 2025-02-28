@@ -1,0 +1,44 @@
+name: Build & Deploy application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Fix permissions
+        run: sudo chown -R $USER:$USER /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2 || true
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: frontend
+
+      - name: Build Angular project # Build the frontend 
+        run: npm run build
+        working-directory: frontend
+
+      - name: Move files to /var/www/dwengo # Move the files to /var/www/dwengo were we statically serve the frontend
+        run: |
+          rm -rf /var/www/dwengo/*
+          cp -r frontend/dist/frontend/browser/* /var/www/dwengo/
+
+      - name: Build Docker image 
+        run: docker compose -f compose.prod.yaml -p prod build # This docker container will serve the backend + DB
+
+      - name: Stop old containers
+        run: docker compose -f compose.prod.yaml -p prod down
+
+      - name: Start new containers
+        run: docker compose -f compose.prod.yaml -p prod up -d
