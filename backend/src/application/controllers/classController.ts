@@ -12,7 +12,7 @@ import { Get, UserGet, Update, Delete, Create } from "../services/classServices"
  * - POST /classes - Create a new class
  */
 export class ClassController extends Controller {
-  constructor(
+  public constructor(
     get: Get,
     userGet: UserGet,
     update: Update,
