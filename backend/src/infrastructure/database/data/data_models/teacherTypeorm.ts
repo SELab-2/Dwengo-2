@@ -26,6 +26,6 @@ export class TeacherTypeORM {
             userModel.family_name,
             userModel.password_hash,
             userModel.name_school,
-        )
+        );
     }
 }

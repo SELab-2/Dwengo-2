@@ -1,9 +1,6 @@
 import { DataSource, TypeORMError } from "typeorm"
 import { IDatasourceInitialize } from "./datasourceInitializeInterface";
 import { DatasourceTypeORMPostgreSQLSingleton } from "./datasourceTypeORMSingleton";
-import { ITeacherRepository } from "../../../../core/repositories/teacherRepositoryInterface";
-import { TeacherRepositoryTypeORM } from "../../../repositories/teacherRepositoryTypeORM";
-import { Teacher } from "../../../../core/entities/teacher";
 
 export class DatasourceInitializePostgreSQL implements IDatasourceInitialize {
 
@@ -27,21 +24,6 @@ export class DatasourceInitializePostgreSQL implements IDatasourceInitialize {
             //console.error("Error message: ", error);
             throw error;
         });
-
-        // TODO: remove and implement test with Jest
-        console.log("Creating teacher");
-        const repo: ITeacherRepository = new TeacherRepositoryTypeORM();
-
-        const teacher: Teacher =  new Teacher(
-            "email@mail.com",
-            "test",
-            "name",
-            "12345"
-        );
-
-        console.log(teacher);
-
-        await repo.createTeacher(teacher);
     }
 
     async shutdown_database(): Promise<void> {
