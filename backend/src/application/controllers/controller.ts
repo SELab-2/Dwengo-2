@@ -1,4 +1,4 @@
-import { ApiError, Request, Response, RouteHandlers} from '../types';
+import { ApiError, Request, Response, RouteHandlers, ResponseBody } from '../types';
 import { extractPathParams } from '../helpersExpress';
 import { Services } from '../services/service';
 
@@ -37,13 +37,13 @@ export abstract class Controller {
 
     const methodHandlers = this.handlers[method];
     if (!methodHandlers)
-      return this.response(404, { code: "NOT_FOUND", message: "Method not supported" });
+      return this.respond(404, { code: "NOT_FOUND", message: "Method not supported" });
 
     const match = methodHandlers.find(
       p => p.hasId === !!id && p.hasParentId === !!idParent && (!p.parent || p.parent === parent)
     );
 
-    if (!match) return this.response(404, { code: "NOT_FOUND", message: "Endpoint not found" });
+    if (!match) return this.respond(404, { code: "NOT_FOUND", message: "Endpoint not found" });
 
     try { return match.handler(req); }
     catch (error) { return this.handleError(error); }
@@ -57,7 +57,8 @@ export abstract class Controller {
    * @param headers - Optional additional HTTP headers
    * @returns Complete response object
    */
-  protected response(status: number, body: object, headers: Record<string, string> = {}): Response {
+  protected respond(status: number, responseBody: unknown, headers: Record<string, string> = {}): Response {
+    const body = this.serviceResponseToResponseBody(responseBody);
     return {status, headers: { 'Content-Type': 'application/json', ...headers }, body};
   }
 
@@ -73,12 +74,20 @@ export abstract class Controller {
       NOT_FOUND: 404, UNAUTHORIZED: 401, BAD_REQUEST: 400, FORBIDDEN: 403, CONFLICT: 409
     };
     if (!(error && typeof error === 'object' && 'code' in error && 'message' in error)) {
-      return this.response(500, { code: 'INTERNAL_ERROR', message: 'Unexpected server error' });
+      return this.respond(500, { code: 'INTERNAL_ERROR', message: 'Unexpected server error' });
     }
     const apiError = error as ApiError;
     const status = statusMap[apiError.code] || 500;
-    return this.response(status, {
+    return this.respond(status, {
       code: apiError.code || "INTERNAL_ERROR", message: apiError.message || "Server error"
     });
+  }
+
+  protected serviceResponseToResponseBody(serviceResponse: unknown): ResponseBody {
+    try {
+      return serviceResponse as ResponseBody;
+    } catch (error) {
+      throw new Error(`Failed to serialize service response: ${error}`);
+    }
   }
 }

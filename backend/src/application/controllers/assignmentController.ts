@@ -1,7 +1,7 @@
 import { Controller } from './controller';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
 import { extractPathParams, extractQueryParams } from '../helpersExpress';
-import { AssignmentServices } from '../services/assignmentServices';
+import { Get, GroupGet, Update, Delete, Create } from '../services/assignmentServices';
 
 /**
  * Controller responsible for assignment-related API endpoints including CRUD operations
@@ -14,13 +14,14 @@ import { AssignmentServices } from '../services/assignmentServices';
  */
 export class AssignmentController extends Controller {
   constructor(
-    get: InstanceType<typeof AssignmentServices.Get>,
-    groupGet: InstanceType<typeof AssignmentServices.GroupGet>,
-    update: InstanceType<typeof AssignmentServices.Update>,
-    remove: InstanceType<typeof AssignmentServices.Delete>,
-    create: InstanceType<typeof AssignmentServices.Create>
+    get: Get,
+    groupGet: GroupGet,
+    update: Update,
+    remove: Delete,
+    create: Create
   ) {
     const handlers : RouteHandlers = {
+      // pattern matching for each HTTP method
       [HttpMethod.GET]: [
         { hasId: true, hasParentId: false, handler: (req: Request) => this.getOne(req) },
         { parent: 'groups', hasId: false, hasParentId: true, handler: (req: Request) => this.getMany(req) }
@@ -47,7 +48,7 @@ export class AssignmentController extends Controller {
    */
   private getOne(req: Request): Response {
     const { id } = extractPathParams(req);
-    return this.response(200, this.services.get.execute(id));
+    return this.respond(200, this.services.get.execute(id));
   }
 
   /**
@@ -60,7 +61,7 @@ export class AssignmentController extends Controller {
     const { page, size } = extractQueryParams(req);
     if (page === undefined || size === undefined)
       throw { code: 'BAD_REQUEST', message: 'Missing required query parameters: page and size' };
-    return this.response(200, this.services.groupGet.execute(idParent, page, size));
+    return this.respond(200, this.services.groupGet.execute(idParent, page, size));
   }
 
   /**
@@ -72,7 +73,7 @@ export class AssignmentController extends Controller {
     const { id } = extractPathParams(req);
     const data = req.body;
     if (!data) throw { code: 'BAD_REQUEST', message: 'Missing request body' };
-    return this.response(200, this.services.update.execute(id, data));
+    return this.respond(200, this.services.update.execute(id, data));
   }
 
   /**
@@ -82,7 +83,7 @@ export class AssignmentController extends Controller {
    */
   private delete(req: Request): Response {
     const { id } = extractPathParams(req);
-    return this.response(204, this.services.remove.execute(id));
+    return this.respond(204, this.services.remove.execute(id));
   }
 
   /**
@@ -93,6 +94,6 @@ export class AssignmentController extends Controller {
   private create(req: Request): Response {
     const data = req.body;
     if (!data) throw { code: 'BAD_REQUEST', message: 'Missing request body' };
-    return this.response(201, this.services.create.execute(data));
+    return this.respond(201, this.services.create.execute(data));
   }
 }
