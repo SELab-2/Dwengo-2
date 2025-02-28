@@ -1,8 +1,8 @@
 import { Entity, PrimaryColumn, OneToOne, JoinColumn, Column } from "typeorm"
-import { Assignment } from "./assignment_typeorm"
-import { Student } from "./student_typeorm"
-import { AssignmentAnswer } from "./assignment_answer_typeorm"
-import { QuestionThread } from "./question_thread_typeorm"
+import { Assignment } from "./assignmentTypeorm"
+import { Student } from "./studentTypeorm"
+import { AssignmentAnswer } from "./assignmentAnswerTypeorm"
+import { QuestionThread } from "./questionThreadTypeorm"
 
 export enum StudentProgressStatus {
     NOT_DONE = "not_done",

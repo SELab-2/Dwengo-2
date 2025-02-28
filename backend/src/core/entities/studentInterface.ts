@@ -1,7 +1,6 @@
-import { AssignmentInterface } from "./assignment_interface";
-import { UserInterface } from "./user_interface";
+import { ClassInterface } from "./classInterface";
+import { IUser } from "./userInterface";
 
-export interface StudentInterface extends UserInterface {
-    ask_question_for_assignment: (assignment: AssignmentInterface) => void; // TODO: correct arguments.
-    send_submission_for_assignment: (assignment: AssignmentInterface) => void;
+export interface IStudent extends IUser {
+    classes: ClassInterface[];
 }
