@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn } from "typeorm"
-import { Teacher } from "./teacher_typeorm"
-import { Class } from "./class_typeorm"
+import { Teacher } from "./teacherTypeorm"
+import { Class } from "./classTypeorm"
 
 @Entity()
 export class TeacherOfClass {
