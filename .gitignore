@@ -2,3 +2,5 @@ node_modules/
 .angular/
 .vscode/
 coverage/
+settings.json
+*.env/
