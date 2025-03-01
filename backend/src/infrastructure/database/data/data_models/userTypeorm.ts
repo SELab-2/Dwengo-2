@@ -22,7 +22,7 @@ export class UserTypeORM {
     password_hash!: string
 
     public static createUserTypeORM(user: User): UserTypeORM {
-        let userTypeORM: UserTypeORM = new UserTypeORM();
+        const userTypeORM: UserTypeORM = new UserTypeORM();
         userTypeORM.email = user.email
         userTypeORM.first_name = user.first_name
         userTypeORM.family_name = user.family_name

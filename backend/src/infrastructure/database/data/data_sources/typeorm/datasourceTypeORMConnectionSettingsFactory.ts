@@ -48,6 +48,9 @@ export class DatasourceTypeORMConnectionSettingsFactory {
         logging: boolean=true,
         host: string="database",
         dropschema: boolean=false, // Never set this to true in production
+
+        // Next any[] is not possible to replace with a more specific type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         entities: any[] = [
             UserTypeORM, 
             StudentTypeORM, 
@@ -66,7 +69,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             AssignmentAnswerTypeORM,
             StudentProgressTypeORM
         ],
-    ) {
+    ): DatasourceTypeORMConnectionSettings {
         return new DatasourceTypeORMConnectionSettings(
             type,
             host,

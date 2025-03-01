@@ -12,6 +12,6 @@ export class DatasourceFactoryTypeORM implements IDatasourceFactory {
      */
     public createDatasource(): DatasourceTypeORM {
         return new DatasourceTypeORM();
-    };
+    }
 
 }

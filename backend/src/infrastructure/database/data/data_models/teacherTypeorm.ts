@@ -13,7 +13,7 @@ export class TeacherTypeORM {
     teacher!: UserTypeORM
 
     public static createTeacherTypeORM(teacher: Teacher, correspondingUser: UserTypeORM): TeacherTypeORM {
-        let teacherTypeORM: TeacherTypeORM = new TeacherTypeORM();
+        const teacherTypeORM: TeacherTypeORM = new TeacherTypeORM();
         teacherTypeORM.teacher = correspondingUser;
         return teacherTypeORM;
     }

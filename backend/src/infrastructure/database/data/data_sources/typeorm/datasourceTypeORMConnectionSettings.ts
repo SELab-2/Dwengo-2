@@ -2,6 +2,7 @@
  * Class that represents the connection settings for a TypeORM datasource.
  * These get created by the DatasourceTypeORMConnectionSettingsFactory, see that class for more information.
  */
+
 export class DatasourceTypeORMConnectionSettings {
 
     public constructor(
@@ -14,6 +15,9 @@ export class DatasourceTypeORMConnectionSettings {
         private synchronize: boolean,
         private logging: boolean,
         private dropschema: boolean,
+
+        // Next any[] is not possible to replace with a more specific type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         private entities: any[]
     ) {}
 
@@ -49,7 +53,7 @@ export class DatasourceTypeORMConnectionSettings {
         return this.logging;
     }
 
-    public getEntities(): any[] {
+    public getEntities() {
         return this.entities;
     }
 
@@ -57,6 +61,8 @@ export class DatasourceTypeORMConnectionSettings {
         return this.dropschema;
     }
 
+    // Next any[] is not possible to replace with a more specific type
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public toObject(): any {
         return {
             type: this.type,

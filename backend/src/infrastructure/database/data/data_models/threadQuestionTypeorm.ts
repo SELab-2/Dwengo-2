@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, Column, CreateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, Column } from "typeorm"
 import { UserTypeORM } from "./userTypeorm"
 import { QuestionThreadTypeORM } from "./questionThreadTypeorm"
 
