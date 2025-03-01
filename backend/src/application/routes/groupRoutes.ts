@@ -1,6 +1,7 @@
 import { Express } from 'express';
-import { requestFromExpress, responseToExpress } from '../helpersExpress';
+import { configureRoutes, DEFAULT_METHOD_MAP } from './routes';
 import { GroupController } from '../controllers/groupController';
+import { HttpMethod } from '../types';
 
 /**
  * RESTful routing configuration for group-related endpoints.
@@ -17,45 +18,13 @@ import { GroupController } from '../controllers/groupController';
  * - POST /groups - Create new group
  */
 export function groupRoutes(app: Express, controller: GroupController): void {
-  app.get('/users/:idParent/groups/:id', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.get('/users/:idParent/groups', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.get('/classes/:idParent/groups/:id', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.get('/classes/:idParent/groups', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.patch('/groups/:id', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.delete('/groups/:id', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.post('/groups', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
+  configureRoutes([
+    { app, method: HttpMethod.GET,    urlPattern: '/users/:idParent/groups/:id', controller },
+    { app, method: HttpMethod.GET,    urlPattern: '/users/:idParent/groups', controller },
+    { app, method: HttpMethod.GET,    urlPattern: '/classes/:idParent/groups/:id', controller },
+    { app, method: HttpMethod.GET,    urlPattern: '/classes/:idParent/groups', controller },
+    { app, method: HttpMethod.PATCH,  urlPattern: '/groups/:id', controller },
+    { app, method: HttpMethod.DELETE, urlPattern: '/groups/:id', controller },
+    { app, method: HttpMethod.POST,   urlPattern: '/groups', controller },
+  ], DEFAULT_METHOD_MAP);
 }
