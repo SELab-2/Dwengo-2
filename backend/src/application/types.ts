@@ -13,16 +13,22 @@ export enum HttpMethod {
   CONNECT = "CONNECT" ,
 }
 
+export type RequestHeaders = Record<string, string>;
+export type ResponseHeaders = Record<string, string>;
+export type RequestBody = Record<string, unknown>;
+export type ResponseBody = Record<string, unknown>;
+
 /**
  * Interface defining an HTTP request object.
  * Based on the standardized HTTP Request structure.
  * See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
  */
 export interface Request {
-  headers: Record<string, string>;
+  headers: RequestHeaders;
   method: HttpMethod;
   body: object;
 }
+
 
 /**
  * Interface defining an HTTP response object.
@@ -30,8 +36,8 @@ export interface Request {
  * See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
  */
 export interface Response {
-  headers: Record<string, string>;
-  body: Record<string, unknown>;
+  headers: ResponseHeaders;
+  body: ResponseBody;
   status: number;
 }
 
