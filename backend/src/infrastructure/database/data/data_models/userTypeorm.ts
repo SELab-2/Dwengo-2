@@ -23,6 +23,7 @@ export class UserTypeORM {
 
     public static createUserTypeORM(user: User): UserTypeORM {
         const userTypeORM: UserTypeORM = new UserTypeORM();
+        if(user.id) userTypeORM.id = user.id;
         userTypeORM.email = user.email
         userTypeORM.first_name = user.first_name
         userTypeORM.family_name = user.family_name

@@ -18,31 +18,31 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
         return await this.datasource.createTeacher(teacher);
     }
 
-    getTeacherById(id: string): Promise<Teacher> {
-        throw new Error("Method not implemented.");
+    async getTeacherById(id: string): Promise<Teacher|null> {
+        return await this.datasource.getTeacherById(id);
     }
 
-    getTeacherByEmail(email: string): Promise<Teacher> {
-        throw new Error("Method not implemented.");
+    async getTeacherByEmail(email: string): Promise<Teacher|null> {
+        return await this.datasource.getTeacherByEmail(email);
     }
 
-    getTeacherByFirstName(first_name: string): Promise<Teacher> {
-        throw new Error("Method not implemented.");
+    async getTeacherByFirstName(first_name: string): Promise<Teacher|null> {
+        return await this.datasource.getTeacherByFirstName(first_name);
     }
 
-    getTeacherByLastName(last_name: string): Promise<Teacher> {
-        throw new Error("Method not implemented.");
+    async getTeacherByLastName(last_name: string): Promise<Teacher|null> {
+        return await this.datasource.getTeacherByLastName(last_name);
     }
 
-    getAllTeachers(): Promise<Teacher[]> {
-        throw new Error("Method not implemented.");
+    async getAllTeachers(): Promise<Teacher[]> {
+        return await this.datasource.getAllTeachers();
     }
 
-    updateTeacher(teacher: Teacher): Promise<Teacher> {
-        throw new Error("Method not implemented.");
+    async updateTeacher(teacher: Teacher): Promise<Teacher> {
+        return await this.datasource.updateTeacher(teacher);
     }
 
-    deleteTeacher(teacher: Teacher): Promise<Teacher> {
-        throw new Error("Method not implemented.");
+    async deleteTeacherWithId(id: string): Promise<void> {
+        return await this.datasource.deleteTeacherWithId(id);
     }
 }

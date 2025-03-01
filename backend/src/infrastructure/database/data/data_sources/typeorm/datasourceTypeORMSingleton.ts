@@ -20,12 +20,11 @@ export class DatasourceTypeORMSingleton {
         if(!this.instance) {
             console.log(`Initializing database connection to ${connectionSettings.getDatabase()} (${connectionSettings.getType()}) on ${connectionSettings.getHost()}:${connectionSettings.getPort()}`);
 
+            connectionSettings.setSynchronize(true); // Make sure we sync when we don't a connection yet
             this.instance = new DataSource(connectionSettings.toObject());
-            const datasource: DataSource = await this.instance.initialize(); // TODO: can fail, so do more checks
+            this.instance = await this.instance.initialize(); // TODO: can fail, so do more checks
 
             console.log("Initialization succesful");
-            return datasource;
-
         }
         return this.instance;
     }

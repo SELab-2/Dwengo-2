@@ -38,3 +38,5 @@ describe("DatasourceTypeORMSingleton", () => {
     });
 
 });
+
+// TODO: test that calling getInstance multiple times returns the same instance

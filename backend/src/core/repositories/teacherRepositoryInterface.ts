@@ -28,30 +28,30 @@ export abstract class ITeacherRepository {
     /**
      * Get a teacher by its id.
      * @param id The id of the teacher
-     * @returns A promise that resolves to the teacher with the given id.
+     * @returns A promise that resolves to the teacher with the given id or null if no results are found.
      */
-    public abstract getTeacherById(id: string): Promise<Teacher>;
+    public abstract getTeacherById(id: string): Promise<Teacher|null>;
 
     /**
      * Get a teacher by their email.
      * @param email The email of the teacher
-     * @returns A promise that resolves to the teacher with the given email.
+     * @returns A promise that resolves to the teacher with the given email or null if no results are found.
      */
-    public abstract getTeacherByEmail(email: string): Promise<Teacher>;
+    public abstract getTeacherByEmail(email: string): Promise<Teacher|null>;
 
     /**
      * Get a teacher by their first name.
      * @param first_name The first name of the teacher
      * @returns A promise that resolves to the teacher with the given first name.
      */
-    public abstract getTeacherByFirstName(first_name: string): Promise<Teacher>;
+    public abstract getTeacherByFirstName(first_name: string): Promise<Teacher|null>;
 
     /**
      * Get a teacher by their last name.
      * @param last_name The last name of the teacher
      * @returns A promise that resolves to the teacher with the given last name.
      */
-    public abstract getTeacherByLastName(last_name: string): Promise<Teacher>;
+    public abstract getTeacherByLastName(last_name: string): Promise<Teacher|null>;
 
     /**
      * Get all teachers in the repository.
@@ -68,8 +68,7 @@ export abstract class ITeacherRepository {
 
     /**
      * Delete a teacher from the repository.
-     * @param teacher The teacher to delete.
-     * @returns A promise that resolves to the deleted teacher.
+     * @param id The id of the teacher to delete.
      */
-    public abstract deleteTeacher(teacher: Teacher): Promise<Teacher>;
+    public abstract deleteTeacherWithId(id: string): Promise<void>;
 }
