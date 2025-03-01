@@ -7,7 +7,7 @@ import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnecti
 import { DatasourceTypeORMConnectionSettingsFactory } from "./datasourceTypeORMConnectionSettingsFactory";
 import { IDatasource } from "../datasourceInterface";
 
-export class DatasourceTypeORMPostgreSQL implements IDatasource {
+export class DatasourceTypeORM implements IDatasource {
 
     private static datasourceConnectionSettings: DatasourceTypeORMConnectionSettings = 
         DatasourceTypeORMConnectionSettingsFactory
@@ -22,7 +22,7 @@ export class DatasourceTypeORMPostgreSQL implements IDatasource {
     private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMPostgreSQLSingleton.getInstance(this.datasourceConnectionSettings);
 
     public async createTeacher(teacher: Teacher): Promise<Teacher> {
-        const datasource: DataSource = await DatasourceTypeORMPostgreSQL.datasourcePromise;
+        const datasource: DataSource = await DatasourceTypeORM.datasourcePromise;
 
         const userModel: UserTypeORM = await datasource
             .getRepository(UserTypeORM)

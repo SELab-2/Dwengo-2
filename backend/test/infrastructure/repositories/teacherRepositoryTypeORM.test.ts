@@ -1,26 +1,39 @@
 import { Teacher } from "../../../src/core/entities/teacher";
+import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
 import { TeacherRepositoryTypeORM } from "../../../src/infrastructure/repositories/teacherRepositoryTypeORM";
 
-// Mock for IDatasource
-const mockIDatasource: IDatasource = {
-    createTeacher: jest.fn((teacher: Teacher) => Promise<Teacher>),
-};
-
-// Mock for IDatasourceFactory
-const mockIDatasourceFactory = {
-    createDatasource: jest.fn(() => mockIDatasource),
-};
-
 describe("TeacherRepositoryTypeORM", () => {
-    it("should be mocked", async () => {
-        const teacherRepository = new TeacherRepositoryTypeORM(mockIDatasourceFactory);
 
-        const mockTeacher = {} as Teacher;
-        teacherRepository.createTeacher(mockTeacher); // Call the method
+    let datasourceFactoryMock: jest.Mocked<IDatasourceFactory>;
+    let datasource: IDatasource;
+    let teacherRepositoryTypeORM: TeacherRepositoryTypeORM;
+    let teacher: Teacher;
 
-        // Assertions to ensure the mocks are called properly
-        expect(mockIDatasourceFactory.createDatasource).toHaveBeenCalled();
-        expect(teacherRepository.createTeacher).toHaveBeenCalledWith(mockTeacher);
+    beforeEach(() => {
+        datasource = {
+            createTeacher: jest.fn((teacher: Teacher) => Promise.resolve(teacher))
+        };
+        datasourceFactoryMock = {
+            createDatasource: jest.fn(() => datasource)
+        };
+
+        // Mock teacher
+        teacher = new Teacher("email", "alice", "bob", "password");
     });
+
+    test("createTeacher", async () => {
+        // Make repository
+        teacherRepositoryTypeORM = new TeacherRepositoryTypeORM(datasourceFactoryMock);
+
+        expect(datasourceFactoryMock.createDatasource).toHaveBeenCalledTimes(1);
+
+        // Call function from repository
+        const returnTeacher: Teacher = await teacherRepositoryTypeORM.createTeacher(teacher);
+        
+        expect(datasource.createTeacher).toHaveBeenCalledTimes(1);
+        expect(datasource.createTeacher).toHaveBeenCalledWith(teacher);
+        expect(returnTeacher).toEqual(teacher);
+    });
+
 });

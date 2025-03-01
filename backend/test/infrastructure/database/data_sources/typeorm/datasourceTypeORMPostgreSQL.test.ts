@@ -2,9 +2,9 @@ import { DataSource } from "typeorm";
 import { UserTypeORM } from "../../../../../src/infrastructure/database/data/data_models/userTypeorm";
 import { DatasourceTypeORMConnectionSettingsFactory } from "../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
 import { DatasourceTypeORMConnectionSettings } from "../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
+import { TeacherTypeORM } from "../../../../../src/infrastructure/database/data/data_models/teacherTypeorm";
 
-let datasourceSettings: DatasourceTypeORMConnectionSettings;
-
+// Mock TypeORM
 jest.mock("typeorm", () => ({
     DataSource: jest.fn().mockImplementation(() => ({
         getRepository: jest.fn().mockReturnValue({
@@ -14,6 +14,7 @@ jest.mock("typeorm", () => ({
     DataSourceOptions: jest.fn(),
 
     // TODO: should instead mock the data models?
+    // Mock the decorators in the data models
     Entity: jest.fn(() => () => {}),
     PrimaryGeneratedColumn: jest.fn(() => () => {}),
     PrimaryColumn: jest.fn(() => () => {}),
@@ -23,8 +24,10 @@ jest.mock("typeorm", () => ({
     CreateDateColumn: jest.fn(() => () => {}),
 }));
 
-describe("Mock example", () => {
+// Variables
+let datasourceSettings: DatasourceTypeORMConnectionSettings;
 
+beforeAll(() => {
     datasourceSettings = DatasourceTypeORMConnectionSettingsFactory
     .createDatasourceTypeORMConnectionSettings(
         "postgres",
@@ -33,13 +36,24 @@ describe("Mock example", () => {
         "postgres",
         "dwengo-database"
     );
+});
 
-    it("should be mocked", () => {
-        const dataSource = new DataSource(datasourceSettings.toObject());
+describe("DatasourceTypeORM", () => {  
+    it("createTeacher", () => {
+        const dataSource = new DataSource(datasourceSettings.toObject()); // TypeORM
+
+        // Save user
         const userRepository = dataSource.getRepository(UserTypeORM);
-        userRepository.save(UserTypeORM.createUserTypeORM({} as any)); // TODO: ?
+        userRepository.save(UserTypeORM.createUserTypeORM({} as any));
 
-        expect(userRepository.save).toHaveBeenCalled();
         expect(dataSource.getRepository).toHaveBeenCalledWith(UserTypeORM);
+        expect(userRepository.save).toHaveBeenCalled();
+        
+        // Save teacher
+        const teacherRepository = dataSource.getRepository(TeacherTypeORM);
+        teacherRepository.save(TeacherTypeORM.createTeacherTypeORM({} as any, {} as any));
+
+        expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
+        expect(teacherRepository.save).toHaveBeenCalled();
     });
 });

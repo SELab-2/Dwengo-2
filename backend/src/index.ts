@@ -3,10 +3,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { IDatasource } from "./infrastructure/database/data/data_sources/datasourceInterface";
-import { DatasourceTypeORMPostgreSQL } from "./infrastructure/database/data/data_sources/typeorm/datasourceTypeORMPostgreSQL";
-import { TeacherRepositoryTypeORM } from "./infrastructure/repositories/teacherRepositoryTypeORM";
-import { DatasourceFactoryTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM";
-
+import { DatasourceTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceTypeORM";
 
 dotenv.config();
 
@@ -16,7 +13,7 @@ const port = process.env.PORT || 3000;
 // TODO: implement backend application
 
 // Initialize the datasource
-const datasource: IDatasource = new DatasourceTypeORMPostgreSQL();
+const datasource: IDatasource = new DatasourceTypeORM();
 
 app.get('/', (req, res) => {
   res.send("Hello, World!\n");

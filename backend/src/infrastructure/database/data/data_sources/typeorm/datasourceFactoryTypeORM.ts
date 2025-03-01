@@ -1,10 +1,10 @@
 import { IDatasourceFactory } from "../datasourceFactoryInterface";
-import { DatasourceTypeORMPostgreSQL } from "./datasourceTypeORMPostgreSQL";
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceFactoryTypeORM implements IDatasourceFactory {
     
-    public createDatasource(): DatasourceTypeORMPostgreSQL {
-        return new DatasourceTypeORMPostgreSQL();
+    public createDatasource(): DatasourceTypeORM {
+        return new DatasourceTypeORM();
     };
 
 }
