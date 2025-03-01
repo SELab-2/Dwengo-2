@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
 
-export class DatasourceTypeORMPostgreSQLSingleton {
+export class DatasourceTypeORMSingleton {
 
     private static instance: DataSource;
 

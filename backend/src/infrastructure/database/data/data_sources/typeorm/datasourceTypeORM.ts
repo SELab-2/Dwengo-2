@@ -2,7 +2,7 @@ import { DataSource } from "typeorm";
 import { Teacher } from "../../../../../core/entities/teacher";
 import { UserTypeORM } from "../../data_models/userTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
-import { DatasourceTypeORMPostgreSQLSingleton } from "./datasourceTypeORMSingleton";
+import { DatasourceTypeORMSingleton } from "./datasourceTypeORMSingleton";
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
 import { DatasourceTypeORMConnectionSettingsFactory } from "./datasourceTypeORMConnectionSettingsFactory";
 import { IDatasource } from "../datasourceInterface";
@@ -19,7 +19,7 @@ export class DatasourceTypeORM implements IDatasource {
             "dwengo-database"
         );
     
-    private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMPostgreSQLSingleton.getInstance(this.datasourceConnectionSettings);
+    private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(this.datasourceConnectionSettings);
 
     public async createTeacher(teacher: Teacher): Promise<Teacher> {
         const datasource: DataSource = await DatasourceTypeORM.datasourcePromise;
