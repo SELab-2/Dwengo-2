@@ -21,6 +21,8 @@ export class UserTypeORM {
     @Column({ type: "varchar", length: 64 }) // 256-bit hash => 32 bytes => 64 hexadecimals
     password_hash!: string
 
+    // Since multiple constructors isn't supported by Typescript
+    // https://stackoverflow.com/questions/12702548/constructor-overload-in-typescript
     public static createUserTypeORM(user: User): UserTypeORM {
         const userTypeORM: UserTypeORM = new UserTypeORM();
         if(user.id) userTypeORM.id = user.id;
