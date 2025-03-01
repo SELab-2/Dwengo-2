@@ -1,3 +1,7 @@
+/**
+ * Class that represents the connection settings for a TypeORM datasource.
+ * These get created by the DatasourceTypeORMConnectionSettingsFactory, see that class for more information.
+ */
 export class DatasourceTypeORMConnectionSettings {
 
     public constructor(

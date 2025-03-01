@@ -16,10 +16,12 @@ export class DatasourceTypeORM implements IDatasource {
             5432,
             "postgres",
             "postgres",
-            "dwengo-database"
+            "dwengo-database",
+            true,
+            true
         );
     
-    private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(this.datasourceConnectionSettings);
+    private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(this.datasourceConnectionSettings); // TODO: static can be removed?
 
     public async createTeacher(teacher: Teacher): Promise<Teacher> {
         const datasource: DataSource = await DatasourceTypeORM.datasourcePromise;

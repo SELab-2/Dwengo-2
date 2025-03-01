@@ -16,8 +16,28 @@ import { AssignmentAnswerTypeORM } from "../../data_models/assignmentAnswerTypeo
 import { StudentProgressTypeORM } from "../../data_models/studentProgressTypeorm";
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
 
+/**
+ * Factory class for creating DatasourceTypeORMConnectionSettings objects.
+ * These connection settings are used to make datasources.
+ */
 export class DatasourceTypeORMConnectionSettingsFactory {
 
+    // TODO: check for valid type inputs? (we don't support mysql, ...)
+
+    /**
+     * Create a new DatasourceTypeORMConnectionSettings object.
+     * @param type Type of database, e.g. "postgres"
+     * @param port Port number of the database
+     * @param username Username for the database
+     * @param password Password for the database
+     * @param database Database name
+     * @param synchronize Synchronize the database scheme and it's entities, if the database is uninitialized this initializes the database
+     * @param logging Enable logging (recommended)
+     * @param host Hostname
+     * @param dropschema Drop the schema after closing the connection (never set this to true in production)
+     * @param entities The entities of the database (our data models)
+     * @returns A new DatasourceTypeORMConnectionSettings object with the given configurations
+     */
     public static createDatasourceTypeORMConnectionSettings(
         type: string,
         port: number,
