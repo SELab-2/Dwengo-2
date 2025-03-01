@@ -32,6 +32,6 @@ export class PendingInviteController extends Controller {
       ]
     };
 
-    super({ get, userGet, delete, create }, handlers);
+    super({ get, userGet, remove, create }, handlers);
   }
 }
