@@ -1,14 +1,29 @@
-import { ClassInterface } from "./classInterface";
 import { User } from "./userInterface";
 
 export class Student extends User {
     public constructor(
-        public readonly email: string,
-        public first_name: string,
-        public family_name: string,
-        public readonly password_hash: string,
-        public readonly id?: string,
+        email: string,
+        firstName: string,
+        familyName: string,
+        passwordHash: string,
+        private _classes: string[], // List of class Id's where the student is part of
+        id?: string,
     ) {
-        super(email, first_name, family_name, password_hash, id);
+        super(email, firstName, familyName, passwordHash, id);
+    }
+
+    public get classes():string[]{
+        return this._classes; // Mutable
+    }
+    
+    public get classesCopy():string[]{
+        return [...this._classes]; // Immutable for instance
+    }
+
+    public set classes(newClasses:string[]){
+        if (!Array.isArray(newClasses)) {
+            throw new Error("Classes must be an array of strings.");
+        }
+        this._classes = newClasses;
     }
 }
