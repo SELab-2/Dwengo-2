@@ -1,14 +1,14 @@
 export class PendingInvite {
     public constructor(
-        private readonly requestId: string,
-        private readonly classId: string,
+        private readonly _requestId: string,
+        private readonly _classId: string,
     ){}
 
-    public getRequestId(): string {
-        return this.requestId;
+    public get requestId(): string {
+        return this._requestId;
     }
 
-    public getClassId(): string {
-        return this.classId;
+    public get classId(): string {
+        return this._classId;
     }
 }
