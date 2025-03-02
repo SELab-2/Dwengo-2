@@ -1,36 +1,36 @@
 export class Class {
     public constructor(
-        private name: string,
-        private description: string,
-        private targetAudience: string,  // Who is this class directed to (8th grade, home schooling, ...)
-        private id?: string,
+        private _name: string,
+        private _description: string,
+        private _targetAudience: string,  // Who is this class directed to (8th grade, home schooling, ...)
+        private _id?: string,
     ){}
 
-    public getName():string{
-        return this.name;
+    // Getters
+    public get name():string{
+        return this._name;
     }
-    public setName(name:string):void{
-        this.name = name;
+    public get description():string{
+        return this._description;
     }
-
-    public getDescription():string{
-        return this.description;
+    public get targetAudience():string{
+        return this._targetAudience;
     }
-    public setDescription(description:string):void{
-        this.description = description;
-    }
-
-    public getTargetAudience():string{
-        return this.targetAudience;
-    }
-    public setTargetAudience():void{
-        this.targetAudience = this.targetAudience;
+    public get id():string|undefined{
+        return this._id;
     }
 
-    public getId():string|undefined{
-        return this.id;
+    // Setters
+    public set name(newName:string){
+        this._name = newName;
     }
-    public setId(id:string):void{
-        this.id = id;
+    public set description(newDescription:string){
+        this._description = newDescription;
+    }
+    public set targetAudience(newTargetAudience:string){
+        this._targetAudience = newTargetAudience;
+    }
+    public set id(newId:string){
+        this._id = newId;
     }
 }
