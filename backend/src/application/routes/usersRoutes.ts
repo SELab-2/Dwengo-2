@@ -17,7 +17,7 @@ import { HttpMethod } from '../types';
  * - GET /users - Get all users
  * - POST /users - Create new user
  */
-export function userRoutes(app: Express, controller: UsersController): void {
+export function usersRoutes(app: Express, controller: UsersController): void {
   configureRoutes([
     { app, method: HttpMethod.GET,  urlPattern: '/classes/:idParent/users', controller },
     { app, method: HttpMethod.GET,  urlPattern: '/groups/:idParent/users', controller },
