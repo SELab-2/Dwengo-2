@@ -1,1 +1,10 @@
-// TODO: export all routes, rename them as needed
+export * from './routes';
+export * from './assignmentRoutes';
+// export * from './classRoutes';
+export * from './groupRoutes';
+// export * from './pendingInviteRoutes';
+// export * from './questionThreadRoutes';
+export * from './studentRoutes';
+export * from './teacherRoutes';
+// export * from './threadQuestionRoutes';
+export * from './usersRoutes';

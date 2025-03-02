@@ -1,1 +1,3 @@
-/*HTTP (req, res) handling for User entity*/
+import { Controller } from './controller';
+
+export class StudentController extends Controller {}
