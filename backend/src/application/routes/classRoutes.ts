@@ -1,6 +1,7 @@
 import { Express } from "express";
+import { configureRoutes, DEFAULT_METHOD_MAP } from "./routesExpress";
 import { ClassController } from "../controllers/classController";
-import { requestFromExpress, responseToExpress } from "../helpersExpress";
+import { HttpMethod } from "../types";
 
 /**
  * RESTful routing configuration for class-related endpoints.
@@ -15,33 +16,11 @@ import { requestFromExpress, responseToExpress } from "../helpersExpress";
  * - POST /classes - Create a new class
  */
 export function classRoutes(app: Express, controller: ClassController): void {
-  app.get("/users/:idParent/classes/:id", (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.get("/users/:idParent/classes", (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.patch("/classes/:id", (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.delete("/classes/:id", (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.post("/classes", (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
+  configureRoutes([
+    { app, method: HttpMethod.GET,    urlPattern: "/users/:idParent/classes/:id", controller },
+    { app, method: HttpMethod.GET,    urlPattern: "/users/:idParent/classes", controller },
+    { app, method: HttpMethod.PATCH,  urlPattern: "/classes/:id", controller },
+    { app, method: HttpMethod.DELETE, urlPattern: "/classes/:id", controller },
+    { app, method: HttpMethod.POST,   urlPattern: "/classes", controller },
+  ], DEFAULT_METHOD_MAP);
 }

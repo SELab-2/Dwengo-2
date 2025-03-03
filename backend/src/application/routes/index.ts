@@ -1,4 +1,4 @@
-export * from './routes';
+export * from './routesExpress';
 export * from './assignmentRoutes';
 // export * from './classRoutes';
 export * from './groupRoutes';

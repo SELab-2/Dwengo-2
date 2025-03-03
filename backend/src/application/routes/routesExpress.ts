@@ -2,7 +2,6 @@ import { Express, RequestHandler } from 'express';
 import { requestFromExpress, responseToExpress } from '../helpersExpress';
 import { Controller } from '../controllers/controller';
 import { HttpMethod } from '../types';
-// TODO - Relies on express, :-(
 
 /**
  * Configuration for a single route mapping HTTP methods to controller actions

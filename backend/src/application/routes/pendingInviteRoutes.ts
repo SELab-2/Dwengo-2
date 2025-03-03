@@ -1,6 +1,7 @@
 import { Express } from 'express';
-import { requestFromExpress, responseToExpress } from '../helpersExpress';
+import { configureRoutes, DEFAULT_METHOD_MAP } from './routesExpress';
 import { PendingInviteController } from '../controllers/pendingInviteController';
+import { HttpMethod } from '../types';
 
 /**
  * RESTful routing configuration for PendingInvite related endpoints.
@@ -14,27 +15,10 @@ import { PendingInviteController } from '../controllers/pendingInviteController'
  * - POST /invites - Create new invite
  */
 export function pendingInviteRoutes(app: Express, controller: PendingInviteController): void {
-  app.get('/users/:idParent/invites/:id', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.get('/users/:idParent/invites', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.delete('/invites/:id', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  app.post('/invites', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
+  configureRoutes([
+    { app, method: HttpMethod.GET,    urlPattern: '/users/:idParent/invites/:id', controller },
+    { app, method: HttpMethod.GET,    urlPattern: '/users/:idParent/invites', controller },
+    { app, method: HttpMethod.DELETE, urlPattern: '/invites/:id', controller },
+    { app, method: HttpMethod.POST,   urlPattern: '/invites', controller },
+  ], DEFAULT_METHOD_MAP);
 }
