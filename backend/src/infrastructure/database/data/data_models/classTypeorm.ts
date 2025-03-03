@@ -10,4 +10,7 @@ export class Class {
 
     @Column({ type: "smallint" })
     year!: number
+
+    @Column({ type: "text"})
+    description!: string
 }

@@ -12,10 +12,10 @@ export class User {
     first_name!: string
 
     @Column({ type: "varchar", length: 50 })
-    family_name!: string
+    last_name!: string
 
     @Column({ type: "varchar", length: 150, nullable: true }) // Optional
-    name_school!: string
+    school_name!: string
 
     @Column({ type: "varchar", length: 64 }) // 256-bit hash => 32 bytes => 64 hexadecimals
     password_hash!: string
