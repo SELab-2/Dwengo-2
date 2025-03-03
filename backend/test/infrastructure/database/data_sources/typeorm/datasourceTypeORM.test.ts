@@ -1,19 +1,23 @@
-import { DataSource } from "typeorm";
+import { DataSource, FindOneOptions, } from "typeorm";
 import { UserTypeORM } from "../../../../../src/infrastructure/database/data/data_models/userTypeorm";
 import { DatasourceTypeORMConnectionSettingsFactory } from "../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
 import { DatasourceTypeORMConnectionSettings } from "../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
 import { TeacherTypeORM } from "../../../../../src/infrastructure/database/data/data_models/teacherTypeorm";
+
+// Variables
+let datasourceSettings: DatasourceTypeORMConnectionSettings;
 
 // Mock TypeORM
 jest.mock("typeorm", () => ({
     DataSource: jest.fn().mockImplementation(() => ({
         getRepository: jest.fn().mockReturnValue({
             save: jest.fn(),
+            findOne: jest.fn((options: FindOneOptions) => Promise.resolve({} as TeacherTypeORM)),
         } as any)
     })),
     DataSourceOptions: jest.fn(),
+    FindOneOptions: jest.fn(),
 
-    // TODO: should instead mock the data models?
     // Mock the decorators in the data models
     Entity: jest.fn(() => () => {}),
     PrimaryGeneratedColumn: jest.fn(() => () => {}),
@@ -22,10 +26,19 @@ jest.mock("typeorm", () => ({
     OneToOne: jest.fn(() => () => {}),
     JoinColumn: jest.fn(() => () => {}),
     CreateDateColumn: jest.fn(() => () => {}),
+
+    // Querying
+    Repository: jest.fn().mockImplementation(() => ({
+        findOne: jest.fn((options: FindOneOptions) => Promise.resolve({} as TeacherTypeORM)),
+    }))
 }));
 
-// Variables
-let datasourceSettings: DatasourceTypeORMConnectionSettings;
+// Mock datamodel
+jest.mock("../../../../../src/infrastructure/database/data/data_models/teacherTypeorm", () => ({
+    TeacherTypeORM: jest.fn().mockImplementation(() => ({
+        toTeacherEntity: jest.fn((user: UserTypeORM) => ({} as any))
+    }))
+}));
 
 beforeAll(() => {
     datasourceSettings = DatasourceTypeORMConnectionSettingsFactory
@@ -39,7 +52,7 @@ beforeAll(() => {
 });
 
 describe("DatasourceTypeORM", () => {  
-    it("createTeacher", () => {
+    test("createTeacher", () => {
         const dataSource = new DataSource(datasourceSettings.toObject()); // TypeORM
 
         // Save user
@@ -56,4 +69,22 @@ describe("DatasourceTypeORM", () => {
         expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
         expect(teacherRepository.save).toHaveBeenCalled();
     });
+
+    test("getTeacherById", async () => {
+        const dataSource = new DataSource(datasourceSettings.toObject()); // TypeORM
+
+        // Find teacher
+        const teacherRepository = dataSource.getRepository(TeacherTypeORM);
+        const teacherModel = await teacherRepository.findOne({ where: { id: "id" }, relations: ["teacher"] });
+
+        expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
+        expect(teacherRepository.findOne).toHaveBeenCalled();
+
+        // Teacher found? Then map to teacher entity
+        if (teacherModel !== null) {
+            const teacher = teacherModel.toTeacherEntity(teacherModel.teacher);
+            // expect(teacher).toBeDefined();
+        }
+    });
+
 });
