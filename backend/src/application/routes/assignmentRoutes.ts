@@ -1,7 +1,7 @@
-// src/application/routes/assignment_routes.ts
 import { Express } from 'express';
-import { requestFromExpress, responseToExpress } from '../helpers';
+import { configureRoutes, DEFAULT_METHOD_MAP } from './routes';
 import { AssignmentController } from '../controllers/assignmentController';
+import { HttpMethod } from '../types';
 
 /**
  * RESTful routing configuration for assignment-related endpoints.
@@ -16,38 +16,11 @@ import { AssignmentController } from '../controllers/assignmentController';
  * - POST /assignments - Create new assignment
  */
 export function assignmentRoutes(app: Express, controller: AssignmentController): void {
-  // Get specific assignment in a group
-  app.get('/groups/:idParent/assignments/:id', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  // Get all assignments in a group
-  app.get('/groups/:idParent/assignments', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  // Update assignment
-  app.patch('/assignments/:id', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  // Delete assignment
-  app.delete('/assignments/:id', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
-
-  // Create new assignment
-  app.post('/assignments', (req, res) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
-  });
+  configureRoutes([
+    { app, method: HttpMethod.GET,    urlPattern: '/groups/:idParent/assignments/:id', controller },
+    { app, method: HttpMethod.GET,    urlPattern: '/groups/:idParent/assignments', controller },
+    { app, method: HttpMethod.PATCH,  urlPattern: '/assignments/:id', controller },
+    { app, method: HttpMethod.DELETE, urlPattern: '/assignments/:id', controller },
+    { app, method: HttpMethod.POST,   urlPattern: '/assignments', controller },
+  ], DEFAULT_METHOD_MAP);
 }
