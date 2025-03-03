@@ -93,10 +93,14 @@ export class DatasourceTypeORMConnectionSettings {
         this.dropschema = dropschema;
     }
 
+    // Next any[] is not possible to replace with a more specific type
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public getEntities(): any[] {
         return this.entities;
     }
 
+    // Next any[] is not possible to replace with a more specific type
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public setEntities(entities: any[]): void {
         this.entities = entities;
     }
