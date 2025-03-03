@@ -1,5 +1,5 @@
 import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
-import { requestFromExpress, requestToExpress, responseFromExpress, responseToExpress } from "../../src/application/helpers";
+import { requestFromExpress, requestToExpress, responseFromExpress, responseToExpress } from "../../src/application/helpersExpress";
 import { Request, Response, HttpMethod } from "../../src/application/types";
 
 describe("Request Objects", (): void => {
