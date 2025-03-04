@@ -18,7 +18,7 @@ export class PendingInviteController extends Controller {
     remove: Delete,
     create: Create
   ) {
-    const handlers : RouteHandlers = {
+    const handlers: RouteHandlers = {
       // pattern matching for each HTTP method
       [HttpMethod.GET]: [
         { hasId: true, hasParentId: true, handler: (req: Request) => this.getOne(req) },
@@ -32,6 +32,6 @@ export class PendingInviteController extends Controller {
       ]
     };
 
-    super({ get, userGet, delete, create }, handlers);
+    super({ get, userGet, remove, create }, handlers);
   }
 }
