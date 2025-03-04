@@ -1,4 +1,4 @@
-import { Controller } from './controller';
+import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
 import { extractPathParams, extractQueryParams } from '../helpersExpress';
 import { Get, GroupGet, Update, Delete, Create } from '../services/assignmentServices';

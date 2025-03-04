@@ -1,6 +1,4 @@
-import { Controller } from './controller';
-import { Request, HttpMethod, RouteHandlers } from '../types';
-import { Get, UserGet, Delete, Create } from '../services/pendingInviteServices';
+import { Controller } from './controllerExpress';
 
 /**
  * Controller responsible for pending invite-related API endpoints including CRUD operations
@@ -11,27 +9,4 @@ import { Get, UserGet, Delete, Create } from '../services/pendingInviteServices'
  * - DELETE /invites/:id - Delete invite
  * - POST /invites - Create new invite
  */
-export class PendingInviteController extends Controller {
-  public constructor(
-    get: Get,
-    userGet: UserGet,
-    remove: Delete,
-    create: Create
-  ) {
-    const handlers: RouteHandlers = {
-      // pattern matching for each HTTP method
-      [HttpMethod.GET]: [
-        { hasId: true, hasParentId: true, handler: (req: Request) => this.getOne(req) },
-        { hasId: false, hasParentId: true, handler: (req: Request) => this.getMany(req) }
-      ],
-      [HttpMethod.DELETE]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.delete(req) }
-      ],
-      [HttpMethod.POST]: [
-        { hasId: false, hasParentId: false, handler: (req: Request) => this.create(req) }
-      ]
-    };
-
-    super({ get, userGet, remove, create }, handlers);
-  }
-}
+export class PendingInviteController extends Controller {}

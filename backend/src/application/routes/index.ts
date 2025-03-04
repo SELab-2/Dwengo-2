@@ -1,10 +1,10 @@
 export * from './routesExpress';
 export * from './assignmentRoutes';
-// export * from './classRoutes';
+export * from './classRoutes';
 export * from './groupRoutes';
-// export * from './pendingInviteRoutes';
-// export * from './questionThreadRoutes';
+export * from './pendingInviteRoutes';
+export * from './questionRoutes';
 export * from './studentRoutes';
 export * from './teacherRoutes';
-// export * from './threadQuestionRoutes';
+export * from './messageRoutes';
 export * from './usersRoutes';

@@ -1,6 +1,6 @@
 import { Express, RequestHandler } from 'express';
 import { requestFromExpress, responseToExpress } from '../helpersExpress';
-import { Controller } from '../controllers/controller';
+import { Controller } from '../controllers/controllerExpress';
 import { HttpMethod } from '../types';
 
 /**

@@ -1,1 +1,10 @@
-// TODO: export all controllers, rename them as needed
+export * from './controllerExpress'
+export * from './assignmentController';
+export * from './classController';
+export * from './groupController';
+export * from './pendingInviteController';
+export * from './questionController';
+export * from './studentController';
+export * from './teacherController';
+export * from './messageController';
+export * from './usersController';

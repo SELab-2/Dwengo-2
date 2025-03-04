@@ -1,3 +1,3 @@
-import { Controller } from './controller';
+import { Controller } from './controllerExpress';
 
 export class StudentController extends Controller {}

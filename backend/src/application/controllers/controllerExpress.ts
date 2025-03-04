@@ -83,6 +83,11 @@ export abstract class Controller {
     });
   }
 
+  /**
+   * Method to serialize the service response to a ResponseBody object.
+   * @param serviceResponse The response as it is retrieved from the service
+   * @returns the service response as a ResponseBody object
+   */
   protected serviceResponseToResponseBody(serviceResponse: unknown): ResponseBody {
     try {
       return serviceResponse as ResponseBody;
