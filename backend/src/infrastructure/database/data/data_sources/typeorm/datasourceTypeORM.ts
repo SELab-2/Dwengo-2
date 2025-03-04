@@ -13,7 +13,7 @@ export class DatasourceTypeORM implements IDatasource {
         DatasourceTypeORMConnectionSettingsFactory
         .createDatasourceTypeORMConnectionSettings(
             "postgres",
-            5433, // 5433 for development docker, 5432 for production docker (on server)
+            5432, // 5433 for development docker, 5432 for production docker (on server)
             "postgres",
             "postgres",
             "dwengo-database",
@@ -98,7 +98,7 @@ export class DatasourceTypeORM implements IDatasource {
 
         const userModel: UserTypeORM | null = await datasource
             .getRepository(UserTypeORM)
-            .findOne({ where: { family_name: last_name } });
+            .findOne({ where: { last_name: last_name } });
 
         if (userModel !== null) {
             const teacherModel: TeacherTypeORM | null = await datasource

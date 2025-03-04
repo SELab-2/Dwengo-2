@@ -23,9 +23,9 @@ export class TeacherTypeORM {
         return new Teacher(
             userModel.email,
             userModel.first_name,
-            userModel.family_name,
+            userModel.last_name,
             userModel.password_hash,
-            userModel.name_school,
+            userModel.school_name,
             this.id, // Important that it's the id from the Teacher table and not User!
         );
     }

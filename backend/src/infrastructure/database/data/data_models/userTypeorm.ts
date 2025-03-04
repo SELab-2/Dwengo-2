@@ -13,10 +13,10 @@ export class UserTypeORM {
     first_name!: string
 
     @Column({ type: "varchar", length: 50 })
-    family_name!: string
+    last_name!: string
 
     @Column({ type: "varchar", length: 150, nullable: true }) // Optional
-    name_school?: string
+    school_name!: string
 
     @Column({ type: "varchar", length: 64 }) // 256-bit hash => 32 bytes => 64 hexadecimals
     password_hash!: string
@@ -26,11 +26,11 @@ export class UserTypeORM {
     public static createUserTypeORM(user: User): UserTypeORM {
         const userTypeORM: UserTypeORM = new UserTypeORM();
         if(user.id) userTypeORM.id = user.id;
-        userTypeORM.email = user.email
-        userTypeORM.first_name = user.first_name
-        userTypeORM.family_name = user.family_name
-        userTypeORM.name_school = user.name_school
-        userTypeORM.password_hash = user.password_hash
+        userTypeORM.email = user.email;
+        userTypeORM.first_name = user.first_name;
+        userTypeORM.last_name = user.family_name;
+        if(user.name_school) userTypeORM.school_name = user.name_school;
+        userTypeORM.password_hash = user.password_hash;
         return userTypeORM;
     }
 }

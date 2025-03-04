@@ -3,4 +3,4 @@ dist/
 .git/
 .vscode/
 Dockerfile
-compose.yml
+compose.yaml

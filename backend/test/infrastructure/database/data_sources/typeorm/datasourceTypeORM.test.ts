@@ -116,7 +116,7 @@ describe("DatasourceTypeORM", () => {
         // Find user
         const userRepository: Repository<UserTypeORM> = dataSource.getRepository(UserTypeORM);
         const userModel: UserTypeORM = (await userRepository.findOne({
-            where: { family_name: "last_name" },
+            where: { last_name: "last_name" },
         }))!;
 
         // Find teacher

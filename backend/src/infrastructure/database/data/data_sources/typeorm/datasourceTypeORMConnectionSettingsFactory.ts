@@ -1,20 +1,20 @@
 import { UserTypeORM } from "../../data_models/userTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
-import { PendingInviteTypeORM } from "../../data_models/inviteTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
-import { AssignmentGroupTypeORM } from "../../data_models/assignmentGroupTypeorm";
 import { TeacherGroupAssignmentTypeORM } from "../../data_models/teacherGroupAssignmentTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
-import { ThreadQuestionsTypeORM } from "../../data_models/threadQuestionTypeorm";
 import { AssignmentAnswerTypeORM } from "../../data_models/assignmentAnswerTypeorm";
 import { StudentProgressTypeORM } from "../../data_models/studentProgressTypeorm";
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
+import { JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
+import { AssignmentGroupTypeORM } from "../../data_models/assignmentForGroupTypeorm";
+import { ThreadMessageTypeORM } from "../../data_models/threadMessageTypeorm";
 
 /**
  * Factory class for creating DatasourceTypeORMConnectionSettings objects.
@@ -55,7 +55,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             UserTypeORM, 
             StudentTypeORM, 
             TeacherTypeORM,
-            PendingInviteTypeORM,
+            JoinRequestTypeORM,
             ClassTypeORM,
             TeacherOfClassTypeORM,
             StudentOfClassTypeORM,
@@ -65,7 +65,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             AssignmentGroupTypeORM,
             TeacherGroupAssignmentTypeORM,
             QuestionThreadTypeORM,
-            ThreadQuestionsTypeORM,
+            ThreadMessageTypeORM,
             AssignmentAnswerTypeORM,
             StudentProgressTypeORM
         ],

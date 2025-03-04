@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, Column, CreateDateColumn } from "typeorm"
 import { UserTypeORM } from "./userTypeorm"
 import { QuestionThreadTypeORM } from "./questionThreadTypeorm"
 
 @Entity()
-export class ThreadQuestionsTypeORM {
+export class ThreadMessageTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 
@@ -15,6 +15,9 @@ export class ThreadQuestionsTypeORM {
     @JoinColumn({ name: "user_id" })
     sent_by!: UserTypeORM
 
+    @CreateDateColumn()
+    sent_at!: Date
+
     @Column({ type: "text" })
-    content!: string
+    contents!: string
 }
