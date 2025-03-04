@@ -1310,7 +1310,7 @@ paths:
         - questions
       summary: Update assignment question
       description: Modify a question within an assignment entry, such as providing an answer or adding remarks.
-      operationId: updateAssignmentQuestionbyId
+      operationId: updateAssignmentQuestion
       parameters:
         - in: path
           name: id
@@ -1342,7 +1342,7 @@ paths:
         - questions
       summary: Delete asignment question
       description: Permanently delete a question from an assignment entry by its unique identifier.
-      operationId: deleteAssignmentQuestionbyId
+      operationId: deleteAssignmentQuestion
       parameters:
         - in: path
           name: id
@@ -1443,7 +1443,7 @@ paths:
         - messages
       summary: Update question message
       description: Modify a message within a question, such as adding a reply or changing the content.
-      operationId: updateQuestionMessageById
+      operationId: updateQuestionMessage
       parameters:
         - in: path
           name: id
@@ -1475,7 +1475,7 @@ paths:
         - messages
       summary: Delete question message
       description: Permanently delete a message from a question by its unique identifier.
-      operationId: deleteQuestionMessageById
+      operationId: deleteQuestionMessage
       parameters:
         - in: path
           name: id
