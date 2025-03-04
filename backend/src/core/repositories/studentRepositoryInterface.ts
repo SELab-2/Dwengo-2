@@ -1,9 +1,18 @@
 /*Here comes the interface for the repository for User entity -> Get's implemented in infrastructure/repositories*/
 
 import { ClassInterface } from "../entities/classInterface";
+import { Student } from "../entities/student";
 
 
 export interface StudentRepositoryInterface {
+    /**
+     * Function to get the student with the given id.
+     * 
+     * @param studentId the id of the student to get.
+     * @returns the student with the given id or null if student is not in DB.
+     */
+    getStudent(studentId: string): Promise<Student | null>;
+
     /**
      * Ask a question about a step in an assignment.
      * @param studentId the id of the student asking the question.
