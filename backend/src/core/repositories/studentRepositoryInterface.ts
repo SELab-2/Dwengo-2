@@ -1,10 +1,17 @@
 /*Here comes the interface for the repository for User entity -> Get's implemented in infrastructure/repositories*/
-
-import { ClassInterface } from "../entities/classInterface";
+import { Class } from "../entities/class";
 import { Student } from "../entities/student";
 
 
-export interface StudentRepositoryInterface {
+export interface IStudentRepository {
+
+    /**
+     * Function to delete a student record in the DB.
+     * 
+     * @param student the student to delete.
+     */
+    deleteStudent(student: Student): void | PromiseLike<void>;
+
     /**
      * Function to get the student with the given id.
      * 
@@ -55,5 +62,5 @@ export interface StudentRepositoryInterface {
      * @param studentId the student id.
      * @returns every class where the student is part of
      */
-    getClasses: (studentId: string) => Promise<ClassInterface[]>;
+    getClasses: (studentId: string) => Promise<Class[]>;
 }

@@ -1,9 +1,9 @@
-import { useCase } from "../../../config/usecase";
+import { UseCase } from "../../../config/usecase";
 import { Student } from "../../entities/student";
-import { StudentRepositoryInterface } from "../../repositories/studentRepositoryInterface";
+import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 
-export class GetSudent implements useCase<string, Student | null> {
-  constructor(private studentRepository: StudentRepositoryInterface) {}
+export class GetSudent implements UseCase<string, Student | null> {
+  constructor(private studentRepository: IStudentRepository) {}
 
   /**
    * Gets a student from the DB.
