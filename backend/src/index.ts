@@ -2,15 +2,28 @@
 import express from "express";
 import cors from 'cors';
 import dotenv from "dotenv";
-import { DatasourcePostgreSQL } from "./infrastructure/database/data/data_sources/datasource";
+import { IDatasource } from "./infrastructure/database/data/data_sources/datasourceInterface";
+import { DatasourceTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceTypeORM";
+import { ClassRepositoryTypeORM } from "./infrastructure/repositories/classRepositoryTypeORM";
+import { DatasourceFactoryTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM";
+import { Class } from "./core/entities/class";
 
 // TODO - Start using index.ts files to import entities etc. in a single line
 
 dotenv.config();
 
 // Initialize the datasource
-const datasource = new DatasourcePostgreSQL();
-datasource.initialize_datasource();
+const datasource: IDatasource = new DatasourceTypeORM();
+
+const repo = new ClassRepositoryTypeORM(
+  new DatasourceFactoryTypeORM()
+);
+repo.createClass(new Class(
+  "Programmeren",
+  "Voor mensen die niet kunnen programmeren",
+  "Beginner",
+));
+
 
 // Initialize repositories
 const repos = {

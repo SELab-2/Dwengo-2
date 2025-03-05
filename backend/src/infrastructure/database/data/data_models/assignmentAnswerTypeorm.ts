@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 
 @Entity()
-export class AssignmentAnswer {
+export class AssignmentAnswerTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: number
 

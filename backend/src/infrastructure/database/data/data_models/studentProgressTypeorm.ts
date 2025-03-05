@@ -1,8 +1,8 @@
 import { Entity, PrimaryColumn, OneToOne, JoinColumn, Column } from "typeorm"
-import { Assignment } from "./assignmentTypeorm"
-import { Student } from "./studentTypeorm"
-import { AssignmentAnswer } from "./assignmentAnswerTypeorm"
-import { QuestionThread } from "./questionThreadTypeorm"
+import { AssignmentTypeORM } from "./assignmentTypeorm"
+import { StudentTypeORM } from "./studentTypeorm"
+import { AssignmentAnswerTypeORM } from "./assignmentAnswerTypeorm"
+import { QuestionThreadTypeORM } from "./questionThreadTypeorm"
 
 export enum StudentProgressStatus {
     NOT_DONE = "not_done",
@@ -11,28 +11,28 @@ export enum StudentProgressStatus {
 }
 
 @Entity()
-export class StudentProgress {
+export class StudentProgressTypeORM {
     @PrimaryColumn()
     super_so_uuid!: string
 
     @PrimaryColumn()
     so_uuid!: string
 
-    @OneToOne(() => Assignment)
+    @OneToOne(() => AssignmentTypeORM)
     @JoinColumn({ name: "assignment_id" })
-    assignment!: Assignment
+    assignment!: AssignmentTypeORM
 
-    @OneToOne(() => Student)
+    @OneToOne(() => StudentTypeORM)
     @JoinColumn({ name: "student_id" })
-    student!: Student
+    student!: StudentTypeORM
 
-    @OneToOne(() => QuestionThread, { nullable: true })
+    @OneToOne(() => QuestionThreadTypeORM, { nullable: true })
     @JoinColumn({ name: "question_thread_id" })
-    question_thread!: QuestionThread
+    question_thread!: QuestionThreadTypeORM
 
-    @OneToOne(() => AssignmentAnswer, { nullable: true })
+    @OneToOne(() => AssignmentAnswerTypeORM, { nullable: true })
     @JoinColumn({ name: "answer_id" })
-    answer!: AssignmentAnswer
+    answer!: AssignmentAnswerTypeORM
 
     @Column({
         type: "enum",

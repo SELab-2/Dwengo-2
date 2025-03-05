@@ -1,6 +1,5 @@
 import { Controller } from './controllerExpress';
-import { Request, Response, HttpMethod, RouteHandlers } from '../types';
-import { extractPathParams, extractQueryParams } from '../helpersExpress';
+import { Request, HttpMethod, RouteHandlers } from '../types';
 import * as AssignmentServices from '../services/assignmentServices';
 
 /**
