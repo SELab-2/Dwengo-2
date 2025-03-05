@@ -1,32 +1,31 @@
-import { Service } from "./service"; 
+import { Service } from "./service";
 import { Message } from "../../core/entities/message";
 import { GetMessage } from "../../core/use-cases/message/getMessage";
-import { SetupMessage } from "../../core/use-cases/message/setupMessage";
-import { UpdateMessage } from "../../core/use-cases/message/updateMessage";
+import { CreateMessage } from "../../core/use-cases/message/createMessage";
 import { DeleteMessage } from "../../core/use-cases/message/deleteMessage";
 import { GetQuestionMessages } from "../../core/use-cases/message/getQuestionMessages";
 
-export class Get extends Service<Message> {
+export class GetMessageService extends Service<Message> {
   constructor(get: GetMessage) { super({ get }); }
   // TODO: implement the execute function
 }
 
-export class GetQuestionMessages extends Service<Message> {
-  constructor(questionGet: GetQuestionMessage) { super({ questionGet }); }
+export class GetQuestionMessagesService extends Service<Message[]> {
+  constructor(questionGet: GetQuestionMessages) { super({ questionGet }); }
   // TODO: implement the execute function
 }
 
-export class Update extends Service<Message> {
-  constructor(update: UpdateMessage) { super({ update }); }
+export class UpdateMessageService extends Service<Message> {
+  // TODO: implement constructor with UpdateMessage use case
   // TODO: implement the execute function
 }
 
-export class Delete extends Service<Message> {
+export class DeleteMessageService extends Service<void> {
   constructor(remove: DeleteMessage) { super({ remove }); }
   // TODO: implement the execute function
 }
 
-export class Create extends Service<Message> {
-  constructor(create: SetupMessage) { super({ create }); }
+export class CreateMessageService extends Service<Message> {
+  constructor(create: CreateMessage) { super({ create }); }
   // TODO: implement the execute function
 }

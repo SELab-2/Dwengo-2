@@ -14,11 +14,11 @@ import * as MessageServices from '../services/messageServices';
  */
 export class MessageController extends Controller {
   constructor(
-    get: MessageServices.Get,
-    questionGet: MessageServices.GetQuestionMessages,
-    update: MessageServices.Update,
-    remove: MessageServices.Delete,
-    create: MessageServices.Create
+    get: MessageServices.GetMessageService,
+    questionGet: MessageServices.GetQuestionMessagesService,
+    update: MessageServices.UpdateMessageService,
+    remove: MessageServices.DeleteMessageService,
+    create: MessageServices.CreateMessageService
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
