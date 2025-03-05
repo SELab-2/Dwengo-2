@@ -44,19 +44,24 @@ export function responseFromExpress(res: ExpressResponse): Response {
 }
 
 /**
- * Convert a Response object to an Express Response object
- * @param res the Response object
- * @param expressRes the Express Response object to modify
- * We have to "modify" the Express Response object because it is not possible to create a new one
- * @returns the modified Express Response object
+ * Converts a Response object to an Express Response object and sends it as JSON.
+ * Ensures the Content-Type is always application/json and sends the response.
+ *
+ * @param res - The Response object containing status, headers, and body
+ * @param expressRes - The Express Response object to modify and send
+ * @returns The modified Express Response object
  */
 export function responseToExpress(res: Response, expressRes: ExpressResponse): ExpressResponse {
   expressRes.status(res.status);
-  expressRes.json(res.body);
+  expressRes.setHeader('Content-Type', 'application/json');
 
   Object.entries(res.headers).forEach(([key, value]) => {
-    expressRes.setHeader(key, value);
+    if (key.toLowerCase() !== 'content-type') {
+      expressRes.setHeader(key, value);
+    }
   });
+
+  expressRes.json(res.body);
 
   return expressRes;
 }
