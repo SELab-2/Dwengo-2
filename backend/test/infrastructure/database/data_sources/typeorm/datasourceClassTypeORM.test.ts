@@ -1,4 +1,4 @@
-import { DataSource } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { TeacherTypeORM } from "../../../../../src/infrastructure/database/data/data_models/teacherTypeorm";
 import { DatasourceTypeORMConnectionSettings } from "../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
 import { Class } from "../../../../../src/core/entities/class";
@@ -27,27 +27,28 @@ jest.mock("typeorm", () => {
     };
 });
 
-beforeAll(() => {
-    datasourceSettings = DatasourceTypeORMConnectionSettingsFactory.createDatasourceTypeORMConnectionSettings(
-        "postgres",
-        5432,
-        "postgres",
-        "postgres",
-        "dwengo-database"
-    );
-    class_ = new Class(
-        "Programmeren",
-        "Voor mensen die niet kunnen programmeren",
-        "Beginners"
-    );
-    dataSource = new DataSource(datasourceSettings.toObject());
-});
-
 describe("DatasourceClassTypeORM", () => {
 
+    let classRepository: Repository<ClassTypeORM>;
+
+    beforeAll(() => {
+        datasourceSettings = DatasourceTypeORMConnectionSettingsFactory.createDatasourceTypeORMConnectionSettings(
+            "postgres",
+            5432,
+            "postgres",
+            "postgres",
+            "dwengo-database"
+        );
+        class_ = new Class(
+            "Programmeren",
+            "Voor mensen die niet kunnen programmeren",
+            "Beginners"
+        );
+        dataSource = new DataSource(datasourceSettings.toObject());
+        classRepository = dataSource.getRepository(ClassTypeORM);
+    });
+
     test("createClass", () => {
-        // Save class
-        const classRepository = dataSource.getRepository(ClassTypeORM);
         classRepository.save(ClassTypeORM.createClassTypeORM(class_));
 
         expect(dataSource.getRepository).toHaveBeenCalledWith(ClassTypeORM);
@@ -55,8 +56,6 @@ describe("DatasourceClassTypeORM", () => {
     });
 
     test("getClassById", () => {
-        // Find class by id
-        const classRepository = dataSource.getRepository(ClassTypeORM);
         classRepository.findOne({ where: { id: "1" } });
 
         expect(dataSource.getRepository).toHaveBeenCalledWith(ClassTypeORM);
@@ -64,8 +63,6 @@ describe("DatasourceClassTypeORM", () => {
     });
 
     test("getClassByName", () => {
-        // Find class by name
-        const classRepository = dataSource.getRepository(ClassTypeORM);
         classRepository.findOne({ where: { name: "Programmeren" } });
 
         expect(dataSource.getRepository).toHaveBeenCalledWith(ClassTypeORM);
@@ -73,8 +70,6 @@ describe("DatasourceClassTypeORM", () => {
     });
 
     test("getAllClasses", () => {
-        // Find all classes
-        const classRepository = dataSource.getRepository(ClassTypeORM);
         classRepository.find();
 
         expect(dataSource.getRepository).toHaveBeenCalledWith(ClassTypeORM);
@@ -82,8 +77,6 @@ describe("DatasourceClassTypeORM", () => {
     });
 
     test("deleteClassById", () => {
-        // Delete class by id
-        const classRepository = dataSource.getRepository(ClassTypeORM);
         classRepository.delete("1");
 
         expect(dataSource.getRepository).toHaveBeenCalledWith(ClassTypeORM);

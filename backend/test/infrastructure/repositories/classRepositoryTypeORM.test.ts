@@ -11,6 +11,8 @@ describe("ClassRepositoryTypeORM", () => {
 
     let datasourceClass: IDatasourceClass;
 
+    let returnClass: Class|null;
+
     beforeEach(() => {
         datasourceMock = {
             getDatasourceTeacher: jest.fn(),
@@ -34,7 +36,7 @@ describe("ClassRepositoryTypeORM", () => {
 
     test("createClass", async () => {
         // Call function from repository
-        const returnClass: Class = await datasourceClass.createClass(newClass);
+        returnClass = await datasourceClass.createClass(newClass);
         
         expect(datasourceClass.createClass).toHaveBeenCalledTimes(1);
         expect(datasourceClass.createClass).toHaveBeenCalledWith(newClass);
@@ -43,7 +45,7 @@ describe("ClassRepositoryTypeORM", () => {
 
     test("getClassById", async () => {
         // Call function from repository
-        const returnClass: Class|null = await datasourceClass.getClassById(newClass.id!);
+        returnClass = await datasourceClass.getClassById(newClass.id!);
 
         expect(datasourceClass.getClassById).toHaveBeenCalledTimes(1);
         expect(datasourceClass.getClassById).toHaveBeenCalledWith(newClass.id!);
@@ -52,7 +54,7 @@ describe("ClassRepositoryTypeORM", () => {
 
     test("getClassByName", async () => {
         // Call function from repository
-        const returnClass: Class|null = await datasourceClass.getClassByName(newClass.name);
+        returnClass = await datasourceClass.getClassByName(newClass.name);
 
         expect(datasourceClass.getClassByName).toHaveBeenCalledTimes(1);
         expect(datasourceClass.getClassByName).toHaveBeenCalledWith(newClass.name);
