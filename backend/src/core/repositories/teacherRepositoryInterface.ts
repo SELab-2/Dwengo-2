@@ -14,12 +14,9 @@ export abstract class ITeacherRepository {
         protected datasourceFactory: IDatasourceFactory
     ) {}
 
-    /* TODO: idea?
-    getTeacherByPredicate(predicate: (teacher: Teacher) => boolean): Promise<Teacher[]>; ??
-    */
-
     /**
-     * Insert a new teacher in the repository.
+     * Insert a new teacher in the repository. The `id` field of the teacher should be empty.
+     * The `id` field will be set by the repository to a uuid.
      * @param teacher The new teacher to insert.
      * @returns A promise that resolves to the inserted teacher.
      */
@@ -71,4 +68,5 @@ export abstract class ITeacherRepository {
      * @param id The id of the teacher to delete.
      */
     public abstract deleteTeacherWithId(id: string): Promise<void>;
+    
 }
