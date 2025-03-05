@@ -1,37 +1,29 @@
-import { ClassInterface } from "./class_interface";
-import { TeacherInterface } from "./teacher_interface";
+import { User } from "./userInterface";
 
-export class Teacher implements ITeacher {
+export class Teacher extends User {
+    public constructor(
+        email: string,
+        firstName: string,
+        familyName: string,
+        passwordHash: string,
+        private _classes: string[], // List of class Id's the teacher is (co-)owner of
+        id?: string,
+    ) {
+        super(email, firstName, familyName, passwordHash, id);
+    }
 
-    // Necessary variables
-    id: string;     // Teacher id
-    email: string;  // Teacher's email
-    first_name: string;     // Teacher's first name
-    family_name: string;    // Teacher's family name
-    password_hash: string;  // Teacher's hashed password
-    get_classes: () => [ClassInterface];
-    create_class: () => ClassInterface;
-
-    // Optional variables
-    name_school?: string;   // Teacher's school
-
-    constructor(
-        id: string, 
-        email: string, 
-        first_name: string, 
-        family_name: string, 
-        password_hash: string, 
-        get_classes: () => [ClassInterface],
-        create_class: () => ClassInterface,
-        name_school?: string) {
-        this.id = id;
-        this.email = email;
-        this.first_name = first_name;
-        this.family_name = family_name;
-        this.password_hash = password_hash;
-        this.name_school = name_school;
-        this.get_classes = get_classes;
-        this.create_class = create_class;
+    public get classes():string[]{
+        return this._classes; // Mutable
     }
     
+    public get classesCopy():string[]{
+        return [...this._classes]; // Immutable for instance
+    }
+
+    public set classes(newClasses:string[]){
+        if (!Array.isArray(newClasses)) {
+            throw new Error("Classes must be an array of strings.");
+        }
+        this._classes = newClasses;
+    }
 }
