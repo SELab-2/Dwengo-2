@@ -1,33 +1,29 @@
 import { Service } from './service';
-import { GetAssignment } from '../../core/use-cases/assignment/getAssignment';
-import { GetGroupAssignments } from '../../core/use-cases/assignment/getGroupAssignment';
-import { UpdateAssignment } from '../../core/use-cases/assignment/updateAssignment';
-import { DeleteAssignment } from '../../core/use-cases/assignment/deleteAssignment';
-import { CreateAssignment } from '../../core/use-cases/assignment/makeAssignment';
 import { Assignment } from '../../core/entities/assignment';
-import { UUID } from 'crypto';
+import { GetAssignment } from '../../core/use-cases/assignment/getAssignment';
+import { MakeAssignment } from '../../core/use-cases/assignment/makeAssignment';
 
 export class GetAssignmentService extends Service<Assignment> {
   constructor(get: GetAssignment) { super({ get }); }
-  execute(assignmentId: UUID) { return this.usecases.get.execute(assignmentId); }
+  // TODO: implement the execute function
 }
 
-export class GroupGetAssignmentService extends Service<Assignment[]> {
-  constructor(get: GetGroupAssignments) { super({ get }); }
-  execute(groupId: UUID, page: number, size: number) { return this.usecases.get.execute(groupId, page, size); }
+export class GetGroupAssignmentsService extends Service<Assignment[]> {
+  // TODO: implement constructor with GetGroupAssignments use case
+  // TODO: implement the execute function
 }
 
 export class UpdateAssignmentService extends Service<Assignment> {
-  constructor(update: UpdateAssignment) { super({ update }); }
-  execute(assignmentId: UUID, data: object) { return this.usecases.update.execute(assignmentId, data); }
+  // TODO: implement constructor with UpdateAssignment use case
+  // TODO: implement the execute function
 }
 
-export class DeleteAssignmentService extends Service<Assignment[]> {
-  constructor(remove: DeleteAssignment) { super({ remove }); }
-  execute(assignmentId: UUID) { return this.usecases.remove.execute(assignmentId); }
+export class DeleteAssignmentService extends Service<void> {
+  // TODO: implement constructor with DeleteAssignment use case
+  // TODO: implement the execute function
 }
 
 export class CreateAssignmentService extends Service<Assignment> {
-  constructor(create: CreateAssignment) { super({ create }); }
-  execute(data: object) { return this.usecases.create.execute(data); }
+  constructor(create: MakeAssignment) { super({ create }); }
+  // TODO: implement the execute function
 }

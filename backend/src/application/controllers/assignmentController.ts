@@ -14,7 +14,7 @@ import * as AssignmentServices from '../services/assignmentServices';
 export class AssignmentController extends Controller {
   constructor(
     get: AssignmentServices.GetAssignmentService,
-    groupGet: AssignmentServices.GroupGetAssignmentService,
+    groupGet: AssignmentServices.GetGroupAssignmentsService,
     update: AssignmentServices.UpdateAssignmentService,
     remove: AssignmentServices.DeleteAssignmentService,
     create: AssignmentServices.CreateAssignmentService
