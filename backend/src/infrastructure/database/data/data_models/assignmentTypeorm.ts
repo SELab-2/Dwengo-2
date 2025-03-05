@@ -1,14 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm"
-import { Class } from "./classTypeorm"
+import { ClassTypeORM } from "./classTypeorm"
 
 @Entity()
-export class Assignment {
+export class AssignmentTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 
-    @OneToOne(() => Class)
+    @OneToOne(() => ClassTypeORM)
     @JoinColumn({ name: "class_id" })
-    class!: Class
+    class!: ClassTypeORM
 
     @Column({ type: "varchar", length: 100 }) // In the Dwengo API docs a uuid is a string
     learning_path_id!: string // uuid of corresponding learning path
