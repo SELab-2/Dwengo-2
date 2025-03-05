@@ -20,7 +20,8 @@ describe("getStudent Use Case", () => {
       "John",
       "Doe",
       "hashedpassword123",
-      [],
+      "Yale",
+      [] as string[],
       "1"
     );
 
