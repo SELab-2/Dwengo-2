@@ -2,7 +2,7 @@ import { UseCase } from "../../../config/usecase";
 import { Student } from "../../entities/student"
 import { StudentRepositoryInterface } from "../../repositories/studentRepositoryInterface";
 import { AppError } from "../../../config/error";
-export class CreateStudent implements useCase<Student, string> {
+export class CreateStudent implements UseCase<Student, string> {
     public constructor(private studentRepository: StudentRepositoryInterface) {}
     /**
      * Validates student input.
@@ -31,20 +31,15 @@ export class CreateStudent implements useCase<Student, string> {
      * @throws AppError if input is invalid.
      */
     async execute(input: Student): Promise<string> {
-        try {
-            // Normalize input
-            input.firstName = input.firstName!.trim();
-            input.familyName = input.familyName!.trim();
+        // Normalize input
+        input.firstName = input.firstName!.trim();
+        input.familyName = input.familyName!.trim();
 
-            // Check if input is valid
-            await this.validateInput(input);
+        // Check if input is valid
+        await this.validateInput(input);
 
-            // Save the student to the database
-            const id: string = await this.studentRepository.createStudent(input);
-            return id;
-        } catch (error) {
-            // Forward error to the controller
-            throw error;
-        }
+        // Save the student to the database
+        const id: string = await this.studentRepository.createStudent(input);
+        return id;
     }
 }
