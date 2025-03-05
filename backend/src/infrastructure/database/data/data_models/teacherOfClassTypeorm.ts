@@ -1,19 +1,19 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn } from "typeorm"
-import { Teacher } from "./teacherTypeorm"
-import { Class } from "./classTypeorm"
+import { TeacherTypeORM } from "./teacherTypeorm"
+import { ClassTypeORM } from "./classTypeorm"
 
 @Entity()
-export class TeacherOfClass {
+export class TeacherOfClassTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 
-    @OneToOne(() => Teacher)
+    @OneToOne(() => TeacherTypeORM)
     @JoinColumn({ name: "teacher_id" })
-    teacher!: Teacher
+    teacher!: TeacherTypeORM
 
-    @OneToOne(() => Class)
+    @OneToOne(() => ClassTypeORM)
     @JoinColumn({ name: "class_id" })
-    class!: Class
+    class!: ClassTypeORM
 
     @CreateDateColumn() // Automatically sets this field to the date of insertion
     since!: Date

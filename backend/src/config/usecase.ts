@@ -1,3 +1,3 @@
-export interface useCase<Type> {
-  execute: (input: Type) => Promise<void>;
+export interface useCase<Type, ReturnType> {
+  execute: (input: Type) => Promise<ReturnType>;
 }
