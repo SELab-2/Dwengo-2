@@ -27,7 +27,7 @@ describe("CreateStudent", () => {
       "  Doe  ",
       "hashedpassword123",
       "Yale",
-      [],
+      [] as string[],
       "4"
     );
 
@@ -38,6 +38,7 @@ describe("CreateStudent", () => {
     expect(student.email).toBe("test@example.com");
     expect(student.firstName).toBe("John");
     expect(student.familyName).toBe("Doe");
+    expect(student.schoolName).toBe("Yale")
   });
 
   test("Should throw error if email is already in use", async () => {
