@@ -1,13 +1,21 @@
+import { IDatasourceClass } from "./datasourceClassInterface";
 import { IDatasourceTeacher } from "./datasourceTeacherInterface";
 
 /**
- * Interface for the datasources used in the repositories.
- * These contain the actual connection with the database and contain methods to interact with the database.
- * 
- * Methods like these are the CRUD operations that are used in the repositories.
+ * Interface representing a data source.
  */
 export interface IDatasource {
 
+    /**
+     * Retrieves the data source for teachers.
+     * @returns A promise that resolves to an instance of `IDatasourceTeacher`.
+     */
     getDatasourceTeacher(): Promise<IDatasourceTeacher>;
+
+    /**
+     * Retrieves the data source for classes.
+     * @returns A promise that resolves to an instance of `IDatasourceClass`.
+     */
+    getDatasourceClass(): Promise<IDatasourceClass>;
 
 }
