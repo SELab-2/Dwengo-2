@@ -4,6 +4,7 @@ export abstract class User {
         protected _firstName: string,
         protected _familyName: string,
         protected readonly _passwordHash: string,
+        protected _schoolName: string,
         protected _id?: string
     ) {}
     
@@ -23,6 +24,9 @@ export abstract class User {
     public get passwordHash(): string {
         return this._passwordHash;
     }
+    public get schoolName(): string {
+        return this._schoolName
+    }
 
     // Setters
     public set firstName(value: string) {
@@ -37,6 +41,10 @@ export abstract class User {
             throw new Error("Family name cannot be empty.");
         }
         this._familyName = value;
+    }
+
+    public set schoolName(value: string) {
+        this._schoolName = value;
     }
     
 }
