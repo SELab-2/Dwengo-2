@@ -1,4 +1,6 @@
 import { Controller } from "./controllerExpress";
+import { Request, HttpMethod, RouteHandlers } from "../types";
+import * as ClassServices from "../services/classServices";
 
 /**
  * Controller responsible for class-related API endpoints including CRUD operations
@@ -9,4 +11,30 @@ import { Controller } from "./controllerExpress";
  * - DELETE /classes/:id - Delete class
  * - POST /classes - Create a new class
  */
-export class ClassController extends Controller {}
+export class ClassController extends Controller {
+  constructor(
+    get: ClassServices.Get,
+    userGet: ClassServices.UserGet,
+    update: ClassServices.Update,
+    remove: ClassServices.Delete,
+    create: ClassServices.Create
+  ) {
+    const handlers: RouteHandlers = {
+      [HttpMethod.GET]: [
+        { parent: "users", hasId: true, hasParentId: true, handler: (req: Request) => this.getOne(req) },
+        { parent: "users", hasId: false, hasParentId: true, handler: (req: Request) => this.getMany(req) },
+      ],
+      [HttpMethod.PATCH]: [
+        { hasId: true, hasParentId: false, handler: (req: Request) => this.update(req) },
+      ],
+      [HttpMethod.POST]: [
+        { hasId: true, hasParentId: false, handler: (req: Request) => this.delete(req) },
+      ],
+      [HttpMethod.DELETE]: [
+        { hasId: false, hasParentId: false, handler: (req: Request) => this.create(req) },
+      ],
+    };
+
+    super({ get, userGet, update, remove, create }, handlers);
+  }
+}

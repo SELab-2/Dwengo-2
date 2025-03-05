@@ -1,30 +1,31 @@
-import { Class } from "../../infrastructure/database/data/data_models/classTypeorm";
-import { Service } from "./service";
-import { UUID } from 'crypto';
-
-// TODO: add other imports for usecases
+import { Service } from './service';
+import { Class } from '../../core/entities/class';
+import { DeleteClass } from '../../core/use-cases/class/deleteClass';
+import { GetClass } from '../../core/use-cases/class/getClass';
+import { SetupClass } from '../../core/use-cases/class/setupClass';
+import { UpdateClass } from '../../core/use-cases/class/updateClass';
 
 export class Get extends Service<Class> {
   constructor(get: GetClass) { super({ get }); }
-  execute(classId: UUID) { return this.usecases.get.execute(classId); }
+  // TODO: implement the execute function
 }
 
-export class UserGet extends Service<Class[]> {
-  constructor(get: GetUserClasses) { super({ get }); }
-  execute(userId: UUID, page: number, size: number) { return this.usecases.get.execute(userId, page, size); }
+export class UserGet extends Service<Class> {
+  // TODO: implement constructor with UserGetClass use case
+  // TODO: implement the execute function
 }
 
 export class Update extends Service<Class> {
   constructor(update: UpdateClass) { super({ update }); }
-  execute(classId: UUID, data: object) { return this.usecases.update.execute(classId, data); }
+  // TODO: implement the execute function
 }
 
-export class Delete extends Service<Class[]> {
+export class Delete extends Service<Class> {
   constructor(remove: DeleteClass) { super({ remove }); }
-  execute(classId: UUID) { return this.usecases.remove.execute(classId); }
+  // TODO: implement the execute function
 }
 
 export class Create extends Service<Class> {
-  constructor(create: CreateClass) { super({ create }); }
-  execute(data: object) { return this.usecases.create.execute(data); }
+  constructor(create: SetupClass) { super({ create }); }
+  // TODO: implement the execute function
 }
