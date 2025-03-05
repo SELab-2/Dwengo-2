@@ -1,27 +1,19 @@
-import { IDatasourceFactory } from "../../infrastructure/database/data/data_sources/datasourceFactoryInterface";
-import { Class } from "../entities/class";
+import { DataSource } from "typeorm";
+import { Class } from "../../../../core/entities/class";
 
 /**
- * Interface for class repositories.
- * Allows CRUD operations on class entities.
+ * Interface for the class data source
  */
-/**
- * Interface for a class repository.
- * This interface defines the methods required for interacting with class data.
- */
-export abstract class IClassRepository {
+export abstract class IDatasourceClass {
 
-    /**
-     * Constructor for the IClassRepository.
-     * @param datasourceFactory Factory for creating datasources.
-     */
     public constructor(
-        protected datasourceFactory: IDatasourceFactory
+        protected datasource: DataSource
     ) {}
 
     /**
      * Insert a new class in the repository. The `id` field of the class should be empty.
      * The `id` field will be set by the repository to a uuid.
+     * 
      * @param newClass The new class to insert.
      * @returns A promise that resolves to the inserted class.
      */
@@ -29,6 +21,7 @@ export abstract class IClassRepository {
 
     /**
      * Get a class by its id.
+     * 
      * @param id The id of the class.
      * @returns A promise that resolves to the class with the given id or null if no results are found.
      */
@@ -36,6 +29,7 @@ export abstract class IClassRepository {
     
     /**
      * Get a class by its name.
+     * 
      * @param name The name of the class.
      * @returns A promise that resolves to the class with the given name or null if no results are found.
      */
@@ -43,12 +37,14 @@ export abstract class IClassRepository {
 
     /**
      * Get all classes in the repository.
+     * 
      * @returns A promise that resolves to an array of all classes.
      */
     public abstract getAllClasses(): Promise<Class[]>;
 
     /**
      * Delete a class by its id.
+     * 
      * @param id The id of the class to delete.
      * @returns A promise that resolves when the class is deleted.
      */
