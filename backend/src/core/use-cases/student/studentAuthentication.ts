@@ -1,1 +1,9 @@
-/*Example for use-case: here comes bussiness logic for logging in as Student*/
+import { UseCase } from "../../../config/useCase";
+
+export class StudentAuthentication implements UseCase<undefined, undefined> {
+  constructor() {}
+
+  async execute(input: undefined): Promise<undefined> {
+    //TODO
+  }
+}
