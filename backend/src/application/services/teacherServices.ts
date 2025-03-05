@@ -1,6 +1,8 @@
 import { Service } from './service';
 import { Teacher } from '../../core/entities/teacher';
-import { UUID } from 'crypto';
+import { GetTeacher } from '../../core/use-cases/teacher/getTeacher';
+import { UpdateTeacher } from '../../core/use-cases/teacher/updateTeacher';
+import { DeleteTeacher } from '../../core/use-cases/teacher/deleteTeacher';
 
 /**
  * Collection of services for teacher-related operations.
@@ -13,7 +15,7 @@ import { UUID } from 'crypto';
  */
 export class GetTeacherService extends Service<Teacher> {
   constructor(get: GetTeacher) { super({ get }); }
-  execute(teacherId: UUID) { return this.usecases.get.execute(teacherId); }
+  // TODO: implement the execute function
 }
 
 /**
@@ -21,7 +23,7 @@ export class GetTeacherService extends Service<Teacher> {
  */
 export class UpdateTeacherService extends Service<Teacher> {
   constructor(update: UpdateTeacher) { super({ update }); }
-  execute(teacherId: UUID, data: object) { return this.usecases.update.execute(teacherId, data); }
+  // TODO: implement the execute function
 }
 
 /**
@@ -29,13 +31,13 @@ export class UpdateTeacherService extends Service<Teacher> {
  */
 export class DeleteTeacherService extends Service<void> {
   constructor(remove: DeleteTeacher) { super({ remove }); }
-  execute(teacherId: UUID) { return this.usecases.remove.execute(teacherId); }
+  // TODO: implement the execute function
 }
 
 /**
  * Service for removing a teacher from a class
  */
 export class RemoveTeacherFromClassService extends Service<void> {
-  constructor(classRemove: RemoveTeacherFromClass) { super({ classRemove }); }
-  execute(teacherId: UUID, classId: UUID) { return this.usecases.classRemove.execute(teacherId, classId); }
+  // TODO: implement constructor with RemoveTeacherFromClassService use case
+  // TODO: implement the execute function
 }
