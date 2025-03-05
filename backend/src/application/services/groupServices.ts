@@ -25,7 +25,7 @@ export class GetGroupService extends Service<Group> {
  * Service for retrieving groups belonging to a user with pagination
  */
 export class GetUserGroupsService extends Service<Group[]> {
-// TODO: implement constructor with GetUserGroups use case
+  // TODO: implement constructor with GetUserGroups use case
   // TODO: implement the execute function
 }
 
@@ -33,7 +33,7 @@ export class GetUserGroupsService extends Service<Group[]> {
  * Service for retrieving groups belonging to a class with pagination
  */
 export class GetClassGroupsService extends Service<Group[]> {
-// TODO: implement constructor with GetClassGroups use case
+  // TODO: implement constructor with GetClassGroups use case
   // TODO: implement the execute function
 }
 
@@ -41,7 +41,7 @@ export class GetClassGroupsService extends Service<Group[]> {
  * Service for updating a group
  */
 export class UpdateGroupService extends Service<Group> {
-// TODO: implement constructor with UpdateGroup use case
+  // TODO: implement constructor with UpdateGroup use case
   // TODO: implement the execute function
 }
 
