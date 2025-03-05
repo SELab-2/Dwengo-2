@@ -11,6 +11,7 @@ interface RouteConfig {
   method: HttpMethod;
   urlPattern: string;
   controller: Controller;
+  middleware?: RequestHandler[];
 }
 
 /**
@@ -22,9 +23,9 @@ interface RouteConfig {
  * @param methodMap - Array of [HttpMethod, Express method name] pairs defining supported methods
  */
 export function configureRoute(
-  { app, method, urlPattern, controller }: RouteConfig, methodMap: [HttpMethod, keyof Express][]
+  { app, method, urlPattern, controller, middleware = [] }: RouteConfig, methodMap: [HttpMethod, keyof Express][]
 ): void {
-  const handler: RequestHandler = (req, res) => {
+  const handler: RequestHandler = (req, res, next) => {
     const request = requestFromExpress(req);
     const response = controller.handle(request);
     responseToExpress(response, res);
@@ -32,7 +33,7 @@ export function configureRoute(
 
   for (const [httpMethod, appMethod] of methodMap) {
     if (httpMethod === method) {
-      app[appMethod](urlPattern, handler);
+      app[appMethod](urlPattern, ...middleware, handler);
       return;
     }
   }
