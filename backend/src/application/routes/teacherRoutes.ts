@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import { configureRoutes, DEFAULT_METHOD_MAP } from './routes';
+import { configureRoutes, DEFAULT_METHOD_MAP } from './routesExpress';
 import { TeacherController } from '../controllers/teacherController';
 import { HttpMethod } from '../types';
 

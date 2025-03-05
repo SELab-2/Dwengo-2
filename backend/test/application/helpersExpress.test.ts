@@ -28,8 +28,8 @@ describe("Request Objects", (): void => {
 
 describe("Response Objects", (): void => {
   const expectedResponse: Response = {
-    status: 200, 
-    headers: { "Content-Type": "application/json" }, 
+    status: 200,
+    headers: { "Content-Type": "application/json" },
     body: {}
   };
 
@@ -57,4 +57,23 @@ describe("Response Objects", (): void => {
     expect(expressResponse.json).toHaveBeenCalledWith(expectedResponse.body);
     expect(expressResponse.setHeader).toHaveBeenCalledWith("Content-Type", "application/json");
   });
+});
+
+describe('extractPathParams', (): void => {
+  it.todo('should extract entity and id from /users/t-123');
+  it.todo('should remove t- from id when entity is users');
+  it.todo('should remove s- from id when entity is users');
+  it.todo('should not remove t- from id when entity is not users');
+  it.todo('should extract parent, idParent, entity, and id from /users/s-123/orders/456');
+  it.todo('should remove s- from idParent when parent is users');
+  it.todo('should not remove s- from idParent when parent is not users');
+  it.todo('should handle empty path');
+  it.todo('should leave mid-string prefixes intact (e.g., /users/t-123-t-456)');
+});
+
+describe('extractQueryParams', (): void => {
+  it.todo('should extract numeric query params (e.g., page=2)');
+  it.todo('should extract string query params (e.g., name=john)');
+  it.todo('should return empty object for no query string');
+  it.todo('should handle multiple query params (e.g., page=2&limit=10)');
 });

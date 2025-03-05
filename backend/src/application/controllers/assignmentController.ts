@@ -1,7 +1,7 @@
-import { Controller } from './controller';
+import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
 import { extractPathParams, extractQueryParams } from '../helpersExpress';
-import { AssignmentServices } from '../services/assignmentServices';
+import { Get, GroupGet, Update, Delete, Create } from '../services/assignmentServices';
 
 /**
  * Controller responsible for assignment-related API endpoints including CRUD operations
@@ -14,11 +14,11 @@ import { AssignmentServices } from '../services/assignmentServices';
  */
 export class AssignmentController extends Controller {
   constructor(
-    get: InstanceType<typeof AssignmentServices.Get>,
-    groupGet: InstanceType<typeof AssignmentServices.GroupGet>,
-    update: InstanceType<typeof AssignmentServices.Update>,
-    remove: InstanceType<typeof AssignmentServices.Delete>,
-    create: InstanceType<typeof AssignmentServices.Create>
+    get: Get,
+    groupGet: GroupGet,
+    update: Update,
+    remove: Delete,
+    create: Create
   ) {
     const handlers : RouteHandlers = {
       // pattern matching for each HTTP method
