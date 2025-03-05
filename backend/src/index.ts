@@ -4,9 +4,6 @@ import cors from 'cors';
 import dotenv from "dotenv";
 import { IDatasource } from "./infrastructure/database/data/data_sources/datasourceInterface";
 import { DatasourceTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceTypeORM";
-import { ClassRepositoryTypeORM } from "./infrastructure/repositories/classRepositoryTypeORM";
-import { DatasourceFactoryTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM";
-import { Class } from "./core/entities/class";
 
 // TODO - Start using index.ts files to import entities etc. in a single line
 
