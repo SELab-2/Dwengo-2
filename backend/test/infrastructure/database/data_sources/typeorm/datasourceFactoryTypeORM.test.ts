@@ -16,6 +16,6 @@ describe("DatasourceFactoryTypeORM", () => {
         let datasourceFactoryTypeORM = new DatasourceFactoryTypeORM();
         let datasourceTypeORM: DatasourceTypeORM = datasourceFactoryTypeORM.createDatasource();
 
-        expect(datasourceTypeORM.createTeacher).toHaveBeenCalledTimes(0);
+        expect(datasourceTypeORM).toBeDefined();
     });
 });

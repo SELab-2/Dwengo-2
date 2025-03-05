@@ -1,14 +1,14 @@
-import { DataSource, FindOneOptions, Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { UserTypeORM } from "../../../../../src/infrastructure/database/data/data_models/userTypeorm";
 import { DatasourceTypeORMConnectionSettingsFactory } from "../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
 import { DatasourceTypeORMConnectionSettings } from "../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
 import { TeacherTypeORM } from "../../../../../src/infrastructure/database/data/data_models/teacherTypeorm";
 import { Teacher } from "../../../../../src/core/entities/teacher";
-import { ClassTypeORM } from "../../../../../src/infrastructure/database/data/data_models/classTypeorm";
 import { Class } from "../../../../../src/core/entities/class";
 
 // Variables
 let datasourceSettings: DatasourceTypeORMConnectionSettings;
+let dataSource: DataSource;
 let class_: Class; // _ because `class` is a keyword
 
 // Mock TypeORM
@@ -41,12 +41,11 @@ beforeAll(() => {
         "Voor mensen die niet kunnen programmeren",
         "Beginners"
     );
+    dataSource = new DataSource(datasourceSettings.toObject());
 });
 
-describe("DatasourceTypeORM", () => {
+describe("DatasourceTeacherTypeORM", () => {
     test("createTeacher", () => {
-        const dataSource = new DataSource(datasourceSettings.toObject());
-
         // Save user
         const userRepository = dataSource.getRepository(UserTypeORM);
         userRepository.save(UserTypeORM.createUserTypeORM({} as any));
@@ -63,8 +62,6 @@ describe("DatasourceTypeORM", () => {
     });
 
     test("getTeacherById", async () => {
-        const dataSource = new DataSource(datasourceSettings.toObject()); // TypeORM
-
         // Find teacher
         const teacherRepository: Repository<TeacherTypeORM> = dataSource.getRepository(TeacherTypeORM);
         const teacherModel: TeacherTypeORM = (await teacherRepository.findOne({
@@ -79,8 +76,6 @@ describe("DatasourceTypeORM", () => {
     });
 
     test("getTeacherByEmail", async () => {
-        const dataSource = new DataSource(datasourceSettings.toObject()); // TypeORM
-
         // Find user
         const userRepository: Repository<UserTypeORM> = dataSource.getRepository(UserTypeORM);
         const userModel: UserTypeORM = (await userRepository.findOne({
@@ -99,8 +94,6 @@ describe("DatasourceTypeORM", () => {
     });
 
     test("getTeacherByFirstName", async () => {
-        const dataSource = new DataSource(datasourceSettings.toObject()); // TypeORM
-
         // Find user
         const userRepository: Repository<UserTypeORM> = dataSource.getRepository(UserTypeORM);
         const userModel: UserTypeORM = (await userRepository.findOne({
@@ -119,8 +112,6 @@ describe("DatasourceTypeORM", () => {
     });
 
     test("getTeacherByLastName", async () => {
-        const dataSource = new DataSource(datasourceSettings.toObject()); // TypeORM
-
         // Find user
         const userRepository: Repository<UserTypeORM> = dataSource.getRepository(UserTypeORM);
         const userModel: UserTypeORM = (await userRepository.findOne({
@@ -139,8 +130,6 @@ describe("DatasourceTypeORM", () => {
     });
 
     test("getAllTeachers", async () => {
-        const dataSource = new DataSource(datasourceSettings.toObject()); // TypeORM
-
         // Find all teachers
         const teacherRepository: Repository<TeacherTypeORM> = dataSource.getRepository(TeacherTypeORM);
         const teacherModels: TeacherTypeORM[] = await teacherRepository.find({ relations: ["teacher"] });
@@ -152,8 +141,6 @@ describe("DatasourceTypeORM", () => {
     });
 
     test("updateTeacher", () => {
-        const dataSource = new DataSource(datasourceSettings.toObject());
-
         // Update teacher
         const teacherRepository = dataSource.getRepository(UserTypeORM);
         teacherRepository.save(UserTypeORM.createUserTypeORM(new Teacher("", "", "", "")));
@@ -163,8 +150,6 @@ describe("DatasourceTypeORM", () => {
     });
 
     test("deleteTeacherWithId", () => {
-        const dataSource = new DataSource(datasourceSettings.toObject());
-
         // Delete teacher
         let teacherRepository = dataSource.getRepository(TeacherTypeORM);
         const teacherModel = teacherRepository.findOne({ where: {id: "id"}, relations: ["teacher"] });
