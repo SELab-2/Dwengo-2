@@ -1,5 +1,6 @@
 import { Class } from "../../infrastructure/database/data/data_models/classTypeorm";
 import { Service } from "./service";
+import { UUID } from 'crypto';
 
 // TODO: add other imports for usecases
 
@@ -10,7 +11,7 @@ export class Get extends Service<Class> {
 
 export class UserGet extends Service<Class[]> {
   constructor(get: GetUserClasses) { super({ get }); }
-  execute(userId: UUID, page: number, size: number) { return this.usecases.get.execute(userID, page, size); }
+  execute(userId: UUID, page: number, size: number) { return this.usecases.get.execute(userId, page, size); }
 }
 
 export class Update extends Service<Class> {

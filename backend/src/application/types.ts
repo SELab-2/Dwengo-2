@@ -1,3 +1,5 @@
+// TODO - Move some types to proper subdirectory like routes etc
+
 /**
  * The HTTP methods as defined in: https://www.rfc-editor.org/rfc/rfc9110.html
  */
