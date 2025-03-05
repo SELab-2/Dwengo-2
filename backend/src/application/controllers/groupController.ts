@@ -22,7 +22,6 @@ export class GroupController extends Controller {
     create: GroupServices.CreateGroupService
   ) {
     const handlers: RouteHandlers = {
-      // pattern matching for each HTTP method
       [HttpMethod.GET]: [
         { hasId: true, hasParentId: false, handler: (req: Request) => this.getOne(req) },
         { parent: 'users', hasId: false, hasParentId: true, handler: (req: Request) => this.getUserGroups(req) },

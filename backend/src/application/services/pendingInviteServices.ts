@@ -3,6 +3,7 @@ import { PendingInvite } from "../../core/entities/pendingInvite";
 import { GetInvite } from "../../core/use-cases/pending_invite/getInvite";
 import { DeleteInvite } from "../../core/use-cases/pending_invite/deleteInvite";
 import { CreateInvite } from "../../core/use-cases/pending_invite/createInvite";
+import { GetUserInvite } from "../../core/use-cases/pending_invite/getUserInvite";
 
 export class GetPendingInviteService extends Service<PendingInvite> {
   constructor(get: GetInvite) { super({ get }); }

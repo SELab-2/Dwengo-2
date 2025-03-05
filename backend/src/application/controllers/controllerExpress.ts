@@ -1,5 +1,5 @@
 import { ApiError, Request, Response, RouteHandlers, ResponseBody } from '../types';
-import { extractPathParams, extractQueryParams } from '../helpersExpress';
+import { extractPathParams } from '../helpersExpress';
 import { Services } from '../services/service';
 
 /**
@@ -73,11 +73,14 @@ export abstract class Controller {
     const statusMap: Record<string, number> = {
       NOT_FOUND: 404, UNAUTHORIZED: 401, BAD_REQUEST: 400, FORBIDDEN: 403, CONFLICT: 409
     };
+
     if (!(error && typeof error === 'object' && 'code' in error && 'message' in error)) {
       return this.respond(500, { code: 'INTERNAL_ERROR', message: 'Unexpected server error' });
     }
+
     const apiError = error as ApiError;
     const status = statusMap[apiError.code] || 500;
+
     return this.respond(status, {
       code: apiError.code || "INTERNAL_ERROR", message: apiError.message || "Server error"
     });
@@ -116,17 +119,15 @@ export abstract class Controller {
     return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
   }
 
-    /**
-   * Retrieves all entities with pagination
-   * @param req - Request with pagination parameters
-   * @returns Response with status 200 and list of users
-   */
-    private getAll(req: Request): Response {
-      const { page, size } = extractQueryParams(req);
-      if (page === undefined || size === undefined)
-        throw { code: 'BAD_REQUEST', message: 'Missing required query parameters: page and size' };
-      return this.respond(200, this.services.getAll.execute(page, size));
-    }
+  /**
+ * Retrieves all entities with pagination
+ * @param req - Request with pagination parameters
+ * @returns Response with status 200 and list of users
+ */
+  protected getAll(req: Request): Response {
+    // TODO: implement this function based on the use cases
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+  }
 
   /**
    * Updates an entity by ID

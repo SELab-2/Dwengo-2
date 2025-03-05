@@ -20,7 +20,6 @@ export class AssignmentController extends Controller {
     create: AssignmentServices.CreateAssignmentService
   ) {
     const handlers : RouteHandlers = {
-      // pattern matching for each HTTP method
       [HttpMethod.GET]: [
         { hasId: true, hasParentId: false, handler: (req: Request) => this.getOne(req) },
         { parent: 'groups', hasId: false, hasParentId: true, handler: (req: Request) => this.getMany(req) }

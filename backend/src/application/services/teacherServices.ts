@@ -3,6 +3,7 @@ import { Teacher } from '../../core/entities/teacher';
 import { GetTeacher } from '../../core/use-cases/teacher/getTeacher';
 import { UpdateTeacher } from '../../core/use-cases/teacher/updateTeacher';
 import { DeleteTeacher } from '../../core/use-cases/teacher/deleteTeacher';
+import { RemoveTeacherFromClass } from '../../core/use-cases/teacher/removeTeacherFromClass';
 
 /**
  * Collection of services for teacher-related operations.

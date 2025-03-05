@@ -20,7 +20,6 @@ export class StudentController extends Controller {
     groupRemove: StudentServices.RemoveStudentFromGroupService
   ) {
     const handlers: RouteHandlers = {
-      // pattern matching for each HTTP method
       [HttpMethod.GET]: [
         { hasId: true, hasParentId: false, handler: (req: Request) => this.getOne(req) }
       ],
@@ -43,7 +42,7 @@ export class StudentController extends Controller {
    * @returns Response with status 204 (No Content)
    */
   protected removeFromClass(req: Request): Response {
-    // TODO: implement
+    // TODO: implement this function
     return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' })
   }
 
@@ -53,7 +52,7 @@ export class StudentController extends Controller {
    * @returns Response with status 204 (No Content)
    */
   private removeFromGroup(req: Request): Response {
-    // TODO: implement
+    // TODO: implement this function
     return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' })
   }
 }

@@ -1,6 +1,9 @@
 import { Service } from './service';
 import { Group } from '../../core/entities/group';
 import { GetGroup } from '../../core/use-cases/group/getGroup';
+import { GetUserGroups } from '../../core/use-cases/group/getUserGroups';
+import { GetClassGroups } from '../../core/use-cases/group/getClassGroups';
+import { UpdateGroup } from '../../core/use-cases/group/updateGroup';
 import { DeleteGroup } from '../../core/use-cases/group/deleteGroup';
 import { CreateGroup } from '../../core/use-cases/group/createGroup';
 

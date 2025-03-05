@@ -3,6 +3,8 @@ import { Student } from '../../core/entities/student';
 import { GetStudent } from '../../core/use-cases/student/getStudent';
 import { DeleteStudent } from '../../core/use-cases/student/deleteStudent';
 import { UpdateStudent } from '../../core/use-cases/student/updateStudent';
+import { RemoveStudentFromClass } from '../../core/use-cases/student/removeStudentFromClass';
+import { RemoveStudentFromGroup } from '../../core/use-cases/student/removeStudentFromGroup';
 
 /**
  * Collection of services for student-related operations.

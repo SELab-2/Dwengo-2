@@ -2,7 +2,7 @@ import { Service } from './service';
 import { Class } from '../../core/entities/class';
 import { DeleteClass } from '../../core/use-cases/class/deleteClass';
 import { GetClass } from '../../core/use-cases/class/getClass';
-import { SetupClass } from '../../core/use-cases/class/setupClass';
+import { CreateClass } from '../../core/use-cases/class/setupClass';
 import { UpdateClass } from '../../core/use-cases/class/updateClass';
 
 export class GetClassService extends Service<Class> {
@@ -26,6 +26,6 @@ export class DeleteClassService extends Service<void> {
 }
 
 export class CreateClassService extends Service<Class> {
-  constructor(create: SetupClass) { super({ create }); }
+  // TODO: implement constructor with CreateClass use case
   // TODO: implement the execute function
 }

@@ -18,7 +18,6 @@ export class TeacherController extends Controller {
     classRemove: TeacherServices.RemoveTeacherFromClassService
   ) {
     const handlers: RouteHandlers = {
-      // pattern matching for each HTTP method
       [HttpMethod.GET]: [
         { hasId: true, hasParentId: false, handler: (req: Request) => this.getOne(req) }
       ],

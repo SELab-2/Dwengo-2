@@ -2,6 +2,7 @@ import { Service } from "./service";
 import { Message } from "../../core/entities/message";
 import { GetMessage } from "../../core/use-cases/message/getMessage";
 import { CreateMessage } from "../../core/use-cases/message/createMessage";
+import { UpdateMessage } from "../../core/use-cases/message/updateMessage";
 import { DeleteMessage } from "../../core/use-cases/message/deleteMessage";
 import { GetQuestionMessages } from "../../core/use-cases/message/getQuestionMessages";
 

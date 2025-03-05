@@ -25,7 +25,6 @@ export class UsersController extends Controller {
     assignToAssignment: UsersServices.AssignUserToAssignmentService
   ) {
     const handlers: RouteHandlers = {
-      // pattern matching for each HTTP method
       [HttpMethod.GET]: [
         { hasId: false, hasParentId: false, handler: (req: Request) => this.getAll(req) },
         { parent: 'classes', hasId: false, hasParentId: true, handler: (req: Request) => this.getClassUsers(req) },
