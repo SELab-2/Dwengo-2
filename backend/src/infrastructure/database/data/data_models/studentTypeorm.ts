@@ -1,12 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
-import { User } from "./userTypeorm"
+import { UserTypeORM } from "./userTypeorm"
 
 @Entity()
-export class Student {
+export class StudentTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @OneToOne(() => User)
+    @OneToOne(() => UserTypeORM)
     @JoinColumn({ name: "user_id" })
-    student!: User
+    student!: UserTypeORM
 }

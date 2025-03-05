@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, Column } from "typeorm"
-import { User } from "./userTypeorm"
-import { Class } from "./classTypeorm"
+import { UserTypeORM } from "./userTypeorm"
+import { ClassTypeORM } from "./classTypeorm"
 
 export enum JoinAsType {
     TEACHER = "teacher",
@@ -8,17 +8,17 @@ export enum JoinAsType {
 }
 
 @Entity()
-export class JoinRequest {
+export class JoinRequestTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
     
-    @OneToOne(() => User)
+    @OneToOne(() => UserTypeORM)
     @JoinColumn({ name: "requester_id" })
-    requester!: User
+    requester!: UserTypeORM
 
-    @OneToOne(() => Class)
+    @OneToOne(() => ClassTypeORM)
     @JoinColumn({ name: "class_id" })
-    class!: Class
+    class!: ClassTypeORM
 
     @Column({
         type: "enum",

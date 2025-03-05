@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn } from "typeorm"
-import { Student } from "./studentTypeorm"
-import { Assignment } from "./assignmentTypeorm"
+import { StudentTypeORM } from "./studentTypeorm"
+import { AssignmentTypeORM } from "./assignmentTypeorm"
 
 export enum ThreadVisibility {
     GROUP = "group",
@@ -8,17 +8,17 @@ export enum ThreadVisibility {
 }
 
 @Entity()
-export class QuestionThread {
+export class QuestionThreadTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 
-    @OneToOne(() => Student)
+    @OneToOne(() => StudentTypeORM)
         @JoinColumn({ name: "creator_id" })
-        student!: Student
+        student!: StudentTypeORM
 
-    @OneToOne(() => Assignment)
+    @OneToOne(() => AssignmentTypeORM)
         @JoinColumn({ name: "assignment_id" })
-        assignment!: Assignment
+        assignment!: AssignmentTypeORM
     
     @Column()
         learning_object_id!: string

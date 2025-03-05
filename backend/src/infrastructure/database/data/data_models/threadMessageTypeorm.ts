@@ -1,19 +1,19 @@
 import { Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, Column, CreateDateColumn } from "typeorm"
-import { User } from "./userTypeorm"
-import { QuestionThread } from "./questionThreadTypeorm"
+import { UserTypeORM } from "./userTypeorm"
+import { QuestionThreadTypeORM } from "./questionThreadTypeorm"
 
 @Entity()
-export class ThreadMessage {
+export class ThreadMessageTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 
-    @OneToOne(() => QuestionThread)
+    @OneToOne(() => QuestionThreadTypeORM)
     @JoinColumn({ name: "thread_id" })
-    thread!: QuestionThread
+    thread!: QuestionThreadTypeORM
 
-    @OneToOne(() => User)
+    @OneToOne(() => UserTypeORM)
     @JoinColumn({ name: "user_id" })
-    sent_by!: User
+    sent_by!: UserTypeORM
 
     @CreateDateColumn()
     sent_at!: Date
