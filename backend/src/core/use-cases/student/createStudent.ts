@@ -1,4 +1,4 @@
-import { UseCase } from "../../../config/useCase";
+import { UseCase } from "../../../config/usecase";
 import { Student } from "../../entities/student"
 import {StudentRepositoryInterface} from "../../repositories/studentRepositoryInterface";
 export class CreateStudent implements UseCase<Student, string> {
