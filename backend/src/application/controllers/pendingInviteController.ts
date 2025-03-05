@@ -13,10 +13,10 @@ import * as PendingInviteServices from '../services/pendingInviteServices';
  */
 export class PendingInviteController extends Controller {
   constructor(
-    get: PendingInviteServices.Get,
-    userGet: PendingInviteServices.UserGet,
-    remove: PendingInviteServices.Delete,
-    create: PendingInviteServices.Create
+    get: PendingInviteServices.GetPendingInviteService,
+    userGet: PendingInviteServices.GetUserPendingInvitesService,
+    remove: PendingInviteServices.DeletePendingInviteService,
+    create: PendingInviteServices.CreatePendingInviteService
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
