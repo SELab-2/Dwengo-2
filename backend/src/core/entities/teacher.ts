@@ -1,4 +1,4 @@
-import { User } from "./userInterface";
+import { User } from "./user";
 
 export class Teacher extends User {
     public constructor(
