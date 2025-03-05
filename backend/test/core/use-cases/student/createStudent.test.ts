@@ -16,7 +16,7 @@ describe("CreateStudent", () => {
 
   test("Should throw error because of invalid email", async () => {
     await expect(
-      createStudent.execute(new Student("incorrect-email", "John", "Doe", "hashedpassword123",[], "1"))
+      createStudent.execute(new Student("incorrect-email", "John", "Doe", "hashedpassword123", "Harvard", [], "1"))
     ).rejects.toThrow("Invalid email");
   });
 
@@ -26,6 +26,7 @@ describe("CreateStudent", () => {
       "  John  ",
       "  Doe  ",
       "hashedpassword123",
+      "Yale",
       [],
       "4"
     );
@@ -43,7 +44,7 @@ describe("CreateStudent", () => {
     mockStudentRepository.findByEmail.mockResolvedValue(true);
   
     await expect(
-      createStudent.execute(new Student("test@example.com", "John", "Doe", "hashedpassword123",[], "5"))
+      createStudent.execute(new Student("test@example.com", "John", "Doe", "hashedpassword123", "Oxford", [], "5"))
     ).rejects.toThrow("Email already in use");
   
     // Control if findByEmail is correctly called
