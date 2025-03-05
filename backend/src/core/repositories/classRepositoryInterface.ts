@@ -32,14 +32,14 @@ export abstract class IClassRepository {
      * @param id The id of the class.
      * @returns A promise that resolves to the class with the given id or null if no results are found.
      */
-    public abstract getClassById(id: string): Promise<Class|null>;
+    public abstract getClassById(id: string): Promise<Class>;
     
     /**
      * Get a class by its name.
      * @param name The name of the class.
      * @returns A promise that resolves to the class with the given name or null if no results are found.
      */
-    public abstract getClassByName(name: string): Promise<Class|null>;
+    public abstract getClassByName(name: string): Promise<Class>;
 
     /**
      * Get all classes in the repository.
