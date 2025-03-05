@@ -1,18 +1,14 @@
-import { UseCase } from "../../../config/usecase";
-import { Student } from "../../entities/student";
-import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
+import { StudentRepositoryInterface } from '../../repositories/studentRepositoryInterface';
+import { UseCase } from '../../../config/useCase';
 
-export class DeleteStudent implements UseCase<Student, void> {
+export class DeleteStudent implements UseCase<string, void> {
+  constructor(private studentRepository: StudentRepositoryInterface) {}
 
-  constructor(private studentRepository: IStudentRepository) {}
+  async execute(id: string): Promise<void> {
+    const student = await this.studentRepository.getStudent(id);
 
-  /**
-   * UseCase to delete a student from the DB.
-   * 
-   * @param student the student to delete.
-   * @returns void
-   */
-  public async execute(student: Student): Promise<void> {
-    return await this.studentRepository.deleteStudent(student);
+    if (!student) {
+      throw new Error('Student not found');
+    }
   }
 }
