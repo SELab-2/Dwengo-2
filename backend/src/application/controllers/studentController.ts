@@ -1,6 +1,5 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
-import { extractPathParams } from '../helpersExpress';
 import * as StudentServices from '../services/studentServices';
 
 /**
@@ -39,45 +38,13 @@ export class StudentController extends Controller {
   }
 
   /**
-   * Retrieves a single student by ID
-   * @param req - Request with student ID in path params
-   * @returns Response with status 200 and student data
-   */
-  private getOne(req: Request): Response {
-    const { id } = extractPathParams(req);
-    return this.respond(200, this.services.get.execute(id));
-  }
-
-  /**
-   * Updates a student by ID
-   * @param req - Request with student ID in path params and update data in body
-   * @returns Response with status 200 and updated student data
-   */
-  private update(req: Request): Response {
-    const { id } = extractPathParams(req);
-    const data = req.body;
-    if (!data) throw { code: 'BAD_REQUEST', message: 'Missing request body' };
-    return this.respond(200, this.services.update.execute(id, data));
-  }
-
-  /**
-   * Deletes a student by ID
-   * @param req - Request with student ID in path params
-   * @returns Response with status 204 (No Content)
-   */
-  private delete(req: Request): Response {
-    const { id } = extractPathParams(req);
-    return this.respond(204, this.services.remove.execute(id));
-  }
-
-  /**
    * Removes a student from a class
    * @param req - Request with class ID and student ID in path params
    * @returns Response with status 204 (No Content)
    */
-  private removeFromClass(req: Request): Response {
-    const { id, idParent } = extractPathParams(req);
-    return this.respond(204, this.services.classRemove.execute(id, idParent));
+  protected removeFromClass(req: Request): Response {
+    // TODO: implement
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' })
   }
 
   /**
@@ -86,7 +53,7 @@ export class StudentController extends Controller {
    * @returns Response with status 204 (No Content)
    */
   private removeFromGroup(req: Request): Response {
-    const { id, idParent } = extractPathParams(req);
-    return this.respond(204, this.services.groupRemove.execute(id, idParent));
+    // TODO: implement
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' })
   }
 }

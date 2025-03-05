@@ -1,6 +1,5 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
-import { extractPathParams, extractQueryParams } from '../helpersExpress';
 import * as UsersServices from '../services/usersServices';
 
 /**
@@ -44,39 +43,13 @@ export class UsersController extends Controller {
   }
 
   /**
-   * Retrieves all users with pagination
-   * @param req - Request with pagination parameters
-   * @returns Response with status 200 and list of users
-   */
-  private getAll(req: Request): Response {
-    const { page, size } = extractQueryParams(req);
-    if (page === undefined || size === undefined)
-      throw { code: 'BAD_REQUEST', message: 'Missing required query parameters: page and size' };
-    return this.respond(200, this.services.getAll.execute(page, size));
-  }
-
-  /**
-   * Creates a new user
-   * @param req - Request with user data in body
-   * @returns Response with status 201 and created user data
-   */
-  private create(req: Request): Response {
-    const data = req.body;
-    if (!data) throw { code: 'BAD_REQUEST', message: 'Missing request body' };
-    return this.respond(201, this.services.create.execute(data));
-  }
-
-  /**
    * Retrieves all users in a class with pagination
    * @param req - Request with class ID and pagination parameters
    * @returns Response with status 200 and list of users
    */
   private getClassUsers(req: Request): Response {
-    const { idParent } = extractPathParams(req);
-    const { page, size } = extractQueryParams(req);
-    if (page === undefined || size === undefined)
-      throw { code: 'BAD_REQUEST', message: 'Missing required query parameters: page and size' };
-    return this.respond(200, this.services.getClassUsers.execute(idParent, page, size));
+    // TODO: implement this method
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
   }
 
   /**
@@ -85,11 +58,8 @@ export class UsersController extends Controller {
    * @returns Response with status 200 and list of users
    */
   private getGroupUsers(req: Request): Response {
-    const { idParent } = extractPathParams(req);
-    const { page, size } = extractQueryParams(req);
-    if (page === undefined || size === undefined)
-      throw { code: 'BAD_REQUEST', message: 'Missing required query parameters: page and size' };
-    return this.respond(200, this.services.getGroupUsers.execute(idParent, page, size));
+    // TODO: implement this method
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });  
   }
 
   /**
@@ -98,10 +68,8 @@ export class UsersController extends Controller {
    * @returns Response with status 201 and assigned user data
    */
   private assignToGroup(req: Request): Response {
-    const { idParent } = extractPathParams(req);
-    const data = req.body;
-    if (!data) throw { code: 'BAD_REQUEST', message: 'Missing request body' };
-    return this.respond(201, this.services.assignToGroup.execute(idParent, data));
+    // TODO: implement this method
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
   }
 
   /**
@@ -110,11 +78,8 @@ export class UsersController extends Controller {
    * @returns Response with status 200 and list of users
    */
   private getAssignmentUsers(req: Request): Response {
-    const { idParent } = extractPathParams(req);
-    const { page, size } = extractQueryParams(req);
-    if (page === undefined || size === undefined)
-      throw { code: 'BAD_REQUEST', message: 'Missing required query parameters: page and size' };
-    return this.respond(200, this.services.getAssignmentUsers.execute(idParent, page, size));
+    // TODO: implement this method
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
   }
 
   /**
@@ -123,9 +88,7 @@ export class UsersController extends Controller {
    * @returns Response with status 201 and assigned user data
    */
   private assignToAssignment(req: Request): Response {
-    const { idParent } = extractPathParams(req);
-    const data = req.body;
-    if (!data) throw { code: 'BAD_REQUEST', message: 'Missing request body' };
-    return this.respond(201, this.services.assignToAssignment.execute(idParent, data));
+    // TODO: implement this method
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
   }
 }

@@ -1,7 +1,7 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
 import { extractPathParams, extractQueryParams } from '../helpersExpress';
-import { Get, GroupGet, Update, Delete, Create } from '../services/assignmentServices';
+import * as AssignmentServices from '../services/assignmentServices';
 
 /**
  * Controller responsible for assignment-related API endpoints including CRUD operations
@@ -14,11 +14,11 @@ import { Get, GroupGet, Update, Delete, Create } from '../services/assignmentSer
  */
 export class AssignmentController extends Controller {
   constructor(
-    get: Get,
-    groupGet: GroupGet,
-    update: Update,
-    remove: Delete,
-    create: Create
+    get: AssignmentServices.GetAssignmentService,
+    groupGet: AssignmentServices.GroupGetAssignmentService,
+    update: AssignmentServices.UpdateAssignmentService,
+    remove: AssignmentServices.DeleteAssignmentService,
+    create: AssignmentServices.CreateAssignmentService
   ) {
     const handlers : RouteHandlers = {
       // pattern matching for each HTTP method
@@ -38,62 +38,5 @@ export class AssignmentController extends Controller {
     };
 
     super({ get, groupGet, update, remove, create }, handlers);
-  }
-
-
-  /**
-   * Retrieves a single assignment by ID
-   * @param req - Request with assignment ID in path params
-   * @returns Response with status 200 and assignment data
-   */
-  private getOne(req: Request): Response {
-    const { id } = extractPathParams(req);
-    return this.respond(200, this.services.get.execute(id));
-  }
-
-  /**
-   * Retrieves multiple assignments belonging to a specific group with pagination
-   * @param req - Request with group ID in path params and page/size in query params
-   * @returns Response with status 200 and paginated assignment collection
-   */
-  private getMany(req: Request): Response {
-    const { idParent } = extractPathParams(req);
-    const { page, size } = extractQueryParams(req);
-    if (page === undefined || size === undefined)
-      throw { code: 'BAD_REQUEST', message: 'Missing required query parameters: page and size' };
-    return this.respond(200, this.services.groupGet.execute(idParent, page, size));
-  }
-
-  /**
-   * Updates an assignment by ID
-   * @param req - Request with assignment ID in path params and update data in body
-   * @returns Response with status 200 and updated assignment data
-   */
-  private update(req: Request): Response {
-    const { id } = extractPathParams(req);
-    const data = req.body;
-    if (!data) throw { code: 'BAD_REQUEST', message: 'Missing request body' };
-    return this.respond(200, this.services.update.execute(id, data));
-  }
-
-  /**
-   * Deletes an assignment by ID
-   * @param req - Request with assignment ID in path params
-   * @returns Response with status 204 (No Content)
-   */
-  private delete(req: Request): Response {
-    const { id } = extractPathParams(req);
-    return this.respond(204, this.services.remove.execute(id));
-  }
-
-  /**
-   * Creates a new assignment
-   * @param req - Request with assignment data in body
-   * @returns Response with status 201 and created assignment data
-   */
-  private create(req: Request): Response {
-    const data = req.body;
-    if (!data) throw { code: 'BAD_REQUEST', message: 'Missing request body' };
-    return this.respond(201, this.services.create.execute(data));
   }
 }

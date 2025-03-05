@@ -1,5 +1,5 @@
 import { ApiError, Request, Response, RouteHandlers, ResponseBody } from '../types';
-import { extractPathParams } from '../helpersExpress';
+import { extractPathParams, extractQueryParams } from '../helpersExpress';
 import { Services } from '../services/service';
 
 /**
@@ -94,5 +94,67 @@ export abstract class Controller {
     } catch (error) {
       throw new Error(`Failed to serialize service response: ${error}`);
     }
+  }
+
+  /**
+   * Retrieves a single entity by ID
+   * @param req - Request with entity ID in path params
+   * @returns Response with status 200 and entity data
+   */
+  protected getOne(req: Request): Response {
+    // TODO: implement this function based on the use cases
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+  }
+
+  /**
+   * Retrieves multiple entities belonging to a specific parent entity with pagination
+   * @param req - Request with parent entity ID in path params and page/size in query params
+   * @returns Response with status 200 and paginated entity collection
+   */
+  protected getMany(req: Request): Response {
+    // TODO: implement this function based on the use cases
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+  }
+
+    /**
+   * Retrieves all entities with pagination
+   * @param req - Request with pagination parameters
+   * @returns Response with status 200 and list of users
+   */
+    private getAll(req: Request): Response {
+      const { page, size } = extractQueryParams(req);
+      if (page === undefined || size === undefined)
+        throw { code: 'BAD_REQUEST', message: 'Missing required query parameters: page and size' };
+      return this.respond(200, this.services.getAll.execute(page, size));
+    }
+
+  /**
+   * Updates an entity by ID
+   * @param req - Request with entity ID in path params and update data in body
+   * @returns Response with status 200 and updated entity data
+   */
+  protected update(req: Request): Response {
+    // TODO: implement this function based on the use cases
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+  }
+
+  /**
+   * Deletes an entity by ID
+   * @param req - Request with entity ID in path params
+   * @returns Response with status 204 (No Content)
+   */
+  protected delete(req: Request): Response {
+    // TODO: implement this function based on the use cases
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+  }
+
+  /**
+   * Creates a new entity
+   * @param req - Request with entity data in body
+   * @returns Response with status 201 and created entity data
+   */
+  protected create(req: Request): Response {
+    // TODO: implement this function based on the use cases
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
   }
 }

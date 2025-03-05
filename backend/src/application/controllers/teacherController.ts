@@ -1,6 +1,5 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
-import { extractPathParams } from '../helpersExpress';
 import * as TeacherServices from '../services/teacherServices';
 
 /**
@@ -36,44 +35,12 @@ export class TeacherController extends Controller {
   }
 
   /**
-   * Retrieves a single teacher by ID
-   * @param req - Request with teacher ID in path params
-   * @returns Response with status 200 and teacher data
-   */
-  private getOne(req: Request): Response {
-    const { id } = extractPathParams(req);
-    return this.respond(200, this.services.get.execute(id));
-  }
-
-  /**
-   * Updates a teacher by ID
-   * @param req - Request with teacher ID in path params and update data in body
-   * @returns Response with status 200 and updated teacher data
-   */
-  private update(req: Request): Response {
-    const { id } = extractPathParams(req);
-    const data = req.body;
-    if (!data) throw { code: 'BAD_REQUEST', message: 'Missing request body' };
-    return this.respond(200, this.services.update.execute(id, data));
-  }
-
-  /**
-   * Deletes a teacher by ID
-   * @param req - Request with teacher ID in path params
-   * @returns Response with status 204 (No Content)
-   */
-  private delete(req: Request): Response {
-    const { id } = extractPathParams(req);
-    return this.respond(204, this.services.remove.execute(id));
-  }
-
-  /**
    * Removes a teacher from a class
    * @param req - Request with class ID and teacher ID in path params
    * @returns Response with status 204 (No Content)
    */
-  private removeFromClass(req: Request): Response {
-    const { id, idParent } = extractPathParams(req);
-    return this.respond(204, this.services.classRemove.execute(id, idParent));
+  protected removeFromClass(req: Request): Response {
+    // TODO: implement this method
+    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
   }
 }
