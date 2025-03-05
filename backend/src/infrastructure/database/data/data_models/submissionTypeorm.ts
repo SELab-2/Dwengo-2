@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, Column, CreateDateColumn } from "typeorm"
-import { Assignment } from "./assignmentTypeorm"
-import { Student } from "./studentTypeorm"
+import { AssignmentTypeORM } from "./assignmentTypeorm"
+import { StudentTypeORM } from "./studentTypeorm"
 
 export enum SubmissionStatus {
     NOT_ACCEPTED = "not_accepted",
@@ -12,13 +12,13 @@ export class Submission {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 
-    @OneToOne(() => Student)
+    @OneToOne(() => StudentTypeORM)
     @JoinColumn({ name: "student_id" })
-    student!: Student
+    student!: StudentTypeORM
 
-    @OneToOne(() => Assignment)
+    @OneToOne(() => AssignmentTypeORM)
     @JoinColumn({ name: "assignment_id" })
-    assignment!: Assignment
+    assignment!: AssignmentTypeORM
 
     @Column({ type: "varchar"}) // In the Dwengo API docs a uuid is a string
     learning_object_id!: string // uuid of corresponding learning object
