@@ -1,21 +1,19 @@
 import { DataSource, TypeORMError } from "typeorm"
-import { AssignmentAnswer } from "../data_models/assignmentAnswerTypeorm";
-import { AssignmentGroup } from "../data_models/assignmentGroupTypeorm";
+import { AssignmentForGroup } from "../data_models/assignmentForGroupTypeorm";
 import { Assignment } from "../data_models/assignmentTypeorm";
 import { Class } from "../data_models/classTypeorm";
 import { Group } from "../data_models/groupTypeorm";
-import { PendingInvite } from "../data_models/inviteTypeorm";
+import { JoinRequest } from "../data_models/joinRequestTypeorm";
 import { StudentOfClass } from "../data_models/studentOfClassTypeorm";
 import { StudentOfGroup } from "../data_models/studentOfGroupTypeorm";
-import { StudentProgress } from "../data_models/studentProgressTypeorm";
 import { QuestionThread } from "../data_models/questionThreadTypeorm";
 import { Student } from "../data_models/studentTypeorm";
-import { TeacherGroupAssignment } from "../data_models/teacherGroupAssignmentTypeorm";
 import { TeacherOfClass } from "../data_models/teacherOfClassTypeorm";
 import { Teacher } from "../data_models/teacherTypeorm";
 import { User } from "../data_models/userTypeorm";
-import { ThreadQuestions } from "../data_models/threadQuestionTypeorm";
+import { ThreadMessage } from "../data_models/threadMessageTypeorm";
 import { DatasourceInterface } from "./datasourceInterface";
+import { Submission } from "../data_models/submissionTypeorm";
 
 export class DatasourcePostgreSQL implements DatasourceInterface {
 
@@ -39,19 +37,17 @@ export class DatasourcePostgreSQL implements DatasourceInterface {
                 User, 
                 Student, 
                 Teacher,
-                PendingInvite,
+                JoinRequest,
                 Class,
                 TeacherOfClass,
                 StudentOfClass,
                 Group,
                 StudentOfGroup,
                 Assignment,
-                AssignmentGroup,
-                TeacherGroupAssignment,
+                AssignmentForGroup,
                 QuestionThread,
-                ThreadQuestions,
-                AssignmentAnswer,
-                StudentProgress
+                ThreadMessage,
+                Submission
             ]
         });
     }

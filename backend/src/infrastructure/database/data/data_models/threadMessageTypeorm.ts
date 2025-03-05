@@ -3,7 +3,7 @@ import { User } from "./userTypeorm"
 import { QuestionThread } from "./questionThreadTypeorm"
 
 @Entity()
-export class ThreadQuestions {
+export class ThreadMessage {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 
@@ -15,6 +15,9 @@ export class ThreadQuestions {
     @JoinColumn({ name: "user_id" })
     sent_by!: User
 
+    @CreateDateColumn()
+    sent_at!: Date
+
     @Column({ type: "text" })
-    content!: string
+    contents!: string
 }

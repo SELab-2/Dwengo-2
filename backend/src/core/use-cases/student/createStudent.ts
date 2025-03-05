@@ -1,7 +1,7 @@
 import { useCase } from "../../../config/usecase";
 import { Student } from "../../entities/student"
 import {StudentRepositoryInterface} from "../../repositories/studentRepositoryInterface";
-export class CreateStudent implements useCase<Student> {
+export class CreateStudent implements useCase<Student, string> {
     public constructor(private studentRepository: StudentRepositoryInterface) {}
     /**
      * Validates student input.
@@ -15,11 +15,11 @@ export class CreateStudent implements useCase<Student> {
             throw new Error("Invalid email");
         }
 
-        if (!input.first_name || typeof input.first_name !== "string") {
+        if (!input.firstName || typeof input.firstName !== "string") {
             throw new Error("Invalid first name");
         }
 
-        if (!input.family_name || typeof input.family_name !== "string") {
+        if (!input.familyName || typeof input.familyName !== "string") {
             throw new Error("Invalid family name");
         }
 
@@ -38,17 +38,18 @@ export class CreateStudent implements useCase<Student> {
      * @returns void
      * @throws Error if input is invalid.
      */
-    async execute(input: Student): Promise<void> {
+    async execute(input: Student): Promise<string> {
         try {
             // Normalize input
-            input.first_name = input.first_name!.trim();
-            input.family_name = input.family_name!.trim();
+            input.firstName = input.firstName!.trim();
+            input.familyName = input.familyName!.trim();
 
             // Check if input is valid
             await this.validateInput(input);
 
             // Save the student to the database
             const id: string = await this.studentRepository.createStudent(input);
+            return id;
         } catch (error) {
             console.error("Error creating new student:", error);
             throw error;

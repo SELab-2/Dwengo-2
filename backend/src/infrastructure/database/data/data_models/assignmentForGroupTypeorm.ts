@@ -1,14 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
-import { Teacher } from "./teacherTypeorm"
+import { Group } from "./groupTypeorm"
 import { Assignment } from "./assignmentTypeorm"
 
 @Entity()
-export class TeacherGroupAssignment {
-    @PrimaryGeneratedColumn()
+export class AssignmentForGroup {
+    @PrimaryGeneratedColumn("uuid")
+    id!: string
 
-    @OneToOne(() => Teacher)
-    @JoinColumn({ name: "teacher_id" })
-    teacher!: Teacher
+    @OneToOne(() => Group)
+    @JoinColumn({ name: "group_id" })
+    group!: Group
 
     @OneToOne(() => Assignment)
     @JoinColumn({ name: "assignment_id" })
