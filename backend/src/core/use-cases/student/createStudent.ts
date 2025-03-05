@@ -1,4 +1,4 @@
-import { useCase } from "../../../config/usecase";
+import { UseCase } from "../../../config/usecase";
 import { Student } from "../../entities/student"
 import { StudentRepositoryInterface } from "../../repositories/studentRepositoryInterface";
 import { AppError } from "../../../config/error";
