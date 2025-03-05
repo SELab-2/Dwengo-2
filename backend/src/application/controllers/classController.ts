@@ -13,11 +13,11 @@ import * as ClassServices from "../services/classServices";
  */
 export class ClassController extends Controller {
   constructor(
-    get: ClassServices.Get,
-    userGet: ClassServices.UserGet,
-    update: ClassServices.Update,
-    remove: ClassServices.Delete,
-    create: ClassServices.Create
+    get: ClassServices.GetClassService,
+    userGet: ClassServices.GetUserClassesService,
+    update: ClassServices.UpdateClassService,
+    remove: ClassServices.DeleteClassService,
+    create: ClassServices.CreateClassService
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
