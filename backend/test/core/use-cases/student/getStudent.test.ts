@@ -15,13 +15,14 @@ describe("getStudent Use Case", () => {
   });
 
   test("Should return student if found", async () => {
-    const student: Student = {
-      id: "1",
-      email: "test@student.com",
-      first_name: "John",
-      family_name: "Doe",
-      password_hash: "hashedpassword123",
-    };
+    const student = new Student(
+      "test@student.com",
+      "John",
+      "Doe",
+      "hashedpassword123",
+      [],
+      "1"
+    );
 
     mockStudentRepository.getStudent.mockResolvedValue(student);
     const result = await getStudentUseCase.execute("1");
