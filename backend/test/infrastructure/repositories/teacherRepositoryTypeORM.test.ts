@@ -19,7 +19,14 @@ describe("TeacherRepositoryTypeORM", () => {
             getTeacherByLastName: jest.fn((last_name: string) => Promise.resolve(teacher)),
             getAllTeachers: jest.fn(() => Promise.resolve([teacher, teacher])),
             updateTeacher: jest.fn((updatedTeacher: Teacher) => Promise.resolve(updatedTeacher)),
-            deleteTeacherWithId: jest.fn((id: string) => Promise.resolve())
+            deleteTeacherWithId: jest.fn((id: string) => Promise.resolve()),
+
+            // These do not matter for this test
+            createClass: jest.fn(),
+            getClassById: jest.fn(),
+            getClassByName: jest.fn(),
+            getAllClasses: jest.fn(),
+            deleteClassById: jest.fn(),
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasource)

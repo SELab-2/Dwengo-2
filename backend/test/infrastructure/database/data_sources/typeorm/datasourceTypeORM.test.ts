@@ -4,9 +4,12 @@ import { DatasourceTypeORMConnectionSettingsFactory } from "../../../../../src/i
 import { DatasourceTypeORMConnectionSettings } from "../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
 import { TeacherTypeORM } from "../../../../../src/infrastructure/database/data/data_models/teacherTypeorm";
 import { Teacher } from "../../../../../src/core/entities/teacher";
+import { ClassTypeORM } from "../../../../../src/infrastructure/database/data/data_models/classTypeorm";
+import { Class } from "../../../../../src/core/entities/class";
 
 // Variables
 let datasourceSettings: DatasourceTypeORMConnectionSettings;
+let class_: Class; // _ because `class` is a keyword
 
 // Mock TypeORM
 jest.mock("typeorm", () => {
@@ -32,6 +35,11 @@ beforeAll(() => {
         "postgres",
         "postgres",
         "dwengo-database"
+    );
+    class_ = new Class(
+        "Programmeren",
+        "Voor mensen die niet kunnen programmeren",
+        "Beginners"
     );
 });
 
@@ -170,5 +178,27 @@ describe("DatasourceTypeORM", () => {
         expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
         expect(teacherRepository.delete).toHaveBeenCalled();
     });
+
+    // test("createClass", () => {
+    //     const dataSource = new DataSource(datasourceSettings.toObject());
+
+    //     // Create class
+    //     const classRepository = dataSource.getRepository(ClassTypeORM);
+    //     classRepository.save(ClassTypeORM.createClassTypeORM(class_));
+
+    //     expect(dataSource.getRepository).toHaveBeenCalledWith(ClassTypeORM);
+    //     expect(classRepository.save).toHaveBeenCalled;
+    // });
+
+    // test("getClassById", () => {
+    //     const dataSource = new DataSource(datasourceSettings.toObject());
+
+    //     // Find class
+    //     const classRepository = dataSource.getRepository(ClassTypeORM);
+    //     classRepository.findOne({ where: { id: "id" } });
+
+    //     expect(dataSource.getRepository).toHaveBeenCalledWith(ClassTypeORM);
+    //     expect(classRepository.findOne).toHaveBeenCalled();
+    // });
 
 });
