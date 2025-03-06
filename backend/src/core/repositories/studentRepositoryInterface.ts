@@ -6,6 +6,15 @@ import { Student } from "../entities/student";
 
 export interface StudentRepositoryInterface {
     /**
+     * Function to update a student's info in the DB.
+     * 
+     * @param student the student object with info to be updated.
+     * @returns void
+     * @throws Error if the student is not present in the DB.
+     */
+    updateStudent(student: Student): Promise<void>;
+
+    /**
      * Function to get the student with the given id.
      * 
      * @param studentId the id of the student to get.
