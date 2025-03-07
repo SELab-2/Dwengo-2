@@ -27,8 +27,7 @@ describe("CreateStudent", () => {
       "  Doe  ",
       "hashedpassword123",
       "Yale",
-      [] as string[],
-      "4"
+      "2"
     );
 
     jest.spyOn(createStudent as any, "validateInput").mockResolvedValue(undefined);
@@ -45,7 +44,7 @@ describe("CreateStudent", () => {
     mockStudentRepository.findByEmail.mockResolvedValue(true);
   
     await expect(
-      createStudent.execute(new Student("test@example.com", "John", "Doe", "hashedpassword123", "Oxford", [], "5"))
+      createStudent.execute(new Student("test@example.com", "John", "Doe", "hashedpassword123", "Oxford", "3"))
     ).rejects.toThrow("Email already in use");
   
     // Control if findByEmail is correctly called

@@ -1,6 +1,7 @@
 import { GetSudent } from "../../../../src/core/use-cases/student/getStudent";
 import { StudentRepositoryInterface } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
+import { AppError } from "../../../../src/config/error";
 
 describe("getStudent Use Case", () => {
   let getStudentUseCase: GetSudent;
@@ -32,11 +33,10 @@ describe("getStudent Use Case", () => {
     expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("1");
   });
 
-  test("Should return null if student is not found", async () => {
-    mockStudentRepository.getStudent.mockResolvedValue(null);
-    const result = await getStudentUseCase.execute("999");
-
-    expect(result).toBeNull();
+  test("Should throw error", async () => {
+    mockStudentRepository.getStudent.mockRejectedValue(new AppError("Student not found", 404));
+    
+    await expect(getStudentUseCase.execute("999")).rejects.toThrow();
     expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("999");
   });
 });
