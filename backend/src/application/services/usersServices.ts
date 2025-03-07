@@ -15,7 +15,7 @@ import { User } from '../../core/entities/user';
 /**
  * Service for retrieving all users with pagination
  */
-export class GetAllUsersService extends Service<User[]> {
+export class GetAllUsersService extends Service {
   // TODO: implement constructor with GetAllUsers use case
   // TODO: implement the execute function
 }
@@ -23,7 +23,7 @@ export class GetAllUsersService extends Service<User[]> {
 /**
  * Service for creating a new user
  */
-export class CreateUserService extends Service<User> {
+export class CreateUserService extends Service {
   // TODO: implement constructor with CreateUser use case
   // TODO: implement the execute function
 }
@@ -31,7 +31,7 @@ export class CreateUserService extends Service<User> {
 /**
  * Service for retrieving all users in a class with pagination
  */
-export class GetClassUsersService extends Service<User[]> {
+export class GetClassUsersService extends Service {
   // TODO: implement constructor with GetClassUsers use case
   // TODO: implement the execute function
 }
@@ -39,7 +39,7 @@ export class GetClassUsersService extends Service<User[]> {
 /**
  * Service for retrieving all users in a group with pagination
  */
-export class GetGroupUsersService extends Service<User[]> {
+export class GetGroupUsersService extends Service {
   // TODO: implement constructor with GetGroupUsers use case
   // TODO: implement the execute function
 }
@@ -47,7 +47,7 @@ export class GetGroupUsersService extends Service<User[]> {
 /**
  * Service for assigning a user to a group
  */
-export class AssignUserToGroupService extends Service<User> {
+export class AssignUserToGroupService extends Service {
   // TODO: implement constructor with AssignUserToGroup use case
   // TODO: implement the execute function
 }
@@ -55,7 +55,7 @@ export class AssignUserToGroupService extends Service<User> {
 /**
  * Service for retrieving all users in an assignment with pagination
  */
-export class GetAssignmentUsersService extends Service<User[]> {
+export class GetAssignmentUsersService extends Service {
   // TODO: implement constructor with GetAssignmentUsers use case
   // TODO: implement the execute function
 }
@@ -63,7 +63,7 @@ export class GetAssignmentUsersService extends Service<User[]> {
 /**
  * Service for assigning a user to an assignment
  */
-export class AssignUserToAssignmentService extends Service<User> {
+export class AssignUserToAssignmentService extends Service {
   // TODO: implement constructor with AssignUserToAssignment use case
   // TODO: implement the execute function
 }

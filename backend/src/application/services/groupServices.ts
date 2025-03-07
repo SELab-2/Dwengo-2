@@ -16,7 +16,7 @@ import { CreateGroup } from '../../core/use-cases/group/createGroup';
 /**
  * Service for retrieving a single group by ID
  */
-export class GetGroupService extends Service<Group> {
+export class GetGroupService extends Service {
   constructor(get: GetGroup) { super({ get }); }
   // TODO: implement the execute function
 }
@@ -24,7 +24,7 @@ export class GetGroupService extends Service<Group> {
 /**
  * Service for retrieving groups belonging to a user with pagination
  */
-export class GetUserGroupsService extends Service<Group[]> {
+export class GetUserGroupsService extends Service {
   // TODO: implement constructor with GetUserGroups use case
   // TODO: implement the execute function
 }
@@ -32,7 +32,7 @@ export class GetUserGroupsService extends Service<Group[]> {
 /**
  * Service for retrieving groups belonging to a class with pagination
  */
-export class GetClassGroupsService extends Service<Group[]> {
+export class GetClassGroupsService extends Service {
   // TODO: implement constructor with GetClassGroups use case
   // TODO: implement the execute function
 }
@@ -40,7 +40,7 @@ export class GetClassGroupsService extends Service<Group[]> {
 /**
  * Service for updating a group
  */
-export class UpdateGroupService extends Service<Group> {
+export class UpdateGroupService extends Service {
   // TODO: implement constructor with UpdateGroup use case
   // TODO: implement the execute function
 }
@@ -48,7 +48,7 @@ export class UpdateGroupService extends Service<Group> {
 /**
  * Service for deleting a group
  */
-export class DeleteGroupService extends Service<void> {
+export class DeleteGroupService extends Service {
   constructor(remove: DeleteGroup) { super({ remove }); }
   // TODO: implement the execute function
 }
@@ -56,7 +56,7 @@ export class DeleteGroupService extends Service<void> {
 /**
  * Service for creating a new group
  */
-export class CreateGroupService extends Service<Group> {
+export class CreateGroupService extends Service {
   constructor(create: CreateGroup) { super({ create }); }
   // TODO: implement the execute function
 }

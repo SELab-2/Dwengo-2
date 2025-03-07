@@ -9,7 +9,7 @@ import { GetAssignmentQuestions } from "../../core/use-cases/question/getQuestio
 /**
  * Retrieve a question by its id. Also includes the assignment id.
  */
-export class GetQuestionService extends Service<Question> {
+export class GetQuestionService extends Service {
   constructor(get: GetQuestion) { super({ get }); }
   // TODO: implement the execute function
 }
@@ -17,7 +17,7 @@ export class GetQuestionService extends Service<Question> {
 /**
  * Retrieve all questions for an assignment.
  */
-export class GetAssignmentQuestionsService extends Service<Question[]> {
+export class GetAssignmentQuestionsService extends Service {
   // TODO: implement constructor with GetAssignmentQuestions use case
   // TODO: implement the execute function
 }
@@ -25,7 +25,7 @@ export class GetAssignmentQuestionsService extends Service<Question[]> {
 /**
  * Update a question by its id.
  */
-export class UpdateQuestionService extends Service<Question> {
+export class UpdateQuestionService extends Service {
   constructor(update: UpdateQuestion) { super({ update }); }
   // TODO: implement the execute function
 }
@@ -33,7 +33,7 @@ export class UpdateQuestionService extends Service<Question> {
 /**
  * Delete a question by its id.
  */
-export class DeleteQuestionService extends Service<void> {
+export class DeleteQuestionService extends Service {
   constructor(remove: DeleteQuestion) { super({ remove }); }
   // TODO: implement the execute function
 }
@@ -41,7 +41,7 @@ export class DeleteQuestionService extends Service<void> {
 /**
  * Create a new question for an assignment.
  */
-export class CreateQuestionService extends Service<Question> {
+export class CreateQuestionService extends Service {
   constructor(create: CreateQuestion) { super({ create }); }
   // TODO: implement the execute function
 }
