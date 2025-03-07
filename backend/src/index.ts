@@ -7,6 +7,8 @@ import { DatasourceTypeORM } from "./infrastructure/database/data/data_sources/t
 import { JoinRequestRepositoryTypeORM } from "./infrastructure/repositories/JoinRequestRepositoryTypeORM";
 import { DatasourceFactoryTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM";
 import { JoinRequest } from "./core/entities/joinRequest";
+import { ITeacherRepository } from "./core/repositories/teacherRepositoryInterface";
+import { TeacherRepositoryTypeORM } from "./infrastructure/repositories/teacherRepositoryTypeORM";
 
 dotenv.config();
 
@@ -17,6 +19,8 @@ const port = process.env.PORT || 3000;
 
 // Initialize the datasource
 const datasource: IDatasource = new DatasourceTypeORM();
+
+// const teacherRepo: ITeacherRepository = new TeacherRepositoryTypeORM();
 
 // const repo = new JoinRequestRepositoryTypeORM(new DatasourceFactoryTypeORM());
 // repo.createJoinRequest(new JoinRequest(
