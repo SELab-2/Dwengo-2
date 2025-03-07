@@ -60,7 +60,6 @@ describe("DatasourceClassTypeORM", () => {
     test("createJoinRequest", async () => {
         const teacherModel = await teacherRepository.findOne({ where: { id: joinRequest.getId() }, relations: ["teacher"] });
 
-        expect(teacherModel).toBeNull(); // Ensure the mock behaves as expected
         expect(teacherRepository.findOne).toHaveBeenCalledWith({
             where: { id: joinRequest.getId() },
             relations: ["teacher"],
@@ -78,4 +77,36 @@ describe("DatasourceClassTypeORM", () => {
 
         expect(joinRequestRepository.save).toHaveBeenCalledWith(joinRequestModel);
     });
+
+    test("getJoinRequestById", async () => {
+        const joinRequestModel = await joinRequestRepository.findOne({ where: { id: joinRequest.getId() }, relations: ["requester", "class"] });
+
+        expect(joinRequestRepository.findOne).toHaveBeenCalledWith({
+            where: { id: joinRequest.getId() },
+            relations: ["requester", "class"],
+        });
+    });
+
+    test("getJoinRequestByRequesterId", async () => {
+        const joinRequestsModel = await joinRequestRepository.find({ where: { requester: { id: teacher.id! } }, relations: ["requester", "class"] });
+
+        expect(joinRequestRepository.find).toHaveBeenCalledWith({
+            where: { requester: { id: teacher.id! } }, relations: ["requester", "class"]
+        });
+    });
+
+    test("getJoinRequestByClassId", async () => {
+        const joinRequestsModel = await joinRequestRepository.find({ where: { class: { id: class_.id! } }, relations: ["requester", "class"] });
+
+        expect(joinRequestRepository.find).toHaveBeenCalledWith({
+            where: { class: { id: class_.id! } }, relations: ["requester", "class"]
+        });
+    });
+
+    test("deleteJoinRequestById", async () => {
+        await joinRequestRepository.delete({ id: joinRequest.getId() });
+
+        expect(joinRequestRepository.delete).toHaveBeenCalledWith({ id: joinRequest.getId()});
+    });
+
 });

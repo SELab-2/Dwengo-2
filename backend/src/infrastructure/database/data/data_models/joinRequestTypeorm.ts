@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, Column } from "typeorm"
 import { UserTypeORM } from "./userTypeorm"
 import { ClassTypeORM } from "./classTypeorm"
 import { JoinRequest, JoinRequestType } from "../../../../core/entities/joinRequest"

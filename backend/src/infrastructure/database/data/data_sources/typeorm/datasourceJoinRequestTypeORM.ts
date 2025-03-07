@@ -51,19 +51,42 @@ export class DatasourceJoinRequestTypeORM extends IDatasourceJoinRequest {
     }
 
     public async getJoinRequestById(id: string): Promise<JoinRequest | null> {
-        throw new Error("Method not implemented.");
+        const joinRequest: JoinRequestTypeORM | null = await this.datasource
+            .getRepository(JoinRequestTypeORM)
+            .findOne({
+                where: {id: id},
+                relations: ["requester", "class"]
+            });
+
+        return joinRequest?.toJoinRequestEntity() || null
     }
 
     public async getJoinRequestByRequesterId(requesterId: string): Promise<JoinRequest[]> {
-        throw new Error("Method not implemented.");
+        const joinRequests: JoinRequestTypeORM[] = await this.datasource
+            .getRepository(JoinRequestTypeORM)
+            .find({
+                where: {requester: {id: requesterId}},
+                relations: ["requester", "class"]
+            });
+
+        return joinRequests.map(joinRequest => joinRequest.toJoinRequestEntity());
     }
 
     public async getJoinRequestByClassId(classId: string): Promise<JoinRequest[]> {
-        throw new Error("Method not implemented.");
+        const joinRequests: JoinRequestTypeORM[] = await this.datasource
+            .getRepository(JoinRequestTypeORM)
+            .find({
+                where: {class: {id: classId}},
+                relations: ["requester", "class"]
+            });
+
+        return joinRequests.map(joinRequest => joinRequest.toJoinRequestEntity());
     }
 
     public async deleteJoinRequestById(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        await this.datasource
+            .getRepository(JoinRequestTypeORM)
+            .delete({id: id});
     }
 
 }

@@ -31,7 +31,7 @@ describe("TeacherRepositoryTypeORM", () => {
             getAllTeachers: jest.fn(() => Promise.resolve([teacher, teacher])),
             updateTeacher: jest.fn(() => Promise.resolve(teacher)),
             deleteTeacherWithId: jest.fn()
-        } as any; // TODO hack?
+        } as any;
 
         // Mock teacher
         teacher = new Teacher("email", "alice", "bob", "password", "id");
