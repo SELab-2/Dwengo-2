@@ -28,14 +28,14 @@ export abstract class IClassRepository {
     public abstract createClass(newClass: Class): Promise<Class>;
 
     /**
-     * Get a class by its id.
+     * Get a class by its id. Throws an `EntityNotFoundError` when no class is found.
      * @param id The id of the class.
      * @returns A promise that resolves to the class with the given id or null if no results are found.
      */
     public abstract getClassById(id: string): Promise<Class>;
     
     /**
-     * Get a class by its name.
+     * Get a class by its name. Throws an `EntityNotFoundError` when no class is found.
      * @param name The name of the class.
      * @returns A promise that resolves to the class with the given name or null if no results are found.
      */
