@@ -7,7 +7,7 @@ import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 export class ClassRepositoryTypeORM extends IClassRepository {
 
     private datasource: IDatasource;
-    private datasourceClass: Promise<IDatasourceClass>
+    private datasourceClass: Promise<IDatasourceClass>;
 
     public constructor(
         datasourceFactory: IDatasourceFactory

@@ -1,6 +1,25 @@
-import { UseCase } from "../../../config/useCase";
+import { UseCase, UseCaseParams } from "../../../config/useCase";
 import { Student } from "../../entities/student"
 import {IStudentRepository} from "../../repositories/studentRepositoryInterface";
+
+export class CreateStudentParams implements UseCaseParams<Student> {
+    fromObject(input: Object): Student {
+        return {
+            email: input["email"],
+            firstName: input["firstName"],
+            familyName: input["familyName"]
+        }
+    }
+
+    toObject(input: Student): Object {
+        return {
+            email: input.email,
+            firstName: input.firstName,
+            familyName: input.familyName
+        }
+    }
+}
+
 export class CreateStudent implements UseCase<Student, string> {
     public constructor(private studentRepository: IStudentRepository) {}
     /**

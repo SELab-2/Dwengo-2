@@ -3,5 +3,6 @@ export interface UseCase<Type, ReturnType> {
 }
 
 export interface UseCaseParams<Type>{
-  toObject: (input: Type) => Object
+  fromObject: (input: object) => Type,
+  toObject: (input: Type) => object
 }
