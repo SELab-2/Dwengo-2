@@ -1,10 +1,10 @@
 export class Assignment {
     public constructor(
         private _classId: string,
-        private _LearningPathId: string,
-        private _start_date: Date,
+        private _learningPathId: string,
+        private _startDate: Date,
         private _deadline: Date,
-        private _extra_instructions: string,
+        private _extraInstructions: string,
         private _id?: string,
     ){}
 
@@ -15,17 +15,17 @@ export class Assignment {
     public get classId():string{
         return this._classId;
     }
-    public get LearningPathId():string{
-        return this._LearningPathId;
+    public get learningPathId():string{
+        return this._learningPathId;
     }
     public get start_date():Date{
-        return this._start_date;
+        return this._startDate;
     }
     public get deadline():Date{
         return this._deadline;
     }
-    public get extra_instructions():string{
-        return this._extra_instructions;
+    public get extraInstructions():string{
+        return this._extraInstructions;
     }
 
     // Setters
@@ -35,16 +35,16 @@ export class Assignment {
     public set classId(newClassId:string){
         this._classId = newClassId;
     }
-    public set LearningPathId(newLearningPathId:string){
-        this._LearningPathId = newLearningPathId;
+    public set learningPathId(newLearningPathId:string){
+        this._learningPathId = newLearningPathId;
     }
-    public set start_date(newStartDate:Date){
-        this._start_date = newStartDate;
+    public set startDate(newStartDate:Date){
+        this._startDate = newStartDate;
     }
     public set deadline(newDeadline:Date){
         this._deadline = newDeadline;
     }
-    public set extra_instructions(newExtraInstructions:string){
-        this._extra_instructions = newExtraInstructions;
+    public set extraInstructions(newExtraInstructions:string){
+        this._extraInstructions = newExtraInstructions;
     }
 }
