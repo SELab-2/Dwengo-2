@@ -1,18 +1,12 @@
 import { IDatasourceFactory } from "../../infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { Teacher } from "../entities/teacher";
+import { AbstractRepository } from "./AbstractRepository";
 
 /**
  * Interface for teacher repositories.
  * Allows CRUD operations on teacher entities.
  */
-export abstract class ITeacherRepository {
-
-    /**
-     * @param datasourceFactory Factory for creating datasources.
-     */
-    public constructor(
-        protected datasourceFactory: IDatasourceFactory
-    ) {}
+export abstract class ITeacherRepository extends AbstractRepository {
 
     /**
      * Insert a new teacher in the repository. The `id` field of the teacher should be empty.
@@ -23,32 +17,32 @@ export abstract class ITeacherRepository {
     public abstract createTeacher(teacher: Teacher): Promise<Teacher>;
 
     /**
-     * Get a teacher by its id.
+     * Get a teacher by its id. Throws an `EntityNotFoundError` when no teacher is found.
      * @param id The id of the teacher
      * @returns A promise that resolves to the teacher with the given id or null if no results are found.
      */
-    public abstract getTeacherById(id: string): Promise<Teacher|null>;
+    public abstract getTeacherById(id: string): Promise<Teacher>;
 
     /**
-     * Get a teacher by their email.
+     * Get a teacher by their email. Throws an `EntityNotFoundError` when no teacher is found.
      * @param email The email of the teacher
      * @returns A promise that resolves to the teacher with the given email or null if no results are found.
      */
-    public abstract getTeacherByEmail(email: string): Promise<Teacher|null>;
+    public abstract getTeacherByEmail(email: string): Promise<Teacher>;
 
     /**
-     * Get a teacher by their first name.
+     * Get a teacher by their first name. Throws an `EntityNotFoundError` when no teacher is found.
      * @param first_name The first name of the teacher
      * @returns A promise that resolves to the teacher with the given first name.
      */
-    public abstract getTeacherByFirstName(first_name: string): Promise<Teacher|null>;
+    public abstract getTeacherByFirstName(first_name: string): Promise<Teacher>;
 
     /**
-     * Get a teacher by their last name.
+     * Get a teacher by their last name. Throws an `EntityNotFoundError` when no teacher is found.
      * @param last_name The last name of the teacher
      * @returns A promise that resolves to the teacher with the given last name.
      */
-    public abstract getTeacherByLastName(last_name: string): Promise<Teacher|null>;
+    public abstract getTeacherByLastName(last_name: string): Promise<Teacher>;
 
     /**
      * Get all teachers in the repository.
