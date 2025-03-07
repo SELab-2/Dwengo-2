@@ -12,7 +12,7 @@ export interface IStudentRepository {
      * 
      * @param student the student to delete.
      */
-    deleteStudent(student: string): void | PromiseLike<void>;
+    deleteStudent(student: string): Promise<void>;
 
     /**
      * Function to get the student with the given id.
