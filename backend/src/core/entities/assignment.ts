@@ -18,7 +18,7 @@ export class Assignment {
     public get learningPathId():string{
         return this._learningPathId;
     }
-    public get start_date():Date{
+    public get startDate():Date{
         return this._startDate;
     }
     public get deadline():Date{
