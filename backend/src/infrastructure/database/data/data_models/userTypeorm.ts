@@ -28,7 +28,7 @@ export class UserTypeORM {
         if(user.id) userTypeORM.id = user.id;
         userTypeORM.email = user.email;
         userTypeORM.first_name = user.first_name;
-        userTypeORM.last_name = user.family_name;
+        userTypeORM.last_name = user.last_name;
         if(user.name_school) userTypeORM.school_name = user.name_school;
         userTypeORM.password_hash = user.password_hash;
         return userTypeORM;
