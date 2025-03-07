@@ -1,6 +1,6 @@
 import { ApiError, Request, Response, RouteHandlers, ResponseBody } from '../types';
-import { extractPathParams } from '../helpersExpress';
-import { Services } from '../services/service';
+import { statusMap, extractPathParams } from '../helpersExpress';
+import { Service, Services } from '../services/service';
 
 /**
  * Abstract base Controller class implementing RESTful routing with path parameter-based routing.
@@ -70,10 +70,6 @@ export abstract class Controller {
    * @returns Error response with appropriate status and formatted message
    */
   protected handleError(error: ApiError | unknown): Response {
-    const statusMap: Record<string, number> = {
-      NOT_FOUND: 404, UNAUTHORIZED: 401, BAD_REQUEST: 400, FORBIDDEN: 403, CONFLICT: 409
-    };
-
     if (!(error && typeof error === 'object' && 'code' in error && 'message' in error)) {
       return this.respond(500, { code: 'INTERNAL_ERROR', message: 'Unexpected server error' });
     }
