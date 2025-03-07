@@ -16,7 +16,7 @@ describe("CreateStudent", () => {
 
   test("Should throw error because of invalid email", async () => {
     await expect(
-      createStudent.execute(new Student("incorrect-email", "John", "Doe", "hashedpassword123", "Harvard", [], "1"))
+      createStudent.execute(new Student("incorrect-email", "John", "Doe", "hashedpassword123", "Harvard", "1"))
     ).rejects.toThrow("Invalid email");
   });
 
