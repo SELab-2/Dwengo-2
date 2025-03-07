@@ -1,5 +1,7 @@
 // TODO - Move some types to proper subdirectory like routes etc
 
+import { Service } from "./services";
+
 /**
  * The HTTP methods as defined in: https://www.rfc-editor.org/rfc/rfc9110.html
  */
@@ -13,6 +15,14 @@ export enum HttpMethod {
   POST    = "POST"    ,
   PATCH   = "PATCH"   ,
   CONNECT = "CONNECT" ,
+}
+
+export enum ErrorCode {
+  NOT_FOUND     = "NOT_FOUND"     ,
+  UNAUTHORIZED  = "UNAUTHORIZED"  ,
+  BAD_REQUEST   = "BAD_REQUEST"   ,
+  FORBIDDEN     = "FORBIDDEN"     ,
+  CONFLICT      = "CONFLICT"      ,
 }
 
 export type RequestHeaders = Record<string, string>;

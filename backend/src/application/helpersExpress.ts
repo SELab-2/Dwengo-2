@@ -1,5 +1,13 @@
 import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
-import { Request, Response, HttpMethod, PathParams } from "./types";
+import { ErrorCode, Request, Response, HttpMethod, PathParams } from "./types";
+
+export const statusMap: Record<ErrorCode, number> = {
+  NOT_FOUND: 404,
+  UNAUTHORIZED: 401,
+  BAD_REQUEST: 400,
+  FORBIDDEN: 403,
+  CONFLICT: 409
+}
 
 /**
  * Convert an Express Request object to a Request object
