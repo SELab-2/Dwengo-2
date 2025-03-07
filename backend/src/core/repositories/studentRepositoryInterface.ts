@@ -20,7 +20,7 @@ export interface StudentRepositoryInterface {
      * @param studentId the id of the student to get.
      * @returns the student with the given id or null if student is not in DB.
      */
-    getStudent(studentId: string): Promise<Student | null>;
+    getStudent(studentId: string): Promise<Student>;
 
     /**
      * Create a new student in the DB.

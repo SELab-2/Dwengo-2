@@ -30,12 +30,4 @@ describe("getStudent Use Case", () => {
     expect(result).toEqual(student);
     expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("1");
   });
-
-  test("Should return null if student is not found", async () => {
-    mockStudentRepository.getStudent.mockResolvedValue(null);
-    const result = await getStudentUseCase.execute("999");
-
-    expect(result).toBeNull();
-    expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("999");
-  });
 });
