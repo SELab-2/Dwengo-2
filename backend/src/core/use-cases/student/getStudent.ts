@@ -3,7 +3,7 @@ import { Student } from "../../entities/student";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 
 export class GetSudent implements UseCase<string, Student | null> {
-  constructor(private studentRepository: StudentRepositoryInterface) {}
+  constructor(private studentRepository: IStudentRepository) {}
 
   /**
    * Gets a student from the DB.

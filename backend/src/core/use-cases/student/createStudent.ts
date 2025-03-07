@@ -1,8 +1,8 @@
 import { UseCase } from "../../../config/useCase";
 import { Student } from "../../entities/student"
-import {StudentRepositoryInterface} from "../../repositories/studentRepositoryInterface";
+import {IStudentRepository} from "../../repositories/studentRepositoryInterface";
 export class CreateStudent implements UseCase<Student, string> {
-    public constructor(private studentRepository: StudentRepositoryInterface) {}
+    public constructor(private studentRepository: IStudentRepository) {}
     /**
      * Validates student input.
      * @param input student object to be validated.
