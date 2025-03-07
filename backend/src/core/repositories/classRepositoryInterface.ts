@@ -1,5 +1,6 @@
 import { IDatasourceFactory } from "../../infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { Class } from "../entities/class";
+import { AbstractRepository } from "./AbstractRepository";
 
 /**
  * Interface for class repositories.
@@ -9,15 +10,7 @@ import { Class } from "../entities/class";
  * Interface for a class repository.
  * This interface defines the methods required for interacting with class data.
  */
-export abstract class IClassRepository {
-
-    /**
-     * Constructor for the IClassRepository.
-     * @param datasourceFactory Factory for creating datasources.
-     */
-    public constructor(
-        protected datasourceFactory: IDatasourceFactory
-    ) {}
+export abstract class IClassRepository extends AbstractRepository {
 
     /**
      * Insert a new class in the repository. The `id` field of the class should be empty.
@@ -28,18 +21,18 @@ export abstract class IClassRepository {
     public abstract createClass(newClass: Class): Promise<Class>;
 
     /**
-     * Get a class by its id.
+     * Get a class by its id. Throws an `EntityNotFoundError` when no class is found.
      * @param id The id of the class.
      * @returns A promise that resolves to the class with the given id or null if no results are found.
      */
-    public abstract getClassById(id: string): Promise<Class|null>;
+    public abstract getClassById(id: string): Promise<Class>;
     
     /**
-     * Get a class by its name.
+     * Get a class by its name. Throws an `EntityNotFoundError` when no class is found.
      * @param name The name of the class.
      * @returns A promise that resolves to the class with the given name or null if no results are found.
      */
-    public abstract getClassByName(name: string): Promise<Class|null>;
+    public abstract getClassByName(name: string): Promise<Class>;
 
     /**
      * Get all classes in the repository.
