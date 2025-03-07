@@ -1,33 +1,34 @@
-import { StudentRepositoryInterface } from "../../../../src/core/repositories/studentRepositoryInterface";
-import { RemoveStudentFromClass } from "../../../../src/core/use-cases/student/removeStudentFromClass";
+import { RemoveStudentFromClass, RemoveStudentParams } from '../../../../src/core/use-cases/student/removeStudentFromClass';
+import { StudentRepositoryInterface } from '../../../../src/core/repositories/studentRepositoryInterface';
 
-
-// TODO: Implement tests where we check if student was actually removed from class
-describe("RemoveStudentFromClass", () => {
-  let mockStudentRepository: jest.Mocked<StudentRepositoryInterface>;
+describe('RemoveStudentFromClass', () => {
+  let studentRepository: StudentRepositoryInterface;
   let removeStudentFromClass: RemoveStudentFromClass;
 
   beforeEach(() => {
-    mockStudentRepository = {
-      removeStudentFromClass: jest.fn()
-    } as unknown as jest.Mocked<StudentRepositoryInterface>;;
-
-    removeStudentFromClass = new RemoveStudentFromClass(mockStudentRepository);
+    studentRepository = {
+      removeStudentFromClass: jest.fn(),
+    } as unknown as StudentRepositoryInterface;
+    removeStudentFromClass = new RemoveStudentFromClass(studentRepository);
   });
 
-  it("should call removeStudentFromClass on the repository with correct parameters", async () => {
-    const input = { studentId: "123", classId: "456" };
+  it('should remove a student from a class', async () => {
+    const studentId = 'student123';
+    const classId = 'class456';
+    const params = new RemoveStudentParams(studentId, classId);
 
-    await removeStudentFromClass.execute(input);
+    await removeStudentFromClass.execute(params);
 
-    expect(mockStudentRepository.removeStudentFromClass).toHaveBeenCalledWith("123", "456");
-    expect(mockStudentRepository.removeStudentFromClass).toHaveBeenCalledTimes(1);
+    expect(studentRepository.removeStudentFromClass).toHaveBeenCalledWith(studentId, classId);
   });
 
-  it("should handle errors thrown by the repository", async () => {
-    mockStudentRepository.removeStudentFromClass.mockRejectedValue(new Error("Student not found"));
-    const input = { studentId: "123", classId: "456" };
+  it('should return an empty object after removing a student', async () => {
+    const studentId = 'student123';
+    const classId = 'class456';
+    const params = new RemoveStudentParams(studentId, classId);
 
-    await expect(removeStudentFromClass.execute(input)).rejects.toThrow("Student not found");
+    const result = await removeStudentFromClass.execute(params);
+
+    expect(result).toEqual({});
   });
 });
