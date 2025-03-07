@@ -22,13 +22,13 @@ export interface StudentRepositoryInterface {
     * Function to remove a student from a group.
     * 
     * @param studentId ID of student to be removed from group
-    * @param classId ID of group from which student is to be removed
+    * @param groupId ID of group from which student is to be removed
     * @returns void
     * 
     * @throws Error if student is not in group
     * @throws Error if group does not exist
     */
-    removeStudentFromGroup(groupId: string, classId: string): Promise<void>;
+    removeStudentFromGroup(studentId: string, groupId: string): Promise<void>;
     
     /**
      * Function to get the student with the given id.

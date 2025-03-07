@@ -1,25 +1,24 @@
-import { UseCase } from "../../../config/usecase";
-import { StudentRepositoryInterface } from "../../repositories/studentRepositoryInterface";
+import { StudentRepositoryInterface } from '../../repositories/studentRepositoryInterface';
+import { RemoveStudentFrom } from './removeStudentFrom';
 
-interface RemoveStudentFromGroupInput {
-    studentId: string;
-    groupId: string;
-}
-
-export class RemoveStudentFromGroup implements UseCase<RemoveStudentFromGroupInput, void> {
-
-  public constructor(private studentRepository: StudentRepositoryInterface) {}
+// Class used to remove a student from a group.
+export class RemoveStudentFromGroup extends RemoveStudentFrom {
+  constructor(studentRepository: StudentRepositoryInterface) {
+    super(studentRepository);
+  }
 
   /**
-   * Removes a student from a group.
-   * 
-   * @param input object containing studentId and groupId
-   * @returns void
-   * 
-   * @throws Error if student is not found
-   * @throws Error if group is not found
+   * Function for removing student from a group.
+   *
+   * @param studentId id of the student to be removed.
+   * @param otherId id of the group where to be removed from.
+   *
+   * @returns void.
    */
-  async execute(input: RemoveStudentFromGroupInput): Promise<void> {
-    await this.studentRepository.removeStudentFromGroup(input.studentId, input.groupId);
+  public async removeStudent(
+    studentId: string,
+    otherId: string,
+  ): Promise<void> {
+    await this.studentRepository.removeStudentFromClass(studentId, otherId);
   }
 }
