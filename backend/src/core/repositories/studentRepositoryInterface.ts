@@ -2,6 +2,7 @@
 
 import { Class } from "../entities/class";
 import { Student } from "../entities/student";
+import { DeleteStudentParams } from "../use-cases/student/deleteStudent";
 
 
 export interface IStudentRepository {
@@ -11,7 +12,7 @@ export interface IStudentRepository {
      * 
      * @param student the student to delete.
      */
-    deleteStudent(student: Student): void | PromiseLike<void>;
+    deleteStudent(student: string): void | PromiseLike<void>;
 
     /**
      * Function to get the student with the given id.
