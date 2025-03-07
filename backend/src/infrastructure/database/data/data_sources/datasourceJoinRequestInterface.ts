@@ -13,6 +13,7 @@ export abstract class IDatasourceJoinRequest {
     /**
      * Insert a new class in the repository. The `id` field of the class should be empty.
      * The `id` field will be set by the repository to a uuid.
+     * Throws an `DatabaseEntryNotFoundError` if the requester does not exist.
      * 
      * @param newClass The new class to insert.
      * @returns A promise that resolves to the inserted class.

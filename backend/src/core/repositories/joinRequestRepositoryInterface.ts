@@ -13,7 +13,7 @@ export abstract class IJoinRequestRepoistory extends AbstractRepository {
      * @param joinRequest The new join request to insert.
      * @returns A promise that resolves to the inserted join request.
      */
-    public abstract createJoinRequest(joinRequest: any): Promise<JoinRequest>;
+    public abstract createJoinRequest(joinRequest: JoinRequest): Promise<JoinRequest>;
 
     /**
      * Get a join request by its id. Throws an `EntityNotFoundError` when no join request is found.
