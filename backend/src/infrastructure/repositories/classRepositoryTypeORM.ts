@@ -9,10 +9,8 @@ export class ClassRepositoryTypeORM extends IClassRepository {
     private datasource: IDatasource;
     private datasourceClass: Promise<IDatasourceClass>;
 
-    public constructor(
-        datasourceFactory: IDatasourceFactory
-    ) {
-        super(datasourceFactory);
+    public constructor() {
+        super();
         this.datasource = this.datasourceFactory.createDatasource();
         this.datasourceClass = this.datasource.getDatasourceClass();
     }

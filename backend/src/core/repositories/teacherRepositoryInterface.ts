@@ -1,18 +1,12 @@
 import { IDatasourceFactory } from "../../infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { Teacher } from "../entities/teacher";
+import { AbstractRepository } from "./AbstractRepository";
 
 /**
  * Interface for teacher repositories.
  * Allows CRUD operations on teacher entities.
  */
-export abstract class ITeacherRepository {
-
-    /**
-     * @param datasourceFactory Factory for creating datasources.
-     */
-    public constructor(
-        protected datasourceFactory: IDatasourceFactory
-    ) {}
+export abstract class ITeacherRepository extends AbstractRepository {
 
     /**
      * Insert a new teacher in the repository. The `id` field of the teacher should be empty.
