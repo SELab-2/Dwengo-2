@@ -3,5 +3,6 @@ export interface UseCase<Type, ReturnType> {
 }
 
 export interface UseCaseParams<Type>{
+  friomObject: (input: Object) => Type,
   toObject: (input: Type) => Object
 }
