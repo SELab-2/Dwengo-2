@@ -3,12 +3,12 @@ import { User } from "./userInterface";
 export class Student extends User {
     public constructor(
         email: string,
-        firstName: string,
-        familyName: string,
-        passwordHash: string,
+        first_name: string,
+        last_name: string,
+        password_hash: string,
         id?: string,
     ) {
-        super(email, firstName, familyName, passwordHash, id);
+        super(email, first_name, last_name, password_hash, id);
     }
 
 }
