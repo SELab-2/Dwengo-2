@@ -89,7 +89,8 @@ export interface RoutePattern {
   parent?: string;
   hasId: boolean;
   hasParentId: boolean;
-  handler: (req: Request) => Response;
+  extractor:(req: Request) => object;
+  handler: (req: Request, data: object) => Response;
 }
 
 export type RouteHandlers = Partial<Record<HttpMethod, RoutePattern[]>>;
