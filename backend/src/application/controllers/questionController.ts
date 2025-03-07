@@ -1,10 +1,11 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
+import { defaultExtractor } from './helpersExpress';
 import * as QuestionServices from '../services/questionServices';
 
 /**
  * Controller for question routes.
- * 
+ *
  * Supported endpoints:
  * - GET    /assignments/:idParent/questions/:id - Get question by id
  * - GET    /assignments/:idParent/questions - Get all questions for an assignment
@@ -22,17 +23,22 @@ export class QuestionController extends Controller {
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
-        { parent: 'assignments', hasId: true, hasParentId: true, handler: (req: Request) => this.getOne(req) },
-        { parent: 'assignments', hasId: false, hasParentId: true, handler: (req: Request) => this.getMany(req) },
+        { parent: 'assignments', hasId: true, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getOne(req, data) },
+        { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getChildren(req,data, getAssignmentQuestions) },
       ],
       [HttpMethod.PATCH]: [
-        { parent: 'assignments', hasId: true, hasParentId: true, handler: (req: Request) => this.update(req) },
+        { parent: 'assignments', hasId: true, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.update(req, data) },
       ],
       [HttpMethod.DELETE]: [
-        { parent: 'assignments', hasId: true, hasParentId: true, handler: (req: Request) => this.delete(req) },
+        { parent: 'assignments', hasId: true, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.delete(req, data) },
       ],
       [HttpMethod.POST]: [
-        { parent: 'assignments', hasId: false, hasParentId: true, handler: (req: Request) => this.create(req) },
+        { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.create(req, data) },
       ],
     };
 

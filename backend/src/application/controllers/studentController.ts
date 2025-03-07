@@ -1,5 +1,6 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
+import { defaultExtractor } from './helpersExpress';
 import * as StudentServices from '../services/studentServices';
 
 /**
@@ -16,43 +17,28 @@ export class StudentController extends Controller {
     get: StudentServices.GetStudentService,
     update: StudentServices.UpdateStudentService,
     remove: StudentServices.DeleteStudentService,
-    classRemove: StudentServices.RemoveStudentFromClassService,
-    groupRemove: StudentServices.RemoveStudentFromGroupService
+    removeClassStudent: StudentServices.RemoveStudentFromClassService,
+    removeGroupStudent: StudentServices.RemoveStudentFromGroupService
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.getOne(req) }
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getOne(req, data) }
       ],
       [HttpMethod.PATCH]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.update(req) }
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.update(req, data) }
       ],
       [HttpMethod.DELETE]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.delete(req) },
-        { parent: 'classes', hasId: true, hasParentId: true, handler: (req: Request) => this.removeFromClass(req) },
-        { parent: 'groups', hasId: true, hasParentId: true, handler: (req: Request) => this.removeFromGroup(req) }
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.delete(req, data) },
+        { parent: 'classes', hasId: true, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.removeChild(req, data, removeClassStudent) },
+        { parent: 'groups', hasId: true, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.removeChild(req, data, removeGroupStudent) }
       ]
     };
 
-    super({ get, update, remove, classRemove, groupRemove }, handlers);
-  }
-
-  /**
-   * Removes a student from a class
-   * @param req - Request with class ID and student ID in path params
-   * @returns Response with status 204 (No Content)
-   */
-  protected removeFromClass(req: Request): Response {
-    // TODO: implement this function
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' })
-  }
-
-  /**
-   * Removes a student from a group
-   * @param req - Request with group ID and student ID in path params
-   * @returns Response with status 204 (No Content)
-   */
-  private removeFromGroup(req: Request): Response {
-    // TODO: implement this function
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' })
+    super({ get, update, remove, removeClassStudent, removeGroupStudent }, handlers);
   }
 }
