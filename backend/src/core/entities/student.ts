@@ -6,7 +6,6 @@ export class Student extends User {
         firstName: string,
         familyName: string,
         passwordHash: string,
-        private _classes: string[], // List of class Id's where the student is part of
         id?: string,
     ) {
         super(email, firstName, familyName, passwordHash, id);
