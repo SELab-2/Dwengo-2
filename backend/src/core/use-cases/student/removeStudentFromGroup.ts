@@ -19,6 +19,6 @@ export class RemoveStudentFromGroup extends RemoveStudentFrom {
     studentId: string,
     otherId: string,
   ): Promise<void> {
-    await this.studentRepository.removeStudentFromClass(studentId, otherId);
+    await this.studentRepository.removeStudentFromGroup(studentId, otherId);
   }
 }

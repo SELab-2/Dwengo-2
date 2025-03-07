@@ -1,5 +1,6 @@
 import { StudentRepositoryInterface } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { RemoveStudentFromGroup } from "../../../../src/core/use-cases/student/removeStudentFromGroup";
+import { RemoveStudentFromParams } from "../../../../src/core/use-cases/student/removeStudentFrom";
 
 
 // TODO: Implement tests where we check if student was actually removed from class
@@ -16,9 +17,9 @@ describe("RemoveStudentFromGroup", () => {
   });
 
   it("should call removeStudentFromGroup on the repository with correct parameters", async () => {
-    const input = { studentId: "123", groupId: "456" };
+    const params = new RemoveStudentFromParams("123", "456");
 
-    await removeStudentFromGroup.execute(input);
+    await removeStudentFromGroup.execute(params);
 
     expect(mockStudentRepository.removeStudentFromGroup).toHaveBeenCalledWith("123", "456");
     expect(mockStudentRepository.removeStudentFromGroup).toHaveBeenCalledTimes(1);
@@ -26,8 +27,8 @@ describe("RemoveStudentFromGroup", () => {
 
   it("should handle errors thrown by the repository", async () => {
     mockStudentRepository.removeStudentFromGroup.mockRejectedValue(new Error("Student not found"));
-    const input = { studentId: "123", groupId: "456" };
+    const params = new RemoveStudentFromParams("123", "456");
 
-    await expect(removeStudentFromGroup.execute(input)).rejects.toThrow("Student not found");
+    await expect(removeStudentFromGroup.execute(params)).rejects.toThrow("Student not found");
   });
 });
