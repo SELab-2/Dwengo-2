@@ -10,10 +10,8 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
     private datasource: IDatasource;
     private datasourceTeacher: Promise<IDatasourceTeacher>
 
-    public constructor(
-        datasourceFactory: IDatasourceFactory
-    ) {
-        super(datasourceFactory);
+    public constructor() {
+        super();
         this.datasource = this.datasourceFactory.createDatasource();
         this.datasourceTeacher = this.datasource.getDatasourceTeacher();
     }
