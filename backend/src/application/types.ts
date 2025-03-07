@@ -64,7 +64,7 @@ export interface Response {
  * @see {@link Controller.handleError} for error handling implementation
  */
 export interface ApiError {
-  code: string; // e.g., 'BAD_REQUEST', 'NOT_FOUND'
+  code: ErrorCode; // e.g., 'BAD_REQUEST', 'NOT_FOUND'
   message: string; // Human-readable error message
   [key: string]: unknown; // Optional additional properties (for flexibility)
 }
