@@ -7,6 +7,8 @@ import { IDatasourceTeacher } from "../datasourceTeacherInterface";
 import { DatasourceTeacherTypeORM } from "./datasourceTeacherTypeORM";
 import { IDatasourceClass } from "../datasourceClassInterface";
 import { DatasourceClassTypeORM } from "./datasourceClassTypeORM";
+import { IDatasourceStudent } from "../datasourceStudentInterface";
+import { DatasourceStudentTypeORM } from "./datasourceStudentTypeORM";
 
 export class DatasourceTypeORM implements IDatasource {
 
@@ -30,6 +32,10 @@ export class DatasourceTypeORM implements IDatasource {
 
     public async getDatasourceTeacher(): Promise<IDatasourceTeacher> {
         return new DatasourceTeacherTypeORM(await DatasourceTypeORM.datasourcePromise);
+    }
+
+    public async getDatasourceStudent(): Promise<IDatasourceStudent> {
+        return new DatasourceStudentTypeORM(await DatasourceTypeORM.datasourcePromise)
     }
 
     public async getDatasourceClass(): Promise<IDatasourceClass> {
