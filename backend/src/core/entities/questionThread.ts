@@ -13,7 +13,7 @@ export class QuestionThread {
         private _isClosed: boolean,
         private _visibility: VisibilityType,
         private _messages: Message[],
-        private _Id?: string,
+        private _id?: string,
     ){}
 
     // Getters
@@ -35,8 +35,8 @@ export class QuestionThread {
     public get messages(): Message[] {
         return this._messages;
     }
-    public get Id(): string|undefined {
-        return this._Id;
+    public get id(): string|undefined {
+        return this._id;
     }
     
 
@@ -50,7 +50,7 @@ export class QuestionThread {
     public set messages(newMessages: Message[]) {
         this._messages = newMessages;
     }
-    public set Id(newId: string) {
-        this._Id = newId;
+    public set id(newId: string) {
+        this._id = newId;
     }
 }
