@@ -2,27 +2,27 @@ export class User {
     
     // Necessary variables
     email: string;          // Teacher's email
-    first_name: string;     // Teacher's first name
-    family_name: string;    // Teacher's family name
-    password_hash: string;  // Teacher's hashed password
+    firstName: string;     // Teacher's first name
+    familyName: string;    // Teacher's family name
+    passwordHash: string;  // Teacher's hashed password
 
     // Optional variables
-    name_school?: string;   // Teacher's school
+    nameSchool?: string;   // Teacher's school
     id?: string;            // Teacher id
 
     constructor(
         email: string, 
-        first_name: string, 
-        family_name: string, 
-        password_hash: string, 
-        name_school?: string,
+        firstName: string, 
+        familyName: string, 
+        passwordHash: string, 
+        nameSchool?: string,
         id?: string
     ) {
         this.email = email;
-        this.first_name = first_name;
-        this.family_name = family_name;
-        this.password_hash = password_hash;
-        this.name_school = name_school;
+        this.firstName = firstName;
+        this.familyName = familyName;
+        this.passwordHash = passwordHash;
+        this.nameSchool = nameSchool;
         this.id = id;
     }
 

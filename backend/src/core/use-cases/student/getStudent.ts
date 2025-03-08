@@ -1,18 +1,26 @@
-import { UseCase } from "../../../config/usecase";
-import { Student } from "../../entities/student";
-import { StudentRepositoryInterface } from "../../repositories/studentRepositoryInterface";
+import { Student } from '../../entities/student';
+import { StudentRepositoryInterface } from '../../repositories/studentRepositoryInterface';
+import { GetUser } from '../user/getUser';
 
-export class GetSudent implements UseCase<string, Student | null> {
-  constructor(private studentRepository: StudentRepositoryInterface) {}
+// Class to get a student from the DB
+export class GetStudent extends GetUser {
+  constructor(private studentRepository: StudentRepositoryInterface) {
+    super();
+  }
 
   /**
-   * Gets a student from the DB.
-   * @param id ID of the student to get from the DB.
-   * @returns the student with the given id.
-   * @throws Error if the student could not be found.
+   * Function that retrieves a student with a given id from the DB.
+   * 
+   * @param id of the student to get from the DB.
+   * @returns object with the info of the student.
    */
-  async execute(id: string): Promise<Student> {
-    const student = await this.studentRepository.getStudent(id);
-    return student;
+  public async getUser(id: string): Promise<object> {
+    const student: Student = await this.studentRepository.getStudent(id);
+    return {
+      id: student.id,
+      email: student.email,
+      firstName: student.firstName,
+      familyName: student.familyName,
+    };
   }
 }
