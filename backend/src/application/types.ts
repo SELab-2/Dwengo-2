@@ -1,6 +1,4 @@
-// TODO - Move some types to proper subdirectory like routes etc
-
-import { Service } from "./services";
+/* ************* HTTP Protocol Types ************* */
 
 /**
  * The HTTP methods as defined in: https://www.rfc-editor.org/rfc/rfc9110.html
@@ -25,6 +23,8 @@ export enum ErrorCode {
   CONFLICT      = "CONFLICT"      ,
 }
 
+/* ************* Request/Response Types ************* */
+
 export type RequestHeaders = Record<string, string>;
 export type ResponseHeaders = Record<string, string>;
 export type RequestBody = Record<string, unknown>;
@@ -41,7 +41,6 @@ export interface Request {
   body: object;
 }
 
-
 /**
  * Interface defining an HTTP response object.
  * Based on the standardized HTTP Response structure.
@@ -52,6 +51,8 @@ export interface Response {
   body: ResponseBody;
   status: number;
 }
+
+/* ************* Error Handling Types ************* */
 
 /**
  * Interface defining a structured error object for API responses.
@@ -69,6 +70,8 @@ export interface ApiError {
   [key: string]: unknown; // Optional additional properties (for flexibility)
 }
 
+/* ************* Path/Routing Types ************* */
+
 /**
  * Interface representing path parameters extracted from URL segments.
  * Used for RESTful route pattern matching and parameter extraction.
@@ -78,6 +81,8 @@ export interface PathParams {
   parent?: string;
   id?: string;
   idParent?: string;
+  idType?: string;
+  idParentType?: string;
 }
 
 /**
