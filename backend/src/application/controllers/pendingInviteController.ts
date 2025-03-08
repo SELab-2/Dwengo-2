@@ -1,7 +1,7 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
+import { defaultExtractor } from './helpersExpress';
 import * as PendingInviteServices from '../services/pendingInviteServices';
-
 /**
  * Controller responsible for pending invite-related API endpoints including CRUD operations
  * and invite listings by user. Follows RESTful patterns with paths:
@@ -14,23 +14,27 @@ import * as PendingInviteServices from '../services/pendingInviteServices';
 export class PendingInviteController extends Controller {
   constructor(
     get: PendingInviteServices.GetPendingInviteService,
-    userGet: PendingInviteServices.GetUserPendingInvitesService,
+    getUserInvites: PendingInviteServices.GetUserPendingInvitesService,
     remove: PendingInviteServices.DeletePendingInviteService,
     create: PendingInviteServices.CreatePendingInviteService
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
-        { parent: 'users', hasId: true, hasParentId: true, handler: (req: Request) => this.getOne(req) },
-        { parent: 'users', hasId: false, hasParentId: true, handler: (req: Request) => this.getMany(req) },
+        { parent: 'users', hasId: true, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getOne(req, data) },
+        { parent: 'users', hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getChildren(req, data, getUserInvites) },
       ],
       [HttpMethod.DELETE]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.delete(req) },
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.delete(req, data) },
       ],
       [HttpMethod.POST]: [
-        { hasId: false, hasParentId: false, handler: (req: Request) => this.create(req) },
+        { hasId: false, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.create(req, data) },
       ],
     };
 
-    super({ get, userGet, remove, create }, handlers);
+    super({ get, getUserInvites, remove, create }, handlers);
   }
 }

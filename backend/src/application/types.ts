@@ -64,7 +64,7 @@ export interface Response {
  * @see {@link Controller.handleError} for error handling implementation
  */
 export interface ApiError {
-  code: string; // e.g., 'BAD_REQUEST', 'NOT_FOUND'
+  code: ErrorCode; // e.g., 'BAD_REQUEST', 'NOT_FOUND'
   message: string; // Human-readable error message
   [key: string]: unknown; // Optional additional properties (for flexibility)
 }
@@ -89,7 +89,8 @@ export interface RoutePattern {
   parent?: string;
   hasId: boolean;
   hasParentId: boolean;
-  handler: (req: Request) => Response;
+  extractor:(req: Request) => object;
+  handler: (req: Request, data: object) => Response;
 }
 
 export type RouteHandlers = Partial<Record<HttpMethod, RoutePattern[]>>;

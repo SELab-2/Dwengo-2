@@ -14,7 +14,7 @@ import { RemoveTeacherFromClass } from '../../core/use-cases/teacher/removeTeach
 /**
  * Service for retrieving a single teacher by ID
  */
-export class GetTeacherService extends Service<Teacher> {
+export class GetTeacherService extends Service {
   constructor(get: GetTeacher) { super({ get }); }
   // TODO: implement the execute function
 }
@@ -22,7 +22,7 @@ export class GetTeacherService extends Service<Teacher> {
 /**
  * Service for updating a teacher
  */
-export class UpdateTeacherService extends Service<Teacher> {
+export class UpdateTeacherService extends Service {
   constructor(update: UpdateTeacher) { super({ update }); }
   // TODO: implement the execute function
 }
@@ -30,7 +30,7 @@ export class UpdateTeacherService extends Service<Teacher> {
 /**
  * Service for deleting a teacher
  */
-export class DeleteTeacherService extends Service<void> {
+export class DeleteTeacherService extends Service {
   constructor(remove: DeleteTeacher) { super({ remove }); }
   // TODO: implement the execute function
 }
@@ -38,7 +38,7 @@ export class DeleteTeacherService extends Service<void> {
 /**
  * Service for removing a teacher from a class
  */
-export class RemoveTeacherFromClassService extends Service<void> {
+export class RemoveTeacherFromClassService extends Service {
   // TODO: implement constructor with RemoveTeacherFromClassService use case
   // TODO: implement the execute function
 }

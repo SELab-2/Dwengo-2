@@ -7,9 +7,9 @@ import { UpdateAssignment } from '../../core/use-cases/assignment/updateAssignme
 import { GetGroupAssignments } from '../../core/use-cases/assignment/getGroupAssignments';
 
 /**
- * Responsible for retrieving a single assignment by ID 
+ * Responsible for retrieving a single assignment by ID
  */
-export class GetAssignmentService extends Service<Assignment> {
+export class GetAssignmentService extends Service {
   constructor(get: GetAssignment) { super({ get }); }
   // TODO: implement the execute function
 }
@@ -17,7 +17,7 @@ export class GetAssignmentService extends Service<Assignment> {
 /**
  * Responsible for retrieving all assignments for a group by group ID
  */
-export class GetGroupAssignmentsService extends Service<Assignment[]> {
+export class GetGroupAssignmentsService extends Service {
   // TODO: implement constructor with GetGroupAssignments use case
   // TODO: implement the execute function
 }
@@ -25,7 +25,7 @@ export class GetGroupAssignmentsService extends Service<Assignment[]> {
 /**
  * Updates an assignment, identified by ID, with new data
  */
-export class UpdateAssignmentService extends Service<Assignment> {
+export class UpdateAssignmentService extends Service {
   // TODO: implement constructor with UpdateAssignment use case
   // TODO: implement the execute function
 }
@@ -33,7 +33,7 @@ export class UpdateAssignmentService extends Service<Assignment> {
 /**
  * Deletes an assignment by ID
  */
-export class DeleteAssignmentService extends Service<void> {
+export class DeleteAssignmentService extends Service {
   // TODO: implement constructor with DeleteAssignment use case
   // TODO: implement the execute function
 }
@@ -41,7 +41,7 @@ export class DeleteAssignmentService extends Service<void> {
 /**
  * Creates a new assignment
  */
-export class CreateAssignmentService extends Service<Assignment> {
+export class CreateAssignmentService extends Service {
   constructor(create: MakeAssignment) { super({ create }); }
   // TODO: implement the execute function
 }
@@ -49,7 +49,7 @@ export class CreateAssignmentService extends Service<Assignment> {
 /**
  * Deletes an assignment by ID
  */
-export class DeleteAssignmentService extends Service<void> {
+export class DeleteAssignmentService extends Service {
   constructor(remove: DeleteAssignment) { super({ remove }); }
   // TODO: implement the execute function
 }

@@ -9,7 +9,7 @@ import { UpdateClass } from '../../core/use-cases/class/updateClass';
  * Retrieves a single Class using it's id and a user's id.
  * This could be simplified to only use the class id.
  */
-export class GetClassService extends Service<Class> {
+export class GetClassService extends Service {
   constructor(get: GetClass) { super({ get }); }
   // TODO: implement the execute function
 }
@@ -17,7 +17,7 @@ export class GetClassService extends Service<Class> {
 /**
  * Retrieves all Classes for a user.
  */
-export class GetUserClassesService extends Service<Class[]> {
+export class GetUserClassesService extends Service {
   // TODO: implement constructor with GetUserClasses use case
   // TODO: implement the execute function
 }
@@ -25,7 +25,7 @@ export class GetUserClassesService extends Service<Class[]> {
 /**
  * Updates a Class's data.
  */
-export class UpdateClassService extends Service<Class> {
+export class UpdateClassService extends Service {
   constructor(update: UpdateClass) { super({ update }); }
   // TODO: implement the execute function
 }
@@ -33,7 +33,7 @@ export class UpdateClassService extends Service<Class> {
 /**
  * Deletes a Class.
  */
-export class DeleteClassService extends Service<void> {
+export class DeleteClassService extends Service {
   constructor(remove: DeleteClass) { super({ remove }); }
   // TODO: implement the execute function
 }
@@ -41,7 +41,7 @@ export class DeleteClassService extends Service<void> {
 /**
  * Creates a new Class.
  */
-export class CreateClassService extends Service<Class> {
+export class CreateClassService extends Service {
   // TODO: implement constructor with CreateClass use case
   // TODO: implement the execute function
 }

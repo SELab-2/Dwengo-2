@@ -9,7 +9,7 @@ import { GetQuestionMessages } from "../../core/use-cases/message/getQuestionMes
 /**
  * Retrieves a single message by ID
  */
-export class GetMessageService extends Service<Message> {
+export class GetMessageService extends Service {
   constructor(get: GetMessage) { super({ get }); }
   // TODO: implement the execute function
 }
@@ -17,7 +17,7 @@ export class GetMessageService extends Service<Message> {
 /**
  * Retrieves all messages for a question
  */
-export class GetQuestionMessagesService extends Service<Message[]> {
+export class GetQuestionMessagesService extends Service {
   constructor(questionGet: GetQuestionMessages) { super({ questionGet }); }
   // TODO: implement the execute function
 }
@@ -25,7 +25,7 @@ export class GetQuestionMessagesService extends Service<Message[]> {
 /**
  * Updates a message
  */
-export class UpdateMessageService extends Service<Message> {
+export class UpdateMessageService extends Service {
   // TODO: implement constructor with UpdateMessage use case
   // TODO: implement the execute function
 }
@@ -33,7 +33,7 @@ export class UpdateMessageService extends Service<Message> {
 /**
  * Deletes a message
  */
-export class DeleteMessageService extends Service<void> {
+export class DeleteMessageService extends Service {
   constructor(remove: DeleteMessage) { super({ remove }); }
   // TODO: implement the execute function
 }
@@ -41,7 +41,7 @@ export class DeleteMessageService extends Service<void> {
 /**
  * Creates a new message
  */
-export class CreateMessageService extends Service<Message> {
+export class CreateMessageService extends Service {
   constructor(create: CreateMessage) { super({ create }); }
   // TODO: implement the execute function
 }

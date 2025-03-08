@@ -1,5 +1,6 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
+import { defaultExtractor } from './helpersExpress';
 import * as AssignmentServices from '../services/assignmentServices';
 
 /**
@@ -14,27 +15,32 @@ import * as AssignmentServices from '../services/assignmentServices';
 export class AssignmentController extends Controller {
   constructor(
     get: AssignmentServices.GetAssignmentService,
-    groupGet: AssignmentServices.GetGroupAssignmentsService,
+    getGroupAssignments: AssignmentServices.GetGroupAssignmentsService,
     update: AssignmentServices.UpdateAssignmentService,
     remove: AssignmentServices.DeleteAssignmentService,
     create: AssignmentServices.CreateAssignmentService
   ) {
     const handlers : RouteHandlers = {
       [HttpMethod.GET]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.getOne(req) },
-        { parent: 'groups', hasId: false, hasParentId: true, handler: (req: Request) => this.getMany(req) }
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getOne(req, data) },
+        { parent: 'groups', hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getChildren(req, data, getGroupAssignments) }
       ],
       [HttpMethod.PATCH]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.update(req) }
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.update(req, data) }
       ],
       [HttpMethod.POST]: [
-        { hasId: false, hasParentId: false, handler: (req: Request) => this.create(req) }
+        { hasId: false, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.create(req, data) }
       ],
       [HttpMethod.DELETE]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.delete(req) }
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.delete(req, data) }
       ]
     };
 
-    super({ get, groupGet, update, remove, create }, handlers);
+    super({ get, getGroupAssignments, update, remove, create }, handlers);
   }
 }

@@ -1,6 +1,8 @@
 import { ApiError, Request, Response, RouteHandlers, ResponseBody } from '../types';
-import { extractPathParams } from '../helpersExpress';
-import { Services } from '../services/service';
+import { statusMap, extractPathParams } from '../helpersExpress';
+import { Service, Services } from '../services/service';
+
+// TODO - Important the data must be in order of parameters, responsibility of the extractor
 
 /**
  * Abstract base Controller class implementing RESTful routing with path parameter-based routing.
@@ -45,7 +47,7 @@ export abstract class Controller {
 
     if (!match) return this.respond(404, { code: "NOT_FOUND", message: "Endpoint not found" });
 
-    try { return match.handler(req); }
+    try { return match.handler(req, match.extractor(req)); }
     catch (error) { return this.handleError(error); }
   }
 
@@ -70,10 +72,6 @@ export abstract class Controller {
    * @returns Error response with appropriate status and formatted message
    */
   protected handleError(error: ApiError | unknown): Response {
-    const statusMap: Record<string, number> = {
-      NOT_FOUND: 404, UNAUTHORIZED: 401, BAD_REQUEST: 400, FORBIDDEN: 403, CONFLICT: 409
-    };
-
     if (!(error && typeof error === 'object' && 'code' in error && 'message' in error)) {
       return this.respond(500, { code: 'INTERNAL_ERROR', message: 'Unexpected server error' });
     }
@@ -104,29 +102,48 @@ export abstract class Controller {
    * @param req - Request with entity ID in path params
    * @returns Response with status 200 and entity data
    */
-  protected getOne(req: Request): Response {
-    // TODO: implement this function based on the use cases
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+  protected getOne(req: Request, data: object): Response {
+    // TODO: add more checking ...
+    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    return this.respond(200, body);
   }
 
   /**
-   * Retrieves multiple entities belonging to a specific parent entity with pagination
-   * @param req - Request with parent entity ID in path params and page/size in query params
-   * @returns Response with status 200 and paginated entity collection
+  * Retrieves all entities with pagination
+  * @param req - Request with pagination parameters
+  * @returns Response with status 200 and list of users
+  */
+  protected getAll(req: Request, data: object): Response {
+    // TODO: add more checking ... (page number, size extraction)
+    const body: ResponseBody = this.services.getAll.execute(...Object.values(data));
+    return this.respond(200, body);
+  }
+
+  /**
+   * TODO
    */
-  protected getMany(req: Request): Response {
-    // TODO: implement this function based on the use cases
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+  protected getChildren(req: Request, data: object, service: Service): Response {
+    // TODO: add more checking ... (page number, size extraction)
+    const body: ResponseBody = service.execute(...Object.values(data));
+    return this.respond(200, body);
   }
 
   /**
- * Retrieves all entities with pagination
- * @param req - Request with pagination parameters
- * @returns Response with status 200 and list of users
- */
-  protected getAll(req: Request): Response {
-    // TODO: implement this function based on the use cases
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+   * TODO
+   */
+  protected addChild(req: Request, data: object, service: Service): Response {
+    // TODO: add more checking ...
+    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    return this.respond(201, body);
+  }
+
+  /**
+   * TODO
+   */
+  protected removeChild(req: Request, data: object, service: Service): Response {
+    // TODO: add more checking ... (data will be empty, just extract id)
+    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    return this.respond(204, body);
   }
 
   /**
@@ -134,9 +151,10 @@ export abstract class Controller {
    * @param req - Request with entity ID in path params and update data in body
    * @returns Response with status 200 and updated entity data
    */
-  protected update(req: Request): Response {
-    // TODO: implement this function based on the use cases
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+  protected update(req: Request, data: object): Response {
+    // TODO: add more checking ...
+    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    return this.respond(200, body);
   }
 
   /**
@@ -144,9 +162,10 @@ export abstract class Controller {
    * @param req - Request with entity ID in path params
    * @returns Response with status 204 (No Content)
    */
-  protected delete(req: Request): Response {
-    // TODO: implement this function based on the use cases
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+  protected delete(req: Request, data: object): Response {
+    // TODO: add more checking ... (data will be empty, just extract id)
+    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    return this.respond(204, body);
   }
 
   /**
@@ -154,8 +173,9 @@ export abstract class Controller {
    * @param req - Request with entity data in body
    * @returns Response with status 201 and created entity data
    */
-  protected create(req: Request): Response {
-    // TODO: implement this function based on the use cases
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+  protected create(req: Request, data: object): Response {
+    // TODO: add more checking ... (data will be empty, just extract id)
+    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    return this.respond(201, body);
   }
 }

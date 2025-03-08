@@ -1,6 +1,7 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
 import * as UsersServices from '../services/usersServices';
+import { defaultExtractor } from './helpersExpress';
 
 /**
  * Controller responsible for general user-related API endpoints including
@@ -20,74 +21,31 @@ export class UsersController extends Controller {
     create: UsersServices.CreateUserService,
     getClassUsers: UsersServices.GetClassUsersService,
     getGroupUsers: UsersServices.GetGroupUsersService,
-    assignToGroup: UsersServices.AssignUserToGroupService,
+    addGroupUser: UsersServices.AssignUserToGroupService,
     getAssignmentUsers: UsersServices.GetAssignmentUsersService,
-    assignToAssignment: UsersServices.AssignUserToAssignmentService
+    addAssignmentUser: UsersServices.AssignUserToAssignmentService
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
-        { hasId: false, hasParentId: false, handler: (req: Request) => this.getAll(req) },
-        { parent: 'classes', hasId: false, hasParentId: true, handler: (req: Request) => this.getClassUsers(req) },
-        { parent: 'groups', hasId: false, hasParentId: true, handler: (req: Request) => this.getGroupUsers(req) },
-        { parent: 'assignments', hasId: false, hasParentId: true, handler: (req: Request) => this.getAssignmentUsers(req) }
+        { hasId: false, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getAll(req, data) },
+        { parent: 'classes', hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getChildren(req, data, getClassUsers) },
+        { parent: 'groups', hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getChildren(req, data, getGroupUsers) },
+        { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getChildren(req, data, getAssignmentUsers) }
       ],
       [HttpMethod.POST]: [
-        { hasId: false, hasParentId: false, handler: (req: Request) => this.create(req) },
-        { parent: 'groups', hasId: false, hasParentId: true, handler: (req: Request) => this.assignToGroup(req) },
-        { parent: 'assignments', hasId: false, hasParentId: true, handler: (req: Request) => this.assignToAssignment(req) }
+        { hasId: false, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.create(req, data) },
+        { parent: 'groups', hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.addChild(req, data, addGroupUser) },
+        { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.addChild(req, data, addAssignmentUser) }
       ]
     };
 
-    super({ getAll, create, getClassUsers, getGroupUsers, assignToGroup, getAssignmentUsers, assignToAssignment }, handlers);
-  }
-
-  /**
-   * Retrieves all users in a class with pagination
-   * @param req - Request with class ID and pagination parameters
-   * @returns Response with status 200 and list of users
-   */
-  private getClassUsers(req: Request): Response {
-    // TODO: implement this method
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
-  }
-
-  /**
-   * Retrieves all users in a group with pagination
-   * @param req - Request with group ID and pagination parameters
-   * @returns Response with status 200 and list of users
-   */
-  private getGroupUsers(req: Request): Response {
-    // TODO: implement this method
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });  
-  }
-
-  /**
-   * Assigns a user to a group
-   * @param req - Request with group ID and user data in body
-   * @returns Response with status 201 and assigned user data
-   */
-  private assignToGroup(req: Request): Response {
-    // TODO: implement this method
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
-  }
-
-  /**
-   * Retrieves all users in an assignment with pagination
-   * @param req - Request with assignment ID and pagination parameters
-   * @returns Response with status 200 and list of users
-   */
-  private getAssignmentUsers(req: Request): Response {
-    // TODO: implement this method
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
-  }
-
-  /**
-   * Assigns a user to an assignment
-   * @param req - Request with assignment ID and user data in body
-   * @returns Response with status 201 and assigned user data
-   */
-  private assignToAssignment(req: Request): Response {
-    // TODO: implement this method
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+    super({ getAll, create, getClassUsers, getGroupUsers, addGroupUser, getAssignmentUsers, addAssignmentUser }, handlers);
   }
 }

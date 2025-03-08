@@ -1,5 +1,6 @@
 import { Controller } from "./controllerExpress";
 import { Request, HttpMethod, RouteHandlers } from "../types";
+import { defaultExtractor } from "./helpersExpress";
 import * as ClassServices from "../services/classServices";
 
 /**
@@ -14,27 +15,32 @@ import * as ClassServices from "../services/classServices";
 export class ClassController extends Controller {
   constructor(
     get: ClassServices.GetClassService,
-    userGet: ClassServices.GetUserClassesService,
+    getUserClasses: ClassServices.GetUserClassesService,
     update: ClassServices.UpdateClassService,
     remove: ClassServices.DeleteClassService,
     create: ClassServices.CreateClassService
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
-        { parent: "users", hasId: true, hasParentId: true, handler: (req: Request) => this.getOne(req) },
-        { parent: "users", hasId: false, hasParentId: true, handler: (req: Request) => this.getMany(req) },
+        { parent: "users", hasId: true, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getOne(req, data) },
+        { parent: "users", hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getChildren(req, data, getUserClasses) },
       ],
       [HttpMethod.PATCH]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.update(req) },
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.update(req, data) },
       ],
       [HttpMethod.POST]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.delete(req) },
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.delete(req, data) },
       ],
       [HttpMethod.DELETE]: [
-        { hasId: false, hasParentId: false, handler: (req: Request) => this.create(req) },
+        { hasId: false, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.create(req, data) },
       ],
     };
 
-    super({ get, userGet, update, remove, create }, handlers);
+    super({ get, getUserClasses, update, remove, create }, handlers);
   }
 }

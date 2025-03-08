@@ -16,7 +16,7 @@ import { RemoveStudentFromGroup } from '../../core/use-cases/student/removeStude
 /**
  * Service for retrieving a single student by ID
  */
-export class GetStudentService extends Service<Student> {
+export class GetStudentService extends Service {
   constructor(get: GetStudent) { super({ get }); }
   // TODO: implement the execute function
 }
@@ -24,7 +24,7 @@ export class GetStudentService extends Service<Student> {
 /**
  * Service for updating a student
  */
-export class UpdateStudentService extends Service<Student> {
+export class UpdateStudentService extends Service {
   constructor(update: UpdateStudent) { super({ update }); }
   // TODO: implement the execute function
 }
@@ -32,7 +32,7 @@ export class UpdateStudentService extends Service<Student> {
 /**
  * Service for deleting a student
  */
-export class DeleteStudentService extends Service<void> {
+export class DeleteStudentService extends Service {
   constructor(remove: DeleteStudent) { super({ remove }); }
   // TODO: implement the execute function
 }
@@ -40,7 +40,7 @@ export class DeleteStudentService extends Service<void> {
 /**
  * Service for removing a student from a class
  */
-export class RemoveStudentFromClassService extends Service<void> {
+export class RemoveStudentFromClassService extends Service {
   // TODO: implement constructor with RemoveStudentFromClass use case
   // TODO: implement the execute function
 }
@@ -48,7 +48,7 @@ export class RemoveStudentFromClassService extends Service<void> {
 /**
  * Service for removing a student from a group
  */
-export class RemoveStudentFromGroupService extends Service<void> {
+export class RemoveStudentFromGroupService extends Service {
   // TODO: implement constructor with RemoveStudentFromGroup use case
   // TODO: implement the execute function
 }

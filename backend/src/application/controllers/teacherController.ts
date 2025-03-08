@@ -1,6 +1,7 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
 import * as TeacherServices from '../services/teacherServices';
+import { defaultExtractor } from './helpersExpress';
 
 /**
  * Controller responsible for teacher-related API endpoints including user management
@@ -15,31 +16,25 @@ export class TeacherController extends Controller {
     get: TeacherServices.GetTeacherService,
     update: TeacherServices.UpdateTeacherService,
     remove: TeacherServices.DeleteTeacherService,
-    classRemove: TeacherServices.RemoveTeacherFromClassService
+    removeClassTeacher: TeacherServices.RemoveTeacherFromClassService
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.getOne(req) }
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getOne(req, data) }
       ],
       [HttpMethod.PATCH]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.update(req) }
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.update(req, data) }
       ],
       [HttpMethod.DELETE]: [
-        { hasId: true, hasParentId: false, handler: (req: Request) => this.delete(req) },
-        { parent: 'classes', hasId: true, hasParentId: true, handler: (req: Request) => this.removeFromClass(req) }
+        { hasId: true, hasParentId: false, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.delete(req, data) },
+        { parent: 'classes', hasId: true, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.removeChild(req, data, removeClassTeacher) }
       ]
     };
 
-    super({ get, update, remove, classRemove }, handlers);
-  }
-
-  /**
-   * Removes a teacher from a class
-   * @param req - Request with class ID and teacher ID in path params
-   * @returns Response with status 204 (No Content)
-   */
-  protected removeFromClass(req: Request): Response {
-    // TODO: implement this method
-    return this.respond(501, { code: 'NOT_IMPLEMENTED', message: 'Method not implemented' });
+    super({ get, update, remove, removeClassTeacher }, handlers);
   }
 }

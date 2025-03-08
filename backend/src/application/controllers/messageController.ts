@@ -1,5 +1,6 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
+import { defaultExtractor } from './helpersExpress';
 import * as MessageServices from '../services/messageServices';
 
 /**
@@ -15,27 +16,32 @@ import * as MessageServices from '../services/messageServices';
 export class MessageController extends Controller {
   constructor(
     get: MessageServices.GetMessageService,
-    questionGet: MessageServices.GetQuestionMessagesService,
+    getQuestionMessages: MessageServices.GetQuestionMessagesService,
     update: MessageServices.UpdateMessageService,
     remove: MessageServices.DeleteMessageService,
     create: MessageServices.CreateMessageService
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
-        { parent: 'questions', hasId: true, hasParentId: true, handler: (req: Request) => this.getOne(req) },
-        { parent: 'questions', hasId: false, hasParentId: true, handler: (req: Request) => this.getMany(req) },
+        { parent: 'questions', hasId: true, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getOne(req, data) },
+        { parent: 'questions', hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.getChildren(req, data, getQuestionMessages) },
       ],
       [HttpMethod.PATCH]: [
-        { parent: 'questions', hasId: true, hasParentId: true, handler: (req: Request) => this.update(req) },
+        { parent: 'questions', hasId: true, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.update(req, data) },
       ],
       [HttpMethod.DELETE]: [
-        { parent: 'questions', hasId: true, hasParentId: true, handler: (req: Request) => this.delete(req) },
+        { parent: 'questions', hasId: true, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.delete(req, data) },
       ],
       [HttpMethod.POST]: [
-        { parent: 'questions', hasId: false, hasParentId: true, handler: (req: Request) => this.create(req) },
+        { parent: 'questions', hasId: false, hasParentId: true, extractor: defaultExtractor,
+          handler: (req: Request, data: object) => this.create(req, data) },
       ],
     };
 
-    super({ get, questionGet, update, remove, create }, handlers);
+    super({ get, getQuestionMessages, update, remove, create }, handlers);
   }
 }
