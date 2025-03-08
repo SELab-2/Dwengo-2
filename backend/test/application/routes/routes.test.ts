@@ -27,7 +27,11 @@ const mockController = {
 // Define route functions explicitly
 const routeFunctions = {
   assignmentRoutes: routes.assignmentRoutes,
+  classRoutes: routes.classRoutes,
   groupRoutes: routes.groupRoutes,
+  messageRoutes: routes.messageRoutes,
+  pendingInviteRoutes: routes.pendingInviteRoutes,
+  questionThreadRoutes: routes.questionThreadRoutes,
   studentRoutes: routes.studentRoutes,
   teacherRoutes: routes.teacherRoutes,
   usersRoutes: routes.usersRoutes,
@@ -42,6 +46,13 @@ const routeConfigs: Record<keyof typeof routeFunctions, { method: 'get' | 'patch
     { method: 'delete', path: '/assignments/:id' },
     { method: 'post', path: '/assignments' },
   ],
+  classRoutes: [
+    { method: 'get', path: "/users/:idParent/classes/:id" },
+    { method: 'get', path: "/users/:idParent/classes" },
+    { method: 'patch', path: "/classes/:id" },
+    { method: 'delete', path: "/classes/:id" },
+    { method: 'post', path: "/classes" },
+  ],
   groupRoutes: [
     { method: 'get', path: '/users/:idParent/groups/:id' },
     { method: 'get', path: '/users/:idParent/groups' },
@@ -50,6 +61,26 @@ const routeConfigs: Record<keyof typeof routeFunctions, { method: 'get' | 'patch
     { method: 'patch', path: '/groups/:id' },
     { method: 'delete', path: '/groups/:id' },
     { method: 'post', path: '/groups' },
+  ],
+  messageRoutes: [
+    { method: 'get', path: '/questions/:idParent/messages/:id' },
+    { method: 'get', path: '/questions/:idParent/messages' },
+    { method: 'patch', path: '/questions/:idParent/messages/:id' },
+    { method: 'delete', path: '/questions/:idParent/messages/:id' },
+    { method: 'post', path: '/questions/:idParent/messages' },
+  ],
+  pendingInviteRoutes: [
+    { method: 'get', path: '/users/:idParent/invites/:id' },
+    { method: 'get', path: '/users/:idParent/invites' },
+    { method: 'delete', path: '/invites/:id' },
+    { method: 'post', path: '/invites' },
+  ],
+  questionThreadRoutes: [
+    { method: 'get', path: "/assignments/:idParent/questions/:id" },
+    { method: 'get', path: "/assignments/:idParent/questions" },
+    { method: 'patch', path: "/assignments/:idParent/questions/:id" },
+    { method: 'delete', path: "/assignments/:idParent/questions/:id" },
+    { method: 'post', path: "/assignments/:idParent/questions" },
   ],
   studentRoutes: [
     { method: 'delete', path: '/classes/:idParent/users/:id(s-.*)' },
