@@ -1,18 +1,12 @@
 import { IDatasourceFactory } from "../../infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { Student } from "../entities/student";
+import { AbstractRepository } from "./AbstractRepository";
 
 /**
  * Interface for student repositories.
  * Allows CRUD operations on student entities.
  */
-export abstract class IStudentRepository {
-
-    /**
-     * @param datasourceFactory Factory for creating datasources.
-     */
-    public constructor(
-        protected datasourceFactory: IDatasourceFactory
-    ) {}
+export abstract class IStudentRepository extends AbstractRepository {
 
     /**
      * Insert a new student in the repository. The `id` field of the student should be empty.
@@ -23,32 +17,32 @@ export abstract class IStudentRepository {
     public abstract createStudent(student: Student): Promise<Student>;
 
     /**
-     * Get a student by its id.
+     * Get a student by its id. Throws an `EntityNotFoundError` when no student is found.
      * @param id The id of the student
      * @returns A promise that resolves to the student with the given id or null if no results are found.
      */
-    public abstract getStudentById(id: string): Promise<Student|null>;
+    public abstract getStudentById(id: string): Promise<Student>;
 
     /**
-     * Get a student by their email.
+     * Get a student by their email. Throws an `EntityNotFoundError` when no student is found.
      * @param email The email of the student
      * @returns A promise that resolves to the student with the given email or null if no results are found.
      */
-    public abstract getStudentByEmail(email: string): Promise<Student|null>;
+    public abstract getStudentByEmail(email: string): Promise<Student>;
 
     /**
-     * Get a student by their first name.
+     * Get a student by their first name. Throws an `EntityNotFoundError` when no student is found.
      * @param first_name The first name of the student
      * @returns A promise that resolves to the student with the given first name.
      */
-    public abstract getStudentByFirstName(first_name: string): Promise<Student|null>;
+    public abstract getStudentByFirstName(first_name: string): Promise<Student>;
 
     /**
-     * Get a student by their last name.
+     * Get a student by their last name. Throws an `EntityNotFoundError` when no student is found.
      * @param last_name The last name of the student
      * @returns A promise that resolves to the student with the given last name.
      */
-    public abstract getStudentByLastName(last_name: string): Promise<Student|null>;
+    public abstract getStudentByLastName(last_name: string): Promise<Student>;
 
     /**
      * Get all students in the repository.
