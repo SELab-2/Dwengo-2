@@ -7,7 +7,7 @@ import { HttpMethod } from '../types';
  * RESTful routing configuration for PendingInvite related endpoints.
  * Maps HTTP requests to the PendingInviteController's handle method after
  * converting Express request/response objects to our internal format.
- * 
+ *
  * Supported endpoints:
  * - GET /users/:idParent/invites/:id - Get specific invite for a user
  * - GET /users/:idParent/invites - Get all pending invites for a user

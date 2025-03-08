@@ -7,7 +7,7 @@ import { HttpMethod } from "../types";
  * RESTful routing configuration for question-thread-related endpoints.
  * Maps HTTP requests to the QuestionThreadController's handle method after
  * converting Express request/response objects to our internal format.
- * 
+ *
  * Supported endpoints:
  * - GET /assignments/:idParent/questions/:id - Get specific question in an assignment
  * - GET /assignments/:idParent/questions - Get all questions in an assignment

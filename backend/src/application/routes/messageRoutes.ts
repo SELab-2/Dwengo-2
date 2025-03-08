@@ -7,13 +7,13 @@ import { HttpMethod } from '../types';
  * RESTful routing configuration for message-related endpoints.
  * Maps HTTP requests to the MessageController's handle method after
  * converting Express request/response objects to our internal format.
- * 
+ *
  * Supported endpoints:
  * - GET /questions/:idParent/messages/:id - Get specific message in a question thread
  * - GET /questions/:idParent/messages - Get all messages in a question thread
  * - PATCH /questions/:idParent/messages/:id - Update message
  * - DELETE /questions/:idParent/messages/:id - Delete message
- * - POST /questions/:idParent/messages - Create new message 
+ * - POST /questions/:idParent/messages - Create new message
  */
 export function messageRoutes(app: Express, controller: MessageController): void {
   configureRoutes([
