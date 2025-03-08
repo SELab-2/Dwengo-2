@@ -3,7 +3,7 @@ export class User {
     // Necessary variables
     email: string;          // Teacher's email
     first_name: string;     // Teacher's first name
-    last_name: string;    // Teacher's family name
+    family_name: string;    // Teacher's family name
     password_hash: string;  // Teacher's hashed password
 
     // Optional variables
@@ -20,7 +20,7 @@ export class User {
     ) {
         this.email = email;
         this.first_name = first_name;
-        this.last_name = last_name;
+        this.family_name = last_name;
         this.password_hash = password_hash;
         this.name_school = name_school;
         this.id = id;
