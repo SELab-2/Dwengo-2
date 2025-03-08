@@ -2,78 +2,63 @@
 
 import { Class } from "../entities/class";
 import { Student } from "../entities/student";
+import { AbstractRepository } from "./AbstractRepository";
 
 
-export interface StudentRepositoryInterface {
-    /**
-     * Function to get the student with the given id.
-     * 
-     * @param studentId the id of the student to get.
-     * @returns the student with the given id.
-     * @throws Error if the student is not found.
-     */
-    getStudent(studentId: string): Promise<Student>;
+export abstract class StudentRepositoryInterface extends AbstractRepository{
 
     /**
-     * Create a new student in the DB.
-     * @param student the student to be created
-     * @returns the id of the created student in the DB.
-     * @throws Error if the student could not be created.
+     * Insert a new student in the repository. The `id` field of the student should be empty.
+     * The `id` field will be set by the repository to a uuid.
+     * @param student The new student to insert.
+     * @returns A promise that resolves to the inserted student.
      */
-    createStudent(
-        student: Student
-    ): Promise<string>;
+    public abstract createStudent(student: Student): Promise<Student>;
 
     /**
-     * Find a student in the DB by email.
-     * @param email email of the student to be found
-     * @returns true if the student is present in the DB, false otherwise.
+     * Get a student by its id. Throws an `EntityNotFoundError` when no student is found.
+     * @param id The id of the student
+     * @returns A promise that resolves to the student with the given id or null if no results are found.
      */
-    findByEmail(
-        email: string
-    ): Promise<boolean>;
+    public abstract getStudentById(id: string): Promise<Student>;
 
     /**
-     * Ask a question about a step in an assignment.
-     * @param studentId the id of the student asking the question.
-     * @param assignmentId the assignment which contains the step.
-     * @param objectId specifies the object which is the subject of the question.
-     * @param question the question itself.
+     * Get a student by their email. Throws an `EntityNotFoundError` when no student is found.
+     * @param email The email of the student
+     * @returns A promise that resolves to the student with the given email or null if no results are found.
      */
-    askQuestionForAssignment(
-        studentId: string,
-        assignmentId: string,
-        objectId: string,
-        question: string
-    ): Promise<void>;
+    public abstract getStudentByEmail(email: string): Promise<Student>;
 
     /**
-     * Function will send the submission for a step in a assignment.
-     * 
-     * @param studentId the id of the student submitting a step in a assignment.
-     * @param assignmentID the assignment that contains the step on which the student wants to submit their answer.
-     * @param objectId the id of the object.
-     * @param answer the answer provided by the student.
+     * Get a student by their first name. Throws an `EntityNotFoundError` when no student is found.
+     * @param first_name The first name of the student
+     * @returns A promise that resolves to the student with the given first name.
      */
-    sendSubmissionForAssignment(
-        studentId: string,
-        objectId: string,
-        assignmentId: string,
-        answer: string
-    ): Promise<void>;
+    public abstract getStudentByFirstName(first_name: string): Promise<Student>;
 
     /**
-     * Function to make a join request for a class.
-     * 
-     * @param studentId the id of the student that wants to join a class.
-     * @param classCode the code of the class you want to join.
+     * Get a student by their last name. Throws an `EntityNotFoundError` when no student is found.
+     * @param last_name The last name of the student
+     * @returns A promise that resolves to the student with the given last name.
      */
-    requestToJoinClass(studentId: string, classCode: string): Promise<void>;
+    public abstract getStudentByLastName(last_name: string): Promise<Student>;
 
-     /**
-     * Get every class where the student is part of.
-     * @param studentId the student id.
-     * @returns every class where the student is part of
+    /**
+     * Get all students in the repository.
+     * @returns A promise that resolves to an array of all students.
      */
-    getClasses: (studentId: string) => Promise<Class[]>;
+    public abstract getAllStudents(): Promise<Student[]>;
+
+    /**
+     * Update an existing student in the repository.
+     * @param student The student to update.
+     * @returns A promise that resolves to the updated student.
+     */
+    public abstract updateStudent(student: Student): Promise<Student>;
+
+    /**
+     * Delete a student from the repository.
+     * @param id The id of the student to delete.
+     */
+    public abstract deleteStudentWithId(id: string): Promise<void>;
 }
