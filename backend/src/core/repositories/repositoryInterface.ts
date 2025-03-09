@@ -23,12 +23,6 @@ export abstract class IRepository<Entity> extends AbstractRepository {
     public abstract getById(id: string): Promise<Entity|null>;
 
     /**
-     * Get all entitys in the repository.
-     * @returns A promise that resolves to an array of all entitys.
-     */
-    public abstract getAll(): Promise<Entity[]>;
-
-    /**
      * Update an existing entity in the repository.
      * @param entity The entity to update.
      * @returns A promise that resolves to the updated entity.
@@ -41,9 +35,4 @@ export abstract class IRepository<Entity> extends AbstractRepository {
      */
     public abstract delete(entity: Entity): Promise<void>;
 
-    /**
-     * Delete a entity from the repository.
-     * @param id The id of the entity to delete.
-     */
-    public abstract deleteWithId(id: string): Promise<void>;
 }

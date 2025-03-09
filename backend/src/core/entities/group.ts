@@ -4,8 +4,9 @@ import { Class } from "./class";
 
 export class Group {
     constructor(
-        protected students: Student[], // The students that are part of the group.
-        protected class_: Class // The class of which the group is a subgroup of.
+        public students: Student[], // The students that are part of the group.
+        public class_: Class, // The class of which the group is a subgroup of.
+        public id?: string, // The unique identifier of the group.
     ){}
 }
 
