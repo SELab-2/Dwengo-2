@@ -11,7 +11,7 @@ export enum JoinAsType {
 export class JoinRequestTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
-    
+
     @OneToOne(() => UserTypeORM)
     @JoinColumn({ name: "requester_id" })
     requester!: UserTypeORM
@@ -25,4 +25,18 @@ export class JoinRequestTypeORM {
         enum: JoinAsType
     })
     type!: JoinAsType
+
+    private joinAsTypeToJoinRequestType(joinAsType: JoinAsType): JoinRequestType {
+        return joinAsType === JoinAsType.TEACHER ? JoinRequestType.TEACHER : JoinRequestType.STUDENT
+    }
+
+    public toJoinRequestEntity(): JoinRequest {
+        return new JoinRequest(
+            this.requester.id,
+            this.class.id,
+            this.joinAsTypeToJoinRequestType(this.type),
+            this.id,
+        );
+    }
+
 }

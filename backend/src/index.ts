@@ -2,10 +2,9 @@
 import express from "express";
 import cors from 'cors';
 import dotenv from "dotenv";
-import { IDatasource } from "./infrastructure/database/data/data_sources/datasourceInterface";
 import { DatasourceTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceTypeORM";
-
-// TODO - Start using index.ts files to import entities etc. in a single line
+import { IAssignmentRepository } from "./core/repositories/assignmentRepositoryInterface";
+import { AssignmentRepositoryTypeORM } from "./infrastructure/repositories/assignmentRepositoryTypeORM";
 
 dotenv.config();
 
@@ -35,9 +34,21 @@ const controllers = {
 };
 
 const app = express();
-const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
+const port = process.env.PORT || 3000;
+
+// TODO: implement backend application
+
+// Initialize a datasource
+const datasource = new DatasourceTypeORM();
+
+// TODO: remove, this is a stupid small test function
+async function test() {
+  const assignmentRepo: IAssignmentRepository = new AssignmentRepositoryTypeORM();
+
+  console.log(await assignmentRepo.getAssignmentsByLearningPathId("123"));
+}
 
 // Register routes
 

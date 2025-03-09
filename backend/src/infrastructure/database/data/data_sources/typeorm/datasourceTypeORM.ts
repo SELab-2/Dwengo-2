@@ -7,11 +7,15 @@ import { IDatasourceTeacher } from "../datasourceTeacherInterface";
 import { DatasourceTeacherTypeORM } from "./datasourceTeacherTypeORM";
 import { IDatasourceClass } from "../datasourceClassInterface";
 import { DatasourceClassTypeORM } from "./datasourceClassTypeORM";
+import { DatasourceJoinRequestTypeORM } from "./datasourceJoinRequestTypeORM";
+import { IDatasourceJoinRequest } from "../datasourceJoinRequestInterface";
+import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
+import { DatasourceAssignmentTypeORM } from "./datasourceAssignmentTypeORM";
 
 export class DatasourceTypeORM implements IDatasource {
 
     // Connection for the TypeORM - postgres database
-    private static datasourceConnectionSettings: DatasourceTypeORMConnectionSettings = 
+    private static datasourceConnectionSettings: DatasourceTypeORMConnectionSettings =
         DatasourceTypeORMConnectionSettingsFactory
         .createDatasourceTypeORMConnectionSettings(
             "postgres",
@@ -22,7 +26,7 @@ export class DatasourceTypeORM implements IDatasource {
             true,
             true
         );
-    
+
     // Promise of the TypeORM DataSource object
     // This object is needed for the repositories to be able to ask queries.
     private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(this.datasourceConnectionSettings);
@@ -35,5 +39,13 @@ export class DatasourceTypeORM implements IDatasource {
     public async getDatasourceClass(): Promise<IDatasourceClass> {
         return new DatasourceClassTypeORM(await DatasourceTypeORM.datasourcePromise);
     }
-    
+
+    public async getDatasourceJoinRequest(): Promise<IDatasourceJoinRequest> {
+        return new DatasourceJoinRequestTypeORM(await DatasourceTypeORM.datasourcePromise);
+    }
+
+    public async getDatasourceAssignment(): Promise<IDatasourceAssignment> {
+        return new DatasourceAssignmentTypeORM(await DatasourceTypeORM.datasourcePromise);
+    }
+
 }

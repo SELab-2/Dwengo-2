@@ -13,8 +13,10 @@ describe("TeacherRepositoryTypeORM", () => {
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceTeacher: jest.fn(), // TODO: should work?
-            getDatasourceClass: jest.fn()
+            getDatasourceTeacher: jest.fn(),
+            getDatasourceClass: jest.fn(),
+            getDatasourceJoinRequest: jest.fn(),
+            getDatasourceAssignment: jest.fn(),
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),
@@ -39,7 +41,7 @@ describe("TeacherRepositoryTypeORM", () => {
     test("createTeacher", async () => {
         // Call function from repository
         const returnTeacher: Teacher = await datasourceTeacher.createTeacher(teacher);
-        
+
         expect(datasourceTeacher.createTeacher).toHaveBeenCalledTimes(1);
         expect(datasourceTeacher.createTeacher).toHaveBeenCalledWith(teacher);
         expect(returnTeacher).toEqual(teacher);

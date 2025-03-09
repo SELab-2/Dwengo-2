@@ -1,9 +1,104 @@
-import { UseCase } from "../../../config/useCase";
+import { UseCase } from '../../../config/useCase';
+import { Student } from '../../entities/student';
+import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
+import { ApiError, ErrorCode } from '../../../application/types';
 
-export class UpdateStudent implements UseCase<undefined, undefined> {
-  constructor() {}
+/**
+ * Class to be used by execute method to update a student's info in the DB.
+ * If a field is not to be updated, it should be undefined in the constructor.
+ */
+export class UpdateStudentParams {
+  private email?: string;
+  private firstName?: string;
+  private familyName?: string;
+  private passwordHash?: string;
+  private schoolName?: string;
+  private id: string;
 
-  async execute(input: undefined): Promise<undefined> {
-    //TODO
+  constructor(
+    id: string,
+    email?: string,
+    firstName?: string,
+    familyName?: string,
+    passwordHash?: string,
+    schoolName?: string,
+  ) {
+    this.id = id;
+    this.email = email;
+    this.firstName = firstName;
+    this.familyName = familyName;
+    this.passwordHash = passwordHash;
+    this.schoolName = schoolName;
+  }
+
+  /**
+   * Creates an object with updated fields of a student.
+   *
+   * @param studentRepository repository to get student info from DB.
+   * @returns a student object with the updated info.
+   */
+  async fromObject(
+    studentRepository: IStudentRepository,
+  ): Promise<Student> {
+    // Checks
+    const student: Student = await studentRepository.getStudent(this.id);
+
+    // Check if email is not same when being updated
+    if (this.email && student.email === this.email) {
+      throw {
+        code: ErrorCode.BAD_REQUEST,
+        message: 'Email cannot be the same as old one.',
+      } as ApiError;
+    }
+
+    // Check if email is already in use
+    if (this.email) {
+      const present: boolean = await studentRepository.findByEmail(this.email);
+      if (present) {
+        throw {
+          code: ErrorCode.BAD_REQUEST,
+          message: 'Email already in use.',
+        } as ApiError;
+      }
+    }
+
+    // Check if password is not same when being updated
+    if (this.passwordHash && student.passwordHash === this.passwordHash) {
+      throw {
+        code: ErrorCode.BAD_REQUEST,
+        message: 'Password cannot be the same as old one.',
+      } as ApiError;
+    }
+
+    // Update student with new info
+    const updatedStudent = new Student(
+      this.email ?? student.email,
+      this.firstName ?? student.firstName,
+      this.familyName ?? student.familyName,
+      this.passwordHash ?? student.passwordHash,
+      this.schoolName ?? student.schoolName,
+      this.id,
+    );
+    return updatedStudent;
+  }
+
+  toObject(): object {
+    return {};
+  }
+}
+
+export class UpdateStudent implements UseCase<UpdateStudentParams, object> {
+  constructor(private studentRepository: IStudentRepository) {}
+
+  /**
+   * Updates a student's info in the DB.
+   *
+   * @param input Object with new data of student to update in the DB.
+   * @returns empty object, no additional info needed.
+   */
+  async execute(input: UpdateStudentParams): Promise<object> {
+    const student: Student = await input.fromObject(this.studentRepository);
+    await this.studentRepository.updateStudent(student);
+    return input.toObject();
   }
 }
