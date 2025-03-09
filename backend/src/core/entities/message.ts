@@ -1,4 +1,4 @@
-export class ThreadQuestion {
+export class Message {
     constructor(
         private readonly _senderId: string,
         private readonly _createdAt: Date,
