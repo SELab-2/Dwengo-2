@@ -1,6 +1,6 @@
 import { UseCase } from "../../../config/usecase";
 
-export class CreateMessage implements UseCase<undefined, undefined> {
+export class GetQuestionMessages implements UseCase<undefined, undefined> {
   constructor() {}
 
   async execute(input: undefined): Promise<undefined> {
