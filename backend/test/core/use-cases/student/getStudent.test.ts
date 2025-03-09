@@ -1,9 +1,10 @@
-import { GetSudent } from "../../../../src/core/use-cases/student/getStudent";
+import { GetStudent } from "../../../../src/core/use-cases/student/getStudent";
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
+import { EntityNotFoundError } from "../../../../src/config/error";
 
 describe("getStudent Use Case", () => {
-  let getStudentUseCase: GetSudent;
+  let getStudentUseCase: GetStudent;
   let mockStudentRepository: jest.Mocked<IStudentRepository>;
 
   beforeEach(() => {
@@ -20,7 +21,6 @@ describe("getStudent Use Case", () => {
       "John",
       "Doe",
       "hashedpassword123",
-      [],
       "1"
     );
 
@@ -31,11 +31,14 @@ describe("getStudent Use Case", () => {
     expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("1");
   });
 
-  test("Should return null if student is not found", async () => {
-    mockStudentRepository.getStudent.mockResolvedValue(null);
-    const result = await getStudentUseCase.execute("999");
+  test("Should throw EntityNotFoundError if student not found", async () => {
+    mockStudentRepository.getStudent.mockRejectedValue(
+      new EntityNotFoundError("Student not found")
+    );
 
-    expect(result).toBeNull();
-    expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("999");
+    await expect(getStudentUseCase.execute("1")).rejects.toThrow(
+      "Student not found"
+    );
+    expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("1");
   });
 });

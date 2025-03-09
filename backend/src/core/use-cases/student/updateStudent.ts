@@ -33,7 +33,7 @@ export class UpdateStudentParams {
 
   /**
    * Creates an object with updated fields of a student.
-   *
+   * 
    * @param studentRepository repository to get student info from DB.
    * @returns a student object with the updated info.
    */
