@@ -24,5 +24,6 @@ export class CreateStudent extends CreateUser<Student, CreateStudentParams> {
      */
     public async createUser(user: Student): Promise<string> {
         return await this.studentRepository.createStudent(user);
+
     }
 }

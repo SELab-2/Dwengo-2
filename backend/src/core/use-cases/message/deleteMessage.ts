@@ -1,4 +1,4 @@
-import { UseCase } from "../../../config/useCase";
+import { UseCase } from "../../../config/usecase";
 
 export class DeleteMessage implements UseCase<undefined, undefined> {
   constructor() {}

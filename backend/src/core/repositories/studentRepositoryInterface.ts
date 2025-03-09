@@ -118,3 +118,4 @@ export interface IStudentRepository {
    */
   getClasses: (studentId: string) => Promise<Class[]>;
 }
+
