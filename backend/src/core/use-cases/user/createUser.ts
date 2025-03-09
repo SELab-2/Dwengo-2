@@ -1,5 +1,5 @@
-import { UseCase } from '../../../config/usecase';
-import { StudentRepositoryInterface } from '../../repositories/studentRepositoryInterface';
+import { UseCase } from '../../../config/useCase';
+import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
 import { ApiError, ErrorCode } from '../../../application/types';
 import { User } from '../../entities/user';
 import { ITeacherRepository } from '../../repositories/teacherRepositoryInterface';
@@ -17,7 +17,7 @@ abstract class CreateParams<T extends User> {
   protected familyName: string;
   protected passwordHash: string;
   protected schoolName: string;
-  
+
   constructor(
     email: string,
     firstName: string,
@@ -32,7 +32,7 @@ abstract class CreateParams<T extends User> {
     this.schoolName = schoolName;
   }
 
-   /**
+  /**
    * @description Abstract method to create a user object.
    * @returns {T} The created user.
    */
@@ -42,12 +42,12 @@ abstract class CreateParams<T extends User> {
    * @description Creates a user object from the provided info and checks if info is valid.
    * @param {StudentRepositoryInterface} studentRepository - The student repository.
    * @param {ITeacherRepository} teacherRepository - The teacher repository.
-   * 
+   *
    * @returns {Promise<T>} The created user.
    * @throws {ApiError} If the email is invalid or already in use.
    */
   public async fromObject(
-    studentRepository: StudentRepositoryInterface,
+    studentRepository: IStudentRepository,
     teacherRepository: ITeacherRepository,
   ): Promise<T> {
     // Check email
@@ -59,8 +59,12 @@ abstract class CreateParams<T extends User> {
     }
 
     // Check if email not already in use
-    const studentPresent: boolean = await studentRepository.checkByEmail(this.email);
-    const teacherPresent: boolean = await teacherRepository.checkTeacherByEmail(this.email);
+    const studentPresent: boolean = await studentRepository.checkByEmail(
+      this.email,
+    );
+    const teacherPresent: boolean = await teacherRepository.checkTeacherByEmail(
+      this.email,
+    );
     if (studentPresent || teacherPresent) {
       throw {
         code: ErrorCode.CONFLICT,
@@ -77,7 +81,13 @@ abstract class CreateParams<T extends User> {
  */
 export class CreateStudentParams extends CreateParams<Student> {
   createUser(): Student {
-    return new Student(this.email, this.firstName, this.familyName, this.passwordHash, this.schoolName);
+    return new Student(
+      this.email,
+      this.firstName,
+      this.familyName,
+      this.passwordHash,
+      this.schoolName,
+    );
   }
 }
 
@@ -87,10 +97,15 @@ export class CreateStudentParams extends CreateParams<Student> {
  */
 export class CreateTeacherParams extends CreateParams<Teacher> {
   createUser(): Teacher {
-    return new Teacher(this.email, this.firstName, this.familyName, this.passwordHash, this.schoolName);
+    return new Teacher(
+      this.email,
+      this.firstName,
+      this.familyName,
+      this.passwordHash,
+      this.schoolName,
+    );
   }
 }
-
 
 /**
  * @template T The type of user to be created.
@@ -101,9 +116,11 @@ export class CreateTeacherParams extends CreateParams<Teacher> {
  * @param {StudentRepositoryInterface} studentRepository - The student repository.
  * @param {ITeacherRepository} teacherRepository - The teacher repository.
  */
-export abstract class CreateUser<T extends User, P extends CreateParams<T>> implements UseCase<P, object> {
+export abstract class CreateUser<T extends User, P extends CreateParams<T>>
+  implements UseCase<P, object>
+{
   public constructor(
-    protected studentRepository: StudentRepositoryInterface,
+    protected studentRepository: IStudentRepository,
     protected teacherRepository: ITeacherRepository,
   ) {}
 
@@ -120,7 +137,10 @@ export abstract class CreateUser<T extends User, P extends CreateParams<T>> impl
    * @returns {Promise<object>} An object containing the ID of the created user.
    */
   async execute(input: P): Promise<object> {
-    const user: T = await input.fromObject(this.studentRepository, this.teacherRepository);
+    const user: T = await input.fromObject(
+      this.studentRepository,
+      this.teacherRepository,
+    );
     const id: string = await this.createUser(user);
     return { id: id };
   }

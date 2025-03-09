@@ -2,6 +2,7 @@ import { UseCase } from '../../../config/useCase';
 import { Student } from '../../entities/student';
 import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
 import { ApiError, ErrorCode } from '../../../application/types';
+import { ITeacherRepository } from '../../repositories/teacherRepositoryInterface';
 
 /**
  * Class to be used by execute method to update a student's info in the DB.
@@ -33,12 +34,13 @@ export class UpdateStudentParams {
 
   /**
    * Creates an object with updated fields of a student.
-   * 
+   *
    * @param studentRepository repository to get student info from DB.
    * @returns a student object with the updated info.
    */
   async fromObject(
     studentRepository: IStudentRepository,
+    teacherRepository: ITeacherRepository,
   ): Promise<Student> {
     // Checks
     const student: Student = await studentRepository.getStudent(this.id);
@@ -53,8 +55,12 @@ export class UpdateStudentParams {
 
     // Check if email is already in use
     if (this.email) {
-      const present: boolean = await studentRepository.findByEmail(this.email);
-      if (present) {
+      const studentPresent: boolean = await studentRepository.checkByEmail(
+        this.email,
+      );
+      const teacherPresent: boolean =
+        await teacherRepository.checkTeacherByEmail(this.email);
+      if (studentPresent || teacherPresent) {
         throw {
           code: ErrorCode.BAD_REQUEST,
           message: 'Email already in use.',
@@ -88,7 +94,10 @@ export class UpdateStudentParams {
 }
 
 export class UpdateStudent implements UseCase<UpdateStudentParams, object> {
-  constructor(private studentRepository: IStudentRepository) {}
+  constructor(
+    private studentRepository: IStudentRepository,
+    private teacherRepository: ITeacherRepository,
+  ) {}
 
   /**
    * Updates a student's info in the DB.
@@ -97,7 +106,10 @@ export class UpdateStudent implements UseCase<UpdateStudentParams, object> {
    * @returns empty object, no additional info needed.
    */
   async execute(input: UpdateStudentParams): Promise<object> {
-    const student: Student = await input.fromObject(this.studentRepository);
+    const student: Student = await input.fromObject(
+      this.studentRepository,
+      this.teacherRepository,
+    );
     await this.studentRepository.updateStudent(student);
     return input.toObject();
   }

@@ -1,9 +1,12 @@
-import { UseCase } from "../../../config/useCase";
-import { Student } from "../../entities/student";
-import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
+import { Student } from '../../entities/student';
+import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
+import { GetUser } from '../user/getUser';
 
-export class GetSudent implements UseCase<string, Student | null> {
-  constructor(private studentRepository: IStudentRepository) {}
+// Class to get a student from the DB
+export class GetStudent extends GetUser {
+  constructor(private studentRepository: IStudentRepository) {
+    super();
+  }
 
   /**
    * Function that retrieves a student with a given id from the DB.

@@ -1,5 +1,5 @@
 import { ApiError, ErrorCode } from '../../../application/types';
-import { UseCase } from '../../../config/usecase';
+import { UseCase } from '../../../config/useCase';
 
 /**
  * Abstract class to get a student/teacher from DB

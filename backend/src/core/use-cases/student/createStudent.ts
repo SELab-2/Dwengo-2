@@ -1,5 +1,5 @@
 import { Student } from "../../entities/student";
-import { StudentRepositoryInterface } from "../../repositories/studentRepositoryInterface";
+import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
 import { CreateStudentParams, CreateUser } from "../user/createUser";
 
@@ -11,7 +11,7 @@ import { CreateStudentParams, CreateUser } from "../user/createUser";
  */
 export class CreateStudent extends CreateUser<Student, CreateStudentParams> {
     public constructor(
-        studentRepository: StudentRepositoryInterface,
+        studentRepository: IStudentRepository,
         teacherRepository: ITeacherRepository,
     ) {
         super(studentRepository, teacherRepository)
