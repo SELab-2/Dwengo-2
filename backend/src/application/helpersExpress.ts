@@ -114,21 +114,21 @@ function removePrefixes(
 /**
  * Extracts path parameters from a Request object's path header.
  * Removes specified prefixes from `id` when entity matches and from `idParent` when parent matches,
- * based on a predefined mapping of entity types to prefix patterns.
+ * based on a predefined or custom mapping of entity types to prefix patterns.
+ * Also extracts and stores the type information when a prefix is matched.
  *
  * @param req - The Request object containing a `headers` property with a `path` field.
- * @returns A `PathParams` object with `id` and optionally `idParent` properties, or an empty object if no valid path is found.
+ * @param customPrefixPatterns - Optional custom prefix patterns to use instead of the default
+ * @returns A `PathParams` object with `id` and optionally `idParent` properties,
+ *          plus `type` and `parentType` if prefixes were matched.
  * @example
  * // For req.headers['path'] = "/users/t-123"
- * extractPathParams(req) // Returns { entity: "users", id: "123" }
+ * extractPathParams(req) // Returns { entity: "users", id: "123", type: "teacher" }
  *
  * // For req.headers['path'] = "/users/s-123/orders/456"
- * extractPathParams(req) // Returns { parent: "users", idParent: "123", entity: "orders", id: "456" }
- *
- * // For req.headers['path'] = "/classes/789/users/x-012"
- * extractPathParams(req) // Returns { parent: "classes", idParent: "789", entity: "users", id: "012" }
+ * extractPathParams(req) // Returns { parent: "users", idParent: "123", parentType: "student", entity: "orders", id: "456" }
  */
-export function extractPathParams(req: Request): PathParams {
+export function extractPathParams(req: Request, customPrefixPatterns?: Record<string, Record<string, string>>): PathParams {
   const path = req.headers['path']?.split('?')[0] || '';
   const pathParts = path.split('/').slice(1).filter(Boolean);
   const params: PathParams = {};
