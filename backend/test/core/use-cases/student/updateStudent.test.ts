@@ -2,12 +2,12 @@ import {
   UpdateStudent,
   UpdateStudentParams,
 } from '../../../../src/core/use-cases/student/updateStudent';
-import { StudentRepositoryInterface } from '../../../../src/core/repositories/studentRepositoryInterface';
+import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
 import { Student } from '../../../../src/core/entities/student';
 import { ErrorCode } from '../../../../src/application/types';
 
 describe('UpdateStudent Use Case', () => {
-  let studentRepository: jest.Mocked<StudentRepositoryInterface>;
+  let studentRepository: jest.Mocked<IStudentRepository>;
   let updateStudent: UpdateStudent;
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('UpdateStudent Use Case', () => {
       getStudent: jest.fn(),
       findByEmail: jest.fn(),
       updateStudent: jest.fn(),
-    } as unknown as jest.Mocked<StudentRepositoryInterface>;
+    } as unknown as jest.Mocked<IStudentRepository>;
 
     updateStudent = new UpdateStudent(studentRepository);
   });

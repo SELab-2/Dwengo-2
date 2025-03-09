@@ -3,8 +3,14 @@
 import { Class } from "../entities/class";
 import { Student } from "../entities/student";
 
+export interface IStudentRepository {
 
-export interface StudentRepositoryInterface {
+    /**
+     * Function to delete a student record in the DB.
+     * 
+     * @param student the student to delete.
+     */
+    deleteStudent(student: string): Promise<void>;
 
     /**
      * Function to remove a student from a class.
@@ -37,7 +43,7 @@ export interface StudentRepositoryInterface {
      * @throws Error if the student is not present in the DB.
      */
     updateStudent(student: Student): Promise<void>;
-  
+
     /**
      * Function to get the student with the given id.
      * 

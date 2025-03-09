@@ -1,6 +1,6 @@
-import { UseCase, UseCaseParams } from '../../../config/usecase';
+import { UseCase } from '../../../config/useCase';
 import { Student } from '../../entities/student';
-import { StudentRepositoryInterface } from '../../repositories/studentRepositoryInterface';
+import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
 import { ApiError, ErrorCode } from '../../../application/types';
 
 /**
@@ -38,7 +38,7 @@ export class UpdateStudentParams {
    * @returns a student object with the updated info.
    */
   async fromObject(
-    studentRepository: StudentRepositoryInterface,
+    studentRepository: IStudentRepository,
   ): Promise<Student> {
     // Checks
     const student: Student = await studentRepository.getStudent(this.id);
@@ -88,7 +88,7 @@ export class UpdateStudentParams {
 }
 
 export class UpdateStudent implements UseCase<UpdateStudentParams, object> {
-  constructor(private studentRepository: StudentRepositoryInterface) {}
+  constructor(private studentRepository: IStudentRepository) {}
 
   /**
    * Updates a student's info in the DB.

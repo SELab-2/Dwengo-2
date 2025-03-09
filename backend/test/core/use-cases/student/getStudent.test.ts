@@ -1,16 +1,16 @@
 import { GetSudent } from "../../../../src/core/use-cases/student/getStudent";
-import { StudentRepositoryInterface } from "../../../../src/core/repositories/studentRepositoryInterface";
+import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
 import { AppError } from "../../../../src/config/error";
 
 describe("getStudent Use Case", () => {
   let getStudentUseCase: GetSudent;
-  let mockStudentRepository: jest.Mocked<StudentRepositoryInterface>;
+  let mockStudentRepository: jest.Mocked<IStudentRepository>;
 
   beforeEach(() => {
     mockStudentRepository = {
       getStudent: jest.fn(), // Mock DB function
-    } as unknown as jest.Mocked<StudentRepositoryInterface>;
+    } as unknown as jest.Mocked<IStudentRepository>;
 
     getStudentUseCase = new GetSudent(mockStudentRepository);
   });
