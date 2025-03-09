@@ -1,7 +1,7 @@
 export class Group {
     public constructor(
         private _classId: string,
-        private _members: string[],
+        private _members: string[], // List of student IDs
         private _id?: string,
     ){}
 
