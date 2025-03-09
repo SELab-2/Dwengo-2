@@ -7,9 +7,9 @@ import { IGroupRepository } from "../../../../core/repositories/groupRepositoryI
 export abstract class IDatasourceGroup extends IGroupRepository{
 
     public constructor(
-            protected datasource: DataSource
-        ) {
-            super();
-        }
+        protected datasource: DataSource
+    ) {
+        super();
+    }
 
 }
