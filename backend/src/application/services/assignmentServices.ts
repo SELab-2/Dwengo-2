@@ -1,55 +1,67 @@
 import { Service } from './service';
-import { Assignment } from '../../core/entities/assignment';
-import { GetAssignment } from '../../core/use-cases/assignment/getAssignment';
-import { CreateAssignment } from '../../core/use-cases/assignment/makeAssignment';
-import { DeleteAssignment } from '../../core/use-cases/assignment/deleteAssignment';
-import { UpdateAssignment } from '../../core/use-cases/assignment/updateAssignment';
-import { GetGroupAssignments } from '../../core/use-cases/assignment/getGroupAssignments';
+import * as AssignmentUseCases from '../../core/use-cases/assignment';
 
 /**
  * Responsible for retrieving a single assignment by ID
  */
 export class GetAssignmentService extends Service {
-  constructor(get: GetAssignment) { super({ get }); }
+  constructor(get: AssignmentUseCases.GetAssignment) { super({ get }); }
   // TODO: implement the execute function
+  public execute() {
+    return {
+
+    }
+  }
 }
 
 /**
  * Responsible for retrieving all assignments for a group by group ID
  */
 export class GetGroupAssignmentsService extends Service {
-  // TODO: implement constructor with GetGroupAssignments use case
+  constructor(getGroup: AssignmentUseCases.GetGroupAssignment) { super({ getGroup }); }
   // TODO: implement the execute function
+  public execute() {
+    return {
+
+    }
+  }
 }
 
 /**
  * Updates an assignment, identified by ID, with new data
  */
 export class UpdateAssignmentService extends Service {
-  // TODO: implement constructor with UpdateAssignment use case
+  constructor(update: AssignmentUseCases.UpdateAssignment) { super({ update }); }
   // TODO: implement the execute function
+  public execute() {
+    return {
+
+    }
+  }
 }
 
 /**
  * Deletes an assignment by ID
  */
 export class DeleteAssignmentService extends Service {
-  // TODO: implement constructor with DeleteAssignment use case
+  constructor(remove: AssignmentUseCases.DeleteAssignment) { super({ remove }); }
   // TODO: implement the execute function
+  public execute() {
+    return {
+
+    }
+  }
 }
 
 /**
  * Creates a new assignment
  */
 export class CreateAssignmentService extends Service {
-  constructor(create: MakeAssignment) { super({ create }); }
+  constructor(create: AssignmentUseCases.CreateAssignment) { super({ create }); }
   // TODO: implement the execute function
-}
+  public execute() {
+    return {
 
-/**
- * Deletes an assignment by ID
- */
-export class DeleteAssignmentService extends Service {
-  constructor(remove: DeleteAssignment) { super({ remove }); }
-  // TODO: implement the execute function
+    }
+  }
 }
