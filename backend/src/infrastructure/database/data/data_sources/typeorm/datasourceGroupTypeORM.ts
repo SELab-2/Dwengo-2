@@ -6,16 +6,10 @@ import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { Student } from "../../../../../core/entities/student";
+import { IDatasourceGroup } from "../datasourceGroupInterface";
 
 
-export class DatasourceGroupTypeORM extends IGroupRepository {
-
-    
-    public constructor(
-        protected datasource: DataSource
-    ) {
-        super();
-    }
+export class DatasourceGroupTypeORM extends IDatasourceGroup {
 
 
     public async create(entity: Group): Promise<Group> {
