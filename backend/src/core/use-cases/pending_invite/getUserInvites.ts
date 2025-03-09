@@ -1,6 +1,6 @@
 import { UseCase } from "../../../config/usecase";
 
-export class DeleteInvite implements UseCase<undefined, undefined> {
+export class GetUserInvites implements UseCase<undefined, undefined> {
   constructor() {}
 
   async execute(input: undefined): Promise<undefined> {
