@@ -39,7 +39,7 @@ describe("ClassRepositoryTypeORM", () => {
     test("createClass", async () => {
         // Call function from repository
         returnClass = await datasourceClass.createClass(newClass);
-        
+
         expect(datasourceClass.createClass).toHaveBeenCalledTimes(1);
         expect(datasourceClass.createClass).toHaveBeenCalledWith(newClass);
         expect(returnClass).toEqual(newClass);
