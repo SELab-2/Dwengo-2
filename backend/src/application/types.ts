@@ -41,6 +41,7 @@ export interface Request {
   body: object;
 }
 
+
 /**
  * Interface defining an HTTP response object.
  * Based on the standardized HTTP Response structure.
@@ -53,7 +54,6 @@ export interface Response {
 }
 
 /* ************* Error Handling Types ************* */
-
 /**
  * Interface defining a structured error object for API responses.
  * Used to standardize error handling across controllers and services.
@@ -69,6 +69,7 @@ export interface ApiError {
   message: string; // Human-readable error message
   [key: string]: unknown; // Optional additional properties (for flexibility)
 }
+
 
 /* ************* Path/Routing Types ************* */
 

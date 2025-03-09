@@ -1,4 +1,5 @@
 import { IDatasourceClass } from "./datasourceClassInterface";
+import { IDatasourceJoinRequest } from "./datasourceJoinRequestInterface";
 import { IDatasourceTeacher } from "./datasourceTeacherInterface";
 
 /**
@@ -17,5 +18,11 @@ export interface IDatasource {
      * @returns A promise that resolves to an instance of `IDatasourceClass`.
      */
     getDatasourceClass(): Promise<IDatasourceClass>;
+
+    /**
+     * Retrieves the data source for join requests.
+     * @returns A promise that resolves to an instance of `IDatasourceJoinRequest`.
+     */
+    getDatasourceJoinRequest(): Promise<IDatasourceJoinRequest>;
 
 }
