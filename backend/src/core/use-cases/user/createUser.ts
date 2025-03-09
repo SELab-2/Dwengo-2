@@ -53,7 +53,7 @@ abstract class CreateParams<T extends User> {
     // Check email
     if (!this.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
       throw {
-        code: ErrorCode.CONFLICT,
+        code: ErrorCode.BAD_REQUEST,
         message: 'Email invalid.',
       } as ApiError;
     }

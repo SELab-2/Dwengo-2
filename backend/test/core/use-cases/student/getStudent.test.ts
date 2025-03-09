@@ -1,10 +1,10 @@
-import { GetSudent } from "../../../../src/core/use-cases/student/getStudent";
+import { GetStudent } from "../../../../src/core/use-cases/student/getStudent";
 import { StudentRepositoryInterface } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
 import { AppError } from "../../../../src/config/error";
 
 describe("getStudent Use Case", () => {
-  let getStudentUseCase: GetSudent;
+  let getStudentUseCase: GetStudent;
   let mockStudentRepository: jest.Mocked<StudentRepositoryInterface>;
 
   beforeEach(() => {
@@ -12,7 +12,7 @@ describe("getStudent Use Case", () => {
       getStudent: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<StudentRepositoryInterface>;
 
-    getStudentUseCase = new GetSudent(mockStudentRepository);
+    getStudentUseCase = new GetStudent(mockStudentRepository);
   });
 
   test("Should return student if found", async () => {
@@ -28,7 +28,13 @@ describe("getStudent Use Case", () => {
     mockStudentRepository.getStudent.mockResolvedValue(student);
     const result = await getStudentUseCase.execute("1");
 
-    expect(result).toEqual(student);
+    expect(result).toEqual({
+      email: "test@student.com",
+      firstName: "John",
+      familyName: "Doe",
+      schoolName: "Yale",
+      id: "1"
+    });
     expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("1");
   });
 

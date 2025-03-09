@@ -21,6 +21,7 @@ export class GetStudent extends GetUser {
       email: student.email,
       firstName: student.firstName,
       familyName: student.familyName,
+      schoolName: student.schoolName
     };
   }
 }
