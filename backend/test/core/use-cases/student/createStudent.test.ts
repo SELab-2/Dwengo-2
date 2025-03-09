@@ -16,7 +16,7 @@ describe("CreateStudent", () => {
 
   test("Should throw error because of invalid email", async () => {
     await expect(
-      createStudent.execute(new Student("incorrect-email", "John", "Doe", "hashedpassword123",[], "1"))
+      createStudent.execute(new Student("incorrect-email", "John", "Doe", "hashedpassword123", "Harvard", "1"))
     ).rejects.toThrow("Invalid email");
   });
 
@@ -26,8 +26,8 @@ describe("CreateStudent", () => {
       "  John  ",
       "  Doe  ",
       "hashedpassword123",
-      [],
-      "4"
+      "Yale",
+      "2"
     );
 
     jest.spyOn(createStudent as any, "validateInput").mockResolvedValue(undefined);
@@ -37,13 +37,14 @@ describe("CreateStudent", () => {
     expect(student.email).toBe("test@example.com");
     expect(student.firstName).toBe("John");
     expect(student.familyName).toBe("Doe");
+    expect(student.schoolName).toBe("Yale")
   });
 
   test("Should throw error if email is already in use", async () => {
     mockStudentRepository.findByEmail.mockResolvedValue(true);
   
     await expect(
-      createStudent.execute(new Student("test@example.com", "John", "Doe", "hashedpassword123",[], "5"))
+      createStudent.execute(new Student("test@example.com", "John", "Doe", "hashedpassword123", "Oxford", "3"))
     ).rejects.toThrow("Email already in use");
   
     // Control if findByEmail is correctly called

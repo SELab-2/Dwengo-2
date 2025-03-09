@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, Column } from "typeorm"
 import { UserTypeORM } from "./userTypeorm"
 import { ClassTypeORM } from "./classTypeorm"
+import { JoinRequest, JoinRequestType } from "../../../../core/entities/joinRequest"
 
 export enum JoinAsType {
     TEACHER = "teacher",
@@ -25,4 +26,26 @@ export class JoinRequestTypeORM {
         enum: JoinAsType
     })
     type!: JoinAsType
+
+    private joinAsTypeToJoinRequestType(joinAsType: JoinAsType): JoinRequestType {
+        return joinAsType === JoinAsType.TEACHER ? JoinRequestType.TEACHER : JoinRequestType.STUDENT
+    }
+
+    public toJoinRequestEntity(): JoinRequest {
+        return new JoinRequest(
+            this.requester.id,
+            this.class.id,
+            this.joinAsTypeToJoinRequestType(this.type),
+            this.id,
+        );
+    }
+
+    public static createJoinRequestTypeORM(joinRequest: JoinRequest, user: UserTypeORM, class_: ClassTypeORM): JoinRequestTypeORM {
+        const joinRequestTypeORM = new JoinRequestTypeORM();
+        joinRequestTypeORM.requester = user;
+        joinRequestTypeORM.class = class_;
+        joinRequestTypeORM.type = joinRequest.type === JoinRequestType.TEACHER ? JoinAsType.TEACHER : JoinAsType.STUDENT;
+        return joinRequestTypeORM;
+    }
+
 }
