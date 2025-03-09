@@ -82,7 +82,7 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         const groupRepository = this.datasource.getRepository(GroupTypeORM);
         const studentOfGroupRepository = this.datasource.getRepository(StudentOfGroupTypeORM)
 
-        var groupModel: GroupTypeORM | null = null;
+        let groupModel: GroupTypeORM | null = null;
         
         if (group.id){
             groupModel = await groupRepository.findOne({
@@ -117,7 +117,7 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         const studentOfGroupRepository = this.datasource.getRepository(StudentOfGroupTypeORM);
 
         
-        var groupModel: GroupTypeORM | null = null;
+        let groupModel: GroupTypeORM | null = null;
         
         if (group.id){
             groupModel = await groupRepository.findOne({
