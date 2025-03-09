@@ -1,6 +1,6 @@
 import { UseCase } from "../../../config/usecase";
 
-export class DeleteClass implements UseCase<undefined, undefined> {
+export class GetUserClasses implements UseCase<undefined, undefined> {
   constructor() {}
 
   async execute(input: undefined): Promise<undefined> {

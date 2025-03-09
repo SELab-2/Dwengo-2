@@ -1,47 +1,68 @@
 import { Service } from './service';
-import { Class } from '../../core/entities/class';
-import { DeleteClass } from '../../core/use-cases/class/deleteClass';
-import { GetClass } from '../../core/use-cases/class/getClass';
-import { CreateClass } from '../../core/use-cases/class/setupClass';
-import { UpdateClass } from '../../core/use-cases/class/updateClass';
+import * as ClassUseCases from '../../core/use-cases/class';
 
 /**
  * Retrieves a single Class using it's id and a user's id.
  * This could be simplified to only use the class id.
  */
 export class GetClassService extends Service {
-  constructor(get: GetClass) { super({ get }); }
+  constructor(get: ClassUseCases.GetClass) { super({ get }); }
   // TODO: implement the execute function
+  public execute() {
+    return {
+      
+    }
+  }
 }
 
 /**
  * Retrieves all Classes for a user.
  */
 export class GetUserClassesService extends Service {
-  // TODO: implement constructor with GetUserClasses use case
+  constructor(getUserClasses: ClassUseCases.GetUserClasses) { super({ getUserClasses }); }
   // TODO: implement the execute function
+  public execute() {
+    return {
+      
+    }
+  }
 }
 
 /**
  * Updates a Class's data.
  */
 export class UpdateClassService extends Service {
-  constructor(update: UpdateClass) { super({ update }); }
+  constructor(update: ClassUseCases.UpdateClass) { super({ update }); }
   // TODO: implement the execute function
+  public execute() {
+    return {
+      
+    }
+  }
 }
 
 /**
  * Deletes a Class.
  */
 export class DeleteClassService extends Service {
-  constructor(remove: DeleteClass) { super({ remove }); }
+  constructor(remove: ClassUseCases.DeleteClass) { super({ remove }); }
   // TODO: implement the execute function
+  public execute() {
+    return {
+      
+    }
+  }
 }
 
 /**
  * Creates a new Class.
  */
 export class CreateClassService extends Service {
-  // TODO: implement constructor with CreateClass use case
+  constructor(create: ClassUseCases.CreateClass) { super({ create }); }
   // TODO: implement the execute function
+  public execute() {
+    return {
+      
+    }
+  }
 }
