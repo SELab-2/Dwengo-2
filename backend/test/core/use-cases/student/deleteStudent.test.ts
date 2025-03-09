@@ -2,6 +2,7 @@ import { DeleteStudent, DeleteStudentParams } from "../../../../src/core/use-cas
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
 import { rejects } from "assert";
+import { EntityNotFoundError } from "../../../../src/config/error";
 
 describe("getStudent Use Case", () => {
   let deleteStudentUseCase: DeleteStudent;
@@ -20,7 +21,7 @@ describe("getStudent Use Case", () => {
   });
 
 test("Should throw error if student not found in database", async () => {
-    mockStudentRepository.getStudent.mockResolvedValue(null);
+    mockStudentRepository.getStudent.mockRejectedValue(new EntityNotFoundError("Student not found"));
 
     await expect(deleteStudentUseCase.execute(params)).rejects.toThrow("Student not found");
 });
@@ -31,7 +32,6 @@ test("Should throw error if student not found in database", async () => {
         "  John  ",
         "  Doe  ",
         "hashedpassword123",
-        [],
         "1"
       );
 
