@@ -12,20 +12,23 @@ export class UpdateStudentParams {
   private firstName?: string;
   private familyName?: string;
   private passwordHash?: string;
+  private schoolName?: string;
   private id: string;
 
   constructor(
-    email: string,
-    firstName: string,
-    familyName: string,
-    passwordHash: string,
     id: string,
+    email?: string,
+    firstName?: string,
+    familyName?: string,
+    passwordHash?: string,
+    schoolName?: string,
   ) {
+    this.id = id;
     this.email = email;
     this.firstName = firstName;
     this.familyName = familyName;
     this.passwordHash = passwordHash;
-    this.id = id;
+    this.schoolName = schoolName;
   }
 
   /**
@@ -73,7 +76,7 @@ export class UpdateStudentParams {
       this.firstName ?? student.firstName,
       this.familyName ?? student.familyName,
       this.passwordHash ?? student.passwordHash,
-      [],
+      this.schoolName ?? student.schoolName,
       this.id,
     );
     return updatedStudent;
