@@ -17,11 +17,37 @@ export class DatasourceGroupTypeORM extends IGroupRepository {
 
 
     public create(group: Group): Promise<Group> {
-        throw new Error("Method not implemented.");
+        const groupModel: GroupTypeORM = await this.datasource
+            .getRepository(GroupTypeORM)
+            .save(GroupTypeORM.createGroupTypeORM(group));
+        
     }
+
     public async getById(id: string): Promise<Group|null> {
-        throw new Error("Method not implemented.")
+        // Step 1: Fetch the group model
+        const groupModel : GroupTypeORM|null = await this.datasource.getRepository(GroupTypeORM).findOne({
+            where: { id: id },
+        });
+
+        if (!groupModel) {
+            return null
+        }
+
+        // Step 2: Fetch all students in that group
+        const studentOfGroups : StudentOfGroupTypeORM[] = await this.datasource
+            .getRepository(StudentOfGroupTypeORM)
+            .find({
+                where: { group: groupModel },
+                relations: ["student", "student.student"], // student.student fetches UserTypeORM
+            }
+        );
+
+        // Extract StudentTypeORM models
+        const studentModels : StudentTypeORM[] = studentOfGroups.map(entry => entry.student);
+
+        return this.toEntity(groupModel, studentModels);
     }
+
     public getAll(): Promise<Group[]> {
         throw new Error("Method not implemented.");
     }
