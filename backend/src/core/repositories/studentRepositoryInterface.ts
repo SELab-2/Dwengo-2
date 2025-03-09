@@ -2,7 +2,6 @@
 
 import { Class } from "../entities/class";
 import { Student } from "../entities/student";
-import { DeleteStudentParams } from "../use-cases/student/deleteStudent";
 
 export interface IStudentRepository {
 

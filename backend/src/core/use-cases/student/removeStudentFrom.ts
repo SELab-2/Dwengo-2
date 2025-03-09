@@ -1,5 +1,5 @@
-import { UseCase } from '../../../config/usecase';
-import { StudentRepositoryInterface } from '../../repositories/studentRepositoryInterface';
+import { UseCase } from '../../../config/useCase';
+import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
 
 interface RemoveStudentID {
   studentId: string;
@@ -29,7 +29,7 @@ export class RemoveStudentFromParams {
 export abstract class RemoveStudentFrom
   implements UseCase<RemoveStudentFromParams, object>
 {
-  public constructor(protected studentRepository: StudentRepositoryInterface) {}
+  public constructor(protected studentRepository: IStudentRepository) {}
 
   /**
    * Function that calls the right method of repository.

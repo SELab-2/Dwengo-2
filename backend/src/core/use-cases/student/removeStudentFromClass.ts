@@ -1,9 +1,9 @@
-import { StudentRepositoryInterface } from '../../repositories/studentRepositoryInterface';
+import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
 import { RemoveStudentFrom } from './removeStudentFrom';
 
 // Class used to remove a student from a class.
 export class RemoveStudentFromClass extends RemoveStudentFrom {
-  constructor(studentRepository: StudentRepositoryInterface) {
+  constructor(studentRepository: IStudentRepository) {
     super(studentRepository);
   }
 

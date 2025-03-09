@@ -1,15 +1,15 @@
 import { RemoveStudentFromClass} from '../../../../src/core/use-cases/student/removeStudentFromClass';
 import { RemoveStudentFromParams } from '../../../../src/core/use-cases/student/removeStudentFrom'
-import { StudentRepositoryInterface } from '../../../../src/core/repositories/studentRepositoryInterface';
+import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
 
 describe('RemoveStudentFromClass', () => {
-  let studentRepository: StudentRepositoryInterface;
+  let studentRepository: IStudentRepository;
   let removeStudentFromClass: RemoveStudentFromClass;
 
   beforeEach(() => {
     studentRepository = {
       removeStudentFromClass: jest.fn(),
-    } as unknown as StudentRepositoryInterface;
+    } as unknown as IStudentRepository;
     removeStudentFromClass = new RemoveStudentFromClass(studentRepository);
   });
 

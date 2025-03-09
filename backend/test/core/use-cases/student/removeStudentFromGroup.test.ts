@@ -1,17 +1,17 @@
-import { StudentRepositoryInterface } from "../../../../src/core/repositories/studentRepositoryInterface";
+import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { RemoveStudentFromGroup } from "../../../../src/core/use-cases/student/removeStudentFromGroup";
 import { RemoveStudentFromParams } from "../../../../src/core/use-cases/student/removeStudentFrom";
 
 
 // TODO: Implement tests where we check if student was actually removed from class
 describe("RemoveStudentFromGroup", () => {
-  let mockStudentRepository: jest.Mocked<StudentRepositoryInterface>;
+  let mockStudentRepository: jest.Mocked<IStudentRepository>;
   let removeStudentFromGroup: RemoveStudentFromGroup;
 
   beforeEach(() => {
     mockStudentRepository = {
       removeStudentFromGroup: jest.fn()
-    } as unknown as jest.Mocked<StudentRepositoryInterface>;;
+    } as unknown as jest.Mocked<IStudentRepository>;;
 
     removeStudentFromGroup = new RemoveStudentFromGroup(mockStudentRepository);
   });
