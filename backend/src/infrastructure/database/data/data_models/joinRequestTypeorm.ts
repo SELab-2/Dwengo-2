@@ -40,12 +40,4 @@ export class JoinRequestTypeORM {
         );
     }
 
-    public static createJoinRequestTypeORM(joinRequest: JoinRequest, user: UserTypeORM, class_: ClassTypeORM): JoinRequestTypeORM {
-        const joinRequestTypeORM = new JoinRequestTypeORM();
-        joinRequestTypeORM.requester = user;
-        joinRequestTypeORM.class = class_;
-        joinRequestTypeORM.type = joinRequest.type === JoinRequestType.TEACHER ? JoinAsType.TEACHER : JoinAsType.STUDENT;
-        return joinRequestTypeORM;
-    }
-
 }
