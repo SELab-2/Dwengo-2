@@ -22,4 +22,13 @@ export class EntityNotFoundError extends Error {
         super(message);
         this.message = message;
     }
-}/*Basic interface for errorhandling*/
+}
+
+export class DatabaseEntryNotFoundError extends Error {
+    message: string;
+
+    constructor(message: string) {
+        super(message);
+        this.message = message;
+    }
+}

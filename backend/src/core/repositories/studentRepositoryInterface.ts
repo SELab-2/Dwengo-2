@@ -18,7 +18,8 @@ export interface StudentRepositoryInterface {
      * Function to get the student with the given id.
      * 
      * @param studentId the id of the student to get.
-     * @returns the student with the given id or null if student is not in DB.
+     * @returns the student with the given id.
+     * @throws Error if the student is not found.
      */
     getStudent(studentId: string): Promise<Student>;
 
@@ -26,6 +27,7 @@ export interface StudentRepositoryInterface {
      * Create a new student in the DB.
      * @param student the student to be created
      * @returns the id of the created student in the DB.
+     * @throws Error if the student could not be created.
      */
     createStudent(
         student: Student
