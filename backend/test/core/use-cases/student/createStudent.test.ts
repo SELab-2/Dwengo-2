@@ -2,7 +2,7 @@ import { CreateStudent } from "../../../../src/core/use-cases/student/createStud
 import { Student } from "../../../../src/core/entities/student";
 
 const mockStudentRepository = {
-  findByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
+  checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
   createStudent: jest.fn().mockResolvedValue("mock-student-id"), // Simulate student
 };
 
@@ -41,14 +41,14 @@ describe("CreateStudent", () => {
   });
 
   test("Should throw error if email is already in use", async () => {
-    mockStudentRepository.findByEmail.mockResolvedValue(true);
+    mockStudentRepository.checkByEmail.mockResolvedValue(true);
   
     await expect(
       createStudent.execute(new Student("test@example.com", "John", "Doe", "hashedpassword123", "Oxford", "3"))
     ).rejects.toThrow("Email already in use");
   
-    // Control if findByEmail is correctly called
-    expect(mockStudentRepository.findByEmail).toHaveBeenCalledWith("test@example.com");
+    // Control if checkByEmail is correctly called
+    expect(mockStudentRepository.checkByEmail).toHaveBeenCalledWith("test@example.com");
   });
   
 });
