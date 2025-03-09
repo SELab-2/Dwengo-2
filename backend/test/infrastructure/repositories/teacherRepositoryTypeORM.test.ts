@@ -66,19 +66,19 @@ describe("TeacherRepositoryTypeORM", () => {
 
     test("getTeacherByFirstName", async () => {
         // Call function from repository
-        const returnTeacher: Teacher|null = await datasourceTeacher.getTeacherByFirstName(teacher.first_name);
+        const returnTeacher: Teacher|null = await datasourceTeacher.getTeacherByFirstName(teacher.firstName);
 
         expect(datasourceTeacher.getTeacherByFirstName).toHaveBeenCalledTimes(1);
-        expect(datasourceTeacher.getTeacherByFirstName).toHaveBeenCalledWith(teacher.first_name);
+        expect(datasourceTeacher.getTeacherByFirstName).toHaveBeenCalledWith(teacher.firstName);
         expect(returnTeacher).toEqual(teacher);
     });
 
     test("getTeacherByLastName", async () => {
         // Call function from repository
-        const returnTeacher: Teacher|null = await datasourceTeacher.getTeacherByLastName(teacher.family_name);
+        const returnTeacher: Teacher|null = await datasourceTeacher.getTeacherByLastName(teacher.familyName);
 
         expect(datasourceTeacher.getTeacherByLastName).toHaveBeenCalledTimes(1);
-        expect(datasourceTeacher.getTeacherByLastName).toHaveBeenCalledWith(teacher.family_name);
+        expect(datasourceTeacher.getTeacherByLastName).toHaveBeenCalledWith(teacher.familyName);
         expect(returnTeacher).toEqual(teacher);
     });
 

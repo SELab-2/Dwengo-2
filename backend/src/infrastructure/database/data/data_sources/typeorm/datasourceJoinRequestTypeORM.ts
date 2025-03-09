@@ -11,11 +11,11 @@ export class DatasourceJoinRequestTypeORM extends IDatasourceJoinRequest {
         // Look up the id of the requester
         let id: string;
 
-        if(joinRequest.getType() === JoinRequestType.TEACHER) {
+        if(joinRequest.type === JoinRequestType.TEACHER) {
             const teacher: TeacherTypeORM|null = await this.datasource
                 .getRepository(TeacherTypeORM)
                 .findOne({
-                    where: {id: joinRequest.getRequester()},
+                    where: {id: joinRequest.requester},
                     relations: ["teacher"]
                 });
             id = teacher?.teacher.id || "";
@@ -23,14 +23,14 @@ export class DatasourceJoinRequestTypeORM extends IDatasourceJoinRequest {
             const student: StudentTypeORM|null = await this.datasource
                 .getRepository(StudentTypeORM)
                 .findOne({
-                    where: {id: joinRequest.getRequester()},
+                    where: {id: joinRequest.requester},
                     relations: ["student"]
                 });
             id = student?.student.id || "";
         }
 
         if(id === "") {
-            throw new DatabaseEntryNotFoundError(`Student or teacher with id ${joinRequest.getRequester()} not found`);
+            throw new DatabaseEntryNotFoundError(`Student or teacher with id ${joinRequest.requester} not found`);
         }
 
         // Create partial object
@@ -38,8 +38,8 @@ export class DatasourceJoinRequestTypeORM extends IDatasourceJoinRequest {
             .getRepository(JoinRequestTypeORM)
             .create({
                 requester: {id: id},
-                class: {id: joinRequest.getClassId()},
-                type: joinRequest.getType() === JoinRequestType.TEACHER ? JoinAsType.TEACHER : JoinAsType.STUDENT
+                class: {id: joinRequest.classId},
+                type: joinRequest.type === JoinRequestType.TEACHER ? JoinAsType.TEACHER : JoinAsType.STUDENT
             });
 
         // Save that partial object

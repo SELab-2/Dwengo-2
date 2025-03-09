@@ -58,17 +58,17 @@ describe("DatasourceClassTypeORM", () => {
     });
 
     test("createJoinRequest", async () => {
-        const teacherModel = await teacherRepository.findOne({ where: { id: joinRequest.getId() }, relations: ["teacher"] });
+        const teacherModel = await teacherRepository.findOne({ where: { id: joinRequest.id }, relations: ["teacher"] });
 
         expect(teacherRepository.findOne).toHaveBeenCalledWith({
-            where: { id: joinRequest.getId() },
+            where: { id: joinRequest.id },
             relations: ["teacher"],
         });
 
         const joinRequestModel = joinRequestRepository.create({
             requester: {id: teacher.id!},
-            class: {id: joinRequest.getClassId()},
-            type: joinRequest.getType() === JoinRequestType.TEACHER ? JoinAsType.TEACHER : JoinAsType.STUDENT
+            class: {id: joinRequest.classId},
+            type: joinRequest.type === JoinRequestType.TEACHER ? JoinAsType.TEACHER : JoinAsType.STUDENT
         });
 
         expect(joinRequestRepository.create).toHaveBeenCalled();
@@ -79,10 +79,10 @@ describe("DatasourceClassTypeORM", () => {
     });
 
     test("getJoinRequestById", async () => {
-        const joinRequestModel = await joinRequestRepository.findOne({ where: { id: joinRequest.getId() }, relations: ["requester", "class"] });
+        const joinRequestModel = await joinRequestRepository.findOne({ where: { id: joinRequest.id }, relations: ["requester", "class"] });
 
         expect(joinRequestRepository.findOne).toHaveBeenCalledWith({
-            where: { id: joinRequest.getId() },
+            where: { id: joinRequest.id },
             relations: ["requester", "class"],
         });
     });
@@ -104,9 +104,9 @@ describe("DatasourceClassTypeORM", () => {
     });
 
     test("deleteJoinRequestById", async () => {
-        await joinRequestRepository.delete({ id: joinRequest.getId() });
+        await joinRequestRepository.delete({ id: joinRequest.id });
 
-        expect(joinRequestRepository.delete).toHaveBeenCalledWith({ id: joinRequest.getId()});
+        expect(joinRequestRepository.delete).toHaveBeenCalledWith({ id: joinRequest.id});
     });
 
 });

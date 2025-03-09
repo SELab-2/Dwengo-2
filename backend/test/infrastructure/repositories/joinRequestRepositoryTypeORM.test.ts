@@ -42,34 +42,34 @@ describe("JoinRequestRepositoryTypeORM", () => {
 
     test("getJoinRequestById", async () => {
         // Call function from repository
-        const returnJoinRequest: JoinRequest|null = await datasourceJoinRequest.getJoinRequestById(joinRequest.getId()!);
+        const returnJoinRequest: JoinRequest|null = await datasourceJoinRequest.getJoinRequestById(joinRequest.id!);
         
         expect(datasourceJoinRequest.getJoinRequestById).toHaveBeenCalledTimes(1);
-        expect(datasourceJoinRequest.getJoinRequestById).toHaveBeenCalledWith(joinRequest.getId());
+        expect(datasourceJoinRequest.getJoinRequestById).toHaveBeenCalledWith(joinRequest.id);
         expect(returnJoinRequest).toEqual(joinRequest);
     });
 
     test("getJoinRequestByRequesterId", async () => {
         // Call function from repository
-        const returnJoinRequests: JoinRequest[] = await datasourceJoinRequest.getJoinRequestByRequesterId(joinRequest.getRequester());
+        const returnJoinRequests: JoinRequest[] = await datasourceJoinRequest.getJoinRequestByRequesterId(joinRequest.requester);
         
         expect(datasourceJoinRequest.getJoinRequestByRequesterId).toHaveBeenCalledTimes(1);
-        expect(datasourceJoinRequest.getJoinRequestByRequesterId).toHaveBeenCalledWith(joinRequest.getRequester());
+        expect(datasourceJoinRequest.getJoinRequestByRequesterId).toHaveBeenCalledWith(joinRequest.requester);
         expect(returnJoinRequests).toEqual([joinRequest, joinRequest]);
     });
 
     test("getJoinRequestByClassId", async () => {
         // Call function from repository
-        const returnJoinRequests: JoinRequest[] = await datasourceJoinRequest.getJoinRequestByClassId(joinRequest.getClassId());
+        const returnJoinRequests: JoinRequest[] = await datasourceJoinRequest.getJoinRequestByClassId(joinRequest.classId);
         
         expect(datasourceJoinRequest.getJoinRequestByClassId).toHaveBeenCalledTimes(1);
-        expect(datasourceJoinRequest.getJoinRequestByClassId).toHaveBeenCalledWith(joinRequest.getClassId());
+        expect(datasourceJoinRequest.getJoinRequestByClassId).toHaveBeenCalledWith(joinRequest.classId);
         expect(returnJoinRequests).toEqual([joinRequest, joinRequest]);
     });
 
     test("deleteJoinRequestById", async () => {
         // Call function from repository
-        await datasourceJoinRequest.deleteJoinRequestById(joinRequest.getId()!);
+        await datasourceJoinRequest.deleteJoinRequestById(joinRequest.id!);
 
         expect(datasourceJoinRequest.deleteJoinRequestById).toHaveBeenCalledTimes(1);
     });

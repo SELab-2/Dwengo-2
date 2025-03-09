@@ -11,16 +11,16 @@ export abstract class IJoinRequestRepoistory extends AbstractRepository {
      * Insert a new join request in the repository. The `id` field of the join request should be empty.
      * The `id` field will be set by the repository to a uuid.
      * 
-     * Throws an `EntityNotFoundError` when the requester id does not exist.
-     * 
      * @param joinRequest The new join request to insert.
+     * @throws EntityNotFoundError when the requester id in `joinRequest` does not exist.
      * @returns A promise that resolves to the inserted join request.
      */
     public abstract createJoinRequest(joinRequest: JoinRequest): Promise<JoinRequest>;
 
     /**
-     * Get a join request by its id. Throws an `EntityNotFoundError` when no join request is found.
+     * Get a join request by its id.
      * @param id The id of the join request
+     * @throws EntityNotFoundError when no join request is found.
      * @returns A promise that resolves to the join request with the given id or null if no results are found.
      */
     public abstract getJoinRequestById(id: string): Promise<JoinRequest>;

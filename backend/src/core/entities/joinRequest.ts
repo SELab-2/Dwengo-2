@@ -4,48 +4,38 @@ export enum JoinRequestType {
 }
 
 export class JoinRequest {
-
     public constructor(
-        private requester: string,
-        private classId: string,
-        private type: JoinRequestType,
-        private id?: string
-    ) {}
+        private _requester: string,
+        private _classId: string,
+        private _type: JoinRequestType,
+        private _id?: string,
+    ){}
 
-    // Getter and Setter for requester
-    public getRequester(): string {
-        return this.requester;
+    //getters
+    public get requester(): string {
+        return this._requester;
+    }
+    public get classId(): string {
+        return this._classId;
+    }
+    public get type(): JoinRequestType {
+        return this._type;
+    }
+    public get id(): string | undefined {
+        return this._id;
     }
 
-    public setRequester(requester: string): void {
-        this.requester = requester;
+    //setters
+    public set requester(newRequester: string) {
+        this._requester = newRequester;
     }
-
-    // Getter and Setter for classId
-    public getClassId(): string {
-        return this.classId;
+    public set classId(newClassId: string) {
+        this._classId = newClassId;
     }
-
-    public setClassId(classId: string): void {
-        this.classId = classId;
+    public set type(newType: JoinRequestType) {
+        this._type = newType;
     }
-
-    // Getter and Setter for type
-    public getType(): JoinRequestType {
-        return this.type;
+    public set id(newId: string) {
+        this._id = newId;
     }
-
-    public setType(type: JoinRequestType): void {
-        this.type = type;
-    }
-
-    // Getter and Setter for id
-    public getId(): string | undefined {
-        return this.id;
-    }
-
-    public setId(id: string | undefined): void {
-        this.id = id;
-    }
-    
 }

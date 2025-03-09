@@ -44,7 +44,7 @@ export class JoinRequestTypeORM {
         const joinRequestTypeORM = new JoinRequestTypeORM();
         joinRequestTypeORM.requester = user;
         joinRequestTypeORM.class = class_;
-        joinRequestTypeORM.type = joinRequest.getType() === JoinRequestType.TEACHER ? JoinAsType.TEACHER : JoinAsType.STUDENT;
+        joinRequestTypeORM.type = joinRequest.type === JoinRequestType.TEACHER ? JoinAsType.TEACHER : JoinAsType.STUDENT;
         return joinRequestTypeORM;
     }
 
