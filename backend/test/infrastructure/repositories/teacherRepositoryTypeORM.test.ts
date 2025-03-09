@@ -14,7 +14,8 @@ describe("TeacherRepositoryTypeORM", () => {
     beforeEach(() => {
         datasourceMock = {
             getDatasourceTeacher: jest.fn(), // TODO: should work?
-            getDatasourceClass: jest.fn()
+            getDatasourceClass: jest.fn(),
+            getDatasourceStudent: jest.fn()
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),
