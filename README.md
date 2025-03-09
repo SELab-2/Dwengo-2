@@ -49,8 +49,51 @@ If you want to develop inside one of the containers,
 you can attach your running VSCode session to this container using ``CTRL + SHIFT + P``,
 then selecting ``Attach to running container``.
 
-### Caveats and Debug tips:
+### Debugging during development
 
-- It is important to **pay attention to what ports you bind the containers**.
-The [compose.yaml](./compose.yaml) file uses a **static binding to the default ports**,
-so it is important to note that you can **only start one instance of each service** in this way **at the same time**.
+The project's setup allows for simplified debugging during development.
+When you work on a feature,
+we expect you to do so by running the containers and attaching to the container for development.
+Encountering issues with the toolchain can then be solved by the following checklist:
+
+#### Latest containers
+
+- **stop all running instances** of the Dwengo-containers by performing the following command from the root of the project's directory structure
+
+```bash
+docker compose down
+```
+
+- **clean all images and containers**, if you don't have any other Docker images on your system, you can do this very quickly by using the command below. *Pro tip: if you don't have any other Docker Containers you actively have running, you can set this as a(n) (ana)cron job on Linux systems. If you then always pull the latest updates before spinning up the containers, you will always have the latest versions*.
+
+```bash
+docker system prune -f -a
+```
+
+- **rebuild the containers from their latest image** by pulling the latest commits to your local repository and using
+
+```bash
+docker compose up
+```
+
+#### Develop inside the container
+
+Make sure you are developing inside the container, if you haven't installed all it's requirements and dependencies locally.
+
+#### Install dependencies
+
+If you do choose to work on your local system, just run the command below from the backend's root folder (`/backend`):
+
+```bash
+npm install
+```
+
+#### Post an issue
+
+If you still encounter issues, feel free to post an issue on our issues page.
+You may always assign our Tech Lead (Bram Comyn).
+Make sure to specify the following:
+
+- current branch
+- your OS/whether you're working inside the container
+- screenshot or stack trace of any errors you are facing
