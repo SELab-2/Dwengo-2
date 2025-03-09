@@ -2,11 +2,9 @@
 
 import express from "express";
 import dotenv from "dotenv";
-import { IDatasource } from "./infrastructure/database/data/data_sources/datasourceInterface";
 import { DatasourceTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceTypeORM";
-import { ClassRepositoryTypeORM } from "./infrastructure/repositories/classRepositoryTypeORM";
-import { DatasourceFactoryTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM";
-import { Class } from "./core/entities/class";
+import { IAssignmentRepository } from "./core/repositories/assignmentRepositoryInterface";
+import { AssignmentRepositoryTypeORM } from "./infrastructure/repositories/assignmentRepositoryTypeORM";
 
 dotenv.config();
 
@@ -15,17 +13,15 @@ const port = process.env.PORT || 3000;
 
 // TODO: implement backend application
 
-// Initialize the datasource
-const datasource: IDatasource = new DatasourceTypeORM();
+// Initialize a datasource
+const datasource = new DatasourceTypeORM();
 
-const repo = new ClassRepositoryTypeORM(
-  new DatasourceFactoryTypeORM()
-);
-repo.createClass(new Class(
-  "Programmeren",
-  "Voor mensen die niet kunnen programmeren",
-  "Beginner",
-));
+// TODO: remove, this is a stupid small test function
+async function test() {
+  const assignmentRepo: IAssignmentRepository = new AssignmentRepositoryTypeORM();
+
+  console.log(await assignmentRepo.getAssignmentsByLearningPathId("123"));
+}
 
 
 app.get('/', (req, res) => {
