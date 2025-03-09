@@ -1,17 +1,17 @@
 import { StudentRepositoryInterface } from '../../repositories/studentRepositoryInterface';
 import { RemoveStudentFrom } from './removeStudentFrom';
 
-// Class used to remove a student from a class.
-export class RemoveStudentFromClass extends RemoveStudentFrom {
+// Class used to remove a student from a group.
+export class RemoveStudentFromGroup extends RemoveStudentFrom {
   constructor(studentRepository: StudentRepositoryInterface) {
     super(studentRepository);
   }
 
   /**
-   * Function for removing student from a class.
+   * Function for removing student from a group.
    *
    * @param studentId id of the student to be removed.
-   * @param otherId id of the class where to be removed from.
+   * @param otherId id of the group where to be removed from.
    *
    * @returns void.
    */
@@ -19,6 +19,6 @@ export class RemoveStudentFromClass extends RemoveStudentFrom {
     studentId: string,
     otherId: string,
   ): Promise<void> {
-    await this.studentRepository.removeStudentFromClass(studentId, otherId);
+    await this.studentRepository.removeStudentFromGroup(studentId, otherId);
   }
 }
