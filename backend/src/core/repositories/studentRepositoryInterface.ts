@@ -2,8 +2,47 @@
 
 import { Class } from '../entities/class';
 import { Student } from '../entities/student';
+export interface IStudentRepository {
 
-export interface StudentRepositoryInterface {
+    /**
+     * Function to delete a student record in the DB.
+     * 
+     * @param student the student to delete.
+     */
+    deleteStudent(student: string): Promise<void>;
+
+    /**
+     * Function to remove a student from a class.
+     * 
+     * @param studentId ID of student to be removed from class
+     * @param classId ID of class from which student is to be removed
+     * @returns void
+     * 
+     * @throws Error if student is not in class
+     * @throws Error if class does not exist
+     */
+    removeStudentFromClass(studentId: string, classId: string): Promise<void>;
+
+    /**
+    * Function to remove a student from a group.
+    * 
+    * @param studentId ID of student to be removed from group
+    * @param groupId ID of group from which student is to be removed
+    * @returns void
+    * 
+    * @throws Error if student is not in group
+    * @throws Error if group does not exist
+    */
+    removeStudentFromGroup(studentId: string, groupId: string): Promise<void>;
+    /**
+     * Function to update a student's info in the DB.
+     * 
+     * @param student the student object with info to be updated.
+     * @returns void
+     * @throws Error if the student is not present in the DB.
+     */
+    updateStudent(student: Student): Promise<void>;
+
   /**
    * Function to get the student with the given id.
    *
