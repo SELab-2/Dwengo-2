@@ -1,29 +1,31 @@
-export class Group {
-    public constructor(
-        private _classId: string,
-        private _members: string[], // List of student IDs
-        private _id?: string,
-    ){}
+import { Student } from './student';
 
-    // Getters
-    public get classId():string{
+export class Group {
+    constructor(
+        private readonly _classId: string,
+        private _members: Student[],
+        private readonly _id?: string,
+    ) {}
+
+    public get classId(): string {
         return this._classId;
     }
-    public get members():string[]{
-        return this._members;
+
+    public get members(): Student[] {
+        return [...this._members];  // Prevent direct modification
     }
-    public get id():string|undefined{
+
+    public get id(): string | undefined {
         return this._id;
     }
 
-    // Setters
-    public set classId(newClassId:string){
-        this._classId = newClassId;
+    public addMember(student: Student): void {
+        if (!this._members.some(m => m.id === student.id)) {
+            this._members.push(student);
+        }
     }
-    public set members(newMembers:string[]){
-        this._members = newMembers;
-    }
-    public set id(newId:string){
-        this._id = newId;
+
+    public removeMember(studentId: string): void {
+        this._members = this._members.filter(m => m.id !== studentId);
     }
 }
