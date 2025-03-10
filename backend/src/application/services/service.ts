@@ -1,33 +1,18 @@
-// TODO - Add error handler
-// TODO - Replace unknown when abstract type is defined for usecases
-
-import { ResponseBody } from "../types";
-
 /**
- * Service is an abstract class defining the base structure of all service implementations.
- * Services provide a clean interface between controllers and use cases, encapsulating
- * business logic execution while allowing for composition of use cases.
- *
- * Each service implementation should focus on a single responsibility, with its
- * use cases injected through the constructor for testability.
- *
- * @template ServiceOutput The type returned by the service's execute method
+ * Service is an abstract class defining the base structure of a service.
+ * It is used to define the structure of a service and will provide common functionality to all services.
+ * A service is meant to group together related use cases and provide a single point of access to them in the controllers.
  */
 export abstract class Service {
-  protected usecases: Record<string, unknown>;
-
-  public constructor(usecases: Record<string, unknown>) {
-    this.usecases = usecases;
+  public constructor(usecases: object) {
+    // TODO: add an object with generic use cases
   }
 
   /**
-   * Executes the service's primary function with the provided arguments.
-   * Each service implementation defines its own parameter signature.
-   *
-   * @param args Arguments required by the specific service implementation
-   * @returns Result of type ServiceOutput as defined by the implementing class
+   * Execute the service.   * 
+   * TODO: add more specific return type
    */
-  public abstract execute(...args: unknown[]): ResponseBody;
+  public abstract execute(): void|object;
 }
 
 export type Services = Record<string, Service>;

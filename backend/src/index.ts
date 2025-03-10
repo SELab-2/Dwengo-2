@@ -1,6 +1,6 @@
 // Application entry point
+
 import express from "express";
-import cors from 'cors';
 import dotenv from "dotenv";
 import { DatasourceTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceTypeORM";
 import { IAssignmentRepository } from "./core/repositories/assignmentRepositoryInterface";
@@ -8,34 +8,7 @@ import { AssignmentRepositoryTypeORM } from "./infrastructure/repositories/assig
 
 dotenv.config();
 
-// Initialize the datasource
-const datasource: IDatasource = new DatasourceTypeORM();
-
-const repo = new ClassRepositoryTypeORM(
-  new DatasourceFactoryTypeORM()
-);
-repo.createClass(new Class(
-  "Programmeren",
-  "Voor mensen die niet kunnen programmeren",
-  "Beginner",
-));
-
-
-// Initialize repositories
-const repos = {
-};
-
-// Initialize services with use cases
-const services = {
-};
-
-// Initialize controllers
-const controllers = {
-};
-
 const app = express();
-app.use(cors());
-app.use(express.json());
 const port = process.env.PORT || 3000;
 
 // TODO: implement backend application
@@ -50,7 +23,6 @@ async function test() {
   console.log(await assignmentRepo.getAssignmentsByLearningPathId("123"));
 }
 
-// Register routes
 
 app.get('/', (req, res) => {
   res.send("Hello, World!\n");

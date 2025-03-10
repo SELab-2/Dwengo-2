@@ -10,7 +10,6 @@ import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { TeacherGroupAssignmentTypeORM } from "../../data_models/teacherGroupAssignmentTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { AssignmentAnswerTypeORM } from "../../data_models/assignmentAnswerTypeorm";
-import { StudentProgressTypeORM } from "../../data_models/studentProgressTypeorm";
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
 import { JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
 import { AssignmentGroupTypeORM } from "../../data_models/assignmentForGroupTypeorm";
@@ -67,7 +66,6 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             QuestionThreadTypeORM,
             ThreadMessageTypeORM,
             AssignmentAnswerTypeORM,
-            StudentProgressTypeORM
         ],
     ): DatasourceTypeORMConnectionSettings {
         return new DatasourceTypeORMConnectionSettings(

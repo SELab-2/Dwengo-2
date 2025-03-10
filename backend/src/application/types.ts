@@ -1,4 +1,4 @@
-/* ************* HTTP Protocol Types ************* */
+// TODO - Move some types to proper subdirectory like routes etc
 
 /**
  * The HTTP methods as defined in: https://www.rfc-editor.org/rfc/rfc9110.html
@@ -23,8 +23,6 @@ export enum ErrorCode {
   CONFLICT      = "CONFLICT"      ,
 }
 
-/* ************* Request/Response Types ************* */
-
 export type RequestHeaders = Record<string, string>;
 export type ResponseHeaders = Record<string, string>;
 export type RequestBody = Record<string, unknown>;
@@ -41,6 +39,7 @@ export interface Request {
   body: object;
 }
 
+
 /**
  * Interface defining an HTTP response object.
  * Based on the standardized HTTP Response structure.
@@ -51,8 +50,6 @@ export interface Response {
   body: ResponseBody;
   status: number;
 }
-
-/* ************* Error Handling Types ************* */
 
 /**
  * Interface defining a structured error object for API responses.
@@ -65,12 +62,10 @@ export interface Response {
  * @see {@link Controller.handleError} for error handling implementation
  */
 export interface ApiError {
-  code: ErrorCode; // e.g., 'BAD_REQUEST', 'NOT_FOUND'
+  code: string; // e.g., 'BAD_REQUEST', 'NOT_FOUND'
   message: string; // Human-readable error message
   [key: string]: unknown; // Optional additional properties (for flexibility)
 }
-
-/* ************* Path/Routing Types ************* */
 
 /**
  * Interface representing path parameters extracted from URL segments.
@@ -81,8 +76,6 @@ export interface PathParams {
   parent?: string;
   id?: string;
   idParent?: string;
-  idType?: string;
-  idParentType?: string;
 }
 
 /**
@@ -94,8 +87,7 @@ export interface RoutePattern {
   parent?: string;
   hasId: boolean;
   hasParentId: boolean;
-  extractor:(req: Request) => object;
-  handler: (req: Request, data: object) => Response;
+  handler: (req: Request) => Response;
 }
 
 export type RouteHandlers = Partial<Record<HttpMethod, RoutePattern[]>>;

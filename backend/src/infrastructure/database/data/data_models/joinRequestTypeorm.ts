@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, Column } from "typeorm"
 import { UserTypeORM } from "./userTypeorm"
 import { ClassTypeORM } from "./classTypeorm"
 import { JoinRequest, JoinRequestType } from "../../../../core/entities/joinRequest"
@@ -12,7 +12,7 @@ export enum JoinAsType {
 export class JoinRequestTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
-
+    
     @OneToOne(() => UserTypeORM)
     @JoinColumn({ name: "requester_id" })
     requester!: UserTypeORM
