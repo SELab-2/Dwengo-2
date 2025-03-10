@@ -20,7 +20,7 @@ export abstract class IRepository<Entity> extends AbstractRepository {
      * @throws EntityNotFoundError when no entity is found.
      * @returns A promise that resolves to the entity with the given id or null if no results are found.
      */
-    public abstract getById(id: string): Promise<Entity|null>;
+    public abstract getById(id: string): Promise<Entity>;
 
     /**
      * Update an existing entity in the repository.

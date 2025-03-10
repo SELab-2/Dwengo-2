@@ -1,15 +1,18 @@
 import { DataSource } from "typeorm";
-import { IGroupRepository } from "../../../../core/repositories/groupRepositoryInterface";
+import { Group } from "../../../../core/entities/group";
 
-/**
- * Interface for the teacher data source.
- */
-export abstract class IDatasourceGroup extends IGroupRepository{
+export abstract class IDatasourceGroup {
 
     public constructor(
         protected datasource: DataSource
-    ) {
-        super();
-    }
+    ) {}
+
+    public abstract create(entity: Group): Promise<Group>;
+
+    public abstract getById(id: string): Promise<Group|null>;
+
+    public abstract update(entity: Group): Promise<Group>;
+
+    public abstract delete(entity: Group): Promise<void>;
 
 }
