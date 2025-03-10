@@ -4,6 +4,7 @@ import { Class } from "../entities/class";
 import { Student } from "../entities/student";
 
 export interface IStudentRepository {
+    checkByEmail(email: string): boolean | PromiseLike<boolean>;
 
     /**
      * Function to delete a student record in the DB.
