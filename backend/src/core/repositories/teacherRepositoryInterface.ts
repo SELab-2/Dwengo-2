@@ -8,6 +8,14 @@ import { AbstractRepository } from "./AbstractRepository";
  */
 export abstract class ITeacherRepository extends AbstractRepository {
 
+
+    /**
+     * Check if a teacher with the given email exists in the repository.
+     * @param email The email to check for.
+     * @returns A promise that resolves to true if a teacher with the given email exists, false otherwise.
+     */
+    public abstract checkTeacherByEmail(email: string): boolean | PromiseLike<boolean>;
+
     /**
      * Insert a new teacher in the repository. The `id` field of the teacher should be empty.
      * The `id` field will be set by the repository to a uuid.
