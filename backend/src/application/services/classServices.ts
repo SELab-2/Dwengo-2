@@ -6,11 +6,11 @@ import * as ClassUseCases from '../../core/use-cases/class';
  * This could be simplified to only use the class id.
  */
 export class GetClassService extends Service {
-  constructor(get: ClassUseCases.GetClass) { super({ get }); }
+  constructor(get: ClassUseCases.GetClassByClassId) { super({ get }); }
   // TODO: implement the execute function
   public execute() {
     return {
-      
+
     }
   }
 }
@@ -23,7 +23,7 @@ export class GetUserClassesService extends Service {
   // TODO: implement the execute function
   public execute() {
     return {
-      
+
     }
   }
 }
@@ -36,7 +36,7 @@ export class UpdateClassService extends Service {
   // TODO: implement the execute function
   public execute() {
     return {
-      
+
     }
   }
 }
@@ -49,7 +49,7 @@ export class DeleteClassService extends Service {
   // TODO: implement the execute function
   public execute() {
     return {
-      
+
     }
   }
 }
@@ -62,7 +62,7 @@ export class CreateClassService extends Service {
   // TODO: implement the execute function
   public execute() {
     return {
-      
+
     }
   }
 }

@@ -6,7 +6,7 @@ import * as ClassUseCases from '../../../src/core/use-cases/class';
 
 // mock the services used by the controller
 class MockGetClassService extends ClassServices.GetClassService {
-  constructor() { super({} as unknown as ClassUseCases.GetClass); }
+  constructor() { super({} as unknown as ClassUseCases.GetClassByClassId); }
   public execute = jest.fn();
 }
 
