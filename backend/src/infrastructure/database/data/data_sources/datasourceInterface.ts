@@ -1,6 +1,7 @@
 import { IDatasourceAssignment } from "./datasourceAssignmentInterface";
 import { IDatasourceClass } from "./datasourceClassInterface";
 import { IDatasourceJoinRequest } from "./datasourceJoinRequestInterface";
+import { IDatasourceMessage } from "./datasourceMessageInterface";
 import { IDatasourceTeacher } from "./datasourceTeacherInterface";
 
 /**
@@ -31,5 +32,11 @@ export interface IDatasource {
      * @returns A promise that resolves to an instance of `IDatasourceAssignment`.
      */
     getDatasourceAssignment(): Promise<IDatasourceAssignment>;
+
+    /**
+     * Retrieves the data source for messages.
+     * @returns A promise that resolves to an instance of `IDatasourceMessage`.
+     */
+    getDatasourceMessage(): Promise<IDatasourceMessage>;
 
 }
