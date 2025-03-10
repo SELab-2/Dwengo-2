@@ -1,48 +1,24 @@
-import { UseCase } from '../../../config/usecase';
-import { StudentRepositoryInterface } from '../../repositories/studentRepositoryInterface';
+import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
+import { RemoveStudentFrom } from './removeStudentFrom';
 
-interface RemoveStudentID {
-  studentId: string;
-  classId: string;
-}
-
-
-// Class to be used by execute method.
-export class RemoveStudentParams {
-  private studentId: string;
-  private classId: string;
-  constructor(studentId: string, classId: string) {
-    this.studentId = studentId;
-    this.classId = classId;
+// Class used to remove a student from a class.
+export class RemoveStudentFromClass extends RemoveStudentFrom {
+  constructor(studentRepository: IStudentRepository) {
+    super(studentRepository);
   }
 
   /**
-   * Function that gives back an object containing studentId and classId
-   *  
-   * @returns object containing the studentId and classId
-   */
-  fromObject(): RemoveStudentID {
-    return { studentId: this.studentId, classId: this.classId };
-  }
-}
-
-export class RemoveStudentFromClass
-  implements UseCase<RemoveStudentParams, object>
-{
-  public constructor(private studentRepository: StudentRepositoryInterface) {}
-
-  /**
-   * Removes a student from a class.
+   * Function for removing student from a class.
    *
-   * @param input RemoveStudentParams object containing studentId and classId
-   * @returns empty object no extra info needed
+   * @param studentId id of the student to be removed.
+   * @param otherId id of the class where to be removed from.
+   *
+   * @returns void.
    */
-  async execute(input: RemoveStudentParams): Promise<object> {
-    const id: RemoveStudentID = input.fromObject();
-    await this.studentRepository.removeStudentFromClass(
-      id.studentId,
-      id.classId,
-    );
-    return {};
+  public async removeStudent(
+    studentId: string,
+    otherId: string,
+  ): Promise<void> {
+    await this.studentRepository.removeStudentFromClass(studentId, otherId);
   }
 }

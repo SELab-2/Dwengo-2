@@ -1,10 +1,10 @@
 import { DatabaseEntryNotFoundError, EntityNotFoundError } from "../../config/error";
 import { JoinRequest } from "../../core/entities/joinRequest";
-import { IJoinRequestRepoistory } from "../../core/repositories/joinRequestRepositoryInterface";
+import { IJoinRequestRepository } from "../../core/repositories/joinRequestRepositoryInterface";
 import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 import { IDatasourceJoinRequest } from "../database/data/data_sources/datasourceJoinRequestInterface";
 
-export class JoinRequestRepositoryTypeORM extends IJoinRequestRepoistory {
+export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
 
     private datasource: IDatasource;
     private datasourceJoinRequest: Promise<IDatasourceJoinRequest>

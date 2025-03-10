@@ -5,7 +5,7 @@ import { AbstractRepository } from "./AbstractRepository";
  * Interface for join request repositories.
  * Allows CRUD operations on join request entities.
  */
-export abstract class IJoinRequestRepoistory extends AbstractRepository {
+export abstract class IJoinRequestRepository extends AbstractRepository {
 
     /**
      * Insert a new join request in the repository. The `id` field of the join request should be empty.
