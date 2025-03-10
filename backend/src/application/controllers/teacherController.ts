@@ -1,7 +1,8 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
-import * as TeacherServices from '../services/teacherServices';
+import * as TeacherServices from '../../core/services/teacher/index';
 import { defaultExtractor } from './helpersExpress';
+
 
 /**
  * Controller responsible for teacher-related API endpoints including user management
@@ -13,10 +14,10 @@ import { defaultExtractor } from './helpersExpress';
  */
 export class TeacherController extends Controller {
   constructor(
-    get: TeacherServices.GetTeacherService,
-    update: TeacherServices.UpdateTeacherService,
-    remove: TeacherServices.DeleteTeacherService,
-    removeClassTeacher: TeacherServices.RemoveTeacherFromClassService
+    get: TeacherServices.GetTeacher,
+    update: TeacherServices.UpdateTeacher,
+    remove: TeacherServices.DeleteTeacher,
+    removeClassTeacher: TeacherServices.RemoveTeacherFromClass
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [

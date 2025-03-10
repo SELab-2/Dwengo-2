@@ -2,7 +2,7 @@ import { mockApp } from "./mocks";
 import { groupRoutes } from "../../../src/application/routes";
 import { GroupController } from "../../../src/application/controllers/groupController";
 import * as GroupServices from "../../../src/application/services/groupServices";
-import * as GroupUseCases from "../../../src/core/use-cases/group";
+import * as GroupUseCases from "../../../src/core/services/group";
 
 // mock the services used by the controller
 class MockGetGroupService extends GroupServices.GetGroupService {

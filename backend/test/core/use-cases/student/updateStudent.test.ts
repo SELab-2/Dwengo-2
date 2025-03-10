@@ -1,12 +1,12 @@
 import {
   UpdateStudent,
   UpdateStudentParams,
-} from '../../../../src/core/use-cases/student/updateStudent';
+} from '../../../../src/core/services/student/updateStudent';
 import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
 import { Student } from '../../../../src/core/entities/student';
 import { ErrorCode } from '../../../../src/application/types';
 
-describe('UpdateStudent Use Case', () => {
+describe('UpdateStudent Service', () => {
   let studentRepository: jest.Mocked<IStudentRepository>;
   let updateStudent: UpdateStudent;
 

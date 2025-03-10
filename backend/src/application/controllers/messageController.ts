@@ -1,7 +1,8 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as MessageServices from '../services/messageServices';
+import * as MessageServices from '../../core/services/message/index';
+
 
 /**
  * Controller responsible for message-related API endpoints including CRUD operations
@@ -15,11 +16,11 @@ import * as MessageServices from '../services/messageServices';
  */
 export class MessageController extends Controller {
   constructor(
-    get: MessageServices.GetMessageService,
-    getQuestionMessages: MessageServices.GetQuestionMessagesService,
-    update: MessageServices.UpdateMessageService,
-    remove: MessageServices.DeleteMessageService,
-    create: MessageServices.CreateMessageService
+    get: MessageServices.GetMessage,
+    getQuestionMessages: MessageServices.GetQuestionMessages,
+    update: MessageServices.UpdateMessage,
+    remove: MessageServices.DeleteMessage,
+    create: MessageServices.CreateMessage
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [

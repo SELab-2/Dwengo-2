@@ -2,7 +2,7 @@ import { mockApp } from "./mocks";
 import { questionThreadRoutes } from "../../../src/application/routes";
 import { QuestionController } from "../../../src/application/controllers/questionController";
 import * as QuestionServices from "../../../src/application/services/questionServices";
-import * as QuestionUseCases from "../../../src/core/use-cases/question_thread";
+import * as QuestionUseCases from "../../../src/core/services/question_thread";
 
 // mock the services used by the controller
 class MockGetQuestionService extends QuestionServices.GetQuestionService {

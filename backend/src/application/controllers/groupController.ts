@@ -1,7 +1,8 @@
 import { Controller } from './controllerExpress';
 import { RouteHandlers, HttpMethod, Request } from '../types';
-import * as GroupServices from '../services/groupServices';
+import * as GroupServices from '../../core/services/group/index';
 import { defaultExtractor } from './helpersExpress';
+
 
 /**
  * Controller responsible for group-related API endpoints including CRUD operations
@@ -15,12 +16,12 @@ import { defaultExtractor } from './helpersExpress';
  */
 export class GroupController extends Controller {
   constructor(
-    get: GroupServices.GetGroupService,
-    getUserGroups: GroupServices.GetUserGroupsService,
-    getClassGroups: GroupServices.GetClassGroupsService,
-    update: GroupServices.UpdateGroupService,
-    remove: GroupServices.DeleteGroupService,
-    create: GroupServices.CreateGroupService
+    get: GroupServices.GetGroup,
+    getUserGroups: GroupServices.GetUserGroups,
+    getClassGroups: GroupServices.GetClassGroups,
+    update: GroupServices.UpdateGroup,
+    remove: GroupServices.DeleteGroup,
+    create: GroupServices.CreateGroup
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [

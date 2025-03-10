@@ -1,7 +1,8 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as AssignmentServices from '../services/assignmentServices';
+import * as AssignmentServices from '../../core/services/assignment/index';
+
 
 /**
  * Controller responsible for assignment-related API endpoints including CRUD operations
@@ -14,11 +15,11 @@ import * as AssignmentServices from '../services/assignmentServices';
  */
 export class AssignmentController extends Controller {
   constructor(
-    get: AssignmentServices.GetAssignmentService,
-    getGroupAssignments: AssignmentServices.GetGroupAssignmentsService,
-    update: AssignmentServices.UpdateAssignmentService,
-    remove: AssignmentServices.DeleteAssignmentService,
-    create: AssignmentServices.CreateAssignmentService
+    get: AssignmentServices.GetAssignment,
+    getGroupAssignments: AssignmentServices.GetGroupAssignment,
+    update: AssignmentServices.UpdateAssignment,
+    remove: AssignmentServices.DeleteAssignment,
+    create: AssignmentServices.CreateAssignment
   ) {
     const handlers : RouteHandlers = {
       [HttpMethod.GET]: [

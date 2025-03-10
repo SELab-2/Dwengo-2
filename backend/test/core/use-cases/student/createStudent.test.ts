@@ -1,4 +1,4 @@
-import { CreateStudent } from "../../../../src/core/use-cases/student/createStudent";
+import { CreateStudent } from "../../../../src/core/services/student/createStudent";
 import { Student } from "../../../../src/core/entities/student";
 
 const mockStudentRepository = {

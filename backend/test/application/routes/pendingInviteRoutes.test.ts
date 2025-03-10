@@ -2,7 +2,7 @@ import { mockApp } from "./mocks";
 import { pendingInviteRoutes } from "../../../src/application/routes";
 import { PendingInviteController } from "../../../src/application/controllers/pendingInviteController";
 import * as PendingInviteServices from "../../../src/application/services/pendingInviteServices";
-import * as PendingInviteUseCases from "../../../src/core/use-cases/pending_invite";
+import * as PendingInviteUseCases from "../../../src/core/services/pending_invite";
 
 // mock the services used by the controller
 class MockGetPendingInviteService extends PendingInviteServices.GetPendingInviteService {

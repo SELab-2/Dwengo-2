@@ -2,7 +2,7 @@ import { mockApp } from "./mocks";
 import { messageRoutes } from "../../../src/application/routes/messageRoutes";
 import { MessageController } from "../../../src/application/controllers";
 import * as MessageServices from "../../../src/application/services";
-import * as MessageUseCases from "../../../src/core/use-cases/message";
+import * as MessageUseCases from "../../../src/core/services/message";
 
 // mock the services used by the controller
 class MockGetMessageService extends MessageServices.GetMessageService {

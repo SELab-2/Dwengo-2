@@ -1,6 +1,6 @@
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
-import { RemoveStudentFromGroup } from "../../../../src/core/use-cases/student/removeStudentFromGroup";
-import { RemoveStudentFromParams } from "../../../../src/core/use-cases/student/removeStudentFrom";
+import { RemoveStudentFromGroup } from "../../../../src/core/services/student/removeStudentFromGroup";
+import { RemoveStudentFromParams } from "../../../../src/core/services/student/removeStudentFrom";
 
 
 // TODO: Implement tests where we check if student was actually removed from class

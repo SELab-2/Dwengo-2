@@ -1,7 +1,8 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
-import * as UsersServices from '../services/usersServices';
+import * as UsersServices from '../../core/services/user/index';
 import { defaultExtractor } from './helpersExpress';
+
 
 /**
  * Controller responsible for general user-related API endpoints including
@@ -17,13 +18,13 @@ import { defaultExtractor } from './helpersExpress';
  */
 export class UsersController extends Controller {
   constructor(
-    getAll: UsersServices.GetAllUsersService,
-    create: UsersServices.CreateUserService,
-    getClassUsers: UsersServices.GetClassUsersService,
-    getGroupUsers: UsersServices.GetGroupUsersService,
-    addGroupUser: UsersServices.AssignUserToGroupService,
-    getAssignmentUsers: UsersServices.GetAssignmentUsersService,
-    addAssignmentUser: UsersServices.AssignUserToAssignmentService
+    getAll: UsersServices.GetAllUsers,
+    create: UsersServices.CreateUser,
+    getClassUsers: UsersServices.GetClassUsers,
+    getGroupUsers: UsersServices.GetGroupUsers,
+    addGroupUser: UsersServices.AssignUserToGroup,
+    getAssignmentUsers: UsersServices.GetAssignmentUsers,
+    addAssignmentUser: UsersServices.AssignUserToAssignment
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [

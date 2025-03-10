@@ -2,7 +2,7 @@ import { mockApp } from './mocks';
 import { assignmentRoutes } from '../../../src/application/routes';
 import { AssignmentController } from '../../../src/application/controllers/assignmentController';
 import * as AssignmentServices from '../../../src/application/services/assignmentServices';
-import * as AssignmentUseCases from '../../../src/core/use-cases/assignment';
+import * as AssignmentUseCases from '../../../src/core/services/assignment';
 
 // mock the services used by the controller
 class MockGetAssignmentService extends AssignmentServices.GetAssignmentService {

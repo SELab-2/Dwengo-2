@@ -2,7 +2,7 @@ import { mockApp } from './mocks';
 import { classRoutes } from '../../../src/application/routes';
 import { ClassController } from '../../../src/application/controllers';
 import * as ClassServices from '../../../src/application/services';
-import * as ClassUseCases from '../../../src/core/use-cases/class';
+import * as ClassUseCases from '../../../src/core/services/class';
 
 // mock the services used by the controller
 class MockGetClassService extends ClassServices.GetClassService {

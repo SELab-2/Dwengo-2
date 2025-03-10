@@ -1,5 +1,5 @@
-import { RemoveStudentFromClass} from '../../../../src/core/use-cases/student/removeStudentFromClass';
-import { RemoveStudentFromParams } from '../../../../src/core/use-cases/student/removeStudentFrom'
+import { RemoveStudentFromClass} from '../../../../src/core/services/student/removeStudentFromClass';
+import { RemoveStudentFromParams } from '../../../../src/core/services/student/removeStudentFrom'
 import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
 
 describe('RemoveStudentFromClass', () => {
