@@ -10,4 +10,4 @@ export interface ServiceParams {
 }
 
 //TODO can we abstract the params type in services to for a Params as abstracted class or interface?
-export type Services = Record<string, Service<any, any>>;
+export type Services = Record<string, Service<ServiceParams, object>>;
