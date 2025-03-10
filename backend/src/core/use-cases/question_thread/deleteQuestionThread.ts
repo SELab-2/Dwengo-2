@@ -1,4 +1,4 @@
-import { UseCase } from "../../../config/usecase";
+import { UseCase } from "../../../config/useCase";
 
 export class DeleteQuestionThread implements UseCase<undefined, undefined> {
   constructor() {}
