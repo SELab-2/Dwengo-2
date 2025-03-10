@@ -1,9 +1,9 @@
-import { UseCase } from "../../../config/usecase";
+import { Class } from "../../entities/class";
+import { ClassBaseUseCase } from "./baseClassUseCase";
 
-export class CreateClass implements UseCase<undefined, undefined> {
-  constructor() {}
+export class CreateClass extends ClassBaseUseCase<Class, Class> {
 
-  async execute(input: undefined): Promise<undefined> {
-    //TODO
+  async execute(input: Class): Promise<Class> {
+    return this.classRepository.createClass(input);
   }
 }
