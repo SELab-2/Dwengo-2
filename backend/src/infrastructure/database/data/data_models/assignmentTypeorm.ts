@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm"
 import { ClassTypeORM } from "./classTypeorm"
-import { Assignment } from "../../../../core/entities/assignment"
 
 @Entity()
 export class AssignmentTypeORM {
@@ -22,16 +21,4 @@ export class AssignmentTypeORM {
 
     @Column({ type: "text" })
     extra_instructions!: string
-
-    public toAssignmentEntity(): Assignment {
-        return new Assignment(
-            this.class.id!,
-            this.learning_path_id,
-            this.start,
-            this.deadline,
-            this.extra_instructions,
-            this.id
-        );
-    }
-
 }

@@ -1,18 +1,17 @@
-import { GetSudent } from "../../../../src/core/use-cases/student/getStudent";
-import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
+import { GetStudent } from "../../../../src/core/use-cases/student/getStudent";
+import { StudentRepositoryInterface } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
-import { AppError } from "../../../../src/config/error";
 
 describe("getStudent Use Case", () => {
-  let getStudentUseCase: GetSudent;
-  let mockStudentRepository: jest.Mocked<IStudentRepository>;
+  let getStudentUseCase: GetStudent;
+  let mockStudentRepository: jest.Mocked<StudentRepositoryInterface>;
 
   beforeEach(() => {
     mockStudentRepository = {
       getStudent: jest.fn(), // Mock DB function
-    } as unknown as jest.Mocked<IStudentRepository>;
+    } as unknown as jest.Mocked<StudentRepositoryInterface>;
 
-    getStudentUseCase = new GetSudent(mockStudentRepository);
+    getStudentUseCase = new GetStudent(mockStudentRepository);
   });
 
   test("Should return student if found", async () => {
@@ -21,7 +20,7 @@ describe("getStudent Use Case", () => {
       "John",
       "Doe",
       "hashedpassword123",
-      "Yale",
+      [],
       "1"
     );
 
@@ -32,10 +31,11 @@ describe("getStudent Use Case", () => {
     expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("1");
   });
 
-  test("Should throw error", async () => {
-    mockStudentRepository.getStudent.mockRejectedValue(new AppError("Student not found", 404));
-    
-    await expect(getStudentUseCase.execute("999")).rejects.toThrow();
+  test("Should return null if student is not found", async () => {
+    mockStudentRepository.getStudent.mockResolvedValue(null);
+    const result = await getStudentUseCase.execute("999");
+
+    expect(result).toBeNull();
     expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("999");
   });
 });

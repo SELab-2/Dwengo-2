@@ -13,10 +13,8 @@ describe("TeacherRepositoryTypeORM", () => {
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceTeacher: jest.fn(),
-            getDatasourceClass: jest.fn(),
-            getDatasourceJoinRequest: jest.fn(),
-            getDatasourceAssignment: jest.fn(),
+            getDatasourceTeacher: jest.fn(), // TODO: should work?
+            getDatasourceClass: jest.fn()
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),
@@ -32,7 +30,7 @@ describe("TeacherRepositoryTypeORM", () => {
             getAllTeachers: jest.fn(() => Promise.resolve([teacher, teacher])),
             updateTeacher: jest.fn(() => Promise.resolve(teacher)),
             deleteTeacherWithId: jest.fn()
-        } as any;
+        } as any; // TODO hack?
 
         // Mock teacher
         teacher = new Teacher("email", "alice", "bob", "password", "id");
@@ -67,19 +65,19 @@ describe("TeacherRepositoryTypeORM", () => {
 
     test("getTeacherByFirstName", async () => {
         // Call function from repository
-        const returnTeacher: Teacher|null = await datasourceTeacher.getTeacherByFirstName(teacher.firstName);
+        const returnTeacher: Teacher|null = await datasourceTeacher.getTeacherByFirstName(teacher.first_name);
 
         expect(datasourceTeacher.getTeacherByFirstName).toHaveBeenCalledTimes(1);
-        expect(datasourceTeacher.getTeacherByFirstName).toHaveBeenCalledWith(teacher.firstName);
+        expect(datasourceTeacher.getTeacherByFirstName).toHaveBeenCalledWith(teacher.first_name);
         expect(returnTeacher).toEqual(teacher);
     });
 
     test("getTeacherByLastName", async () => {
         // Call function from repository
-        const returnTeacher: Teacher|null = await datasourceTeacher.getTeacherByLastName(teacher.familyName);
+        const returnTeacher: Teacher|null = await datasourceTeacher.getTeacherByLastName(teacher.family_name);
 
         expect(datasourceTeacher.getTeacherByLastName).toHaveBeenCalledTimes(1);
-        expect(datasourceTeacher.getTeacherByLastName).toHaveBeenCalledWith(teacher.familyName);
+        expect(datasourceTeacher.getTeacherByLastName).toHaveBeenCalledWith(teacher.family_name);
         expect(returnTeacher).toEqual(teacher);
     });
 
