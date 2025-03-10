@@ -29,14 +29,6 @@ export abstract class ITeacherRepository {
      */
     public abstract getTeacherById(id: string): Promise<Teacher|null>;
 
-
-    /**
-     * Check if a teacher with this email exists.
-     * @param email The email of the teacher
-     * @returns A promise that resolves to a boolean, true if email is already in use false otherwise.
-     */
-    public abstract checkTeacherByEmail(email: string): Promise<boolean>;
-
     /**
      * Get a teacher by their email.
      * @param email The email of the teacher
