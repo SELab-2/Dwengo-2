@@ -2,9 +2,7 @@ import { EntityNotFoundError } from "../../../config/error";
 import { Class } from "../../entities/class";
 import { ClassBaseUseCase } from "./baseClassUseCase";
 
-
 //TODO - change after refactor
-
 
 export class GetClassByClassId extends ClassBaseUseCase<string, Class> {
   /**
