@@ -5,3 +5,4 @@ export * from "./getAllUsers";
 export * from "./getAssignmentUsers";
 export * from "./getClassUsers";
 export * from "./getGroupUsers";
+export * from "./getUser";

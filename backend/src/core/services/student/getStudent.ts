@@ -1,6 +1,6 @@
 import { Student } from '../../entities/student';
 import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
-import { GetUser } from '../user/getUser';
+import { GetUser } from '../user';
 
 // Class to get a student from the DB
 export class GetStudent extends GetUser {

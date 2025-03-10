@@ -1,7 +1,7 @@
 import { Student } from "../../entities/student";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
-import { CreateStudentParams, CreateUser } from "../user/createUser";
+import { CreateStudentParams, CreateUser } from "../user";
 
 /**
  * @extends {CreateUser<Student, CreateStudentParams>}

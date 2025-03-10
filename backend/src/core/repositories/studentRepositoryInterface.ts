@@ -1,5 +1,4 @@
 /*Here comes the interface for the repository for User entity -> Get's implemented in infrastructure/repositories*/
-
 import { Class } from '../entities/class';
 import { Student } from '../entities/student';
 export interface IStudentRepository {
