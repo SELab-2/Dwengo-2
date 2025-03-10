@@ -1,4 +1,6 @@
-export class Assignment {
+import { Entity } from "./entityInterface";
+
+export class Assignment implements Entity {
     public constructor(
         private _classId: string,
         private _learningPathId: string,

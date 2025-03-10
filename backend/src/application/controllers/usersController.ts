@@ -2,6 +2,7 @@ import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
 import * as UsersServices from '../../core/services/user/index';
 import { defaultExtractor } from './helpersExpress';
+import { User } from '../../core/entities/user';
 
 
 /**
@@ -19,7 +20,8 @@ import { defaultExtractor } from './helpersExpress';
 export class UsersController extends Controller {
   constructor(
     getAll: UsersServices.GetAllUsers,
-    create: UsersServices.CreateUser,
+    //FIX: We need to rethink this
+    create: UsersServices.CreateUser<User, UsersServices.CreateParams<User>>,
     getClassUsers: UsersServices.GetClassUsers,
     getGroupUsers: UsersServices.GetGroupUsers,
     addGroupUser: UsersServices.AssignUserToGroup,

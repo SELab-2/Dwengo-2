@@ -17,7 +17,7 @@ export class DeleteStudentParams implements ServiceParams {
   }
 }
 
-export class DeleteStudent implements Service<DeleteStudentParams, void> {
+export class DeleteStudent implements Service<DeleteStudentParams, object> {
   constructor(private studentRepository: IStudentRepository) {}
   /**
    * Delete a student from the DB.
@@ -25,9 +25,10 @@ export class DeleteStudent implements Service<DeleteStudentParams, void> {
    * @returns void
    * @throws Error if the student that will be deleted does not exist.
    */
-  async execute(params: DeleteStudentParams): Promise<void> {
-    const student = await this.studentRepository.getStudent(params.getId());
+  async execute(input: DeleteStudentParams): Promise<object> {
+    const student = await this.studentRepository.getStudent(input.getId());
 
-    await this.studentRepository.deleteStudent(params.getId());
+    await this.studentRepository.deleteStudent(input.getId());
+    return {};
   }
 }

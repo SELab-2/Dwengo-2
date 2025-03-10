@@ -1,4 +1,6 @@
-export class PendingInvite {
+import { Entity } from "./entityInterface";
+
+export class PendingInvite implements Entity{
     public constructor(
         private readonly _requestId: string,
         private readonly _classId: string,

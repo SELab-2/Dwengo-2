@@ -26,7 +26,7 @@ test("Should throw error if student not found in database", async () => {
     await expect(deleteStudentService.execute(params)).rejects.toThrow("Student not found");
 });
 
-  test("Should return void if student is deleted", async () => {
+  test("Should return empty object if student is deleted", async () => {
     const student: Student = new Student(
         "test@example.com",
         "  John  ",
@@ -38,7 +38,7 @@ test("Should throw error if student not found in database", async () => {
     mockStudentRepository.getStudent.mockResolvedValue(student);
     mockStudentRepository.deleteStudent.mockResolvedValue(undefined);
     
-    await expect(deleteStudentService.execute(params)).resolves.toBeUndefined();
+    await expect(deleteStudentService.execute(params)).resolves.toEqual({});
     expect(mockStudentRepository.getStudent).toHaveBeenCalledWith(params.getId());
     expect(mockStudentRepository.deleteStudent).toHaveBeenCalledWith(params.getId());
   });
