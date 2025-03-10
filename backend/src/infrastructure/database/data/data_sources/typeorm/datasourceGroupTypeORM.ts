@@ -15,7 +15,7 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
 
         const groupModel = new GroupTypeORM();
         if (!entity.class_.id) {
-            throw new Error("Class not found");
+            throw new Error("No class id was provided.");
         }
         
         // Check if the class exists.
@@ -24,15 +24,11 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         });
 
         if (!classModel){
-            throw new Error("Class not found");
+            throw new EntityNotFoundError(`Class with id: ${entity.class_.id} not found`);
         }
         
         groupModel.class = classModel
         
-        if (!entity.class_.id) {
-            throw new Error("Class not found");
-        }
-
         // Save the group
         const savedGroup = await groupRepository.save(groupModel);
 
