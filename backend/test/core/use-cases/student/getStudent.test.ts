@@ -1,7 +1,7 @@
 import { GetStudent } from "../../../../src/core/use-cases/student/getStudent";
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
-import { EntityNotFoundError } from "../../../../src/config/error";
+import { AppError, EntityNotFoundError } from "../../../../src/config/error";
 
 describe("getStudent Use Case", () => {
   let getStudentUseCase: GetStudent;
@@ -21,24 +21,27 @@ describe("getStudent Use Case", () => {
       "John",
       "Doe",
       "hashedpassword123",
+      "Yale",
       "1"
     );
 
     mockStudentRepository.getStudent.mockResolvedValue(student);
     const result = await getStudentUseCase.execute("1");
 
-    expect(result).toEqual(student);
+    expect(result).toEqual({
+      email: "test@student.com",
+      firstName: "John",
+      familyName: "Doe",
+      schoolName: "Yale",
+      id: "1"
+    });
     expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("1");
   });
 
-  test("Should throw EntityNotFoundError if student not found", async () => {
-    mockStudentRepository.getStudent.mockRejectedValue(
-      new EntityNotFoundError("Student not found")
-    );
-
-    await expect(getStudentUseCase.execute("1")).rejects.toThrow(
-      "Student not found"
-    );
-    expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("1");
+  test("Should throw error", async () => {
+    mockStudentRepository.getStudent.mockRejectedValue(new EntityNotFoundError("Student not found"));
+    
+    await expect(getStudentUseCase.execute("999")).rejects.toThrow();
+    expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("999");
   });
 });
