@@ -1,3 +1,4 @@
+import { EntityNotFoundError } from "../../../../../config/error";
 import { Message } from "../../../../../core/entities/message";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { ThreadMessageTypeORM } from "../../data_models/threadMessageTypeorm";
@@ -14,14 +15,14 @@ export class DatasourceMessageTypeORM extends IDatasourceMessage {
         const userModel = await userRepository.findOne({ where: { id: message.senderId } });
 
         if (!userModel){
-            throw new Error("user not found");
+            throw new EntityNotFoundError(`User with id: ${message.senderId} not found`);
         }
 
         // We find the thread.
         const threadModel = await threadRepository.findOne({ where: { id: message.threadId } });
 
         if (!threadModel){
-            throw new Error("thread not found");
+            throw new EntityNotFoundError(`Thread with id: ${message.threadId} not found`);
         }
 
         // creation of the message model.
@@ -58,7 +59,7 @@ export class DatasourceMessageTypeORM extends IDatasourceMessage {
             .findOne({ where: { id: message.id } });
         
         if (!messageModel){
-            throw new Error("message not found");
+            throw new EntityNotFoundError(`Message with id: ${message.id} not found`);
         }
 
         await messageRepository.remove(messageModel);

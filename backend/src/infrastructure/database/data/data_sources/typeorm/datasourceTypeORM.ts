@@ -11,6 +11,10 @@ import { DatasourceJoinRequestTypeORM } from "./datasourceJoinRequestTypeORM";
 import { IDatasourceJoinRequest } from "../datasourceJoinRequestInterface";
 import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
 import { DatasourceAssignmentTypeORM } from "./datasourceAssignmentTypeORM";
+import { IDatasourceMessage } from "../datasourceMessageInterface";
+import { IDatasourceThread } from "../datasourceThreadInterface";
+import { DatasourceThreadTypeORM } from "./datasourceThreadTypeORM";
+import { DatasourceMessageTypeORM } from "./datasourceMessageTypeORM";
 
 export class DatasourceTypeORM implements IDatasource {
 
@@ -46,6 +50,14 @@ export class DatasourceTypeORM implements IDatasource {
 
     public async getDatasourceAssignment(): Promise<IDatasourceAssignment> {
         return new DatasourceAssignmentTypeORM(await DatasourceTypeORM.datasourcePromise);
+    }
+
+    public async getDatasourceMessage(): Promise<IDatasourceMessage> {
+        return new DatasourceMessageTypeORM(await DatasourceTypeORM.datasourcePromise);
+    }
+
+    public async getDatasourceThread(): Promise<IDatasourceThread> {
+        return new DatasourceThreadTypeORM(await DatasourceTypeORM.datasourcePromise);
     }
     
 }

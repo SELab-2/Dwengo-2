@@ -1,9 +1,6 @@
 import { DataSource } from "typeorm";
 import { Message } from "../../../../core/entities/message";
 
-/**
- * Interface for the teacher data source.
- */
 export abstract class IDatasourceMessage{
 
     public constructor(
