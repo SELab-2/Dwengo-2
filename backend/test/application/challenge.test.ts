@@ -52,20 +52,20 @@ describe('ChallengeManager', () => {
   // test('verifyChallenge returns true for valid signature', () => {
   //   // Get a challenge
   //   const { challenge } = challengeManager.getChallenge();
-  //
+
   //   // Sign the challenge with private key
   //   const signature = crypto.sign(
   //     null,
   //     Buffer.from(challenge),
   //     keyPair.privateKey
   //   );
-  //
+
   //   // Verify the signature
   //   const result = challengeManager.verifyChallenge(
   //     mockUser.id,
   //     signature.toString('base64')
   //   );
-  //
+
   //   expect(result).toBe(true);
   // });
 
