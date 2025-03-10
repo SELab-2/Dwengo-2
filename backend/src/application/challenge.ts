@@ -36,11 +36,11 @@ export class ChallengeManager {
   public verifyChallenge(userId: UUID, signedChallenge: string): boolean {
     try {
       const user = this.getUser(userId);
-      if (!user || !user.password_hash) return false;
+      if (!user || !user.passwordHash) return false;
 
       const challenge = this.getChallenge().challenge;
       const publicKey = createPublicKey(
-        {key: user.password_hash, format: 'pem', type: 'spki'}
+        {key: user.passwordHash, format: 'pem', type: 'spki'}
       );
 
       // Convert signedChallenge from base64 string to Buffer
