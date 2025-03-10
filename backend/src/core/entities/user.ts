@@ -1,6 +1,5 @@
-import { Entity } from "./entityInterface";
 
-export abstract class User implements Entity {
+export abstract class User {
     constructor(
         protected readonly _email: string,
         protected _firstName: string,

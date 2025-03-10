@@ -1,6 +1,6 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
-import * as UsersServices from '../../core/services/user/index';
+import * as UsersServices from '../../core/services/user';
 import { defaultExtractor } from './helpersExpress';
 import { User } from '../../core/entities/user';
 

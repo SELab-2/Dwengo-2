@@ -1,6 +1,6 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
-import * as TeacherServices from '../../core/services/teacher/index';
+import * as TeacherServices from '../../core/services/teacher';
 import { defaultExtractor } from './helpersExpress';
 
 

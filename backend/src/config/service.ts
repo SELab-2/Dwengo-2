@@ -1,4 +1,3 @@
-import { Entity } from "../core/entities/entityInterface";
 
 export interface ServiceParams {
   //TODO can we abstract the fromObject method in services to for a Params as abstracted class or interface?

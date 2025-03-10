@@ -1,7 +1,7 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as PendingInviteServices from '../../core/services/pending_invite/index';
+import * as PendingInviteServices from '../../core/services/pending_invite';
 
 /**
  * Controller responsible for pending invite-related API endpoints including CRUD operations

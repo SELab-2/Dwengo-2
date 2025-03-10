@@ -1,7 +1,7 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as QuestionServices from '../../core/services/question_thread/index';
+import * as QuestionServices from '../../core/services/question_thread';
 
 
 /**

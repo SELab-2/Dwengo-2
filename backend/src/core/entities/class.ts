@@ -1,6 +1,5 @@
-import { Entity } from "./entityInterface";
 
-export class Class implements Entity {
+export class Class {
     public constructor(
         private _name: string,
         private _description: string,

@@ -1,6 +1,6 @@
 import { Controller } from './controllerExpress';
 import { RouteHandlers, HttpMethod, Request } from '../types';
-import * as GroupServices from '../../core/services/group/index';
+import * as GroupServices from '../../core/services/group';
 import { defaultExtractor } from './helpersExpress';
 
 

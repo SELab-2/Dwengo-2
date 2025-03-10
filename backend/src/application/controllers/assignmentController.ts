@@ -1,7 +1,7 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as AssignmentServices from '../../core/services/assignment/index';
+import * as AssignmentServices from '../../core/services/assignment';
 
 
 /**

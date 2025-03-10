@@ -1,11 +1,9 @@
-import { Entity } from "./entityInterface";
-
 export enum JoinRequestType {
     TEACHER = "teacher",
     STUDENT = "student"
 }
 
-export class JoinRequest implements Entity {
+export class JoinRequest {
     public constructor(
         private _requester: string,
         private _classId: string,

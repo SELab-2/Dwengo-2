@@ -1,7 +1,7 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as MessageServices from '../../core/services/message/index';
+import * as MessageServices from '../../core/services/message';
 
 
 /**
