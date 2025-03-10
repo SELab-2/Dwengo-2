@@ -1,7 +1,5 @@
 import { EntityNotFoundError } from "../../../config/error";
-import { UseCase } from "../../../config/useCase";
 import { Class } from "../../entities/class";
-import { IClassRepository } from "../../repositories/classRepositoryInterface";
 import { ClassBaseUseCase } from "./baseClassUseCase";
 
 
