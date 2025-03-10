@@ -33,7 +33,7 @@ describe("TeacherRepositoryTypeORM", () => {
             getAllTeachers: jest.fn(() => Promise.resolve([teacher, teacher])),
             updateTeacher: jest.fn(() => Promise.resolve(teacher)),
             deleteTeacherWithId: jest.fn()
-        } as any; // TODO hack?
+        } as any;
 
         // Mock teacher
         teacher = new Teacher("email", "alice", "bob", "password", "id");
@@ -42,7 +42,7 @@ describe("TeacherRepositoryTypeORM", () => {
     test("createTeacher", async () => {
         // Call function from repository
         const returnTeacher: Teacher = await datasourceTeacher.createTeacher(teacher);
-
+        
         expect(datasourceTeacher.createTeacher).toHaveBeenCalledTimes(1);
         expect(datasourceTeacher.createTeacher).toHaveBeenCalledWith(teacher);
         expect(returnTeacher).toEqual(teacher);

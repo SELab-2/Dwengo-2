@@ -1,6 +1,6 @@
-import { UseCase } from "../../../config/usecase";
+import { UseCase } from "../../../config/useCase";
 
-export class CreateQuestionThread implements UseCase<undefined, undefined> {
+export class GetAssignmentQuestionThreads implements UseCase<undefined, undefined> {
   constructor() {}
 
   async execute(input: undefined): Promise<undefined> {

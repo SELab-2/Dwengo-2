@@ -1,8 +1,8 @@
 import { IDatasourceAssignment } from "./datasourceAssignmentInterface";
 import { IDatasourceClass } from "./datasourceClassInterface";
 import { IDatasourceGroup } from "./datasourceGroupInterface";
-import { IDatasourceTeacher } from "./datasourceTeacherInterface";
 import { IDatasourceJoinRequest } from "./datasourceJoinRequestInterface";
+import { IDatasourceTeacher } from "./datasourceTeacherInterface";
 
 /**
  * Interface representing a data source.
