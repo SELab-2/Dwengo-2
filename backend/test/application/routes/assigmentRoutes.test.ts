@@ -1,32 +1,26 @@
 import { mockApp } from './mocks';
 import { assignmentRoutes } from '../../../src/application/routes';
 import { AssignmentController } from '../../../src/application/controllers/assignmentController';
-import * as AssignmentServices from '../../../src/application/services/assignmentServices';
-import * as AssignmentUseCases from '../../../src/core/services/assignment';
+import * as AssignmentServices from '../../../src/core/services/assignment/index';
 
 // mock the services used by the controller
-class MockGetAssignmentService extends AssignmentServices.GetAssignmentService {
-  constructor() { super({} as unknown as AssignmentUseCases.GetAssignment); }
+class MockGetAssignmentService extends AssignmentServices.GetAssignment {
   public execute = jest.fn();
 }
 
-class MockGetGroupAssignmentsService extends AssignmentServices.GetGroupAssignmentsService {
-  constructor() { super({} as unknown as AssignmentUseCases.GetGroupAssignment); }
+class MockGetGroupAssignmentsService extends AssignmentServices.GetGroupAssignment {
   public execute = jest.fn();
 }
 
-class MockUpdateAssignmentService extends AssignmentServices.UpdateAssignmentService {
-  constructor() { super({} as unknown as AssignmentUseCases.UpdateAssignment); }
+class MockUpdateAssignmentService extends AssignmentServices.UpdateAssignment {
   public execute = jest.fn();
 }
 
-class MockDeleteAssignmentService extends AssignmentServices.DeleteAssignmentService {
-  constructor() { super({} as unknown as AssignmentUseCases.DeleteAssignment); }
+class MockDeleteAssignmentService extends AssignmentServices.DeleteAssignment {
   public execute = jest.fn();
 }
 
-class MockCreateAssignmentService extends AssignmentServices.CreateAssignmentService {
-  constructor() { super({} as unknown as AssignmentUseCases.CreateAssignment); }
+class MockCreateAssignmentService extends AssignmentServices.CreateAssignment {
   public execute = jest.fn();
 }
 
