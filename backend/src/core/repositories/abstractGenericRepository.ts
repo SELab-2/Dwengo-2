@@ -1,6 +1,6 @@
 import { AbstractRepository } from "./AbstractRepository";
 
-export abstract class IRepository<Entity> extends AbstractRepository {
+export abstract class AbstractGenericRepository<Entity> extends AbstractRepository {
     // This class contains all the standard methods/functions that every repository should have.
 
     // TODO: Combine this class with ``AbstractRepository``. I didn't do this yet so that it would not give any problems.

@@ -1,16 +1,12 @@
 import { Group } from "../../../../../core/entities/group";
-import { IGroupRepository } from "../../../../../core/repositories/groupRepositoryInterface";
-import { DataSource } from "typeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
-import { Student } from "../../../../../core/entities/student";
 import { IDatasourceGroup } from "../datasourceGroupInterface";
-
+import { EntityNotFoundError } from "../../../../../config/error";
 
 export class DatasourceGroupTypeORM extends IDatasourceGroup {
-
 
     public async create(entity: Group): Promise<Group> {
         const groupRepository = this.datasource.getRepository(GroupTypeORM);
@@ -75,7 +71,7 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         // Extract StudentTypeORM models
         const studentModels : StudentTypeORM[] = studentOfGroups.map(entry => entry.student);
 
-        return this.toEntity(groupModel, studentModels);
+        return groupModel.toEntity(studentModels);
     }
 
     public async update(group: Group): Promise<Group> {
@@ -90,8 +86,8 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
             });
         }
 
-        if (!groupModel || groupModel === null){
-            throw new Error("Group not found");
+        if (!groupModel){
+            throw new EntityNotFoundError(`Group with id: ${group.id} not found`);
         }
 
         // Save updated group
@@ -125,8 +121,8 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
             });
         }
 
-        if (!groupModel || groupModel === null){
-            throw new Error("Group not found");
+        if (!groupModel){
+            throw new EntityNotFoundError(`Group with id: ${group.id} not found`);
         }
 
         // First, delete related student-group entries
@@ -136,13 +132,5 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         await studentOfGroupRepository.delete({ group: groupModel });
     }
 
-    // Maps the typeORM result to an entity.
-    // This is here and not in groupTypeORM itself because the group entity needs data from multiple tables.
-    private toEntity(groupModel: GroupTypeORM, studentModels: StudentTypeORM[]): Group{
-        // Convert the student TypeORMs to Entities.
-        const students: Student[] = studentModels.map((studentModel: StudentTypeORM) => studentModel.toStudentEntity(studentModel.student));
-    
-        return new Group(students, groupModel.class.toClassEntity(), groupModel.id,)
-    }
 
 }
