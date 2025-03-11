@@ -1,6 +1,6 @@
 import { EntityNotFoundError } from "../../config/error";
 import { Submission } from "../../core/entities/submission";
-import { ISubmissionRepository } from "../../core/repositories/submissionRepository";
+import { ISubmissionRepository } from "../../core/repositories/submissionRepositoryInterface";
 import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 import { IDatasourceSubmission } from "../database/data/data_sources/datasourceSubmissionInterface";
 
