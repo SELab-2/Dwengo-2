@@ -1,6 +1,6 @@
 import { Service, ServiceParams } from "../../../config/service";
 
-export class GetTeacher implements Service<ServiceParams, object> {
+export class GetTeacher implements Service<ServiceParams> {
   constructor() {}
 
   async execute(input: ServiceParams): Promise<object> {
