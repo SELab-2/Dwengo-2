@@ -1,5 +1,5 @@
 import { Assignment } from "../entities/assignment";
-import { AbstractRepository } from "./abstractRepository";
+import { AbstractRepository } from "./AbstractRepository";
 
 /**
  * Interface for assignment repositories.

@@ -1,5 +1,5 @@
 import { Class } from "../entities/class";
-import { AbstractRepository } from "./abstractRepository";
+import { AbstractRepository } from "./AbstractRepository";
 
 /**
  * Interface for class repositories.
