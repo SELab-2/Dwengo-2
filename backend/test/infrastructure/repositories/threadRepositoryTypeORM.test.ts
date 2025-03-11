@@ -21,6 +21,8 @@ describe("ThreadRepositoryTypeORM", () => {
             getDatasourceAssignment: jest.fn(),
             getDatasourceMessage: jest.fn(),
             getDatasourceThread: jest.fn(),
+            getDatasourceStudent: jest.fn(),
+            getDatasourceGroup: jest.fn(),
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),
@@ -35,7 +37,7 @@ describe("ThreadRepositoryTypeORM", () => {
             getByLastName: jest.fn(() => Promise.resolve(thread)),
             getAll: jest.fn(() => Promise.resolve([thread, thread])),
             update: jest.fn(() => Promise.resolve(thread)),
-            deleteWithId: jest.fn()
+            delete: jest.fn()
         } as any;
 
         // Mock thread
@@ -79,10 +81,28 @@ describe("ThreadRepositoryTypeORM", () => {
         const createdThread: QuestionThread = await datasourceThread.create(thread);
         // Call function from repository
         await datasourceThread.delete(createdThread);
+        
 
         expect(datasourceThread.delete).toHaveBeenCalledTimes(1);
         expect(datasourceThread.delete).toHaveBeenCalledWith(createdThread);
-        expect(datasourceThread.delete).toThrow(EntityNotFoundError)
+    });
+
+    test('delete throws error if not in database', async () => {
+        const nonExistentThreadId = "non-existent-id";
+        datasourceThread.getById = jest.fn(() => Promise.resolve(null));
+        datasourceThread.delete = jest.fn(async (thread: QuestionThread) => {
+            const foundThread = await datasourceThread.getById(thread.id!);
+            if (!foundThread) {
+                throw new EntityNotFoundError('Thread not found');
+            }
+        });
+
+        await expect(datasourceThread.delete({ id: nonExistentThreadId } as QuestionThread))
+            .rejects
+            .toThrow(EntityNotFoundError);
+
+        expect(datasourceThread.delete).toHaveBeenCalledTimes(1);
+        expect(datasourceThread.delete).toHaveBeenCalledWith({ id: nonExistentThreadId });
     });
 
 });
