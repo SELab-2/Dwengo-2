@@ -1,5 +1,5 @@
 import { JoinRequest } from "../entities/joinRequest";
-import { AbstractRepository } from "./AbstractRepository";
+import { AbstractRepository } from "./abstractRepository";
 
 /**
  * Interface for join request repositories.

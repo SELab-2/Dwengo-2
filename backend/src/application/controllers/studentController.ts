@@ -1,7 +1,8 @@
 import { Controller } from './controllerExpress';
 import { Request, Response, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as StudentServices from '../services/studentServices';
+import * as StudentServices from '../../core/services/student';
+
 
 /**
  * Controller responsible for student-related API endpoints including user management
@@ -14,11 +15,11 @@ import * as StudentServices from '../services/studentServices';
  */
 export class StudentController extends Controller {
   constructor(
-    get: StudentServices.GetStudentService,
-    update: StudentServices.UpdateStudentService,
-    remove: StudentServices.DeleteStudentService,
-    removeClassStudent: StudentServices.RemoveStudentFromClassService,
-    removeGroupStudent: StudentServices.RemoveStudentFromGroupService
+    get: StudentServices.GetStudent,
+    update: StudentServices.UpdateStudent,
+    remove: StudentServices.DeleteStudent,
+    removeClassStudent: StudentServices.RemoveStudentFromClass,
+    removeGroupStudent: StudentServices.RemoveStudentFromGroup
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [

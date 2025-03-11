@@ -9,8 +9,12 @@ import { IDatasourceClass } from "../datasourceClassInterface";
 import { DatasourceClassTypeORM } from "./datasourceClassTypeORM";
 import { DatasourceJoinRequestTypeORM } from "./datasourceJoinRequestTypeORM";
 import { IDatasourceJoinRequest } from "../datasourceJoinRequestInterface";
+import { IDatasourceGroup } from "../datasourceGroupInterface";
+import { DatasourceGroupTypeORM } from "./datasourceGroupTypeORM";
 import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
 import { DatasourceAssignmentTypeORM } from "./datasourceAssignmentTypeORM";
+import { IDatasourceStudent } from "../datasourceStudentInterface";
+import { DatasourceStudentTypeORM } from "./datasourceStudentTypeORM";
 import { IDatasourceMessage } from "../datasourceMessageInterface";
 import { IDatasourceThread } from "../datasourceThreadInterface";
 import { DatasourceThreadTypeORM } from "./datasourceThreadTypeORM";
@@ -35,6 +39,9 @@ export class DatasourceTypeORM implements IDatasource {
     // This object is needed for the repositories to be able to ask queries.
     private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(this.datasourceConnectionSettings);
 
+    public async getDatasourceStudent(): Promise<IDatasourceStudent> {
+        return new DatasourceStudentTypeORM(await DatasourceTypeORM.datasourcePromise);
+    }
 
     public async getDatasourceTeacher(): Promise<IDatasourceTeacher> {
         return new DatasourceTeacherTypeORM(await DatasourceTypeORM.datasourcePromise);
@@ -42,6 +49,10 @@ export class DatasourceTypeORM implements IDatasource {
 
     public async getDatasourceClass(): Promise<IDatasourceClass> {
         return new DatasourceClassTypeORM(await DatasourceTypeORM.datasourcePromise);
+    }
+
+    public async getDatasourceGroup(): Promise<IDatasourceGroup> {
+        return new DatasourceGroupTypeORM(await DatasourceTypeORM.datasourcePromise);
     }
 
     public async getDatasourceJoinRequest(): Promise<IDatasourceJoinRequest> {

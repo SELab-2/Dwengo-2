@@ -1,3 +1,4 @@
+
 export class Assignment {
     public constructor(
         private _classId: string,
@@ -46,5 +47,16 @@ export class Assignment {
     }
     public set extraInstructions(newExtraInstructions:string){
         this._extraInstructions = newExtraInstructions;
+    }
+
+    public toObject():object{
+        return {
+            id: this._id,
+            classId: this._classId,
+            learningPathId: this._learningPathId,
+            startDate: this._startDate,
+            deadline: this._deadline,
+            extraInstructions: this._extraInstructions
+        }
     }
 }

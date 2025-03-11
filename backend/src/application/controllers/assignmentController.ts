@@ -1,12 +1,14 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as AssignmentServices from '../services/assignmentServices';
+import * as AssignmentServices from '../../core/services/assignment';
+
 
 /**
  * Controller responsible for assignment-related API endpoints including CRUD operations
  * and assignment listings by group. Follows RESTful patterns with paths:
  * - GET /assignments/:id - Get single assignment
+ * //TODO: Groups are defined within Assignments, so this path needs to be updated or removed
  * - GET /groups/:idParent/assignments - Get assignments for a group
  * - PATCH /assignments/:id - Update an assignment
  * - POST /assignments - Create a new assignment
@@ -14,11 +16,11 @@ import * as AssignmentServices from '../services/assignmentServices';
  */
 export class AssignmentController extends Controller {
   constructor(
-    get: AssignmentServices.GetAssignmentService,
-    getGroupAssignments: AssignmentServices.GetGroupAssignmentsService,
-    update: AssignmentServices.UpdateAssignmentService,
-    remove: AssignmentServices.DeleteAssignmentService,
-    create: AssignmentServices.CreateAssignmentService
+    get: AssignmentServices.GetAssignment,
+    getGroupAssignments: AssignmentServices.GetGroupAssignment,
+    update: AssignmentServices.UpdateAssignment,
+    remove: AssignmentServices.DeleteAssignment,
+    create: AssignmentServices.CreateAssignment
   ) {
     const handlers : RouteHandlers = {
       [HttpMethod.GET]: [

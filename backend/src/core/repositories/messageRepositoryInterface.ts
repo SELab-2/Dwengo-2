@@ -1,6 +1,5 @@
 import { Message } from "../entities/message";
-import { DeleteMessage } from "../use-cases/message";
-import { AbstractRepository } from "./AbstractRepository";
+import { AbstractRepository } from "./abstractRepository";
 
 /**
  * Interface for message repositories.

@@ -15,10 +15,12 @@ describe("ClassRepositoryTypeORM", () => {
         datasourceMock = {
             getDatasourceTeacher: jest.fn(),
             getDatasourceClass: jest.fn(),
+            getDatasourceGroup: jest.fn(),
             getDatasourceJoinRequest: jest.fn(),
             getDatasourceAssignment: jest.fn(),
             getDatasourceMessage: jest.fn(),
             getDatasourceThread: jest.fn(),
+            getDatasourceStudent: jest.fn()
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),
