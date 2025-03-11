@@ -19,11 +19,11 @@ describe('CreateClass', () => {
         const inputClass = new CreateClassParams("Math 101", "Basic math class", "Primary School");
         const createdClass = new Class("Math 101", "Basic math class", "Primary School", "mock-class-id");
 
-        mockClassRepository.createClass.mockResolvedValue(createdClass);
+        mockClassRepository.createClass.mockResolvedValue(createdClass.toObject());
 
         const result = await createClass.execute(inputClass);
 
-        expect(result).toEqual(createdClass);
+        expect(result).toEqual(createdClass.toObject());
         expect(mockClassRepository.createClass).toHaveBeenCalledWith(inputClass);
     });
 

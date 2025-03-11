@@ -26,7 +26,7 @@ describe("GetClass Use Cases", () => {
 
         expect(mockClassRepository.getClassById).toHaveBeenCalledWith(classId);
         expect(mockClassRepository.getClassById).toHaveBeenCalledTimes(1);
-        expect(result).toEqual(classInstance);
+        expect(result).toEqual(classInstance.toObject());
     });
 
     test("GetClassByName should call repository with correct name", async () => {

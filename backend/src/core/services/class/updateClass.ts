@@ -25,7 +25,7 @@ export class UpdateClassParams implements ServiceParams {
 }
 
 export class UpdateClass extends ClassBaseService<UpdateClassParams> {
-  async execute(input: UpdateClassParams): Promise<Class> {
+  async execute(input: UpdateClassParams): Promise<object> {
 
     // Object met alleen de velden die worden bijgewerkt
     const updatedFields: Partial<Class> = {};
@@ -33,6 +33,6 @@ export class UpdateClass extends ClassBaseService<UpdateClassParams> {
     if (input.description) updatedFields.description = input.description;
     if (input.targetAudience) updatedFields.targetAudience = input.targetAudience;
 
-    return this.classRepository.updateClass(input.id, updatedFields);
+    return (await this.classRepository.updateClass(input.id, updatedFields)).toObject();
   }
 }
