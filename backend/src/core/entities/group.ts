@@ -1,7 +1,8 @@
+
 export class Group {
     constructor(
+        private _memberIds: string[],
         private readonly _classId: string,
-        private _members: string[],
         private readonly _id?: string,
     ) {}
 
@@ -9,15 +10,16 @@ export class Group {
         return this._classId;
     }
 
-    public get members(): string[] {
-        return [...this._members];  // Prevent direct modification
+    public get memberIds(): string[] {
+        return [...this._memberIds];  // Prevent direct modification
     }
 
     public get id(): string | undefined {
         return this._id;
     }
 
-    public set members(newMembers: string[]) {
-        this._members = newMembers;
+    public set memberIds(newMemberIds: string[]) {
+        this._memberIds = newMemberIds;
     }
 }
+
