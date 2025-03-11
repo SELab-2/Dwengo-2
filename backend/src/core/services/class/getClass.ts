@@ -1,62 +1,53 @@
 import { ServiceParams } from "../../../config/service";
-import { Class } from "../../entities/class";
 import { ClassBaseService } from "./baseClassService";
 
-//TODO - change after refactor
-export class GetClassByClassIdParams implements ServiceParams {
-    classId: string;
-    className: string;
-    teacherId: string;
-    studentId: string;
-    constructor(classId: string, className: string, teacherId: string, studentId: string) {
-        this.classId = classId;
-        this.className = className;
-        this.teacherId = teacherId;
-        this.studentId = studentId;
+
+export class GetClassParams implements ServiceParams {
+    // fields may be null: GetClassParams for GetClassByName only requires name, GetClassByClassId only requires classId...
+    constructor(private _classId?: string, private _className?: string, private _teacherId?: string, private _studentId?: string) {}
+
+    public get classId(): string|undefined {
+        return this._classId;
     }
 
-    getClassId(): string {
-        return this.classId;
+    public get className(): string|undefined {
+        return this._className;
     }
 
-    getClassName(): string {
-        return this.className;
+    public get teacherId(): string|undefined {
+        return this._teacherId;
     }
 
-    getTeacherId(): string {
-        return this.teacherId;
-    }
-
-    getStudentId(): string {
-        return this.studentId;
+    public get studentId(): string|undefined {
+        return this._studentId;
     }
 }
 
-export class GetClassByClassId extends ClassBaseService<GetClassByClassIdParams, object> {
+export class GetClassByClassId extends ClassBaseService<GetClassParams> {
   /**
    * Gets a class from the DB given its ID.
    * @param input ID of the class to get from the DB.
    * @returns the class with the given id.
    * @throws {EntityNotFoundError} if the class could not be found.
    */
-  execute(input: GetClassByClassIdParams): Promise<object> {
-    return this.classRepository.getClassById(input.getClassId());
+  execute(input: GetClassParams): Promise<object> {
+    return this.classRepository.getClassById(input.classId!);
   }
 }
 
-export class GetClassByName extends ClassBaseService<GetClassByClassIdParams, object> {
+export class GetClassByName extends ClassBaseService<GetClassParams> {
     /**
      * Gets a class from the DB given its name.
      * @param input name of the class to get.
      * @returns the class with the given name.
      * @throws {EntityNotFoundError} if the class could not be found.
      */
-    async execute(input: GetClassByClassIdParams): Promise<object> {
-        return this.classRepository.getClassByName(input.getClassName());
+    async execute(input: GetClassParams): Promise<object> {
+        return this.classRepository.getClassByName(input.className!);
     }
 }
 
-export class GetAllClasses extends ClassBaseService<GetClassByClassIdParams, object>{
+export class GetAllClasses extends ClassBaseService<GetClassParams>{
     /**
      * Get all classes,
      * @returns every class stored inside the database.
@@ -67,26 +58,26 @@ export class GetAllClasses extends ClassBaseService<GetClassByClassIdParams, obj
     }
 }
 
-export class GetClassesByTeacherId extends ClassBaseService<GetClassByClassIdParams, object>{
+export class GetClassesByTeacherId extends ClassBaseService<GetClassParams>{
     /**
      * Get all classes for a teacher.
      * @param input the id of the teacher.
      * @returns every class for a teacher.
      * @throws {EntityNotFoundError} if the teacher could not be found.
      */
-    async execute(input: GetClassByClassIdParams): Promise<object> {
-        return this.classRepository.getAllClassesByTeacherId(input.getTeacherId());
+    async execute(input: GetClassParams): Promise<object> {
+        return this.classRepository.getAllClassesByTeacherId(input.teacherId!);
     }
 }
 
-export class GetClassesByStudentId extends ClassBaseService<GetClassByClassIdParams, object>{
+export class GetClassesByStudentId extends ClassBaseService<GetClassParams>{
     /**
      * Get all classes for a student.
      * @param input the id of the student.
      * @returns every class where a student is part of.
      * @throws {EntityNotFoundError} if the student could not be found.
      */
-    async execute(input: GetClassByClassIdParams): Promise<object> {
-        return this.classRepository.getAllClassesByStudentId(input.getStudentId());
+    async execute(input: GetClassParams): Promise<object> {
+        return this.classRepository.getAllClassesByStudentId(input.studentId!);
     }
 }
