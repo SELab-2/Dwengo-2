@@ -2,17 +2,18 @@ import { GetStudent } from "../../../../src/core/services/student/getStudent";
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
 import { AppError, EntityNotFoundError } from "../../../../src/config/error";
+import { GetUserParams } from "../../../../src/core/services/user";
 
-describe("getStudent Use Case", () => {
-  let getStudentUseCase: GetStudent;
+describe("getStudent Service", () => {
+  let getStudentService: GetStudent;
   let mockStudentRepository: jest.Mocked<IStudentRepository>;
 
   beforeEach(() => {
     mockStudentRepository = {
-      getStudent: jest.fn(), // Mock DB function
+      getStudentById: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<IStudentRepository>;
 
-    getStudentUseCase = new GetStudent(mockStudentRepository);
+    getStudentService = new GetStudent(mockStudentRepository);
   });
 
   test("Should return student if found", async () => {
@@ -25,8 +26,10 @@ describe("getStudent Use Case", () => {
       "1"
     );
 
-    mockStudentRepository.getStudent.mockResolvedValue(student);
-    const result = await getStudentUseCase.execute("1");
+    const params: GetUserParams = new GetUserParams("1");
+
+    mockStudentRepository.getStudentById.mockResolvedValue(student);
+    const result = await getStudentService.execute(params);
 
     expect(result).toEqual({
       email: "test@student.com",
@@ -35,13 +38,15 @@ describe("getStudent Use Case", () => {
       schoolName: "Yale",
       id: "1"
     });
-    expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("1");
+    expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("1");
   });
 
   test("Should throw error", async () => {
-    mockStudentRepository.getStudent.mockRejectedValue(new EntityNotFoundError("Student not found"));
+    mockStudentRepository.getStudentById.mockRejectedValue(new EntityNotFoundError("Student not found"));
     
-    await expect(getStudentUseCase.execute("999")).rejects.toThrow();
-    expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("999");
+    const params: GetUserParams = new GetUserParams("999");
+
+    await expect(getStudentService.execute(params)).rejects.toThrow();
+    expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("999");
   });
 });

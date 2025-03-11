@@ -11,8 +11,8 @@ describe("deleteStudent Service", () => {
 
   beforeEach(() => {
     mockStudentRepository = {
-      getStudent: jest.fn(),
-      deleteStudent: jest.fn(),
+      getStudentById: jest.fn(),
+      deleteStudentById: jest.fn(),
     } as unknown as jest.Mocked<IStudentRepository>;
 
     deleteStudentService = new DeleteStudent(mockStudentRepository);
@@ -35,8 +35,8 @@ test("Should throw error if student not found in database", async () => {
         "1"
       );
 
-    mockStudentRepository.getStudent.mockResolvedValue(student);
-    mockStudentRepository.deleteStudent.mockResolvedValue(undefined);
+    mockStudentRepository.getStudentById.mockResolvedValue(student);
+    mockStudentRepository.deleteStudentById.mockResolvedValue(undefined);
     
     await expect(deleteStudentService.execute(params)).resolves.toEqual({});
     expect(mockStudentRepository.deleteStudent).toHaveBeenCalledWith(params.id);
