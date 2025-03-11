@@ -1,7 +1,8 @@
 import { GetStudent } from "../../../../src/core/services/student/getStudent";
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
-import { EntityNotFoundError } from "../../../../src/config/error";
+import { AppError, EntityNotFoundError } from "../../../../src/config/error";
+import { GetUserParams } from "../../../../src/core/services/user";
 
 describe("getStudent Service", () => {
   let getStudentService: GetStudent;
@@ -25,8 +26,10 @@ describe("getStudent Service", () => {
       "1"
     );
 
+    const params: GetUserParams = new GetUserParams("1");
+
     mockStudentRepository.getStudentById.mockResolvedValue(student);
-    const result = await getStudentService.execute("1");
+    const result = await getStudentService.execute(params);
 
     expect(result).toEqual({
       email: "test@student.com",
@@ -41,7 +44,9 @@ describe("getStudent Service", () => {
   test("Should throw error", async () => {
     mockStudentRepository.getStudentById.mockRejectedValue(new EntityNotFoundError("Student not found"));
     
-    await expect(getStudentService.execute("999")).rejects.toThrow();
+    const params: GetUserParams = new GetUserParams("999");
+
+    await expect(getStudentService.execute(params)).rejects.toThrow();
     expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("999");
   });
 });

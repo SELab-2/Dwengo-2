@@ -23,7 +23,7 @@ export class CreateStudent extends CreateUser<Student, CreateStudentParams> {
      * @returns {Promise<string>} The id of the created student.
      */
     public async createUser(user: Student): Promise<string> {
-        const result = await this.studentRepository.createStudent(user)
+        const result: Student = await this.studentRepository.createStudent(user)
         return result.id!;
 
     }
