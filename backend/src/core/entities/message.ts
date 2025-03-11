@@ -4,6 +4,7 @@ export class Message {
         private readonly _createdAt: Date,
         private readonly _threadId: string,
         private _content: string,
+        private readonly _id?: string,
     ){}
 
     // Getters
@@ -18,6 +19,10 @@ export class Message {
     }
     public get content(): string {
         return this._content;
+    }
+
+    public get id(): string | undefined {
+        return this._id;
     }
 
     // Setter

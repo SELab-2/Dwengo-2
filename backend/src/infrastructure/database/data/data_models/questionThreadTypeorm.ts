@@ -1,6 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn } from "typeorm"
 import { StudentTypeORM } from "./studentTypeorm"
 import { AssignmentTypeORM } from "./assignmentTypeorm"
+import { QuestionThread } from "../../../../core/entities/questionThread"
+import { VisibilityType } from "../../../../core/entities/questionThread"
+import { ThreadMessageTypeORM } from "./threadMessageTypeorm"
 
 export enum ThreadVisibility {
     GROUP = "group",
@@ -33,4 +36,30 @@ export class QuestionThreadTypeORM {
     })
     visibility!: ThreadVisibility
 
+    public static createTypeORM(thread: QuestionThread, studentModel: StudentTypeORM, assignmentModel: AssignmentTypeORM): QuestionThreadTypeORM {
+        const threadTypeORM: QuestionThreadTypeORM = new QuestionThreadTypeORM();
+        threadTypeORM.assignment = assignmentModel;
+        threadTypeORM.student = studentModel;
+        threadTypeORM.is_closed = thread.isClosed;
+        threadTypeORM.learning_object_id = thread.learningObjectId;
+
+        if (thread.visibility == VisibilityType.GROUP){
+            threadTypeORM.visibility = ThreadVisibility.GROUP;
+        }else{
+            threadTypeORM.visibility = ThreadVisibility.STUDENT;
+        }
+
+        return threadTypeORM;
+    }
+    
+    public toEntity(messageModels: ThreadMessageTypeORM[]): QuestionThread{
+        const messageIds: string[] = messageModels.map((messageModel) => messageModel.id);
+        let visibilityType: VisibilityType
+        if (this.visibility === ThreadVisibility.GROUP){
+            visibilityType = VisibilityType.GROUP
+        } else {
+            visibilityType = VisibilityType.PRIVATE
+        }
+        return new QuestionThread(this.student.id, this.assignment.id, this.learning_object_id, this.is_closed, visibilityType, messageIds, this.id );
+    }
 }

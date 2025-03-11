@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, Column, CreateDateColumn } from "typeorm"
 import { UserTypeORM } from "./userTypeorm"
 import { QuestionThreadTypeORM } from "./questionThreadTypeorm"
+import { Message } from "../../../../core/entities/message"
 
 @Entity()
 export class ThreadMessageTypeORM {
@@ -20,4 +21,23 @@ export class ThreadMessageTypeORM {
 
     @Column({ type: "text" })
     contents!: string
+
+    public static createTypeORM(message: Message, userModel: UserTypeORM, threadModel: QuestionThreadTypeORM): ThreadMessageTypeORM {
+        const messageTypeORM: ThreadMessageTypeORM = new ThreadMessageTypeORM()
+        messageTypeORM.contents = message.content;
+        messageTypeORM.sent_at = message.createdAt;
+        messageTypeORM.sent_by = userModel;
+        messageTypeORM.thread = threadModel;
+        return messageTypeORM;
+    }
+
+    public toEntity(): Message{
+        return new Message(
+            this.sent_by.id,
+            this.sent_at,
+            this.thread.id,
+            this.contents,
+            this.id
+        );
+    }
 }
