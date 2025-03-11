@@ -9,7 +9,7 @@ describe("getStudent Use Case", () => {
 
   beforeEach(() => {
     mockStudentRepository = {
-      getStudent: jest.fn(), // Mock DB function
+      getStudentById: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<StudentRepositoryInterface>;
 
     getStudentUseCase = new GetSudent(mockStudentRepository);
@@ -25,17 +25,17 @@ describe("getStudent Use Case", () => {
       "1"
     );
 
-    mockStudentRepository.getStudent.mockResolvedValue(student);
+    mockStudentRepository.getStudentById.mockResolvedValue(student);
     const result = await getStudentUseCase.execute("1");
 
     expect(result).toEqual(student);
-    expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("1");
+    expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("1");
   });
 
   test("Should throw error", async () => {
-    mockStudentRepository.getStudent.mockRejectedValue(new AppError("Student not found", 404));
+    mockStudentRepository.getStudentById.mockRejectedValue(new AppError("Student not found", 404));
     
     await expect(getStudentUseCase.execute("999")).rejects.toThrow();
-    expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("999");
+    expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("999");
   });
 });

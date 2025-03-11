@@ -1,7 +1,7 @@
 import { UseCase } from "../../../config/usecase";
 import { Student } from "../../entities/student"
 import { StudentRepositoryInterface } from "../../repositories/studentRepositoryInterface";
-import { AppError } from "../../../config/error";
+import { AppError, EntityNotFoundError } from "../../../config/error";
 export class CreateStudent implements UseCase<Student, string> {
     public constructor(private studentRepository: StudentRepositoryInterface) {}
     /**
@@ -17,7 +17,16 @@ export class CreateStudent implements UseCase<Student, string> {
         }
 
         // Check if email not already in use
-        const present: boolean = await this.studentRepository.findByEmail(input.email);
+        let present: boolean = true;
+        try{
+            await this.studentRepository.getStudentByEmail(input.email);
+        }catch(e){
+            if (e instanceof EntityNotFoundError) {
+                present = false;
+            }else{
+                console.log(e);
+            }
+        }
         if (present) {
             throw new AppError("Email already in use", 409);
         }
@@ -39,7 +48,8 @@ export class CreateStudent implements UseCase<Student, string> {
         await this.validateInput(input);
 
         // Save the student to the database
-        const id: string = await this.studentRepository.createStudent(input);
-        return id;
+        const student: Student = await this.studentRepository.createStudent(input);
+
+        return student.id as string;
     }
 }

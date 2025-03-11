@@ -12,7 +12,7 @@ export class GetSudent implements UseCase<string, Student | null> {
    * @throws Error if the student could not be found.
    */
   async execute(id: string): Promise<Student> {
-    const student = await this.studentRepository.getStudent(id);
+    const student = await this.studentRepository.getStudentById(id);
     return student;
   }
 }
