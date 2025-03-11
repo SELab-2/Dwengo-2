@@ -104,7 +104,7 @@ export abstract class Controller {
    * @param operationName - Name of the operation for error message
    * @returns Response with appropriate status and data
    */
-  protected async _executeService(service: Service<ServiceParams, object> | undefined,
+  protected async _executeService(service: Service<ServiceParams> | undefined,
     data: ServiceParams, statusCode: number, operationName: string): Promise<Response>
   {
     if (!service)
@@ -144,7 +144,7 @@ export abstract class Controller {
    * @returns Response with status 200 and list of child entities
    */
   protected async getChildren(req: Request,data: ServiceParams,
-    service: Service<ServiceParams, object>): Promise<Response>
+    service: Service<ServiceParams>): Promise<Response>
   {
     return this._executeService(service, data, 200, "GetChildren");
   }
@@ -157,7 +157,7 @@ export abstract class Controller {
    * @returns Response with status 201 and created child entity data
    */
   protected async addChild(req: Request, data: ServiceParams,
-    service: Service<ServiceParams, object>): Promise<Response>
+    service: Service<ServiceParams>): Promise<Response>
   {
     return this._executeService(service, data, 201, "AddChild");
   }
@@ -170,7 +170,7 @@ export abstract class Controller {
    * @returns Response with status 204 (No Content)
    */
   protected async removeChild(req: Request, data: ServiceParams,
-    service: Service<ServiceParams, object>): Promise<Response>
+    service: Service<ServiceParams>): Promise<Response>
   {
     return this._executeService(service, data, 204, "RemoveChild");
   }
