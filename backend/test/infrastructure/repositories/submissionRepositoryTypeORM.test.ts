@@ -2,6 +2,7 @@ import { StatusType, Submission } from "../../../src/core/entities/submission";
 import { IDatasourceSubmission } from "../../../src/infrastructure/database/data/data_sources/datasourceSubmissionInterface";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
+import { EntityNotFoundError } from "../../../src/config/error";
 
 describe("SubmissionRepositoryTypeORM", () => {
 
@@ -17,18 +18,23 @@ describe("SubmissionRepositoryTypeORM", () => {
             getDatasourceClass: jest.fn(),
             getDatasourceJoinRequest: jest.fn(),
             getDatasourceAssignment: jest.fn(),
+            getDatasourceMessage: jest.fn(),
+            getDatasourceStudent: jest.fn(),
+            getDatasourceGroup: jest.fn(),
             getDatasourceSubmission: jest.fn(),
+            getDatasourceThread: jest.fn(),
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),
         };
 
         datasourceSubmission = {
-            createSubmission: jest.fn(() => Promise.resolve(submission)),
-            getSubmissionById: jest.fn(() => Promise.resolve(submission)),
+            create: jest.fn(() => Promise.resolve(submission)),
+            getById: jest.fn(() => Promise.resolve(submission)),
+            update: jest.fn(() => Promise.resolve(submission)),
             getSubmissionsByClassId: jest.fn(() => Promise.resolve(submission)),
             getSubmissionsByLearningPathId: jest.fn(() => Promise.resolve([submission, submission])),
-            deleteSubmissionById: jest.fn()
+            delete: jest.fn()
         } as any;
 
         // Mock submission
@@ -71,11 +77,30 @@ describe("SubmissionRepositoryTypeORM", () => {
     });
 
     test("delete", async () => {
-        // Call function from repository
-        await datasourceSubmission.delete(submission);
-
-        expect(datasourceSubmission.delete).toHaveBeenCalledTimes(1);
-        expect(datasourceSubmission.delete).toHaveBeenCalledWith(submission.id!);
+            const createdSubmission: Submission = await datasourceSubmission.create(submission);
+            // Call function from repository
+            await datasourceSubmission.delete(createdSubmission);
+    
+            expect(datasourceSubmission.delete).toHaveBeenCalledTimes(1);
+            expect(datasourceSubmission.delete).toHaveBeenCalledWith(createdSubmission);
+    });
+    
+    test('delete throws error if not in database', async () => {
+            const nonExistentSubmissionId = "non-existent-id";
+            datasourceSubmission.getById = jest.fn(() => Promise.resolve(null));
+            datasourceSubmission.delete = jest.fn(async (submission: Submission) => {
+                        const foundSubmission = await datasourceSubmission.getById(submission.id!);
+                        if (!foundSubmission) {
+                            throw new EntityNotFoundError('Submission not found');
+                        }
+            });
+    
+            await expect(datasourceSubmission.delete({ id: nonExistentSubmissionId } as Submission))
+                .rejects
+                .toThrow(EntityNotFoundError);
+    
+            expect(datasourceSubmission.delete).toHaveBeenCalledTimes(1);
+            expect(datasourceSubmission.delete).toHaveBeenCalledWith({ id: nonExistentSubmissionId });
     });
 
 });
