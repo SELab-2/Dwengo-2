@@ -2,6 +2,16 @@ import { mockApp } from "./mocks";
 import { questionThreadRoutes } from "../../../src/application/routes";
 import { QuestionController } from "../../../src/application/controllers/questionController";
 import * as QuestionServices from "../../../src/core/services/question_thread/index";
+import { DataSource } from "typeorm";
+
+jest.mock(
+  "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM",
+  () => ({
+    DatasourceFactoryTypeORM: jest.fn().mockImplementation(() => ({
+      createDataSource: jest.fn(),
+    })),
+  })
+);
 
 // mock the services used by the controller
 class MockGetQuestionService extends QuestionServices.GetQuestionThread {
@@ -51,5 +61,9 @@ describe("questionThreadRoutes", () => {
     expect(mockApp.post).toHaveBeenCalledTimes(1);
 
     expect(controller.handle).not.toHaveBeenCalled();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 });

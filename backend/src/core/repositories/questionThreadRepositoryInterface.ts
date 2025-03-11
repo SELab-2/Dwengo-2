@@ -1,5 +1,5 @@
 import { QuestionThread } from "../entities/questionThread";
-import { AbstractRepository } from "./AbstractRepository";
+import { AbstractRepository } from "./abstractRepository";
 
 /**
  * Interface for question thread repositories.
