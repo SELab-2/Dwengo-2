@@ -1,12 +1,13 @@
 import { Submission } from "../entities/submission";
+import { AbstractRepository } from "./abstractRepository";
 
-export abstract class ISubmissionRepository {
+export abstract class ISubmissionRepository extends AbstractRepository{
     
-    public abstract create(submission: Submission, teacherId: string): Promise<Submission>;
+    public abstract create(submission: Submission): Promise<Submission>;
 
     public abstract getById(id: string): Promise<Submission>;
 
     public abstract update(submission: Submission): Promise<Submission>;
 
-    public abstract delete(id: string): Promise<void>;
+    public abstract delete(submission: Submission): Promise<void>;
 }
