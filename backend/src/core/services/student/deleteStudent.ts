@@ -4,6 +4,6 @@ import { DeleteUser } from "../user/deleteUser";
 export class DeleteStudent extends DeleteUser {
   constructor(private studentRepository: IStudentRepository) {super()}
   async deleteStudent(id: string): Promise<void> {
-    await this.studentRepository.deleteStudent(id);
+    await this.studentRepository.deleteStudentById(id);
   }
 }

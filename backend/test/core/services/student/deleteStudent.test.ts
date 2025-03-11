@@ -21,7 +21,7 @@ describe("deleteStudent Service", () => {
   });
 
 test("Should throw error if student not found in database", async () => {
-    mockStudentRepository.deleteStudent.mockRejectedValue(new EntityNotFoundError("Student not found"));
+    mockStudentRepository.deleteStudentById.mockRejectedValue(new EntityNotFoundError("Student not found"));
 
     await expect(deleteStudentService.execute(params)).rejects.toThrow("Student not found");
 });
@@ -39,6 +39,6 @@ test("Should throw error if student not found in database", async () => {
     mockStudentRepository.deleteStudentById.mockResolvedValue(undefined);
     
     await expect(deleteStudentService.execute(params)).resolves.toEqual({});
-    expect(mockStudentRepository.deleteStudent).toHaveBeenCalledWith(params.id);
+    expect(mockStudentRepository.deleteStudentById).toHaveBeenCalledWith(params.id);
   });
 });
