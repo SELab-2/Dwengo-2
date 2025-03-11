@@ -9,7 +9,8 @@
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
     "lint": "eslint --config .eslintrc.js --ext .ts ./src/",
     "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "detectOpenHandles": "jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",

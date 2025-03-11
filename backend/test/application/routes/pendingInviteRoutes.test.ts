@@ -2,6 +2,16 @@ import { mockApp } from "./mocks";
 import { pendingInviteRoutes } from "../../../src/application/routes";
 import { PendingInviteController } from "../../../src/application/controllers/pendingInviteController";
 import * as PendingInviteServices from "../../../src/core/services/pending_invite/index";
+import { DataSource } from "typeorm";
+
+jest.mock(
+  "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM",
+  () => ({
+    DatasourceFactoryTypeORM: jest.fn().mockImplementation(() => ({
+      createDataSource: jest.fn(),
+    })),
+  })
+);
 
 // mock the services used by the controller
 class MockGetPendingInviteService extends PendingInviteServices.GetInvite {
@@ -45,5 +55,9 @@ describe("pendingInviteRoutes", () => {
     expect(mockApp.post).toHaveBeenCalledTimes(1);
 
     expect(controller.handle).not.toHaveBeenCalled();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 });

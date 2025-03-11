@@ -2,11 +2,19 @@ import { mockApp, MockClassRepository } from './mocks';
 import { classRoutes } from '../../../src/application/routes';
 import { ClassController } from '../../../src/application/controllers';
 import * as ClassServices from '../../../src/core/services/class/index';
-import { IClassRepository } from '../../../src/core/repositories/classRepositoryInterface';
 
-// mock the services used by the controller
+jest.mock(
+  "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM",
+  () => ({
+    DatasourceFactoryTypeORM: jest.fn().mockImplementation(() => ({
+      createDataSource: jest.fn(),
+    })),
+  })
+);
+
+// Mock class services
 class MockGetClassService extends ClassServices.GetClassByClassId {
-  constructor(classRepository: IClassRepository){
+  constructor(classRepository: MockClassRepository){
     super(classRepository);
   }  
   public execute = jest.fn();
@@ -28,7 +36,7 @@ class MockCreateClassService extends ClassServices.CreateClass {
   public execute = jest.fn();
 }
 
-// mock the controller
+// Mock the controller
 class MockClassController extends ClassController {
   constructor() {
     super(
@@ -43,7 +51,7 @@ class MockClassController extends ClassController {
   public handle = jest.fn();
 }
 
-// testing itself
+// Test
 describe("classRoutes", () => {
   it("should define the class routes", () => {
     const controller = new MockClassController();
@@ -55,5 +63,9 @@ describe("classRoutes", () => {
     expect(mockApp.post).toHaveBeenCalledTimes(1);
 
     expect(controller.handle).not.toHaveBeenCalled();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 });

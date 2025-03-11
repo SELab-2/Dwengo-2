@@ -1,8 +1,6 @@
 import { Express } from 'express';
 import { IClassRepository } from '../../../src/core/repositories/classRepositoryInterface';
-import { Class } from '../../../src/core/entities/class';
 import { IAssignmentRepository } from '../../../src/core/repositories/assignmentRepositoryInterface';
-import { Assignment } from '../../../src/core/entities/assignment';
 
 export const mockApp = {
   get: jest.fn(),
