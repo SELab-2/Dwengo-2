@@ -12,7 +12,7 @@ describe('GetQuestionThread', () => {
 
     beforeEach(() => {
         getQuestionThread = new GetQuestionThread(mockQuestionThreadRepository as any);
-        jest.clearAllMocks(); // Reset mocks voor elke test
+        jest.clearAllMocks();
     });
 
     test('Should retrieve a question thread and return it as an object', async () => {

@@ -12,7 +12,7 @@ describe('GetAssignmentQuestionThreads', () => {
 
     beforeEach(() => {
         getAssignmentQuestionThreads = new GetAssignmentQuestionThreads(mockQuestionThreadRepository as any);
-        jest.clearAllMocks(); // Reset mocks voor elke test
+        jest.clearAllMocks();
     });
 
     test('Should retrieve question threads for an assignment and return them as an object list', async () => {

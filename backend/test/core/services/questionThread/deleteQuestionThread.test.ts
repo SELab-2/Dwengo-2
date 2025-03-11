@@ -11,7 +11,7 @@ describe('DeleteQuestionThread', () => {
 
     beforeEach(() => {
         deleteQuestionThread = new DeleteQuestionThread(mockQuestionThreadRepository as any);
-        jest.clearAllMocks(); // Reset mocks voor elke test
+        jest.clearAllMocks();
     });
 
     test('Should delete a question thread and return an empty object', async () => {
