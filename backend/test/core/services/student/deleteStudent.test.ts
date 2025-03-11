@@ -1,13 +1,13 @@
-import { DeleteStudent, DeleteStudentParams } from "../../../../src/core/services/student/deleteStudent";
+import { DeleteStudent } from "../../../../src/core/services/student/deleteStudent";
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
-import { rejects } from "assert";
 import { EntityNotFoundError } from "../../../../src/config/error";
+import { DeleteUserParams } from "../../../../src/core/services/user/deleteUser";
 
 describe("deleteStudent Service", () => {
   let deleteStudentService: DeleteStudent;
   let mockStudentRepository: jest.Mocked<IStudentRepository>;
-  let params: DeleteStudentParams;
+  let params: DeleteUserParams;
 
   beforeEach(() => {
     mockStudentRepository = {
@@ -17,11 +17,11 @@ describe("deleteStudent Service", () => {
 
     deleteStudentService = new DeleteStudent(mockStudentRepository);
 
-    params = new DeleteStudentParams("1"); 
+    params = new DeleteUserParams("1"); 
   });
 
 test("Should throw error if student not found in database", async () => {
-    mockStudentRepository.getStudentById.mockRejectedValue(new EntityNotFoundError("Student not found"));
+    mockStudentRepository.deleteStudentById.mockRejectedValue(new EntityNotFoundError("Student not found"));
 
     await expect(deleteStudentService.execute(params)).rejects.toThrow("Student not found");
 });
@@ -39,7 +39,6 @@ test("Should throw error if student not found in database", async () => {
     mockStudentRepository.deleteStudentById.mockResolvedValue(undefined);
     
     await expect(deleteStudentService.execute(params)).resolves.toEqual({});
-    expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith(params.getId());
-    expect(mockStudentRepository.deleteStudentById).toHaveBeenCalledWith(params.getId());
+    expect(mockStudentRepository.deleteStudentById).toHaveBeenCalledWith(params.id);
   });
 });
