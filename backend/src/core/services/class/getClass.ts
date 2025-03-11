@@ -4,7 +4,7 @@ import { ClassBaseService } from "./baseClassService";
 
 export class GetClassParams implements ServiceParams {
     // fields may be null: GetClassParams for GetClassByName only requires name, GetClassByClassId only requires classId...
-    constructor(private _classId?: string, private _className?: string, private _teacherId?: string, private _studentId?: string) { }
+    constructor(private _classId?: string, private _className?: string, private _id?: string) { }
 
     public get classId(): string | undefined {
         return this._classId;
@@ -14,12 +14,8 @@ export class GetClassParams implements ServiceParams {
         return this._className;
     }
 
-    public get teacherId(): string | undefined {
-        return this._teacherId;
-    }
-
-    public get studentId(): string | undefined {
-        return this._studentId;
+    public get id(): string | undefined {
+        return this._id;
     }
 }
 
@@ -58,6 +54,18 @@ export class GetAllClasses extends ClassBaseService<GetClassParams> {
     }
 }
 
+export class GetUserClasses extends ClassBaseService<GetClassParams> {
+    /**
+     * Get all classes for a user.
+     * @param input the id of the user.
+     * @returns every class for a user.
+     * @throws {EntityNotFoundError} if the user could not be found.
+     */
+    async execute(input: GetClassParams): Promise<object> {
+        return { classes: (await this.classRepository.getUserClasses(input.id!)).forEach(c => c.toObject()) };
+    }
+}
+
 export class GetClassesByTeacherId extends ClassBaseService<GetClassParams> {
     /**
      * Get all classes for a teacher.
@@ -66,7 +74,7 @@ export class GetClassesByTeacherId extends ClassBaseService<GetClassParams> {
      * @throws {EntityNotFoundError} if the teacher could not be found.
      */
     async execute(input: GetClassParams): Promise<object> {
-        return { classes: (await this.classRepository.getAllClassesByTeacherId(input.teacherId!)).forEach(c => c.toObject()) };
+        return { classes: (await this.classRepository.getAllClassesByTeacherId(input.id!)).forEach(c => c.toObject()) };
     }
 }
 
@@ -78,6 +86,6 @@ export class GetClassesByStudentId extends ClassBaseService<GetClassParams> {
      * @throws {EntityNotFoundError} if the student could not be found.
      */
     async execute(input: GetClassParams): Promise<object> {
-        return { classes: (await this.classRepository.getAllClassesByStudentId(input.teacherId!)).forEach(c => c.toObject()) };
+        return { classes: (await this.classRepository.getAllClassesByStudentId(input.id!)).forEach(c => c.toObject()) };
     }
 }

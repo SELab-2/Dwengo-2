@@ -34,7 +34,7 @@ export abstract class IClassRepository extends AbstractRepository {
      * @returns A promise that resolves to the class with the given id or null if no results are found.
      */
     public abstract getClassById(id: string): Promise<Class>;
-    
+
     /**
      * Get a class by its name.
      * @param name The name of the class.
@@ -48,6 +48,14 @@ export abstract class IClassRepository extends AbstractRepository {
      * @returns A promise that resolves to an array of all classes.
      */
     public abstract getAllClasses(): Promise<Class[]>;
+
+    /**
+     * Get all classes for a user.
+     * @param id the id of the user.
+     * @returns A promise that resolves to an array of all classes for that user.
+     * @throws {EntityNotFoundError} when the user is not found.
+     */
+    public abstract getUserClasses(id: string): Promise<Class[]>;
 
     /**
      * Get all classes for a teacher.
