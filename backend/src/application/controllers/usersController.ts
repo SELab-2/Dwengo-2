@@ -1,9 +1,15 @@
 import { Controller } from './controllerExpress';
-import { Request, Response, HttpMethod, RouteHandlers } from '../types';
+import { Request, HttpMethod, RouteHandlers } from '../types';
 import * as UsersServices from '../../core/services/user';
+import * as StudentServices from '../../core/services/student';
 import { defaultExtractor } from './helpersExpress';
 import { User } from '../../core/entities/user';
+import { createParamsExtractor } from '../extractors';
+import { Student } from '../../core/entities/student';
 
+const extractors = {
+  createUser: createParamsExtractor(StudentServices.CreateStudentParams)
+};
 
 /**
  * Controller responsible for general user-related API endpoints including
@@ -19,36 +25,36 @@ import { User } from '../../core/entities/user';
  */
 export class UsersController extends Controller {
   constructor(
-    getAll: UsersServices.GetAllUsers,
+    // getAll: UsersServices.GetAllUsers,
     //FIX: We need to rethink this
-    create: UsersServices.CreateUser<User, UsersServices.CreateParams<User>>,
-    getClassUsers: UsersServices.GetClassUsers,
-    getGroupUsers: UsersServices.GetGroupUsers,
-    addGroupUser: UsersServices.AssignUserToGroup,
-    getAssignmentUsers: UsersServices.GetAssignmentUsers,
-    addAssignmentUser: UsersServices.AssignUserToAssignment
+    create: UsersServices.CreateUser<Student, StudentServices.CreateStudentParams>,
+    // getClassUsers: UsersServices.GetClassUsers,
+    // getGroupUsers: UsersServices.GetGroupUsers,
+    // addGroupUser: UsersServices.AssignUserToGroup,
+    // getAssignmentUsers: UsersServices.GetAssignmentUsers,
+    // addAssignmentUser: UsersServices.AssignUserToAssignment
   ) {
     const handlers: RouteHandlers = {
-      [HttpMethod.GET]: [
-        { hasId: false, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getAll(req, data) },
-        { parent: 'classes', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getChildren(req, data, getClassUsers) },
-        { parent: 'groups', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getChildren(req, data, getGroupUsers) },
-        { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getChildren(req, data, getAssignmentUsers) }
-      ],
+      // [HttpMethod.GET]: [
+      //   { hasId: false, hasParentId: false, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getAll(req, data) },
+      //   { parent: 'classes', hasId: false, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getChildren(req, data, getClassUsers) },
+      //   { parent: 'groups', hasId: false, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getChildren(req, data, getGroupUsers) },
+      //   { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getChildren(req, data, getAssignmentUsers) }
+      // ],
       [HttpMethod.POST]: [
-        { hasId: false, hasParentId: false, extractor: defaultExtractor,
+        { hasId: false, hasParentId: false, extractor: extractors.createUser,
           handler: (req: Request, data: object) => this.create(req, data) },
-        { parent: 'groups', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.addChild(req, data, addGroupUser) },
-        { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.addChild(req, data, addAssignmentUser) }
+        // { parent: 'groups', hasId: false, hasParentId: true, extractor: defaultExtractor,
+        //   handler: (req: Request, data: object) => this.addChild(req, data, addGroupUser) },
+        // { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
+        //   handler: (req: Request, data: object) => this.addChild(req, data, addAssignmentUser) }
       ]
     };
 
-    super({ getAll, create, getClassUsers, getGroupUsers, addGroupUser, getAssignmentUsers, addAssignmentUser }, handlers);
+    super({ /*getAll,*/ create/*, getClassUsers, getGroupUsers, addGroupUser, getAssignmentUsers, addAssignmentUser*/ }, handlers);
   }
 }
