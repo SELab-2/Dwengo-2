@@ -24,7 +24,7 @@ describe("GroupRepositoryTypeORM", () => {
             getDatasourceThread: jest.fn(),
             getDatasourceStudent: jest.fn(),
             getDatasourceGroup: jest.fn(),
-
+            getDatasourceSubmission: jest.fn()
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),
