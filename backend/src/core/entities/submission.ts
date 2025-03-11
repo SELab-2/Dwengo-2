@@ -10,7 +10,7 @@ export class Submission {
         private readonly _assignmentId: string,
         private readonly _learningObjectId: string,
         private readonly _time: Date,
-        private _contents: any, // can be a photo, a string, whatever. In the database this is bytea.
+        private _contents: Buffer, // can be a photo, a string, whatever. In the database this is bytea.
         private _status: StatusType,
         private _id?: string,
     ){}
@@ -28,7 +28,7 @@ export class Submission {
     public get time(): Date {
         return this._time;
     }
-    public get contents(): any {
+    public get contents(): Buffer {
         return this._contents;
     }
     public get status(): StatusType {
@@ -40,7 +40,7 @@ export class Submission {
     
 
     // Setter
-    public set contents(newContents: any) {
+    public set contents(newContents: Buffer) {
         this._contents = newContents;
     }
     public set status(newStatus: StatusType) {
