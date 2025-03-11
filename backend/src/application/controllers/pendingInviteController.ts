@@ -1,7 +1,8 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as PendingInviteServices from '../services/pendingInviteServices';
+import * as PendingInviteServices from '../../core/services/pending_invite';
+
 /**
  * Controller responsible for pending invite-related API endpoints including CRUD operations
  * and invite listings by user. Follows RESTful patterns with paths:
@@ -13,10 +14,10 @@ import * as PendingInviteServices from '../services/pendingInviteServices';
  */
 export class PendingInviteController extends Controller {
   constructor(
-    get: PendingInviteServices.GetPendingInviteService,
-    getUserInvites: PendingInviteServices.GetUserPendingInvitesService,
-    remove: PendingInviteServices.DeletePendingInviteService,
-    create: PendingInviteServices.CreatePendingInviteService
+    get: PendingInviteServices.GetInvite,
+    getUserInvites: PendingInviteServices.GetUserInvites,
+    remove: PendingInviteServices.DeleteInvite,
+    create: PendingInviteServices.CreateInvite
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [

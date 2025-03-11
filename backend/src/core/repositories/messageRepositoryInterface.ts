@@ -1,5 +1,5 @@
 import { Message } from "../entities/message";
-import { AbstractRepository } from "./AbstractRepository";
+import { AbstractRepository } from "./abstractRepository";
 
 /**
  * Interface for message repositories.

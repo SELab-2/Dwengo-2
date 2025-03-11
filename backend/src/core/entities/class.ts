@@ -1,3 +1,4 @@
+
 export class Class {
     public constructor(
         private _name: string,

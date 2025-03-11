@@ -1,3 +1,4 @@
+
 export class Assignment {
     public constructor(
         private _classId: string,

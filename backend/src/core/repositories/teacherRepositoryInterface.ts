@@ -1,20 +1,12 @@
 import { IDatasourceFactory } from "../../infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { Teacher } from "../entities/teacher";
-import { AbstractRepository } from "./AbstractRepository";
+import { AbstractRepository } from "./abstractRepository";
 
 /**
  * Interface for teacher repositories.
  * Allows CRUD operations on teacher entities.
  */
 export abstract class ITeacherRepository extends AbstractRepository {
-
-
-    /**
-     * Check if a teacher with the given email exists in the repository.
-     * @param email The email to check for.
-     * @returns A promise that resolves to true if a teacher with the given email exists, false otherwise.
-     */
-    public abstract checkTeacherByEmail(email: string): boolean | PromiseLike<boolean>;
 
     /**
      * Insert a new teacher in the repository. The `id` field of the teacher should be empty.
@@ -31,6 +23,14 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @returns A promise that resolves to the teacher with the given id or null if no results are found.
      */
     public abstract getTeacherById(id: string): Promise<Teacher>;
+
+
+    /**
+     * Check if a teacher with this email exists.
+     * @param email The email of the teacher
+     * @returns A promise that resolves to a boolean, true if email is already in use false otherwise.
+     */
+    public abstract checkTeacherByEmail(email: string): Promise<boolean>;
 
     /**
      * Get a teacher by their email.

@@ -1,32 +1,26 @@
 import { mockApp } from "./mocks";
 import { messageRoutes } from "../../../src/application/routes/messageRoutes";
 import { MessageController } from "../../../src/application/controllers";
-import * as MessageServices from "../../../src/application/services";
-import * as MessageUseCases from "../../../src/core/use-cases/message";
+import * as MessageServices from "../../../src/core/services/message/index";
 
 // mock the services used by the controller
-class MockGetMessageService extends MessageServices.GetMessageService {
-  constructor() { super({} as unknown as MessageUseCases.GetMessage); }
+class MockGetMessageService extends MessageServices.GetMessage {
   public execute = jest.fn();
 }
 
-class MockGetQuestionMessagesService extends MessageServices.GetQuestionMessagesService {
-  constructor() { super({} as unknown as MessageUseCases.GetQuestionMessages); }
+class MockGetQuestionMessagesService extends MessageServices.GetQuestionMessages {
   public execute = jest.fn();
 }
 
-class MockUpdateMessageService extends MessageServices.UpdateMessageService {
-  constructor() { super({} as unknown as MessageUseCases.UpdateMessage); }
+class MockUpdateMessageService extends MessageServices.UpdateMessage {
   public execute = jest.fn();
 }
 
-class MockDeleteMessageService extends MessageServices.DeleteMessageService {
-  constructor() { super({} as unknown as MessageUseCases.DeleteMessage); }
+class MockDeleteMessageService extends MessageServices.DeleteMessage {
   public execute = jest.fn();
 }
 
-class MockCreateMessageService extends MessageServices.CreateMessageService {
-  constructor() { super({} as unknown as MessageUseCases.CreateMessage); }
+class MockCreateMessageService extends MessageServices.CreateMessage {
   public execute = jest.fn();
 }
 
