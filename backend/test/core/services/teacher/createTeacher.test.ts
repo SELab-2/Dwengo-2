@@ -9,9 +9,10 @@ const mockStudentRepository = {
 
 const mockTeacherRepository = {
   checkTeacherByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
+  createStudent: jest.fn().mockResolvedValue('mock-teacher-id'), // Simulate teacher
 };
 
-describe('CreateStudent', () => {
+describe('CreateTeacher service', () => {
   let createStudent: CreateStudent;
 
   beforeEach(() => {
