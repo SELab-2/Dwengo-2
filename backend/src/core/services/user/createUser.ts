@@ -110,9 +110,8 @@ export class CreateTeacherParams extends CreateParams<Teacher> {
 /**
  * @template T The type of user to be created.
  * @template P The corresponding type of params to be used.
- * @class CreateUser
- * @implements {UseCase<P, object>}
- * @description Abstract class representing the use case for creating a user.
+ * @implements {Service<P>}
+ * @description Abstract class representing the service for creating a user.
  * @param {StudentRepositoryInterface} studentRepository - The student repository.
  * @param {ITeacherRepository} teacherRepository - The teacher repository.
  */

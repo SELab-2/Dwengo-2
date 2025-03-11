@@ -7,7 +7,7 @@ import { User } from '../../entities/user';
 import { Teacher } from '../../entities/teacher';
 
 /**
- * Class to be used by execute method to update a student's info in the DB.
+ * Class to be used by execute method to update a user's info in the DB.
  * If a field is not to be updated, it should be undefined in the constructor.
  */
 export abstract class UpdateParams<T extends User> implements ServiceParams {
@@ -21,18 +21,19 @@ export abstract class UpdateParams<T extends User> implements ServiceParams {
   ) {}
 
   /**
-   * Creates an object with updated fields of a user.
+   * Updates an object with updated fields of a user.
    *
    * @param studentRepository repository to get student info from DB.
    * @param teacherRepository repository to get teacher info from DB.
    * @returns a student object with the updated info.
    */
   async fromObject(
+    getOldUser: (id: string) => Promise<T>,
     studentRepository: IStudentRepository,
     teacherRepository: ITeacherRepository,
   ): Promise<T> {
     // Checks
-    const user: T = await this.getOldUser();
+    const user: T = await getOldUser(this.id);
 
     // Check if email is not same when being updated
     if (this.email && user.email === this.email) {
@@ -65,29 +66,14 @@ export abstract class UpdateParams<T extends User> implements ServiceParams {
       } as ApiError;
     }
 
-    // Update student with new info
-    const updatedUser = new Student(
-      this.email ?? user.email,
-      this.firstName ?? user.firstName,
-      this.familyName ?? user.familyName,
-      this.passwordHash ?? user.passwordHash,
-      this.schoolName ?? user.schoolName,
-      this.id,
-    );
     return this.createNewUser(user);
   }
 
   /**
-   * @description Abstract method to create a user object.
+   * @description Abstract method to create a new user object.
    * @returns {T} The created user.
    */
   abstract createNewUser(oldUser: T): T;
-
-  /**
-   * @description Abstract method to create a user object.
-   * @returns {T} The created user.
-   */
-  abstract getOldUser(): Promise<T>;
 
   toObject(): object {
     return {};
@@ -95,64 +81,19 @@ export abstract class UpdateParams<T extends User> implements ServiceParams {
 }
 
 /**
- * @extends {UpdateParams<Teacher>}
- * @description Class representing the parameters required to update a teacher.
+ * @template T The type of user to be updated.
+ * @template P The corresponding type of params to be used.
+ * @implements {Service<P>}
+ * @description Abstract class representing the service for updating a user.
+ * @param {StudentRepositoryInterface} studentRepository - The student repository.
+ * @param {ITeacherRepository} teacherRepository - The teacher repository.
  */
-export class UpdateTeacherParams extends UpdateParams<Teacher> {
-  constructor(
-    id: string,
-    private repository: ITeacherRepository,
-    email?: string,
-    firstName?: string,
-    familyName?: string,
-    passwordHash?: string,
-    schoolName?: string,
-  ) {
-    super(id, email, firstName, familyName, passwordHash, schoolName);
-  }
-  createNewUser(oldUser: Teacher): Teacher {
-    return new Teacher(
-      this.email ?? oldUser.email,
-      this.firstName ?? oldUser.firstName,
-      this.familyName ?? oldUser.familyName,
-      this.passwordHash ?? oldUser.passwordHash,
-      this.schoolName ?? oldUser.schoolName,
-      this.id,
-    );
-  }
-
-  async getOldUser(): Promise<Teacher> {
-    return await this.repository.getTeacherById(this.id);
-  }
-}
-
-/**
- * @extends {UpdateParams<Student>}
- * @description Class representing the parameters required to update a student.
- */
-export class UpdateTeacherParams extends UpdateParams<Student> {
-  createNewUser(oldUser: Student): Student {
-    return new Student(
-      this.email ?? oldUser.email,
-      this.firstName ?? oldUser.firstName,
-      this.familyName ?? oldUser.familyName,
-      this.passwordHash ?? oldUser.passwordHash,
-      this.schoolName ?? oldUser.schoolName,
-      this.id,
-    );
-  }
-
-  getOldUser(): Student {
-    studentRepository.get;
-  }
-}
-
-export abstract class UpdateStudent<T extends User, P extends UpdateParams<T>>
+export abstract class UpdateUser<T extends User, P extends UpdateParams<T>>
   implements Service<P>
 {
   constructor(
-    private studentRepository: IStudentRepository,
-    private teacherRepository: ITeacherRepository,
+    protected studentRepository: IStudentRepository,
+    protected teacherRepository: ITeacherRepository,
   ) {}
 
   /**
@@ -163,6 +104,13 @@ export abstract class UpdateStudent<T extends User, P extends UpdateParams<T>>
   abstract updateUser(user: T): Promise<void>;
 
   /**
+   * @description Abstract method to get old user.
+   * @param {T} user - The id of user to get.
+   * @returns {Promise<void>} The id of the updated user.
+   */
+  abstract getOldUser(id: string): Promise<T>;
+
+  /**
    * Updates a student's info in the DB.
    *
    * @param input Object with new data of student to update in the DB.
@@ -170,6 +118,7 @@ export abstract class UpdateStudent<T extends User, P extends UpdateParams<T>>
    */
   async execute(input: P): Promise<object> {
     const user: T = await input.fromObject(
+      this.getOldUser.bind(this),
       this.studentRepository,
       this.teacherRepository,
     );
