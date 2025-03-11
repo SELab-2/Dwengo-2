@@ -1,3 +1,5 @@
+import { ServiceParams } from "../config/service";
+
 /* ************* HTTP Protocol Types ************* */
 
 /**
@@ -34,11 +36,14 @@ export type ResponseBody = Record<string, unknown>;
  * Interface defining an HTTP request object.
  * Based on the standardized HTTP Request structure.
  * See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
+ * With same optional help fields for internal use.
  */
 export interface Request {
   headers: RequestHeaders;
   method: HttpMethod;
-  body: object;
+  body: Record<string, unknown>;
+  pathParams?: PathParams;
+  queryParams?: QueryParams;
 }
 
 /**
@@ -86,6 +91,12 @@ export interface PathParams {
 }
 
 /**
+ * Type representing query parameters extracted from URL segments.
+ * Used parameter extraction.
+ */
+export type QueryParams = Record<string, string | number>;
+
+/**
  * Route pattern definition for declarative routing.
  * Used to match incoming requests to their appropriate handler functions
  * based on URL structure and parameters.
@@ -94,8 +105,8 @@ export interface RoutePattern {
   parent?: string;
   hasId: boolean;
   hasParentId: boolean;
-  extractor:(req: Request) => object;
-  handler: (req: Request, data: object) => Response;
+  extractor: (req: Request) => ServiceParams;
+  handler: (req: Request, data: ServiceParams) => Promise<Response>;
 }
 
 export type RouteHandlers = Partial<Record<HttpMethod, RoutePattern[]>>;
