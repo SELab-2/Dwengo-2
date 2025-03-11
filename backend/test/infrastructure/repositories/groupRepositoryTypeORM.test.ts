@@ -2,8 +2,6 @@ import { Group } from "../../../src/core/entities/group";
 import { IDatasourceGroup } from "../../../src/infrastructure/database/data/data_sources/datasourceGroupInterface";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
-import { Student } from "../../../src/core/entities/student";
-import { Class } from "../../../src/core/entities/class";
 
 describe("GroupRepositoryTypeORM", () => {
 
@@ -23,6 +21,8 @@ describe("GroupRepositoryTypeORM", () => {
             getDatasourceGroup: jest.fn(),
             getDatasourceJoinRequest: jest.fn(),
             getDatasourceAssignment: jest.fn(),
+            getDatasourceStudent: jest.fn()
+
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),

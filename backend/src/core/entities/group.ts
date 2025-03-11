@@ -1,8 +1,8 @@
 
 export class Group {
     constructor(
-        private readonly _classId: string,
         private _memberIds: string[],
+        private readonly _classId: string,
         private readonly _id?: string,
     ) {}
 
