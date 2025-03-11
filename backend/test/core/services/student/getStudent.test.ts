@@ -2,6 +2,7 @@ import { GetStudent } from "../../../../src/core/services/student/getStudent";
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
 import { AppError, EntityNotFoundError } from "../../../../src/config/error";
+import { GetUserParams } from "../../../../src/core/services/user";
 
 describe("getStudent Use Case", () => {
   let getStudentUseCase: GetStudent;
@@ -25,8 +26,10 @@ describe("getStudent Use Case", () => {
       "1"
     );
 
+    const params: GetUserParams = new GetUserParams("1");
+
     mockStudentRepository.getStudent.mockResolvedValue(student);
-    const result = await getStudentUseCase.execute("1");
+    const result = await getStudentUseCase.execute(params);
 
     expect(result).toEqual({
       email: "test@student.com",
@@ -41,7 +44,9 @@ describe("getStudent Use Case", () => {
   test("Should throw error", async () => {
     mockStudentRepository.getStudent.mockRejectedValue(new EntityNotFoundError("Student not found"));
     
-    await expect(getStudentUseCase.execute("999")).rejects.toThrow();
+    const params: GetUserParams = new GetUserParams("999");
+
+    await expect(getStudentUseCase.execute(params)).rejects.toThrow();
     expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("999");
   });
 });

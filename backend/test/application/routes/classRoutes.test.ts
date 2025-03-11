@@ -4,7 +4,7 @@ import { ClassController } from '../../../src/application/controllers';
 import * as ClassServices from '../../../src/core/services/class/index';
 
 // mock the services used by the controller
-class MockGetClassService extends ClassServices.GetClass {
+class MockGetClassService extends ClassServices.GetClassByClassId {
   public execute = jest.fn();
 }
 

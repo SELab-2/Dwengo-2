@@ -11,4 +11,5 @@ export interface Service<T extends ServiceParams> {
 }
 
 //TODO can we abstract the params type in services to for a Params as abstracted class or interface?
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Services = Record<string, any>;

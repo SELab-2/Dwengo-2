@@ -125,7 +125,7 @@ export abstract class Controller {
   /**
    * TODO
    */
-  protected getChildren<T extends ServiceParams>(req: Request, data: object, service: Service<T, object>): Response {
+  protected getChildren<T extends ServiceParams>(req: Request, data: object, service: Service<T>): Response {
     // TODO: add more checking ... (page number, size extraction)
     // TODO: change data object to Params for designated service
     const body: object = service.execute(data as T);
@@ -135,7 +135,7 @@ export abstract class Controller {
   /**
    * TODO
    */
-  protected addChild(req: Request, data: object, service: Service<ServiceParams, object>): Response {
+  protected addChild(req: Request, data: object, service: Service<ServiceParams>): Response {
     // TODO: add more checking ...
     // TODO: change data object to Params for designated service
     const body: object = service.execute(data);
@@ -145,7 +145,7 @@ export abstract class Controller {
   /**
    * TODO
    */
-  protected removeChild<T extends ServiceParams>(req: Request, data: object, service: Service<T, object>): Response {
+  protected removeChild<T extends ServiceParams>(req: Request, data: object, service: Service<T>): Response {
     // TODO: add more checking ... (data will be empty, just extract id)
     // TODO: change data object to Params for designated service
     const body: object = service.execute(data as T);

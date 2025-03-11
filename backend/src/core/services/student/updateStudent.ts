@@ -93,7 +93,7 @@ export class UpdateStudentParams implements ServiceParams{
   }
 }
 
-export class UpdateStudent implements Service<UpdateStudentParams, object> {
+export class UpdateStudent implements Service<UpdateStudentParams> {
   constructor(
     private studentRepository: IStudentRepository,
     private teacherRepository: ITeacherRepository,

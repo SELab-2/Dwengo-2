@@ -1,10 +1,10 @@
 import { ApiError, ErrorCode } from '../../../application/types';
 import { Service, ServiceParams } from '../../../config/service';
 
-class GetUserParams implements ServiceParams {
+export class GetUserParams implements ServiceParams {
   constructor(private _id: string) {}
 
-  public getId() {
+  public get id() {
     return this._id;
   }
 }
@@ -29,6 +29,6 @@ export abstract class GetUser implements Service<GetUserParams> {
    * @throws ApiError if id is invalid.
    */
   async execute(input: GetUserParams): Promise<object> {
-    return await this.getUser(input.getId());
+    return await this.getUser(input.id);
   }
 }
