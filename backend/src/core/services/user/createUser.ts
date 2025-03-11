@@ -117,7 +117,7 @@ export class CreateTeacherParams extends CreateParams<Teacher> {
  * @param {ITeacherRepository} teacherRepository - The teacher repository.
  */
 export abstract class CreateUser<T extends User, P extends CreateParams<T>>
-  implements Service<P, object>
+  implements Service<P>
 {
   public constructor(
     protected studentRepository: IStudentRepository,
