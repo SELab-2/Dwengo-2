@@ -12,7 +12,7 @@ export class QuestionThread {
         private readonly _learningObjectId: string,
         private _isClosed: boolean,
         private _visibility: VisibilityType,
-        private _messages: Message[],
+        private _messageIds: string[],
         private _id?: string,
     ){}
 
@@ -32,8 +32,8 @@ export class QuestionThread {
     public get visibility(): VisibilityType {
         return this._visibility;
     }
-    public get messages(): Message[] {
-        return this._messages;
+    public get messageIds(): string[] {
+        return this._messageIds;
     }
     public get id(): string|undefined {
         return this._id;
@@ -47,8 +47,8 @@ export class QuestionThread {
     public set visibility(newVisibility: VisibilityType) {
         this._visibility = newVisibility;
     }
-    public set messages(newMessages: Message[]) {
-        this._messages = newMessages;
+    public set messageIds(newMessages: string[]) {
+        this._messageIds = newMessages;
     }
     public set id(newId: string) {
         this._id = newId;

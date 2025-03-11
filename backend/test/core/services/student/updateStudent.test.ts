@@ -14,7 +14,7 @@ describe('UpdateStudent Service', () => {
 
   beforeEach(() => {
     studentRepository = {
-      getStudent: jest.fn(),
+      getStudentById: jest.fn(),
       checkByEmail: jest.fn(),
       updateStudent: jest.fn(),
     } as unknown as jest.Mocked<IStudentRepository>;
@@ -34,7 +34,7 @@ describe('UpdateStudent Service', () => {
       'oldSchool',
       '1',
     );
-    studentRepository.getStudent.mockResolvedValue(student);
+    studentRepository.getStudentById.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
     const params = new UpdateStudentParams(
@@ -47,7 +47,7 @@ describe('UpdateStudent Service', () => {
     );
     const result = await updateStudent.execute(params);
 
-    expect(studentRepository.getStudent).toHaveBeenCalledWith('1');
+    expect(studentRepository.getStudentById).toHaveBeenCalledWith('1');
     expect(studentRepository.checkByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
@@ -76,7 +76,7 @@ describe('UpdateStudent Service', () => {
       'oldSchool',
       '1',
     );
-    studentRepository.getStudent.mockResolvedValue(student);
+    studentRepository.getStudentById.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
     const params = new UpdateStudentParams(
@@ -89,7 +89,7 @@ describe('UpdateStudent Service', () => {
     );
     const result = await updateStudent.execute(params);
 
-    expect(studentRepository.getStudent).toHaveBeenCalledWith('1');
+    expect(studentRepository.getStudentById).toHaveBeenCalledWith('1');
     expect(studentRepository.checkByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
@@ -118,7 +118,7 @@ describe('UpdateStudent Service', () => {
       'School',
       '1',
     );
-    studentRepository.getStudent.mockResolvedValue(student);
+    studentRepository.getStudentById.mockResolvedValue(student);
 
     const params = new UpdateStudentParams(
       '1',
@@ -144,7 +144,7 @@ describe('UpdateStudent Service', () => {
       'school',
       '1',
     );
-    studentRepository.getStudent.mockResolvedValue(student);
+    studentRepository.getStudentById.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(true);
 
     const params = new UpdateStudentParams(
@@ -171,7 +171,7 @@ describe('UpdateStudent Service', () => {
       'school',
       '1',
     );
-    studentRepository.getStudent.mockResolvedValue(student);
+    studentRepository.getStudentById.mockResolvedValue(student);
 
     const params = new UpdateStudentParams(
       '1',

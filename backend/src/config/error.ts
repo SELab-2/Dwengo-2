@@ -32,3 +32,15 @@ export class DatabaseEntryNotFoundError extends Error {
         this.message = message;
     }
 }
+
+/**
+ * Error class for cases like failure to create a Class.
+ */
+export class DatabaseError extends Error {
+    message: string;
+
+    constructor(message: string) {
+        super(message);
+        this.message = message;
+    }
+}

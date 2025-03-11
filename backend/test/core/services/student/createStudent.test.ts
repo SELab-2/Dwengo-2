@@ -1,16 +1,17 @@
 import { ErrorCode } from '../../../../src/application/types';
+import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
+import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
 import { CreateStudent } from '../../../../src/core/services/student/createStudent';
-import { CreateStudentParams } from '../../../../src/core/services/user/createUser';
+import { CreateStudentParams } from '../../../../src/core/services/student/createStudent';
 
 const mockStudentRepository = {
   checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
   createStudent: jest.fn().mockResolvedValue('mock-student-id'), // Simulate student
-};
+} as unknown as jest.Mocked<IStudentRepository>;
 
 const mockTeacherRepository = {
   checkTeacherByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
-  createStudent: jest.fn().mockResolvedValue('mock-teacher-id'), // Simulate teacher
-};
+} as unknown as jest.Mocked<ITeacherRepository>;
 
 describe('CreateStudent', () => {
   let createStudent: CreateStudent;

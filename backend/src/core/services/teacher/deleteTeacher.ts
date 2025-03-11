@@ -1,9 +1,9 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
+import { DeleteUser } from "../user/deleteUser";
 
-export class DeleteTeacher implements Service<ServiceParams, object> {
-  constructor() {}
-
-  async execute(input: ServiceParams): Promise<object> {
-    return {};
+export class DeleteTeacher extends DeleteUser {
+  constructor(private teacherRepository: ITeacherRepository) {super()}
+  async deleteStudent(id: string): Promise<void> {
+    await this.teacherRepository.deleteTeacherWithId(id);
   }
 }
