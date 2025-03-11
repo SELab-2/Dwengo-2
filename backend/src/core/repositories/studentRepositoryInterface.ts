@@ -62,3 +62,4 @@ export abstract class StudentRepositoryInterface extends AbstractRepository{
      */
     public abstract deleteStudentWithId(id: string): Promise<void>;
 }
+

@@ -7,6 +7,10 @@ import { IDatasourceTeacher } from "../datasourceTeacherInterface";
 import { DatasourceTeacherTypeORM } from "./datasourceTeacherTypeORM";
 import { IDatasourceClass } from "../datasourceClassInterface";
 import { DatasourceClassTypeORM } from "./datasourceClassTypeORM";
+import { DatasourceJoinRequestTypeORM } from "./datasourceJoinRequestTypeORM";
+import { IDatasourceJoinRequest } from "../datasourceJoinRequestInterface";
+import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
+import { DatasourceAssignmentTypeORM } from "./datasourceAssignmentTypeORM";
 import { IDatasourceStudent } from "../datasourceStudentInterface";
 import { DatasourceStudentTypeORM } from "./datasourceStudentTypeORM";
 
@@ -39,6 +43,14 @@ export class DatasourceTypeORM implements IDatasource {
 
     public async getDatasourceClass(): Promise<IDatasourceClass> {
         return new DatasourceClassTypeORM(await DatasourceTypeORM.datasourcePromise);
+    }
+
+    public async getDatasourceJoinRequest(): Promise<IDatasourceJoinRequest> {
+        return new DatasourceJoinRequestTypeORM(await DatasourceTypeORM.datasourcePromise);
+    }
+
+    public async getDatasourceAssignment(): Promise<IDatasourceAssignment> {
+        return new DatasourceAssignmentTypeORM(await DatasourceTypeORM.datasourcePromise);
     }
     
 }

@@ -7,7 +7,7 @@ For generating key pairs from a password hash, we can use the following approach
 
 Here's a conceptual flow:
 
-```javascript
+```ts
 async function generateKeyPair(password) {
     // Generate strong hash using Argon2id
     const hashBuffer = await argon2.hash(password, {
@@ -45,12 +45,12 @@ Why these choices?
 ## Usage
 
 1. Client requests challenge:
-```javascript
+```ts
 const { challenge, expiresAt } = await fetch('/challenge').then(r => r.json())
 ```
 
 2. Client signs challenge and logs in:
-```javascript
+```ts
 const privateKey = await deriveKeyFromPassword(password)
 const signedChallenge = await sign(challenge, privateKey)
 

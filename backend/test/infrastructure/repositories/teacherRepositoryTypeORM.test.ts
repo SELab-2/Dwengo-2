@@ -13,8 +13,10 @@ describe("TeacherRepositoryTypeORM", () => {
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceTeacher: jest.fn(), // TODO: should work?
+            getDatasourceTeacher: jest.fn(),
             getDatasourceClass: jest.fn(),
+            getDatasourceJoinRequest: jest.fn(),
+            getDatasourceAssignment: jest.fn(),
             getDatasourceStudent: jest.fn()
         };
         datasourceFactoryMock = {
@@ -31,7 +33,7 @@ describe("TeacherRepositoryTypeORM", () => {
             getAllTeachers: jest.fn(() => Promise.resolve([teacher, teacher])),
             updateTeacher: jest.fn(() => Promise.resolve(teacher)),
             deleteTeacherWithId: jest.fn()
-        } as any; // TODO hack?
+        } as any;
 
         // Mock teacher
         teacher = new Teacher("email", "alice", "bob", "password", "id");
