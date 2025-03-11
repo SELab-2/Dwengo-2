@@ -2,36 +2,29 @@
 import express from "express";
 import cors from 'cors';
 import dotenv from "dotenv";
-import { IDatasource } from "./infrastructure/database/data/data_sources/datasourceInterface";
-import { DatasourceTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceTypeORM";
 
-// TODO - Start using index.ts files to import entities etc. in a single line
+import { StudentRepositoryTypeORM } from "./infrastructure/repositories/studentRepositoryTypeORM";
+import { studentRoutes } from "./application/routes";
+import { StudentController } from "./application/controllers";
+import * as StudentServices from './core/services/student';
 
 dotenv.config();
 
-// Initialize the datasource
-const datasource: IDatasource = new DatasourceTypeORM();
-
-const repo = new ClassRepositoryTypeORM(
-  new DatasourceFactoryTypeORM()
-);
-repo.createClass(new Class(
-  "Programmeren",
-  "Voor mensen die niet kunnen programmeren",
-  "Beginner",
-));
-
-
 // Initialize repositories
 const repos = {
+  student: new StudentRepositoryTypeORM()
 };
 
 // Initialize services with use cases
 const services = {
+  student: {
+    get: new StudentServices.GetStudent(repos.student)
+  }
 };
 
 // Initialize controllers
 const controllers = {
+  student: new StudentController(services.student.get)
 };
 
 const app = express();
@@ -40,6 +33,7 @@ app.use(cors());
 app.use(express.json());
 
 // Register routes
+studentRoutes(app, controllers.student);
 
 app.get('/', (req, res) => {
   res.send("Hello, World!\n");
