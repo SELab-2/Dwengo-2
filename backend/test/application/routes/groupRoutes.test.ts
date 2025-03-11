@@ -3,6 +3,15 @@ import { groupRoutes } from "../../../src/application/routes";
 import { GroupController } from "../../../src/application/controllers/groupController";
 import * as GroupServices from "../../../src/core/services/group/index";
 
+jest.mock(
+  "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM",
+  () => ({
+    DatasourceFactoryTypeORM: jest.fn().mockImplementation(() => ({
+      createDataSource: jest.fn(),
+    })),
+  })
+);
+
 // mock the services used by the controller
 class MockGetGroupService extends GroupServices.GetGroup {
   public execute = jest.fn();
@@ -56,5 +65,9 @@ describe("groupRoutes", () => {
     expect(mockApp.post).toHaveBeenCalledTimes(1);
 
     expect(controller.handle).not.toHaveBeenCalled();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 });

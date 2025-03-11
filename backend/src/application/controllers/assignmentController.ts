@@ -8,6 +8,7 @@ import * as AssignmentServices from '../../core/services/assignment';
  * Controller responsible for assignment-related API endpoints including CRUD operations
  * and assignment listings by group. Follows RESTful patterns with paths:
  * - GET /assignments/:id - Get single assignment
+ * //TODO: Groups are defined within Assignments, so this path needs to be updated or removed
  * - GET /groups/:idParent/assignments - Get assignments for a group
  * - PATCH /assignments/:id - Update an assignment
  * - POST /assignments - Create a new assignment

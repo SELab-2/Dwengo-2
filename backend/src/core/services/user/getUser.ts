@@ -1,10 +1,18 @@
 import { ApiError, ErrorCode } from '../../../application/types';
-import { Service } from '../../../config/service';
+import { Service, ServiceParams } from '../../../config/service';
+
+export class GetUserParams implements ServiceParams {
+  constructor(private _id: string) {}
+
+  public get id() {
+    return this._id;
+  }
+}
 
 /**
  * Abstract class to get a student/teacher from DB
  */
-export abstract class GetUser implements Service<string, object> {
+export abstract class GetUser implements Service<GetUserParams> {
   /**
    * Abstract function to retrieve a student/teachter from DB.
    *
@@ -20,13 +28,7 @@ export abstract class GetUser implements Service<string, object> {
    *
    * @throws ApiError if id is invalid.
    */
-  async execute(id: string): Promise<object> {
-    if (!id || typeof id !== 'string') {
-      throw {
-        code: ErrorCode.BAD_REQUEST,
-        message: 'Invalid user id.',
-      } as ApiError;
-    }
-    return await this.getUser(id);
+  async execute(input: GetUserParams): Promise<object> {
+    return await this.getUser(input.id);
   }
 }

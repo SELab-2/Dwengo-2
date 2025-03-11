@@ -15,7 +15,7 @@ import * as ClassServices from '../../core/services/class';
  */
 export class ClassController extends Controller {
   constructor(
-    get: ClassServices.GetClass,
+    get: ClassServices.GetClassByClassId,
     getUserClasses: ClassServices.GetUserClasses,
     update: ClassServices.UpdateClass,
     remove: ClassServices.DeleteClass,

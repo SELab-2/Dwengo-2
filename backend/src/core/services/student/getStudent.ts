@@ -15,7 +15,7 @@ export class GetStudent extends GetUser {
    * @returns object with the info of the student.
    */
   public async getUser(id: string): Promise<object> {
-    const student: Student = await this.studentRepository.getStudent(id);
+    const student: Student = await this.studentRepository.getStudentById(id);
     return {
       id: student.id,
       email: student.email,
