@@ -1,23 +1,23 @@
 import { ErrorCode } from '../../../../src/application/types';
 import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
-import { CreateStudent } from '../../../../src/core/services/student/createStudent';
-import { CreateStudentParams } from '../../../../src/core/services/student/createStudent';
+import { CreateTeacher, CreateTeacherParams } from '../../../../src/core/services/teacher';
 
 const mockStudentRepository = {
   checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
-  createStudent: jest.fn().mockResolvedValue('mock-student-id'), // Simulate student
+  createStudent: jest.fn().mockResolvedValue(null), // Simulate student
 } as unknown as jest.Mocked<IStudentRepository>;
 
 const mockTeacherRepository = {
   checkTeacherByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
+  createTeacher: jest.fn().mockResolvedValue(null), // Simulate teacher
 } as unknown as jest.Mocked<ITeacherRepository>;
 
-describe('CreateStudent', () => {
-  let createStudent: CreateStudent;
+describe('CreateTeacher service', () => {
+  let createTeacher: CreateTeacher
 
   beforeEach(() => {
-    createStudent = new CreateStudent(
+    createTeacher = new CreateTeacher(
       mockStudentRepository as any,
       mockTeacherRepository as any,
     );
@@ -25,8 +25,8 @@ describe('CreateStudent', () => {
 
   test('Should throw error because of invalid email', async () => {
     await expect(
-      createStudent.execute(
-        new CreateStudentParams(
+      createTeacher.execute(
+        new CreateTeacherParams(
           'incorrect-email',
           'John',
           'Doe',
@@ -40,12 +40,12 @@ describe('CreateStudent', () => {
     });
   });
 
-  test('Should throw error if email is already in use by student', async () => {
-    mockStudentRepository.checkByEmail.mockResolvedValue(true);
+  test('Should throw error if email is already in use by teacher', async () => {
+    mockTeacherRepository.checkTeacherByEmail.mockResolvedValue(true);
 
     await expect(
-      createStudent.execute(
-        new CreateStudentParams(
+      createTeacher.execute(
+        new CreateTeacherParams(
           'test@example.com',
           'John',
           'Doe',
@@ -59,7 +59,7 @@ describe('CreateStudent', () => {
     });
 
     // Control if checkByEmail is correctly called
-    expect(mockStudentRepository.checkByEmail).toHaveBeenCalledWith(
+    expect(mockTeacherRepository.checkTeacherByEmail).toHaveBeenCalledWith(
       'test@example.com',
     );
   });
@@ -68,8 +68,8 @@ describe('CreateStudent', () => {
     mockTeacherRepository.checkTeacherByEmail.mockResolvedValue(true);
 
     await expect(
-      createStudent.execute(
-        new CreateStudentParams(
+      createTeacher.execute(
+        new CreateTeacherParams(
           'test@example.com',
           'John',
           'Doe',
@@ -83,7 +83,7 @@ describe('CreateStudent', () => {
     });
 
     // Control if checkByEmail is correctly called
-    expect(mockStudentRepository.checkByEmail).toHaveBeenCalledWith(
+    expect(mockTeacherRepository.checkTeacherByEmail).toHaveBeenCalledWith(
       'test@example.com',
     );
   });

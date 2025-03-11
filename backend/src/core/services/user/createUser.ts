@@ -76,38 +76,6 @@ export abstract class CreateParams<T extends User> implements ServiceParams {
 }
 
 /**
- * @extends {CreateParams<Student>}
- * @description Class representing the parameters required to create a student.
- */
-export class CreateStudentParams extends CreateParams<Student> {
-  createUser(): Student {
-    return new Student(
-      this.email,
-      this.firstName,
-      this.familyName,
-      this.passwordHash,
-      this.schoolName,
-    );
-  }
-}
-
-/**
- * @extends {CreateParams<Teacher>}
- * @description Class representing the parameters required to create a teacher.
- */
-export class CreateTeacherParams extends CreateParams<Teacher> {
-  createUser(): Teacher {
-    return new Teacher(
-      this.email,
-      this.firstName,
-      this.familyName,
-      this.passwordHash,
-      this.schoolName,
-    );
-  }
-}
-
-/**
  * @template T The type of user to be created.
  * @template P The corresponding type of params to be used.
  * @implements {Service<P>}
