@@ -1,3 +1,4 @@
+
 export abstract class User {
     constructor(
         protected readonly _email: string,

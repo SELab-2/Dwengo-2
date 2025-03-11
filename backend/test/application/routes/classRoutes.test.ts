@@ -1,51 +1,57 @@
-import { mockApp } from './mocks';
+import { mockApp, MockClassRepository } from './mocks';
 import { classRoutes } from '../../../src/application/routes';
 import { ClassController } from '../../../src/application/controllers';
-import * as ClassServices from '../../../src/application/services';
-import * as ClassUseCases from '../../../src/core/use-cases/class';
+import * as ClassServices from '../../../src/core/services/class/index';
 
-// mock the services used by the controller
-class MockGetClassService extends ClassServices.GetClassService {
-  constructor() { super({} as unknown as ClassUseCases.GetClass); }
+jest.mock(
+  "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM",
+  () => ({
+    DatasourceFactoryTypeORM: jest.fn().mockImplementation(() => ({
+      createDataSource: jest.fn(),
+    })),
+  })
+);
+
+// Mock class services
+class MockGetClassService extends ClassServices.GetClassByClassId {
+  constructor(classRepository: MockClassRepository) {
+    super(classRepository);
+  }
   public execute = jest.fn();
 }
 
-class MockGetUserClassesService extends ClassServices.GetUserClassesService {
-  constructor() { super({} as unknown as ClassUseCases.GetUserClasses); }
+class MockGetUserClassesService extends ClassServices.GetUserClasses {
   public execute = jest.fn();
 }
 
-class MockUpdateClassService extends ClassServices.UpdateClassService {
-  constructor() { super({} as unknown as ClassUseCases.UpdateClass); }
+class MockUpdateClassService extends ClassServices.UpdateClass {
   public execute = jest.fn();
 }
 
-class MockDeleteClassService extends ClassServices.DeleteClassService {
-  constructor() { super({} as unknown as ClassUseCases.DeleteClass); }
+class MockDeleteClassService extends ClassServices.DeleteClass {
   public execute = jest.fn();
 }
 
-class MockCreateClassService extends ClassServices.CreateClassService {
-  constructor() { super({} as unknown as ClassUseCases.CreateClass); }
+class MockCreateClassService extends ClassServices.CreateClass {
   public execute = jest.fn();
 }
 
-// mock the controller
+// Mock the controller
 class MockClassController extends ClassController {
   constructor() {
     super(
-      new MockGetClassService(),
-      new MockGetUserClassesService(),
-      new MockUpdateClassService(),
-      new MockDeleteClassService(),
-      new MockCreateClassService()
+      new MockGetClassService(new MockClassRepository()),
+      new MockGetUserClassesService(new MockClassRepository()),
+      new MockUpdateClassService(new MockClassRepository()),
+      new MockDeleteClassService(new MockClassRepository()),
+      new MockCreateClassService(new MockClassRepository())
     );
   }
 
   public handle = jest.fn();
 }
 
-// testing itself
+// Test
 describe("classRoutes", () => {
   it("should define the class routes", () => {
     const controller = new MockClassController();
@@ -57,5 +63,9 @@ describe("classRoutes", () => {
     expect(mockApp.post).toHaveBeenCalledTimes(1);
 
     expect(controller.handle).not.toHaveBeenCalled();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 });

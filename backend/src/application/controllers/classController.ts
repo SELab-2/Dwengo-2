@@ -1,7 +1,8 @@
 import { Controller } from "./controllerExpress";
 import { Request, HttpMethod, RouteHandlers } from "../types";
 import { defaultExtractor } from "./helpersExpress";
-import * as ClassServices from "../services/classServices";
+import * as ClassServices from '../../core/services/class';
+
 
 /**
  * Controller responsible for class-related API endpoints including CRUD operations
@@ -14,11 +15,11 @@ import * as ClassServices from "../services/classServices";
  */
 export class ClassController extends Controller {
   constructor(
-    get: ClassServices.GetClassService,
-    getUserClasses: ClassServices.GetUserClassesService,
-    update: ClassServices.UpdateClassService,
-    remove: ClassServices.DeleteClassService,
-    create: ClassServices.CreateClassService
+    get: ClassServices.GetClassByClassId,
+    getUserClasses: ClassServices.GetUserClasses,
+    update: ClassServices.UpdateClass,
+    remove: ClassServices.DeleteClass,
+    create: ClassServices.CreateClass
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [

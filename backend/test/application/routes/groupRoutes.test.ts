@@ -1,37 +1,39 @@
 import { mockApp } from "./mocks";
 import { groupRoutes } from "../../../src/application/routes";
 import { GroupController } from "../../../src/application/controllers/groupController";
-import * as GroupServices from "../../../src/application/services/groupServices";
-import * as GroupUseCases from "../../../src/core/use-cases/group";
+import * as GroupServices from "../../../src/core/services/group/index";
+
+jest.mock(
+  "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM",
+  () => ({
+    DatasourceFactoryTypeORM: jest.fn().mockImplementation(() => ({
+      createDataSource: jest.fn(),
+    })),
+  })
+);
 
 // mock the services used by the controller
-class MockGetGroupService extends GroupServices.GetGroupService {
-  constructor() { super({} as unknown as GroupUseCases.GetGroup); }
+class MockGetGroupService extends GroupServices.GetGroup {
   public execute = jest.fn();
 }
 
-class MockGetUserGroupsService extends GroupServices.GetUserGroupsService {
-  constructor() { super({} as unknown as GroupUseCases.GetUserGroups); }
+class MockGetUserGroupsService extends GroupServices.GetUserGroups {
   public execute = jest.fn();
 }
 
-class MockGetClassGroupsService extends GroupServices.GetClassGroupsService {
-  constructor() { super({} as unknown as GroupUseCases.GetClassGroups); }
+class MockGetClassGroupsService extends GroupServices.GetClassGroups {
   public execute = jest.fn();
 }
 
-class MockUpdateGroupService extends GroupServices.UpdateGroupService {
-  constructor() { super({} as unknown as GroupUseCases.UpdateGroup); }
+class MockUpdateGroupService extends GroupServices.UpdateGroup {
   public execute = jest.fn();
 }
 
-class MockDeleteGroupService extends GroupServices.DeleteGroupService {
-  constructor() { super({} as unknown as GroupUseCases.DeleteGroup); }
+class MockDeleteGroupService extends GroupServices.DeleteGroup {
   public execute = jest.fn();
 }
 
-class MockCreateGroupService extends GroupServices.CreateGroupService {
-  constructor() { super({} as unknown as GroupUseCases.CreateGroup); }
+class MockCreateGroupService extends GroupServices.CreateGroup {
   public execute = jest.fn();
 }
 
@@ -63,5 +65,9 @@ describe("groupRoutes", () => {
     expect(mockApp.post).toHaveBeenCalledTimes(1);
 
     expect(controller.handle).not.toHaveBeenCalled();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 });

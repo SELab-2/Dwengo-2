@@ -1,7 +1,8 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as QuestionServices from '../services/questionServices';
+import * as QuestionServices from '../../core/services/question_thread';
+
 
 /**
  * Controller for question routes.
@@ -13,13 +14,15 @@ import * as QuestionServices from '../services/questionServices';
  * - DELETE /assignments/:idParent/questions/:id - Delete question by id
  * - POST   /assignments/:idParent/questions - Create a new question for an assignment
  */
+
+// I don't think this is the right approach for QuestionThread but there wasn't a controller for it, so I'm using this as a template
 export class QuestionController extends Controller {
   constructor(
-    get: QuestionServices.GetQuestionService,
-    getAssignmentQuestions: QuestionServices.GetAssignmentQuestionsService,
-    update: QuestionServices.UpdateQuestionService,
-    remove: QuestionServices.DeleteQuestionService,
-    create: QuestionServices.CreateQuestionService
+    get: QuestionServices.GetQuestionThread,
+    getAssignmentQuestions: QuestionServices.GetAssignmentQuestionThreads,
+    update: QuestionServices.UpdateQuestionThread,
+    remove: QuestionServices.DeleteQuestionThread,
+    create: QuestionServices.CreateQuestionThread
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [

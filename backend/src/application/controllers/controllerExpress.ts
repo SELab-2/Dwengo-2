@@ -1,6 +1,7 @@
 import { ApiError, Request, Response, RouteHandlers, ResponseBody } from '../types';
 import { statusMap, extractPathParams } from '../helpersExpress';
-import { Service, Services } from '../services/service';
+import { Service, ServiceParams, Services } from '../../config/service';
+
 
 // TODO - Important the data must be in order of parameters, responsibility of the extractor
 
@@ -104,7 +105,8 @@ export abstract class Controller {
    */
   protected getOne(req: Request, data: object): Response {
     // TODO: add more checking ...
-    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    // TODO: change data object to Params for designated service
+    const body: object = this.services.get.execute(data);
     return this.respond(200, body);
   }
 
@@ -115,34 +117,38 @@ export abstract class Controller {
   */
   protected getAll(req: Request, data: object): Response {
     // TODO: add more checking ... (page number, size extraction)
-    const body: ResponseBody = this.services.getAll.execute(...Object.values(data));
+    // TODO: change data object to Params for designated service
+    const body: object = this.services.getAll.execute(...Object.values(data));
     return this.respond(200, body);
   }
 
   /**
    * TODO
    */
-  protected getChildren(req: Request, data: object, service: Service): Response {
+  protected getChildren<T extends ServiceParams>(req: Request, data: object, service: Service<T>): Response {
     // TODO: add more checking ... (page number, size extraction)
-    const body: ResponseBody = service.execute(...Object.values(data));
+    // TODO: change data object to Params for designated service
+    const body: object = service.execute(data as T);
     return this.respond(200, body);
   }
 
   /**
    * TODO
    */
-  protected addChild(req: Request, data: object, service: Service): Response {
+  protected addChild<T extends ServiceParams>(req: Request, data: object, service: Service<T>): Response {
     // TODO: add more checking ...
-    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    // TODO: change data object to Params for designated service
+    const body: object = service.execute(data as T);
     return this.respond(201, body);
   }
 
   /**
    * TODO
    */
-  protected removeChild(req: Request, data: object, service: Service): Response {
+  protected removeChild<T extends ServiceParams>(req: Request, data: object, service: Service<T>): Response {
     // TODO: add more checking ... (data will be empty, just extract id)
-    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    // TODO: change data object to Params for designated service
+    const body: object = service.execute(data as T);
     return this.respond(204, body);
   }
 
@@ -153,7 +159,8 @@ export abstract class Controller {
    */
   protected update(req: Request, data: object): Response {
     // TODO: add more checking ...
-    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    // TODO: change data object to Params for designated service
+    const body: object = this.services.get.execute(data);
     return this.respond(200, body);
   }
 
@@ -164,7 +171,8 @@ export abstract class Controller {
    */
   protected delete(req: Request, data: object): Response {
     // TODO: add more checking ... (data will be empty, just extract id)
-    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    // TODO: change data object to Params for designated service
+    const body: object = this.services.get.execute(data);
     return this.respond(204, body);
   }
 
@@ -175,7 +183,8 @@ export abstract class Controller {
    */
   protected create(req: Request, data: object): Response {
     // TODO: add more checking ... (data will be empty, just extract id)
-    const body: ResponseBody = this.services.get.execute(...Object.values(data));
+    // TODO: change data object to Params for designated service
+    const body: object = this.services.get.execute(data);
     return this.respond(201, body);
   }
 }

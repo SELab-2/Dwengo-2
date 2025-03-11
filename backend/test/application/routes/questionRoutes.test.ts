@@ -1,32 +1,36 @@
 import { mockApp } from "./mocks";
 import { questionThreadRoutes } from "../../../src/application/routes";
 import { QuestionController } from "../../../src/application/controllers/questionController";
-import * as QuestionServices from "../../../src/application/services/questionServices";
-import * as QuestionUseCases from "../../../src/core/use-cases/question_thread";
+import * as QuestionServices from "../../../src/core/services/question_thread/index";
+import { DataSource } from "typeorm";
+
+jest.mock(
+  "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM",
+  () => ({
+    DatasourceFactoryTypeORM: jest.fn().mockImplementation(() => ({
+      createDataSource: jest.fn(),
+    })),
+  })
+);
 
 // mock the services used by the controller
-class MockGetQuestionService extends QuestionServices.GetQuestionService {
-  constructor() { super({} as unknown as QuestionUseCases.GetQuestionThread); }
+class MockGetQuestionService extends QuestionServices.GetQuestionThread {
   public execute = jest.fn();
 }
 
-class MockGetAssignmentQuestionsService extends QuestionServices.GetAssignmentQuestionsService {
-  constructor() { super({} as unknown as QuestionUseCases.GetAssignmentQuestionThreads); }
+class MockGetAssignmentQuestionsService extends QuestionServices.GetAssignmentQuestionThreads {
   public execute = jest.fn();
 }
 
-class MockUpdateQuestionService extends QuestionServices.UpdateQuestionService {
-  constructor() { super({} as unknown as QuestionUseCases.UpdateQuestionThread); }
+class MockUpdateQuestionService extends QuestionServices.UpdateQuestionThread {
   public execute = jest.fn();
 }
 
-class MockDeleteQuestionService extends QuestionServices.DeleteQuestionService {
-  constructor() { super({} as unknown as QuestionUseCases.DeleteQuestionThread); }
+class MockDeleteQuestionService extends QuestionServices.DeleteQuestionThread {
   public execute = jest.fn();
 }
 
-class MockCreateQuestionService extends QuestionServices.CreateQuestionService {
-  constructor() { super({} as unknown as QuestionUseCases.CreateQuestionThread); }
+class MockCreateQuestionService extends QuestionServices.CreateQuestionThread {
   public execute = jest.fn();
 }
 
@@ -57,5 +61,9 @@ describe("questionThreadRoutes", () => {
     expect(mockApp.post).toHaveBeenCalledTimes(1);
 
     expect(controller.handle).not.toHaveBeenCalled();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 });

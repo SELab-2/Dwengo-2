@@ -11,6 +11,15 @@ export class StudentTypeORM {
     @JoinColumn({ name: "user_id" })
     student!: UserTypeORM
 
+
+    // Since multiple constructors isn't supported by Typescript:
+    // https://stackoverflow.com/questions/12702548/constructor-overload-in-typescript
+    public static createStudentTypeORM(student: Student, correspondingUser: UserTypeORM): StudentTypeORM {
+        const studentTypeORM: StudentTypeORM = new StudentTypeORM();
+        studentTypeORM.student = correspondingUser;
+        return studentTypeORM;
+    }
+
     public toStudentEntity(userModel: UserTypeORM): Student {
         return new Student(
             userModel.email,

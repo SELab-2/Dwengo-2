@@ -1,12 +1,25 @@
-import { Student } from "./student";
-import { Class } from "./class";
-
 
 export class Group {
     constructor(
-        public memberIds: string[], // The students that are part of the group.
-        public classId: string, // The class of which the group is a subgroup of.
-        public id?: string, // The unique identifier of the group.
-    ){}
+        private readonly _classId: string,
+        private _memberIds: string[],
+        private readonly _id?: string,
+    ) {}
+
+    public get classId(): string {
+        return this._classId;
+    }
+
+    public get memberIds(): string[] {
+        return [...this._memberIds];  // Prevent direct modification
+    }
+
+    public get id(): string | undefined {
+        return this._id;
+    }
+
+    public set memberIds(newMemberIds: string[]) {
+        this._memberIds = newMemberIds;
+    }
 }
 
