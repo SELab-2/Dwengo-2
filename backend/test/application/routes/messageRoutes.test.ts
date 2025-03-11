@@ -2,6 +2,16 @@ import { mockApp } from "./mocks";
 import { messageRoutes } from "../../../src/application/routes/messageRoutes";
 import { MessageController } from "../../../src/application/controllers";
 import * as MessageServices from "../../../src/core/services/message/index";
+import { DataSource } from "typeorm";
+
+jest.mock(
+  "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceFactoryTypeORM",
+  () => ({
+    DatasourceFactoryTypeORM: jest.fn().mockImplementation(() => ({
+      createDataSource: jest.fn(),
+    })),
+  })
+);
 
 // mock the services used by the controller
 class MockGetMessageService extends MessageServices.GetMessage {
@@ -51,5 +61,9 @@ describe("messageRoutes", () => {
     expect(mockApp.post).toHaveBeenCalledTimes(1);
 
     expect(controller.handle).not.toHaveBeenCalled();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 });
