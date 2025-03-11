@@ -10,7 +10,7 @@ describe("GroupRepositoryTypeORM", () => {
     let datasourceMock: IDatasource;
     let datasourceFactoryMock: IDatasourceFactory;
     let newGroup: Group;
-    let student_ids: string[];
+    let memberIds: string[];
 
     let datasourceGroup: IDatasourceGroup;
 
@@ -36,7 +36,7 @@ describe("GroupRepositoryTypeORM", () => {
         } as any;
 
         // Mock students
-        student_ids = [
+        memberIds = [
             "id_1",
             "id_2"
         ]
@@ -45,7 +45,7 @@ describe("GroupRepositoryTypeORM", () => {
         const class_id = "id_1"
 
         // Mock Group
-        newGroup = new Group(student_ids, class_id);
+        newGroup = new Group(memberIds, class_id);
 
 
     });
@@ -74,7 +74,7 @@ describe("GroupRepositoryTypeORM", () => {
         const createdGroup = await datasourceGroup.create(newGroup);
 
         // We remove a a student from the group.
-        createdGroup.student_ids.pop()
+        createdGroup.memberIds.pop()
 
         returnGroup = await datasourceGroup.update(createdGroup);
         expect(datasourceGroup.update).toHaveBeenCalledTimes(1);

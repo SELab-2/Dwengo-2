@@ -14,17 +14,17 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         const classRepository = this.datasource.getRepository(ClassTypeORM);
 
         const groupModel = new GroupTypeORM();
-        if (!entity.class_id) {
+        if (!entity.classId) {
             throw new Error("No class id was provided.");
         }
         
         // Check if the class exists.
         const classModel : ClassTypeORM|null = await classRepository.findOne({
-            where: { id: entity.class_id },
+            where: { id: entity.classId },
         });
 
         if (!classModel){
-            throw new EntityNotFoundError(`Class with id: ${entity.class_id} not found`);
+            throw new EntityNotFoundError(`Class with id: ${entity.classId} not found`);
         }
         
         groupModel.class = classModel
@@ -33,16 +33,16 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         const savedGroup = await groupRepository.save(groupModel);
 
         // Link students to the group
-        const studentsOfGroup = entity.student_ids.map(student_id => {
+        const studentsOfGroup = entity.memberIds.map(memberId => {
             const studentOfGroup = new StudentOfGroupTypeORM();
-            studentOfGroup.student = { id: student_id } as StudentTypeORM;
+            studentOfGroup.student = { id: memberId } as StudentTypeORM;
             studentOfGroup.group = savedGroup;
             return studentOfGroup;
         });
 
         await studentOfGroupRepository.save(studentsOfGroup);
 
-        return new Group(entity.student_ids, entity.class_id, savedGroup.id);
+        return new Group(entity.memberIds, entity.classId, savedGroup.id);
     }
 
     public async getById(id: string): Promise<Group|null> {
@@ -92,9 +92,9 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         // Update students (delete old links and add new ones)
         await studentOfGroupRepository.delete({ group: groupModel });
 
-        const studentOfGroups = group.student_ids.map(student_id => {
+        const studentOfGroups = group.memberIds.map(memberId => {
             const studentOfGroup = new StudentOfGroupTypeORM();
-            studentOfGroup.student = { id: student_id } as StudentTypeORM;
+            studentOfGroup.student = { id: memberId } as StudentTypeORM;
             studentOfGroup.group = groupModel as GroupTypeORM;
             return studentOfGroup;
         });
