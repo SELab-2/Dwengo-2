@@ -20,6 +20,14 @@ export abstract class IClassRepository extends AbstractRepository {
     public abstract createClass(newClass: Class): Promise<Class>;
 
     /**
+     * Updates an existing class.
+     * @param classId the id of the class to be updated.
+     * @param updatedClass the params to be updated.
+     * @returns the new version of the class.
+     */
+    public abstract updateClass(classId: string, updatedClass: Partial<Class>): Promise<Class>;
+
+    /**
      * Get a class by its id.
      * @param id The id of the class.
      * @throws EntityNotFoundError when no class is found.
