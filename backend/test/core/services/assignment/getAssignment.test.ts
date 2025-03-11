@@ -38,7 +38,7 @@ describe("getAssignment Service", () => {
         id: "1",
         classId: "1",
         startDate: date,
-        endDate: date,
+        deadline: date,
         extraInstructions: "extra_instructions",
         learningPathId: "1"
     });

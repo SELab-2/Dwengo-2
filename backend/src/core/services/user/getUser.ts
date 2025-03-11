@@ -4,7 +4,7 @@ import { Service } from '../../../config/service';
 /**
  * Abstract class to get a student/teacher from DB
  */
-export abstract class GetUser implements Service<string, object> {
+export abstract class GetUser implements Service<string> {
   /**
    * Abstract function to retrieve a student/teachter from DB.
    *
