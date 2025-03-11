@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, Column, CreateDateColumn } from "typeorm"
 import { AssignmentTypeORM } from "./assignmentTypeorm"
 import { StudentTypeORM } from "./studentTypeorm"
+import { StatusType, Submission } from "../../../../core/entities/submission"
 
 export enum SubmissionStatus {
     NOT_ACCEPTED = "not_accepted",
@@ -8,7 +9,7 @@ export enum SubmissionStatus {
 }
 
 @Entity()
-export class Submission {
+export class SubmissionTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 
@@ -35,4 +36,42 @@ export class Submission {
         default: SubmissionStatus.ACCEPTED
     })
     progress_status!: SubmissionStatus
+
+    public toEntity(): Submission {
+        let status : StatusType;
+        if (this.progress_status == SubmissionStatus.ACCEPTED){
+            status = StatusType.ACCEPTED;
+        } else {
+            status = StatusType.NOT_ACCEPTED;
+        }
+        return new Submission(
+            this.student.id,
+            this.assignment.id,
+            this.learning_object_id,
+            this.time,
+            this.contents,
+            status,
+            this.id
+        );
+    }
+
+    public static createTypeORM(submission: Submission, studentModel: StudentTypeORM, assignmentModel: AssignmentTypeORM): SubmissionTypeORM {
+        const submissionModel: SubmissionTypeORM = new SubmissionTypeORM()
+
+        let status : SubmissionStatus;
+        if (submission.status == StatusType.ACCEPTED){
+            status = SubmissionStatus.ACCEPTED;
+        } else {
+            status = SubmissionStatus.NOT_ACCEPTED;
+        }
+
+        submissionModel.student = studentModel;
+        submissionModel.assignment = assignmentModel;
+        submissionModel.learning_object_id = submission.learningObjectId;
+        submissionModel.time = submission.time;
+        submissionModel.contents = submission.contents;
+        submissionModel.progress_status = status;
+        
+        return submissionModel;
+    }
 }
