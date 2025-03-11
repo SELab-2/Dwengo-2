@@ -10,7 +10,7 @@ describe("getTeacher Use Case", () => {
 
   beforeEach(() => {
     mockTeacherRepository = {
-        getTeacherById: jest.fn(), // Mock DB function
+      getTeacherById: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<ITeacherRepository>;
 
     getTeacherUseCase = new GetTeacher(mockTeacherRepository);

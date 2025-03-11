@@ -1,32 +1,29 @@
-import {
-  UpdateStudent,
-  UpdateStudentParams,
-} from '../../../../src/core/services/student/updateStudent';
 import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
-import { Student } from '../../../../src/core/entities/student';
 import { ErrorCode } from '../../../../src/application/types';
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
+import { UpdateTeacher, UpdateTeacherParams } from '../../../../src/core/services/teacher';
+import { Teacher } from '../../../../src/core/entities/teacher';
 
-describe('UpdateStudent Service', () => {
+describe('UpdateTeacher Service', () => {
   let studentRepository: jest.Mocked<IStudentRepository>;
   let teacherRepository: jest.Mocked<ITeacherRepository>;
-  let updateStudent: UpdateStudent;
+  let updateTeacher: UpdateTeacher;
 
   beforeEach(() => {
-    studentRepository = {
-      getStudentById: jest.fn(),
-      checkByEmail: jest.fn(),
-      updateStudent: jest.fn(),
-    } as unknown as jest.Mocked<IStudentRepository>;
     teacherRepository = {
-      checkTeacherByEmail: jest.fn()
+      getTeacherById: jest.fn(),
+      checkTeacherByEmail: jest.fn(),
+      updateTeacher: jest.fn(),
     } as unknown as jest.Mocked<ITeacherRepository>;
+    studentRepository = {
+      checkByEmail: jest.fn(),
+    } as unknown as jest.Mocked<IStudentRepository>;
 
-    updateStudent = new UpdateStudent(studentRepository, teacherRepository);
+    updateTeacher = new UpdateTeacher(studentRepository, teacherRepository);
   });
 
-  it('should update student info successfully', async () => {
-    const student = new Student(
+  it('should update teacher info successfully', async () => {
+    const teacher = new Teacher(
       'oldemail@example.com',
       'OldFirstName',
       'OldFamilyName',
@@ -34,41 +31,41 @@ describe('UpdateStudent Service', () => {
       'oldSchool',
       '1',
     );
-    studentRepository.getStudentById.mockResolvedValue(student);
-    studentRepository.checkByEmail.mockResolvedValue(false);
+    teacherRepository.getTeacherById.mockResolvedValue(teacher);
+    teacherRepository.checkTeacherByEmail.mockResolvedValue(false);
 
-    const params = new UpdateStudentParams(
+    const params = new UpdateTeacherParams(
       '1',
       'newemail@example.com',
       'NewFirstName',
       'NewFamilyName',
       'newpasswordhash',
-      'newSchool'
+      'newSchool',
     );
-    const result = await updateStudent.execute(params);
+    const result = await updateTeacher.execute(params);
 
-    expect(studentRepository.getStudentById).toHaveBeenCalledWith('1');
-    expect(studentRepository.checkByEmail).toHaveBeenCalledWith(
-      'newemail@example.com',
-    );
+    expect(teacherRepository.getTeacherById).toHaveBeenCalledWith('1');
     expect(teacherRepository.checkTeacherByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
-    expect(studentRepository.updateStudent).toHaveBeenCalledWith(
+    expect(studentRepository.checkByEmail).toHaveBeenCalledWith(
+      'newemail@example.com',
+    );
+    expect(teacherRepository.updateTeacher).toHaveBeenCalledWith(
       expect.objectContaining({
         id: '1',
         email: 'newemail@example.com',
         firstName: 'NewFirstName',
         familyName: 'NewFamilyName',
         passwordHash: 'newpasswordhash',
-        schoolName: 'newSchool'
+        schoolName: 'newSchool',
       }),
     );
     expect(result).toEqual({});
   });
 
   it('should update one field successfully', async () => {
-    const student = new Student(
+    const teacher = new Teacher(
       'oldemail@example.com',
       'OldFirstName',
       'OldFamilyName',
@@ -76,41 +73,41 @@ describe('UpdateStudent Service', () => {
       'oldSchool',
       '1',
     );
-    studentRepository.getStudentById.mockResolvedValue(student);
-    studentRepository.checkByEmail.mockResolvedValue(false);
+    teacherRepository.getTeacherById.mockResolvedValue(teacher);
+    teacherRepository.checkTeacherByEmail.mockResolvedValue(false);
 
-    const params = new UpdateStudentParams(
+    const params = new UpdateTeacherParams(
       '1',
       'newemail@example.com',
       undefined,
       undefined,
       undefined,
-      undefined
+      undefined,
     );
-    const result = await updateStudent.execute(params);
+    const result = await updateTeacher.execute(params);
 
-    expect(studentRepository.getStudentById).toHaveBeenCalledWith('1');
-    expect(studentRepository.checkByEmail).toHaveBeenCalledWith(
-      'newemail@example.com',
-    );
+    expect(teacherRepository.getTeacherById).toHaveBeenCalledWith('1');
     expect(teacherRepository.checkTeacherByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
-    expect(studentRepository.updateStudent).toHaveBeenCalledWith(
+    expect(studentRepository.checkByEmail).toHaveBeenCalledWith(
+      'newemail@example.com',
+    );
+    expect(teacherRepository.updateTeacher).toHaveBeenCalledWith(
       expect.objectContaining({
         id: '1',
         email: 'newemail@example.com',
-        firstName: "OldFirstName",
-        familyName: "OldFamilyName",
-        passwordHash: "oldpasswordhash",
-        schoolName: "oldSchool",
+        firstName: 'OldFirstName',
+        familyName: 'OldFamilyName',
+        passwordHash: 'oldpasswordhash',
+        schoolName: 'oldSchool',
       }),
     );
     expect(result).toEqual({});
   });
 
   it('should throw error if email is the same as old one', async () => {
-    const student = new Student(
+    const teacher = new Teacher(
       'sameemail@example.com',
       'FirstName',
       'FamilyName',
@@ -118,25 +115,25 @@ describe('UpdateStudent Service', () => {
       'School',
       '1',
     );
-    studentRepository.getStudentById.mockResolvedValue(student);
+    teacherRepository.getTeacherById.mockResolvedValue(teacher);
 
-    const params = new UpdateStudentParams(
+    const params = new UpdateTeacherParams(
       '1',
       'sameemail@example.com',
       'NewFirstName',
       'NewFamilyName',
       'newpasswordhash',
-      'newSchool'
+      'newSchool',
     );
 
-    await expect(updateStudent.execute(params)).rejects.toEqual({
+    await expect(updateTeacher.execute(params)).rejects.toEqual({
       code: ErrorCode.BAD_REQUEST,
       message: 'Email cannot be the same as old one.',
     });
   });
 
   it('should throw error if email is already in use', async () => {
-    const student = new Student(
+    const teacher = new Teacher(
       'oldemail@example.com',
       'FirstName',
       'FamilyName',
@@ -144,26 +141,26 @@ describe('UpdateStudent Service', () => {
       'school',
       '1',
     );
-    studentRepository.getStudentById.mockResolvedValue(student);
-    studentRepository.checkByEmail.mockResolvedValue(true);
+    teacherRepository.getTeacherById.mockResolvedValue(teacher);
+    teacherRepository.checkTeacherByEmail.mockResolvedValue(true);
 
-    const params = new UpdateStudentParams(
+    const params = new UpdateTeacherParams(
       '1',
       'newemail@example.com',
       'NewFirstName',
       'NewFamilyName',
       'newpasswordhash',
-      'newSchool'
+      'newSchool',
     );
 
-    await expect(updateStudent.execute(params)).rejects.toEqual({
+    await expect(updateTeacher.execute(params)).rejects.toEqual({
       code: ErrorCode.BAD_REQUEST,
       message: 'Email already in use.',
     });
   });
 
   it('should throw error if password is the same as old one', async () => {
-    const student = new Student(
+    const teacher = new Teacher(
       'oldemail@example.com',
       'FirstName',
       'FamilyName',
@@ -171,18 +168,18 @@ describe('UpdateStudent Service', () => {
       'school',
       '1',
     );
-    studentRepository.getStudentById.mockResolvedValue(student);
+    teacherRepository.getTeacherById.mockResolvedValue(teacher);
 
-    const params = new UpdateStudentParams(
+    const params = new UpdateTeacherParams(
       '1',
       'newemail@example.com',
       'NewFirstName',
       'NewFamilyName',
       'samepasswordhash',
-      'newSchool'
+      'newSchool',
     );
 
-    await expect(updateStudent.execute(params)).rejects.toEqual({
+    await expect(updateTeacher.execute(params)).rejects.toEqual({
       code: ErrorCode.BAD_REQUEST,
       message: 'Password cannot be the same as old one.',
     });

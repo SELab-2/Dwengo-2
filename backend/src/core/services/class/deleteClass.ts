@@ -1,9 +1,20 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ServiceParams } from "../../../config/service";
+import { ClassBaseService } from "./baseClassService";
 
-export class DeleteClass implements Service<ServiceParams> {
-  constructor() {}
+export class DeleteClassParams implements ServiceParams {
+  constructor(
+    private _id: string //id of the class to delete
+  ){}
 
-  async execute(input: ServiceParams): Promise<object> {
+  public get id(): string {
+    return this._id;
+  }
+}
+
+export class DeleteClass extends ClassBaseService<DeleteClassParams>{
+
+  async execute(input: DeleteClassParams): Promise<object> {
+    await this.classRepository.deleteClassById(input.id);
     return {};
   }
 }
