@@ -135,10 +135,10 @@ export abstract class Controller {
   /**
    * TODO
    */
-  protected addChild(req: Request, data: object, service: Service<ServiceParams>): Response {
+  protected addChild<T extends ServiceParams>(req: Request, data: object, service: Service<T>): Response {
     // TODO: add more checking ...
     // TODO: change data object to Params for designated service
-    const body: object = service.execute(data);
+    const body: object = service.execute(data as T);
     return this.respond(201, body);
   }
 
