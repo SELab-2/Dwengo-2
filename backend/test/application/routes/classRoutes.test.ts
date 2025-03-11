@@ -14,9 +14,9 @@ jest.mock(
 
 // Mock class services
 class MockGetClassService extends ClassServices.GetClassByClassId {
-  constructor(classRepository: MockClassRepository){
+  constructor(classRepository: MockClassRepository) {
     super(classRepository);
-  }  
+  }
   public execute = jest.fn();
 }
 
@@ -41,10 +41,10 @@ class MockClassController extends ClassController {
   constructor() {
     super(
       new MockGetClassService(new MockClassRepository()),
-      new MockGetUserClassesService(),
-      new MockUpdateClassService(),
-      new MockDeleteClassService(),
-      new MockCreateClassService()
+      new MockGetUserClassesService(new MockClassRepository()),
+      new MockUpdateClassService(new MockClassRepository()),
+      new MockDeleteClassService(new MockClassRepository()),
+      new MockCreateClassService(new MockClassRepository())
     );
   }
 
