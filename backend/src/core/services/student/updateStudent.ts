@@ -31,6 +31,6 @@ export class UpdateStudent extends UpdateUser<Student, UpdateStudentParams> {
     await this.studentRepository.updateStudent(user);
   }
   async getOldUser(id: string): Promise<Student> {
-    return await this.studentRepository.getStudent(id);
+    return await this.studentRepository.getStudentById(id);
   }
 }

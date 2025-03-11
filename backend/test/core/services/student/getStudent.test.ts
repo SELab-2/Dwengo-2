@@ -47,6 +47,6 @@ describe("getStudent Service", () => {
     const params: GetUserParams = new GetUserParams("999");
 
     await expect(getStudentService.execute(params)).rejects.toThrow();
-    expect(mockStudentRepository.getStudent).toHaveBeenCalledWith("999");
+    expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("999");
   });
 });
