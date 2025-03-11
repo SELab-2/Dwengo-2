@@ -7,7 +7,7 @@ export class CreateClassParams implements ServiceParams {
     private _name: string,
     private _description: string,
     private _targetAudience: string
-  ) {}
+  ) { }
 
   get name(): string {
     return this._name;
@@ -25,6 +25,6 @@ export class CreateClassParams implements ServiceParams {
 export class CreateClass extends ClassBaseService<CreateClassParams> {
   async execute(input: CreateClassParams): Promise<object> {
     const newClass = new Class(input.name, input.description, input.targetAudience);
-    return (await this.classRepository.createClass(newClass)).toObject();
+    return { id: (await this.classRepository.createClass(newClass)).id };
   }
 }

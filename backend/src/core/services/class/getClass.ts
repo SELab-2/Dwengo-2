@@ -4,35 +4,35 @@ import { ClassBaseService } from "./baseClassService";
 
 export class GetClassParams implements ServiceParams {
     // fields may be null: GetClassParams for GetClassByName only requires name, GetClassByClassId only requires classId...
-    constructor(private _classId?: string, private _className?: string, private _teacherId?: string, private _studentId?: string) {}
+    constructor(private _classId?: string, private _className?: string, private _teacherId?: string, private _studentId?: string) { }
 
-    public get classId(): string|undefined {
+    public get classId(): string | undefined {
         return this._classId;
     }
 
-    public get className(): string|undefined {
+    public get className(): string | undefined {
         return this._className;
     }
 
-    public get teacherId(): string|undefined {
+    public get teacherId(): string | undefined {
         return this._teacherId;
     }
 
-    public get studentId(): string|undefined {
+    public get studentId(): string | undefined {
         return this._studentId;
     }
 }
 
 export class GetClassByClassId extends ClassBaseService<GetClassParams> {
-  /**
-   * Gets a class from the DB given its ID.
-   * @param input ID of the class to get from the DB.
-   * @returns the class with the given id.
-   * @throws {EntityNotFoundError} if the class could not be found.
-   */
-  execute(input: GetClassParams): Promise<object> {
-    return this.classRepository.getClassById(input.classId!);
-  }
+    /**
+     * Gets a class from the DB given its ID.
+     * @param input ID of the class to get from the DB.
+     * @returns the class with the given id.
+     * @throws {EntityNotFoundError} if the class could not be found.
+     */
+    async execute(input: GetClassParams): Promise<object> {
+        return (await this.classRepository.getClassById(input.classId!)).toObject();
+    }
 }
 
 export class GetClassByName extends ClassBaseService<GetClassParams> {
@@ -47,18 +47,18 @@ export class GetClassByName extends ClassBaseService<GetClassParams> {
     }
 }
 
-export class GetAllClasses extends ClassBaseService<GetClassParams>{
+export class GetAllClasses extends ClassBaseService<GetClassParams> {
     /**
      * Get all classes,
      * @returns every class stored inside the database.
      * @throws {EntityNotFoundError} if the class could not be found.
      */
     async execute(): Promise<object> {
-        return {classes: (await this.classRepository.getAllClasses()).forEach(c => c.toObject())};
+        return { classes: (await this.classRepository.getAllClasses()).forEach(c => c.toObject()) };
     }
 }
 
-export class GetClassesByTeacherId extends ClassBaseService<GetClassParams>{
+export class GetClassesByTeacherId extends ClassBaseService<GetClassParams> {
     /**
      * Get all classes for a teacher.
      * @param input the id of the teacher.
@@ -66,11 +66,11 @@ export class GetClassesByTeacherId extends ClassBaseService<GetClassParams>{
      * @throws {EntityNotFoundError} if the teacher could not be found.
      */
     async execute(input: GetClassParams): Promise<object> {
-        return {classes: (await this.classRepository.getAllClassesByTeacherId(input.teacherId!)).forEach(c => c.toObject())};
+        return { classes: (await this.classRepository.getAllClassesByTeacherId(input.teacherId!)).forEach(c => c.toObject()) };
     }
 }
 
-export class GetClassesByStudentId extends ClassBaseService<GetClassParams>{
+export class GetClassesByStudentId extends ClassBaseService<GetClassParams> {
     /**
      * Get all classes for a student.
      * @param input the id of the student.
@@ -78,6 +78,6 @@ export class GetClassesByStudentId extends ClassBaseService<GetClassParams>{
      * @throws {EntityNotFoundError} if the student could not be found.
      */
     async execute(input: GetClassParams): Promise<object> {
-        return {classes: (await this.classRepository.getAllClassesByStudentId(input.teacherId!)).forEach(c => c.toObject())};
+        return { classes: (await this.classRepository.getAllClassesByStudentId(input.teacherId!)).forEach(c => c.toObject()) };
     }
 }

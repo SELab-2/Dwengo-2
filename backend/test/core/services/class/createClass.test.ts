@@ -15,16 +15,16 @@ describe('CreateClass', () => {
         jest.clearAllMocks(); // Reset mocks voor elke test
     });
 
-    test('Should create a class and return it with an ID', async () => {
+    test('Should create a class and return its ID', async () => {
         const inputClass = new CreateClassParams("Math 101", "Basic math class", "Primary School");
         const createdClass = new Class("Math 101", "Basic math class", "Primary School", "mock-class-id");
 
-        mockClassRepository.createClass.mockResolvedValue(createdClass.toObject());
+        mockClassRepository.createClass.mockResolvedValue(createdClass);
 
         const result = await createClass.execute(inputClass);
 
-        expect(result).toEqual(createdClass.toObject());
-        expect(mockClassRepository.createClass).toHaveBeenCalledWith(inputClass);
+        expect(result).toEqual({ id: "mock-class-id" });
+        expect(mockClassRepository.createClass).toHaveBeenCalledWith(expect.any(Class));
     });
 
     test('Should throw a DatabaseError if creation fails', async () => {
@@ -33,6 +33,6 @@ describe('CreateClass', () => {
         mockClassRepository.createClass.mockRejectedValue(new DatabaseError('Creation failed'));
 
         await expect(createClass.execute(inputClass)).rejects.toThrow(DatabaseError);
-        expect(mockClassRepository.createClass).toHaveBeenCalledWith(inputClass);
+        expect(mockClassRepository.createClass).toHaveBeenCalledWith(expect.any(Class));
     });
 });
