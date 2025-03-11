@@ -27,7 +27,7 @@ export class RemoveStudentFromParams implements ServiceParams {
 
 // Abstract class for RemoveStudentFromGroup and RemoveStudentFromClass
 export abstract class RemoveStudentFrom
-  implements Service<RemoveStudentFromParams, object>
+  implements Service<RemoveStudentFromParams>
 {
   public constructor(protected studentRepository: IStudentRepository) {}
 

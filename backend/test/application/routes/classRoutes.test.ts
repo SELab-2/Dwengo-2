@@ -1,10 +1,14 @@
-import { mockApp } from './mocks';
+import { mockApp, MockClassRepository } from './mocks';
 import { classRoutes } from '../../../src/application/routes';
 import { ClassController } from '../../../src/application/controllers';
 import * as ClassServices from '../../../src/core/services/class/index';
+import { IClassRepository } from '../../../src/core/repositories/classRepositoryInterface';
 
 // mock the services used by the controller
-class MockGetClassService extends ClassServices.GetClass {
+class MockGetClassService extends ClassServices.GetClassByClassId {
+  constructor(classRepository: IClassRepository){
+    super(classRepository);
+  }  
   public execute = jest.fn();
 }
 
@@ -28,7 +32,7 @@ class MockCreateClassService extends ClassServices.CreateClass {
 class MockClassController extends ClassController {
   constructor() {
     super(
-      new MockGetClassService(),
+      new MockGetClassService(new MockClassRepository()),
       new MockGetUserClassesService(),
       new MockUpdateClassService(),
       new MockDeleteClassService(),

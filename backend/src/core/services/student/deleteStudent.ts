@@ -17,7 +17,7 @@ export class DeleteStudentParams implements ServiceParams {
   }
 }
 
-export class DeleteStudent implements Service<DeleteStudentParams, object> {
+export class DeleteStudent implements Service<DeleteStudentParams> {
   constructor(private studentRepository: IStudentRepository) {}
   /**
    * Delete a student from the DB.
