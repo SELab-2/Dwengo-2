@@ -118,7 +118,7 @@ export abstract class Controller {
   protected getAll(req: Request, data: object): Response {
     // TODO: add more checking ... (page number, size extraction)
     // TODO: change data object to Params for designated service
-    const body: object = this.services.getAll.execute(data);
+    const body: object = this.services.getAll.execute(...Object.values(data));
     return this.respond(200, body);
   }
 

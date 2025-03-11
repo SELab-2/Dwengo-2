@@ -11,6 +11,8 @@ import { DatasourceJoinRequestTypeORM } from "./datasourceJoinRequestTypeORM";
 import { IDatasourceJoinRequest } from "../datasourceJoinRequestInterface";
 import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
 import { DatasourceAssignmentTypeORM } from "./datasourceAssignmentTypeORM";
+import { IDatasourceStudent } from "../datasourceStudentInterface";
+import { DatasourceStudentTypeORM } from "./datasourceStudentTypeORM";
 
 export class DatasourceTypeORM implements IDatasource {
 
@@ -31,6 +33,9 @@ export class DatasourceTypeORM implements IDatasource {
     // This object is needed for the repositories to be able to ask queries.
     private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(this.datasourceConnectionSettings);
 
+    public async getDatasourceStudent(): Promise<IDatasourceStudent> {
+        return new DatasourceStudentTypeORM(await DatasourceTypeORM.datasourcePromise);
+    }
 
     public async getDatasourceTeacher(): Promise<IDatasourceTeacher> {
         return new DatasourceTeacherTypeORM(await DatasourceTypeORM.datasourcePromise);

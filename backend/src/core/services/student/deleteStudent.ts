@@ -26,9 +26,9 @@ export class DeleteStudent implements Service<DeleteStudentParams> {
    * @throws Error if the student that will be deleted does not exist.
    */
   async execute(input: DeleteStudentParams): Promise<object> {
-    const student = await this.studentRepository.getStudent(input.getId());
+    const student = await this.studentRepository.getStudentById(input.getId());
 
-    await this.studentRepository.deleteStudent(input.getId());
+    await this.studentRepository.deleteStudentById(input.getId());
     return {};
   }
 }

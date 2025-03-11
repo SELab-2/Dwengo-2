@@ -43,7 +43,7 @@ export class UpdateStudentParams implements ServiceParams{
     teacherRepository: ITeacherRepository,
   ): Promise<Student> {
     // Checks
-    const student: Student = await studentRepository.getStudent(this.id);
+    const student: Student = await studentRepository.getStudentById(this.id);
 
     // Check if email is not same when being updated
     if (this.email && student.email === this.email) {
