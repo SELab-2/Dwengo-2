@@ -35,6 +35,6 @@ export function usersRoutes(app: Express, controller: UsersController): void {
     { app, method: HttpMethod.GET,    urlPattern: '/assignments/:idParent/users', controller },
     { app, method: HttpMethod.POST,   urlPattern: '/assignments/:idParent/users', controller },
     { app, method: HttpMethod.GET,    urlPattern: '/users', controller },
-    { app, method: HttpMethod.POST,   urlPattern: '/users', controller },
+    { app, method: HttpMethod.POST,   urlPattern: '/users', controller }
   ], DEFAULT_METHOD_MAP);
 }
