@@ -91,8 +91,16 @@ export abstract class ITeacherRepository extends AbstractRepository {
     /**
    * Get all teachers for a class.
    * @param classId
+   * @returns the ids of the teachers
    * @throws {EntityNotFoundError} when the class doesn't exist.
    */
     public abstract getClassTeacher(classId: string): Promise<string[]>
 
+    /**
+   * Get all teachers for an assignment
+   * @param assignmentId 
+   * @returns the ids of the teachers
+   * @throws {EntityNotFoundError} when the assignment doesn't exist
+   */
+    public abstract getAssignmentTeachers(classId: string): Promise<string[]>
 }

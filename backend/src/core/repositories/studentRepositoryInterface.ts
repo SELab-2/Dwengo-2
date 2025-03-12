@@ -139,6 +139,19 @@ export abstract class IStudentRepository extends AbstractRepository {
   /**
    * Get all students for a class
    * @param classId 
+   * @returns the id of the students
+   * @throws {EntityNotFoundError} when the assignment could not be found.
    */
   public abstract getClassStudents(classId: string): Promise<string[]>
+
+  /**
+   * Get all students for an assignment.
+   * @param assignmentId 
+   * @returns the id of the students
+   * @throws {EntityNotFoundError} when the assignment could not be found.
+   */
+  public abstract getAssignmentStudents(assignmentId: string): Promise<string[]>
+
+
+
 }
