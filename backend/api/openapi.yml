@@ -5,23 +5,13 @@ info:
   description: |
     The Dwengo API facilitates user authentication, management of users, classes, groups, learning objects, learning paths, assignments, and interactive Q&A features for the Dwengo learning platform.
   contact:
-    email: you@your-company.com
-    name: ''
+    url: 'https://github.com/SELab-2/Dwengo-2'
   license:
     name: MIT
     url: 'https://mit-license.org/'
-
-# NOTE - In order for proper restfull we need to add parent context for get as access namespace and post without parent context
-#      - Why? Because the responses of get will vary based on user otherwise (not restfull).
-#      - Similar for delete delete on parent does semantically imply global removal so we distinguish between parent and global removal
-#      - Global removal on /<resource-name>/{id} and local with parent prefixed for that local relation.
-#      - Similar for post can also have local or global rule
-#      - For get, only local which results in idemptotent responses using a parent context
-#      - For patch as uuids can apply to local relations also must be applied to no context otherwhise would split into a new copy
-# TODO - Objects and paths scheme, look at original api, or keep it like it is, proxy
-# TODO - Url query parameters like ?page=<nr>
-# TODO - We have assignments but what about interactive learning objects that act as tasks
-
+servers:
+  - url: 'https://sel2-2.ugent.be'
+    description: Production server
 tags:
   - name: authentication
     description: Endpoints for user registration and authentication, including login and token management
