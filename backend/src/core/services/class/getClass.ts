@@ -14,6 +14,7 @@ export class GetClassParams implements ServiceParams {
         return this._className;
     }
 
+    // This is the ID needed for GetClassByStudent or Teacher
     public get id(): string | undefined {
         return this._id;
     }
