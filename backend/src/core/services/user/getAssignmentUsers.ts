@@ -1,9 +1,17 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ServiceParams } from "../../../config/service";
+import { UserBaseService } from "./userBaseService";
 
-//FIX: These are mock classes, structure of how user is mapped from application to core needs to be defined
+export class GetAssignmentUsersParams implements ServiceParams {
+    constructor(private _assignmentId: string) { }
 
-export class GetAssignmentUsers implements Service<ServiceParams>{
-    async execute(input: ServiceParams): Promise<object> {
-        return {};
+    public get assignmentId(): string {
+        return this._assignmentId;
+    }
+}
+
+export class GetAssignmentUsers extends UserBaseService<GetAssignmentUsersParams> {
+    async execute(input: GetAssignmentUsersParams): Promise<object> {
+        const students: object[] = (await this.studentRepository.getAssignmentStudents(input.assignmentId)).map(s => s.toObject());
+        return { students: students };
     }
 }
