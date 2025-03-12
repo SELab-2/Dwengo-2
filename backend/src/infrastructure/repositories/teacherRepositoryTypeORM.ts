@@ -1,7 +1,6 @@
 import { EntityNotFoundError } from "../../config/error";
 import { Teacher } from "../../core/entities/teacher";
 import { ITeacherRepository } from "../../core/repositories/teacherRepositoryInterface";
-import { IDatasourceFactory } from "../database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 import { IDatasourceTeacher } from "../database/data/data_sources/datasourceTeacherInterface";
 
@@ -28,6 +27,10 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
         } else {
             throw new EntityNotFoundError(`Teacher with id: ${id} not found`);
         }
+    }
+
+    async checkTeacherByEmail(email: string): Promise<boolean> {
+        throw new Error("Not implemented yet");
     }
 
     async getTeacherByEmail(email: string): Promise<Teacher> {
@@ -71,5 +74,9 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
     async deleteTeacherWithId(id: string): Promise<void> {
         return await (await this.datasourceTeacher).deleteTeacherWithId(id);
     }
-    
+
+    async deleteTeacherFromClass(teacherId: string, classId: string): Promise<void> {
+        throw new Error("Not implemented yet");
+    }
+
 }
