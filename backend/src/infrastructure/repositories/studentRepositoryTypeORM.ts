@@ -72,36 +72,16 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     }
 
     async removeStudentFromClass(studentId: string, classId: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        await (await this.datasourceStudent).removeStudentFromClass(studentId, classId);
     }
 
     async removeStudentFromGroup(studentId: string, groupId: string): Promise<void>  {
-        throw new Error("Method not implemented.");
+        await (await this.datasourceStudent).removeStudentFromGroup(studentId, groupId);
     }
 
     async checkByEmail(email: string): Promise<boolean> {
-        throw new Error("Method not implemented.");
+        const student: Student | null = await this.getStudentByEmail(email);
+        return student !== null;
     }
 
-    async askQuestionForAssignment(
-        studentId: string,
-        assignmentId: string,
-        objectId: string,
-        question: string
-    ): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-
-    async sendSubmissionForAssignment(
-        studentId: string, 
-        objectId: string, 
-        assignmentId: string, 
-        answer: string
-    ): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-
-    async requestToJoinClass(studentId: string, classCode: string): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
 }
