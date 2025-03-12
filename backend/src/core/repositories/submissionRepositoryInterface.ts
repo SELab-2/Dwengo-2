@@ -22,8 +22,8 @@ export abstract class ISubmissionRepository extends AbstractRepository {
 
     /**
      * Deletes a submission from the repository.
-     * @param submission - The submission to update.
+     * @param id - The submission to delete.
      * @returns A promise that resolves when the submission is deleted.
      */
-    public abstract delete(submission: Submission): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 }
