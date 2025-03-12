@@ -1,11 +1,10 @@
 import { EntityNotFoundError } from "../../config/error";
 import { Student } from "../../core/entities/student";
-import { StudentRepositoryInterface } from "../../core/repositories/studentRepositoryInterface";
-import { IDatasourceFactory } from "../database/data/data_sources/datasourceFactoryInterface";
+import { IStudentRepository } from "../../core/repositories/studentRepositoryInterface";
 import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 import { IDatasourceStudent } from "../database/data/data_sources/datasourceStudentInterface";
 
-export class StudentRepositoryTypeORM extends StudentRepositoryInterface {
+export class StudentRepositoryTypeORM extends IStudentRepository {
 
     private datasource: IDatasource;
     private datasourceStudent: Promise<IDatasourceStudent>
@@ -68,8 +67,41 @@ export class StudentRepositoryTypeORM extends StudentRepositoryInterface {
         return await (await this.datasourceStudent).updateStudent(student);
     }
 
-    async deleteStudentWithId(id: string): Promise<void> {
+    async deleteStudentById(id: string): Promise<void> {
         return await (await this.datasourceStudent).deleteStudentWithId(id);
     }
-    
+
+    async removeStudentFromClass(studentId: string, classId: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    async removeStudentFromGroup(studentId: string, groupId: string): Promise<void>  {
+        throw new Error("Method not implemented.");
+    }
+
+    async checkByEmail(email: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    async askQuestionForAssignment(
+        studentId: string,
+        assignmentId: string,
+        objectId: string,
+        question: string
+    ): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    async sendSubmissionForAssignment(
+        studentId: string, 
+        objectId: string, 
+        assignmentId: string, 
+        answer: string
+    ): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    async requestToJoinClass(studentId: string, classCode: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
 }

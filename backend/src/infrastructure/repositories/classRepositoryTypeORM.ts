@@ -20,6 +20,10 @@ export class ClassRepositoryTypeORM extends IClassRepository {
         return await (await this.datasourceClass).createClass(newClass);
     }
 
+    public async updateClass(classId: string, updatedClass: Partial<Class>): Promise<Class> {
+        throw new Error("Not implemented yet");
+    }
+
     public async getClassById(id: string): Promise<Class> {
         const _class: Class|null = await (await this.datasourceClass).getClassById(id);
 
@@ -46,6 +50,18 @@ export class ClassRepositoryTypeORM extends IClassRepository {
 
     public async deleteClassById(id: string): Promise<void> {
         return await (await this.datasourceClass).deleteClassById(id);
+    }
+
+    public async getUserClasses(id: string): Promise<Class[]> {
+        throw new Error("Not implemented yet");
+    }
+
+    public async getAllClassesByTeacherId(teacherId: string): Promise<Class[]> {
+        throw new Error("Not implemented yet");
+    }
+
+    public async getAllClassesByStudentId(studentId: string): Promise<Class[]> {
+        throw new Error("Not implemented yet");
     }
 
 }
