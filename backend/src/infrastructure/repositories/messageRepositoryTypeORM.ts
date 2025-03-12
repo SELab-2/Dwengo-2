@@ -4,7 +4,7 @@ import { IDatasourceMessage } from "../database/data/data_sources/datasourceMess
 import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 import { EntityNotFoundError } from "../../config/error";
 
-export class IMessageRepositoryTypeORM extends IMessageRepository{
+export class MessageRepositoryTypeORM extends IMessageRepository{
 
     private datasource: IDatasource;
     private datasourceMessage: Promise<IDatasourceMessage>;
