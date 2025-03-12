@@ -646,13 +646,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/classes/{idParent}/groups/{id}':
+  '/assignments/{idParent}/groups/{id}':
     get:
       tags:
         - groups
-      summary: Get class group by ID
-      description: Retrieve detailed information about a specific group within a class by its unique identifier.
-      operationId: getClassGroupById
+      summary: Get assignment group by ID
+      description: Retrieve detailed information about a specific group from an assignment by its unique identifier.
+      operationId: getAssignmentGroupById
       parameters:
         - in: path
           name: id
@@ -673,13 +673,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/classes/{idParent}/groups':
+  '/assignments/{idParent}/groups':
     get:
       tags:
         - groups
-      summary: Get all groups for class
-      description: Retrieve a list of all groups associated with a specific class.
-      operationId: getClassGroups
+      summary: Get all groups for an assignment
+      description: Retrieve a list of all groups associated with a specific assignment.
+      operationId: getAssignmentGroups
       parameters:
         - in: path
           name: idParent
@@ -989,13 +989,13 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  '/groups/{idParent}/assignments/{id}':
+  '/users/{idParent}/assignments/{id}':
     get:
       tags:
         - assignments
-      summary: Get group assignment by ID
-      description: Retrieve detailed information about a specific assignment within a group by their unique identifiers.
-      operationId: getGroupAssignmentById
+      summary: Get user's assignment by ID
+      description: Retrieve detailed information about a specific assignment of a user by their unique identifiers.
+      operationId: getUserAssignmentById
       parameters:
         - in: path
           name: id
@@ -1016,13 +1016,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/groups/{idParent}/assignments':
+  '/users/{idParent}/assignments':
     get:
       tags:
         - assignments
-      summary: Get all group assignments
-      description: Retrieve a list of all assignments associated with a specific group.
-      operationId: getGroupAssignments
+      summary: Get all user's assignments
+      description: Retrieve a list of all assignments associated with a specific user.
+      operationId: getUserAssignments
       parameters:
         - in: path
           name: idParent
@@ -1496,7 +1496,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  
+
   '/questions/{idParent}/messages':
     get:
       tags:
@@ -2237,12 +2237,17 @@ components:
     AssignmentCreate:
       type: object
       required:
+        - class
         - group
         - start
         - deadline
         - instructions
       additionalProperties: false
       properties:
+        class:
+          type: string
+          format: uuid
+          description: Unique identifier for the assignment's class.
         group:
           type: string
           format: uuid
