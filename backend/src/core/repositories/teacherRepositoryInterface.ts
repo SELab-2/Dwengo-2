@@ -1,4 +1,3 @@
-import { IDatasourceFactory } from "../../infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { Teacher } from "../entities/teacher";
 import { AbstractRepository } from "./abstractRepository";
 
@@ -88,5 +87,12 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @param assignmentId 
      */
     public abstract assignTeacherToAssignment(teacherId: string, assignmentId: string): Promise<void>;
-    
+
+    /**
+   * Get all teachers for a class.
+   * @param classId
+   * @throws {EntityNotFoundError} when the class doesn't exist.
+   */
+    public abstract getClassTeacher(classId: string): Promise<string[]>
+
 }
