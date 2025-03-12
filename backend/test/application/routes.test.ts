@@ -37,8 +37,6 @@ const routeFunctions = {
   messageRoutes: routes.messageRoutes,
   joinRequestRoutes: routes.joinRequestRoutes,
   questionThreadRoutes: routes.questionThreadRoutes,
-  studentRoutes: routes.studentRoutes,
-  teacherRoutes: routes.teacherRoutes,
   usersRoutes: routes.usersRoutes,
 };
 
@@ -86,19 +84,6 @@ const routeConfigs: Record<keyof typeof routeFunctions, { method: 'get' | 'patch
     { method: 'patch', path: "/assignments/:idParent/questions/:id" },
     { method: 'delete', path: "/assignments/:idParent/questions/:id" },
     { method: 'post', path: "/assignments/:idParent/questions" },
-  ],
-  studentRoutes: [
-    { method: 'delete', path: '/classes/:idParent/users/:id(s-.*)' },
-    { method: 'delete', path: '/groups/:idParent/users/:id(s-.*)' },
-    { method: 'get', path: '/users/:id(s-.*)' },
-    { method: 'patch', path: '/users/:id(s-.*)' },
-    { method: 'delete', path: '/users/:id(s-.*)' },
-  ],
-  teacherRoutes: [
-    { method: 'delete', path: '/classes/:idParent/users/:id(t-.*)' },
-    { method: 'get', path: '/users/:id(t-.*)' },
-    { method: 'patch', path: '/users/:id(t-.*)' },
-    { method: 'delete', path: '/users/:id(t-.*)' },
   ],
   usersRoutes: [
     { method: 'get', path: '/classes/:idParent/users' },
