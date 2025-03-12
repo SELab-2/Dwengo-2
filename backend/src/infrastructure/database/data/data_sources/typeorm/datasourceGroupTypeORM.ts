@@ -104,21 +104,21 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         return group;
     }
 
-    public async delete(group: Group): Promise<void> {
+    public async delete(id: string): Promise<void> {
         const groupRepository = this.datasource.getRepository(GroupTypeORM);
         const studentOfGroupRepository = this.datasource.getRepository(StudentOfGroupTypeORM);
 
         
         let groupModel: GroupTypeORM | null = null;
         
-        if (group.id){
+        if (id){
             groupModel = await groupRepository.findOne({
-                where: { id: group.id },
+                where: { id: id },
             });
         }
 
         if (!groupModel){
-            throw new EntityNotFoundError(`Group with id: ${group.id} not found`);
+            throw new EntityNotFoundError(`Group with id: ${id} not found`);
         }
 
         // First, delete related student-group entries
