@@ -4,14 +4,16 @@ import cors from 'cors';
 import dotenv from "dotenv";
 
 import { StudentRepositoryTypeORM } from "./infrastructure/repositories/studentRepositoryTypeORM";
-import { assignmentRoutes, classRoutes, usersRoutes } from "./application/routes";
-import { AssignmentController, ClassController, UsersController } from "./application/controllers";
+import { assignmentRoutes, classRoutes, joinRequestRoutes, usersRoutes } from "./application/routes";
+import { AssignmentController, ClassController, UsersController, JoinRequestController } from "./application/controllers";
 import * as UserServices from './core/services/user';
 import * as ClassServices from './core/services/class';
 import * as AssignmentServices from './core/services/assignment';
+import * as JoinRequestServices from './core/services/join_request';
 import { TeacherRepositoryTypeORM } from "./infrastructure/repositories/teacherRepositoryTypeORM";
 import { ClassRepositoryTypeORM } from "./infrastructure/repositories/classRepositoryTypeORM";
 import { AssignmentRepositoryTypeORM } from "./infrastructure/repositories/assignmentRepositoryTypeORM";
+import { JoinRequestRepositoryTypeORM } from "./infrastructure/repositories/joinRequestRepositoryTypeORM";
 
 dotenv.config();
 
@@ -21,6 +23,7 @@ const repos = {
   teacher: new TeacherRepositoryTypeORM(),
   class: new ClassRepositoryTypeORM(),
   assignment: new AssignmentRepositoryTypeORM(),
+  joinRequest: new JoinRequestRepositoryTypeORM(),
 };
 
 // Initialize services with use cases
@@ -52,6 +55,12 @@ const services = {
     update: new AssignmentServices.UpdateAssignment(repos.assignment),
     remove: new AssignmentServices.DeleteAssignment(repos.assignment),
     create: new AssignmentServices.CreateAssignment(repos.assignment)
+  },
+  joinRequest: {
+    get: new JoinRequestServices.GetJoinRequest(repos.joinRequest),
+    getJoinRequests: new JoinRequestServices.GetJoinRequests(repos.joinRequest),
+    remove: new JoinRequestServices.DeleteJoinRequest(repos.joinRequest),
+    create: new JoinRequestServices.CreateJoinRequest(repos.joinRequest, repos.class)
   }
 };
 
@@ -64,7 +73,11 @@ const controllers = {
     services.class.remove, services.class.create
   ),
   assignment: new AssignmentController(services.assignment.get, services.assignment.getUserAssignments,
-    services.assignment.update, services.assignment.remove, services.assignment.create),
+    services.assignment.update, services.assignment.remove, services.assignment.create
+  ),
+  joinRequest: new JoinRequestController(services.joinRequest.get, services.joinRequest.getJoinRequests,
+    services.joinRequest.remove, services.joinRequest.create
+  )
 };
 
 const app = express();
@@ -76,6 +89,7 @@ app.use(express.json());
 usersRoutes(app, controllers.users);
 classRoutes(app, controllers.class);
 assignmentRoutes(app, controllers.assignment);
+joinRequestRoutes(app, controllers.joinRequest);
 
 app.get('/', (req, res) => {
   res.send("Hello, World!\n");
