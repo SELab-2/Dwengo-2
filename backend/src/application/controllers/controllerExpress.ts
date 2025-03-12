@@ -105,7 +105,7 @@ export abstract class Controller {
    * @returns Response with appropriate status and data
    */
   protected async _executeService<T extends ServiceParams>(service: Service<T> | undefined,
-    data: ServiceParams, statusCode: number, operationName: string): Promise<Response>
+    data: T, statusCode: number, operationName: string): Promise<Response>
   {
     if (!service)
       return this.handleError({code: ErrorCode.NOT_FOUND,
