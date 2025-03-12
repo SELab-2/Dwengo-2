@@ -3,22 +3,27 @@ import { Student } from '../../entities/student';
 import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
 import { ApiError, ErrorCode } from '../../../application/types';
 import { ITeacherRepository } from '../../repositories/teacherRepositoryInterface';
-import { User } from '../../entities/user';
+import { User, UserType } from '../../entities/user';
 import { Teacher } from '../../entities/teacher';
 
 /**
  * Class to be used by execute method to update a user's info in the DB.
  * If a field is not to be updated, it should be undefined in the constructor.
  */
-export abstract class UpdateParams<T extends User> implements ServiceParams {
+export class UpdateParams implements ServiceParams {
   constructor(
-    protected id: string,
-    protected email?: string,
-    protected firstName?: string,
-    protected familyName?: string,
-    protected passwordHash?: string,
-    protected schoolName?: string,
+    private _id: string,
+    private _userType: UserType,
+    private _email?: string,
+    private _firstName?: string,
+    private _familyName?: string,
+    private _passwordHash?: string,
+    private _schoolName?: string,
   ) {}
+
+  get userType() {
+    return this._userType;
+  }
 
   /**
    * Updates an object with updated fields of a user.
@@ -28,15 +33,19 @@ export abstract class UpdateParams<T extends User> implements ServiceParams {
    * @returns a student object with the updated info.
    */
   async fromObject(
-    getOldUser: (id: string) => Promise<T>,
     studentRepository: IStudentRepository,
     teacherRepository: ITeacherRepository,
-  ): Promise<T> {
+  ): Promise<User> {
     // Checks
-    const user: T = await getOldUser(this.id);
+    let oldUser: User;
+    if (this._userType == UserType.STUDENT) {
+      oldUser = await studentRepository.getStudentById(this._id);
+    } else {
+      oldUser = await teacherRepository.getTeacherById(this._id);
+    }
 
     // Check if email is not same when being updated
-    if (this.email && user.email === this.email) {
+    if (this._email && oldUser.email === this._email) {
       throw {
         code: ErrorCode.BAD_REQUEST,
         message: 'Email cannot be the same as old one.',
@@ -44,12 +53,12 @@ export abstract class UpdateParams<T extends User> implements ServiceParams {
     }
 
     // Check if email is already in use
-    if (this.email) {
+    if (this._email) {
       const studentPresent: boolean = await studentRepository.checkByEmail(
-        this.email,
+        this._email,
       );
       const teacherPresent: boolean =
-        await teacherRepository.checkTeacherByEmail(this.email);
+        await teacherRepository.checkTeacherByEmail(this._email);
       if (studentPresent || teacherPresent) {
         throw {
           code: ErrorCode.BAD_REQUEST,
@@ -59,70 +68,51 @@ export abstract class UpdateParams<T extends User> implements ServiceParams {
     }
 
     // Check if password is not same when being updated
-    if (this.passwordHash && user.passwordHash === this.passwordHash) {
+    if (this._passwordHash && oldUser.passwordHash === this._passwordHash) {
       throw {
         code: ErrorCode.BAD_REQUEST,
         message: 'Password cannot be the same as old one.',
       } as ApiError;
     }
 
-    return this.createNewUser(user);
-  }
-
-  /**
-   * @description Abstract method to create a new user object.
-   * @returns {T} The created user.
-   */
-  abstract createNewUser(oldUser: T): T;
-
-  toObject(): object {
-    return {};
+    if (this._userType == UserType.STUDENT) {
+      return new Student(
+        this._email ?? oldUser.email,
+        this._firstName ?? oldUser.firstName,
+        this._familyName ?? oldUser.familyName,
+        this._passwordHash ?? oldUser.passwordHash,
+        this._schoolName ?? oldUser.schoolName,
+        this._id,
+      );
+    }
+    return new Teacher(
+      this._email ?? oldUser.email,
+      this._firstName ?? oldUser.firstName,
+      this._familyName ?? oldUser.familyName,
+      this._passwordHash ?? oldUser.passwordHash,
+      this._schoolName ?? oldUser.schoolName,
+      this._id,
+    );
   }
 }
 
-/**
- * @template T The type of user to be updated.
- * @template P The corresponding type of params to be used.
- * @implements {Service<P>}
- * @description Abstract class representing the service for updating a user.
- * @param {StudentRepositoryInterface} studentRepository - The student repository.
- * @param {ITeacherRepository} teacherRepository - The teacher repository.
- */
-export abstract class UpdateUser<T extends User, P extends UpdateParams<T>>
-  implements Service<P>
-{
+export abstract class UpdateUser implements Service<UpdateParams> {
   constructor(
-    protected studentRepository: IStudentRepository,
-    protected teacherRepository: ITeacherRepository,
+    private studentRepository: IStudentRepository,
+    private teacherRepository: ITeacherRepository,
   ) {}
 
-  /**
-   * @description Abstract method to update a user.
-   * @param {T} user - The user to be updated.
-   * @returns {Promise<void>} The id of the updated user.
-   */
-  abstract updateUser(user: T): Promise<void>;
-
-  /**
-   * @description Abstract method to get old user.
-   * @param {T} user - The id of user to get.
-   * @returns {Promise<void>} The id of the updated user.
-   */
-  abstract getOldUser(id: string): Promise<T>;
-
-  /**
-   * Updates a student's info in the DB.
-   *
-   * @param input Object with new data of student to update in the DB.
-   * @returns empty object, no additional info needed.
-   */
-  async execute(input: P): Promise<object> {
-    const user: T = await input.fromObject(
-      this.getOldUser.bind(this),
+  async execute(input: UpdateParams): Promise<object> {
+    const user: User = await input.fromObject(
       this.studentRepository,
       this.teacherRepository,
     );
-    await this.updateUser(user);
+    if (input.userType == UserType.STUDENT) {
+      await this.studentRepository.updateStudent(user as Student);
+    } else {
+      await this.teacherRepository.updateTeacher(user as Teacher);
+    }
+
     return {};
   }
 }
