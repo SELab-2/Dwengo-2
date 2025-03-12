@@ -23,24 +23,24 @@ export class MessageController extends Controller {
     create: MessageServices.CreateMessage
   ) {
     const handlers: RouteHandlers = {
-      [HttpMethod.GET]: [
-        { parent: 'questions', hasId: true, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getOne(req, data) },
-        { parent: 'questions', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getChildren(req, data, getThreadMessages) },
-      ],
-      [HttpMethod.PATCH]: [
-        { parent: 'questions', hasId: true, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.update(req, data) },
-      ],
-      [HttpMethod.DELETE]: [
-        { parent: 'questions', hasId: true, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.delete(req, data) },
-      ],
-      [HttpMethod.POST]: [
-        { parent: 'questions', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.create(req, data) },
-      ],
+      // [HttpMethod.GET]: [
+      //   { parent: 'questions', hasId: true, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getOne(req, data) },
+      //   { parent: 'questions', hasId: false, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getChildren(req, data, getQuestionMessages) },
+      // ],
+      // [HttpMethod.PATCH]: [
+      //   { parent: 'questions', hasId: true, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.update(req, data) },
+      // ],
+      // [HttpMethod.DELETE]: [
+      //   { parent: 'questions', hasId: true, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.delete(req, data) },
+      // ],
+      // [HttpMethod.POST]: [
+      //   { parent: 'questions', hasId: false, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.create(req, data) },
+      // ],
     };
 
     super({ get, getThreadMessages, update, remove, create }, handlers);

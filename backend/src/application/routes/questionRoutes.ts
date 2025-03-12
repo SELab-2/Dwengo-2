@@ -1,6 +1,6 @@
 import { Express } from "express";
 import { configureRoutes, DEFAULT_METHOD_MAP } from "./routesExpress";
-import { QuestionController } from "../controllers/questionController";
+import { QuestionThreadController } from "../controllers/questionThreadController";
 import { HttpMethod } from "../types";
 
 /**
@@ -15,7 +15,7 @@ import { HttpMethod } from "../types";
  * - DELETE /assignments/:idParent/questions/:id - Delete question
  * - POST /assignments/:idParent/questions - Create new question
  */
-export function questionThreadRoutes(app: Express, controller: QuestionController): void {
+export function questionThreadRoutes(app: Express, controller: QuestionThreadController): void {
   configureRoutes([
     { app, method: HttpMethod.GET,    urlPattern: "/assignments/:idParent/questions/:id", controller },
     { app, method: HttpMethod.GET,    urlPattern: "/assignments/:idParent/questions", controller },
