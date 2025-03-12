@@ -1,4 +1,3 @@
-import { Message } from "./message";
 export enum VisibilityType {
     PUBLIC = "public",
     GROUP = "group",
