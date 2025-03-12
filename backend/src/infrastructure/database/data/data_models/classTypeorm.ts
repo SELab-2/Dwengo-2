@@ -9,7 +9,7 @@ export class ClassTypeORM {
 
     @OneToOne(() => TeacherOfClassTypeORM)
     @JoinColumn({ name: "teacherId" })
-    teacherId!: string
+    teacher!: TeacherOfClassTypeORM
 
     @Column({ type: "varchar", length: 200 })
     name!: string
@@ -33,7 +33,8 @@ export class ClassTypeORM {
             this.name,
             this.description,
             this.targetAudience,
-            this.id
+            this.teacher.id,
+            this.id,
         );
     }
 
