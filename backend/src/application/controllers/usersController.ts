@@ -21,7 +21,7 @@ export class UsersController extends Controller {
   constructor(
     getAll: UsersServices.GetAllUsers,
     //FIX: We need to rethink this
-    create: UsersServices.CreateUser<User, UsersServices.CreateParams<User>>,
+    create: UsersServices.CreateUser,
     getClassUsers: UsersServices.GetClassUsers,
     getGroupUsers: UsersServices.GetGroupUsers,
     addGroupUser: UsersServices.AssignUserToGroup,

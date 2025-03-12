@@ -40,7 +40,7 @@ describe("TeacherRepositoryTypeORM", () => {
         } as any;
 
         // Mock teacher
-        teacher = new Teacher("email", "alice", "bob", "password", "id");
+        teacher = new Teacher("teacher@gmail.com", "alice", "bob", "password", "UGent", "1");
     });
 
     test("createTeacher", async () => {

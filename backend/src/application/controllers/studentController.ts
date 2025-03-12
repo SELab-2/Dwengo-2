@@ -1,9 +1,3 @@
-import { Controller } from './controllerExpress';
-import { Request, Response, HttpMethod, RouteHandlers } from '../types';
-import { defaultExtractor } from './helpersExpress';
-import * as StudentServices from '../../core/services/student';
-
-
 /**
  * Controller responsible for student-related API endpoints including user management
  * operations that are specific to students. Follows RESTful patterns with paths:
@@ -13,6 +7,8 @@ import * as StudentServices from '../../core/services/student';
  * - DELETE /classes/:idParent/users/:id(s-.*) - Remove student from class
  * - DELETE /groups/:idParent/users/:id(s-.*) - Remove student from group
  */
+
+/*
 export class StudentController extends Controller {
   constructor(
     get: StudentServices.GetStudent,
@@ -43,3 +39,4 @@ export class StudentController extends Controller {
     super({ get, update, remove, removeClassStudent, removeGroupStudent }, handlers);
   }
 }
+*/

@@ -13,7 +13,7 @@ export class Submission {
         private _contents: Buffer, // can be a photo, a string, whatever. In the database this is bytea.
         private _status: StatusType,
         private _id?: string,
-    ){}
+    ) { }
 
     // Getters
     public get studentId(): string {
@@ -34,10 +34,10 @@ export class Submission {
     public get status(): StatusType {
         return this._status;
     }
-    public get id(): string|undefined {
+    public get id(): string | undefined {
         return this._id;
     }
-    
+
 
     // Setter
     public set contents(newContents: Buffer) {
@@ -49,4 +49,17 @@ export class Submission {
     public set id(newId: string) {
         this._id = newId;
     }
+
+    public toObject(): object {
+        return {
+            studentId: this._studentId,
+            assignmentId: this._assignmentId,
+            learningObjectId: this._learningObjectId,
+            time: this._time,
+            contents: this._contents,
+            status: this._status,
+            id: this._id,
+        };
+    }
+
 }

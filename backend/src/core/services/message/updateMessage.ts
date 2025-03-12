@@ -1,9 +1,24 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ServiceParams } from "../../../config/service";
+import { MessageService } from "./messageService";
+import { Message } from "../../entities/message";
 
-export class UpdateMessage implements Service<ServiceParams> {
-  constructor() {}
+export class UpdateMessageParams implements ServiceParams {
+  constructor(private _id: string, private _content: string) {}
 
-  async execute(input: ServiceParams): Promise<object> {
-    return {};
+  get id(): string {
+    return this._id;
+  }
+
+  get content(): string {
+    return this._content;
+  }
+}
+
+export class UpdateMessage extends MessageService<UpdateMessageParams> {
+  async execute(input: UpdateMessageParams): Promise<object> {
+    const message: Message = await this.messageRepository.getMessageById(input.id);
+    message.content = input.content;
+    await this.messageRepository.updateMessage(message);
+    return message.toObject();
   }
 }
