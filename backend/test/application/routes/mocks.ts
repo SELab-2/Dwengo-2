@@ -2,7 +2,6 @@ import { Express } from 'express';
 import { IClassRepository } from '../../../src/core/repositories/classRepositoryInterface';
 import { IAssignmentRepository } from '../../../src/core/repositories/assignmentRepositoryInterface';
 import { IQuestionThreadRepository } from '../../../src/core/repositories/questionThreadRepositoryInterface';
-import { QuestionThread } from '../../../src/core/entities/questionThread';
 import { IGroupRepository } from '../../../src/core/repositories/groupRepositoryInterface';
 
 export const mockApp = {
@@ -26,6 +25,8 @@ export class MockClassRepository extends IClassRepository {
 }
 
 export class MockAssignmentRepository extends IAssignmentRepository {
+  public getAssignmentsByUserId = jest.fn();
+  public updateAssignmentById = jest.fn();
   public getAssignmentsByClassId = jest.fn();
   public getAssignmentsByLearningPathId = jest.fn();
   public deleteAssignmentById = jest.fn();
