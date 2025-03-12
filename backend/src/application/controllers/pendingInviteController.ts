@@ -20,20 +20,20 @@ export class PendingInviteController extends Controller {
     create: PendingInviteServices.CreateInvite
   ) {
     const handlers: RouteHandlers = {
-      [HttpMethod.GET]: [
-        { parent: 'users', hasId: true, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getOne(req, data) },
-        { parent: 'users', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getChildren(req, data, getUserInvites) },
-      ],
-      [HttpMethod.DELETE]: [
-        { hasId: true, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.delete(req, data) },
-      ],
-      [HttpMethod.POST]: [
-        { hasId: false, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.create(req, data) },
-      ],
+      // [HttpMethod.GET]: [
+      //   { parent: 'users', hasId: true, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getOne(req, data) },
+      //   { parent: 'users', hasId: false, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getChildren(req, data, getUserInvites) },
+      // ],
+      // [HttpMethod.DELETE]: [
+      //   { hasId: true, hasParentId: false, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.delete(req, data) },
+      // ],
+      // [HttpMethod.POST]: [
+      //   { hasId: false, hasParentId: false, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.create(req, data) },
+      // ],
     };
 
     super({ get, getUserInvites, remove, create }, handlers);

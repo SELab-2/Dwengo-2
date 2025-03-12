@@ -2,8 +2,6 @@ import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import * as UsersServices from '../../core/services/user';
 import * as StudentServices from '../../core/services/student';
-import { defaultExtractor } from './helpersExpress';
-import { User } from '../../core/entities/user';
 import { createParamsExtractor } from '../extractors';
 import { Student } from '../../core/entities/student';
 

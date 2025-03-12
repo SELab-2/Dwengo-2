@@ -1,6 +1,5 @@
 import { Controller } from "./controllerExpress";
-import { Request, HttpMethod, RouteHandlers } from "../types";
-import { defaultExtractor } from "./helpersExpress";
+import { RouteHandlers } from "../types";
 import * as ClassServices from '../../core/services/class';
 
 
@@ -22,24 +21,24 @@ export class ClassController extends Controller {
     create: ClassServices.CreateClass
   ) {
     const handlers: RouteHandlers = {
-      [HttpMethod.GET]: [
-        { parent: "users", hasId: true, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getOne(req, data) },
-        { parent: "users", hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getChildren(req, data, getUserClasses) },
-      ],
-      [HttpMethod.PATCH]: [
-        { hasId: true, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.update(req, data) },
-      ],
-      [HttpMethod.POST]: [
-        { hasId: true, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.delete(req, data) },
-      ],
-      [HttpMethod.DELETE]: [
-        { hasId: false, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.create(req, data) },
-      ],
+      // [HttpMethod.GET]: [
+      //   { parent: "users", hasId: true, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getOne(req, data) },
+      //   { parent: "users", hasId: false, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getChildren(req, data, getUserClasses) },
+      // ],
+      // [HttpMethod.PATCH]: [
+      //   { hasId: true, hasParentId: false, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.update(req, data) },
+      // ],
+      // [HttpMethod.POST]: [
+      //   { hasId: true, hasParentId: false, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.delete(req, data) },
+      // ],
+      // [HttpMethod.DELETE]: [
+      //   { hasId: false, hasParentId: false, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.create(req, data) },
+      // ],
     };
 
     super({ get, getUserClasses, update, remove, create }, handlers);

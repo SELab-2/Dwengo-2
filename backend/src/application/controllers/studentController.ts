@@ -1,6 +1,5 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
-import { defaultExtractor } from './helpersExpress';
 import * as StudentServices from '../../core/services/student';
 import { createParamsExtractor } from '../extractors';
 

@@ -25,24 +25,24 @@ export class QuestionController extends Controller {
     create: QuestionServices.CreateQuestionThread
   ) {
     const handlers: RouteHandlers = {
-      [HttpMethod.GET]: [
-        { parent: 'assignments', hasId: true, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getOne(req, data) },
-        { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getChildren(req,data, getAssignmentQuestions) },
-      ],
-      [HttpMethod.PATCH]: [
-        { parent: 'assignments', hasId: true, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.update(req, data) },
-      ],
-      [HttpMethod.DELETE]: [
-        { parent: 'assignments', hasId: true, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.delete(req, data) },
-      ],
-      [HttpMethod.POST]: [
-        { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.create(req, data) },
-      ],
+      // [HttpMethod.GET]: [
+      //   { parent: 'assignments', hasId: true, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getOne(req, data) },
+      //   { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getChildren(req,data, getAssignmentQuestions) },
+      // ],
+      // [HttpMethod.PATCH]: [
+      //   { parent: 'assignments', hasId: true, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.update(req, data) },
+      // ],
+      // [HttpMethod.DELETE]: [
+      //   { parent: 'assignments', hasId: true, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.delete(req, data) },
+      // ],
+      // [HttpMethod.POST]: [
+      //   { parent: 'assignments', hasId: false, hasParentId: true, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.create(req, data) },
+      // ],
     };
 
     super({ get, getAssignmentQuestions, update, remove, create }, handlers);
