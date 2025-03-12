@@ -8,11 +8,11 @@ export abstract class IDatasourceSubmission {
         ) {}
     
     
-    public abstract create(submission: Submission): Promise<Submission>;
+    public abstract create(submission: Submission): Promise<string>;
 
     public abstract getById(id: string): Promise<Submission|null>;
 
     public abstract update(submission: Submission): Promise<Submission>;
 
-    public abstract delete(submission: Submission): Promise<void>;
+    public abstract delete(submissionId: string): Promise<void>;
 }
