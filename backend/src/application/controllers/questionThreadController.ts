@@ -1,7 +1,7 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as QuestionServices from '../../core/services/question_thread';
+import * as QuestionThreadServices from '../../core/services/question_thread';
 
 
 /**
@@ -16,13 +16,13 @@ import * as QuestionServices from '../../core/services/question_thread';
  */
 
 // I don't think this is the right approach for QuestionThread but there wasn't a controller for it, so I'm using this as a template
-export class QuestionController extends Controller {
+export class QuestionThreadController extends Controller {
   constructor(
-    get: QuestionServices.GetQuestionThread,
-    getAssignmentQuestions: QuestionServices.GetAssignmentQuestionThreads,
-    update: QuestionServices.UpdateQuestionThread,
-    remove: QuestionServices.DeleteQuestionThread,
-    create: QuestionServices.CreateQuestionThread
+    get: QuestionThreadServices.GetQuestionThread,
+    getAssignmentQuestions: QuestionThreadServices.GetAssignmentQuestionThreads,
+    update: QuestionThreadServices.UpdateQuestionThread,
+    remove: QuestionThreadServices.DeleteQuestionThread,
+    create: QuestionThreadServices.CreateQuestionThread
   ) {
     const handlers: RouteHandlers = {
       // [HttpMethod.GET]: [

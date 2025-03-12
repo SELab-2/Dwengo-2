@@ -2,8 +2,8 @@ export * from './controllerExpress'
 export * from './assignmentController';
 export * from './classController';
 export * from './groupController';
-export * from './pendingInviteController';
-export * from './questionController';
+export * from './joinRequestController';
+export * from './questionThreadController';
 export * from './studentController';
 export * from './teacherController';
 export * from './messageController';

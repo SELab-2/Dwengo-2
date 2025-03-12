@@ -4,3 +4,4 @@ export * from './getGroup';
 export * from './getUserGroups';
 export * from './getClassGroups';
 export * from './updateGroup';
+export * from './getAssignmentGroups';

@@ -1,7 +1,8 @@
 import { ErrorCode } from '../../../../src/application/types';
+import { UserType } from '../../../../src/core/entities/user';
 import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
-import { CreateTeacher, CreateTeacherParams } from '../../../../src/core/services/teacher';
+import { CreateUser, CreateUserParams } from '../../../../src/core/services/user';
 
 const mockStudentRepository = {
   checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
@@ -14,10 +15,10 @@ const mockTeacherRepository = {
 } as unknown as jest.Mocked<ITeacherRepository>;
 
 describe('CreateTeacher service', () => {
-  let createTeacher: CreateTeacher
+  let createTeacher: CreateUser
 
   beforeEach(() => {
-    createTeacher = new CreateTeacher(
+    createTeacher = new CreateUser(
       mockStudentRepository as any,
       mockTeacherRepository as any,
     );
@@ -26,12 +27,13 @@ describe('CreateTeacher service', () => {
   test('Should throw error because of invalid email', async () => {
     await expect(
       createTeacher.execute(
-        new CreateTeacherParams(
+        new CreateUserParams(
           'incorrect-email',
           'John',
           'Doe',
           'hashedpassword123',
           'Harvard',
+          UserType.TEACHER
         ),
       ),
     ).rejects.toEqual({
@@ -45,12 +47,13 @@ describe('CreateTeacher service', () => {
 
     await expect(
       createTeacher.execute(
-        new CreateTeacherParams(
+        new CreateUserParams(
           'test@example.com',
           'John',
           'Doe',
           'hashedpassword123',
           'Oxford',
+          UserType.TEACHER
         ),
       ),
     ).rejects.toEqual({
@@ -69,12 +72,13 @@ describe('CreateTeacher service', () => {
 
     await expect(
       createTeacher.execute(
-        new CreateTeacherParams(
+        new CreateUserParams(
           'test@example.com',
           'John',
           'Doe',
           'hashedpassword123',
           'Oxford',
+          UserType.TEACHER
         ),
       ),
     ).rejects.toEqual({

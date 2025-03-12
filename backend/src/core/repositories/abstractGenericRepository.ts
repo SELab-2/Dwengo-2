@@ -1,4 +1,4 @@
-import { AbstractRepository } from "./AbstractRepository";
+import { AbstractRepository } from "./abstractRepository";
 
 export abstract class AbstractGenericRepository<Entity> extends AbstractRepository {
     // This class contains all the standard methods/functions that every repository should have.

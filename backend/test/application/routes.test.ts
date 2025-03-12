@@ -35,7 +35,7 @@ const routeFunctions = {
   classRoutes: routes.classRoutes,
   groupRoutes: routes.groupRoutes,
   messageRoutes: routes.messageRoutes,
-  pendingInviteRoutes: routes.pendingInviteRoutes,
+  joinRequestRoutes: routes.joinRequestRoutes,
   questionThreadRoutes: routes.questionThreadRoutes,
   studentRoutes: routes.studentRoutes,
   teacherRoutes: routes.teacherRoutes,
@@ -74,7 +74,7 @@ const routeConfigs: Record<keyof typeof routeFunctions, { method: 'get' | 'patch
     { method: 'delete', path: '/questions/:idParent/messages/:id' },
     { method: 'post', path: '/questions/:idParent/messages' },
   ],
-  pendingInviteRoutes: [
+  joinRequestRoutes: [
     { method: 'get', path: '/users/:idParent/invites/:id' },
     { method: 'get', path: '/users/:idParent/invites' },
     { method: 'delete', path: '/invites/:id' },

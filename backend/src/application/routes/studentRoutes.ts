@@ -1,8 +1,3 @@
-import { Express } from 'express';
-import { configureRoutes, DEFAULT_METHOD_MAP } from './routesExpress';
-import { StudentController } from '../controllers/studentController';
-import { HttpMethod } from '../types';
-
 /**
  * RESTful routing configuration for student-specific endpoints.
  * Maps HTTP requests to the StudentController's handle method after
@@ -15,6 +10,8 @@ import { HttpMethod } from '../types';
  * - PATCH /users/:id - Update user
  * - DELETE /users/:id - Delete user
  */
+
+/*
 export function studentRoutes(app: Express, controller: StudentController): void {
   configureRoutes([
     { app, method: HttpMethod.DELETE, urlPattern: '/classes/:idParent/users/:id(s-.*)', controller },
@@ -24,3 +21,4 @@ export function studentRoutes(app: Express, controller: StudentController): void
     { app, method: HttpMethod.DELETE, urlPattern: '/users/:id(s-.*)', controller },
   ], DEFAULT_METHOD_MAP);
 }
+*/

@@ -1,7 +1,7 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import { defaultExtractor } from './helpersExpress';
-import * as PendingInviteServices from '../../core/services/pending_invite';
+import * as JoinRequestServices from '../../core/services/pending_invite';
 
 /**
  * Controller responsible for pending invite-related API endpoints including CRUD operations
@@ -12,12 +12,12 @@ import * as PendingInviteServices from '../../core/services/pending_invite';
  * - DELETE /invites/:id - Delete invite
  * - POST /invites - Create new invite
  */
-export class PendingInviteController extends Controller {
+export class JoinRequestController extends Controller {
   constructor(
-    get: PendingInviteServices.GetInvite,
-    getUserInvites: PendingInviteServices.GetUserInvites,
-    remove: PendingInviteServices.DeleteInvite,
-    create: PendingInviteServices.CreateInvite
+    get: JoinRequestServices.GetInvite,
+    getUserInvites: JoinRequestServices.GetUserInvites,
+    remove: JoinRequestServices.DeleteInvite,
+    create: JoinRequestServices.CreateInvite
   ) {
     const handlers: RouteHandlers = {
       // [HttpMethod.GET]: [

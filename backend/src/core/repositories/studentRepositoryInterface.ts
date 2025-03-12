@@ -62,14 +62,6 @@ export abstract class IStudentRepository extends AbstractRepository{
     public abstract deleteStudentById(id: string): Promise<void>;
 
     /**
-     * Function to find a student by their email.
-     *
-     * @param email the email of the student to find.
-     * @returns true if the student is found, false otherwise.
-     */
-    public abstract findByEmail(email: string): boolean | PromiseLike<boolean>;
-
-    /**
      * Function to remove a student from a class.
      *
      * @param studentId ID of student to be removed from class
@@ -99,14 +91,6 @@ export abstract class IStudentRepository extends AbstractRepository{
      * @returns true if the student is present in the DB, false otherwise.
      */
     public abstract checkByEmail(email: string): Promise<boolean>;
-
-    /**
-     * Get a student by their email.
-     * @param email The email of the student
-     * @throws EntityNotFoundError when no student is found.
-     * @returns A promise that resolves to the student with the given email or null if no results are found.
-     */
-    public abstract getByEmail(email: string): Promise<Student>;
 
     /**
      * Ask a question about a step in an assignment.

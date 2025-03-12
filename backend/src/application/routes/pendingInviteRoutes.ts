@@ -1,11 +1,11 @@
 import { Express } from 'express';
 import { configureRoutes, DEFAULT_METHOD_MAP } from './routesExpress';
-import { PendingInviteController } from '../controllers/pendingInviteController';
+import { JoinRequestController } from '../controllers/joinRequestController';
 import { HttpMethod } from '../types';
 
 /**
- * RESTful routing configuration for PendingInvite related endpoints.
- * Maps HTTP requests to the PendingInviteController's handle method after
+ * RESTful routing configuration for JoinRequest related endpoints.
+ * Maps HTTP requests to the JoinRequestController's handle method after
  * converting Express request/response objects to our internal format.
  *
  * Supported endpoints:
@@ -14,7 +14,7 @@ import { HttpMethod } from '../types';
  * - DELETE /invites/:id - Delete invite
  * - POST /invites - Create new invite
  */
-export function pendingInviteRoutes(app: Express, controller: PendingInviteController): void {
+export function joinRequestRoutes(app: Express, controller: JoinRequestController): void {
   configureRoutes([
     { app, method: HttpMethod.GET,    urlPattern: '/users/:idParent/invites/:id', controller },
     { app, method: HttpMethod.GET,    urlPattern: '/users/:idParent/invites', controller },
