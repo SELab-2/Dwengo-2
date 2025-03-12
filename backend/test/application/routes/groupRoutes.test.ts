@@ -1,4 +1,4 @@
-import { mockApp } from "./mocks";
+import { mockApp, MockGroupRepository } from "./mocks";
 import { groupRoutes } from "../../../src/application/routes";
 import { GroupController } from "../../../src/application/controllers/groupController";
 import * as GroupServices from "../../../src/core/services/group/index";
@@ -41,12 +41,12 @@ class MockCreateGroupService extends GroupServices.CreateGroup {
 class MockGroupController extends GroupController {
   constructor() {
     super(
-      new MockGetGroupService(),
-      new MockGetUserGroupsService(),
-      new MockGetClassGroupsService(),
-      new MockUpdateGroupService(),
-      new MockDeleteGroupService(),
-      new MockCreateGroupService()
+      new MockGetGroupService(new MockGroupRepository()),
+      new MockGetUserGroupsService(new MockGroupRepository()),
+      new MockGetClassGroupsService(new MockGroupRepository()),
+      new MockUpdateGroupService(new MockGroupRepository()),
+      new MockDeleteGroupService(new MockGroupRepository()),
+      new MockCreateGroupService(new MockGroupRepository())
     );
   }
 
