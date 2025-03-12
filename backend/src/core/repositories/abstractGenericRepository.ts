@@ -31,8 +31,8 @@ export abstract class AbstractGenericRepository<Entity> extends AbstractReposito
 
     /**
      * Delete an entity from the repository
-     * @param entity The entity to delete.
+     * @param id The id of the entity to delete.
      */
-    public abstract delete(entity: Entity): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 
 }
