@@ -93,43 +93,6 @@ export abstract class IStudentRepository extends AbstractRepository {
   public abstract checkByEmail(email: string): Promise<boolean>;
 
   /**
-   * Ask a question about a step in an assignment.
-   * @param studentId the id of the student asking the question.
-   * @param assignmentId the assignment which contains the step.
-   * @param objectId specifies the object which is the subject of the question.
-   * @param question the question itself.
-   */
-  public abstract askQuestionForAssignment(
-    studentId: string,
-    assignmentId: string,
-    objectId: string,
-    question: string,
-  ): Promise<void>;
-
-  /**
-   * Function will send the submission for a step in a assignment.
-   *
-   * @param studentId the id of the student submitting a step in a assignment.
-   * @param assignmentID the assignment that contains the step on which the student wants to submit their answer.
-   * @param objectId the id of the object.
-   * @param answer the answer provided by the student.
-   */
-  public abstract sendSubmissionForAssignment(
-    studentId: string,
-    objectId: string,
-    assignmentId: string,
-    answer: string,
-  ): Promise<void>;
-
-  /**
-   * Function to make a join request for a class.
-   *
-   * @param studentId the id of the student that wants to join a class.
-   * @param classCode the code of the class you want to join.
-   */
-  public abstract requestToJoinClass(studentId: string, classCode: string): Promise<void>;
-
-  /**
    * Assign a student to a group within an assignment. If the assignment is individual,
    * the student will be assigned to a group of 1.
    * @param studentId the student to be assigned.
@@ -161,6 +124,5 @@ export abstract class IStudentRepository extends AbstractRepository {
    * @throws {EntityNotFoundError} when the group could not be found.
    */
   public abstract getGroupStudents(groupId: string): Promise<Student[]>
-
 
 }

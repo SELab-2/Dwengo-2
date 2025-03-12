@@ -2,32 +2,28 @@ import { Group } from "../../../../../core/entities/group";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { IDatasourceGroup } from "../datasourceGroupInterface";
 import { EntityNotFoundError } from "../../../../../config/error";
+import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 
 export class DatasourceGroupTypeORM extends IDatasourceGroup {
 
     public async create(entity: Group): Promise<Group> {
         const groupRepository = this.datasource.getRepository(GroupTypeORM);
         const studentOfGroupRepository = this.datasource.getRepository(StudentOfGroupTypeORM);
-        const classRepository = this.datasource.getRepository(ClassTypeORM);
+        const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
 
         const groupModel = new GroupTypeORM();
-        if (!entity.classId) {
-            throw new Error("No class id was provided.");
+        if (!entity.assignmentId) {
+            throw new Error("No assignment id was provided.");
         }
         
-        // Check if the class exists.
-        const classModel : ClassTypeORM|null = await classRepository.findOne({
-            where: { id: entity.classId },
-        });
-
-        if (!classModel){
-            throw new EntityNotFoundError(`Class with id: ${entity.classId} not found`);
+        // Link the group to the assignment
+        const assignmentModel: AssignmentTypeORM | null = await assignmentRepository.findOne({ where: { id: entity.assignmentId } });
+        if(!assignmentModel) {
+            throw new Error(`Assignment with id ${entity.assignmentId} not found`);
         }
-        
-        groupModel.class = classModel
+        groupModel.assignment = assignmentModel;
         
         // Save the group
         const savedGroup = await groupRepository.save(groupModel);
@@ -42,7 +38,7 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
 
         await studentOfGroupRepository.save(studentsOfGroup);
 
-        return new Group(entity.memberIds, entity.classId, savedGroup.id);
+        return new Group(entity.memberIds, entity.assignmentId, savedGroup.id);
     }
 
     public async getById(id: string): Promise<Group|null> {
