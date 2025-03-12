@@ -41,12 +41,12 @@ const services = {
     get: new UserServices.GetUser(repos.student, repos.teacher),
     update: new UserServices.UpdateUser(repos.student, repos.teacher),
     remove: new UserServices.DeleteUser(repos.student, repos.teacher),
-    // getClassUsers: new UserServices.GetClassUsers(repos.student, repos.teacher),
+    getClassUsers: new UserServices.GetClassUsers(repos.teacher, repos.student),
     removeUserFromClass: new UserServices.RemoveUserFromClass(repos.student, repos.teacher),
-    // getGroupUsers: new UserServices.GetGroupUsers(repos.student, repos.teacher),
-    // assignUserToGroup: new UserServices.AssignUserToGroup(repos.student, repos.teacher),
+    getGroupUsers: new UserServices.GetGroupUsers(repos.teacher, repos.student),
+    assignStudentToGroup: new UserServices.AssignStudentToGroup(repos.student),
     removeUserFromGroup: new UserServices.RemoveUserFromGroup(repos.student),
-    // getAssignmentUsers: new UserServices.GetAssignmentUsers(repos.student, repos.teacher),
+    getAssignmentUsers: new UserServices.GetAssignmentUsers(repos.teacher, repos.student),
     // assignUserToAssignment: new UserServices.AssignUserToAssignment(repos.student, repos.teacher),
     // getAll: new UserServices.GetAllUsers(repos.student, repos.teacher),
     create: new UserServices.CreateUser(repos.student, repos.teacher)
@@ -98,7 +98,9 @@ const services = {
 // Initialize controllers
 const controllers = {
   users: new UsersController(services.users.get, services.users.update, services.users.remove,
-    services.users.removeUserFromClass, services.users.removeUserFromGroup, services.users.create
+    services.users.getClassUsers, services.users.removeUserFromClass, services.users.getGroupUsers,
+    services.users.assignStudentToGroup, services.users.removeUserFromGroup, services.users.getAssignmentUsers,
+    services.users.create
   ),
   class: new ClassController(services.class.get, services.class.getUserClasses, services.class.update,
     services.class.remove, services.class.create
