@@ -16,12 +16,12 @@ export abstract class User {
     ) {
         if (!_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_email)) {
             throw {
-              code: ErrorCode.BAD_REQUEST,
-              message: 'Email invalid.',
+                code: ErrorCode.BAD_REQUEST,
+                message: 'Email invalid.',
             } as ApiError;
-          }
+        }
     }
-    
+
     // Getters
     public get id(): string | undefined {
         return this._id;
@@ -60,5 +60,14 @@ export abstract class User {
     public set schoolName(value: string) {
         this._schoolName = value;
     }
-    
+
+    public toObject(): object {
+        return {
+            id: this._id,
+            email: this._email,
+            firstName: this._firstName,
+            familyName: this._familyName,
+            schoolName: this._schoolName,
+        };
+    }
 }
