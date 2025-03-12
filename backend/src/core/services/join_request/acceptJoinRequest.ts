@@ -1,6 +1,6 @@
 import { Service, ServiceParams } from "../../../config/service";
 
-export class GetUserInvites implements Service<ServiceParams> {
+export class AcceptJoinRequest implements Service<ServiceParams> {
   constructor() {}
 
   async execute(input: ServiceParams): Promise<object> {
