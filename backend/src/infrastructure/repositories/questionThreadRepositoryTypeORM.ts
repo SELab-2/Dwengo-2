@@ -4,7 +4,7 @@ import { QuestionThread } from "../../core/entities/questionThread";
 import { IDatasourceThread } from "../database/data/data_sources/datasourceThreadInterface";
 import { IQuestionThreadRepository } from "../../core/repositories/questionThreadRepositoryInterface";
 
-export class IThreadRepositoryTypeORM extends IQuestionThreadRepository {
+export class ThreadRepositoryTypeORM extends IQuestionThreadRepository {
 
     private datasource: IDatasource;
     private datasourceThread: Promise<IDatasourceThread>;

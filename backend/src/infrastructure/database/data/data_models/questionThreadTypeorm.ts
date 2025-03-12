@@ -3,7 +3,7 @@ import { StudentTypeORM } from "./studentTypeorm"
 import { AssignmentTypeORM } from "./assignmentTypeorm"
 import { QuestionThread } from "../../../../core/entities/questionThread"
 import { VisibilityType } from "../../../../core/entities/questionThread"
-import { ThreadMessageTypeORM } from "./threadMessageTypeorm"
+import { MessageTypeORM } from "./messageTypeorm"
 
 export enum ThreadVisibility {
     GROUP = "group",
@@ -52,7 +52,7 @@ export class QuestionThreadTypeORM {
         return threadTypeORM;
     }
     
-    public toEntity(messageModels: ThreadMessageTypeORM[]): QuestionThread{
+    public toEntity(messageModels: MessageTypeORM[]): QuestionThread{
         const messageIds: string[] = messageModels.map((messageModel) => messageModel.id);
         let visibilityType: VisibilityType
         if (this.visibility === ThreadVisibility.GROUP){

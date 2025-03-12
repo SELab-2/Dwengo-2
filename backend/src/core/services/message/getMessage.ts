@@ -1,9 +1,16 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ServiceParams } from "../../../config/service";
+import { MessageService } from "./messageService";
 
-export class GetMessage implements Service<ServiceParams> {
-  constructor() {}
+export class GetMessageParams implements ServiceParams {
+  constructor(private _id: string) {}
 
-  async execute(input: ServiceParams): Promise<object> {
-    return {};
+  get id(): string {
+    return this._id;
+  }
+}
+
+export class GetMessage extends MessageService<GetMessageParams> {
+  async execute(input: GetMessageParams): Promise<object> {
+    return (await this.messageRepository.getMessageById(input.id)).toObject();
   }
 }

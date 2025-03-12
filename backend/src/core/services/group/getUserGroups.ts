@@ -1,9 +1,18 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ServiceParams } from "../../../config/service";
+import { GroupService } from "./groupService";
+import { Group } from "../../entities/group";
 
-export class GetUserGroups implements Service<ServiceParams> {
-  constructor() {}
+export class GetUserGroupsParams implements ServiceParams {
+  constructor(private _userId: string) {}
 
-  async execute(input: ServiceParams): Promise<object> {
-    return {};
+  get userId(): string {
+    return this._userId;
+  }
+}
+
+export class GetUserGroups extends GroupService<GetUserGroupsParams> {
+  async execute(input: GetUserGroupsParams): Promise<object> {
+    const groups: Group[] = await this.groupRepository.getByUserId(input.userId);
+    return {groups: groups.map(group => group.toObject())};
   }
 }

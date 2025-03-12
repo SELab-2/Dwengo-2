@@ -13,7 +13,7 @@ import { AssignmentAnswerTypeORM } from "../../data_models/assignmentAnswerTypeo
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
 import { JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
 import { AssignmentGroupTypeORM } from "../../data_models/assignmentForGroupTypeorm";
-import { ThreadMessageTypeORM } from "../../data_models/threadMessageTypeorm";
+import { MessageTypeORM } from "../../data_models/messageTypeorm";
 
 /**
  * Factory class for creating DatasourceTypeORMConnectionSettings objects.
@@ -64,7 +64,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             AssignmentGroupTypeORM,
             TeacherGroupAssignmentTypeORM,
             QuestionThreadTypeORM,
-            ThreadMessageTypeORM,
+            MessageTypeORM,
             AssignmentAnswerTypeORM,
         ],
     ): DatasourceTypeORMConnectionSettings {
