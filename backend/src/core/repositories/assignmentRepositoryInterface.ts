@@ -46,4 +46,14 @@ export abstract class IAssignmentRepository extends AbstractRepository {
      */
     public abstract deleteAssignmentById(id: string): Promise<void>;
 
+    /**
+     * Updates an assignment by its id.
+     * @param id - The id of the assignment to update
+     * @param updatedFields - The fields that need to be updated
+     * @returns A promise that resolves to the Assignment that is updated
+     * @throws EntityNotFound error when the assignment that needs to be updated does not exist
+     */
+
+    public abstract updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment>;
+
 }
