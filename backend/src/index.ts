@@ -4,16 +4,18 @@ import cors from 'cors';
 import dotenv from "dotenv";
 
 import { StudentRepositoryTypeORM } from "./infrastructure/repositories/studentRepositoryTypeORM";
-import { assignmentRoutes, classRoutes, joinRequestRoutes, messageRoutes, questionThreadRoutes, usersRoutes } from "./application/routes";
-import { AssignmentController, ClassController, UsersController, JoinRequestController, QuestionThreadController, MessageController } from "./application/controllers";
+import { assignmentRoutes, groupRoutes, classRoutes, joinRequestRoutes, messageRoutes, questionThreadRoutes, usersRoutes } from "./application/routes";
+import { AssignmentController, GroupController, ClassController, UsersController, JoinRequestController, QuestionThreadController, MessageController } from "./application/controllers";
 import * as UserServices from './core/services/user';
 import * as ClassServices from './core/services/class';
+import * as GroupServices from './core/services/group';
 import * as AssignmentServices from './core/services/assignment';
 import * as JoinRequestServices from './core/services/join_request';
 import * as QuestionThreadServices from './core/services/question_thread';
 import * as MessageServices from './core/services/message';
 import { TeacherRepositoryTypeORM } from "./infrastructure/repositories/teacherRepositoryTypeORM";
 import { ClassRepositoryTypeORM } from "./infrastructure/repositories/classRepositoryTypeORM";
+import { GroupRepositoryTypeORM } from "./infrastructure/repositories/groupRepositoryTypeORM";
 import { AssignmentRepositoryTypeORM } from "./infrastructure/repositories/assignmentRepositoryTypeORM";
 import { JoinRequestRepositoryTypeORM } from "./infrastructure/repositories/joinRequestRepositoryTypeORM";
 import { ThreadRepositoryTypeORM } from "./infrastructure/repositories/questionThreadRepositoryTypeORM";
@@ -26,6 +28,7 @@ const repos = {
   student: new StudentRepositoryTypeORM(),
   teacher: new TeacherRepositoryTypeORM(),
   class: new ClassRepositoryTypeORM(),
+  group: new GroupRepositoryTypeORM(),
   assignment: new AssignmentRepositoryTypeORM(),
   joinRequest: new JoinRequestRepositoryTypeORM(),
   questionThread: new ThreadRepositoryTypeORM(),
@@ -54,6 +57,14 @@ const services = {
     update: new ClassServices.UpdateClass(repos.class),
     remove: new ClassServices.DeleteClass(repos.class),
     create: new ClassServices.CreateClass(repos.class)
+  },
+  group: {
+    get: new GroupServices.GetGroup(repos.group),
+    getUserGroups: new GroupServices.GetUserGroups(repos.group),
+    getAssignmentGroups: new GroupServices.GetAssignmentGroups(repos.group),
+    update: new GroupServices.UpdateGroup(repos.group),
+    remove: new GroupServices.DeleteGroup(repos.group),
+    create: new GroupServices.CreateGroup(repos.group)
   },
   assignment: {
     get: new AssignmentServices.GetAssignment(repos.assignment),
@@ -92,6 +103,9 @@ const controllers = {
   class: new ClassController(services.class.get, services.class.getUserClasses, services.class.update,
     services.class.remove, services.class.create
   ),
+  group: new GroupController(services.group.get, services.group.getUserGroups, services.group.getAssignmentGroups,
+    services.group.update, services.group.remove, services.group.create
+  ),
   assignment: new AssignmentController(services.assignment.get, services.assignment.getUserAssignments,
     services.assignment.update, services.assignment.remove, services.assignment.create
   ),
@@ -114,6 +128,7 @@ app.use(express.json());
 // Register routes
 usersRoutes(app, controllers.users);
 classRoutes(app, controllers.class);
+groupRoutes(app, controllers.group);
 assignmentRoutes(app, controllers.assignment);
 joinRequestRoutes(app, controllers.joinRequest);
 questionThreadRoutes(app, controllers.questionThread);
