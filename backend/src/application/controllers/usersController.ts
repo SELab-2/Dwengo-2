@@ -2,9 +2,7 @@ import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
 import * as UserServices from '../../core/services/user';
 import { createParamsExtractor } from '../extractors';
-import { ServiceParams
-
- } from '../../config/service';
+import { ServiceParams } from '../../config/service';
 const extractors = {
   getUser: createParamsExtractor(UserServices.GetUserParams, {'_id': 'id'}, {}, []),
   updateUser: createParamsExtractor(UserServices.UpdateUserParams,
