@@ -1,10 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm"
 import { Class } from "../../../../core/entities/class"
+import { TeacherOfClassTypeORM } from "./teacherOfClassTypeorm"
 
 @Entity()
 export class ClassTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
+
+    @OneToOne(() => TeacherOfClassTypeORM)
+    @JoinColumn({ name: "teacherId" })
+    teacher!: TeacherOfClassTypeORM
 
     @Column({ type: "varchar", length: 200 })
     name!: string
@@ -28,7 +33,8 @@ export class ClassTypeORM {
             this.name,
             this.description,
             this.targetAudience,
-            this.id
+            this.teacher.id,
+            this.id,
         );
     }
 

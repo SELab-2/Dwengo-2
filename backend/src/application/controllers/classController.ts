@@ -12,7 +12,7 @@ const extractors = {
   ),
   deleteClass: createParamsExtractor(ClassServices.DeleteClassParams, {'_id': 'id'}, {}, []),
   createClass: createParamsExtractor(ClassServices.CreateClassParams,
-    {'_name': 'name', '_description': 'description', '_targetAudience': 'audience'},{}, []
+    {'_name': 'name', '_description': 'description', '_targetAudience': 'audience', '_teacherId': 'teacher'},{}, []
   )
 };
 

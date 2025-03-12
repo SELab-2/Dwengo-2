@@ -1,8 +1,8 @@
 import { EntityNotFoundError } from "../../config/error";
 import { Class } from "../../core/entities/class";
+import { JoinRequestType } from "../../core/entities/joinRequest";
 import { IClassRepository } from "../../core/repositories/classRepositoryInterface";
 import { IDatasourceClass } from "../database/data/data_sources/datasourceClassInterface";
-import { IDatasourceFactory } from "../database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 
 export class ClassRepositoryTypeORM extends IClassRepository {
@@ -61,6 +61,10 @@ export class ClassRepositoryTypeORM extends IClassRepository {
     }
 
     public async getAllClassesByStudentId(studentId: string): Promise<Class[]> {
+        throw new Error("Not implemented yet");
+    }
+
+    public async addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void> {
         throw new Error("Not implemented yet");
     }
 

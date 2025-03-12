@@ -39,7 +39,8 @@ beforeAll(() => {
     class_ = new Class(
         "Programmeren",
         "Voor mensen die niet kunnen programmeren",
-        "Beginners"
+        "Beginners",
+        "Puk van de Petterflet"
     );
     dataSource = new DataSource(datasourceSettings.toObject());
 });

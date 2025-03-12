@@ -4,6 +4,7 @@ export class Class {
         private _name: string,
         private _description: string,
         private _targetAudience: string,  // Who is this class directed to (8th grade, home schooling, ...)
+        private _teacherId: string, // the ID of the teacher that created the class
         private _id?: string,
     ){}
 
@@ -16,6 +17,9 @@ export class Class {
     }
     public get targetAudience():string{
         return this._targetAudience;
+    }
+    public get teacherId():string{
+        return this._teacherId;
     }
     public get id():string|undefined{
         return this._id;
@@ -30,6 +34,9 @@ export class Class {
     }
     public set targetAudience(newTargetAudience:string){
         this._targetAudience = newTargetAudience;
+    }
+    public set teacherId(newTeacherId:string){
+        this._teacherId = newTeacherId;
     }
     public set id(newId:string){
         this._id = newId;
