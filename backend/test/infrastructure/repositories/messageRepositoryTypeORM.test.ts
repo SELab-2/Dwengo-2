@@ -31,75 +31,79 @@ describe("MessageRepositoryTypeORM", () => {
 
         datasourceMessage = {
             // datasource: jest.fn() as unknown as DataSource,
-            create: jest.fn(() => Promise.resolve(message)),
-            getById: jest.fn(() => Promise.resolve(message)),
-            getByEmail: jest.fn(() => Promise.resolve(message)),
-            getByFirstName: jest.fn(() => Promise.resolve(message)),
-            getByLastName: jest.fn(() => Promise.resolve(message)),
-            getAll: jest.fn(() => Promise.resolve([message, message])),
-            update: jest.fn(() => Promise.resolve(message)),
-            delete: jest.fn()
+            createMessage: jest.fn(() => Promise.resolve(message)),
+            getMessageById: jest.fn(() => Promise.resolve(message)),
+            // getByEmail: jest.fn(() => Promise.resolve(message)),
+            // getByFirstName: jest.fn(() => Promise.resolve(message)),
+            // getByLastName: jest.fn(() => Promise.resolve(message)),
+            // getAll: jest.fn(() => Promise.resolve([message, message])),
+            updateMessage: jest.fn(() => Promise.resolve(message)),
+            deleteMessageById: jest.fn()
         } as any;
 
         // Mock message
         date = new Date("11/09/2001");
-        message = new Message("senderId", date, "threadId", "I dont get it.");
+        message = new Message("senderId", date, "threadId", "I dont get it.", "mockMessageId");
 
     });
 
     test("create", async () => {
         // Call function from repository
-        const returnMessage: Message = await datasourceMessage.create(message);
+        const returnMessage: Message = await datasourceMessage.createMessage(message);
         
-        expect(datasourceMessage.create).toHaveBeenCalledTimes(1);
-        expect(datasourceMessage.create).toHaveBeenCalledWith(message);
+        expect(datasourceMessage.createMessage).toHaveBeenCalledTimes(1);
+        expect(datasourceMessage.createMessage).toHaveBeenCalledWith(message);
         expect(returnMessage).toEqual(message);
     });
 
     test("getById", async () => {
         // Call function from repository
-        const returnMessage: Message|null = await datasourceMessage.getById(message.senderId);
+        const returnMessage: Message|null = await datasourceMessage.getMessageById(message.senderId);
 
-        expect(datasourceMessage.getById).toHaveBeenCalledTimes(1);
-        expect(datasourceMessage.getById).toHaveBeenCalledWith(message.senderId);
+        expect(datasourceMessage.getMessageById).toHaveBeenCalledTimes(1);
+        expect(datasourceMessage.getMessageById).toHaveBeenCalledWith(message.senderId);
         expect(returnMessage).toEqual(message);
     });
 
     test("update", async () => {
         // Call function from repository
         message.content = "Never mind, i get it."
-        const returnMessage: Message = await datasourceMessage.update(message);
+        const returnMessage: Message = await datasourceMessage.updateMessage(message);
 
-        expect(datasourceMessage.update).toHaveBeenCalledTimes(1);
-        expect(datasourceMessage.update).toHaveBeenCalledWith(message);
+        expect(datasourceMessage.updateMessage).toHaveBeenCalledTimes(1);
+        expect(datasourceMessage.updateMessage).toHaveBeenCalledWith(message);
         expect(returnMessage.content).toEqual(message.content);
     });
 
     test("delete", async () => {
-        const createdMessage: Message = await datasourceMessage.create(message);
+        const createdMessage: Message = await datasourceMessage.createMessage(message);
+    
+        if (!createdMessage.id) {
+            throw new Error("Message id is undefined");
+        }
+    
         // Call function from repository
-        await datasourceMessage.delete(createdMessage);
-
-        expect(datasourceMessage.delete).toHaveBeenCalledTimes(1);
-        expect(datasourceMessage.delete).toHaveBeenCalledWith(createdMessage);
+        await datasourceMessage.deleteMessageById(createdMessage.id);
+    
+        expect(datasourceMessage.deleteMessageById).toHaveBeenCalledTimes(1);
+        expect(datasourceMessage.deleteMessageById).toHaveBeenCalledWith(createdMessage.id);
     });
 
     test('delete throws error if not in database', async () => {
-            const nonExistentMessageId = "non-existent-id";
-            datasourceMessage.getById = jest.fn(() => Promise.resolve(null));
-            datasourceMessage.delete = jest.fn(async (message: Message) => {
-                        const foundMessage = await datasourceMessage.getById(message.senderId);
-                        if (!foundMessage) {
-                            throw new EntityNotFoundError('Message not found');
-                        }
-            });
-    
-            await expect(datasourceMessage.delete({ senderId: nonExistentMessageId } as Message))
-                .rejects
-                .toThrow(EntityNotFoundError);
-    
-            expect(datasourceMessage.delete).toHaveBeenCalledTimes(1);
-            expect(datasourceMessage.delete).toHaveBeenCalledWith({ senderId: nonExistentMessageId });
+        const nonExistentMessageId = "non-existent-id";
+        datasourceMessage.getMessageById = jest.fn(() => Promise.resolve(null));
+        datasourceMessage.deleteMessageById = jest.fn(async (id: string) => {
+            const foundMessage = await datasourceMessage.getMessageById(id);
+            if (!foundMessage) {
+                throw new EntityNotFoundError('Message not found');
+            }
         });
-
+    
+        await expect(datasourceMessage.deleteMessageById(nonExistentMessageId))
+            .rejects
+            .toThrow(EntityNotFoundError);
+    
+        expect(datasourceMessage.deleteMessageById).toHaveBeenCalledTimes(1);
+        expect(datasourceMessage.deleteMessageById).toHaveBeenCalledWith(nonExistentMessageId);
+    });
 });

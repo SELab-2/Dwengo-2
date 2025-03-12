@@ -29,4 +29,14 @@ export class Message {
     public set content(newContent: string) {
         this._content = newContent;
     }
+
+    public toObject():object{
+        return {
+            senderId: this._senderId,
+            createdAt: this._createdAt,
+            threadId: this._threadId,
+            content: this._content,
+            id: this._id,
+        }
+    }
 }
