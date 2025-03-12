@@ -30,19 +30,19 @@ export class ThreadRepositoryTypeORM extends IQuestionThreadRepository {
     }
 
     public async updateQuestionThread(id: string, updatedThread: Partial<QuestionThread>): Promise<QuestionThread> {
-        throw new Error("Not implemented yet");
+        return await (await this.datasourceThread).updateQuestionThread(id, updatedThread);
     }
 
     public async deleteQuestionThread(id: string): Promise<void> {
-        throw new Error("Not implemented yet");
+        await (await this.datasourceThread).deleteQuestionThread(id);
     }
 
     public async getQuestionThreadsByAssignmentId(assignmentId: string): Promise<QuestionThread[]> {
-        throw new Error("Not implemented yet");
+        return await (await this.datasourceThread).getQuestionThreadsByAssignmentId(assignmentId);
     }
 
     public async getQuestionThreadsByCreatorId(createrId: string): Promise<QuestionThread[]> {
-        throw new Error("Not implemented yet");
+        return await (await this.datasourceThread).getQuestionThreadsByCreatorId(createrId);
     }
     
 }
