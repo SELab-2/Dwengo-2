@@ -1,5 +1,6 @@
 import { HttpMethod, Request, Response } from '../../src/application/types'; // Adjust the import path as needed
 import * as routes from '../../src/application/routes';
+import { fail } from 'assert';
 
 // Mock the module with inline function implementations
 jest.mock("../../src/application/helpersExpress", () => ({
@@ -44,8 +45,8 @@ const routeFunctions = {
 // Route configurations with proper method union
 const routeConfigs: Record<keyof typeof routeFunctions, { method: 'get' | 'patch' | 'delete' | 'post'; path: string }[]> = {
   assignmentRoutes: [
-    { method: 'get', path: '/groups/:idParent/assignments/:id' },
-    { method: 'get', path: '/groups/:idParent/assignments' },
+    { method: 'get', path: '/users/:idParent/assignments/:id' },
+    { method: 'get', path: '/users/:idParent/assignments' },
     { method: 'patch', path: '/assignments/:id' },
     { method: 'delete', path: '/assignments/:id' },
     { method: 'post', path: '/assignments' },
@@ -60,8 +61,8 @@ const routeConfigs: Record<keyof typeof routeFunctions, { method: 'get' | 'patch
   groupRoutes: [
     { method: 'get', path: '/users/:idParent/groups/:id' },
     { method: 'get', path: '/users/:idParent/groups' },
-    { method: 'get', path: '/classes/:idParent/groups/:id' },
-    { method: 'get', path: '/classes/:idParent/groups' },
+    { method: 'get', path: '/assignments/:idParent/groups/:id' },
+    { method: 'get', path: '/assignments/:idParent/groups' },
     { method: 'patch', path: '/groups/:id' },
     { method: 'delete', path: '/groups/:id' },
     { method: 'post', path: '/groups' },
