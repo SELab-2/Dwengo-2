@@ -128,4 +128,11 @@ export abstract class IStudentRepository extends AbstractRepository{
      * @param classCode the code of the class you want to join.
      */
     public abstract requestToJoinClass(studentId: string, classCode: string): Promise<void>;
+
+    /**
+     * Assign a student to an assignment.
+     * @param studentId the student to be assigned.
+     * @param groupId the group in the assignment where the student is part of.
+     */
+    public abstract assignStudentToAssignment(studentId: string, groupId: string): Promise<void>
 }

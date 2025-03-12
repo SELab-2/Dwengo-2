@@ -81,5 +81,12 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @param classId The class to delete the teacher from.
      */
     public abstract deleteTeacherFromClass(teacherId: string, classId: string): Promise<void>;
+
+    /**
+     * Give a teacher access to an assignment.
+     * @param teacherId
+     * @param assignmentId 
+     */
+    public abstract assignTeacherToAssignment(teacherId: string, assignmentId: string): Promise<void>;
     
 }
