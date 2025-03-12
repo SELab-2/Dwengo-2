@@ -1,0 +1,36 @@
+import { Submission } from "../entities/submission";
+import { AbstractRepository } from "./abstractRepository";
+
+export abstract class ISubmissionRepository extends AbstractRepository{
+    
+    /**
+     * Inserts a new submission into the repository. The `id` field of the submission should be empty.
+     * @param submission The submission object to be created.
+     * @throws EntityNotFoundError when the assignment that the submission is for, doesnt exist.
+     * @throws EntityNotFoundError when the student that submitted the submission does not exist.
+     * @returns A promise that resolves to the created submission.
+     */
+    public abstract create(submission: Submission): Promise<Submission>;
+
+    /**
+     * Get a submission by its id.
+     * @param id The id of the submission.
+     * @throws EntityNotFoundError when no submission is found.
+     * @returns A promise that resolves to the retrieved submission.
+     */
+    public abstract getById(id: string): Promise<Submission>;
+
+    /**
+     * Updates a submission.
+     * @param submission - The submission to update.
+     * @returns A promise that resolves when the submission is updated.
+     */
+    public abstract update(submission: Submission): Promise<Submission>;
+
+    /**
+     * Deletes a submission from the repository.
+     * @param submission - The submission to update.
+     * @returns A promise that resolves when the submission is deleted.
+     */
+    public abstract delete(submission: Submission): Promise<void>;
+}

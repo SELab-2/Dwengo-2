@@ -646,13 +646,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/classes/{idParent}/groups/{id}':
+  '/assignments/{idParent}/groups/{id}':
     get:
       tags:
         - groups
-      summary: Get class group by ID
-      description: Retrieve detailed information about a specific group within a class by its unique identifier.
-      operationId: getClassGroupById
+      summary: Get assignment group by ID
+      description: Retrieve detailed information about a specific group from an assignment by its unique identifier.
+      operationId: getAssignmentGroupById
       parameters:
         - in: path
           name: id
@@ -673,13 +673,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/classes/{idParent}/groups':
+  '/assignments/{idParent}/groups':
     get:
       tags:
         - groups
-      summary: Get all groups for class
-      description: Retrieve a list of all groups associated with a specific class.
-      operationId: getClassGroups
+      summary: Get all groups for an assignment
+      description: Retrieve a list of all groups associated with a specific assignment.
+      operationId: getAssignmentGroups
       parameters:
         - in: path
           name: idParent
@@ -989,13 +989,13 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  '/groups/{idParent}/assignments/{id}':
+  '/users/{idParent}/assignments/{id}':
     get:
       tags:
         - assignments
-      summary: Get group assignment by ID
-      description: Retrieve detailed information about a specific assignment within a group by their unique identifiers.
-      operationId: getGroupAssignmentById
+      summary: Get user's assignment by ID
+      description: Retrieve detailed information about a specific assignment of a user by their unique identifiers.
+      operationId: getUserAssignmentById
       parameters:
         - in: path
           name: id
@@ -1016,13 +1016,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/groups/{idParent}/assignments':
+  '/users/{idParent}/assignments':
     get:
       tags:
         - assignments
-      summary: Get all group assignments
-      description: Retrieve a list of all assignments associated with a specific group.
-      operationId: getGroupAssignments
+      summary: Get all user's assignments
+      description: Retrieve a list of all assignments associated with a specific user.
+      operationId: getUserAssignments
       parameters:
         - in: path
           name: idParent
@@ -1278,13 +1278,13 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  '/progresses/{idParent}/questions/{id}':
+  '/assignments/{idParent}/questions/{id}':
     get:
       tags:
         - questions
-      summary: Get progress question by ID
-      description: Retrieve detailed information about a specific question within a progress entry by their unique identifiers.
-      operationId: getProgressQuestionById
+      summary: Get assignment question by ID
+      description: Retrieve detailed information about a specific question within an assignment entry by their unique identifiers.
+      operationId: getAssignmentQuestionById
       parameters:
         - in: path
           name: id
@@ -1308,9 +1308,9 @@ paths:
     patch:
       tags:
         - questions
-      summary: Update progress question
-      description: Modify a question within a progress entry, such as providing an answer or adding remarks.
-      operationId: updateProgressQuestion
+      summary: Update assignment question
+      description: Modify a question within an assignment entry, such as providing an answer or adding remarks.
+      operationId: updateAssignmentQuestion
       parameters:
         - in: path
           name: id
@@ -1340,9 +1340,9 @@ paths:
     delete:
       tags:
         - questions
-      summary: Delete progress question
-      description: Permanently delete a question from a progress entry by its unique identifier.
-      operationId: deleteProgressQuestion
+      summary: Delete asignment question
+      description: Permanently delete a question from an assignment entry by its unique identifier.
+      operationId: deleteAssignmentQuestion
       parameters:
         - in: path
           name: id
@@ -1363,13 +1363,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/progresses/{idParent}/questions':
+  '/assignments/{idParent}/questions':
     get:
       tags:
         - questions
-      summary: Get all progress questions
-      description: Retrieve a list of all questions associated with a specific progress entry.
-      operationId: getProgressQuestions
+      summary: Get all assignment questions
+      description: Retrieve a list of all questions associated with a specific assignment entry.
+      operationId: getAssignmentQuestions
       parameters:
         - in: path
           name: idParent
@@ -1387,9 +1387,9 @@ paths:
     post:
       tags:
         - questions
-      summary: Create new progress question
-      description: Create a new question within a specific progress entry.
-      operationId: createProgressQuestion
+      summary: Create new assignment question
+      description: Create a new question within a specific assignment entry.
+      operationId: createAssignmentQuestion
       parameters:
         - in: path
           name: idParent
@@ -1406,6 +1406,140 @@ paths:
       responses:
         '201':
           $ref: '#/components/responses/QuestionCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  '/questions/{idParent}/messages/{id}':
+    get:
+      tags:
+        - messages
+      summary: Get question message by ID
+      description: Retrieve detailed information about a specific message within a question by their unique identifiers.
+      operationId: getQuestionMessageById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idParent
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/MessageOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags:
+        - messages
+      summary: Update question message
+      description: Modify a message within a question, such as adding a reply or changing the content.
+      operationId: updateQuestionMessage
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idParent
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/MessageOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - messages
+      summary: Delete question message
+      description: Permanently delete a message from a question by its unique identifier.
+      operationId: deleteQuestionMessage
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: idParent
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  '/questions/{idParent}/messages':
+    get:
+      tags:
+        - messages
+      summary: Get all question messages
+      description: Retrieve a list of all messages associated with a specific question.
+      operationId: getQuestionMessages
+      parameters:
+        - in: path
+          name: idParent
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/MessagesOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - messages
+      summary: Create new question message
+      description: Create a new message within a specific question.
+      operationId: createQuestionMessage
+      parameters:
+        - in: path
+          name: idParent
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/MessageCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1524,6 +1658,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Question'
+    MessageOK:
+      description: Message collection request completed successfully
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Message'
     LoginResponseOK:
       description: Login request completed successfully
       content:
@@ -1602,6 +1744,14 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Question'
+    MessagesOK:
+      description: Messages collection request completed successfully
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Message'
 
     InviteCreated:
       description: Invite created successfully
@@ -1663,6 +1813,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/RegisterResponse'
+    MessageCreated:
+      description: Message created successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
 
     NoContent:
       description: Resource deleted successfully
@@ -1902,7 +2058,6 @@ components:
         id:
           type: string
           format: uuid
-          readOnly: true
           description: Unique identifier for the user.
 
     Invite:
@@ -2082,16 +2237,20 @@ components:
     AssignmentCreate:
       type: object
       required:
+        - class
         - group
         - start
         - deadline
         - instructions
       additionalProperties: false
       properties:
+        class:
+          type: string
+          format: uuid
+          description: Unique identifier for the assignment's class.
         group:
           type: string
           format: uuid
-          readOnly: true
           description: Unique identifier for the assignment's group.
         start:
           type: string
@@ -2274,3 +2433,43 @@ components:
           type: string
           minLength: 1
           description: The answer text.
+
+    Message:
+      type: object
+      required:
+        - id
+        - message
+        - date
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the message.
+        message:
+          type: string
+          minLength: 1
+          description: The message text.
+        date:
+          type: string
+          format: date
+          description: Date when the message was sent.
+    MessageCreate:
+      type: object
+      required:
+        - message
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+          minLength: 1
+          description: The message text.
+    MessageUpdate:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+          minLength: 1
+          description: The message text.

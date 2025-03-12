@@ -1,6 +1,6 @@
 import { IDatasourceFactory } from "../../infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { Teacher } from "../entities/teacher";
-import { AbstractRepository } from "./AbstractRepository";
+import { AbstractRepository } from "./abstractRepository";
 
 /**
  * Interface for teacher repositories.
@@ -23,6 +23,14 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @returns A promise that resolves to the teacher with the given id or null if no results are found.
      */
     public abstract getTeacherById(id: string): Promise<Teacher>;
+
+
+    /**
+     * Check if a teacher with this email exists.
+     * @param email The email of the teacher
+     * @returns A promise that resolves to a boolean, true if email is already in use false otherwise.
+     */
+    public abstract checkTeacherByEmail(email: string): Promise<boolean>;
 
     /**
      * Get a teacher by their email.
@@ -66,5 +74,12 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @param id The id of the teacher to delete.
      */
     public abstract deleteTeacherWithId(id: string): Promise<void>;
+
+    /**
+     * Delete a teacher from a class.
+     * @param teacherId The id of the teacher to delete.
+     * @param classId The class to delete the teacher from.
+     */
+    public abstract deleteTeacherFromClass(teacherId: string, classId: string): Promise<void>;
     
 }

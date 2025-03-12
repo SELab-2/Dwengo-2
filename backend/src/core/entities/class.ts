@@ -1,3 +1,4 @@
+
 export class Class {
     public constructor(
         private _name: string,
@@ -32,5 +33,14 @@ export class Class {
     }
     public set id(newId:string){
         this._id = newId;
+    }
+
+    public toObject():object{
+        return {
+            id: this._id,
+            name: this._name,
+            description: this._description,
+            targetAudience: this._targetAudience,
+        }
     }
 }
