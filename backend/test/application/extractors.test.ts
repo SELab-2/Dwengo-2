@@ -1,6 +1,7 @@
 import { createParamsExtractor, ServiceParamsConstructor } from '../../src/application/extractors';
 import { ServiceParams } from '../../src/config/service';
 import { HttpMethod, ErrorCode, Request, PathParams } from '../../src/application/types';
+import { fail } from 'assert';
 
 // Create test service parameter classes
 class BaseParams implements ServiceParams {
