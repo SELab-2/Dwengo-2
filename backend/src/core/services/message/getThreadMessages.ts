@@ -20,12 +20,12 @@ export class GetThreadMessages implements Service<GetThreadMessagesParams> {
     private messageRepository: IMessageRepository
   ) {
   }
-  async execute(input: GetThreadMessagesParams): Promise<object[]> {
+  async execute(input: GetThreadMessagesParams): Promise<object> {
     const thread = await this.questionThreadRepository.getQuestionThreadById(input.threadId);
     // get messageIds from thread and then get messages by ids
     const messages = await Promise.all(thread.messageIds.map(async messageId => {
       return await this.messageRepository.getMessageById(messageId);
     }));
-    return messages.map(message => message.toObject());
+    return {messages: messages.map(message => message.toObject())};
   }
 }
