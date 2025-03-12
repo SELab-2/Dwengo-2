@@ -1,9 +1,7 @@
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Assignment } from "../../../../../core/entities/assignment";
-import { AssignmentGroupTypeORM } from "../../data_models/assignmentForGroupTypeorm";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
-import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
@@ -78,15 +76,13 @@ export class DatasourceAssignmentTypeORM extends IDatasourceAssignment {
             // Join StudentOfGroup
             .leftJoinAndSelect("StudentOfGroupTypeORM.group", "group") // Last one is alias
             // Join Group to AssignmentGroup
-            .leftJoinAndSelect("group.assignmentGroup", "assignmentGroup")        
-            // Join AssignmentForGroup to Assignment
-            .leftJoinAndSelect("assignmentGroup.assignment", "assignment")
+            .leftJoinAndSelect("group.assignment", "assignment")        
             // Join Assignment to Class
             .leftJoinAndSelect("assignment.class", "class")
             .getMany();
 
         return assignmentsJoinResult.map((assignmentJoinResult) => {
-            return assignmentJoinResult.group.assignmentGroup.assignment.toAssignmentEntity();
+            return assignmentJoinResult.group.assignment.toAssignmentEntity();
         });
     }
 
