@@ -4,6 +4,9 @@ import { IAssignmentRepository } from '../../../src/core/repositories/assignment
 import { IQuestionThreadRepository } from '../../../src/core/repositories/questionThreadRepositoryInterface';
 import { IGroupRepository } from '../../../src/core/repositories/groupRepositoryInterface';
 import { IMessageRepository } from '../../../src/core/repositories/messageRepositoryInterface';
+import { Assignment } from '../../../src/core/entities/assignment';
+import { JoinRequestType } from '../../../src/core/entities/joinRequest';
+
 
 export const mockApp = {
   get: jest.fn(),
@@ -23,6 +26,7 @@ export class MockClassRepository extends IClassRepository {
   public updateClass = jest.fn();
   public deleteClass = jest.fn();
   public createClass = jest.fn();
+  public addUserToClass = jest.fn()
 }
 
 export class MockAssignmentRepository extends IAssignmentRepository {
