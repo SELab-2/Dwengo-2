@@ -1,10 +1,10 @@
 import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 import { EntityNotFoundError } from "../../config/error";
-import { IThreadRepository } from "../../core/repositories/questionThreadRepositoryInterface";
 import { QuestionThread } from "../../core/entities/questionThread";
 import { IDatasourceThread } from "../database/data/data_sources/datasourceThreadInterface";
+import { IQuestionThreadRepository } from "../../core/repositories/questionThreadRepositoryInterface";
 
-export class IThreadRepositoryTypeORM extends IThreadRepository{
+export class IThreadRepositoryTypeORM extends IQuestionThreadRepository {
 
     private datasource: IDatasource;
     private datasourceThread: Promise<IDatasourceThread>;
@@ -15,11 +15,11 @@ export class IThreadRepositoryTypeORM extends IThreadRepository{
         this.datasourceThread = this.datasource.getDatasourceThread();
     }
     
-    public async create(thread: QuestionThread): Promise<QuestionThread> {
+    public async createQuestionThread(thread: QuestionThread): Promise<QuestionThread> {
         return await (await this.datasourceThread).create(thread);
     }
     
-    public async getById(id: string): Promise<QuestionThread> {
+    public async getQuestionThreadById(id: string): Promise<QuestionThread> {
         const thread: QuestionThread|null = await (await this.datasourceThread).getById(id);
         
         if(thread) {
@@ -29,12 +29,20 @@ export class IThreadRepositoryTypeORM extends IThreadRepository{
         }
     }
 
-    public async update(thread: QuestionThread): Promise<QuestionThread> {
-        return await (await this.datasourceThread).update(thread);
+    public async updateQuestionThread(id: string, updatedThread: Partial<QuestionThread>): Promise<QuestionThread> {
+        throw new Error("Not implemented yet");
     }
 
-    public async delete(thread: QuestionThread): Promise<void> {
-        return await (await this.datasourceThread).delete(thread);
+    public async deleteQuestionThread(id: string): Promise<void> {
+        throw new Error("Not implemented yet");
+    }
+
+    public async getQuestionThreadsByAssignmentId(assignmentId: string): Promise<QuestionThread[]> {
+        throw new Error("Not implemented yet");
+    }
+
+    public async getQuestionThreadsByCreatorId(createrId: string): Promise<QuestionThread[]> {
+        throw new Error("Not implemented yet");
     }
     
 }
