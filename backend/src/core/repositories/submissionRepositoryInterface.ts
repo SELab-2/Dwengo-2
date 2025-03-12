@@ -1,8 +1,8 @@
 import { Submission } from "../entities/submission";
 import { AbstractRepository } from "./abstractRepository";
 
-export abstract class ISubmissionRepository extends AbstractRepository{
-    
+export abstract class ISubmissionRepository extends AbstractRepository {
+
     /**
      * Inserts a new submission into the repository. The `id` field of the submission should be empty.
      * @param submission The submission object to be created.
@@ -19,13 +19,6 @@ export abstract class ISubmissionRepository extends AbstractRepository{
      * @returns A promise that resolves to the retrieved submission.
      */
     public abstract getById(id: string): Promise<Submission>;
-
-    /**
-     * Updates a submission.
-     * @param submission - The submission to update.
-     * @returns A promise that resolves when the submission is updated.
-     */
-    public abstract update(submission: Submission): Promise<Submission>;
 
     /**
      * Deletes a submission from the repository.
