@@ -17,7 +17,7 @@ import * as MessageServices from '../../core/services/message';
 export class MessageController extends Controller {
   constructor(
     get: MessageServices.GetMessage,
-    getQuestionMessages: MessageServices.GetQuestionMessages,
+    getThreadMessages: MessageServices.GetThreadMessages,
     update: MessageServices.UpdateMessage,
     remove: MessageServices.DeleteMessage,
     create: MessageServices.CreateMessage
@@ -43,6 +43,6 @@ export class MessageController extends Controller {
       // ],
     };
 
-    super({ get, getQuestionMessages, update, remove, create }, handlers);
+    super({ get, getThreadMessages, update, remove, create }, handlers);
   }
 }

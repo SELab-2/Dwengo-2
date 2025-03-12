@@ -38,4 +38,13 @@ export class JoinRequest {
     public set id(newId: string) {
         this._id = newId;
     }
+
+    public toObject(): object {
+        return {
+            requester: this._requester,
+            classId: this._classId,
+            type: this._type,
+            id: this._id
+        };
+    }
 }
