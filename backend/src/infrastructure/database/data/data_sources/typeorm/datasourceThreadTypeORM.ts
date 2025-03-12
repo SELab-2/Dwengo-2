@@ -3,7 +3,7 @@ import { QuestionThread } from "../../../../../core/entities/questionThread";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
-import { ThreadMessageTypeORM } from "../../data_models/threadMessageTypeorm";
+import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { IDatasourceThread } from "../datasourceThreadInterface";
 
 export class DatasourceThreadTypeORM extends IDatasourceThread{
@@ -37,7 +37,7 @@ export class DatasourceThreadTypeORM extends IDatasourceThread{
 
     public async getById(id: string): Promise<QuestionThread | null> {
         const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
-        const messageRepository = this.datasource.getRepository(ThreadMessageTypeORM);
+        const messageRepository = this.datasource.getRepository(MessageTypeORM);
 
         const threadModel: QuestionThreadTypeORM|null = await threadRepository
             .findOne({ where: { id: id } });
@@ -55,7 +55,7 @@ export class DatasourceThreadTypeORM extends IDatasourceThread{
 
     public async update(thread: QuestionThread): Promise<QuestionThread> {
         const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
-        const messageRepository = this.datasource.getRepository(ThreadMessageTypeORM);
+        const messageRepository = this.datasource.getRepository(MessageTypeORM);
 
         if (!thread.id) {
             throw new Error("Cannot delete a thread without an ID");
@@ -84,7 +84,7 @@ export class DatasourceThreadTypeORM extends IDatasourceThread{
     }
 
     public async delete(thread: QuestionThread): Promise<void> {
-        const messageRepository = this.datasource.getRepository(ThreadMessageTypeORM);
+        const messageRepository = this.datasource.getRepository(MessageTypeORM);
         const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
 
         if (!thread.id) {
