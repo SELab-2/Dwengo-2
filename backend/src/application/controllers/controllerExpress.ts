@@ -75,6 +75,7 @@ export abstract class Controller {
    */
   protected handleError(error: ApiError | unknown): Response {
     if (!(error && typeof error === 'object' && 'code' in error && 'message' in error)) {
+      console.log(error);
       return this.respond(500, { code: 'INTERNAL_ERROR', message: 'Unexpected server error' });
     }
 
@@ -143,7 +144,7 @@ export abstract class Controller {
    * @param service - Service to execute
    * @returns Response with status 200 and list of child entities
    */
-  protected async getChildren<T extends ServiceParams>(req: Request,data: T,
+  protected async getChildren<T extends ServiceParams>(req: Request, data: T,
     service: Service<T>): Promise<Response>
   {
     return this._executeService(service, data, 200, "GetChildren");
