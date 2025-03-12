@@ -21,7 +21,7 @@ class MockGetUserGroupsService extends GroupServices.GetUserGroups {
   public execute = jest.fn();
 }
 
-class MockGetClassGroupsService extends GroupServices.GetClassGroups {
+class MockGetAssignmentGroupsService extends GroupServices.GetAssignmentGroups {
   public execute = jest.fn();
 }
 
@@ -43,7 +43,7 @@ class MockGroupController extends GroupController {
     super(
       new MockGetGroupService(new MockGroupRepository()),
       new MockGetUserGroupsService(new MockGroupRepository()),
-      new MockGetClassGroupsService(new MockGroupRepository()),
+      new MockGetAssignmentGroupsService(new MockGroupRepository()),
       new MockUpdateGroupService(new MockGroupRepository()),
       new MockDeleteGroupService(new MockGroupRepository()),
       new MockCreateGroupService(new MockGroupRepository())

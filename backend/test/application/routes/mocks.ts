@@ -51,7 +51,7 @@ export class MockGroupRepository extends IGroupRepository {
   public create = jest.fn();
   public update = jest.fn();
   public getById = jest.fn();
-  public getByClassId = jest.fn();
+  public getByAssignmentId = jest.fn();
   public getByUserId = jest.fn();
   public delete = jest.fn();
 }

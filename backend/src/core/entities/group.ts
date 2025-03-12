@@ -2,12 +2,12 @@
 export class Group {
     constructor(
         private _memberIds: string[],
-        private readonly _classId: string,
+        private readonly _assignmentId: string,
         private readonly _id?: string,
     ) {}
 
-    public get classId(): string {
-        return this._classId;
+    public get assignmentId(): string {
+        return this._assignmentId;
     }
 
     public get memberIds(): string[] {
@@ -26,7 +26,7 @@ export class Group {
         return {
             id: this._id,
             memberIds: this._memberIds,
-            classId: this._classId,
+            assignmentId: this._assignmentId,
         };
     }
 }
