@@ -17,7 +17,7 @@ import * as MessageServices from '../../core/services/message';
 export class MessageController extends Controller {
   constructor(
     get: MessageServices.GetMessage,
-    getQuestionMessages: MessageServices.GetThreadMessages,
+    getThreadMessages: MessageServices.GetThreadMessages,
     update: MessageServices.UpdateMessage,
     remove: MessageServices.DeleteMessage,
     create: MessageServices.CreateMessage
@@ -27,7 +27,7 @@ export class MessageController extends Controller {
         { parent: 'questions', hasId: true, hasParentId: true, extractor: defaultExtractor,
           handler: (req: Request, data: object) => this.getOne(req, data) },
         { parent: 'questions', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getChildren(req, data, getQuestionMessages) },
+          handler: (req: Request, data: object) => this.getChildren(req, data, getThreadMessages) },
       ],
       [HttpMethod.PATCH]: [
         { parent: 'questions', hasId: true, hasParentId: true, extractor: defaultExtractor,
@@ -43,6 +43,6 @@ export class MessageController extends Controller {
       ],
     };
 
-    super({ get, getQuestionMessages, update, remove, create }, handlers);
+    super({ get, getThreadMessages, update, remove, create }, handlers);
   }
 }
