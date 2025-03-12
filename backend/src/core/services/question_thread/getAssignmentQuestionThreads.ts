@@ -1,4 +1,4 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ServiceParams } from "../../../config/service";
 import { QuestionThreadBaseService } from "./questionThreadBaseService";
 
 export class GetAssignmentQuestionThreadsParams implements ServiceParams {
