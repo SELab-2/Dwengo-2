@@ -25,7 +25,7 @@ export class AssignmentController extends Controller {
       [HttpMethod.GET]: [
         { hasId: true, hasParentId: false, extractor: defaultExtractor,
           handler: (req: Request, data: object) => this.getOne(req, data) },
-        { parent: 'groups', hasId: false, hasParentId: true, extractor: defaultExtractor,
+        { parent: 'users', hasId: false, hasParentId: true, extractor: defaultExtractor,
           handler: (req: Request, data: object) => this.getChildren(req, data, getUserAssignments) }
       ],
       [HttpMethod.PATCH]: [
