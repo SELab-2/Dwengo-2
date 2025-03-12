@@ -16,6 +16,7 @@ export class CreateJoinRequestParams implements ServiceParams {
     joinRequestRepository: IJoinRequestRepository,
     classRepository: IClassRepository,
   ): Promise<JoinRequest> {
+    
     // Check if user hasn't already requested to join the class
     const classRequests: JoinRequest[] =
       await joinRequestRepository.getJoinRequestByClassId(this._classId);
