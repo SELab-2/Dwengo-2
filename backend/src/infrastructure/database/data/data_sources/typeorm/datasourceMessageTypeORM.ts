@@ -6,7 +6,7 @@ import { UserTypeORM } from "../../data_models/userTypeorm";
 import { IDatasourceMessage } from "../datasourceMessageInterface";
 
 export class DatasourceMessageTypeORM extends IDatasourceMessage {
-    public async create(message: Message): Promise<Message> {
+    public async createMessage(message: Message): Promise<Message> {
         const userRepository = this.datasource.getRepository(UserTypeORM)
         const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM)
         const messageRepository = this.datasource.getRepository(MessageTypeORM)
@@ -33,7 +33,7 @@ export class DatasourceMessageTypeORM extends IDatasourceMessage {
         return savedMessageModel.toEntity();
     }
 
-    public async getById(id: string): Promise<Message|null> {
+    public async getMessageById(id: string): Promise<Message|null> {
 
         const messageModel: MessageTypeORM|null = await this.datasource
             .getRepository(MessageTypeORM)
@@ -47,12 +47,12 @@ export class DatasourceMessageTypeORM extends IDatasourceMessage {
         return null; // No result
     }
 
-    public async update(message: Message): Promise<Message> {
-        this.delete(message);
-        return this.create(message);
+    public async updateMessage(message: Message): Promise<Message> {
+        this.deleteMessage(message);
+        return this.createMessage(message);
     }
 
-    public async delete(message: Message): Promise<void> {
+    public async deleteMessage(message: Message): Promise<void> {
         const messageRepository = this.datasource.getRepository(MessageTypeORM)
 
         const messageModel: MessageTypeORM|null = await messageRepository

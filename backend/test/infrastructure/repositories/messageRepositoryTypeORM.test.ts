@@ -49,57 +49,57 @@ describe("MessageRepositoryTypeORM", () => {
 
     test("create", async () => {
         // Call function from repository
-        const returnMessage: Message = await datasourceMessage.create(message);
+        const returnMessage: Message = await datasourceMessage.createMessage(message);
         
-        expect(datasourceMessage.create).toHaveBeenCalledTimes(1);
-        expect(datasourceMessage.create).toHaveBeenCalledWith(message);
+        expect(datasourceMessage.createMessage).toHaveBeenCalledTimes(1);
+        expect(datasourceMessage.createMessage).toHaveBeenCalledWith(message);
         expect(returnMessage).toEqual(message);
     });
 
     test("getById", async () => {
         // Call function from repository
-        const returnMessage: Message|null = await datasourceMessage.getById(message.senderId);
+        const returnMessage: Message|null = await datasourceMessage.getMessageById(message.senderId);
 
-        expect(datasourceMessage.getById).toHaveBeenCalledTimes(1);
-        expect(datasourceMessage.getById).toHaveBeenCalledWith(message.senderId);
+        expect(datasourceMessage.getMessageById).toHaveBeenCalledTimes(1);
+        expect(datasourceMessage.getMessageById).toHaveBeenCalledWith(message.senderId);
         expect(returnMessage).toEqual(message);
     });
 
     test("update", async () => {
         // Call function from repository
         message.content = "Never mind, i get it."
-        const returnMessage: Message = await datasourceMessage.update(message);
+        const returnMessage: Message = await datasourceMessage.updateMessage(message);
 
-        expect(datasourceMessage.update).toHaveBeenCalledTimes(1);
-        expect(datasourceMessage.update).toHaveBeenCalledWith(message);
+        expect(datasourceMessage.updateMessage).toHaveBeenCalledTimes(1);
+        expect(datasourceMessage.updateMessage).toHaveBeenCalledWith(message);
         expect(returnMessage.content).toEqual(message.content);
     });
 
     test("delete", async () => {
-        const createdMessage: Message = await datasourceMessage.create(message);
+        const createdMessage: Message = await datasourceMessage.createMessage(message);
         // Call function from repository
-        await datasourceMessage.delete(createdMessage);
+        await datasourceMessage.deleteMessage(createdMessage);
 
-        expect(datasourceMessage.delete).toHaveBeenCalledTimes(1);
-        expect(datasourceMessage.delete).toHaveBeenCalledWith(createdMessage);
+        expect(datasourceMessage.deleteMessage).toHaveBeenCalledTimes(1);
+        expect(datasourceMessage.deleteMessage).toHaveBeenCalledWith(createdMessage);
     });
 
     test('delete throws error if not in database', async () => {
             const nonExistentMessageId = "non-existent-id";
-            datasourceMessage.getById = jest.fn(() => Promise.resolve(null));
-            datasourceMessage.delete = jest.fn(async (message: Message) => {
-                        const foundMessage = await datasourceMessage.getById(message.senderId);
+            datasourceMessage.getMessageById = jest.fn(() => Promise.resolve(null));
+            datasourceMessage.deleteMessage = jest.fn(async (message: Message) => {
+                        const foundMessage = await datasourceMessage.getMessageById(message.senderId);
                         if (!foundMessage) {
                             throw new EntityNotFoundError('Message not found');
                         }
             });
     
-            await expect(datasourceMessage.delete({ senderId: nonExistentMessageId } as Message))
+            await expect(datasourceMessage.deleteMessage({ senderId: nonExistentMessageId } as Message))
                 .rejects
                 .toThrow(EntityNotFoundError);
     
-            expect(datasourceMessage.delete).toHaveBeenCalledTimes(1);
-            expect(datasourceMessage.delete).toHaveBeenCalledWith({ senderId: nonExistentMessageId });
+            expect(datasourceMessage.deleteMessage).toHaveBeenCalledTimes(1);
+            expect(datasourceMessage.deleteMessage).toHaveBeenCalledWith({ senderId: nonExistentMessageId });
         });
 
 });

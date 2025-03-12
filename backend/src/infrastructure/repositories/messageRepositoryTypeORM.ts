@@ -15,12 +15,12 @@ export class IMessageRepositoryTypeORM extends IMessageRepository{
         this.datasourceMessage = this.datasource.getDatasourceMessage();
     }
     
-    public async create(message: Message): Promise<Message> {
-        return await (await this.datasourceMessage).create(message);
+    public async createMessage(message: Message): Promise<Message> {
+        return await (await this.datasourceMessage).createMessage(message);
     }
     
-    public async getById(id: string): Promise<Message> {
-        const message: Message|null = await (await this.datasourceMessage).getById(id);
+    public async getMessageById(id: string): Promise<Message> {
+        const message: Message|null = await (await this.datasourceMessage).getMessageById(id);
         
         if(message) {
             return message;
@@ -29,12 +29,12 @@ export class IMessageRepositoryTypeORM extends IMessageRepository{
         }
     }
 
-    public async update(message: Message): Promise<Message> {
-        return await (await this.datasourceMessage).update(message);
+    public async updateMesssage(message: Message): Promise<Message> {
+        return await (await this.datasourceMessage).updateMessage(message);
     }
 
-    public async delete(message: Message): Promise<void> {
-        return await (await this.datasourceMessage).delete(message);
+    public async deleteMessage(message: Message): Promise<void> {
+        return await (await this.datasourceMessage).deleteMessage(message);
     }
     
 }
