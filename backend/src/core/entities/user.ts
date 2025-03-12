@@ -1,3 +1,4 @@
+import { ApiError, ErrorCode } from "../../application/types";
 
 export enum UserType {
     STUDENT = "student",
@@ -12,7 +13,14 @@ export abstract class User {
         protected readonly _passwordHash: string,
         protected _schoolName: string,
         protected _id?: string
-    ) {}
+    ) {
+        if (!_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_email)) {
+            throw {
+              code: ErrorCode.BAD_REQUEST,
+              message: 'Email invalid.',
+            } as ApiError;
+          }
+    }
     
     // Getters
     public get id(): string | undefined {

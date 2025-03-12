@@ -40,6 +40,7 @@ describe("getStudent Service", () => {
       firstName: "John",
       familyName: "Doe",
       schoolName: "Yale",
+      passwordHash: "hashedpassword123",
       id: "1"
     });
     expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("1");

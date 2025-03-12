@@ -44,6 +44,7 @@ describe('getTeacher Use Case', () => {
       firstName: 'John',
       familyName: 'Doe',
       schoolName: 'Yale',
+      passwordHash: 'hashedpassword123',
       id: '1',
     });
     expect(mockTeacherRepository.getTeacherById).toHaveBeenCalledWith('1');

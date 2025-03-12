@@ -35,14 +35,6 @@ export class CreateUserParams implements ServiceParams {
     studentRepository: IStudentRepository,
     teacherRepository: ITeacherRepository,
   ): Promise<User> {
-    // Check email
-    if (!this._email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this._email)) {
-      throw {
-        code: ErrorCode.BAD_REQUEST,
-        message: 'Email invalid.',
-      } as ApiError;
-    }
-
     // Check if email not already in use
     const emailInUse = await Promise.all([
       studentRepository.checkByEmail(this._email),
