@@ -4,7 +4,7 @@ import { QuestionThreadTypeORM } from "./questionThreadTypeorm"
 import { Message } from "../../../../core/entities/message"
 
 @Entity()
-export class ThreadMessageTypeORM {
+export class MessageTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string
 
@@ -22,8 +22,8 @@ export class ThreadMessageTypeORM {
     @Column({ type: "text" })
     contents!: string
 
-    public static createTypeORM(message: Message, userModel: UserTypeORM, threadModel: QuestionThreadTypeORM): ThreadMessageTypeORM {
-        const messageTypeORM: ThreadMessageTypeORM = new ThreadMessageTypeORM()
+    public static createTypeORM(message: Message, userModel: UserTypeORM, threadModel: QuestionThreadTypeORM): MessageTypeORM {
+        const messageTypeORM: MessageTypeORM = new MessageTypeORM()
         messageTypeORM.contents = message.content;
         messageTypeORM.sent_at = message.createdAt;
         messageTypeORM.sent_by = userModel;

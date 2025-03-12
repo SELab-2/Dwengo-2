@@ -2,6 +2,7 @@ import { IDatasourceTeacher } from "../datasourceTeacherInterface";
 import { Teacher } from "../../../../../core/entities/teacher";
 import { UserTypeORM } from "../../data_models/userTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
+import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 
 export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
 
@@ -114,6 +115,15 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
             await this.datasource.getRepository(UserTypeORM).delete(teacherModel!.teacher.id!);
             await this.datasource.getRepository(TeacherTypeORM).delete(id);
         }
+    }
+
+    public async deleteTeacherFromClass(teacherId: string, classId: string): Promise<void> {
+        await this.datasource
+            .createQueryBuilder()
+            .delete()
+            .from(TeacherOfClassTypeORM)
+            .where("teacher_id = :teacher AND class_id = :class", { teacher: teacherId, class: classId })
+            .execute();
     }
 
 }
