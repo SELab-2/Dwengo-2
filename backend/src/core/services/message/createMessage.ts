@@ -35,6 +35,6 @@ export class CreateMessage extends MessageService<CreateMessageParams> {
       input.threadId,
       input.content
     );
-    return { id: (await this.messageRepository.createMessage(newMessage)).id };
+    return {id: (await this.messageRepository.createMessage(newMessage)).id};
   }
 }
