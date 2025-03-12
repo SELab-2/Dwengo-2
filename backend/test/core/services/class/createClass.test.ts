@@ -10,14 +10,15 @@ const mockClassRepository = {
 describe('CreateClass', () => {
     let createClass: CreateClass;
 
+    const inputClass = new CreateClassParams("Math 101", "Basic math class", "Primary School", "teacher_id");
+
     beforeEach(() => {
         createClass = new CreateClass(mockClassRepository as any);
         jest.clearAllMocks(); // Reset mocks voor elke test
     });
 
     test('Should create a class and return its ID', async () => {
-        const inputClass = new CreateClassParams("Math 101", "Basic math class", "Primary School");
-        const createdClass = new Class("Math 101", "Basic math class", "Primary School", "mock-class-id");
+        const createdClass = new Class("Math 101", "Basic math class", "Primary School", "teacher-id", "mock-class-id");
 
         mockClassRepository.createClass.mockResolvedValue(createdClass);
 
@@ -28,8 +29,6 @@ describe('CreateClass', () => {
     });
 
     test('Should throw a DatabaseError if creation fails', async () => {
-        const inputClass = new CreateClassParams("Math 101", "Basic math class", "Primary School");
-
         mockClassRepository.createClass.mockRejectedValue(new DatabaseError('Creation failed'));
 
         await expect(createClass.execute(inputClass)).rejects.toThrow(DatabaseError);

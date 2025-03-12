@@ -1,12 +1,8 @@
 import { Class } from "../../../src/core/entities/class";
 import { IDatasourceClass } from "../../../src/infrastructure/database/data/data_sources/datasourceClassInterface";
-import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
-import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
 
 describe("ClassRepositoryTypeORM", () => {
 
-    let datasourceMock: IDatasource;
-    let datasourceFactoryMock: IDatasourceFactory;
     let newClass: Class;
 
     let datasourceClass: IDatasourceClass;
@@ -14,21 +10,6 @@ describe("ClassRepositoryTypeORM", () => {
     let returnClass: Class|null;
 
     beforeEach(() => {
-        datasourceMock = {
-            getDatasourceTeacher: jest.fn(),
-            getDatasourceClass: jest.fn(),
-            getDatasourceGroup: jest.fn(),
-            getDatasourceJoinRequest: jest.fn(),
-            getDatasourceAssignment: jest.fn(),
-            getDatasourceSubmission: jest.fn(),
-            getDatasourceStudent: jest.fn(),
-            getDatasourceMessage: jest.fn(),
-            getDatasourceThread: jest.fn(),
-        };
-        datasourceFactoryMock = {
-            createDatasource: jest.fn(() => datasourceMock),
-        };
-
         datasourceClass = {
             createClass: jest.fn(() => Promise.resolve(newClass)),
             getClassById: jest.fn(() => Promise.resolve(newClass)),
@@ -38,7 +19,7 @@ describe("ClassRepositoryTypeORM", () => {
         } as any;
 
         // Mock class
-        newClass = new Class("Programmeren", "Voor mensen die niet kunnen programmeren", "Beginners");
+        newClass = new Class("Programmeren", "Voor mensen die niet kunnen programmeren", "Beginners", "test_teacher_id");
     });
 
     test("createClass", async () => {
