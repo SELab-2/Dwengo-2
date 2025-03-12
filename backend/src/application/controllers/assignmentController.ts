@@ -8,8 +8,7 @@ import * as AssignmentServices from '../../core/services/assignment';
  * Controller responsible for assignment-related API endpoints including CRUD operations
  * and assignment listings by group. Follows RESTful patterns with paths:
  * - GET /assignments/:id - Get single assignment
- * //TODO: Groups are defined within Assignments, so this path needs to be updated or removed
- * - GET /groups/:idParent/assignments - Get assignments for a group
+ * - GET /users/:idParent/assignments - Get assignments for a user
  * - PATCH /assignments/:id - Update an assignment
  * - POST /assignments - Create a new assignment
  * - DELETE /assignments/:id - Delete an assignment
@@ -17,7 +16,7 @@ import * as AssignmentServices from '../../core/services/assignment';
 export class AssignmentController extends Controller {
   constructor(
     get: AssignmentServices.GetAssignment,
-    getGroupAssignments: AssignmentServices.GetGroupAssignment,
+    getUserAssignments: AssignmentServices.GetUserAssignments,
     update: AssignmentServices.UpdateAssignment,
     remove: AssignmentServices.DeleteAssignment,
     create: AssignmentServices.CreateAssignment
@@ -27,7 +26,7 @@ export class AssignmentController extends Controller {
         { hasId: true, hasParentId: false, extractor: defaultExtractor,
           handler: (req: Request, data: object) => this.getOne(req, data) },
         { parent: 'groups', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getChildren(req, data, getGroupAssignments) }
+          handler: (req: Request, data: object) => this.getChildren(req, data, getUserAssignments) }
       ],
       [HttpMethod.PATCH]: [
         { hasId: true, hasParentId: false, extractor: defaultExtractor,
@@ -43,6 +42,6 @@ export class AssignmentController extends Controller {
       ]
     };
 
-    super({ get, getGroupAssignments, update, remove, create }, handlers);
+    super({ get, getUserAssignments, update, remove, create }, handlers);
   }
 }
