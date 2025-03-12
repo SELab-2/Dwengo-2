@@ -142,4 +142,20 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
         await this.datasource.getRepository(StudentOfGroupTypeORM).delete({ student: { id: studentId }, group: { id: groupId } });
     }
 
+    public async assignStudentToGroup(studentId: string, groupId: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    public async getClassStudents(classId: string): Promise<Student[]> {
+        throw new Error("Method not implemented.");
+    }
+
+    public async getAssignmentStudents(assignmentId: string): Promise<Student[]> {
+        throw new Error("Method not implemented.");
+    }
+
+    public async getGroupStudents(groupId: string): Promise<Student[]> {
+        throw new Error("Method not implemented.");
+    }
+
 }
