@@ -1,4 +1,4 @@
-import { mockApp } from "./mocks";
+import { mockApp, MockGroupRepository } from "./mocks";
 import { groupRoutes } from "../../../src/application/routes";
 import { GroupController } from "../../../src/application/controllers/groupController";
 import * as GroupServices from "../../../src/core/services/group/index";
@@ -21,7 +21,7 @@ class MockGetUserGroupsService extends GroupServices.GetUserGroups {
   public execute = jest.fn();
 }
 
-class MockGetClassGroupsService extends GroupServices.GetClassGroups {
+class MockGetAssignmentGroupsService extends GroupServices.GetAssignmentGroups {
   public execute = jest.fn();
 }
 
@@ -41,12 +41,12 @@ class MockCreateGroupService extends GroupServices.CreateGroup {
 class MockGroupController extends GroupController {
   constructor() {
     super(
-      new MockGetGroupService(),
-      new MockGetUserGroupsService(),
-      new MockGetClassGroupsService(),
-      new MockUpdateGroupService(),
-      new MockDeleteGroupService(),
-      new MockCreateGroupService()
+      new MockGetGroupService(new MockGroupRepository()),
+      new MockGetUserGroupsService(new MockGroupRepository()),
+      new MockGetAssignmentGroupsService(new MockGroupRepository()),
+      new MockUpdateGroupService(new MockGroupRepository()),
+      new MockDeleteGroupService(new MockGroupRepository()),
+      new MockCreateGroupService(new MockGroupRepository())
     );
   }
 

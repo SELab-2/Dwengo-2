@@ -2,10 +2,11 @@ import { Express } from 'express';
 import { IClassRepository } from '../../../src/core/repositories/classRepositoryInterface';
 import { IAssignmentRepository } from '../../../src/core/repositories/assignmentRepositoryInterface';
 import { IQuestionThreadRepository } from '../../../src/core/repositories/questionThreadRepositoryInterface';
-import { QuestionThread } from '../../../src/core/entities/questionThread';
+import { IGroupRepository } from '../../../src/core/repositories/groupRepositoryInterface';
 import { IMessageRepository } from '../../../src/core/repositories/messageRepositoryInterface';
 import { Assignment } from '../../../src/core/entities/assignment';
 import { JoinRequestType } from '../../../src/core/entities/joinRequest';
+
 
 export const mockApp = {
   get: jest.fn(),
@@ -48,6 +49,15 @@ export class MockQuestionThreadRepository extends IQuestionThreadRepository {
   public getQuestionThreadsByCreatorId = jest.fn();
   public updateQuestionThread = jest.fn();
   public deleteQuestionThread = jest.fn();
+}
+
+export class MockGroupRepository extends IGroupRepository {
+  public create = jest.fn();
+  public update = jest.fn();
+  public getById = jest.fn();
+  public getByAssignmentId = jest.fn();
+  public getByUserId = jest.fn();
+  public delete = jest.fn();
 }
 
 export class MockMessageRepository extends IMessageRepository {

@@ -1,9 +1,16 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ServiceParams } from "../../../config/service";
+import { GroupService } from "./groupService";
 
-export class GetGroup implements Service<ServiceParams> {
-  constructor() {}
+export class GetGroupParams implements ServiceParams {
+  constructor(private _id: string) {}
 
-  async execute(input: ServiceParams): Promise<object> {
-    return {};
+  get id(): string {
+    return this._id;
+  }
+}
+
+export class GetGroup extends GroupService<GetGroupParams> {
+  async execute(input: GetGroupParams): Promise<object> {
+    return (await this.groupRepository.getById(input.id)).toObject();
   }
 }

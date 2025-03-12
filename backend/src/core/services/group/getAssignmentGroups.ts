@@ -1,7 +1,18 @@
-import { Service, ServiceParams } from '../../../config/service';
+import { ServiceParams } from "../../../config/service";
+import { GroupService } from "./groupService";
+import { Group } from "../../entities/group";
 
-export class GetAssignmentGroups implements Service<ServiceParams> {
-    async execute(input: ServiceParams): Promise<object>{
-        return {};
-    }	
+export class GetAssignmentGroupsParams implements ServiceParams {
+  constructor(private _assignmentId: string) {}
+
+  get assignmentId(): string {
+    return this._assignmentId;
+  }
+}
+
+export class GetAssignmentGroups extends GroupService<GetAssignmentGroupsParams> {
+  async execute(input: GetAssignmentGroupsParams): Promise<object> {
+    const groups: Group[] = await this.groupRepository.getByAssignmentId(input.assignmentId);
+    return {groups: groups.map(group => group.toObject())};
+  }
 }
