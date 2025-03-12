@@ -1,12 +1,15 @@
 import { ErrorCode } from '../../../../src/application/types';
+import { UserType } from '../../../../src/core/entities/user';
 import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
-import { CreateStudent } from '../../../../src/core/services/student/createStudent';
-import { CreateStudentParams } from '../../../../src/core/services/student/createStudent';
+import {
+  CreateUser,
+  CreateUserParams,
+} from '../../../../src/core/services/user/createUser';
 
 const mockStudentRepository = {
   checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
-  createStudent: jest.fn().mockResolvedValue('mock-student-id'), // Simulate student
+  createStudent: jest.fn().mockResolvedValue('mock-user-id'), // Simulate user
 } as unknown as jest.Mocked<IStudentRepository>;
 
 const mockTeacherRepository = {
@@ -14,10 +17,10 @@ const mockTeacherRepository = {
 } as unknown as jest.Mocked<ITeacherRepository>;
 
 describe('CreateStudent', () => {
-  let createStudent: CreateStudent;
+  let createStudent: CreateUser;
 
   beforeEach(() => {
-    createStudent = new CreateStudent(
+    createStudent = new CreateUser(
       mockStudentRepository as any,
       mockTeacherRepository as any,
     );
@@ -26,12 +29,13 @@ describe('CreateStudent', () => {
   test('Should throw error because of invalid email', async () => {
     await expect(
       createStudent.execute(
-        new CreateStudentParams(
+        new CreateUserParams(
           'incorrect-email',
           'John',
           'Doe',
           'hashedpassword123',
           'Harvard',
+          UserType.STUDENT,
         ),
       ),
     ).rejects.toEqual({
@@ -45,12 +49,13 @@ describe('CreateStudent', () => {
 
     await expect(
       createStudent.execute(
-        new CreateStudentParams(
+        new CreateUserParams(
           'test@example.com',
           'John',
           'Doe',
           'hashedpassword123',
           'Oxford',
+          UserType.STUDENT
         ),
       ),
     ).rejects.toEqual({
@@ -69,12 +74,13 @@ describe('CreateStudent', () => {
 
     await expect(
       createStudent.execute(
-        new CreateStudentParams(
+        new CreateUserParams(
           'test@example.com',
           'John',
           'Doe',
           'hashedpassword123',
           'Oxford',
+          UserType.STUDENT
         ),
       ),
     ).rejects.toEqual({

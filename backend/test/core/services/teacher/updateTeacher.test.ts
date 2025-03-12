@@ -1,13 +1,17 @@
 import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
 import { ErrorCode } from '../../../../src/application/types';
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
-import { UpdateTeacher, UpdateTeacherParams } from '../../../../src/core/services/teacher';
 import { Teacher } from '../../../../src/core/entities/teacher';
+import {
+  UpdateUser,
+  UpdateUserParams,
+} from '../../../../src/core/services/user';
+import { UserType } from '../../../../src/core/entities/user';
 
 describe('UpdateTeacher Service', () => {
   let studentRepository: jest.Mocked<IStudentRepository>;
   let teacherRepository: jest.Mocked<ITeacherRepository>;
-  let updateTeacher: UpdateTeacher;
+  let updateTeacher: UpdateUser;
 
   beforeEach(() => {
     teacherRepository = {
@@ -19,7 +23,7 @@ describe('UpdateTeacher Service', () => {
       checkByEmail: jest.fn(),
     } as unknown as jest.Mocked<IStudentRepository>;
 
-    updateTeacher = new UpdateTeacher(studentRepository, teacherRepository);
+    updateTeacher = new UpdateUser(studentRepository, teacherRepository);
   });
 
   it('should update teacher info successfully', async () => {
@@ -34,8 +38,9 @@ describe('UpdateTeacher Service', () => {
     teacherRepository.getTeacherById.mockResolvedValue(teacher);
     teacherRepository.checkTeacherByEmail.mockResolvedValue(false);
 
-    const params = new UpdateTeacherParams(
+    const params = new UpdateUserParams(
       '1',
+      UserType.TEACHER,
       'newemail@example.com',
       'NewFirstName',
       'NewFamilyName',
@@ -76,8 +81,9 @@ describe('UpdateTeacher Service', () => {
     teacherRepository.getTeacherById.mockResolvedValue(teacher);
     teacherRepository.checkTeacherByEmail.mockResolvedValue(false);
 
-    const params = new UpdateTeacherParams(
+    const params = new UpdateUserParams(
       '1',
+      UserType.TEACHER,
       'newemail@example.com',
       undefined,
       undefined,
@@ -117,8 +123,9 @@ describe('UpdateTeacher Service', () => {
     );
     teacherRepository.getTeacherById.mockResolvedValue(teacher);
 
-    const params = new UpdateTeacherParams(
+    const params = new UpdateUserParams(
       '1',
+      UserType.TEACHER,
       'sameemail@example.com',
       'NewFirstName',
       'NewFamilyName',
@@ -144,8 +151,9 @@ describe('UpdateTeacher Service', () => {
     teacherRepository.getTeacherById.mockResolvedValue(teacher);
     teacherRepository.checkTeacherByEmail.mockResolvedValue(true);
 
-    const params = new UpdateTeacherParams(
+    const params = new UpdateUserParams(
       '1',
+      UserType.TEACHER,
       'newemail@example.com',
       'NewFirstName',
       'NewFamilyName',
@@ -170,8 +178,9 @@ describe('UpdateTeacher Service', () => {
     );
     teacherRepository.getTeacherById.mockResolvedValue(teacher);
 
-    const params = new UpdateTeacherParams(
+    const params = new UpdateUserParams(
       '1',
+      UserType.TEACHER,
       'newemail@example.com',
       'NewFirstName',
       'NewFamilyName',

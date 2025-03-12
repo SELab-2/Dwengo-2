@@ -143,7 +143,7 @@ describe("DatasourceTeacherTypeORM", () => {
     test("updateTeacher", () => {
         // Update teacher
         const teacherRepository = dataSource.getRepository(UserTypeORM);
-        teacherRepository.save(UserTypeORM.createUserTypeORM(new Teacher("", "", "", "", "")));
+        teacherRepository.save(UserTypeORM.createUserTypeORM(new Teacher("teacher@gmail.com", "", "", "", "")));
 
         expect(dataSource.getRepository).toHaveBeenCalledWith(UserTypeORM);
         expect(teacherRepository.save).toHaveBeenCalled();

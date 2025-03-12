@@ -1,9 +1,20 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ServiceParams } from "../../../config/service";
+import { AssignmentService } from "./assignmentService";
 
-export class DeleteAssignment implements Service<ServiceParams> {
-  constructor() {}
+export class DeleteAssignmentParams implements ServiceParams {
+  public constructor(
+    private _id: string
+  ){}
 
-  async execute(input: ServiceParams): Promise<object> {
+  public get id(): string {
+    return this._id;
+  }
+}
+
+export class DeleteAssignment extends AssignmentService<DeleteAssignmentParams> {
+
+  async execute(input: DeleteAssignmentParams): Promise<object> {
+    await this.assignmentRepository.deleteAssignmentById(input.id);
     return {};
   }
 }
