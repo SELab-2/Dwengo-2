@@ -1,9 +1,18 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ServiceParams } from "../../../config/service";
+import { GroupService } from "./groupService";
+import { Group } from "../../entities/group";
 
-export class DeleteGroup implements Service<ServiceParams> {
-  constructor() {}
+export class DeleteGroupParams implements ServiceParams {
+  constructor(private _group: Group) {}
 
-  async execute(input: ServiceParams): Promise<object> {
+  get group(): Group {
+    return this._group;
+  }
+}
+
+export class DeleteGroup extends GroupService<DeleteGroupParams> {
+  async execute(input: DeleteGroupParams): Promise<object> {
+    await this.groupRepository.delete(input.group);
     return {};
   }
 }

@@ -21,5 +21,13 @@ export class Group {
     public set memberIds(newMemberIds: string[]) {
         this._memberIds = newMemberIds;
     }
+
+    public toObject(): object {
+        return {
+            id: this._id,
+            memberIds: this._memberIds,
+            classId: this._classId,
+        };
+    }
 }
 
