@@ -104,7 +104,7 @@ export class DatasourceAssignmentTypeORM extends IDatasourceAssignment {
     public async updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment | null> {
         const updateResult = await this.datasource
             .getRepository(AssignmentTypeORM)
-            .update(id, updatedFields);
+            .update(id, updatedFields); // TODO: see if this actually works since Assignment != AssignmentTypeORM
         
         /* Some notes: I did not found any documentation on the return value of update.
          * So i asked ChatGPT: https://chatgpt.com/share/67d1c206-18f4-8004-a760-b40d3d2ef2d0

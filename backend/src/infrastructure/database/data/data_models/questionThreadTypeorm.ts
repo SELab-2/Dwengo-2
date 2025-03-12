@@ -62,4 +62,23 @@ export class QuestionThreadTypeORM {
         }
         return new QuestionThread(this.student.id, this.assignment.id, this.learning_object_id, this.is_closed, visibilityType, messageIds, this.id );
     }
+
+    public static toPartial(questionThread: Partial<QuestionThread>): Partial<QuestionThreadTypeORM> {
+        const threadTypeORM: Partial<QuestionThreadTypeORM> = {};
+
+        // These two fields are the only field we will ever update
+        if (questionThread.isClosed) {
+            threadTypeORM.is_closed = questionThread.isClosed;
+        }
+        if (questionThread.visibility) {
+            if (questionThread.visibility === VisibilityType.GROUP){
+                threadTypeORM.visibility = ThreadVisibility.GROUP;
+            }else{
+                threadTypeORM.visibility = ThreadVisibility.STUDENT;
+            }
+        }
+
+        return threadTypeORM
+    }
+
 }
