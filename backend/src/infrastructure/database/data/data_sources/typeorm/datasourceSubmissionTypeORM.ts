@@ -7,7 +7,7 @@ import { IDatasourceSubmission } from "../datasourceSubmissionInterface";
 
 export class DatasourceSubmissionTypeORM extends IDatasourceSubmission {
 
-    public async create(submission: Submission): Promise<Submission> {
+    public async create(submission: Submission): Promise<string> {
         const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
         const studentRepository = this.datasource.getRepository(StudentTypeORM);
         const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
@@ -33,7 +33,7 @@ export class DatasourceSubmissionTypeORM extends IDatasourceSubmission {
         
         const returnSubmission: SubmissionTypeORM = await submissionRepository.save(submissionModel);
 
-        return returnSubmission.toEntity();
+        return returnSubmission.id;
     }
 
     public async getById(id: string): Promise<Submission | null> {
@@ -71,11 +71,8 @@ export class DatasourceSubmissionTypeORM extends IDatasourceSubmission {
         return updatedSubmission.toEntity();
     }
 
-    public async delete(submission: Submission): Promise<void> {
-        if (!submission.id){
-            throw new Error("Cannot delete a submission that has no id")
-        }
-        await this.datasource.getRepository(SubmissionTypeORM).delete(submission.id as string);
+    public async delete(submission: string): Promise<void> {
+        await this.datasource.getRepository(SubmissionTypeORM).delete(submission);
     }
     
 }

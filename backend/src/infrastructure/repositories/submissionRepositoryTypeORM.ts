@@ -14,9 +14,8 @@ export class SubmissionRepositoryTypeORM extends ISubmissionRepository {
         this.datasource = this.datasourceFactory.createDatasource();
         this.datasourceSubmission = this.datasource.getDatasourceSubmission();
     }
-    
 
-    public async create(submission: Submission): Promise<Submission> {
+    public async create(submission: Submission): Promise<string> {
         return await (await this.datasourceSubmission).create(submission);
     }
 
@@ -34,7 +33,7 @@ export class SubmissionRepositoryTypeORM extends ISubmissionRepository {
         return await (await this.datasourceSubmission).update(submission);
     }
 
-    public async delete(submission: Submission): Promise<void> {
-        return await (await this.datasourceSubmission).delete(submission);
+    public async delete(submissionId: string): Promise<void> {
+        return await (await this.datasourceSubmission).delete(submissionId);
     }
 }
