@@ -86,13 +86,18 @@ const routeConfigs: Record<keyof typeof routeFunctions, { method: 'get' | 'patch
     { method: 'post', path: "/assignments/:idParent/questions" },
   ],
   usersRoutes: [
+    { method: 'get', path: '/users/:id' },
+    { method: 'patch', path: '/users/:id' },
+    { method: 'delete', path: '/users/:id' },
     { method: 'get', path: '/classes/:idParent/users' },
+    { method: 'delete', path: '/classes/:idParent/users/:id' },
     { method: 'get', path: '/groups/:idParent/users' },
     { method: 'post', path: '/groups/:idParent/users' },
+    { method: 'delete', path: '/groups/:idParent/users/:id' },
     { method: 'get', path: '/assignments/:idParent/users' },
     { method: 'post', path: '/assignments/:idParent/users' },
     { method: 'get', path: '/users' },
-    { method: 'post', path: '/users' },
+    { method: 'post', path: '/users' }
   ]
 };
 
