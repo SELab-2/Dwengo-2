@@ -3,6 +3,11 @@ import { IStudentRepository } from '../../repositories/studentRepositoryInterfac
 import { ITeacherRepository } from '../../repositories/teacherRepositoryInterface';
 import { RemoveUserFrom } from './removeUserFrom';
 
+/**
+ * Service for removing a user from a class.
+ * @param studentRepository - Repository for student data.
+ * @param teacherRepository - Repository for teacher data.
+ */
 export class RemoveUserFromClass extends RemoveUserFrom {
   constructor(
     private studentRepository: IStudentRepository,
@@ -10,6 +15,15 @@ export class RemoveUserFromClass extends RemoveUserFrom {
   ) {
     super();
   }
+
+  /**
+   * Removes a user from a class.
+   *
+   * @param userId - The ID of the user to be removed.
+   * @param otherId - The ID of the class.
+   * @param userType - The type of the user (student or teacher).
+   * @returns A promise that resolves when the user is removed.
+   */
   public async removeUser(
     userId: string,
     otherId: string,

@@ -1,10 +1,14 @@
 import { Service, ServiceParams } from '../../../config/service';
-import { User, UserType } from '../../entities/user';
-import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
-import { ITeacherRepository } from '../../repositories/teacherRepositoryInterface';
-import { RemoveStudentFromParams } from '../student/removeStudentFrom';
+import { UserType } from '../../entities/user';
 
-// Class to be used by execute methode
+/**
+ * Parameters required to remove a user from a group or class.
+ *
+ * @param _userId - The ID of the user to be removed.
+ * @param _otherId - The ID of the group or class.
+ * @param _userType - The type of the user (student or teacher).
+ */
+
 export class RemoveUserFromParams implements ServiceParams {
   constructor(
     private _userId: string,
@@ -25,28 +29,30 @@ export class RemoveUserFromParams implements ServiceParams {
   }
 }
 
-// Abstract class for RemoveStudentFromGroup and RemoveStudentFromClass
+/**
+ * @description Abstract class for removing a user from a group or class.
+ *
+ */
 export abstract class RemoveUserFrom implements Service<RemoveUserFromParams> {
   public constructor() {}
 
-  /**
-   * Function that calls the right method of repository.
+  /** Function that calls the appropriate method of the repository.
    *
-   * @param userId id of user to be removed.
-   * @param otherId id of group/class.
+   * @param userId - The ID of the user to be removed.
+   * @param otherId - The ID of the group or class.
+   * @param userType - The type of the user (student or teacher).
    */
   abstract removeUser(
     userId: string,
     otherId: string,
     userType: UserType,
-  ): void;
+  ): Promise<void>;
 
   /**
    * Removes a user from a group/class.
    *
-   * @param input object containing userId and otherId.
+   * @param input the parameters to remove a user from a group or class.
    * @returns empty object no extra info needed.
-   *
    */
   async execute(input: RemoveUserFromParams): Promise<object> {
     await this.removeUser(input.userId, input.otherId, input.userType);

@@ -1,11 +1,13 @@
-import { ApiError, ErrorCode } from '../../../application/types';
 import { Service, ServiceParams } from '../../../config/service';
-import { Student } from '../../entities/student';
-import { Teacher } from '../../entities/teacher';
 import { User, UserType } from '../../entities/user';
 import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
 import { ITeacherRepository } from '../../repositories/teacherRepositoryInterface';
 
+/**
+ * @description Parameters required to get a user.
+ * @param _id - The ID of the user to get.
+ * @param _userType - The type of the user (student or teacher).
+ */
 export class GetUserParams implements ServiceParams {
   constructor(private _id: string, private _userType: UserType) {}
 
@@ -19,7 +21,9 @@ export class GetUserParams implements ServiceParams {
 }
 
 /**
- * Abstract class to get a student/teacher from DB
+ * @description Class representing the service for getting a user.
+ * @param {IStudentRepository} studentRepository - The student repository.
+ * @param {ITeacherRepository} teacherRepository - The teacher repository.
  */
 export class GetUser implements Service<GetUserParams> {
   constructor(
@@ -30,14 +34,15 @@ export class GetUser implements Service<GetUserParams> {
    * Gets a user from the DB.
    *
    * @param id ID of the user to get from the DB.
-   * @returns the student with the given id.
+   * @returns the user with the given id.
    *
-   * @throws ApiError if id is invalid.
+   * @throws Error if the user is not present.
    */
   async execute(input: GetUserParams): Promise<object> {
-    const user: User = input.userType === UserType.STUDENT
-      ? await this.studentRepository.getStudentById(input.id)
-      : await this.teacherRepository.getTeacherById(input.id);
+    const user: User =
+      input.userType === UserType.STUDENT
+        ? await this.studentRepository.getStudentById(input.id)
+        : await this.teacherRepository.getTeacherById(input.id);
 
     return {
       id: user.id,

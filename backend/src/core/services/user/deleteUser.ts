@@ -4,9 +4,10 @@ import { IStudentRepository } from '../../repositories/studentRepositoryInterfac
 import { ITeacherRepository } from '../../repositories/teacherRepositoryInterface';
 
 /**
- * Delete a user from the DB.
+ * @description Parameters required to delete a user.
+ * @param _id - The ID of the user to delete.
+ * @param _userType - The type of the user (student or teacher).
  */
-
 export class DeleteUserParams implements ServiceParams {
   constructor(private _id: string, private _userType: UserType) {}
 
@@ -19,13 +20,19 @@ export class DeleteUserParams implements ServiceParams {
   }
 }
 
-export abstract class DeleteUser implements Service<DeleteUserParams> {
+/**
+ * @description Class representing the service for deleting a user.
+ * @param {IStudentRepository} studentRepository - The student repository.
+ * @param {ITeacherRepository} teacherRepository - The teacher repository.
+ */
+export class DeleteUser implements Service<DeleteUserParams> {
   constructor(
     private studentRepository: IStudentRepository,
     private teacherRepository: ITeacherRepository,
   ) {}
   /**
    * Delete a student from the DB.
+   * 
    * @param params Parameters containing the ID of the user to delete.
    * @returns void
    * @throws Error if the user that will be deleted does not exist.

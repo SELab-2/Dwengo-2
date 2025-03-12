@@ -31,12 +31,15 @@ export class UpdateParams implements ServiceParams {
    * @param studentRepository repository to get student info from DB.
    * @param teacherRepository repository to get teacher info from DB.
    * @returns a student object with the updated info.
+   * @throws ApiError if the email or password is the same as the old one
+   * or if the email is already in use.
+   *
    */
   async fromObject(
     studentRepository: IStudentRepository,
     teacherRepository: ITeacherRepository,
   ): Promise<User> {
-    // Checks
+    // Get the old info of the user
     let oldUser: User;
     if (this._userType == UserType.STUDENT) {
       oldUser = await studentRepository.getStudentById(this._id);
@@ -96,12 +99,23 @@ export class UpdateParams implements ServiceParams {
   }
 }
 
+/**
+ * Abstract class for updating a user.
+ * @param studentRepository - Repository for student data.
+ * @param teacherRepository - Repository for teacher data.
+ */
 export abstract class UpdateUser implements Service<UpdateParams> {
   constructor(
     private studentRepository: IStudentRepository,
     private teacherRepository: ITeacherRepository,
   ) {}
 
+  /**
+   * Executes the update operation.
+   *
+   * @param input - Parameters containing the updated user info.
+   * @returns An empty object.
+   */
   async execute(input: UpdateParams): Promise<object> {
     const user: User = await input.fromObject(
       this.studentRepository,
