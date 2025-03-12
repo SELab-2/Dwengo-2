@@ -13,6 +13,6 @@ export abstract class IDatasourceGroup {
 
     public abstract update(entity: Group): Promise<Group>;
 
-    public abstract delete(entity: Group): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 
 }

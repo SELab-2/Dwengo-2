@@ -72,4 +72,12 @@ export abstract class IDatasourceTeacher {
      */
     public abstract deleteTeacherWithId(id: string): Promise<void>;
 
+    /**
+     * Delete a teacher from a class.
+     * 
+     * @param teacherId Teacher id
+     * @param classId Class id
+     */
+    public abstract deleteTeacherFromClass(teacherId: string, classId: string): Promise<void>;
+
 }

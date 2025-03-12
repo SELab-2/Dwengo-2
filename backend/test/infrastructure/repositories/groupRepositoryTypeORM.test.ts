@@ -8,6 +8,7 @@ describe("GroupRepositoryTypeORM", () => {
     let datasourceMock: IDatasource;
     let datasourceFactoryMock: IDatasourceFactory;
     let newGroup: Group;
+    let idGroup: Group;
     let memberIds: string[];
 
     let datasourceGroup: IDatasourceGroup;
@@ -49,6 +50,8 @@ describe("GroupRepositoryTypeORM", () => {
         // Mock Group
         newGroup = new Group(memberIds, class_id);
 
+        // Mock Group with Id
+        idGroup = new Group(memberIds, class_id, "id_g");
 
     });
 
@@ -86,10 +89,10 @@ describe("GroupRepositoryTypeORM", () => {
 
     test("delete", async () => {
         // Call function from repository
-        await datasourceGroup.delete(newGroup);
+        await datasourceGroup.delete(idGroup.id!);
 
         expect(datasourceGroup.delete).toHaveBeenCalledTimes(1);
-        expect(datasourceGroup.delete).toHaveBeenCalledWith(newGroup);
+        expect(datasourceGroup.delete).toHaveBeenCalledWith(idGroup.id!);
     });
 
 });
