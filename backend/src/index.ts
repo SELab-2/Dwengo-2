@@ -5,26 +5,31 @@ import dotenv from "dotenv";
 
 import { StudentRepositoryTypeORM } from "./infrastructure/repositories/studentRepositoryTypeORM";
 import { studentRoutes } from "./application/routes";
-import { StudentController } from "./application/controllers";
+import { usersRoutes } from "./application/routes";
+import { StudentController, UsersController } from "./application/controllers";
 import * as StudentServices from './core/services/student';
+import { TeacherRepositoryTypeORM } from "./infrastructure/repositories/teacherRepositoryTypeORM";
 
 dotenv.config();
 
 // Initialize repositories
 const repos = {
-  student: new StudentRepositoryTypeORM()
+  student: new StudentRepositoryTypeORM(),
+  teacher: new TeacherRepositoryTypeORM()
 };
 
 // Initialize services with use cases
 const services = {
   student: {
-    get: new StudentServices.GetStudent(repos.student)
+    get: new StudentServices.GetStudent(repos.student),
+    create: new StudentServices.CreateStudent(repos.student, repos.teacher)
   }
 };
 
 // Initialize controllers
 const controllers = {
-  student: new StudentController(services.student.get)
+  student: new StudentController(services.student.get),
+  users: new UsersController(services.student.create)
 };
 
 const app = express();
@@ -34,6 +39,7 @@ app.use(express.json());
 
 // Register routes
 studentRoutes(app, controllers.student);
+usersRoutes(app, controllers.users);
 
 app.get('/', (req, res) => {
   res.send("Hello, World!\n");
