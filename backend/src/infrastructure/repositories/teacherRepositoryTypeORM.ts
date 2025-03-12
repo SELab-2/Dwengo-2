@@ -30,7 +30,8 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
     }
 
     async checkTeacherByEmail(email: string): Promise<boolean> {
-        throw new Error("Not implemented yet");
+        const teacher: Teacher = await this.getTeacherByEmail(email);
+        return teacher !== null;
     }
 
     async getTeacherByEmail(email: string): Promise<Teacher> {
@@ -76,7 +77,7 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
     }
 
     async deleteTeacherFromClass(teacherId: string, classId: string): Promise<void> {
-        throw new Error("Not implemented yet");
+        return await (await this.datasourceTeacher).deleteTeacherFromClass(teacherId, classId);
     }
 
 }
