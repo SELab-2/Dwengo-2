@@ -82,14 +82,6 @@ export abstract class ITeacherRepository extends AbstractRepository {
     public abstract deleteTeacherFromClass(teacherId: string, classId: string): Promise<void>;
 
     /**
-     * Assign a teacher to an assignment (when they're in a class, they should only see the assignments they're assigned to)
-     * @param teacherId
-     * @param assignmentId 
-     * @throws {EntityNotFoundError} if the teacher or assignment could not be found
-     */
-    public abstract assignTeacherToAssignment(teacherId: string, assignmentId: string): Promise<void>;
-
-    /**
      * Get all teachers for a class.
      * @param classId
      * @returns the ids of the teachers
@@ -97,19 +89,4 @@ export abstract class ITeacherRepository extends AbstractRepository {
      */
     public abstract getClassTeachers(classId: string): Promise<Teacher[]>
 
-    /**
-     * Get all teachers for an assignment
-     * @param assignmentId 
-     * @returns the ids of the teachers
-     * @throws {EntityNotFoundError} when the assignment doesn't exist
-     */
-    public abstract getAssignmentTeachers(assignmentId: string): Promise<Teacher[]>
-
-    /**
-     * Get all teachers for an group
-     * @param groupId 
-     * @returns the ids of the teachers
-     * @throws {EntityNotFoundError} when the group doesn't exist
-     */
-    public abstract getGroupTeachers(groupId: string): Promise<Teacher[]>
 }
