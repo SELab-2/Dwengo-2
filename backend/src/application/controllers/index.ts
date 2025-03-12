@@ -4,7 +4,5 @@ export * from './classController';
 export * from './groupController';
 export * from './joinRequestController';
 export * from './questionThreadController';
-export * from './studentController';
-export * from './teacherController';
 export * from './messageController';
 export * from './usersController';

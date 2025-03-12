@@ -106,7 +106,8 @@ export interface RoutePattern {
   hasId: boolean;
   hasParentId: boolean;
   extractor: (req: Request) => ServiceParams;
-  handler: (req: Request, data: ServiceParams) => Promise<Response>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handler: (req: Request, data: any) => Promise<Response>;
 }
 
 export type RouteHandlers = Partial<Record<HttpMethod, RoutePattern[]>>;

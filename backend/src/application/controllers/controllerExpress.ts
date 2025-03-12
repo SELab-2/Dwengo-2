@@ -75,6 +75,7 @@ export abstract class Controller {
    */
   protected handleError(error: ApiError | unknown): Response {
     if (!(error && typeof error === 'object' && 'code' in error && 'message' in error)) {
+      console.log(error);
       return this.respond(500, { code: 'INTERNAL_ERROR', message: 'Unexpected server error' });
     }
 
@@ -105,7 +106,7 @@ export abstract class Controller {
    * @returns Response with appropriate status and data
    */
   protected async _executeService<T extends ServiceParams>(service: Service<T> | undefined,
-    data: ServiceParams, statusCode: number, operationName: string): Promise<Response>
+    data: T, statusCode: number, operationName: string): Promise<Response>
   {
     if (!service)
       return this.handleError({code: ErrorCode.NOT_FOUND,
@@ -143,7 +144,7 @@ export abstract class Controller {
    * @param service - Service to execute
    * @returns Response with status 200 and list of child entities
    */
-  protected async getChildren<T extends ServiceParams>(req: Request,data: ServiceParams,
+  protected async getChildren<T extends ServiceParams>(req: Request, data: T,
     service: Service<T>): Promise<Response>
   {
     return this._executeService(service, data, 200, "GetChildren");
@@ -156,7 +157,7 @@ export abstract class Controller {
    * @param service - Service to execute
    * @returns Response with status 201 and created child entity data
    */
-  protected async addChild<T extends ServiceParams>(req: Request, data: ServiceParams,
+  protected async addChild<T extends ServiceParams>(req: Request, data: T,
     service: Service<T>): Promise<Response>
   {
     return this._executeService(service, data, 201, "AddChild");
@@ -169,7 +170,7 @@ export abstract class Controller {
    * @param service - Service to execute
    * @returns Response with status 204 (No Content)
    */
-  protected async removeChild<T extends ServiceParams>(req: Request, data: ServiceParams,
+  protected async removeChild<T extends ServiceParams>(req: Request, data: T,
     service: Service<T>): Promise<Response>
   {
     return this._executeService(service, data, 204, "RemoveChild");
