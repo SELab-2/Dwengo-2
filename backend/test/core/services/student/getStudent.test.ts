@@ -1,19 +1,23 @@
-import { GetStudent } from "../../../../src/core/services/student/getStudent";
+import { GetUser } from "../../../../src/core/services/user/getUser";
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
-import { AppError, EntityNotFoundError } from "../../../../src/config/error";
+import { EntityNotFoundError } from "../../../../src/config/error";
 import { GetUserParams } from "../../../../src/core/services/user";
+import { ITeacherRepository } from "../../../../src/core/repositories/teacherRepositoryInterface";
+import { UserType } from "../../../../src/core/entities/user";
 
 describe("getStudent Service", () => {
-  let getStudentService: GetStudent;
+  let getStudentService: GetUser;
   let mockStudentRepository: jest.Mocked<IStudentRepository>;
+  let mockTeacherRepository: jest.Mocked<ITeacherRepository>;
 
   beforeEach(() => {
     mockStudentRepository = {
       getStudentById: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<IStudentRepository>;
+    mockTeacherRepository = {} as unknown as jest.Mocked<ITeacherRepository>;
 
-    getStudentService = new GetStudent(mockStudentRepository);
+    getStudentService = new GetUser(mockStudentRepository, mockTeacherRepository);
   });
 
   test("Should return student if found", async () => {
@@ -26,7 +30,7 @@ describe("getStudent Service", () => {
       "1"
     );
 
-    const params: GetUserParams = new GetUserParams("1");
+    const params: GetUserParams = new GetUserParams("1", UserType.STUDENT);
 
     mockStudentRepository.getStudentById.mockResolvedValue(student);
     const result = await getStudentService.execute(params);
@@ -36,6 +40,7 @@ describe("getStudent Service", () => {
       firstName: "John",
       familyName: "Doe",
       schoolName: "Yale",
+      passwordHash: "hashedpassword123",
       id: "1"
     });
     expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("1");
@@ -44,7 +49,7 @@ describe("getStudent Service", () => {
   test("Should throw error", async () => {
     mockStudentRepository.getStudentById.mockRejectedValue(new EntityNotFoundError("Student not found"));
     
-    const params: GetUserParams = new GetUserParams("999");
+    const params: GetUserParams = new GetUserParams("999", UserType.STUDENT);
 
     await expect(getStudentService.execute(params)).rejects.toThrow();
     expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("999");

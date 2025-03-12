@@ -40,7 +40,7 @@ describe("StudentRepositoryTypeORM", () => {
         } as any; // TODO hack?
 
         // Mock student
-        student = new Student("email", "alice", "bob", "password", "id");
+        student = new Student("student@gmail.com", "alice", "bob", "password", "UGent", "1");
     });
 
     test("createStudent", async () => {

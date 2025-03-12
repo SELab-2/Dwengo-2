@@ -1,12 +1,15 @@
-import { DeleteStudent } from "../../../../src/core/services/student/deleteStudent";
-import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
-import { Student } from "../../../../src/core/entities/student";
-import { EntityNotFoundError } from "../../../../src/config/error";
-import { DeleteUserParams } from "../../../../src/core/services/user/deleteUser";
+import { DeleteUser } from '../../../../src/core/services/user/deleteUser';
+import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
+import { Student } from '../../../../src/core/entities/student';
+import { EntityNotFoundError } from '../../../../src/config/error';
+import { DeleteUserParams } from '../../../../src/core/services/user/deleteUser';
+import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
+import { User, UserType } from '../../../../src/core/entities/user';
 
-describe("deleteStudent Service", () => {
-  let deleteStudentService: DeleteStudent;
+describe('deleteStudent Service', () => {
+  let deleteStudentService: DeleteUser;
   let mockStudentRepository: jest.Mocked<IStudentRepository>;
+  let mockTeacherRepository: jest.Mocked<ITeacherRepository>;
   let params: DeleteUserParams;
 
   beforeEach(() => {
@@ -14,31 +17,41 @@ describe("deleteStudent Service", () => {
       getStudentById: jest.fn(),
       deleteStudentById: jest.fn(),
     } as unknown as jest.Mocked<IStudentRepository>;
+    mockTeacherRepository = {} as unknown as jest.Mocked<ITeacherRepository>;
 
-    deleteStudentService = new DeleteStudent(mockStudentRepository);
+    deleteStudentService = new DeleteUser(
+      mockStudentRepository,
+      mockTeacherRepository,
+    );
 
-    params = new DeleteUserParams("1"); 
+    params = new DeleteUserParams('1', UserType.STUDENT);
   });
 
-test("Should throw error if student not found in database", async () => {
-    mockStudentRepository.deleteStudentById.mockRejectedValue(new EntityNotFoundError("Student not found"));
+  test('Should throw error if student not found in database', async () => {
+    mockStudentRepository.deleteStudentById.mockRejectedValue(
+      new EntityNotFoundError('Student not found'),
+    );
 
-    await expect(deleteStudentService.execute(params)).rejects.toThrow("Student not found");
-});
+    await expect(deleteStudentService.execute(params)).rejects.toThrow(
+      'Student not found',
+    );
+  });
 
-  test("Should return empty object if student is deleted", async () => {
+  test('Should return empty object if student is deleted', async () => {
     const student: Student = new Student(
-        "test@example.com",
-        "  John  ",
-        "  Doe  ",
-        "hashedpassword123",
-        "1"
-      );
+      'test@example.com',
+      '  John  ',
+      '  Doe  ',
+      'hashedpassword123',
+      '1',
+    );
 
     mockStudentRepository.getStudentById.mockResolvedValue(student);
     mockStudentRepository.deleteStudentById.mockResolvedValue(undefined);
-    
+
     await expect(deleteStudentService.execute(params)).resolves.toEqual({});
-    expect(mockStudentRepository.deleteStudentById).toHaveBeenCalledWith(params.id);
+    expect(mockStudentRepository.deleteStudentById).toHaveBeenCalledWith(
+      params.id,
+    );
   });
 });
