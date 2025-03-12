@@ -13,6 +13,8 @@ import { IDatasourceGroup } from "../datasourceGroupInterface";
 import { DatasourceGroupTypeORM } from "./datasourceGroupTypeORM";
 import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
 import { DatasourceAssignmentTypeORM } from "./datasourceAssignmentTypeORM";
+import { IDatasourceSubmission } from "../datasourceSubmissionInterface";
+import { DatasourceSubmissionTypeORM } from "./datasourceSubmissionTypeORM";
 import { IDatasourceStudent } from "../datasourceStudentInterface";
 import { DatasourceStudentTypeORM } from "./datasourceStudentTypeORM";
 import { IDatasourceMessage } from "../datasourceMessageInterface";
@@ -63,6 +65,10 @@ export class DatasourceTypeORM implements IDatasource {
         return new DatasourceAssignmentTypeORM(await DatasourceTypeORM.datasourcePromise);
     }
 
+    public async getDatasourceSubmission(): Promise<IDatasourceSubmission> {
+        return new DatasourceSubmissionTypeORM(await DatasourceTypeORM.datasourcePromise);
+    }
+  
     public async getDatasourceMessage(): Promise<IDatasourceMessage> {
         return new DatasourceMessageTypeORM(await DatasourceTypeORM.datasourcePromise);
     }

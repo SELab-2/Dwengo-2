@@ -1,4 +1,4 @@
-import { mockApp } from "./mocks";
+import { mockApp, MockQuestionThreadRepository } from "./mocks";
 import { questionThreadRoutes } from "../../../src/application/routes";
 import { QuestionController } from "../../../src/application/controllers/questionController";
 import * as QuestionServices from "../../../src/core/services/question_thread/index";
@@ -38,11 +38,11 @@ class MockCreateQuestionService extends QuestionServices.CreateQuestionThread {
 class MockQuestionController extends QuestionController {
   constructor() {
     super(
-      new MockGetQuestionService(),
-      new MockGetAssignmentQuestionsService(),
-      new MockUpdateQuestionService(),
-      new MockDeleteQuestionService(),
-      new MockCreateQuestionService()
+      new MockGetQuestionService(new MockQuestionThreadRepository),
+      new MockGetAssignmentQuestionsService(new MockQuestionThreadRepository),
+      new MockUpdateQuestionService(new MockQuestionThreadRepository),
+      new MockDeleteQuestionService(new MockQuestionThreadRepository),
+      new MockCreateQuestionService(new MockQuestionThreadRepository)
     );
   }
 

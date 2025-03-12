@@ -14,7 +14,7 @@ export class QuestionThread {
         private _visibility: VisibilityType,
         private _messageIds: string[],
         private _id?: string,
-    ){}
+    ) { }
 
     // Getters
     public get creatorId(): string {
@@ -35,10 +35,10 @@ export class QuestionThread {
     public get messageIds(): string[] {
         return this._messageIds;
     }
-    public get id(): string|undefined {
+    public get id(): string | undefined {
         return this._id;
     }
-    
+
 
     // Setter
     public set isClosed(closed: boolean) {
@@ -52,5 +52,17 @@ export class QuestionThread {
     }
     public set id(newId: string) {
         this._id = newId;
+    }
+
+    public toObject(): object {
+        return {
+            creatorId: this.creatorId,
+            assignmentId: this.assignmentId,
+            learningObjectId: this.learningObjectId,
+            isClosed: this.isClosed,
+            visibility: this.visibility,
+            messageIds: this.messageIds,
+            id: this.id,
+        }
     }
 }
