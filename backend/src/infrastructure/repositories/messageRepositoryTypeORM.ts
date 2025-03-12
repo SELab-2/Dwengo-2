@@ -29,7 +29,7 @@ export class IMessageRepositoryTypeORM extends IMessageRepository{
         }
     }
 
-    public async updateMesssage(message: Message): Promise<Message> {
+    public async updateMessage(message: Message): Promise<Message> {
         return await (await this.datasourceMessage).updateMessage(message);
     }
 

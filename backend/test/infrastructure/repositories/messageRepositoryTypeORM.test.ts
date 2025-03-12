@@ -31,14 +31,14 @@ describe("MessageRepositoryTypeORM", () => {
 
         datasourceMessage = {
             // datasource: jest.fn() as unknown as DataSource,
-            create: jest.fn(() => Promise.resolve(message)),
-            getById: jest.fn(() => Promise.resolve(message)),
-            getByEmail: jest.fn(() => Promise.resolve(message)),
-            getByFirstName: jest.fn(() => Promise.resolve(message)),
-            getByLastName: jest.fn(() => Promise.resolve(message)),
-            getAll: jest.fn(() => Promise.resolve([message, message])),
-            update: jest.fn(() => Promise.resolve(message)),
-            delete: jest.fn()
+            createMessage: jest.fn(() => Promise.resolve(message)),
+            getMessageById: jest.fn(() => Promise.resolve(message)),
+            // getByEmail: jest.fn(() => Promise.resolve(message)),
+            // getByFirstName: jest.fn(() => Promise.resolve(message)),
+            // getByLastName: jest.fn(() => Promise.resolve(message)),
+            // getAll: jest.fn(() => Promise.resolve([message, message])),
+            updateMessage: jest.fn(() => Promise.resolve(message)),
+            deleteMessage: jest.fn()
         } as any;
 
         // Mock message

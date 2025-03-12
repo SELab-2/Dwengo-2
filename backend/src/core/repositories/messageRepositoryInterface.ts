@@ -22,7 +22,7 @@ export abstract class IMessageRepository extends AbstractRepository {
      */
     public abstract getMessageById(id: string): Promise<Message>;
 
-    public abstract updateMesssage(message: Message): Promise<Message>;
+    public abstract updateMessage(message: Message): Promise<Message>;
 
     /**
      * Get all messages in a specific thread.

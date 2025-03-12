@@ -1,4 +1,4 @@
-import { mockApp } from "./mocks";
+import { mockApp, MockMessageRepository } from "./mocks";
 import { messageRoutes } from "../../../src/application/routes/messageRoutes";
 import { MessageController } from "../../../src/application/controllers";
 import * as MessageServices from "../../../src/core/services/message/index";
@@ -38,11 +38,11 @@ class MockCreateMessageService extends MessageServices.CreateMessage {
 class MockMessageController extends MessageController {
   constructor() {
     super(
-      new MockGetMessageService(),
-      new MockGetQuestionMessagesService(),
-      new MockUpdateMessageService(),
-      new MockDeleteMessageService(),
-      new MockCreateMessageService()
+      new MockGetMessageService(new MockMessageRepository),
+      new MockGetQuestionMessagesService(new MockMessageRepository),
+      new MockUpdateMessageService(new MockMessageRepository),
+      new MockDeleteMessageService(new MockMessageRepository),
+      new MockCreateMessageService(new MockMessageRepository)
     );
   }
 

@@ -3,6 +3,7 @@ import { IClassRepository } from '../../../src/core/repositories/classRepository
 import { IAssignmentRepository } from '../../../src/core/repositories/assignmentRepositoryInterface';
 import { IQuestionThreadRepository } from '../../../src/core/repositories/questionThreadRepositoryInterface';
 import { QuestionThread } from '../../../src/core/entities/questionThread';
+import { IMessageRepository } from '../../../src/core/repositories/messageRepositoryInterface';
 
 export const mockApp = {
   get: jest.fn(),
@@ -42,4 +43,11 @@ export class MockQuestionThreadRepository extends IQuestionThreadRepository {
   public getQuestionThreadsByCreatorId = jest.fn();
   public updateQuestionThread = jest.fn();
   public deleteQuestionThread = jest.fn();
+}
+
+export class MockMessageRepository extends IMessageRepository {
+  public createMessage = jest.fn();
+  public getMessageById = jest.fn();
+  public updateMessage = jest.fn();
+  public deleteMessage = jest.fn();
 }
