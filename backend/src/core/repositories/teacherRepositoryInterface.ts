@@ -95,7 +95,7 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @returns the ids of the teachers
      * @throws {EntityNotFoundError} when the class doesn't exist.
      */
-    public abstract getClassTeacher(classId: string): Promise<string[]>
+    public abstract getClassTeacher(classId: string): Promise<Teacher[]>
 
     /**
      * Get all teachers for an assignment
@@ -103,7 +103,7 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @returns the ids of the teachers
      * @throws {EntityNotFoundError} when the assignment doesn't exist
      */
-    public abstract getAssignmentTeachers(assignmentId: string): Promise<string[]>
+    public abstract getAssignmentTeachers(assignmentId: string): Promise<Teacher[]>
 
     /**
      * Get all teachers for an group
@@ -111,5 +111,5 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @returns the ids of the teachers
      * @throws {EntityNotFoundError} when the group doesn't exist
      */
-    public abstract getGroupTeachers(groupId: string): Promise<string[]>
+    public abstract getGroupTeachers(groupId: string): Promise<Teacher[]>
 }

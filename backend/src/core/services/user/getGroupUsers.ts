@@ -11,8 +11,8 @@ export class GetGroupUsersParams implements ServiceParams {
 
 export class GetGroupUsers extends UserBaseService<GetGroupUsersParams> {
     async execute(input: GetGroupUsersParams): Promise<object> {
-        const students: string[] = await this.studentRepository.getGroupStudents(input.groupId);
-        const teachers: string[] = await this.teacherRepository.getGroupTeachers(input.groupId);
+        const students: object[] = (await this.studentRepository.getGroupStudents(input.groupId)).map(s => s.toObject());
+        const teachers: object[] = (await this.teacherRepository.getGroupTeachers(input.groupId)).map(t => t.toObject());
         return { teachers: teachers, students: students };
     }
 }

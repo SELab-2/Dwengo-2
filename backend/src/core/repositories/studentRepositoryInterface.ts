@@ -144,7 +144,7 @@ export abstract class IStudentRepository extends AbstractRepository {
    * @returns the id of the students
    * @throws {EntityNotFoundError} when the assignment could not be found.
    */
-  public abstract getClassStudents(classId: string): Promise<string[]>
+  public abstract getClassStudents(classId: string): Promise<Student[]>
 
   /**
    * Get all students for an assignment.
@@ -152,7 +152,7 @@ export abstract class IStudentRepository extends AbstractRepository {
    * @returns the id of the students
    * @throws {EntityNotFoundError} when the assignment could not be found.
    */
-  public abstract getAssignmentStudents(assignmentId: string): Promise<string[]>
+  public abstract getAssignmentStudents(assignmentId: string): Promise<Student[]>
 
   /**
    * Get all students for a group.
@@ -160,7 +160,7 @@ export abstract class IStudentRepository extends AbstractRepository {
    * @returns the id of the students
    * @throws {EntityNotFoundError} when the group could not be found.
    */
-  public abstract getGroupStudents(groupId: string): Promise<string[]>
+  public abstract getGroupStudents(groupId: string): Promise<Student[]>
 
 
 }
