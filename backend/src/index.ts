@@ -4,12 +4,14 @@ import cors from 'cors';
 import dotenv from "dotenv";
 
 import { StudentRepositoryTypeORM } from "./infrastructure/repositories/studentRepositoryTypeORM";
-import { classRoutes, usersRoutes } from "./application/routes";
-import { ClassController, UsersController } from "./application/controllers";
+import { assignmentRoutes, classRoutes, usersRoutes } from "./application/routes";
+import { AssignmentController, ClassController, UsersController } from "./application/controllers";
 import * as UserServices from './core/services/user';
 import * as ClassServices from './core/services/class';
+import * as AssignmentServices from './core/services/assignment';
 import { TeacherRepositoryTypeORM } from "./infrastructure/repositories/teacherRepositoryTypeORM";
 import { ClassRepositoryTypeORM } from "./infrastructure/repositories/classRepositoryTypeORM";
+import { AssignmentRepositoryTypeORM } from "./infrastructure/repositories/assignmentRepositoryTypeORM";
 
 dotenv.config();
 
@@ -18,6 +20,7 @@ const repos = {
   student: new StudentRepositoryTypeORM(),
   teacher: new TeacherRepositoryTypeORM(),
   class: new ClassRepositoryTypeORM(),
+  assignment: new AssignmentRepositoryTypeORM(),
 };
 
 // Initialize services with use cases
@@ -42,6 +45,13 @@ const services = {
     update: new ClassServices.UpdateClass(repos.class),
     remove: new ClassServices.DeleteClass(repos.class),
     create: new ClassServices.CreateClass(repos.class)
+  },
+  assignment: {
+    get: new AssignmentServices.GetAssignment(repos.assignment),
+    getUserAssignments: new AssignmentServices.GetUserAssignments(repos.assignment),
+    update: new AssignmentServices.UpdateAssignment(repos.assignment),
+    remove: new AssignmentServices.DeleteAssignment(repos.assignment),
+    create: new AssignmentServices.CreateAssignment(repos.assignment)
   }
 };
 
@@ -52,7 +62,9 @@ const controllers = {
   ),
   class: new ClassController(services.class.get, services.class.getUserClasses, services.class.update,
     services.class.remove, services.class.create
-  )
+  ),
+  assignment: new AssignmentController(services.assignment.get, services.assignment.getUserAssignments,
+    services.assignment.update, services.assignment.remove, services.assignment.create),
 };
 
 const app = express();
@@ -63,6 +75,7 @@ app.use(express.json());
 // Register routes
 usersRoutes(app, controllers.users);
 classRoutes(app, controllers.class);
+assignmentRoutes(app, controllers.assignment);
 
 app.get('/', (req, res) => {
   res.send("Hello, World!\n");
