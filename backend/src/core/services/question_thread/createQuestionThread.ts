@@ -1,4 +1,4 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ServiceParams } from "../../../config/service";
 import { QuestionThread, VisibilityType } from "../../entities/questionThread";
 import { QuestionThreadBaseService } from "./questionThreadBaseService";
 

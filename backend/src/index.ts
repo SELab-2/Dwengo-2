@@ -4,16 +4,18 @@ import cors from 'cors';
 import dotenv from "dotenv";
 
 import { StudentRepositoryTypeORM } from "./infrastructure/repositories/studentRepositoryTypeORM";
-import { assignmentRoutes, classRoutes, joinRequestRoutes, usersRoutes } from "./application/routes";
-import { AssignmentController, ClassController, UsersController, JoinRequestController } from "./application/controllers";
+import { assignmentRoutes, classRoutes, joinRequestRoutes, questionThreadRoutes, usersRoutes } from "./application/routes";
+import { AssignmentController, ClassController, UsersController, JoinRequestController, QuestionThreadController } from "./application/controllers";
 import * as UserServices from './core/services/user';
 import * as ClassServices from './core/services/class';
 import * as AssignmentServices from './core/services/assignment';
 import * as JoinRequestServices from './core/services/join_request';
+import * as QuestionThreadServices from './core/services/question_thread';
 import { TeacherRepositoryTypeORM } from "./infrastructure/repositories/teacherRepositoryTypeORM";
 import { ClassRepositoryTypeORM } from "./infrastructure/repositories/classRepositoryTypeORM";
 import { AssignmentRepositoryTypeORM } from "./infrastructure/repositories/assignmentRepositoryTypeORM";
 import { JoinRequestRepositoryTypeORM } from "./infrastructure/repositories/joinRequestRepositoryTypeORM";
+import { ThreadRepositoryTypeORM } from "./infrastructure/repositories/questionThreadRepositoryTypeORM";
 
 dotenv.config();
 
@@ -24,6 +26,7 @@ const repos = {
   class: new ClassRepositoryTypeORM(),
   assignment: new AssignmentRepositoryTypeORM(),
   joinRequest: new JoinRequestRepositoryTypeORM(),
+  questionThread: new ThreadRepositoryTypeORM()
 };
 
 // Initialize services with use cases
@@ -61,6 +64,13 @@ const services = {
     getJoinRequests: new JoinRequestServices.GetJoinRequests(repos.joinRequest),
     remove: new JoinRequestServices.DeleteJoinRequest(repos.joinRequest),
     create: new JoinRequestServices.CreateJoinRequest(repos.joinRequest, repos.class)
+  },
+  questionThread: {
+    get: new QuestionThreadServices.GetQuestionThread(repos.questionThread),
+    getAssignmentQuestions: new QuestionThreadServices.GetAssignmentQuestionThreads(repos.questionThread),
+    update: new QuestionThreadServices.UpdateQuestionThread(repos.questionThread),
+    remove: new QuestionThreadServices.DeleteQuestionThread(repos.questionThread),
+    create: new QuestionThreadServices.CreateQuestionThread(repos.questionThread)
   }
 };
 
@@ -77,6 +87,9 @@ const controllers = {
   ),
   joinRequest: new JoinRequestController(services.joinRequest.get, services.joinRequest.getJoinRequests,
     services.joinRequest.remove, services.joinRequest.create
+  ),
+  questionThread: new QuestionThreadController(services.questionThread.get, services.questionThread.getAssignmentQuestions,
+    services.questionThread.update, services.questionThread.remove, services.questionThread.create
   )
 };
 
@@ -90,8 +103,9 @@ usersRoutes(app, controllers.users);
 classRoutes(app, controllers.class);
 assignmentRoutes(app, controllers.assignment);
 joinRequestRoutes(app, controllers.joinRequest);
+questionThreadRoutes(app, controllers.questionThread);
 
-app.get('/', (req, res) => {
+app.get('/', (_: express.Request, res: express.Response) => {
   res.send("Hello, World!\n");
 });
 
