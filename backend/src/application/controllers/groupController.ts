@@ -24,26 +24,26 @@ export class GroupController extends Controller {
     create: GroupServices.CreateGroup
   ) {
     const handlers: RouteHandlers = {
-      [HttpMethod.GET]: [
-        { hasId: true, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getOne(req, data) },
-        { parent: 'users', hasId: false, extractor: defaultExtractor,
-          hasParentId: true, handler: (req: Request, data: object) => this.getChildren(req, data, getUserGroups) },
-        { parent: 'assignments', hasId: false, extractor: defaultExtractor,
-          hasParentId: true, handler: (req: Request, data: object) => this.getChildren(req, data, getAssignmentGroups) }
-      ],
-      [HttpMethod.PATCH]: [
-        { hasId: true, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.update(req, data) }
-      ],
-      [HttpMethod.POST]: [
-        { hasId: false, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.create(req, data) }
-      ],
-      [HttpMethod.DELETE]: [
-        { hasId: true, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.delete(req, data) }
-      ]
+      // [HttpMethod.GET]: [
+      //   { hasId: true, hasParentId: false, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.getOne(req, data) },
+      //   { parent: 'users', hasId: false, extractor: defaultExtractor,
+      //     hasParentId: true, handler: (req: Request, data: object) => this.getChildren(req, data, getUserGroups) },
+      //   { parent: 'assignments', hasId: false, extractor: defaultExtractor,
+      //     hasParentId: true, handler: (req: Request, data: object) => this.getChildren(req, data, getAssignmentGroups) }
+      // ],
+      // [HttpMethod.PATCH]: [
+      //   { hasId: true, hasParentId: false, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.update(req, data) }
+      // ],
+      // [HttpMethod.POST]: [
+      //   { hasId: false, hasParentId: false, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.create(req, data) }
+      // ],
+      // [HttpMethod.DELETE]: [
+      //   { hasId: true, hasParentId: false, extractor: defaultExtractor,
+      //     handler: (req: Request, data: object) => this.delete(req, data) }
+      // ]
     };
 
     super({ get, getUserGroups, getAssignmentGroups, update, remove, create }, handlers);

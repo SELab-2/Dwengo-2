@@ -1,9 +1,6 @@
-import { ApiError, Request, Response, RouteHandlers, ResponseBody } from '../types';
-import { statusMap, extractPathParams } from '../helpersExpress';
+import { ApiError, Request, Response, RouteHandlers, ResponseBody, ErrorCode } from '../types';
+import { statusMap, extractPathParams, extractQueryParams } from '../helpersExpress';
 import { Service, ServiceParams, Services } from '../../config/service';
-
-
-// TODO - Important the data must be in order of parameters, responsibility of the extractor
 
 /**
  * Abstract base Controller class implementing RESTful routing with path parameter-based routing.
@@ -32,23 +29,27 @@ export abstract class Controller {
    * This is the main entry point called by the router.
    *
    * @param req - HTTP request object
-   * @returns HTTP response with appropriate status and body
+   * @returns Promise resolving to HTTP response with appropriate status and body
    */
-  public handle(req: Request): Response {
+  public async handle(req: Request): Promise<Response> {
     const { method } = req;
-    const { id, idParent, parent } = extractPathParams(req);
+    req.pathParams = extractPathParams(req);
+    req.queryParams = extractQueryParams(req);
+    const { id, idParent, parent } = req.pathParams;
 
     const methodHandlers = this.handlers[method];
     if (!methodHandlers)
-      return this.respond(404, { code: "NOT_FOUND", message: "Method not supported" });
+      return this.handleError({code: ErrorCode.NOT_FOUND, message: "Method not supported"});
 
     const match = methodHandlers.find(
-      p => p.hasId === !!id && p.hasParentId === !!idParent && (!p.parent || p.parent === parent)
+      p => p.hasId === !!id && p.hasParentId === !!idParent &&
+        (!p.parent || p.parent === parent)
     );
 
-    if (!match) return this.respond(404, { code: "NOT_FOUND", message: "Endpoint not found" });
+    if (!match)
+      return this.handleError({code: ErrorCode.NOT_FOUND, message: "Endpoint not found"});
 
-    try { return match.handler(req, match.extractor(req)); }
+    try { return await match.handler(req, match.extractor(req)); }
     catch (error) { return this.handleError(error); }
   }
 
@@ -74,6 +75,7 @@ export abstract class Controller {
    */
   protected handleError(error: ApiError | unknown): Response {
     if (!(error && typeof error === 'object' && 'code' in error && 'message' in error)) {
+      console.log(error);
       return this.respond(500, { code: 'INTERNAL_ERROR', message: 'Unexpected server error' });
     }
 
@@ -91,100 +93,116 @@ export abstract class Controller {
    * @returns the service response as a ResponseBody object
    */
   protected serviceResponseToResponseBody(serviceResponse: unknown): ResponseBody {
-    try {
-      return serviceResponse as ResponseBody;
-    } catch (error) {
-      throw new Error(`Failed to serialize service response: ${error}`);
-    }
+    try { return serviceResponse as ResponseBody; }
+    catch (error) { throw new Error(`Failed to serialize service response: ${error}`); }
+  }
+
+  /**
+   * Helper method to execute a service and create a response
+   * @param service - The service to execute
+   * @param data - Parameters for the service
+   * @param statusCode - HTTP status code for successful response
+   * @param operationName - Name of the operation for error message
+   * @returns Response with appropriate status and data
+   */
+  protected async _executeService<T extends ServiceParams>(service: Service<T> | undefined,
+    data: T, statusCode: number, operationName: string): Promise<Response>
+  {
+    if (!service)
+      return this.handleError({code: ErrorCode.NOT_FOUND,
+        message: `${operationName} operation not implemented`
+      });
+
+    const body = await service.execute(data);
+    return this.respond(statusCode, body);
   }
 
   /**
    * Retrieves a single entity by ID
    * @param req - Request with entity ID in path params
+   * @param data - Parameters for the service extracted by the route's extractor
    * @returns Response with status 200 and entity data
    */
-  protected getOne(req: Request, data: object): Response {
-    // TODO: add more checking ...
-    // TODO: change data object to Params for designated service
-    const body: object = this.services.get.execute(data);
-    return this.respond(200, body);
+  protected async getOne(req: Request, data: ServiceParams): Promise<Response> {
+    return this._executeService(this.services.get, data, 200, "Get");
   }
 
   /**
-  * Retrieves all entities with pagination
-  * @param req - Request with pagination parameters
-  * @returns Response with status 200 and list of users
-  */
-  protected getAll(req: Request, data: object): Response {
-    // TODO: add more checking ... (page number, size extraction)
-    // TODO: change data object to Params for designated service
-    const body: object = this.services.getAll.execute(...Object.values(data));
-    return this.respond(200, body);
-  }
-
-  /**
-   * TODO
+   * Retrieves all entities with pagination
+   * @param req - Request with pagination parameters
+   * @param data - Parameters for the service extracted by the route's extractor
+   * @returns Response with status 200 and list of entities
    */
-  protected getChildren<T extends ServiceParams>(req: Request, data: object, service: Service<T>): Response {
-    // TODO: add more checking ... (page number, size extraction)
-    // TODO: change data object to Params for designated service
-    const body: object = service.execute(data as T);
-    return this.respond(200, body);
+  protected async getAll(req: Request, data: ServiceParams): Promise<Response> {
+    return this._executeService(this.services.getAll, data, 200, "GetAll");
   }
 
   /**
-   * TODO
+   * Retrieves child entities for a parent entity
+   * @param req - Request with parent ID in path params
+   * @param data - Parameters for the service extracted by the route's extractor
+   * @param service - Service to execute
+   * @returns Response with status 200 and list of child entities
    */
-  protected addChild<T extends ServiceParams>(req: Request, data: object, service: Service<T>): Response {
-    // TODO: add more checking ...
-    // TODO: change data object to Params for designated service
-    const body: object = service.execute(data as T);
-    return this.respond(201, body);
+  protected async getChildren<T extends ServiceParams>(req: Request, data: T,
+    service: Service<T>): Promise<Response>
+  {
+    return this._executeService(service, data, 200, "GetChildren");
   }
 
   /**
-   * TODO
+   * Adds a child entity to a parent entity
+   * @param req - Request with parent ID in path params and child data in body
+   * @param data - Parameters for the service extracted by the route's extractor
+   * @param service - Service to execute
+   * @returns Response with status 201 and created child entity data
    */
-  protected removeChild<T extends ServiceParams>(req: Request, data: object, service: Service<T>): Response {
-    // TODO: add more checking ... (data will be empty, just extract id)
-    // TODO: change data object to Params for designated service
-    const body: object = service.execute(data as T);
-    return this.respond(204, body);
+  protected async addChild<T extends ServiceParams>(req: Request, data: T,
+    service: Service<T>): Promise<Response>
+  {
+    return this._executeService(service, data, 201, "AddChild");
+  }
+
+  /**
+   * Removes a child entity from a parent entity
+   * @param req - Request with parent ID and child ID in path params
+   * @param data - Parameters for the service extracted by the route's extractor
+   * @param service - Service to execute
+   * @returns Response with status 204 (No Content)
+   */
+  protected async removeChild<T extends ServiceParams>(req: Request, data: T,
+    service: Service<T>): Promise<Response>
+  {
+    return this._executeService(service, data, 204, "RemoveChild");
   }
 
   /**
    * Updates an entity by ID
    * @param req - Request with entity ID in path params and update data in body
+   * @param data - Parameters for the service extracted by the route's extractor
    * @returns Response with status 200 and updated entity data
    */
-  protected update(req: Request, data: object): Response {
-    // TODO: add more checking ...
-    // TODO: change data object to Params for designated service
-    const body: object = this.services.get.execute(data);
-    return this.respond(200, body);
+  protected async update(req: Request, data: ServiceParams): Promise<Response> {
+    return this._executeService(this.services.update, data, 200, "Update");
   }
 
   /**
    * Deletes an entity by ID
    * @param req - Request with entity ID in path params
+   * @param data - Parameters for the service extracted by the route's extractor
    * @returns Response with status 204 (No Content)
    */
-  protected delete(req: Request, data: object): Response {
-    // TODO: add more checking ... (data will be empty, just extract id)
-    // TODO: change data object to Params for designated service
-    const body: object = this.services.get.execute(data);
-    return this.respond(204, body);
+  protected async delete(req: Request, data: ServiceParams): Promise<Response> {
+    return this._executeService(this.services.delete, data, 204, "Delete");
   }
 
   /**
    * Creates a new entity
    * @param req - Request with entity data in body
+   * @param data - Parameters for the service extracted by the route's extractor
    * @returns Response with status 201 and created entity data
    */
-  protected create(req: Request, data: object): Response {
-    // TODO: add more checking ... (data will be empty, just extract id)
-    // TODO: change data object to Params for designated service
-    const body: object = this.services.get.execute(data);
-    return this.respond(201, body);
+  protected async create(req: Request, data: ServiceParams): Promise<Response> {
+    return this._executeService(this.services.create, data, 201, "Create");
   }
 }

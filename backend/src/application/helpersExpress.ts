@@ -1,5 +1,5 @@
 import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
-import { ErrorCode, Request, Response, HttpMethod, PathParams } from "./types";
+import { ErrorCode, Request, Response, HttpMethod, PathParams, QueryParams } from "./types";
 
 /* ************* Constants ************* */
 
@@ -182,12 +182,12 @@ export function extractPathParams(req: Request, customPrefixPatterns?: Record<st
  * // For req.headers['path'] = "/users?page=2&limit=10"
  * extractQueryParams(req) // Returns { page: 2, limit: 10 }
  */
-export function extractQueryParams(req: Request): Record<string, string | number> {
+export function extractQueryParams(req: Request): QueryParams {
   const path = req.headers['path'] || '';
   const queryString = path.split('?')[1] || '';
   if (!queryString) return {};
 
-  const result: Record<string, string | number> = {};
+  const result: QueryParams = {};
 
   queryString.split('&').forEach(param => {
     if (!param) return;

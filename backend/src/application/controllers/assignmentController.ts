@@ -1,8 +1,17 @@
 import { Controller } from './controllerExpress';
-import { Request, HttpMethod, RouteHandlers } from '../types';
-import { defaultExtractor } from './helpersExpress';
+import { RouteHandlers } from '../types';
 import * as AssignmentServices from '../../core/services/assignment';
+import { HttpMethod, Request,  } from '../types';
+import { ServiceParams } from '../../config/service';
+import { createParamsExtractor } from '../extractors';
 
+const extractors = {
+  getAssignment: createParamsExtractor(AssignmentServices.GetAssignmentParams, {'_assignmentId': 'id'}, {}, []),
+  getUserAssignments: createParamsExtractor(AssignmentServices.GetUserAssignmentsParams, {'_id': 'idParent'}, {}),
+  updateAssignment: createParamsExtractor(AssignmentServices.UpdateAssignmentParams, {'_id': 'id'}, {}, ['_classId', '_learningPathId', '_startDate', '_deadline', '_extraInstructions']),
+  deleteAssignment: createParamsExtractor(AssignmentServices.DeleteAssignmentParams, {'_id': 'id'}, {}),
+  createAssignment: createParamsExtractor(AssignmentServices.CreateAssignmentParams, {'_classId': 'class', '_learningPathId': 'learningPath', '_startDate': 'startDate', '_deadline': 'deadline', '_extraInstructions': 'extraInstructions', '_teacherId': 'teacher'}, {}, ['_classId', '_learningPathId', '_startDate', '_deadline', '_extraInstructions'])
+}
 
 /**
  * Controller responsible for assignment-related API endpoints including CRUD operations
@@ -23,22 +32,22 @@ export class AssignmentController extends Controller {
   ) {
     const handlers : RouteHandlers = {
       [HttpMethod.GET]: [
-        { hasId: true, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getOne(req, data) },
-        { parent: 'users', hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getChildren(req, data, getUserAssignments) }
+        { hasId: true, hasParentId: false, extractor: extractors.getAssignment,
+          handler: (req: Request, data: ServiceParams) => this.getOne(req, data) },
+        { parent: 'users', hasId: false, hasParentId: true, extractor: extractors.getUserAssignments,
+          handler: (req: Request, data: AssignmentServices.GetUserAssignmentsParams) => this.getChildren(req, data, getUserAssignments) }
       ],
       [HttpMethod.PATCH]: [
-        { hasId: true, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.update(req, data) }
+        { hasId: true, hasParentId: false, extractor: extractors.updateAssignment,
+          handler: (req: Request, data: ServiceParams) => this.update(req, data) }
       ],
       [HttpMethod.POST]: [
-        { hasId: false, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.create(req, data) }
+        { hasId: false, hasParentId: false, extractor: extractors.createAssignment,
+          handler: (req: Request, data: ServiceParams) => this.create(req, data) }
       ],
       [HttpMethod.DELETE]: [
-        { hasId: true, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.delete(req, data) }
+        { hasId: true, hasParentId: false, extractor: extractors.deleteAssignment,
+          handler: (req: Request, data: ServiceParams) => this.delete(req, data) }
       ]
     };
 
