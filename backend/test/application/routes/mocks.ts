@@ -4,6 +4,7 @@ import { IAssignmentRepository } from '../../../src/core/repositories/assignment
 import { IQuestionThreadRepository } from '../../../src/core/repositories/questionThreadRepositoryInterface';
 import { QuestionThread } from '../../../src/core/entities/questionThread';
 import { IMessageRepository } from '../../../src/core/repositories/messageRepositoryInterface';
+import { Assignment } from '../../../src/core/entities/assignment';
 
 export const mockApp = {
   get: jest.fn(),
@@ -26,6 +27,8 @@ export class MockClassRepository extends IClassRepository {
 }
 
 export class MockAssignmentRepository extends IAssignmentRepository {
+  public getAssignmentsByUserId = jest.fn();
+  public updateAssignmentById = jest.fn();
   public getAssignmentsByClassId = jest.fn();
   public getAssignmentsByLearningPathId = jest.fn();
   public deleteAssignmentById = jest.fn();
