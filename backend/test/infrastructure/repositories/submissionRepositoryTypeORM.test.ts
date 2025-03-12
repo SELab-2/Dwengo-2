@@ -77,30 +77,30 @@ describe("SubmissionRepositoryTypeORM", () => {
     });
 
     test("delete", async () => {
-            const createdSubmission: Submission = await datasourceSubmission.create(submission);
+            const createdId: string = await datasourceSubmission.create(submission);
             // Call function from repository
-            await datasourceSubmission.delete(createdSubmission);
+            await datasourceSubmission.delete(createdId);
     
             expect(datasourceSubmission.delete).toHaveBeenCalledTimes(1);
-            expect(datasourceSubmission.delete).toHaveBeenCalledWith(createdSubmission);
+            expect(datasourceSubmission.delete).toHaveBeenCalledWith(createdId);
     });
     
     test('delete throws error if not in database', async () => {
             const nonExistentSubmissionId = "non-existent-id";
             datasourceSubmission.getById = jest.fn(() => Promise.resolve(null));
-            datasourceSubmission.delete = jest.fn(async (submission: Submission) => {
+            datasourceSubmission.delete = jest.fn(async (submissionId: string) => {
                         const foundSubmission = await datasourceSubmission.getById(submission.id!);
                         if (!foundSubmission) {
                             throw new EntityNotFoundError('Submission not found');
                         }
             });
     
-            await expect(datasourceSubmission.delete({ id: nonExistentSubmissionId } as Submission))
+            await expect(datasourceSubmission.delete(nonExistentSubmissionId))
                 .rejects
                 .toThrow(EntityNotFoundError);
     
             expect(datasourceSubmission.delete).toHaveBeenCalledTimes(1);
-            expect(datasourceSubmission.delete).toHaveBeenCalledWith({ id: nonExistentSubmissionId });
+            expect(datasourceSubmission.delete).toHaveBeenCalledWith(nonExistentSubmissionId);
     });
 
 });
