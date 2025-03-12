@@ -1,3 +1,4 @@
+import { EntityNotFoundError } from "../../config/error";
 import { Assignment } from "../../core/entities/assignment";
 import { IAssignmentRepository } from "../../core/repositories/assignmentRepositoryInterface";
 import { IDatasourceAssignment } from "../database/data/data_sources/datasourceAssignmentInterface";
@@ -25,12 +26,16 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
         if(assignment) {
             return assignment
         } else {
-            throw new Error(`Assignment with id ${id} not found`);
+            throw new EntityNotFoundError(`Assignment with id ${id} not found`);
         }
     }
 
     public async getAssignmentsByClassId(classId: string): Promise<Assignment[]> {
         return await (await this.datasourceAssignment).getAssignmentsByClassId(classId);
+    }
+
+    public async getAssignmentsByUserId(userId: string): Promise<Assignment[]> {
+        return await (await this.datasourceAssignment).getAssignmentsByUserId(userId);
     }
 
     public async getAssignmentsByLearningPathId(learningPathId: string): Promise<Assignment[]> {
@@ -39,6 +44,16 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
 
     public async deleteAssignmentById(id: string): Promise<void> {
         return await (await this.datasourceAssignment).deleteAssignmentById(id);
+    }
+
+    public async updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment> {
+        const updatedAssignment: Assignment|null = await (await this.datasourceAssignment).updateAssignmentById(id, updatedFields);
+
+        if(updatedAssignment) {
+            return updatedAssignment;
+        } else {
+            throw new EntityNotFoundError(`Assignment with id ${id} not found`);
+        }
     }
 
 }

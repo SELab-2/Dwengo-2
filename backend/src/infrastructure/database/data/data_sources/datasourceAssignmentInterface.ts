@@ -37,6 +37,14 @@ export abstract class IDatasourceAssignment {
     public abstract getAssignmentsByClassId(classId: string): Promise<Assignment[]>;
 
     /**
+     * Get all assignments of a specific user.
+     * 
+     * @param userId The user id.
+     * @returns A promise that resolves to an array of all assignments of the user.
+     */
+    public abstract getAssignmentsByUserId(userId: string): Promise<Assignment[]>;
+
+    /**
      * Get all assignments with a specific learning path id.
      * 
      * @param learningPathId The id of the learning path.
@@ -51,5 +59,14 @@ export abstract class IDatasourceAssignment {
      * @returns A promise that resolves when the assignment is deleted.
      */
     public abstract deleteAssignmentById(id: string): Promise<void>;
+
+    /**
+     * Update an assignment by it's id and the fields to update.
+     * 
+     * @param id The assignment id
+     * @param updatedFields The fields to update
+     * @returns A promise that resolves to the updated assignment.
+     */
+    public abstract updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment|null>;
 
 }
