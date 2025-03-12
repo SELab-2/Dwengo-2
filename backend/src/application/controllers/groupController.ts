@@ -9,7 +9,7 @@ import { defaultExtractor } from './helpersExpress';
  * and group listings by user or class. Follows RESTful patterns with paths:
  * - GET /groups/:id - Get single group
  * - GET /users/:idParent/groups - Get groups for a user
- * - GET /classes/:idParent/groups - Get groups for a class
+ * - GET /assignments/:idParent/groups - Get groups for an assignment
  * - PATCH /groups/:id - Update a group
  * - DELETE /groups/:id - Delete a group
  * - POST /groups - Create a new group
@@ -18,7 +18,7 @@ export class GroupController extends Controller {
   constructor(
     get: GroupServices.GetGroup,
     getUserGroups: GroupServices.GetUserGroups,
-    getClassGroups: GroupServices.GetClassGroups,
+    getAssignmentGroups: GroupServices.GetAssignmentGroups,
     update: GroupServices.UpdateGroup,
     remove: GroupServices.DeleteGroup,
     create: GroupServices.CreateGroup
@@ -29,8 +29,8 @@ export class GroupController extends Controller {
       //     handler: (req: Request, data: object) => this.getOne(req, data) },
       //   { parent: 'users', hasId: false, extractor: defaultExtractor,
       //     hasParentId: true, handler: (req: Request, data: object) => this.getChildren(req, data, getUserGroups) },
-      //   { parent: 'classes', hasId: false, extractor: defaultExtractor,
-      //     hasParentId: true, handler: (req: Request, data: object) => this.getChildren(req, data, getClassGroups) }
+      //   { parent: 'assignments', hasId: false, extractor: defaultExtractor,
+      //     hasParentId: true, handler: (req: Request, data: object) => this.getChildren(req, data, getAssignmentGroups) }
       // ],
       // [HttpMethod.PATCH]: [
       //   { hasId: true, hasParentId: false, extractor: defaultExtractor,
@@ -46,6 +46,6 @@ export class GroupController extends Controller {
       // ]
     };
 
-    super({ get, getUserGroups, getClassGroups, update, remove, create }, handlers);
+    super({ get, getUserGroups, getAssignmentGroups, update, remove, create }, handlers);
   }
 }
