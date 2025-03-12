@@ -41,13 +41,13 @@ export class CreateAssignmentParams implements ServiceParams {
 export class CreateAssignment extends AssignmentService<CreateAssignmentParams> {
 
   async execute(input: CreateAssignmentParams): Promise<object> {
-    const assigment: Assignment = new Assignment(
+    const assignment: Assignment = new Assignment(
       input.classId,
       input.learningPathId,
       input.startDate,
       input.deadline,
       input.extraInstructions
     );
-    return (await this.assignmentRepository.createAssignment(assigment, input.teacherId)).toObject();
+    return { id: (await this.assignmentRepository.createAssignment(assignment, input.teacherId)).id};
   }
 }

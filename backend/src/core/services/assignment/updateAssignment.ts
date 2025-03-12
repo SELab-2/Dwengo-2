@@ -40,15 +40,14 @@ export class UpdateAssignmentParams implements ServiceParams {
 export class UpdateAssignment extends AssignmentService<UpdateAssignmentParams> {
 
   async execute(input: UpdateAssignmentParams): Promise<object> {
-    const updatedFields: Partial<Assignment> = Object.fromEntries(
-      Object.entries({
-        classId: input.classId,
-        learningPathId: input.learningPathId,
-        startDate: input.startDate,
-        deadline: input.deadline,
-        extraInstructions: input.extraInstructions,
-      }).filter(([_, value]) => value !== undefined)
-    );
-    return (await this.assignmentRepository.updateAssignmentById(input.id, updatedFields)).toObject;
+    const updatedFields: Partial<Assignment> = {};
+
+    if (input.classId) updatedFields.classId = input.classId;
+    if (input.learningPathId) updatedFields.learningPathId = input.learningPathId;
+    if (input.startDate) updatedFields.startDate = input.startDate;
+    if (input.deadline) updatedFields.deadline = input.deadline;
+    if (input.extraInstructions) updatedFields.extraInstructions = input.extraInstructions;
+
+    return (await this.assignmentRepository.updateAssignmentById(input.id, updatedFields)).toObject();
   }
 }

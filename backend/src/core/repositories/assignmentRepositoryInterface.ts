@@ -33,6 +33,13 @@ export abstract class IAssignmentRepository extends AbstractRepository {
     public abstract getAssignmentsByClassId(classId: string): Promise<Assignment[]>;
 
     /**
+     * Get all assignments associated with a specific user id.
+     * @param classId The id of the user
+     * @returns A promise that resolves to an array of assignments.
+     */
+    public abstract getAssignmentsByUserId(userId: string): Promise<Assignment[]>;
+
+    /**
      * Get all assignments associated with a specific learning path id.
      * @param learningPathId The id of the learning path
      * @returns A promise that resolves to an array of assignments.
@@ -53,7 +60,6 @@ export abstract class IAssignmentRepository extends AbstractRepository {
      * @returns A promise that resolves to the Assignment that is updated
      * @throws EntityNotFound error when the assignment that needs to be updated does not exist
      */
-
     public abstract updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment>;
 
 }
