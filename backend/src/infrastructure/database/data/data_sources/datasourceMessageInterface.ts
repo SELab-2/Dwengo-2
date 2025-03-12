@@ -40,6 +40,6 @@ export abstract class IDatasourceMessage {
      * 
      * @param message The message to delete.
      */
-    public abstract deleteMessage(message: Message): Promise<void>;
+    public abstract deleteMessageById(id: string): Promise<void>;
 
 }

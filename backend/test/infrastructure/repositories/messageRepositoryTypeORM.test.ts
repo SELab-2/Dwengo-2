@@ -38,12 +38,12 @@ describe("MessageRepositoryTypeORM", () => {
             // getByLastName: jest.fn(() => Promise.resolve(message)),
             // getAll: jest.fn(() => Promise.resolve([message, message])),
             updateMessage: jest.fn(() => Promise.resolve(message)),
-            deleteMessage: jest.fn()
+            deleteMessageById: jest.fn()
         } as any;
 
         // Mock message
         date = new Date("11/09/2001");
-        message = new Message("senderId", date, "threadId", "I dont get it.");
+        message = new Message("senderId", date, "threadId", "I dont get it.", "mockMessageId");
 
     });
 
@@ -77,29 +77,33 @@ describe("MessageRepositoryTypeORM", () => {
 
     test("delete", async () => {
         const createdMessage: Message = await datasourceMessage.createMessage(message);
+    
+        if (!createdMessage.id) {
+            throw new Error("Message id is undefined");
+        }
+    
         // Call function from repository
-        await datasourceMessage.deleteMessage(createdMessage);
-
-        expect(datasourceMessage.deleteMessage).toHaveBeenCalledTimes(1);
-        expect(datasourceMessage.deleteMessage).toHaveBeenCalledWith(createdMessage);
+        await datasourceMessage.deleteMessageById(createdMessage.id);
+    
+        expect(datasourceMessage.deleteMessageById).toHaveBeenCalledTimes(1);
+        expect(datasourceMessage.deleteMessageById).toHaveBeenCalledWith(createdMessage.id);
     });
 
     test('delete throws error if not in database', async () => {
-            const nonExistentMessageId = "non-existent-id";
-            datasourceMessage.getMessageById = jest.fn(() => Promise.resolve(null));
-            datasourceMessage.deleteMessage = jest.fn(async (message: Message) => {
-                        const foundMessage = await datasourceMessage.getMessageById(message.senderId);
-                        if (!foundMessage) {
-                            throw new EntityNotFoundError('Message not found');
-                        }
-            });
-    
-            await expect(datasourceMessage.deleteMessage({ senderId: nonExistentMessageId } as Message))
-                .rejects
-                .toThrow(EntityNotFoundError);
-    
-            expect(datasourceMessage.deleteMessage).toHaveBeenCalledTimes(1);
-            expect(datasourceMessage.deleteMessage).toHaveBeenCalledWith({ senderId: nonExistentMessageId });
+        const nonExistentMessageId = "non-existent-id";
+        datasourceMessage.getMessageById = jest.fn(() => Promise.resolve(null));
+        datasourceMessage.deleteMessageById = jest.fn(async (id: string) => {
+            const foundMessage = await datasourceMessage.getMessageById(id);
+            if (!foundMessage) {
+                throw new EntityNotFoundError('Message not found');
+            }
         });
-
+    
+        await expect(datasourceMessage.deleteMessageById(nonExistentMessageId))
+            .rejects
+            .toThrow(EntityNotFoundError);
+    
+        expect(datasourceMessage.deleteMessageById).toHaveBeenCalledTimes(1);
+        expect(datasourceMessage.deleteMessageById).toHaveBeenCalledWith(nonExistentMessageId);
+    });
 });

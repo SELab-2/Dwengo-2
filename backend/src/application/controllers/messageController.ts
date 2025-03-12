@@ -17,7 +17,7 @@ import * as MessageServices from '../../core/services/message';
 export class MessageController extends Controller {
   constructor(
     get: MessageServices.GetMessage,
-    getQuestionMessages: MessageServices.GetQuestionMessages,
+    getQuestionMessages: MessageServices.GetThreadMessages,
     update: MessageServices.UpdateMessage,
     remove: MessageServices.DeleteMessage,
     create: MessageServices.CreateMessage

@@ -33,8 +33,8 @@ export class IMessageRepositoryTypeORM extends IMessageRepository{
         return await (await this.datasourceMessage).updateMessage(message);
     }
 
-    public async deleteMessage(message: Message): Promise<void> {
-        return await (await this.datasourceMessage).deleteMessage(message);
+    public async deleteMessageById(id: string): Promise<void> {
+        return await (await this.datasourceMessage).deleteMessageById(id);
     }
     
 }

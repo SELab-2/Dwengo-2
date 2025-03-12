@@ -1,4 +1,4 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { ServiceParams } from "../../../config/service";
 import { Message } from "../../entities/message";
 import { MessageService } from "./messageService";
 

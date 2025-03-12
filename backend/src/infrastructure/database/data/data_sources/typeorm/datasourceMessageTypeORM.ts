@@ -48,18 +48,28 @@ export class DatasourceMessageTypeORM extends IDatasourceMessage {
     }
 
     public async updateMessage(message: Message): Promise<Message> {
-        this.deleteMessage(message);
+        if (!message.id) {
+            throw new Error("Message id is required to update a message");
+        }
+        const messageModel: MessageTypeORM|null = await this.datasource
+            .getRepository(MessageTypeORM)
+            .findOne({ where: { id: message.id } });
+            if (!messageModel){
+                throw new EntityNotFoundError(`Message with id: ${message.id} not found`);
+            }
+        
+        this.deleteMessageById(message.id);
         return this.createMessage(message);
     }
 
-    public async deleteMessage(message: Message): Promise<void> {
+    public async deleteMessageById(id: string): Promise<void> {
         const messageRepository = this.datasource.getRepository(MessageTypeORM)
 
         const messageModel: MessageTypeORM|null = await messageRepository
-            .findOne({ where: { id: message.id } });
+            .findOne({ where: { id: id } });
         
         if (!messageModel){
-            throw new EntityNotFoundError(`Message with id: ${message.id} not found`);
+            throw new EntityNotFoundError(`Message with id: ${id} not found`);
         }
 
         await messageRepository.remove(messageModel);

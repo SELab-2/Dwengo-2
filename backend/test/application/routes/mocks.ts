@@ -49,5 +49,5 @@ export class MockMessageRepository extends IMessageRepository {
   public createMessage = jest.fn();
   public getMessageById = jest.fn();
   public updateMessage = jest.fn();
-  public deleteMessage = jest.fn();
+  public deleteMessageById = jest.fn();
 }
