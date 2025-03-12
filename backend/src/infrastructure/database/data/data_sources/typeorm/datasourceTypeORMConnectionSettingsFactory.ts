@@ -12,7 +12,6 @@ import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { AssignmentAnswerTypeORM } from "../../data_models/assignmentAnswerTypeorm";
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
 import { JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
-import { AssignmentGroupTypeORM } from "../../data_models/assignmentForGroupTypeorm";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 
 /**
@@ -61,7 +60,6 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             GroupTypeORM,
             StudentOfGroupTypeORM,
             AssignmentTypeORM,
-            AssignmentGroupTypeORM,
             TeacherGroupAssignmentTypeORM,
             QuestionThreadTypeORM,
             MessageTypeORM,

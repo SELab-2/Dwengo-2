@@ -2,6 +2,10 @@ import { IDatasourceStudent } from "../datasourceStudentInterface";
 import { Student } from "../../../../../core/entities/student";
 import { UserTypeORM } from "../../data_models/userTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
+import { ClassTypeORM } from "../../data_models/classTypeorm";
+import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
+import { GroupTypeORM } from "../../data_models/groupTypeorm";
+import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 
 export class DatasourceStudentTypeORM extends IDatasourceStudent {
 
@@ -94,9 +98,7 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
 
     public async updateStudent(student: Student): Promise<Student> {
         await this.datasource.getRepository(UserTypeORM).update(student.id!, UserTypeORM.createUserTypeORM(student));
-        
-        // For now, there is no need to update the Student table
-
+    
         return student;
     }
 
@@ -114,6 +116,30 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
             await this.datasource.getRepository(UserTypeORM).delete(studentModel!.student.id!);
             await this.datasource.getRepository(StudentTypeORM).delete(id);
         }
+    }
+
+    public async removeStudentFromClass(studentId: string, classId: string): Promise<void> {
+        const classModel: ClassTypeORM | null = await this.datasource
+            .getRepository(ClassTypeORM)
+            .findOne({ where: { id: classId } });
+
+        if (classModel === null) {
+            throw new Error("Class does not exist");
+        }
+
+        await this.datasource.getRepository(StudentOfClassTypeORM).delete({ student: { id: studentId }, class: { id: classId } });
+    }
+
+    public async removeStudentFromGroup(studentId: string, groupId: string): Promise<void> {
+        const groupModel: GroupTypeORM | null = await this.datasource
+            .getRepository(GroupTypeORM)
+            .findOne({ where: { id: groupId } });
+
+        if (groupModel === null) { 
+            throw new Error("Group does not exist");
+        }
+
+        await this.datasource.getRepository(StudentOfGroupTypeORM).delete({ student: { id: studentId }, group: { id: groupId } });
     }
 
 }

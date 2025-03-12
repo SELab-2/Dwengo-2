@@ -72,4 +72,26 @@ export abstract class IDatasourceStudent {
      */
     public abstract deleteStudentWithId(id: string): Promise<void>;
 
+    /**
+     * Removes a student from a class.
+     * 
+     * @param studentId The id of the student
+     * @param classId The class id
+     * 
+     * @throws Error if student is not in class
+     * @throws Error if class does not exist
+     */
+    public abstract removeStudentFromClass(studentId: string, classId: string): Promise<void>;
+
+    /**
+     * Removes a student from a group
+     * 
+     * @param studentId The id of the student
+     * @param groupId The group id
+     * 
+     * @throws — Error if student is not in group
+     * @throws — Error if group does not exist
+     */
+    public abstract removeStudentFromGroup(studentId: string, groupId: string): Promise<void>;
+
 }
