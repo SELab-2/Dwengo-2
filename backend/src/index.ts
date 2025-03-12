@@ -4,18 +4,20 @@ import cors from 'cors';
 import dotenv from "dotenv";
 
 import { StudentRepositoryTypeORM } from "./infrastructure/repositories/studentRepositoryTypeORM";
-import { assignmentRoutes, classRoutes, joinRequestRoutes, questionThreadRoutes, usersRoutes } from "./application/routes";
-import { AssignmentController, ClassController, UsersController, JoinRequestController, QuestionThreadController } from "./application/controllers";
+import { assignmentRoutes, classRoutes, joinRequestRoutes, messageRoutes, questionThreadRoutes, usersRoutes } from "./application/routes";
+import { AssignmentController, ClassController, UsersController, JoinRequestController, QuestionThreadController, MessageController } from "./application/controllers";
 import * as UserServices from './core/services/user';
 import * as ClassServices from './core/services/class';
 import * as AssignmentServices from './core/services/assignment';
 import * as JoinRequestServices from './core/services/join_request';
 import * as QuestionThreadServices from './core/services/question_thread';
+import * as MessageServices from './core/services/message';
 import { TeacherRepositoryTypeORM } from "./infrastructure/repositories/teacherRepositoryTypeORM";
 import { ClassRepositoryTypeORM } from "./infrastructure/repositories/classRepositoryTypeORM";
 import { AssignmentRepositoryTypeORM } from "./infrastructure/repositories/assignmentRepositoryTypeORM";
 import { JoinRequestRepositoryTypeORM } from "./infrastructure/repositories/joinRequestRepositoryTypeORM";
 import { ThreadRepositoryTypeORM } from "./infrastructure/repositories/questionThreadRepositoryTypeORM";
+import { MessageRepositoryTypeORM } from "./infrastructure/repositories/messageRepositoryTypeORM";
 
 dotenv.config();
 
@@ -26,7 +28,8 @@ const repos = {
   class: new ClassRepositoryTypeORM(),
   assignment: new AssignmentRepositoryTypeORM(),
   joinRequest: new JoinRequestRepositoryTypeORM(),
-  questionThread: new ThreadRepositoryTypeORM()
+  questionThread: new ThreadRepositoryTypeORM(),
+  messages: new MessageRepositoryTypeORM(),
 };
 
 // Initialize services with use cases
@@ -71,6 +74,13 @@ const services = {
     update: new QuestionThreadServices.UpdateQuestionThread(repos.questionThread),
     remove: new QuestionThreadServices.DeleteQuestionThread(repos.questionThread),
     create: new QuestionThreadServices.CreateQuestionThread(repos.questionThread)
+  },
+  message: {
+    get: new MessageServices.GetMessage(repos.messages),
+    getThreadMessages: new MessageServices.GetThreadMessages(repos.questionThread, repos.messages),
+    update: new MessageServices.UpdateMessage(repos.messages),
+    remove: new MessageServices.DeleteMessage(repos.messages),
+    create: new MessageServices.CreateMessage(repos.messages)
   }
 };
 
@@ -90,6 +100,9 @@ const controllers = {
   ),
   questionThread: new QuestionThreadController(services.questionThread.get, services.questionThread.getAssignmentQuestions,
     services.questionThread.update, services.questionThread.remove, services.questionThread.create
+  ),
+  message: new MessageController(services.message.get, services.message.getThreadMessages,
+    services.message.update, services.message.remove, services.message.create
   )
 };
 
@@ -104,6 +117,7 @@ classRoutes(app, controllers.class);
 assignmentRoutes(app, controllers.assignment);
 joinRequestRoutes(app, controllers.joinRequest);
 questionThreadRoutes(app, controllers.questionThread);
+messageRoutes(app, controllers.message);
 
 app.get('/', (_: express.Request, res: express.Response) => {
   res.send("Hello, World!\n");
