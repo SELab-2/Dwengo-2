@@ -1,8 +1,20 @@
 import { Controller } from "./controllerExpress";
-import { Request, HttpMethod, RouteHandlers } from "../types";
-import { defaultExtractor } from "./helpersExpress";
+import { HttpMethod, Request, RouteHandlers } from "../types";
 import * as ClassServices from '../../core/services/class';
+import { createParamsExtractor } from "../extractors";
+import { ServiceParams } from '../../config/service';
 
+const extractors = {
+  getClass: createParamsExtractor(ClassServices.GetClassParams, {'_classId': 'id'}, {}, ['_className', '_id']),
+  getUserClasses: createParamsExtractor(ClassServices.GetClassParams, {'_classId': 'id'}, {}, ['_className', '_id']),
+  updateClass: createParamsExtractor(ClassServices.UpdateClassParams,
+    {'_id': 'id', '_name': 'name', '_description': 'description', '_targetAudience': 'audience'}, {}, []
+  ),
+  deleteClass: createParamsExtractor(ClassServices.DeleteClassParams, {'_id': 'id'}, {}, []),
+  createClass: createParamsExtractor(ClassServices.CreateClassParams,
+    {'_name': 'name', '_description': 'description', '_targetAudience': 'audience'},{}, []
+  )
+};
 
 /**
  * Controller responsible for class-related API endpoints including CRUD operations
@@ -23,22 +35,22 @@ export class ClassController extends Controller {
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
-        { parent: "users", hasId: true, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getOne(req, data) },
-        { parent: "users", hasId: false, hasParentId: true, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.getChildren(req, data, getUserClasses) },
+        { hasId: false, hasParentId: true, extractor: extractors.getClass,
+          handler: (req: Request, data: ServiceParams) => this.getOne(req, data) },
+        { parent: "users", hasId: false, hasParentId: true, extractor: extractors.getUserClasses,
+          handler: (req: Request, data: ClassServices.GetClassParams) => this.getChildren(req, data, getUserClasses) },
       ],
       [HttpMethod.PATCH]: [
-        { hasId: true, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.update(req, data) },
+        { hasId: true, hasParentId: false, extractor: extractors.updateClass,
+          handler: (req: Request, data: ServiceParams) => this.update(req, data) },
       ],
       [HttpMethod.POST]: [
-        { hasId: true, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.delete(req, data) },
+        { hasId: false, hasParentId: false, extractor: extractors.createClass,
+          handler: (req: Request, data: ServiceParams) => this.create(req, data) },
       ],
       [HttpMethod.DELETE]: [
-        { hasId: false, hasParentId: false, extractor: defaultExtractor,
-          handler: (req: Request, data: object) => this.create(req, data) },
+        { hasId: true, hasParentId: false, extractor: extractors.deleteClass,
+          handler: (req: Request, data: ServiceParams) => this.delete(req, data) },
       ],
     };
 

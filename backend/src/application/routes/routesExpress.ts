@@ -25,10 +25,12 @@ interface RouteConfig {
 export function configureRoute(
   { app, method, urlPattern, controller, middleware = [] }: RouteConfig, methodMap: [HttpMethod, keyof Express][]
 ): void {
-  const handler: RequestHandler = (req, res, next) => {
-    const request = requestFromExpress(req);
-    const response = controller.handle(request);
-    responseToExpress(response, res);
+  const handler: RequestHandler = async (req, res, next) => {
+    try {
+      const request = requestFromExpress(req);
+      const response = await controller.handle(request);
+      responseToExpress(response, res);
+    } catch (error) { next(error); }
   };
 
   for (const [httpMethod, appMethod] of methodMap) {

@@ -1,4 +1,5 @@
 import { Class } from "../entities/class";
+import { JoinRequestType } from "../entities/joinRequest";
 import { AbstractRepository } from "./abstractRepository";
 
 /**
@@ -80,4 +81,11 @@ export abstract class IClassRepository extends AbstractRepository {
      */
     public abstract deleteClassById(id: string): Promise<void>;
 
+    /**
+     * Add a student/teacher to a class.
+     * @param classId id of the class.
+     * @param userId id of the user to add to the class.
+     * @param userType type of the user (student/teacher)
+     */
+    public abstract addUserToClass(classId: string, userId:string, userType: JoinRequestType): Promise<void>
 }
