@@ -9,7 +9,7 @@ import { Teacher } from '../../entities/teacher';
 /**
  * @description class representing the parameters required to create a user.
  */
-export class CreateParams implements ServiceParams {
+export class CreateUserParams implements ServiceParams {
   constructor(
     private _email: string,
     private _firstName: string,
@@ -77,7 +77,7 @@ export class CreateParams implements ServiceParams {
  * @param {IStudentRepository} studentRepository - The student repository.
  * @param {ITeacherRepository} teacherRepository - The teacher repository.
  */
-export class CreateUser implements Service<CreateParams> {
+export class CreateUser implements Service<CreateUserParams> {
   public constructor(
     protected studentRepository: IStudentRepository,
     protected teacherRepository: ITeacherRepository,
@@ -88,7 +88,7 @@ export class CreateUser implements Service<CreateParams> {
    * @param input - The input parameters to create a user.
    * @returns {Promise<object>} An object containing the ID of the created user.
    */
-  async execute(input: CreateParams): Promise<object> {
+  async execute(input: CreateUserParams): Promise<object> {
     const user: User = await input.fromObject(
       this.studentRepository,
       this.teacherRepository,

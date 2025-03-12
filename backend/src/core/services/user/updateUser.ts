@@ -10,7 +10,7 @@ import { Teacher } from '../../entities/teacher';
  * Class to be used by execute method to update a user's info in the DB.
  * If a field is not to be updated, it should be undefined in the constructor.
  */
-export class UpdateParams implements ServiceParams {
+export class UpdateUserParams implements ServiceParams {
   constructor(
     private _id: string,
     private _userType: UserType,
@@ -104,7 +104,7 @@ export class UpdateParams implements ServiceParams {
  * @param studentRepository - Repository for student data.
  * @param teacherRepository - Repository for teacher data.
  */
-export abstract class UpdateUser implements Service<UpdateParams> {
+export class UpdateUser implements Service<UpdateUserParams> {
   constructor(
     private studentRepository: IStudentRepository,
     private teacherRepository: ITeacherRepository,
@@ -116,7 +116,7 @@ export abstract class UpdateUser implements Service<UpdateParams> {
    * @param input - Parameters containing the updated user info.
    * @returns An empty object.
    */
-  async execute(input: UpdateParams): Promise<object> {
+  async execute(input: UpdateUserParams): Promise<object> {
     const user: User = await input.fromObject(
       this.studentRepository,
       this.teacherRepository,
