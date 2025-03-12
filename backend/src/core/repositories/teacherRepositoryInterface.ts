@@ -82,9 +82,10 @@ export abstract class ITeacherRepository extends AbstractRepository {
     public abstract deleteTeacherFromClass(teacherId: string, classId: string): Promise<void>;
 
     /**
-     * Give a teacher access to an assignment.
+     * Assign a teacher to an assignment (when they're in a class, they should only see the assignments they're assigned to)
      * @param teacherId
      * @param assignmentId 
+     * @throws {EntityNotFoundError} if the teacher or assignment could not be found
      */
     public abstract assignTeacherToAssignment(teacherId: string, assignmentId: string): Promise<void>;
 

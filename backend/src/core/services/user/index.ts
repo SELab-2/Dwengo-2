@@ -1,5 +1,5 @@
-export * from "./assignUserToAssignment";
-export * from "./assignUserToGroup";
+export * from "./assignTeacherToAssignment";
+export * from "./assignStudentToGroup";
 export * from "./createUser";
 export * from "./deleteUser"
 export * from "./getAllUsers";

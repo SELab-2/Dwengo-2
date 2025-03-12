@@ -130,11 +130,13 @@ export abstract class IStudentRepository extends AbstractRepository {
   public abstract requestToJoinClass(studentId: string, classCode: string): Promise<void>;
 
   /**
-   * Assign a student to an assignment.
+   * Assign a student to a group within an assignment. If the assignment is individual,
+   * the student will be assigned to a group of 1.
    * @param studentId the student to be assigned.
    * @param groupId the group in the assignment where the student is part of.
+   * @throws {EntityNotFoundError} when the student or group could not be found.
    */
-  public abstract assignStudentToAssignment(studentId: string, groupId: string): Promise<void>
+  public abstract assignStudentToGroup(studentId: string, groupId: string): Promise<void>
 
   /**
    * Get all students for a class

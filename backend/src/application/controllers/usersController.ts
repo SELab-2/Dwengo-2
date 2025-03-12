@@ -24,9 +24,9 @@ export class UsersController extends Controller {
     create: UsersServices.CreateUser,
     getClassUsers: UsersServices.GetClassUsers,
     getGroupUsers: UsersServices.GetGroupUsers,
-    addGroupUser: UsersServices.AssignUserToGroup,
+    addGroupUser: UsersServices.AssignStudentToGroup,
     getAssignmentUsers: UsersServices.GetAssignmentUsers,
-    addAssignmentUser: UsersServices.AssignUserToAssignment
+    addAssignmentUser: UsersServices.AssignTeacherToAssignment
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
