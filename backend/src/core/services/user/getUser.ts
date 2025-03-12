@@ -50,6 +50,7 @@ export class GetUser implements Service<GetUserParams> {
       firstName: user.firstName,
       familyName: user.familyName,
       schoolName: user.schoolName,
+      passwordHash: user.passwordHash
     };
   }
 }
