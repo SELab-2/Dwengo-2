@@ -5,23 +5,13 @@ info:
   description: |
     The Dwengo API facilitates user authentication, management of users, classes, groups, learning objects, learning paths, assignments, and interactive Q&A features for the Dwengo learning platform.
   contact:
-    email: you@your-company.com
-    name: ''
+    url: 'https://github.com/SELab-2/Dwengo-2'
   license:
     name: MIT
     url: 'https://mit-license.org/'
-
-# NOTE - In order for proper restfull we need to add parent context for get as access namespace and post without parent context
-#      - Why? Because the responses of get will vary based on user otherwise (not restfull).
-#      - Similar for delete delete on parent does semantically imply global removal so we distinguish between parent and global removal
-#      - Global removal on /<resource-name>/{id} and local with parent prefixed for that local relation.
-#      - Similar for post can also have local or global rule
-#      - For get, only local which results in idemptotent responses using a parent context
-#      - For patch as uuids can apply to local relations also must be applied to no context otherwhise would split into a new copy
-# TODO - Objects and paths scheme, look at original api, or keep it like it is, proxy
-# TODO - Url query parameters like ?page=<nr>
-# TODO - We have assignments but what about interactive learning objects that act as tasks
-
+servers:
+  - url: 'https://sel2-2.ugent.be'
+    description: Production server
 tags:
   - name: authentication
     description: Endpoints for user registration and authentication, including login and token management
@@ -646,13 +636,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/classes/{idParent}/groups/{id}':
+  '/assignments/{idParent}/groups/{id}':
     get:
       tags:
         - groups
-      summary: Get class group by ID
-      description: Retrieve detailed information about a specific group within a class by its unique identifier.
-      operationId: getClassGroupById
+      summary: Get assignment group by ID
+      description: Retrieve detailed information about a specific group from an assignment by its unique identifier.
+      operationId: getAssignmentGroupById
       parameters:
         - in: path
           name: id
@@ -673,13 +663,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/classes/{idParent}/groups':
+  '/assignments/{idParent}/groups':
     get:
       tags:
         - groups
-      summary: Get all groups for class
-      description: Retrieve a list of all groups associated with a specific class.
-      operationId: getClassGroups
+      summary: Get all groups for an assignment
+      description: Retrieve a list of all groups associated with a specific assignment.
+      operationId: getAssignmentGroups
       parameters:
         - in: path
           name: idParent
@@ -989,13 +979,13 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  '/groups/{idParent}/assignments/{id}':
+  '/users/{idParent}/assignments/{id}':
     get:
       tags:
         - assignments
-      summary: Get group assignment by ID
-      description: Retrieve detailed information about a specific assignment within a group by their unique identifiers.
-      operationId: getGroupAssignmentById
+      summary: Get user's assignment by ID
+      description: Retrieve detailed information about a specific assignment of a user by their unique identifiers.
+      operationId: getUserAssignmentById
       parameters:
         - in: path
           name: id
@@ -1016,13 +1006,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/groups/{idParent}/assignments':
+  '/users/{idParent}/assignments':
     get:
       tags:
         - assignments
-      summary: Get all group assignments
-      description: Retrieve a list of all assignments associated with a specific group.
-      operationId: getGroupAssignments
+      summary: Get all user's assignments
+      description: Retrieve a list of all assignments associated with a specific user.
+      operationId: getUserAssignments
       parameters:
         - in: path
           name: idParent
@@ -1496,7 +1486,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  
+
   '/questions/{idParent}/messages':
     get:
       tags:
@@ -2237,12 +2227,17 @@ components:
     AssignmentCreate:
       type: object
       required:
+        - class
         - group
         - start
         - deadline
         - instructions
       additionalProperties: false
       properties:
+        class:
+          type: string
+          format: uuid
+          description: Unique identifier for the assignment's class.
         group:
           type: string
           format: uuid

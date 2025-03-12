@@ -1,11 +1,16 @@
 import { EntityNotFoundError } from '../../../../src/config/error';
-import { DeleteUserParams } from '../../../../src/core/services/user/deleteUser';
-import { DeleteTeacher } from '../../../../src/core/services/teacher';
+import {
+  DeleteUser,
+  DeleteUserParams,
+} from '../../../../src/core/services/user/deleteUser';
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
 import { Teacher } from '../../../../src/core/entities/teacher';
+import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
+import { UserType } from '../../../../src/core/entities/user';
 
 describe('deleteTeacher Service', () => {
-  let deleteTeacherService: DeleteTeacher;
+  let deleteTeacherService: DeleteUser;
+  let mockStudentRepository: jest.Mocked<IStudentRepository>;
   let mockTeacherRepository: jest.Mocked<ITeacherRepository>;
   let params: DeleteUserParams;
 
@@ -14,10 +19,17 @@ describe('deleteTeacher Service', () => {
       getTeacherById: jest.fn(),
       deleteTeacherWithId: jest.fn(),
     } as unknown as jest.Mocked<ITeacherRepository>;
+    mockStudentRepository = {
+      getStudentById: jest.fn(),
+      deleteStudentById: jest.fn(),
+    } as unknown as jest.Mocked<IStudentRepository>;
 
-    deleteTeacherService = new DeleteTeacher(mockTeacherRepository);
+    deleteTeacherService = new DeleteUser(
+      mockStudentRepository,
+      mockTeacherRepository,
+    );
 
-    params = new DeleteUserParams('1');
+    params = new DeleteUserParams('1', UserType.TEACHER);
   });
 
   test('Should throw error if teacher not found in database', async () => {
@@ -26,7 +38,7 @@ describe('deleteTeacher Service', () => {
     );
 
     await expect(deleteTeacherService.execute(params)).rejects.toThrow(
-      'Teacher not found',
+      'Teacher not found'
     );
   });
 
@@ -36,7 +48,7 @@ describe('deleteTeacher Service', () => {
       'John',
       'Doe',
       'hashedpassword123',
-      "Yale",
+      'Yale',
       '1',
     );
 
@@ -44,6 +56,8 @@ describe('deleteTeacher Service', () => {
     mockTeacherRepository.deleteTeacherWithId.mockResolvedValue(undefined);
 
     await expect(deleteTeacherService.execute(params)).resolves.toEqual({});
-    expect(mockTeacherRepository.deleteTeacherWithId).toHaveBeenCalledWith(params.id);
+    expect(mockTeacherRepository.deleteTeacherWithId).toHaveBeenCalledWith(
+      params.id,
+    );
   });
 });

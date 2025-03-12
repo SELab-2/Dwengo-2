@@ -26,6 +26,8 @@ export class MockClassRepository extends IClassRepository {
 }
 
 export class MockAssignmentRepository extends IAssignmentRepository {
+  public getAssignmentsByUserId = jest.fn();
+  public updateAssignmentById = jest.fn();
   public getAssignmentsByClassId = jest.fn();
   public getAssignmentsByLearningPathId = jest.fn();
   public deleteAssignmentById = jest.fn();

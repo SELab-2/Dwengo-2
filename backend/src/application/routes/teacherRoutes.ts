@@ -1,8 +1,3 @@
-import { Express } from 'express';
-import { configureRoutes, DEFAULT_METHOD_MAP } from './routesExpress';
-import { TeacherController } from '../controllers/teacherController';
-import { HttpMethod } from '../types';
-
 /**
  * RESTful routing configuration for teacher-specific endpoints.
  * Maps HTTP requests to the TeacherController's handle method after
@@ -14,6 +9,8 @@ import { HttpMethod } from '../types';
  * - PATCH /users/:id - Update user
  * - DELETE /users/:id - Delete user
  */
+
+/*
 export function teacherRoutes(app: Express, controller: TeacherController): void {
   configureRoutes([
     { app, method: HttpMethod.DELETE, urlPattern: '/classes/:idParent/users/:id(t-.*)', controller },
@@ -22,3 +19,4 @@ export function teacherRoutes(app: Express, controller: TeacherController): void
     { app, method: HttpMethod.DELETE, urlPattern: '/users/:id(t-.*)', controller },
   ], DEFAULT_METHOD_MAP);
 }
+*/

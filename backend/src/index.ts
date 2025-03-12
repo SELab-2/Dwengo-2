@@ -12,16 +12,6 @@ dotenv.config();
 // Initialize the datasource
 const datasource: IDatasource = new DatasourceTypeORM();
 
-const repo = new ClassRepositoryTypeORM(
-  new DatasourceFactoryTypeORM()
-);
-repo.createClass(new Class(
-  "Programmeren",
-  "Voor mensen die niet kunnen programmeren",
-  "Beginner",
-));
-
-
 // Initialize repositories
 const repos = {
 };

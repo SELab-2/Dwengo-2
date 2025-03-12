@@ -22,19 +22,31 @@ class MockGetAssignmentService extends AssignmentServices.GetAssignment {
   public execute = jest.fn();
 }
 
-class MockGetGroupAssignmentsService extends AssignmentServices.GetGroupAssignment {
+class MockGetGroupAssignmentsService extends AssignmentServices.GetUserAssignments {
+  constructor(assignmentRepository: MockAssignmentRepository){
+    super(assignmentRepository);
+  }
   public execute = jest.fn();
 }
 
 class MockUpdateAssignmentService extends AssignmentServices.UpdateAssignment {
+  constructor(assignmentRepository: MockAssignmentRepository){
+    super(assignmentRepository);
+  }
   public execute = jest.fn();
 }
 
 class MockDeleteAssignmentService extends AssignmentServices.DeleteAssignment {
+  constructor(assignmentRepository: MockAssignmentRepository){
+    super(assignmentRepository);
+  }
   public execute = jest.fn();
 }
 
 class MockCreateAssignmentService extends AssignmentServices.CreateAssignment {
+  constructor(assignmentRepository: MockAssignmentRepository){
+    super(assignmentRepository);
+  }
   public execute = jest.fn();
 }
 
@@ -43,10 +55,10 @@ class MockAssignmentController extends AssignmentController {
   constructor() {
     super(
       new MockGetAssignmentService(new MockAssignmentRepository()),
-      new MockGetGroupAssignmentsService(),
-      new MockUpdateAssignmentService(),
-      new MockDeleteAssignmentService(),
-      new MockCreateAssignmentService()
+      new MockGetGroupAssignmentsService(new MockAssignmentRepository()),
+      new MockUpdateAssignmentService(new MockAssignmentRepository()),
+      new MockDeleteAssignmentService(new MockAssignmentRepository()),
+      new MockCreateAssignmentService(new MockAssignmentRepository())
     );
   }
 
