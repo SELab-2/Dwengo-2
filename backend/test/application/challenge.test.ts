@@ -1,5 +1,7 @@
 import { ChallengeManager } from '../../src/application/challenge';
 import * as crypto from 'crypto';
+import { GetUser } from '../../src/core/services/user';
+import { UserType } from '../../src/core/entities/user';
 
 describe('ChallengeManager', () => {
   // Mock dependencies
@@ -9,7 +11,7 @@ describe('ChallengeManager', () => {
   };
 
   let keyPair: crypto.KeyPairKeyObjectResult;
-  let getUser: jest.Mock;
+  let getUser: GetUser;
   let challengeManager: ChallengeManager;
 
   beforeEach(() => {
@@ -23,12 +25,13 @@ describe('ChallengeManager', () => {
     }).toString();
 
     // Create mock getUser function
-    getUser = jest.fn().mockImplementation((id) => {
-      return id === mockUser.id ? mockUser : null;
-    });
+    getUser = {
+      execute: jest.fn().mockResolvedValue(mockUser)
+    } as unknown as GetUser;
+  
 
     // Create instance with mocked dependencies
-    challengeManager = new ChallengeManager(getUser);
+    challengeManager = new ChallengeManager(getUser as unknown as GetUser);
   });
 
   test('getChallenge returns challenge with expiration date', () => {
@@ -49,74 +52,70 @@ describe('ChallengeManager', () => {
     expect(result1.challenge).toEqual(result2.challenge);
   });
 
-  test('verifyChallenge returns true for valid signature', () => {
+  test('verifyChallenge returns true for valid signature', async () => {
     // Get a challenge
     const { challenge } = challengeManager.getChallenge();
-
+  
     // Sign the challenge with private key
     const signature = crypto.sign(
       null,
       Buffer.from(challenge),
       keyPair.privateKey
     );
-
+  
     // Verify the signature
-    const result = challengeManager.verifyChallenge(
+    await expect(challengeManager.verifyChallenge(
       mockUser.id,
-      signature.toString('base64')
-    );
-
-    expect(result).toBe(true);
+      signature.toString('base64'),
+      UserType.STUDENT
+    )).resolves.toBe(true);
   });
-
-  test('verifyChallenge returns false for invalid signature', () => {
+  
+  test('verifyChallenge returns false for invalid signature', async () => {
     // Get a challenge
     const { challenge } = challengeManager.getChallenge();
-
+  
     // Create an invalid signature (signing wrong data)
     const signature = crypto.sign(
       null,
       Buffer.from(challenge + 'tampered'),
       keyPair.privateKey
     );
-
+  
     // Verify the signature
-    const result = challengeManager.verifyChallenge(
+    await expect(challengeManager.verifyChallenge(
       mockUser.id,
-      signature.toString('utf8')
-    );
-
-    expect(result).toBe(false);
+      signature.toString('utf8'),
+      UserType.STUDENT
+    )).resolves.toBe(false);
   });
-
-  test('verifyChallenge returns false for nonexistent user', () => {
+  
+  test('verifyChallenge returns false for nonexistent user', async () => {
     // Get a challenge
     const { challenge } = challengeManager.getChallenge();
-
+  
     // Sign the challenge with private key
     const signature = crypto.sign(
       null,
       Buffer.from(challenge),
       keyPair.privateKey
     );
-
+  
     // Verify with invalid user ID
-    const result = challengeManager.verifyChallenge(
+    await expect(challengeManager.verifyChallenge(
       '00000000-0000-0000-0000-000000000000' as crypto.UUID,
-      signature.toString('utf8')
-    );
-
-    expect(result).toBe(false);
-    expect(getUser).toHaveBeenCalledWith('00000000-0000-0000-0000-000000000000');
+      signature.toString('utf8'), UserType.STUDENT
+    )).resolves.toBe(false);
+  
+    expect(getUser.execute).toHaveBeenCalledWith({ '_id': '00000000-0000-0000-0000-000000000000', '_userType': 'student' });
   });
-
-  test('verifyChallenge handles errors gracefully', () => {
+  
+  test('verifyChallenge handles errors gracefully', async () => {
     // Force an error by providing malformed signature
-    const result = challengeManager.verifyChallenge(
+    await expect(challengeManager.verifyChallenge(
       mockUser.id,
-      'not-a-valid-signature'
-    );
-
-    expect(result).toBe(false);
+      'not-a-valid-signature',
+      UserType.STUDENT
+    )).resolves.toBe(false);
   });
 });

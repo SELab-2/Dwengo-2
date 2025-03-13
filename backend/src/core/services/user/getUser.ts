@@ -44,13 +44,6 @@ export class GetUser implements Service<GetUserParams> {
         ? await this.studentRepository.getStudentById(input.id)
         : await this.teacherRepository.getTeacherById(input.id);
 
-    return {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      familyName: user.familyName,
-      schoolName: user.schoolName,
-      passwordHash: user.passwordHash
-    };
+    return user;
   }
 }
