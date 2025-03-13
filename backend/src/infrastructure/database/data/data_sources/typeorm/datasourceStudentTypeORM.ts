@@ -6,6 +6,9 @@ import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
+import { EntityNotFoundError } from "../../../../../config/error";
+import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
+import { AssignUserToGroup } from "../../../../../core/services/user";
 
 export class DatasourceStudentTypeORM extends IDatasourceStudent {
 
@@ -33,6 +36,8 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
             const t: Student = studentModel.toStudentEntity(studentModel.student);
             console.log(t);
             return t;
+        } else {
+            throw new EntityNotFoundError("Student not found");
         }
         return null; // No result
     }
@@ -110,11 +115,11 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
                 relations: ["student"]
             });
 
-        // TODO: check if studentModel!.student.id! is not null
-
         if(studentModel && studentModel.student.id) {
             await this.datasource.getRepository(UserTypeORM).delete(studentModel!.student.id!);
             await this.datasource.getRepository(StudentTypeORM).delete(id);
+        } else {
+            throw new EntityNotFoundError("Student does not exist");
         }
     }
 
@@ -124,7 +129,15 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
             .findOne({ where: { id: classId } });
 
         if (classModel === null) {
-            throw new Error("Class does not exist");
+            throw new EntityNotFoundError("Class does not exist");
+        }
+
+        const userModel: UserTypeORM | null = await this.datasource
+            .getRepository(UserTypeORM)
+            .findOne({ where: { id: studentId } });
+
+        if(userModel === null) {
+            throw new EntityNotFoundError("User does not exist");
         }
 
         await this.datasource.getRepository(StudentOfClassTypeORM).delete({ student: { id: studentId }, class: { id: classId } });
@@ -136,26 +149,74 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
             .findOne({ where: { id: groupId } });
 
         if (groupModel === null) { 
-            throw new Error("Group does not exist");
+            throw new EntityNotFoundError("Group does not exist");
+        }
+
+        const userModel: UserTypeORM | null = await this.datasource
+            .getRepository(UserTypeORM)
+            .findOne({ where: { id: studentId } });
+
+        if(userModel === null) {
+            throw new EntityNotFoundError("User does not exist");
         }
 
         await this.datasource.getRepository(StudentOfGroupTypeORM).delete({ student: { id: studentId }, group: { id: groupId } });
     }
 
     public async assignStudentToGroup(studentId: string, groupId: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        const groupModel: GroupTypeORM | null = await this.datasource
+            .getRepository(GroupTypeORM)
+            .findOne({ where: { id: groupId } });
+        
+        if (groupModel === null) {
+            throw new EntityNotFoundError("Group does not exist");
+        }
+
+        const userModel: UserTypeORM | null = await this.datasource
+            .getRepository(UserTypeORM)
+            .findOne({ where: { id: studentId } });
+
+        if(userModel === null) {
+            throw new EntityNotFoundError("User does not exist");
+        }
+
+        await this.datasource.getRepository(StudentOfGroupTypeORM).save({ student: { id: studentId }, group: { id: groupId } });
     }
 
     public async getClassStudents(classId: string): Promise<Student[]> {
-        throw new Error("Method not implemented.");
+        const classJoinResult = await this.datasource
+            .getRepository(StudentOfClassTypeORM)
+            .createQueryBuilder("studentOfClass")
+            .leftJoinAndSelect("studentOfClass.student", "student")
+            .where("studentOfClass.class.id = :classId", { classId: classId })
+            .getMany();
+
+        return classJoinResult.map((classJoinResult) => {
+            return classJoinResult.student.toStudentEntity(classJoinResult.student.student);
+        });
     }
 
     public async getAssignmentStudents(assignmentId: string): Promise<Student[]> {
-        throw new Error("Method not implemented.");
+        const assignmentModel: AssignmentTypeORM | null = await this.datasource
+            .getRepository(AssignmentTypeORM)
+            .findOne({ where: { id: assignmentId } });
+    
+            if (!assignmentModel) throw new EntityNotFoundError("Assignment not Found");
+            else return await this.getClassStudents(assignmentModel.toAssignmentEntity().classId);
     }
+    
 
     public async getGroupStudents(groupId: string): Promise<Student[]> {
-        throw new Error("Method not implemented.");
+        const groupJoinResult = await this.datasource
+            .getRepository(StudentOfGroupTypeORM)
+            .createQueryBuilder("studentOfGroup")
+            .leftJoinAndSelect("studentOfGroup.student", "student")
+            .where("studentOfGroup.group.id = :groupId", { groupId: groupId })
+            .getMany();
+
+        return groupJoinResult.map((groupJoinResult) => {
+            return groupJoinResult.student.toStudentEntity(groupJoinResult.student.student);
+        });
     }
 
 }
