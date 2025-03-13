@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import { Class } from "../../../../core/entities/class";
+import { JoinRequestType } from "../../../../core/entities/joinRequest";
 
 /**
  * Interface for the class data source
@@ -48,5 +49,22 @@ export abstract class IDatasourceClass {
      * @param id The id of the class to delete.
      */
     public abstract deleteClassById(id: string): Promise<void>;
+
+    /**
+     * Get all classes that a user is a member of.
+     * 
+     * @param id The id of the user
+     * @throws EntityNotFoundError If the user does not exist.
+     */
+    public abstract getUserClasses(id: string): Promise<Class[]>;
+
+    /**
+     * Add a user to a class.
+     * 
+     * @param classId The id of the class
+     * @param userId The id of the user
+     * @param userType The type of the user (teacher or student)
+     */
+    public abstract addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void>;
 
 }
