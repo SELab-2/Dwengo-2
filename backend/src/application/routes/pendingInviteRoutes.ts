@@ -1,7 +1,7 @@
-import { Express } from 'express';
-import { configureRoutes, DEFAULT_METHOD_MAP } from './routesExpress';
-import { JoinRequestController } from '../controllers/joinRequestController';
-import { HttpMethod } from '../types';
+import { Express } from "express";
+import { configureRoutes, DEFAULT_METHOD_MAP } from "./routesExpress";
+import { JoinRequestController } from "../controllers/joinRequestController";
+import { HttpMethod } from "../types";
 
 /**
  * RESTful routing configuration for JoinRequest related endpoints.
@@ -15,10 +15,13 @@ import { HttpMethod } from '../types';
  * - POST /invites - Create new invite
  */
 export function joinRequestRoutes(app: Express, controller: JoinRequestController): void {
-  configureRoutes([
-    { app, method: HttpMethod.GET,    urlPattern: '/users/:idParent/invites/:id', controller },
-    { app, method: HttpMethod.GET,    urlPattern: '/users/:idParent/invites', controller },
-    { app, method: HttpMethod.DELETE, urlPattern: '/invites/:id', controller },
-    { app, method: HttpMethod.POST,   urlPattern: '/invites', controller },
-  ], DEFAULT_METHOD_MAP);
+    configureRoutes(
+        [
+            { app, method: HttpMethod.GET, urlPattern: "/users/:idParent/invites/:id", controller },
+            { app, method: HttpMethod.GET, urlPattern: "/users/:idParent/invites", controller },
+            { app, method: HttpMethod.DELETE, urlPattern: "/invites/:id", controller },
+            { app, method: HttpMethod.POST, urlPattern: "/invites", controller },
+        ],
+        DEFAULT_METHOD_MAP,
+    );
 }

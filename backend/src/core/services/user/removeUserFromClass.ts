@@ -1,7 +1,7 @@
-import { UserType } from '../../entities/user';
-import { IStudentRepository } from '../../repositories/studentRepositoryInterface';
-import { ITeacherRepository } from '../../repositories/teacherRepositoryInterface';
-import { RemoveUserFrom } from './removeUserFrom';
+import { RemoveUserFrom } from "./removeUserFrom";
+import { UserType } from "../../entities/user";
+import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
+import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
 
 /**
  * Service for removing a user from a class.
@@ -9,30 +9,26 @@ import { RemoveUserFrom } from './removeUserFrom';
  * @param teacherRepository - Repository for teacher data.
  */
 export class RemoveUserFromClass extends RemoveUserFrom {
-  constructor(
-    private studentRepository: IStudentRepository,
-    private teacherRepository: ITeacherRepository,
-  ) {
-    super();
-  }
-
-  /**
-   * Removes a user from a class.
-   *
-   * @param userId - The ID of the user to be removed.
-   * @param otherId - The ID of the class.
-   * @param userType - The type of the user (student or teacher).
-   * @returns A promise that resolves when the user is removed.
-   */
-  public async removeUser(
-    userId: string,
-    otherId: string,
-    userType: UserType,
-  ): Promise<void> {
-    if (userType == UserType.STUDENT) {
-      await this.studentRepository.removeStudentFromClass(userId, otherId);
-    } else {
-      await this.teacherRepository.deleteTeacherFromClass(userId, otherId);
+    constructor(
+        private studentRepository: IStudentRepository,
+        private teacherRepository: ITeacherRepository,
+    ) {
+        super();
     }
-  }
+
+    /**
+     * Removes a user from a class.
+     *
+     * @param userId - The ID of the user to be removed.
+     * @param otherId - The ID of the class.
+     * @param userType - The type of the user (student or teacher).
+     * @returns A promise that resolves when the user is removed.
+     */
+    public async removeUser(userId: string, otherId: string, userType: UserType): Promise<void> {
+        if (userType == UserType.STUDENT) {
+            await this.studentRepository.removeStudentFromClass(userId, otherId);
+        } else {
+            await this.teacherRepository.deleteTeacherFromClass(userId, otherId);
+        }
+    }
 }

@@ -1,6 +1,6 @@
+import { SubmissionBaseService } from "./submissionBaseService";
 import { ServiceParams } from "../../../config/service";
 import { Submission, StatusType } from "../../entities/submission";
-import { SubmissionBaseService } from "./submissionBaseService";
 
 export class CreateSubmissionParams implements ServiceParams {
     constructor(
@@ -10,7 +10,7 @@ export class CreateSubmissionParams implements ServiceParams {
         private _time: Date,
         private _contents: Buffer,
         private _status: StatusType = StatusType.NOT_ACCEPTED,
-    ) { }
+    ) {}
 
     // Getters
     public get studentId(): string {
@@ -41,9 +41,9 @@ export class CreateSubmission extends SubmissionBaseService<CreateSubmissionPara
             input.learningObjectId,
             input.time,
             input.contents,
-            input.status
+            input.status,
         );
 
-        return { id: (await this.submissionRepository.create(submission)) };
+        return { id: await this.submissionRepository.create(submission) };
     }
 }

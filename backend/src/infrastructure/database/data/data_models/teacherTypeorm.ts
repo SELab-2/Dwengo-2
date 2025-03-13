@@ -1,15 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
-import { UserTypeORM } from "./userTypeorm"
-import { Teacher } from "../../../../core/entities/teacher"
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { UserTypeORM } from "./userTypeorm";
+import { Teacher } from "../../../../core/entities/teacher";
 
 @Entity()
 export class TeacherTypeORM {
     @PrimaryGeneratedColumn("uuid")
-    id!: string
+    id!: string;
 
     @OneToOne(() => UserTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "user_id" })
-    teacher!: UserTypeORM
+    teacher!: UserTypeORM;
 
     // Since multiple constructors isn't supported by Typescript:
     // https://stackoverflow.com/questions/12702548/constructor-overload-in-typescript

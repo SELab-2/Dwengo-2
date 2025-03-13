@@ -1,11 +1,12 @@
 import express, { Request, Response, NextFunction } from "express";
 import { ChallengeManager } from "../challenge";
 import { UserType } from "../../core/entities/user";
-import { services } from "../../config/services";
 import { UUID } from "crypto";
+import { services } from "../../config/services";
+import { UserType } from "../../core/entities/user";
+import { ChallengeManager } from "../challenge";
 
 const challengeManager = new ChallengeManager(services.users.get);
-
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   // Assume userId is a UUID

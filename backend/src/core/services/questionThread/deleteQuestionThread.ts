@@ -1,19 +1,17 @@
-import { ServiceParams } from "../../../config/service";
 import { QuestionThreadBaseService } from "./questionThreadBaseService";
+import { ServiceParams } from "../../../config/service";
 
 export class DeleteQuestionThreadParams implements ServiceParams {
-  constructor(
-    private _id: string,
-  ){}
+    constructor(private _id: string) {}
 
-  public get id(): string {
-    return this._id;
-  }
+    public get id(): string {
+        return this._id;
+    }
 }
 
 export class DeleteQuestionThread extends QuestionThreadBaseService<DeleteQuestionThreadParams> {
-  async execute(input: DeleteQuestionThreadParams): Promise<object> {
-    await this.questionThreadRepository.deleteQuestionThread(input.id);
-    return {};
-  }
+    async execute(input: DeleteQuestionThreadParams): Promise<object> {
+        await this.questionThreadRepository.deleteQuestionThread(input.id);
+        return {};
+    }
 }

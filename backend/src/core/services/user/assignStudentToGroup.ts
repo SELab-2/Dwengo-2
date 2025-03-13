@@ -5,19 +5,19 @@ export class AssignStudentToGroupParams implements ServiceParams {
     constructor(
         private _studentId: string,
         private _groupId: string,
-    ){}
-    
-    public get studentId():string {
+    ) {}
+
+    public get studentId(): string {
         return this._studentId;
     }
 
-    public get groupId():string {
+    public get groupId(): string {
         return this._groupId;
     }
 }
 
 export class AssignStudentToGroup implements Service<AssignStudentToGroupParams> {
-    constructor(private studentRepository: IStudentRepository){}
+    constructor(private studentRepository: IStudentRepository) {}
     async execute(input: AssignStudentToGroupParams): Promise<object> {
         await this.studentRepository.assignStudentToGroup(input.studentId, input.groupId);
         return {};

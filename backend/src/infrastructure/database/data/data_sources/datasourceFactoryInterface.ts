@@ -5,12 +5,10 @@ import { IDatasource } from "./datasourceInterface";
  * These are factories that create datasources.
  */
 export interface IDatasourceFactory {
-    
     /**
      * Create a new datasource.
-     * 
+     *
      * @returns The new datasource.
      */
     createDatasource(): IDatasource;
-
 }

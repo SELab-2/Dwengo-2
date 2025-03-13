@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "start": "node dist/src/app.js",
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/app.ts",
-    "lint": "eslint --config .eslintrc.js --ext .ts ./src/",
+    "lint": "eslint src",
     "test": "jest",
     "test-coverage": "jest --coverage"
   },
@@ -52,22 +52,11 @@
     "jest-mock": "^26.6.2",
     "ts-jest": "^29.1.0",
     "@types/jest": "^29.5.0",
-    "supertest": "^6.3.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,jsx}": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ],
-    "*.{html,css,less,ejs}": [
-      "prettier --write",
-      "git add"
-    ]
+    "supertest": "^6.3.0",
+    "prettier": "^3.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-no-only-tests": "^3.0.0"
   }
 }

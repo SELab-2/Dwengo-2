@@ -1,45 +1,45 @@
 import { DataSource } from "typeorm";
-import { DatasourceTypeORMSingleton } from "./datasourceTypeORMSingleton";
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
 import { DatasourceTypeORMConnectionSettingsFactory } from "./datasourceTypeORMConnectionSettingsFactory";
-import { IDatasource } from "../datasourceInterface";
-import { IDatasourceTeacher } from "../datasourceTeacherInterface";
-import { DatasourceTeacherTypeORM } from "./datasourceTeacherTypeORM";
-import { IDatasourceClass } from "../datasourceClassInterface";
-import { DatasourceClassTypeORM } from "./datasourceClassTypeORM";
-import { DatasourceJoinRequestTypeORM } from "./datasourceJoinRequestTypeORM";
-import { IDatasourceJoinRequest } from "../datasourceJoinRequestInterface";
-import { IDatasourceGroup } from "../datasourceGroupInterface";
-import { DatasourceGroupTypeORM } from "./datasourceGroupTypeORM";
+import { DatasourceTypeORMSingleton } from "./datasourceTypeORMSingleton";
 import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
-import { DatasourceAssignmentTypeORM } from "./datasourceAssignmentTypeORM";
-import { IDatasourceSubmission } from "../datasourceSubmissionInterface";
-import { DatasourceSubmissionTypeORM } from "./datasourceSubmissionTypeORM";
-import { IDatasourceStudent } from "../datasourceStudentInterface";
-import { DatasourceStudentTypeORM } from "./datasourceStudentTypeORM";
+import { IDatasourceClass } from "../datasourceClassInterface";
+import { IDatasourceGroup } from "../datasourceGroupInterface";
+import { IDatasource } from "../datasourceInterface";
+import { IDatasourceJoinRequest } from "../datasourceJoinRequestInterface";
 import { IDatasourceMessage } from "../datasourceMessageInterface";
+import { IDatasourceStudent } from "../datasourceStudentInterface";
+import { IDatasourceSubmission } from "../datasourceSubmissionInterface";
+import { IDatasourceTeacher } from "../datasourceTeacherInterface";
+import { DatasourceAssignmentTypeORM } from "./datasourceAssignmentTypeORM";
+import { DatasourceClassTypeORM } from "./datasourceClassTypeORM";
+import { DatasourceGroupTypeORM } from "./datasourceGroupTypeORM";
+import { DatasourceJoinRequestTypeORM } from "./datasourceJoinRequestTypeORM";
+import { DatasourceStudentTypeORM } from "./datasourceStudentTypeORM";
+import { DatasourceSubmissionTypeORM } from "./datasourceSubmissionTypeORM";
+import { DatasourceTeacherTypeORM } from "./datasourceTeacherTypeORM";
 import { IDatasourceThread } from "../datasourceThreadInterface";
-import { DatasourceThreadTypeORM } from "./datasourceThreadTypeORM";
 import { DatasourceMessageTypeORM } from "./datasourceMessageTypeORM";
+import { DatasourceThreadTypeORM } from "./datasourceThreadTypeORM";
 
 export class DatasourceTypeORM implements IDatasource {
-
     // Connection for the TypeORM - postgres database
-    private static datasourceConnectionSettings: DatasourceTypeORMConnectionSettings = 
-        DatasourceTypeORMConnectionSettingsFactory
-        .createDatasourceTypeORMConnectionSettings(
+    private static datasourceConnectionSettings: DatasourceTypeORMConnectionSettings =
+        DatasourceTypeORMConnectionSettingsFactory.createDatasourceTypeORMConnectionSettings(
             "postgres",
             5432, // 5433 for development docker, 5432 for production docker (on server)
             "postgres",
             "postgres",
             "dwengo-database",
             true,
-            true
+            true,
         );
-    
+
     // Promise of the TypeORM DataSource object
     // This object is needed for the repositories to be able to ask queries.
-    private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(this.datasourceConnectionSettings);
+    private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(
+        this.datasourceConnectionSettings,
+    );
 
     public async getDatasourceStudent(): Promise<IDatasourceStudent> {
         return new DatasourceStudentTypeORM(await DatasourceTypeORM.datasourcePromise);
@@ -68,7 +68,7 @@ export class DatasourceTypeORM implements IDatasource {
     public async getDatasourceSubmission(): Promise<IDatasourceSubmission> {
         return new DatasourceSubmissionTypeORM(await DatasourceTypeORM.datasourcePromise);
     }
-  
+
     public async getDatasourceMessage(): Promise<IDatasourceMessage> {
         return new DatasourceMessageTypeORM(await DatasourceTypeORM.datasourcePromise);
     }
@@ -76,5 +76,4 @@ export class DatasourceTypeORM implements IDatasource {
     public async getDatasourceThread(): Promise<IDatasourceThread> {
         return new DatasourceThreadTypeORM(await DatasourceTypeORM.datasourcePromise);
     }
-    
 }

@@ -21,7 +21,7 @@ describe('CreateAssignment', () => {
         startDate = new Date();
         deadline = new Date();
         // Reset mocks voor elke test
-        inputAssignmentParams = new CreateAssignmentParams("1", "1", startDate, deadline, "Extra Instructions", "1");
+        inputAssignmentParams = new CreateAssignmentParams("1", "1", startDate, deadline, "Extra Instructions");
         inputAssignment = new Assignment("1", "1", startDate, deadline, "Extra Instructions");
         createdAssignment = new Assignment("1", "1", startDate, deadline, "Extra Instructions", "1");
     });

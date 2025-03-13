@@ -5,18 +5,21 @@ export class Message {
         private readonly _threadId: string,
         private _content: string,
         private readonly _id?: string,
-    ){}
+    ) {}
 
     // Getters
     public get senderId(): string {
         return this._senderId;
     }
+
     public get createdAt(): Date {
         return this._createdAt;
     }
+
     public get threadId(): string {
         return this._threadId;
     }
+
     public get content(): string {
         return this._content;
     }
@@ -30,13 +33,13 @@ export class Message {
         this._content = newContent;
     }
 
-    public toObject():object{
+    public toObject(): object {
         return {
             senderId: this._senderId,
             createdAt: this._createdAt,
             threadId: this._threadId,
             content: this._content,
             id: this._id,
-        }
+        };
     }
 }

@@ -1,17 +1,17 @@
-import { Express, RequestHandler } from 'express';
-import { requestFromExpress, responseToExpress } from '../helpersExpress';
-import { Controller } from '../controllers/controllerExpress';
-import { HttpMethod } from '../types';
+import { Express, RequestHandler } from "express";
+import { Controller } from "../controllers/controllerExpress";
+import { requestFromExpress, responseToExpress } from "../helpersExpress";
+import { HttpMethod } from "../types";
 
 /**
  * Configuration for a single route mapping HTTP methods to controller actions
  */
 interface RouteConfig {
-  app: Express;
-  method: HttpMethod;
-  urlPattern: string;
-  controller: Controller;
-  middleware?: RequestHandler[];
+    app: Express;
+    method: HttpMethod;
+    urlPattern: string;
+    controller: Controller;
+    middleware?: RequestHandler[];
 }
 
 /**
@@ -23,23 +23,26 @@ interface RouteConfig {
  * @param methodMap - Array of [HttpMethod, Express method name] pairs defining supported methods
  */
 export function configureRoute(
-  { app, method, urlPattern, controller, middleware = [] }: RouteConfig, methodMap: [HttpMethod, keyof Express][]
+    { app, method, urlPattern, controller, middleware = [] }: RouteConfig,
+    methodMap: [HttpMethod, keyof Express][],
 ): void {
-  const handler: RequestHandler = async (req, res, next) => {
-    try {
-      const request = requestFromExpress(req);
-      const response = await controller.handle(request);
-      responseToExpress(response, res);
-    } catch (error) { next(error); }
-  };
+    const handler: RequestHandler = async (req, res, next) => {
+        try {
+            const request = requestFromExpress(req);
+            const response = await controller.handle(request);
+            responseToExpress(response, res);
+        } catch (error) {
+            next(error);
+        }
+    };
 
-  for (const [httpMethod, appMethod] of methodMap) {
-    if (httpMethod === method) {
-      app[appMethod](urlPattern, ...middleware, handler);
-      return;
+    for (const [httpMethod, appMethod] of methodMap) {
+        if (httpMethod === method) {
+            app[appMethod](urlPattern, ...middleware, handler);
+            return;
+        }
     }
-  }
-  throw new Error(`Unsupported HTTP method: ${method}`);
+    throw new Error(`Unsupported HTTP method: ${method}`);
 }
 
 /**
@@ -49,13 +52,13 @@ export function configureRoute(
  * @param methodMap - Array of [HttpMethod, Express method name] pairs defining supported methods
  */
 export function configureRoutes(configs: RouteConfig[], methodMap: [HttpMethod, keyof Express][]): void {
-  configs.forEach(config => configureRoute(config, methodMap));
+    configs.forEach(config => configureRoute(config, methodMap));
 }
 
 // Default method map for common use
 export const DEFAULT_METHOD_MAP: [HttpMethod, keyof Express][] = [
-  [HttpMethod.GET, 'get'],
-  [HttpMethod.POST, 'post'],
-  [HttpMethod.PATCH, 'patch'],
-  [HttpMethod.DELETE, 'delete'],
+    [HttpMethod.GET, "get"],
+    [HttpMethod.POST, "post"],
+    [HttpMethod.PATCH, "patch"],
+    [HttpMethod.DELETE, "delete"],
 ];

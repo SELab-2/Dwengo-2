@@ -1,10 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
 export class AssignmentAnswerTypeORM {
     @PrimaryGeneratedColumn("uuid")
-    id!: number
+    id!: number;
 
     @Column({ type: "bytea" }) // Equivalent to a blob
-    answer!: Buffer
+    answer!: Buffer;
 }
