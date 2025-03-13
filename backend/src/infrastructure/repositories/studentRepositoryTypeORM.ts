@@ -78,9 +78,13 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
         await (await this.datasourceStudent).removeStudentFromGroup(studentId, groupId);
     }
 
-    public async checkByEmail(email: string): Promise<boolean> {
-        const student: Student | null = await this.getStudentByEmail(email);
-        return student !== null;
+    async checkByEmail(email: string): Promise<boolean> {
+        try {
+            const student: Student = await this.getStudentByEmail(email);
+            return student !== null;
+        } catch(EntityNotFoundError) {
+            return false;
+        }
     }
 
     public async assignStudentToGroup(studentId: string, groupId: string): Promise<void> {
