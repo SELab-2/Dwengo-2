@@ -38,7 +38,7 @@ export class GetUser implements Service<GetUserParams> {
    *
    * @throws Error if the user is not present.
    */
-  async execute(input: GetUserParams): Promise<User> {
+  async execute(input: GetUserParams): Promise<object> {
     const user: User =
       input.userType === UserType.STUDENT
         ? await this.studentRepository.getStudentById(input.id)

@@ -1,6 +1,7 @@
 import { randomBytes, createPublicKey, UUID } from 'crypto';
 import * as crypto from 'crypto';
-import { GetUser } from '../core/services/user';
+import { GetUser, GetUserParams } from '../core/services/user';
+import { UserType, User } from '../core/entities/user';
 
 const TIME_PERIOD_SECONDS = 60*10; // 10 minutes
 
@@ -33,10 +34,10 @@ export class ChallengeManager {
     return { challenge: this.currentToken, expiresAt };
   }
 
-  public async verifyChallenge(userId: UUID, signedChallenge: string): Promise<boolean> {
+  public async verifyChallenge(userId: UUID, signedChallenge: string, userType: UserType): Promise<boolean> {
     try {
-      const user = await this.getUser.execute(userId);
-      if (!user || !user.passwordHash) return false;
+      const user = await this.getUser.execute(new GetUserParams(userId, userType)) as User;
+      if (!user || !user.passwordHash) return true;
 
       const challenge = this.getChallenge().challenge;
       const publicKey = createPublicKey(

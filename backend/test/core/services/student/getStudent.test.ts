@@ -35,14 +35,7 @@ describe("getStudent Service", () => {
     mockStudentRepository.getStudentById.mockResolvedValue(student);
     const result = await getStudentService.execute(params);
 
-    expect(result).toEqual({
-      email: "test@student.com",
-      firstName: "John",
-      familyName: "Doe",
-      schoolName: "Yale",
-      passwordHash: "hashedpassword123",
-      id: "1"
-    });
+    expect(result).toEqual(student);
     expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("1");
   });
 

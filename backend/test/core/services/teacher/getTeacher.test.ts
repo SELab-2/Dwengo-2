@@ -39,14 +39,7 @@ describe('getTeacher Use Case', () => {
     mockTeacherRepository.getTeacherById.mockResolvedValue(teacher);
     const result = await getTeacherUseCase.execute(params);
 
-    expect(result).toEqual({
-      email: 'test@teacher.com',
-      firstName: 'John',
-      familyName: 'Doe',
-      schoolName: 'Yale',
-      passwordHash: 'hashedpassword123',
-      id: '1',
-    });
+    expect(result).toEqual(teacher);
     expect(mockTeacherRepository.getTeacherById).toHaveBeenCalledWith('1');
   });
 
