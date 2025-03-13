@@ -1,5 +1,5 @@
 import { DatabaseError, EntityNotFoundError } from '../../../../src/config/error';
-import { GetQuestionThread, GetQuestionThreadParams } from '../../../../src/core/services/question_thread/getQuestionThread';
+import { GetQuestionThread, GetQuestionThreadParams } from '../../../../src/core/services/questionThread/getQuestionThread';
 import { QuestionThread, VisibilityType } from '../../../../src/core/entities/questionThread';
 
 // Mock repository

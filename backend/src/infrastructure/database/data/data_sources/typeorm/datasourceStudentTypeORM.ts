@@ -8,7 +8,7 @@ import { GroupTypeORM } from "../../data_models/groupTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
-import { AssignUserToGroup } from "../../../../../core/services/user";
+import { AssignStudentToGroup } from "../../../../../core/services/user";
 
 export class DatasourceStudentTypeORM extends IDatasourceStudent {
 

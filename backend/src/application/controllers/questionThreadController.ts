@@ -1,6 +1,6 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
-import * as QuestionThreadServices from '../../core/services/question_thread';
+import * as QuestionThreadServices from '../../core/services/questionThread';
 import { createParamsExtractor } from '../extractors';
 import { ServiceParams } from '../../config/service';
 

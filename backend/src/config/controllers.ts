@@ -1,0 +1,39 @@
+import { UsersController } from "../application/controllers";
+import { ClassController } from "../application/controllers";
+import { GroupController } from "../application/controllers";
+import { AssignmentController } from "../application/controllers";
+import { JoinRequestController } from "../application/controllers";
+import { QuestionThreadController } from "../application/controllers";
+import { MessageController } from "../application/controllers";
+import { AuthenticationController } from "../application/controllers";
+import { services } from "./services";
+
+/**
+ * The controllers needed for the Dwengo-2 backend application.
+ */
+export const controllers = {
+  users: new UsersController(services.users.get, services.users.update, services.users.remove,
+    services.users.getClassUsers, services.users.removeUserFromClass, services.users.getGroupUsers,
+    services.users.assignStudentToGroup, services.users.removeUserFromGroup, services.users.getAssignmentUsers,
+    services.users.getAll, services.users.create
+  ),
+  class: new ClassController(services.class.get, services.class.getUserClasses, services.class.update,
+    services.class.remove, services.class.create
+  ),
+  group: new GroupController(services.group.get, services.group.getUserGroups, services.group.getAssignmentGroups,
+    services.group.update, services.group.remove, services.group.create
+  ),
+  assignment: new AssignmentController(services.assignment.get, services.assignment.getUserAssignments,
+    services.assignment.update, services.assignment.remove, services.assignment.create
+  ),
+  joinRequest: new JoinRequestController(services.joinRequest.get, services.joinRequest.getJoinRequests,
+    services.joinRequest.remove, services.joinRequest.create
+  ),
+  questionThread: new QuestionThreadController(services.questionThread.get, services.questionThread.getAssignmentQuestions,
+    services.questionThread.update, services.questionThread.remove, services.questionThread.create
+  ),
+  message: new MessageController(services.message.get, services.message.getThreadMessages,
+    services.message.update, services.message.remove, services.message.create
+  ),
+  authentication: new AuthenticationController(services.authentication.register,services.authentication.login),
+};

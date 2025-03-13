@@ -1,5 +1,5 @@
 import { DatabaseError } from '../../../../src/config/error';
-import { GetAssignmentQuestionThreads, GetAssignmentQuestionThreadsParams } from '../../../../src/core/services/question_thread/getAssignmentQuestionThreads';
+import { GetAssignmentQuestionThreads, GetAssignmentQuestionThreadsParams } from '../../../../src/core/services/questionThread/getAssignmentQuestionThreads';
 import { QuestionThread, VisibilityType } from '../../../../src/core/entities/questionThread';
 
 // Mock repository

@@ -1,7 +1,7 @@
 import {
   DeleteJoinRequest,
   DeleteJoinRequestParams,
-} from '../../../../src/core/services/join_request/deleteJoinRequest';
+} from '../../../../src/core/services/joinRequest/deleteJoinRequest';
 import { IJoinRequestRepository } from '../../../../src/core/repositories/joinRequestRepositoryInterface';
 import { EntityNotFoundError } from '../../../../src/config/error';
 

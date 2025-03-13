@@ -1,6 +1,6 @@
 import { Controller } from './controllerExpress';
 import { Request, HttpMethod, RouteHandlers } from '../types';
-import * as JoinRequestServices from '../../core/services/join_request';
+import * as JoinRequestServices from '../../core/services/joinRequest';
 import { createParamsExtractor } from '../extractors';
 import { ServiceParams } from '../../config/service';
 

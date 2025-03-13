@@ -3,7 +3,7 @@ import { Class } from "../../../../src/core/entities/class";
 import { JoinRequest, JoinRequestType } from "../../../../src/core/entities/joinRequest";
 import { IClassRepository } from "../../../../src/core/repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../../../src/core/repositories/joinRequestRepositoryInterface";
-import { CreateJoinRequest, CreateJoinRequestParams } from "../../../../src/core/services/join_request";
+import { CreateJoinRequest, CreateJoinRequestParams } from "../../../../src/core/services/joinRequest";
 
 describe('CreateJoinRequest', () => {
     let joinRequestRepository: jest.Mocked<IJoinRequestRepository>;

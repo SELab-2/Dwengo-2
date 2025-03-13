@@ -1,4 +1,4 @@
-import { UpdateQuestionThread, UpdateQuestionThreadParams } from '../../../../src/core/services/question_thread/updateQuestionThread';
+import { UpdateQuestionThread, UpdateQuestionThreadParams } from '../../../../src/core/services/questionThread/updateQuestionThread';
 import { QuestionThread, VisibilityType } from '../../../../src/core/entities/questionThread';
 import { DatabaseError } from '../../../../src/config/error';
 

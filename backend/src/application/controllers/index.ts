@@ -1,3 +1,4 @@
+export * from './authenticationController';
 export * from './controllerExpress'
 export * from './assignmentController';
 export * from './classController';

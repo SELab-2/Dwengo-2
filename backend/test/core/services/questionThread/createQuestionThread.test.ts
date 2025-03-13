@@ -1,5 +1,5 @@
 import { DatabaseError } from '../../../../src/config/error';
-import { CreateQuestionThread, CreateQuestionThreadParams } from '../../../../src/core/services/question_thread/createQuestionThread';
+import { CreateQuestionThread, CreateQuestionThreadParams } from '../../../../src/core/services/questionThread/createQuestionThread';
 import { QuestionThread, VisibilityType } from '../../../../src/core/entities/questionThread';
 
 // Mock repository
