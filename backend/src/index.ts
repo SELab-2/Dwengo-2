@@ -20,6 +20,9 @@ import { AssignmentRepositoryTypeORM } from "./infrastructure/repositories/assig
 import { JoinRequestRepositoryTypeORM } from "./infrastructure/repositories/joinRequestRepositoryTypeORM";
 import { ThreadRepositoryTypeORM } from "./infrastructure/repositories/questionThreadRepositoryTypeORM";
 import { MessageRepositoryTypeORM } from "./infrastructure/repositories/messageRepositoryTypeORM";
+import { AuthenticationController } from "./application/controllers/authenticationController";
+import { ChallengeManager } from "./application/challenge";
+import { authenticationRoutes } from "./application/routes/authenticationRoutes";
 
 dotenv.config();
 
@@ -92,6 +95,10 @@ const services = {
     update: new MessageServices.UpdateMessage(repos.messages),
     remove: new MessageServices.DeleteMessage(repos.messages),
     create: new MessageServices.CreateMessage(repos.messages)
+  },
+  authentication: {
+    register: new UserServices.CreateUser(repos.student, repos.teacher),
+    login: new UserServices.GetUser(repos.student, repos.teacher),
   }
 };
 
@@ -119,13 +126,39 @@ const controllers = {
   ),
   message: new MessageController(services.message.get, services.message.getThreadMessages,
     services.message.update, services.message.remove, services.message.create
-  )
+  ),
+  authentication: new AuthenticationController(services.authentication.register,services.authentication.login),
 };
+
+const challengeManager = new ChallengeManager(services.users.get);
 
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
+
+// register middleware for authentication
+app.get('/challenge', (_: express.Request, res: express.Response) => {
+  res.send(challengeManager.getChallenge());
+});
+
+app.get('/login', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const userId = req.query.userId;
+  const signedChallenge = req.query.signedChallenge;
+
+  if (!userId || !signedChallenge) {
+    res.status(400).send('Missing userId or signedChallenge');
+    return;
+  }
+
+  if (await challengeManager.verifyChallenge(userId, signedChallenge)) {
+    res.send('Login successful');
+    next();
+  }
+  else {
+    res.status(401).send('Login failed');
+  }
+});
 
 // Register routes
 usersRoutes(app, controllers.users);
@@ -135,6 +168,7 @@ assignmentRoutes(app, controllers.assignment);
 joinRequestRoutes(app, controllers.joinRequest);
 questionThreadRoutes(app, controllers.questionThread);
 messageRoutes(app, controllers.message);
+authenticationRoutes(app, controllers.authentication);
 
 app.get('/', (_: express.Request, res: express.Response) => {
   res.send("Hello, World!\n");
