@@ -17,7 +17,7 @@ const extractors = {
     remove: createParamsExtractor(GroupServices.DeleteGroupParams, { _id: "id" }, {}, []),
     create: createParamsExtractor(
         GroupServices.CreateGroupParams,
-        { _memberIds: "members", _classId: "class" },
+        { _memberIds: "members", _assignmentId: "assignment" },
         {},
         [],
     ),

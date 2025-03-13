@@ -12,7 +12,6 @@ export class CreateAssignmentParams implements ServiceParams {
         private _startDate: Date,
         private _deadline: Date,
         private _extraInstructions: string,
-        private _teacherId: string,
     ) {}
 
     public get classId(): string {
@@ -34,10 +33,6 @@ export class CreateAssignmentParams implements ServiceParams {
     public get extraInstructions(): string {
         return this._extraInstructions;
     }
-
-    public get teacherId(): string {
-        return this._teacherId;
-    }
 }
 
 /**
@@ -53,6 +48,6 @@ export class CreateAssignment extends AssignmentService<CreateAssignmentParams> 
             input.extraInstructions,
         );
 
-        return { id: (await this.assignmentRepository.createAssignment(assignment, input.teacherId)).id };
+        return { id: (await this.assignmentRepository.createAssignment(assignment, input.classId)).id };
     }
 }

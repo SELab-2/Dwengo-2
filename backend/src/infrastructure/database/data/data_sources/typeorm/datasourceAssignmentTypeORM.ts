@@ -3,11 +3,10 @@ import { Assignment } from "../../../../../core/entities/assignment";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
 
 export class DatasourceAssignmentTypeORM extends IDatasourceAssignment {
-    public async createAssignment(newAssignment: Assignment, teacherId: string): Promise<Assignment> {
+    public async createAssignment(newAssignment: Assignment, classId: string): Promise<Assignment> {
         // Check if the class exists
         const classModel: ClassTypeORM | null = await this.datasource
             .getRepository(ClassTypeORM)
@@ -15,15 +14,6 @@ export class DatasourceAssignmentTypeORM extends IDatasourceAssignment {
 
         if (!classModel) {
             throw new EntityNotFoundError(`Class with id ${newAssignment.classId} not found`);
-        }
-
-        // Class exists, check if teacher exists
-        const teacherModel: TeacherTypeORM | null = await this.datasource
-            .getRepository(TeacherTypeORM)
-            .findOne({ where: { id: teacherId } });
-
-        if (!teacherModel) {
-            throw new EntityNotFoundError(`Teacher with id ${teacherId} not found`);
         }
 
         // Class exists and teacher exist: insert assignment into the database

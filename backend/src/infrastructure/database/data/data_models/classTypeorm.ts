@@ -7,10 +7,6 @@ export class ClassTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @OneToOne(() => TeacherOfClassTypeORM)
-    @JoinColumn({ name: "teacherId" })
-    teacher!: TeacherOfClassTypeORM;
-
     @Column({ type: "varchar", length: 200 })
     name!: string;
 
@@ -28,7 +24,7 @@ export class ClassTypeORM {
         return classTypeORM;
     }
 
-    public toClassEntity(): Class {
-        return new Class(this.name, this.description, this.targetAudience, this.teacher.id, this.id);
+    public toClassEntity(teacherId: string): Class {
+        return new Class(this.name, this.description, this.targetAudience, teacherId, this.id);
     }
 }

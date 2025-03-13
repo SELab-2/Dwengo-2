@@ -192,6 +192,8 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
             .where("studentOfClass.class.id = :classId", { classId: classId })
             .getMany();
 
+        console.log(classJoinResult);
+
         return classJoinResult.map(classJoinResult => {
             return classJoinResult.student.toStudentEntity(classJoinResult.student.student);
         });
@@ -205,8 +207,10 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
                 relations: ["class"],
             });
 
+        console.log(assignmentModel);
+
         if (!assignmentModel) throw new EntityNotFoundError("Assignment not Found");
-        else return await this.getClassStudents(assignmentModel.toAssignmentEntity().classId);
+        else return await this.getClassStudents(assignmentModel.class.id);
     }
 
     public async getGroupStudents(groupId: string): Promise<Student[]> {
