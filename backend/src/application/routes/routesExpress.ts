@@ -10,9 +10,18 @@ interface RouteConfig {
     app: Express;
     method: HttpMethod;
     urlPattern: string;
-    controller: Controller;
+    controller?: Controller;
     middleware?: RequestHandler[];
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const asyncMiddleware = async (fn: any) => async (req: any, res: any, next: any) => {
+    try {
+        await fn(req, res, next);
+    } catch (error) {
+        next(error);
+    }
+};
 
 /**
  * Configures a single route using the provided configuration and method map.
@@ -23,22 +32,30 @@ interface RouteConfig {
  * @param methodMap - Array of [HttpMethod, Express method name] pairs defining supported methods
  */
 export function configureRoute(
-    { app, method, urlPattern, controller, middleware = [] }: RouteConfig,
+    { app, method, urlPattern, controller = undefined, middleware = [] }: RouteConfig,
     methodMap: [HttpMethod, keyof Express][],
 ): void {
-    const handler: RequestHandler = async (req, res, next) => {
-        try {
-            const request = requestFromExpress(req);
-            const response = await controller.handle(request);
-            responseToExpress(response, res);
-        } catch (error) {
-            next(error);
-        }
-    };
+    if (!controller && middleware.length === 0) {
+        console.warn(`Warning: Route ${urlPattern} for method ${method} has no controller or middleware.`);
+        return;
+    }
+    let handler: RequestHandler = (req, res, next) => next();
+    if (controller) {
+        handler = async (req, res, next) => {
+            try {
+                const request = requestFromExpress(req);
+                const response = await controller.handle(request);
+                responseToExpress(response, res);
+            } catch (error) {
+                next(error);
+            }
+        };
+    }
 
     for (const [httpMethod, appMethod] of methodMap) {
         if (httpMethod === method) {
-            app[appMethod](urlPattern, ...middleware, handler);
+            const wrappedMiddleware = middleware.map(mw => asyncMiddleware(mw));
+            app[appMethod](urlPattern, ...wrappedMiddleware, handler);
             return;
         }
     }

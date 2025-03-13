@@ -5,7 +5,7 @@ import { createParamsExtractor } from "../extractors";
 import { Request, HttpMethod, RouteHandlers } from "../types";
 
 const extractors = {
-    getUser: createParamsExtractor(UserServices.GetUserParams, { _id: "id", _userType: "userType" }, {}, []),
+    getUser: createParamsExtractor(UserServices.GetUserParams, { _id: "id", _userType: "role" }, {}, []),
     updateUser: createParamsExtractor(
         UserServices.UpdateUserParams,
         {
