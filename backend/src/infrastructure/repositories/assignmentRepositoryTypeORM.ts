@@ -21,7 +21,7 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
     }
 
     public async getAssignmentById(id: string): Promise<Assignment> {
-        const assignment: Assignment|null = await (await this.datasourceAssignment).getAssignmentById(id);
+        const assignment: Assignment| null = await (await this.datasourceAssignment).getAssignmentById(id);
 
         if(assignment) {
             return assignment
@@ -47,7 +47,7 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
     }
 
     public async updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment> {
-        const updatedAssignment: Assignment|null = await (await this.datasourceAssignment).updateAssignmentById(id, updatedFields);
+        const updatedAssignment: Assignment| null = await (await this.datasourceAssignment).updateAssignmentById(id, updatedFields);
 
         if(updatedAssignment) {
             return updatedAssignment;

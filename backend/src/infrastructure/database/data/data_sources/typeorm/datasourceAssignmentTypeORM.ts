@@ -102,9 +102,33 @@ export class DatasourceAssignmentTypeORM extends IDatasourceAssignment {
     }
 
     public async updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment | null> {
-        const updateResult = await this.datasource
+        const assignmentModel: AssignmentTypeORM | null = 
+            await this.datasource
+                .getRepository(AssignmentTypeORM)
+                .findOne({ where: { id: id } });
+        let updateResult;
+        if(!assignmentModel){
+            throw new EntityNotFoundError("Assignment not found");
+        }
+        if(updatedFields.classId) {
+            const classModel: ClassTypeORM | null = await this.datasource
+                .getRepository(ClassTypeORM)
+                .findOne({ where: { id: id } });
+            
+            if(!classModel) {
+                throw new EntityNotFoundError("Class not found");
+            }
+
+            updateResult = await this.datasource
+                .getRepository(AssignmentTypeORM)
+                .update(id, assignmentModel.fromPartialAssignmentEntity(updatedFields, classModel));
+
+            
+        } else {
+            updateResult = await this.datasource
             .getRepository(AssignmentTypeORM)
-            .update(id, updatedFields); // TODO: see if this actually works since Assignment != AssignmentTypeORM
+            .update(id, assignmentModel.fromPartialAssignmentEntity(updatedFields, undefined));
+        }
         
         /* Some notes: I did not found any documentation on the return value of update.
          * So i asked ChatGPT: https://chatgpt.com/share/67d1c206-18f4-8004-a760-b40d3d2ef2d0
