@@ -15,4 +15,4 @@ export function setupMiddleware(app: Express): void {
   app.use(cors());
   app.use(express.json());
   app.use(authenticationMiddleware);
-};
+}
