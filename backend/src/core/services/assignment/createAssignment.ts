@@ -30,7 +30,7 @@ export class CreateAssignmentParams implements ServiceParams {
         return this._deadline;
     }
 
-    public get extraInstructions(): string{
+    public get extraInstructions(): string {
         return this._extraInstructions;
     }
 }

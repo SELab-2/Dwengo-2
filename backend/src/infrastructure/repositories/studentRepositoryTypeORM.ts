@@ -82,7 +82,7 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
         try {
             const student: Student = await this.getStudentByEmail(email);
             return student !== null;
-        } catch(EntityNotFoundError) {
+        } catch (EntityNotFoundError) {
             return false;
         }
     }
