@@ -124,5 +124,36 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         await studentOfGroupRepository.delete({ group: groupModel });
     }
 
+    public async getByUserId(userId: string): Promise<Group[]> {
+        const groupsJoinResult = await this.datasource
+            .getRepository(StudentOfGroupTypeORM)
+            .createQueryBuilder("studentOfGroup")
+            .where("studentOfGroup.student.id = :id", { id: userId })
+            .leftJoinAndSelect("studentOfGroup.group", "group")
+            .getMany();
+        
+        const groups = await Promise.all(groupsJoinResult.map(async (groupJoinResult) => {
+            const group: GroupTypeORM = groupJoinResult.group;
+            const datasourceGroup = new DatasourceGroupTypeORM(this.datasource);
+            return await datasourceGroup.getById(group.id);
+        }));
+
+        return groups.filter((group): group is Group => group !== null);
+    }
+
+    public async getByAssignmentId(assignmentId: string): Promise<Group[]> {
+        const groupsJoinResult = await this.datasource
+            .getRepository(GroupTypeORM)
+            .createQueryBuilder("group")
+            .where("group.assignment.id = :id", { id: assignmentId })
+            .getMany();
+        
+        const groups = await Promise.all(groupsJoinResult.map(async (group) => {
+            const datasourceGroup = new DatasourceGroupTypeORM(this.datasource);
+            return await datasourceGroup.getById(group.id);
+        }));
+
+        return groups.filter((group): group is Group => group !== null);
+    }
 
 }

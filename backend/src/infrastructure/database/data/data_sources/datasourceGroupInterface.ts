@@ -15,4 +15,8 @@ export abstract class IDatasourceGroup {
 
     public abstract delete(id: string): Promise<void>;
 
+    public abstract getByUserId(userId: string): Promise<Group[]>;
+
+    public abstract getByAssignmentId(assignmentId: string): Promise<Group[]>;
+
 }
