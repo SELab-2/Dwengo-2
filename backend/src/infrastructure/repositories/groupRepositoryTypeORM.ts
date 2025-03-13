@@ -32,8 +32,17 @@ export class GroupRepositoryTypeORM extends IGroupRepository {
         return await (await this.datasourceGroup).update(group);
     }
 
-    public async delete(group: Group): Promise<void> {
-        return await (await this.datasourceGroup).delete(group);
+    public async delete(groupId: string): Promise<void> {
+        return await (await this.datasourceGroup).delete(groupId);
+    }
+
+    public async getByUserId(userId: string): Promise<Group[]> {
+        // TODO: i assume that i get a student id
+        return await (await this.datasourceGroup).getByUserId(userId);
+    }
+
+    public async getByAssignmentId(assignmentId: string): Promise<Group[]> {
+        return await (await this.datasourceGroup).getByAssignmentId(assignmentId);
     }
 
 }
