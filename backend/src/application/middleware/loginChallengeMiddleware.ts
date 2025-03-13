@@ -7,7 +7,7 @@ import { UUID } from "crypto";
 const challengeManager = new ChallengeManager(services.users.get);
 
 export const challengeMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    const { signedChallenge, userType: userTypeString } = req.query;
+    const { signedChallenge, role: userTypeString } = req.body;
 
     // assume every userId is a UUID
     const userId: UUID = req.query.userId as UUID;
@@ -22,7 +22,6 @@ export const challengeMiddleware = async (req: Request, res: Response, next: Nex
     }
 
     const userType = userTypeString === "teacher" ? UserType.TEACHER : UserType.STUDENT;
-
     const isValid = await challengeManager.verifyChallenge(userId, signedChallenge, userType);
 
     if (!isValid) {
@@ -31,7 +30,7 @@ export const challengeMiddleware = async (req: Request, res: Response, next: Nex
     }
 
     // Hijack getUser
-    req.body.userId = userId;
+    req.body.id = userId;
 
     next();
 };
