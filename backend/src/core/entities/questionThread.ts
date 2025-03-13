@@ -48,15 +48,15 @@ export class QuestionThread {
     public set isClosed(closed: boolean) {
         this._isClosed = closed;
     }
-    
+
     public set visibility(newVisibility: VisibilityType) {
         this._visibility = newVisibility;
     }
-    
+
     public set messageIds(newMessages: string[]) {
         this._messageIds = newMessages;
     }
-    
+
     public set id(newId: string) {
         this._id = newId;
     }
