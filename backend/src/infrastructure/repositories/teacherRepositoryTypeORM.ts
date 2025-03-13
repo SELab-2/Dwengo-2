@@ -80,4 +80,8 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
         return await (await this.datasourceTeacher).deleteTeacherFromClass(teacherId, classId);
     }
 
+    async getClassTeachers(classId: string): Promise<Teacher[]> {
+        return await (await this.datasourceTeacher).getClassTeachers(classId);
+    }
+
 }
