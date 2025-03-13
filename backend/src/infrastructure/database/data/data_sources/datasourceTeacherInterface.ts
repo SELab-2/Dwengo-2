@@ -80,4 +80,13 @@ export abstract class IDatasourceTeacher {
      */
     public abstract deleteTeacherFromClass(teacherId: string, classId: string): Promise<void>;
 
+    /**
+     * Get all teachers for a class.
+     * 
+     * @param classId The class id
+     * @throws EntityNotFoundError when the class doesn't exist.
+     * @returns The teachers of the class
+     */
+    public abstract getClassTeachers(classId: string): Promise<Teacher[]>;
+
 }

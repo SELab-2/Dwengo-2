@@ -3,6 +3,7 @@ import { Teacher } from "../../../../../core/entities/teacher";
 import { UserTypeORM } from "../../data_models/userTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
+import { EntityNotFoundError } from "../../../../../config/error";
 
 export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
 
@@ -124,6 +125,34 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
             .from(TeacherOfClassTypeORM)
             .where("teacher_id = :teacher AND class_id = :class", { teacher: teacherId, class: classId })
             .execute();
+    }
+
+    public async getClassTeachers(classId: string): Promise<Teacher[]> {
+        const teacherOfClassModels: TeacherOfClassTypeORM[] = await this.datasource
+            .getRepository(TeacherOfClassTypeORM)
+            .find({ 
+                where: { class: { id: classId } },
+                relations: ["teacher"]
+            });
+
+        if (teacherOfClassModels.length === 0) {
+            throw new EntityNotFoundError(`No teachers found for class with id: ${classId}`);
+        }
+
+        const teachers = await Promise.all(teacherOfClassModels.map( // We have a list of teacherOfClass models
+            async (teacherOfClassModel: TeacherOfClassTypeORM) => {
+                const teacherUserModel: UserTypeORM | null = await this.datasource // We need to find their corresponding teachers
+                    .getRepository(UserTypeORM)
+                    .findOne({ where: { id: teacherOfClassModel.teacher.id } }); // So we use their id
+
+                if (teacherUserModel !== null) {
+                    return teacherOfClassModel.teacher.toTeacherEntity(teacherUserModel); // End result is a list of teachers
+                }
+                return undefined;
+            }
+        ));
+
+        return teachers.filter((teacher): teacher is Teacher => teacher !== undefined);
     }
 
 }
