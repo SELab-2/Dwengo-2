@@ -1,9 +1,9 @@
 import { Express, RequestHandler } from "express";
 import { configureRoutes, DEFAULT_METHOD_MAP } from "./routesExpress";
 import { AuthenticationController } from "../controllers/authenticationController";
+import * as challengeMw from "../middleware/challengeMiddleware";
+import * as loginMw from "../middleware/loginMiddleware";
 import { HttpMethod } from "../types";
-import * as loginMw from "../middleware/loginMiddleware"
-import * as challengeMw from "../middleware/challengeMiddleware"
 
 /**
  * RESTful routing configuration for authentication-related endpoints.
@@ -15,14 +15,28 @@ import * as challengeMw from "../middleware/challengeMiddleware"
  * - POST /register - Register new user
  * - GET /challenge - Get challenge for user
  */
-export function authenticationRoutes(app: Express, controller: AuthenticationController,
-    middleware: RequestHandler[] = []
+export function authenticationRoutes(
+    app: Express,
+    controller: AuthenticationController,
+    middleware: RequestHandler[] = [],
 ) {
     configureRoutes(
         [
-            { app, method: HttpMethod.POST, urlPattern: "/login", controller, middleware: [loginMw.challengeMiddleware, ...middleware] },
+            {
+                app,
+                method: HttpMethod.POST,
+                urlPattern: "/login",
+                controller,
+                middleware: [loginMw.challengeMiddleware, ...middleware],
+            },
             { app, method: HttpMethod.POST, urlPattern: "/register", controller, middleware },
-            { app, method: HttpMethod.GET, urlPattern: "/challenge", controller: undefined, middleware: [challengeMw.challengeMiddleware, ...middleware] },
+            {
+                app,
+                method: HttpMethod.GET,
+                urlPattern: "/challenge",
+                controller: undefined,
+                middleware: [challengeMw.challengeMiddleware, ...middleware],
+            },
         ],
         DEFAULT_METHOD_MAP,
     );

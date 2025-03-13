@@ -14,6 +14,7 @@ interface RouteConfig {
     middleware?: RequestHandler[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const asyncMiddleware = async (fn: any) => async (req: any, res: any, next: any) => {
     try {
         await fn(req, res, next);
@@ -21,7 +22,6 @@ const asyncMiddleware = async (fn: any) => async (req: any, res: any, next: any)
         next(error);
     }
 };
-
 
 /**
  * Configures a single route using the provided configuration and method map.
@@ -51,8 +51,6 @@ export function configureRoute(
             }
         };
     }
-
-
 
     for (const [httpMethod, appMethod] of methodMap) {
         if (httpMethod === method) {

@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import { UserType } from "../../core/entities/user";
 import { UUID } from "crypto";
+import { Request, Response, NextFunction } from "express";
 import { challengeManager } from "../../config/setupServer";
+import { UserType } from "../../core/entities/user";
 
 export const challengeMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const { signedChallenge, role: userTypeString } = req.body;
