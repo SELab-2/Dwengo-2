@@ -13,7 +13,7 @@ const extractors = {
             _familyName: "familyName",
             _passwordHash: "passwordHash",
             _schoolName: "schoolName",
-            _userType: "userType",
+            _userType: "role",
         },
         {},
         [],
@@ -46,6 +46,6 @@ export class AuthenticationController extends Controller {
             ],
         };
 
-        super({ register, login }, handlers);
+        super({ create: register, get: login }, handlers);
     }
 }

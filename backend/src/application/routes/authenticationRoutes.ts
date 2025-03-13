@@ -1,6 +1,8 @@
-import { Express } from "express";
+import { Express, RequestHandler } from "express";
 import { configureRoutes, DEFAULT_METHOD_MAP } from "./routesExpress";
 import { AuthenticationController } from "../controllers/authenticationController";
+import * as challengeMw from "../middleware/challengeMiddleware";
+import * as loginMw from "../middleware/loginMiddleware";
 import { HttpMethod } from "../types";
 
 /**
@@ -13,12 +15,28 @@ import { HttpMethod } from "../types";
  * - POST /register - Register new user
  * - GET /challenge - Get challenge for user
  */
-export function authenticationRoutes(app: Express, controller: AuthenticationController) {
+export function authenticationRoutes(
+    app: Express,
+    controller: AuthenticationController,
+    middleware: RequestHandler[] = [],
+) {
     configureRoutes(
         [
-            { app, method: HttpMethod.POST, urlPattern: "/login", controller },
-            { app, method: HttpMethod.POST, urlPattern: "/register", controller },
-            { app, method: HttpMethod.GET, urlPattern: "/challenge", controller },
+            {
+                app,
+                method: HttpMethod.POST,
+                urlPattern: "/login",
+                controller,
+                middleware: [...middleware],
+            },
+            { app, method: HttpMethod.POST, urlPattern: "/register", controller, middleware },
+            {
+                app,
+                method: HttpMethod.GET,
+                urlPattern: "/challenge",
+                controller: undefined,
+                middleware: [...middleware],
+            },
         ],
         DEFAULT_METHOD_MAP,
     );
