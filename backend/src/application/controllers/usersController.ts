@@ -22,7 +22,7 @@ const extractors = {
   ),
   getAssignmentUsers: createParamsExtractor(UserServices.GetAssignmentUsersParams, {'_assignmentId': 'idParent'}, {}, []),
   // assignUserToAssignment: createParamsExtractor(UserServices.AssignUserToAssignment),
-  // getAllUsers: createParamsExtractor(UserServices.GetAllUsersParam),
+  getAllUsers: createParamsExtractor(UserServices.GetAllUsersParams, {}, {}, []),
   createUser: createParamsExtractor(UserServices.CreateUserParams,
     {'_email': 'email', '_firstName': 'firstName', '_familyName': 'familyName',
       '_passwordHash': 'passwordHash','_schoolName': 'schoolName', '_userType': 'role'}, {}, []
@@ -58,15 +58,15 @@ export class UsersController extends Controller {
     removeUserFromGroup: UserServices.RemoveUserFromGroup,
     getAssignmentUsers: UserServices.GetAssignmentUsers,
     // assignUserToAssignment: UserServices.AssignUserToAssignment,
-    // getAll: UserServices.GetAllUsers,
+    getAll: UserServices.GetAllUsers,
     create: UserServices.CreateUser,
   ) {
     const handlers: RouteHandlers = {
       [HttpMethod.GET]: [
         { hasId: true, hasParentId: false, extractor: extractors.getUser,
           handler: (req: Request, data: ServiceParams) => this.getOne(req, data) },
-        // { hasId: false, hasParentId: false, extractor: extractors.getAllUsers,
-        //   handler: (req: Request, data: ServiceParams) => this.getAll(req, data) },
+        { hasId: false, hasParentId: false, extractor: extractors.getAllUsers,
+          handler: (req: Request, data: ServiceParams) => this.getAll(req, data) },
         { parent: 'classes', hasId: false, hasParentId: true, extractor: extractors.getClassUsers,
           handler: (req: Request, data: UserServices.GetClassUsersParams) => this.getChildren(req, data, getClassUsers) },
         { parent: 'groups', hasId: false, hasParentId: true, extractor: extractors.getGroupUsers,
@@ -100,7 +100,7 @@ export class UsersController extends Controller {
       getClassUsers, removeUserFromClass,
       getGroupUsers, assignStudentToGroup, removeUserFromGroup,
       getAssignmentUsers, // assignUserToAssignment,
-      /*getAll,*/ create}, handlers
+      getAll, create}, handlers
     );
   }
 }
