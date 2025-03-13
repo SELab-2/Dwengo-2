@@ -23,6 +23,18 @@ export class AssignmentTypeORM {
     @Column({ type: "text" })
     extra_instructions!: string
 
+    public fromPartialAssignmentEntity(assignment: Partial<Assignment>, _class: ClassTypeORM | undefined): Partial<AssignmentTypeORM> {
+        const updatedFields: Partial<AssignmentTypeORM> = {};
+
+        if(assignment.classId) updatedFields.class = _class;
+        if(assignment.learningPathId) updatedFields.learning_path_id = assignment.learningPathId;
+        if(assignment.startDate) updatedFields.start = assignment.startDate;
+        if(assignment.deadline) updatedFields.deadline = assignment.deadline;
+        if(assignment.extraInstructions) updatedFields.extra_instructions = assignment.extraInstructions;
+        
+        return updatedFields;
+    }
+
     public toAssignmentEntity(): Assignment {
         return new Assignment(
             this.class.id!,
