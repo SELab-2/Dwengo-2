@@ -84,4 +84,20 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
         return student !== null;
     }
 
+    async assignStudentToGroup(studentId: string, groupId: string): Promise<void> {
+        await (await this.datasourceStudent).assignStudentToGroup(studentId, groupId);
+    }
+
+    async getClassStudents(classId: string): Promise<Student[]> {
+        return await (await this.datasourceStudent).getClassStudents(classId);
+    }
+
+    async getAssignmentStudents(assignmentId: string): Promise<Student[]> {
+        return await (await this.datasourceStudent).getAssignmentStudents(assignmentId);
+    }
+
+    async getGroupStudents(groupId: string): Promise<Student[]> {
+        return await (await this.datasourceStudent).getGroupStudents(groupId);
+    }
+
 }
