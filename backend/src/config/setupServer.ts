@@ -1,5 +1,9 @@
 import dotenv from "dotenv";
 import { Express } from "express";
+import { ChallengeManager } from "../application/challenge";
+import { services } from "./services";
+
+export const challengeManager = new ChallengeManager(services.users.get);
 
 export const setupServer = (app: Express) => {
     dotenv.config();
