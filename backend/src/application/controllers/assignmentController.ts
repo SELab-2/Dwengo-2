@@ -23,7 +23,6 @@ const extractors = {
             _startDate: "startDate",
             _deadline: "deadline",
             _extraInstructions: "extraInstructions",
-            _teacherId: "teacher",
         },
         {},
         [],
