@@ -2,8 +2,7 @@ import { Controller } from "./controllerExpress";
 import { ServiceParams } from "../../config/service";
 import * as AssignmentServices from "../../core/services/assignment";
 import { createParamsExtractor } from "../extractors";
-import { RouteHandlers } from "../types";
-import { HttpMethod, Request } from "../types";
+import { RouteHandlers, HttpMethod, Request } from "../types";
 
 const extractors = {
     getAssignment: createParamsExtractor(AssignmentServices.GetAssignmentParams, { _assignmentId: "id" }, {}, []),

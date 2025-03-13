@@ -11,12 +11,15 @@ export class Message {
     public get senderId(): string {
         return this._senderId;
     }
+    
     public get createdAt(): Date {
         return this._createdAt;
     }
+    
     public get threadId(): string {
         return this._threadId;
     }
+    
     public get content(): string {
         return this._content;
     }

@@ -1,6 +1,9 @@
 import { Service, ServiceParams } from "../../../config/service";
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
 
+/**
+ * Wrapper class for the input parameters of the GetAssignment service.
+ */
 export class GetAssignmentParams implements ServiceParams {
     public constructor(private _id: string) {}
 
@@ -9,18 +12,13 @@ export class GetAssignmentParams implements ServiceParams {
     }
 }
 
+/**
+ * Service class to get an assignment.
+ */
 export class GetAssignment implements Service<GetAssignmentParams> {
     public constructor(private assignmentRepository: IAssignmentRepository) {}
 
     async execute(input: GetAssignmentParams): Promise<object> {
         return (await this.assignmentRepository.getAssignmentById(input.id)).toObject();
-    }
-}
-
-export class GetGroupAssignmentParams implements ServiceParams {
-    public constructor(private _groupId: string) {}
-
-    public get groupId(): string {
-        return this._groupId;
     }
 }

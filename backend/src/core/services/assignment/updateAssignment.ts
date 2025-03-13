@@ -2,6 +2,9 @@ import { AssignmentService } from "./assignmentService";
 import { ServiceParams } from "../../../config/service";
 import { Assignment } from "../../entities/assignment";
 
+/**
+ * Wrapper class for the parameters of the UpdateAssignment service.
+ */
 export class UpdateAssignmentParams implements ServiceParams {
     public constructor(
         private _id: string,
@@ -37,6 +40,9 @@ export class UpdateAssignmentParams implements ServiceParams {
     }
 }
 
+/**
+ * Service that updates an assignment.
+ */
 export class UpdateAssignment extends AssignmentService<UpdateAssignmentParams> {
     async execute(input: UpdateAssignmentParams): Promise<object> {
         const updatedFields: Partial<Assignment> = {};

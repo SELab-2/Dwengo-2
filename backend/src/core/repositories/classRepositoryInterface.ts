@@ -3,10 +3,6 @@ import { Class } from "../entities/class";
 import { JoinRequestType } from "../entities/joinRequest";
 
 /**
- * Interface for class repositories.
- * Allows CRUD operations on class entities.
- */
-/**
  * Interface for a class repository.
  * This interface defines the methods required for interacting with class data.
  */

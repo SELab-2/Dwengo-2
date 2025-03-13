@@ -26,18 +26,23 @@ export abstract class User {
     public get id(): string | undefined {
         return this._id;
     }
+    
     public get email(): string {
         return this._email;
     }
+    
     public get firstName(): string {
         return this._firstName;
     }
+    
     public get familyName(): string {
         return this._familyName;
     }
+    
     public get passwordHash(): string {
         return this._passwordHash;
     }
+    
     public get schoolName(): string {
         return this._schoolName;
     }

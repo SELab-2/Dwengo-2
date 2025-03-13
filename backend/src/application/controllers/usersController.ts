@@ -3,6 +3,7 @@ import { ServiceParams } from "../../config/service";
 import * as UserServices from "../../core/services/user";
 import { createParamsExtractor } from "../extractors";
 import { Request, HttpMethod, RouteHandlers } from "../types";
+
 const extractors = {
     getUser: createParamsExtractor(UserServices.GetUserParams, { _id: "id" }, {}, []),
     updateUser: createParamsExtractor(

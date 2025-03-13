@@ -2,6 +2,9 @@ import { AssignmentService } from "./assignmentService";
 import { ServiceParams } from "../../../config/service";
 import { Assignment } from "../../entities/assignment";
 
+/**
+ * Wrapper class for the possible paramaters to create an assignment
+ */
 export class CreateAssignmentParams implements ServiceParams {
     public constructor(
         private _classId: string,
@@ -37,6 +40,9 @@ export class CreateAssignmentParams implements ServiceParams {
     }
 }
 
+/**
+ * Service to create an assignment
+ */
 export class CreateAssignment extends AssignmentService<CreateAssignmentParams> {
     async execute(input: CreateAssignmentParams): Promise<object> {
         const assignment: Assignment = new Assignment(
@@ -46,6 +52,7 @@ export class CreateAssignment extends AssignmentService<CreateAssignmentParams> 
             input.deadline,
             input.extraInstructions,
         );
+
         return { id: (await this.assignmentRepository.createAssignment(assignment, input.teacherId)).id };
     }
 }

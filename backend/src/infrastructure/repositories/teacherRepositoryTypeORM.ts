@@ -14,11 +14,11 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
         this.datasourceTeacher = this.datasource.getDatasourceTeacher();
     }
 
-    async createTeacher(teacher: Teacher): Promise<Teacher> {
+    public async createTeacher(teacher: Teacher): Promise<Teacher> {
         return await (await this.datasourceTeacher).createTeacher(teacher);
     }
 
-    async getTeacherById(id: string): Promise<Teacher> {
+    public async getTeacherById(id: string): Promise<Teacher> {
         const teacher: Teacher | null = await (await this.datasourceTeacher).getTeacherById(id);
 
         if (teacher) {
@@ -28,12 +28,12 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
         }
     }
 
-    async checkTeacherByEmail(email: string): Promise<boolean> {
+    public async checkTeacherByEmail(email: string): Promise<boolean> {
         const teacher: Teacher = await this.getTeacherByEmail(email);
         return teacher !== null;
     }
 
-    async getTeacherByEmail(email: string): Promise<Teacher> {
+    public async getTeacherByEmail(email: string): Promise<Teacher> {
         const teacher: Teacher | null = await (await this.datasourceTeacher).getTeacherByEmail(email);
 
         if (teacher) {
@@ -43,7 +43,7 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
         }
     }
 
-    async getTeacherByFirstName(first_name: string): Promise<Teacher> {
+    public async getTeacherByFirstName(first_name: string): Promise<Teacher> {
         const teacher: Teacher | null = await (await this.datasourceTeacher).getTeacherByFirstName(first_name);
 
         if (teacher) {
@@ -53,7 +53,7 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
         }
     }
 
-    async getTeacherByLastName(last_name: string): Promise<Teacher> {
+    public async getTeacherByLastName(last_name: string): Promise<Teacher> {
         const teacher: Teacher | null = await (await this.datasourceTeacher).getTeacherByLastName(last_name);
 
         if (teacher) {
@@ -63,23 +63,23 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
         }
     }
 
-    async getAllTeachers(): Promise<Teacher[]> {
+    public async getAllTeachers(): Promise<Teacher[]> {
         return await (await this.datasourceTeacher).getAllTeachers();
     }
 
-    async updateTeacher(teacher: Teacher): Promise<Teacher> {
+    public async updateTeacher(teacher: Teacher): Promise<Teacher> {
         return await (await this.datasourceTeacher).updateTeacher(teacher);
     }
 
-    async deleteTeacherWithId(id: string): Promise<void> {
+    public async deleteTeacherWithId(id: string): Promise<void> {
         return await (await this.datasourceTeacher).deleteTeacherWithId(id);
     }
 
-    async deleteTeacherFromClass(teacherId: string, classId: string): Promise<void> {
+    public async deleteTeacherFromClass(teacherId: string, classId: string): Promise<void> {
         return await (await this.datasourceTeacher).deleteTeacherFromClass(teacherId, classId);
     }
 
-    async getClassTeachers(classId: string): Promise<Teacher[]> {
+    public async getClassTeachers(classId: string): Promise<Teacher[]> {
         return await (await this.datasourceTeacher).getClassTeachers(classId);
     }
 }

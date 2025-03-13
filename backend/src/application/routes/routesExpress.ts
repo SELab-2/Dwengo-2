@@ -26,7 +26,7 @@ export function configureRoute(
     { app, method, urlPattern, controller, middleware = [] }: RouteConfig,
     methodMap: [HttpMethod, keyof Express][],
 ): void {
-    const handler: RequestHandler = async (req, res, next) => {
+    const handler: RequestHandler = async (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
         try {
             const request = requestFromExpress(req);
             const response = await controller.handle(request);

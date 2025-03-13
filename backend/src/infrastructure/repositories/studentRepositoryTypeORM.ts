@@ -14,11 +14,11 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
         this.datasourceStudent = this.datasource.getDatasourceStudent();
     }
 
-    async createStudent(student: Student): Promise<Student> {
+    public async createStudent(student: Student): Promise<Student> {
         return await (await this.datasourceStudent).createStudent(student);
     }
 
-    async getStudentById(id: string): Promise<Student> {
+    public async getStudentById(id: string): Promise<Student> {
         const student: Student | null = await (await this.datasourceStudent).getStudentById(id);
 
         if (student) {
@@ -28,7 +28,7 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
         }
     }
 
-    async getStudentByEmail(email: string): Promise<Student> {
+    public async getStudentByEmail(email: string): Promise<Student> {
         const student: Student | null = await (await this.datasourceStudent).getStudentByEmail(email);
 
         if (student) {
@@ -38,7 +38,7 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
         }
     }
 
-    async getStudentByFirstName(first_name: string): Promise<Student> {
+    public async getStudentByFirstName(first_name: string): Promise<Student> {
         const student: Student | null = await (await this.datasourceStudent).getStudentByFirstName(first_name);
 
         if (student) {
@@ -48,7 +48,7 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
         }
     }
 
-    async getStudentByLastName(last_name: string): Promise<Student> {
+    public async getStudentByLastName(last_name: string): Promise<Student> {
         const student: Student | null = await (await this.datasourceStudent).getStudentByLastName(last_name);
 
         if (student) {
@@ -58,44 +58,44 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
         }
     }
 
-    async getAllStudents(): Promise<Student[]> {
+    public async getAllStudents(): Promise<Student[]> {
         return await (await this.datasourceStudent).getAllStudents();
     }
 
-    async updateStudent(student: Student): Promise<Student> {
+    public async updateStudent(student: Student): Promise<Student> {
         return await (await this.datasourceStudent).updateStudent(student);
     }
 
-    async deleteStudentById(id: string): Promise<void> {
+    public async deleteStudentById(id: string): Promise<void> {
         return await (await this.datasourceStudent).deleteStudentWithId(id);
     }
 
-    async removeStudentFromClass(studentId: string, classId: string): Promise<void> {
+    public async removeStudentFromClass(studentId: string, classId: string): Promise<void> {
         await (await this.datasourceStudent).removeStudentFromClass(studentId, classId);
     }
 
-    async removeStudentFromGroup(studentId: string, groupId: string): Promise<void> {
+    public async removeStudentFromGroup(studentId: string, groupId: string): Promise<void> {
         await (await this.datasourceStudent).removeStudentFromGroup(studentId, groupId);
     }
 
-    async checkByEmail(email: string): Promise<boolean> {
+    public async checkByEmail(email: string): Promise<boolean> {
         const student: Student | null = await this.getStudentByEmail(email);
         return student !== null;
     }
 
-    async assignStudentToGroup(studentId: string, groupId: string): Promise<void> {
+    public async assignStudentToGroup(studentId: string, groupId: string): Promise<void> {
         await (await this.datasourceStudent).assignStudentToGroup(studentId, groupId);
     }
 
-    async getClassStudents(classId: string): Promise<Student[]> {
+    public async getClassStudents(classId: string): Promise<Student[]> {
         return await (await this.datasourceStudent).getClassStudents(classId);
     }
 
-    async getAssignmentStudents(assignmentId: string): Promise<Student[]> {
+    public async getAssignmentStudents(assignmentId: string): Promise<Student[]> {
         return await (await this.datasourceStudent).getAssignmentStudents(assignmentId);
     }
 
-    async getGroupStudents(groupId: string): Promise<Student[]> {
+    public async getGroupStudents(groupId: string): Promise<Student[]> {
         return await (await this.datasourceStudent).getGroupStudents(groupId);
     }
 }
