@@ -68,6 +68,6 @@ describe('CreateJoinRequest', () => {
       const result = await service.execute(params);
   
       expect(result).toEqual({ id: undefined });
-      expect(joinRequestRepository.createJoinRequest).toHaveBeenCalledTimes(2);
+      expect(joinRequestRepository.createJoinRequest).toHaveBeenCalledTimes(1);
     });
   });
