@@ -17,6 +17,7 @@ module.exports = {
             }
         ],
         "no-console": "off",
-        "no-only-tests/no-only-tests": "warn"
+        "no-only-tests/no-only-tests": "warn",
+        "@typescript-eslint/no-unused-vars": "warn",
     }
 };
