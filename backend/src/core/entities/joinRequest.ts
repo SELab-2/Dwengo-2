@@ -1,6 +1,6 @@
 export enum JoinRequestType {
     TEACHER = "teacher",
-    STUDENT = "student"
+    STUDENT = "student",
 }
 
 export class JoinRequest {
@@ -9,7 +9,7 @@ export class JoinRequest {
         private _classId: string,
         private _type: JoinRequestType,
         private _id?: string,
-    ){}
+    ) {}
 
     //getters
     public get requester(): string {
@@ -44,7 +44,7 @@ export class JoinRequest {
             requester: this._requester,
             classId: this._classId,
             type: this._type,
-            id: this._id
+            id: this._id,
         };
     }
 }

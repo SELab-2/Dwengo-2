@@ -1,12 +1,11 @@
-import { Assignment } from "../entities/assignment";
 import { AbstractRepository } from "./abstractRepository";
+import { Assignment } from "../entities/assignment";
 
 /**
  * Interface for assignment repositories.
  * Allows CRUD operations on assignment entities.
  */
 export abstract class IAssignmentRepository extends AbstractRepository {
-
     /**
      * Inserts a new assignment into the repository. The `id` field of the assignment should be empty.
      * @param assignment The assignment object to be created.
@@ -61,5 +60,4 @@ export abstract class IAssignmentRepository extends AbstractRepository {
      * @throws EntityNotFound error when the assignment that needs to be updated does not exist
      */
     public abstract updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment>;
-
 }

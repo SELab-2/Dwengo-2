@@ -5,9 +5,8 @@ import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 import { IDatasourceStudent } from "../database/data/data_sources/datasourceStudentInterface";
 
 export class StudentRepositoryTypeORM extends IStudentRepository {
-
     private datasource: IDatasource;
-    private datasourceStudent: Promise<IDatasourceStudent>
+    private datasourceStudent: Promise<IDatasourceStudent>;
 
     public constructor() {
         super();
@@ -20,9 +19,9 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     }
 
     async getStudentById(id: string): Promise<Student> {
-        const student: Student|null = await (await this.datasourceStudent).getStudentById(id);
+        const student: Student | null = await (await this.datasourceStudent).getStudentById(id);
 
-        if(student) {
+        if (student) {
             return student;
         } else {
             throw new EntityNotFoundError(`Student with id: ${id} not found`);
@@ -30,9 +29,9 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     }
 
     async getStudentByEmail(email: string): Promise<Student> {
-        const student: Student|null = await (await this.datasourceStudent).getStudentByEmail(email);
+        const student: Student | null = await (await this.datasourceStudent).getStudentByEmail(email);
 
-        if(student) {
+        if (student) {
             return student;
         } else {
             throw new EntityNotFoundError(`Student with email: ${email} not found`);
@@ -40,9 +39,9 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     }
 
     async getStudentByFirstName(first_name: string): Promise<Student> {
-        const student: Student|null = await (await this.datasourceStudent).getStudentByFirstName(first_name);
+        const student: Student | null = await (await this.datasourceStudent).getStudentByFirstName(first_name);
 
-        if(student) {
+        if (student) {
             return student;
         } else {
             throw new EntityNotFoundError(`Student with first name: ${first_name} not found`);
@@ -50,10 +49,10 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     }
 
     async getStudentByLastName(last_name: string): Promise<Student> {
-        const student: Student|null = await (await this.datasourceStudent).getStudentByLastName(last_name);
+        const student: Student | null = await (await this.datasourceStudent).getStudentByLastName(last_name);
 
-        if(student) {
-            return student
+        if (student) {
+            return student;
         } else {
             throw new EntityNotFoundError(`Student with last name: ${last_name} not found`);
         }
@@ -75,7 +74,7 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
         await (await this.datasourceStudent).removeStudentFromClass(studentId, classId);
     }
 
-    async removeStudentFromGroup(studentId: string, groupId: string): Promise<void>  {
+    async removeStudentFromGroup(studentId: string, groupId: string): Promise<void> {
         await (await this.datasourceStudent).removeStudentFromGroup(studentId, groupId);
     }
 
@@ -99,5 +98,4 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     async getGroupStudents(groupId: string): Promise<Student[]> {
         return await (await this.datasourceStudent).getGroupStudents(groupId);
     }
-
 }

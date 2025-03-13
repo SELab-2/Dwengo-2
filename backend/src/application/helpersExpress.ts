@@ -1,18 +1,18 @@
-import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import { Request as ExpressRequest, Response as ExpressResponse } from "express";
 import { ErrorCode, Request, Response, HttpMethod, PathParams, QueryParams } from "./types";
 
 /* ************* Constants ************* */
 
 export const statusMap: Record<ErrorCode, number> = {
-  NOT_FOUND: 404,
-  UNAUTHORIZED: 401,
-  BAD_REQUEST: 400,
-  FORBIDDEN: 403,
-  CONFLICT: 409
-}
+    NOT_FOUND: 404,
+    UNAUTHORIZED: 401,
+    BAD_REQUEST: 400,
+    FORBIDDEN: 403,
+    CONFLICT: 409,
+};
 
 export const prefixPatterns: Record<string, Record<string, string>> = {
-  'users': { 't-': 'teacher', 's-': 'student' }
+    users: { "t-": "teacher", "s-": "student" },
 };
 
 /* ************* Request/Response Conversion ************* */
@@ -23,14 +23,14 @@ export const prefixPatterns: Record<string, Record<string, string>> = {
  * @returns the Request object
  */
 export function requestFromExpress(req: ExpressRequest): Request {
-  return {
-    method: HttpMethod[req.method as keyof typeof HttpMethod],
-    headers: {
-      ...req.headers as Record<string, string>,
-      'path': req.path
-    },
-    body: req.body
-  };
+    return {
+        method: HttpMethod[req.method as keyof typeof HttpMethod],
+        headers: {
+            ...(req.headers as Record<string, string>),
+            path: req.path,
+        },
+        body: req.body,
+    };
 }
 
 /**
@@ -39,11 +39,11 @@ export function requestFromExpress(req: ExpressRequest): Request {
  * @returns a partial Express Request object
  */
 export function requestToExpress(req: Request): Partial<ExpressRequest> {
-  return {
-    method: HttpMethod[req.method],
-    headers: req.headers,
-    body: req.body
-  };
+    return {
+        method: HttpMethod[req.method],
+        headers: req.headers,
+        body: req.body,
+    };
 }
 
 /**
@@ -52,11 +52,11 @@ export function requestToExpress(req: Request): Partial<ExpressRequest> {
  * @returns the Response object
  */
 export function responseFromExpress(res: ExpressResponse): Response {
-  return {
-    headers: res.getHeaders() as Record<string, string>,
-    status: res.statusCode,
-    body: {}
-  };
+    return {
+        headers: res.getHeaders() as Record<string, string>,
+        status: res.statusCode,
+        body: {},
+    };
 }
 
 /**
@@ -68,18 +68,18 @@ export function responseFromExpress(res: ExpressResponse): Response {
  * @returns The modified Express Response object
  */
 export function responseToExpress(res: Response, expressRes: ExpressResponse): ExpressResponse {
-  expressRes.status(res.status);
-  expressRes.setHeader('Content-Type', 'application/json');
+    expressRes.status(res.status);
+    expressRes.setHeader("Content-Type", "application/json");
 
-  Object.entries(res.headers).forEach(([key, value]) => {
-    if (key.toLowerCase() !== 'content-type') {
-      expressRes.setHeader(key, value);
-    }
-  });
+    Object.entries(res.headers).forEach(([key, value]) => {
+        if (key.toLowerCase() !== "content-type") {
+            expressRes.setHeader(key, value);
+        }
+    });
 
-  expressRes.json(res.body);
+    expressRes.json(res.body);
 
-  return expressRes;
+    return expressRes;
 }
 
 /* ************* Path Parameter Processing ************* */
@@ -94,21 +94,22 @@ export function responseToExpress(res: Response, expressRes: ExpressResponse): E
  * @returns Object containing the ID without prefix and the identified type if a prefix was found
  */
 function removePrefixes(
-  id: string, entityType: string | undefined,
-  customPrefixPatterns?: Record<string, Record<string, string>>
-): {id: string; type?: string} {
-  const patterns = customPrefixPatterns || prefixPatterns;
-  if (!entityType || !patterns[entityType] || !id) return { id };
+    id: string,
+    entityType: string | undefined,
+    customPrefixPatterns?: Record<string, Record<string, string>>,
+): { id: string; type?: string } {
+    const patterns = customPrefixPatterns || prefixPatterns;
+    if (!entityType || !patterns[entityType] || !id) return { id };
 
-  const entityPrefixes = patterns[entityType];
-  for (const [prefix, prefixType] of Object.entries(entityPrefixes)) {
-    const regex = new RegExp(`^${prefix}`);
-    if (regex.test(id)) {
-      return { id: id.replace(regex, ''), type: prefixType };
+    const entityPrefixes = patterns[entityType];
+    for (const [prefix, prefixType] of Object.entries(entityPrefixes)) {
+        const regex = new RegExp(`^${prefix}`);
+        if (regex.test(id)) {
+            return { id: id.replace(regex, ""), type: prefixType };
+        }
     }
-  }
 
-  return { id: id, type: undefined };
+    return { id: id, type: undefined };
 }
 
 /**
@@ -128,46 +129,46 @@ function removePrefixes(
  * // For req.headers['path'] = "/users/s-123/orders/456"
  * extractPathParams(req) // Returns { parent: "users", idParent: "123", parentType: "student", entity: "orders", id: "456" }
  */
-export function extractPathParams(req: Request, customPrefixPatterns?: Record<string, Record<string, string>>): PathParams {
-  const path = req.headers['path']?.split('?')[0] || '';
-  const pathParts = path.split('/').slice(1).filter(Boolean);
-  const params: PathParams = {};
+export function extractPathParams(
+    req: Request,
+    customPrefixPatterns?: Record<string, Record<string, string>>,
+): PathParams {
+    const path = req.headers["path"]?.split("?")[0] || "";
+    const pathParts = path.split("/").slice(1).filter(Boolean);
+    const params: PathParams = {};
 
-  if (pathParts.length === 1) {
-    params.entity = pathParts[0];
-  }
-  else if (pathParts.length === 2) {
-    params.entity = pathParts[0];
-    params.id = pathParts[1];
+    if (pathParts.length === 1) {
+        params.entity = pathParts[0];
+    } else if (pathParts.length === 2) {
+        params.entity = pathParts[0];
+        params.id = pathParts[1];
 
-    const { id, type } = removePrefixes(params.id, params.entity, customPrefixPatterns);
-    params.id = id;
-    if (type) params.idType = type;
-  }
-  else if (pathParts.length === 3) {
-    params.parent = pathParts[0];
-    params.idParent = pathParts[1];
-    params.entity = pathParts[2];
+        const { id, type } = removePrefixes(params.id, params.entity, customPrefixPatterns);
+        params.id = id;
+        if (type) params.idType = type;
+    } else if (pathParts.length === 3) {
+        params.parent = pathParts[0];
+        params.idParent = pathParts[1];
+        params.entity = pathParts[2];
 
-    const { id: parentId, type: parentType } = removePrefixes(params.idParent, params.parent, customPrefixPatterns);
-    params.idParent = parentId;
-    if (parentType) params.idParentType = parentType;
-  }
-  else if (pathParts.length === 4) {
-    params.parent = pathParts[0];
-    params.idParent = pathParts[1];
-    params.entity = pathParts[2];
-    params.id = pathParts[3];
+        const { id: parentId, type: parentType } = removePrefixes(params.idParent, params.parent, customPrefixPatterns);
+        params.idParent = parentId;
+        if (parentType) params.idParentType = parentType;
+    } else if (pathParts.length === 4) {
+        params.parent = pathParts[0];
+        params.idParent = pathParts[1];
+        params.entity = pathParts[2];
+        params.id = pathParts[3];
 
-    const { id, type } = removePrefixes(params.id, params.entity, customPrefixPatterns);
-    const { id: parentId, type: parentType } = removePrefixes(params.idParent, params.parent, customPrefixPatterns);
-    params.id = id;
-    params.idParent = parentId;
-    if (type) params.idType = type;
-    if (parentType) params.idParentType = parentType;
-  }
+        const { id, type } = removePrefixes(params.id, params.entity, customPrefixPatterns);
+        const { id: parentId, type: parentType } = removePrefixes(params.idParent, params.parent, customPrefixPatterns);
+        params.id = id;
+        params.idParent = parentId;
+        if (type) params.idType = type;
+        if (parentType) params.idParentType = parentType;
+    }
 
-  return params;
+    return params;
 }
 
 /* ************* Query Parameter Processing ************* */
@@ -183,21 +184,21 @@ export function extractPathParams(req: Request, customPrefixPatterns?: Record<st
  * extractQueryParams(req) // Returns { page: 2, limit: 10 }
  */
 export function extractQueryParams(req: Request): QueryParams {
-  const path = req.headers['path'] || '';
-  const queryString = path.split('?')[1] || '';
-  if (!queryString) return {};
+    const path = req.headers["path"] || "";
+    const queryString = path.split("?")[1] || "";
+    if (!queryString) return {};
 
-  const result: QueryParams = {};
+    const result: QueryParams = {};
 
-  queryString.split('&').forEach(param => {
-    if (!param) return;
-    const [key, value] = param.split('=');
-    if (key) {
-      const actualValue = value === undefined ? 'true' : value;
-      const numValue = Number(value);
-      result[key] = value === '' ? '' : !isNaN(numValue) && actualValue !== 'true' ? numValue : actualValue;
-    }
-  });
+    queryString.split("&").forEach(param => {
+        if (!param) return;
+        const [key, value] = param.split("=");
+        if (key) {
+            const actualValue = value === undefined ? "true" : value;
+            const numValue = Number(value);
+            result[key] = value === "" ? "" : !isNaN(numValue) && actualValue !== "true" ? numValue : actualValue;
+        }
+    });
 
-  return result;
+    return result;
 }

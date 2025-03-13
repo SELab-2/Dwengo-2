@@ -1,7 +1,7 @@
 export enum VisibilityType {
     PUBLIC = "public",
     GROUP = "group",
-    PRIVATE = "private"
+    PRIVATE = "private",
 }
 
 export class QuestionThread {
@@ -13,7 +13,7 @@ export class QuestionThread {
         private _visibility: VisibilityType,
         private _messageIds: string[],
         private _id?: string,
-    ) { }
+    ) {}
 
     // Getters
     public get creatorId(): string {
@@ -38,7 +38,6 @@ export class QuestionThread {
         return this._id;
     }
 
-
     // Setter
     public set isClosed(closed: boolean) {
         this._isClosed = closed;
@@ -62,6 +61,6 @@ export class QuestionThread {
             visibility: this.visibility,
             messageIds: this.messageIds,
             id: this.id,
-        }
+        };
     }
 }

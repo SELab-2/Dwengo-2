@@ -1,8 +1,8 @@
-import { ServiceParams } from "../../../config/service";
 import { SubmissionBaseService } from "./submissionBaseService";
+import { ServiceParams } from "../../../config/service";
 
 export class DeleteSubmissionParams implements ServiceParams {
-    constructor(private _id: string) { }
+    constructor(private _id: string) {}
 
     public get id(): string {
         return this._id;

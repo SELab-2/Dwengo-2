@@ -1,22 +1,22 @@
-import { StudentRepositoryTypeORM } from "../infrastructure/repositories/studentRepositoryTypeORM";
-import { TeacherRepositoryTypeORM } from "../infrastructure/repositories/teacherRepositoryTypeORM";
+import { AssignmentRepositoryTypeORM } from "../infrastructure/repositories/assignmentRepositoryTypeORM";
 import { ClassRepositoryTypeORM } from "../infrastructure/repositories/classRepositoryTypeORM";
 import { GroupRepositoryTypeORM } from "../infrastructure/repositories/groupRepositoryTypeORM";
-import { AssignmentRepositoryTypeORM } from "../infrastructure/repositories/assignmentRepositoryTypeORM";
 import { JoinRequestRepositoryTypeORM } from "../infrastructure/repositories/joinRequestRepositoryTypeORM";
-import { ThreadRepositoryTypeORM } from "../infrastructure/repositories/questionThreadRepositoryTypeORM";
 import { MessageRepositoryTypeORM } from "../infrastructure/repositories/messageRepositoryTypeORM";
+import { ThreadRepositoryTypeORM } from "../infrastructure/repositories/questionThreadRepositoryTypeORM";
+import { StudentRepositoryTypeORM } from "../infrastructure/repositories/studentRepositoryTypeORM";
+import { TeacherRepositoryTypeORM } from "../infrastructure/repositories/teacherRepositoryTypeORM";
 
 /**
  * The repositories needed for the Dwengo-2 backend application.
  */
 export const repositories = {
-  student: new StudentRepositoryTypeORM(),
-  teacher: new TeacherRepositoryTypeORM(),
-  class: new ClassRepositoryTypeORM(),
-  group: new GroupRepositoryTypeORM(),
-  assignment: new AssignmentRepositoryTypeORM(),
-  joinRequest: new JoinRequestRepositoryTypeORM(),
-  questionThread: new ThreadRepositoryTypeORM(),
-  messages: new MessageRepositoryTypeORM(),
+    student: new StudentRepositoryTypeORM(),
+    teacher: new TeacherRepositoryTypeORM(),
+    class: new ClassRepositoryTypeORM(),
+    group: new GroupRepositoryTypeORM(),
+    assignment: new AssignmentRepositoryTypeORM(),
+    joinRequest: new JoinRequestRepositoryTypeORM(),
+    questionThread: new ThreadRepositoryTypeORM(),
+    messages: new MessageRepositoryTypeORM(),
 };

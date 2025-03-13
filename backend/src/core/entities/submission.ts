@@ -1,7 +1,6 @@
-
 export enum StatusType {
     NOT_ACCEPTED = "not_accepted",
-    ACCEPTED = "accepted"
+    ACCEPTED = "accepted",
 }
 
 export class Submission {
@@ -13,7 +12,7 @@ export class Submission {
         private _contents: Buffer, // can be a photo, a string, whatever. In the database this is bytea.
         private _status: StatusType,
         private _id?: string,
-    ) { }
+    ) {}
 
     // Getters
     public get studentId(): string {
@@ -38,7 +37,6 @@ export class Submission {
         return this._id;
     }
 
-
     // Setter
     public set contents(newContents: Buffer) {
         this._contents = newContents;
@@ -61,5 +59,4 @@ export class Submission {
             id: this._id,
         };
     }
-
 }

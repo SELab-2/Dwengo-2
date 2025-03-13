@@ -2,7 +2,7 @@ import { ApiError, ErrorCode } from "../../application/types";
 
 export enum UserType {
     STUDENT = "student",
-    TEACHER = "teacher"
+    TEACHER = "teacher",
 }
 
 export abstract class User {
@@ -12,12 +12,12 @@ export abstract class User {
         protected _familyName: string,
         protected readonly _passwordHash: string,
         protected _schoolName: string,
-        protected _id?: string
+        protected _id?: string,
     ) {
         if (!_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_email)) {
             throw {
                 code: ErrorCode.BAD_REQUEST,
-                message: 'Email invalid.',
+                message: "Email invalid.",
             } as ApiError;
         }
     }
@@ -39,7 +39,7 @@ export abstract class User {
         return this._passwordHash;
     }
     public get schoolName(): string {
-        return this._schoolName
+        return this._schoolName;
     }
 
     // Setters

@@ -1,6 +1,6 @@
+import { AbstractRepository } from "./abstractRepository";
 import { Class } from "../entities/class";
 import { JoinRequestType } from "../entities/joinRequest";
-import { AbstractRepository } from "./abstractRepository";
 
 /**
  * Interface for class repositories.
@@ -11,7 +11,6 @@ import { AbstractRepository } from "./abstractRepository";
  * This interface defines the methods required for interacting with class data.
  */
 export abstract class IClassRepository extends AbstractRepository {
-
     /**
      * Insert a new class in the repository. The `id` field of the class should be empty.
      * The `id` field will be set by the repository to a uuid.
@@ -87,5 +86,5 @@ export abstract class IClassRepository extends AbstractRepository {
      * @param userId id of the user to add to the class.
      * @param userType type of the user (student/teacher)
      */
-    public abstract addUserToClass(classId: string, userId:string, userType: JoinRequestType): Promise<void>
+    public abstract addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void>;
 }
