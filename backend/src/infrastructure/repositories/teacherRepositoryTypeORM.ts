@@ -32,7 +32,7 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
         try {
             const teacher: Teacher = await this.getTeacherByEmail(email);
             return teacher !== null;
-        } catch(EntityNotFoundError) {
+        } catch (EntityNotFoundError) {
             return false;
         }
     }
