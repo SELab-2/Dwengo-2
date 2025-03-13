@@ -81,14 +81,14 @@ export class DatasourceClassTypeORM extends IDatasourceClass {
             .getRepository(TeacherOfClassTypeORM)
             .find({
                 where: { teacher: { id: id } },
-                relations: ["class"],
+                relations: ["class", "teacher"],
             });
 
         const studentClasses: StudentOfClassTypeORM[] = await this.datasource
             .getRepository(StudentOfClassTypeORM)
             .find({
                 where: { student: { id: id } },
-                relations: ["class"],
+                relations: ["class", "student"],
             });
 
         if (teacherClasses.length === 0 && studentClasses.length === 0) {
