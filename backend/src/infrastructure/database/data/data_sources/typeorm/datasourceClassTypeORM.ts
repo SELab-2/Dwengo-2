@@ -36,7 +36,7 @@ export class DatasourceClassTypeORM extends IDatasourceClass {
         if (classModel !== null) {
             const classTeacherModel: TeacherOfClassTypeORM | null = await this.datasource
                 .getRepository(TeacherOfClassTypeORM)
-                .findOne({ where: { class: { id: id } } });
+                .findOne({ where: { class: { id: id } } , relations: ["teacher"],});
 
             return classModel.toClassEntity(classTeacherModel!.teacher.id);
         }
