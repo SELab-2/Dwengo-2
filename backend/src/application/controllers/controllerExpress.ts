@@ -203,7 +203,7 @@ export abstract class Controller {
      * @returns Response with status 204 (No Content)
      */
     protected async delete(req: Request, data: ServiceParams): Promise<Response> {
-        return this._executeService(this.services.delete, data, 204, "Delete");
+        return this._executeService(this.services.remove, data, 204, "Delete");
     }
 
     /**

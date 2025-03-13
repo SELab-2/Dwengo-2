@@ -110,6 +110,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: role
+          required: false
+          schema:
+            type: string
+            enum: [student, teacher]
       responses:
         '200':
           $ref: '#/components/responses/UserOK'
@@ -130,6 +136,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: role
+          required: false
+          schema:
+            type: string
+            enum: [student, teacher]
       requestBody:
         required: true
         content:
@@ -156,6 +168,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: role
+          required: false
+          schema:
+            type: string
+            enum: [student, teacher]
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
