@@ -199,7 +199,10 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
     public async getAssignmentStudents(assignmentId: string): Promise<Student[]> {
         const assignmentModel: AssignmentTypeORM | null = await this.datasource
             .getRepository(AssignmentTypeORM)
-            .findOne({ where: { id: assignmentId } });
+            .findOne({ 
+                where: { id: assignmentId },
+                relations: ["class"]
+             });
     
             if (!assignmentModel) throw new EntityNotFoundError("Assignment not Found");
             else return await this.getClassStudents(assignmentModel.toAssignmentEntity().classId);
