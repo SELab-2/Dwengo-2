@@ -1,0 +1,14 @@
+{
+  "name": "presentations",
+  "version": "1.0.0",
+  "description": "Presentations for Dwengo-2",
+  "main": "slides.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "reveal.js": "^5.1.0"
+  }
+}
