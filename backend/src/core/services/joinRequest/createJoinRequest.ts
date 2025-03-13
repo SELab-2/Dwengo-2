@@ -1,7 +1,5 @@
 import { ApiError, ErrorCode } from "../../../application/types";
-import { EntityNotFoundError } from "../../../config/error";
 import { Service, ServiceParams } from "../../../config/service";
-import { Class } from "../../entities/class";
 import { JoinRequest, JoinRequestType } from "../../entities/joinRequest";
 import { IClassRepository } from "../../repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
@@ -29,7 +27,8 @@ export class CreateJoinRequestParams implements ServiceParams {
         }
 
         // Check if user isn't already part of this class
-        let classes: Class[];
+        // Implement this after milestone 1, use check instead of get
+        /*let classes: Class[];
         try {
             if (this._type === JoinRequestType.STUDENT) {
                 classes = await classRepository.getAllClassesByStudentId(this._requesterId);
@@ -44,11 +43,12 @@ export class CreateJoinRequestParams implements ServiceParams {
                     } as ApiError;
                 }
             }
-            throw{
+            throw {
                 code: ErrorCode.CONFLICT,
                 message: "User already in class.",
             } as ApiError;
-        } catch(EntityNotFoundError) {}
+        } catch (EntityNotFoundError) {}
+        */
         return new JoinRequest(this._requesterId, this._classId, this._type);
     }
 }

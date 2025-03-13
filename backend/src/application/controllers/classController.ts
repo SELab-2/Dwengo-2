@@ -5,8 +5,13 @@ import { createParamsExtractor } from "../extractors";
 import { HttpMethod, Request, RouteHandlers } from "../types";
 
 const extractors = {
-    getClass: createParamsExtractor(ClassServices.GetClassParams, { _id: "idParent", _classId: "id" }, {}, ["_className"]),
-    getUserClasses: createParamsExtractor(ClassServices.GetClassParams, { _id: "idParent" }, {}, ["_className", "_classId"]),
+    getClass: createParamsExtractor(ClassServices.GetClassParams, { _id: "idParent", _classId: "id" }, {}, [
+        "_className",
+    ]),
+    getUserClasses: createParamsExtractor(ClassServices.GetClassParams, { _id: "idParent" }, {}, [
+        "_className",
+        "_classId",
+    ]),
     updateClass: createParamsExtractor(
         ClassServices.UpdateClassParams,
         { _id: "id", _name: "name", _description: "description", _targetAudience: "audience" },

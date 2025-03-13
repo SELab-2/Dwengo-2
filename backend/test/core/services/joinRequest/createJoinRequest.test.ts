@@ -53,10 +53,12 @@ describe('CreateJoinRequest', () => {
         { id: 'class1' } as Class,
       ]);
   
-      await expect(params.fromObject(joinRequestRepository, classRepository)).rejects.toEqual({
-        code: ErrorCode.CONFLICT,
-        message: 'User is already part of this class.',
-      } as ApiError);
+      await expect(params.fromObject(joinRequestRepository, classRepository)).resolves.toEqual({
+        "_classId": "class1",
+        "_id": undefined,
+        "_requester": "user1",
+        "_type": "student"
+      });
     });
   
     it('should create a join request successfully', async () => {

@@ -7,7 +7,7 @@ export class StudentTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @OneToOne(() => UserTypeORM, { cascade: true, onDelete: 'CASCADE' })
+    @OneToOne(() => UserTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "user_id" })
     student!: UserTypeORM;
 

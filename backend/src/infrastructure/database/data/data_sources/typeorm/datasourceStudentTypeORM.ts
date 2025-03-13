@@ -108,7 +108,9 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
             throw new EntityNotFoundError("Student does not exist");
         }
 
-        await this.datasource.getRepository(UserTypeORM).update(studentModel.student.id!, UserTypeORM.createUserTypeORM(student));
+        await this.datasource
+            .getRepository(UserTypeORM)
+            .update(studentModel.student.id!, UserTypeORM.createUserTypeORM(student));
 
         return student;
     }
@@ -122,7 +124,7 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
         if (!studentModel) {
             throw new EntityNotFoundError("Student does not exist");
         }
-    
+
         // First, delete the student record
         await this.datasource.getRepository(StudentTypeORM).delete(studentModel.id);
 
