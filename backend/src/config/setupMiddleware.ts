@@ -1,6 +1,7 @@
 import express from "express";
 import { Express } from 'express';
 import cors from "cors";
+import authenticationMiddleware from "../application/middleware/authenticationMiddleware";;
 
 /**
  * Setup all middleware for the application.
@@ -13,4 +14,5 @@ import cors from "cors";
 export function setupMiddleware(app: Express): void {
   app.use(cors());
   app.use(express.json());
+  app.use(authenticationMiddleware);
 }
