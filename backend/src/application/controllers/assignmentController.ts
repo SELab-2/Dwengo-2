@@ -26,7 +26,7 @@ const extractors = {
             _teacherId: "teacher",
         },
         {},
-        ["_classId", "_learningPathId", "_startDate", "_deadline", "_extraInstructions"],
+        ["_teacherId", "_learningPathId", "_startDate", "_deadline", "_extraInstructions"],
     ),
 };
 
