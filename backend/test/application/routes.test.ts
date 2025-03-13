@@ -86,10 +86,10 @@ const routeConfigs: Record<keyof typeof routeFunctions, { method: 'get' | 'patch
     { method: 'post', path: '/questions/:idParent/messages' },
   ],
   joinRequestRoutes: [
-    { method: 'get', path: '/users/:idParent/invites/:id' },
-    { method: 'get', path: '/users/:idParent/invites' },
-    { method: 'delete', path: '/invites/:id' },
-    { method: 'post', path: '/invites' },
+    { method: 'get', path: '/users/:idParent/requests/:id' },
+    { method: 'get', path: '/users/:idParent/requests' },
+    { method: 'delete', path: '/requests/:id' },
+    { method: 'post', path: '/requests' },
   ],
   questionThreadRoutes: [
     { method: 'get', path: "/assignments/:idParent/questions/:id" },

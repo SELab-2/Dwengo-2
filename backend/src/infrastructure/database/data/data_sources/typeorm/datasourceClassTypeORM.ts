@@ -36,7 +36,7 @@ export class DatasourceClassTypeORM extends IDatasourceClass {
         if (classModel !== null) {
             const classTeacherModel: TeacherOfClassTypeORM | null = await this.datasource
                 .getRepository(TeacherOfClassTypeORM)
-                .findOne({ where: { class: { id: id } } });
+                .findOne({ where: { class: { id: id } }, relations: ["teacher"] });
 
             return classModel.toClassEntity(classTeacherModel!.teacher.id);
         }
@@ -81,14 +81,14 @@ export class DatasourceClassTypeORM extends IDatasourceClass {
             .getRepository(TeacherOfClassTypeORM)
             .find({
                 where: { teacher: { id: id } },
-                relations: ["class"],
+                relations: ["class", "teacher"],
             });
 
         const studentClasses: StudentOfClassTypeORM[] = await this.datasource
             .getRepository(StudentOfClassTypeORM)
             .find({
                 where: { student: { id: id } },
-                relations: ["class"],
+                relations: ["class", "student"],
             });
 
         if (teacherClasses.length === 0 && studentClasses.length === 0) {
