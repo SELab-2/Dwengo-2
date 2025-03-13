@@ -57,6 +57,7 @@ export class GetJoinRequest implements Service<GetJoinRequestParams> {
     constructor(private joinRequestRepository: IJoinRequestRepository) {}
 
     async execute(input: GetJoinRequestParams): Promise<object> {
+        console.log(input.requestId, input.userId);
         // Get all requests
         const requests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByRequesterId(input.userId);
 

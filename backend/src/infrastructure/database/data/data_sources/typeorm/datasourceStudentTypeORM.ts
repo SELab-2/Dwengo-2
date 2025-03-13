@@ -99,7 +99,16 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
     }
 
     public async updateStudent(student: Student): Promise<Student> {
-        await this.datasource.getRepository(UserTypeORM).update(student.id!, UserTypeORM.createUserTypeORM(student));
+        const studentModel: StudentTypeORM | null = await this.datasource.getRepository(StudentTypeORM).findOne({
+            where: { id: student.id },
+            relations: ["student"],
+        });
+
+        if (!studentModel) {
+            throw new EntityNotFoundError("Student does not exist");
+        }
+
+        await this.datasource.getRepository(UserTypeORM).update(studentModel.student.id!, UserTypeORM.createUserTypeORM(student));
 
         return student;
     }
@@ -110,11 +119,16 @@ export class DatasourceStudentTypeORM extends IDatasourceStudent {
             relations: ["student"],
         });
 
-        if (studentModel && studentModel.student.id) {
-            await this.datasource.getRepository(UserTypeORM).delete(studentModel!.student.id!);
-            await this.datasource.getRepository(StudentTypeORM).delete(id);
-        } else {
+        if (!studentModel) {
             throw new EntityNotFoundError("Student does not exist");
+        }
+    
+        // First, delete the student record
+        await this.datasource.getRepository(StudentTypeORM).delete(studentModel.id);
+
+        // Manually delete the associated user if needed
+        if (studentModel.student?.id) {
+            await this.datasource.getRepository(UserTypeORM).delete(studentModel.student.id);
         }
     }
 
