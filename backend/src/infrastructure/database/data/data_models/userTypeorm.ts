@@ -25,7 +25,6 @@ export class UserTypeORM {
     // https://stackoverflow.com/questions/12702548/constructor-overload-in-typescript
     public static createUserTypeORM(user: User): UserTypeORM {
         const userTypeORM: UserTypeORM = new UserTypeORM();
-        if (user.id) userTypeORM.id = user.id;
         userTypeORM.email = user.email;
         userTypeORM.first_name = user.firstName;
         userTypeORM.last_name = user.familyName;

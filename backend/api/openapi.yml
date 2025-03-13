@@ -156,6 +156,12 @@ paths:
           schema:
             type: string
             format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDelete'
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -2035,6 +2041,21 @@ components:
         publicKey:
           type: string
           description: Public key derived from locally hashed password
+        role:
+          type: string
+          enum: [STUDENT, TEACHER]
+          default: STUDENT
+          description: User's role in the system.
+    UserDelete:
+      type: object
+      minProperties: 2
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the user.
         role:
           type: string
           enum: [STUDENT, TEACHER]
