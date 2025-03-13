@@ -28,4 +28,5 @@ export const challengeMiddleware = async (req: Request, res: Response, next: Nex
 
     // Hijack getUser
     req.body.id = userId;
+    next();
 };

@@ -8,6 +8,19 @@ jest.mock("../../src/application/helpersExpress", () => ({
   responseToExpress: jest.fn((response, res) => res)
 }));
 
+jest.mock("typeorm", () => {
+  const actualTypeORM = jest.requireActual("typeorm");
+  return {
+    ...actualTypeORM,
+    DataSource: jest.fn().mockImplementation(() => ({
+      initialize: jest.fn().mockResolvedValue(true),
+      getRepository: jest.fn(),
+      destroy: jest.fn().mockResolvedValue(true),  // Voeg destroy toe om te voorkomen dat de connectie blijft openstaan
+    })),
+  };
+});
+
+
 // Get references to the mocked functions
 const { requestFromExpress, responseToExpress } = jest.requireMock("../../src/application/helpersExpress");
 
@@ -73,10 +86,10 @@ const routeConfigs: Record<keyof typeof routeFunctions, { method: 'get' | 'patch
     { method: 'post', path: '/questions/:idParent/messages' },
   ],
   joinRequestRoutes: [
-    { method: 'get', path: '/users/:idParent/invites/:id' },
-    { method: 'get', path: '/users/:idParent/invites' },
-    { method: 'delete', path: '/invites/:id' },
-    { method: 'post', path: '/invites' },
+    { method: 'get', path: '/users/:idParent/requests/:id' },
+    { method: 'get', path: '/users/:idParent/requests' },
+    { method: 'delete', path: '/requests/:id' },
+    { method: 'post', path: '/requests' },
   ],
   questionThreadRoutes: [
     { method: 'get', path: "/assignments/:idParent/questions/:id" },
@@ -108,6 +121,18 @@ const testRoutes = (
 ) => {
   describe(routeFn.name, () => {
     let mockApp: MockExpress;
+
+    afterAll(async () => {
+      jest.clearAllMocks();
+
+      // Zorg ervoor dat TypeORM DataSource correct wordt afgesloten
+      const { DataSource } = jest.requireMock("typeorm");
+      if (typeof DataSource === "function") {
+        const mockDataSource = new DataSource();
+        await mockDataSource.destroy(); // Voorkom openstaande verbindingen
+      }
+    });
+
 
     beforeEach(() => {
       jest.clearAllMocks();

@@ -66,7 +66,7 @@ export class GetUserClasses extends ClassBaseService<GetClassParams> {
      * @throws {EntityNotFoundError} if the user could not be found.
      */
     async execute(input: GetClassParams): Promise<object> {
-        return { classes: (await this.classRepository.getUserClasses(input.id!)).forEach(c => c.toObject()) };
+        return { classes: (await this.classRepository.getUserClasses(input.id!)).map(c => c.toObject()) };
     }
 }
 

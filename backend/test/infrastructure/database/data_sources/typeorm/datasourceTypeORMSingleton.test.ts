@@ -1,4 +1,4 @@
-import { DataSource } from "typeorm";
+import { DataSource, Unique } from "typeorm";
 import { DatasourceTypeORMConnectionSettings } from "../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
 import { DatasourceTypeORMConnectionSettingsFactory } from "../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
 import { DatasourceTypeORMSingleton } from "../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMSingleton";
@@ -11,10 +11,12 @@ jest.mock("typeorm", () => ({
     })),
 
     Entity: jest.fn(() => () => {}),
+    Unique: jest.fn(() => () => {}),
     PrimaryGeneratedColumn: jest.fn(() => () => {}),
     PrimaryColumn: jest.fn(() => () => {}),
     Column: jest.fn(() => () => {}),
     OneToOne: jest.fn(() => () => {}),
+    ManyToOne: jest.fn(() => () => {}),
     JoinColumn: jest.fn(() => () => {}),
     CreateDateColumn: jest.fn(() => () => {}),
 }));

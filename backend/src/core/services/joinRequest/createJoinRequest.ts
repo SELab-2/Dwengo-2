@@ -1,6 +1,5 @@
 import { ApiError, ErrorCode } from "../../../application/types";
 import { Service, ServiceParams } from "../../../config/service";
-import { Class } from "../../entities/class";
 import { JoinRequest, JoinRequestType } from "../../entities/joinRequest";
 import { IClassRepository } from "../../repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
@@ -28,20 +27,28 @@ export class CreateJoinRequestParams implements ServiceParams {
         }
 
         // Check if user isn't already part of this class
-        let classes: Class[];
-        if (this._type === JoinRequestType.STUDENT) {
-            classes = await classRepository.getAllClassesByStudentId(this._requesterId);
-        } else {
-            classes = await classRepository.getAllClassesByTeacherId(this._requesterId);
-        }
-        for (const c of classes) {
-            if (this._classId === c.id!) {
-                throw {
-                    code: ErrorCode.CONFLICT,
-                    message: "User is already part of this class.",
-                } as ApiError;
+        // Implement this after milestone 1, use check instead of get
+        /*let classes: Class[];
+        try {
+            if (this._type === JoinRequestType.STUDENT) {
+                classes = await classRepository.getAllClassesByStudentId(this._requesterId);
+            } else {
+                classes = await classRepository.getAllClassesByTeacherId(this._requesterId);
             }
-        }
+            for (const c of classes) {
+                if (this._classId === c.id!) {
+                    throw {
+                        code: ErrorCode.CONFLICT,
+                        message: "User is already part of this class.",
+                    } as ApiError;
+                }
+            }
+            throw {
+                code: ErrorCode.CONFLICT,
+                message: "User already in class.",
+            } as ApiError;
+        } catch (EntityNotFoundError) {}
+        */
         return new JoinRequest(this._requesterId, this._classId, this._type);
     }
 }
@@ -56,8 +63,6 @@ export class CreateJoinRequest implements Service<CreateJoinRequestParams> {
         const joinRequest: JoinRequest = await this._joinRequestRepository.createJoinRequest(
             await input.fromObject(this._joinRequestRepository, this._classRepository),
         );
-
-        await this._joinRequestRepository.createJoinRequest(joinRequest);
         return { id: joinRequest.id };
     }
 }

@@ -17,8 +17,8 @@ tags:
     description: Endpoints for user registration and authentication, including login and token management
   - name: users
     description: User account management operations including profile updates and user information retrieval
-  - name: invites
-    description: Manage invitations and join requests for classes, including sending, accepting and rejecting invites
+  - name: requests
+    description: Manage invitations and join requests for classes, including sending, accepting and rejecting requests
   - name: progresses
     description: Track and manage student progress through learning paths, objects and assignments
   - name: classes
@@ -110,6 +110,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: role
+          required: false
+          schema:
+            type: string
+            enum: [student, teacher]
       responses:
         '200':
           $ref: '#/components/responses/UserOK'
@@ -130,6 +136,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: role
+          required: false
+          schema:
+            type: string
+            enum: [student, teacher]
       requestBody:
         required: true
         content:
@@ -156,6 +168,12 @@ paths:
           schema:
             type: string
             format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDelete'
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -373,13 +391,13 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  '/users/{idParent}/invites/{id}':
+  '/users/{idParent}/requests/{id}':
     get:
       tags:
-        - invites
-      summary: Get user's invite by ID
-      description: Retrieves detailed information about a specific invite belonging to a user by its unique identifier.
-      operationId: getUserInviteById
+        - requests
+      summary: Get user's request by ID
+      description: Retrieves detailed information about a specific request belonging to a user by its unique identifier.
+      operationId: getUserRequestById
       parameters:
         - in: path
           name: id
@@ -395,18 +413,18 @@ paths:
             format: uuid
       responses:
         '200':
-          $ref: '#/components/responses/InviteOK'
+          $ref: '#/components/responses/JoinRequestOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/users/{idParent}/invites':
+  '/users/{idParent}/requests':
     get:
       tags:
-        - invites
-      summary: Get all user's invites
-      description: Retrieve a list of all invites belonging to a specific user.
-      operationId: getUserInvites
+        - requests
+      summary: Get all user's requests
+      description: Retrieve a list of all requests belonging to a specific user.
+      operationId: getUserrequests
       parameters:
         - in: path
           name: idParent
@@ -418,16 +436,16 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/InvitesOK'
+          $ref: '#/components/responses/RequestsOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  '/invites/{id}':
+  '/requests/{id}':
     delete:
       tags:
-        - invites
-      summary: Delete an invite
-      description: Permanently delete an invite by its unique identifier.
-      operationId: deleteInvite
+        - requests
+      summary: Delete an request
+      description: Permanently delete a request by its unique identifier.
+      operationId: deleteRequest
       parameters:
         - in: path
           name: id
@@ -442,22 +460,22 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  /invites:
+  /requests:
     post:
       tags:
-        - invites
-      summary: Create a new invite
-      description: Create a new invite for a user to join a class or group. Can also be used to create join requests.
-      operationId: createInvite
+        - requests
+      summary: Create a new joinrequest.
+      description: Create a new request for a user to join a class.
+      operationId: createRequest
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InviteCreate'
+              $ref: '#/components/schemas/JoinRequestCreate'
       responses:
         '201':
-          $ref: '#/components/responses/InviteCreated'
+          $ref: '#/components/responses/JoinRequestCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1600,12 +1618,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/User'
-    InviteOK:
+    JoinRequestOK:
       description: Invite request completed successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Invite'
+            $ref: '#/components/schemas/JoinRequest'
     ClassOK:
       description: Class request completed successfully
       content:
@@ -1670,14 +1688,14 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/User'
-    InvitesOK:
-      description: Invites collection request completed successfully
+    RequestsOK:
+      description: Requests collection request completed successfully
       content:
         application/json:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/Invite'
+              $ref: '#/components/schemas/JoinRequest'
     ClassesOK:
       description: Classes collection request completed successfully
       content:
@@ -1743,12 +1761,12 @@ components:
             items:
               $ref: '#/components/schemas/Message'
 
-    InviteCreated:
+    JoinRequestCreated:
       description: Invite created successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Invite'
+            $ref: '#/components/schemas/JoinRequest'
     UserCreated:
       description: User created successfully
       content:
@@ -2040,6 +2058,21 @@ components:
           enum: [STUDENT, TEACHER]
           default: STUDENT
           description: User's role in the system.
+    UserDelete:
+      type: object
+      minProperties: 2
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the user.
+        role:
+          type: string
+          enum: [STUDENT, TEACHER]
+          default: STUDENT
+          description: User's role in the system.
     CollectionUserCreate:
       type: object
       required:
@@ -2050,72 +2083,51 @@ components:
           format: uuid
           description: Unique identifier for the user.
 
-    Invite:
+    JoinRequest:
       type: object
       required:
-        - code
-        - source
-        - target
+        - id
+        - requester
         - class
-        - date
-        - type
+        - role
       properties:
-        code:
+        id:
           type: string
           format: uuid
           readOnly: true
-          description: Unique identifier for the invite.
-        source:
+          description: Unique identifier for the joinrequest.
+        requester:
           type: string
           format: uuid
-          description: ID of the user sending the invite/request.
-        target:
-          type: string
-          format: uuid
-          description: ID of the user receiving the invite/request.
+          description: ID of the user sending the request.
         class:
           type: string
           format: uuid
-          description: ID of the class this invite is for.
-        date:
+          description: ID of the class.
+        role:
           type: string
-          format: date
-          description: Date of the invite creation.
-        type:
+          enum: [STUDENT, TEACHER]
+          description: Role of requester.
+    JoinRequestCreate:
+      type: object
+      required:
+        - requester
+        - class
+        - role
+      additionalProperties: false
+      properties:
+        requester:
           type: string
-          enum: [INVITE, REQUEST]
-          description: Type of invite (teacher invitation or student request).
-    InviteCreate:
-      oneOf:
-        - type: object
-          required:
-            - class
-            - type
-          additionalProperties: false
-          properties:
-            class:
-              type: string
-              format: uuid
-              description: ID of the class to create invite code for.
-            type:
-              type: string
-              enum: [INVITE]
-              description: Must be INVITE for code generation.
-        - type: object
-          required:
-            - code
-            - type
-          additionalProperties: false
-          properties:
-            code:
-              type: string
-              format: uuid
-              description: Existing invite code to request join.
-            type:
-              type: string
-              enum: [REQUEST]
-              description: Must be REQUEST for join requests.
-
+          format: uuid
+          description: ID of the user sending the request.
+        class:
+          type: string
+          format: uuid
+          description: ID of the class.
+        role:
+          type: string
+          enum: [STUDENT, TEACHER]
+          description: Role of requester.
     Class:
       type: object
       required:
@@ -2172,22 +2184,42 @@ components:
       type: object
       required:
         - id
-        - class
+        - assignment
+        - members
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
           description: Unique identifier for the group.
-        class:
+        assignment:
           type: string
           format: uuid
           readOnly: true
-          description: Unique identifier for the group's class.
+          description: Unique identifier for the group's assignment.
+        members:
+          type: array
+          items:
+            type: string
+            format: uuid
+            description: An array of student IDs assigned to this group.
     GroupCreate:
       type: object
+      required:
+        - assignment
+        - members
       additionalProperties: false
-      properties: {}
+      properties:
+         assignment:
+          type: string
+          format: uuid
+          description: Unique identifier for the group's assignment.
+         members:
+          type: array
+          items:
+            type: string
+            format: uuid
+            description: An array of student IDs assigned to this group.
     GroupUpdate:
       type: object
       additionalProperties: false
