@@ -29,8 +29,12 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
     }
 
     async checkTeacherByEmail(email: string): Promise<boolean> {
-        const teacher: Teacher = await this.getTeacherByEmail(email);
-        return teacher !== null;
+        try {
+            const teacher: Teacher = await this.getTeacherByEmail(email);
+            return teacher !== null;
+        } catch(EntityNotFoundError) {
+            return false;
+        }
     }
 
     async getTeacherByEmail(email: string): Promise<Teacher> {
