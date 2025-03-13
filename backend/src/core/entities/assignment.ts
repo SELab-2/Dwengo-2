@@ -1,10 +1,10 @@
 export class Assignment {
     public constructor(
         private _classId: string,
-        private _learningPathId: string,
-        private _startDate: Date,
-        private _deadline: Date,
-        private _extraInstructions: string,
+        private _learningPathId?: string,
+        private _startDate?: Date,
+        private _deadline?: Date,
+        private _extraInstructions?: string,
         private _id?: string,
     ) {}
 
@@ -17,19 +17,19 @@ export class Assignment {
         return this._classId;
     }
 
-    public get learningPathId(): string {
+    public get learningPathId(): string | undefined {
         return this._learningPathId;
     }
 
-    public get startDate(): Date {
+    public get startDate(): Date | undefined {
         return this._startDate;
     }
 
-    public get deadline(): Date {
+    public get deadline(): Date | undefined {
         return this._deadline;
     }
 
-    public get extraInstructions(): string {
+    public get extraInstructions(): string | undefined {
         return this._extraInstructions;
     }
 
