@@ -6,12 +6,12 @@ import { Request, HttpMethod, RouteHandlers } from "../types";
 
 const extractors = {
     getJoinRequest: createParamsExtractor(
-        JoinRequestServices.GetJoinRequestsParams,
-        { _userId: "idParent", _requestId: "id" },
+        JoinRequestServices.GetJoinRequestParams,
+        { userId: "idParent", _requestId: "id" },
         {},
         [],
     ),
-    getJoinRequests: createParamsExtractor(JoinRequestServices.GetJoinRequestParams, { _userId: "idParent" }, {}, []),
+    getJoinRequests: createParamsExtractor(JoinRequestServices.GetJoinRequestsParams, { _userId: "idParent" }, {}, []),
     remove: createParamsExtractor(JoinRequestServices.DeleteJoinRequestParams, { _id: "id" }, {}),
     create: createParamsExtractor(
         JoinRequestServices.CreateJoinRequestParams,
