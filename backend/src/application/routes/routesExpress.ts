@@ -14,8 +14,13 @@ interface RouteConfig {
     middleware?: RequestHandler[];
 }
 
-const asyncMiddleware = (fn: any) => (req: any, res: any, next: any) => {
-    Promise.resolve(fn(req, res, next)).catch(next);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const asyncMiddleware = async (fn: any) => async (req: any, res: any, next: any) => {
+    try {
+        await fn(req, res, next);
+    } catch (error) {
+        next(error);
+    }
 };
 
 /**
@@ -47,12 +52,10 @@ export function configureRoute(
         };
     }
 
-
-
     for (const [httpMethod, appMethod] of methodMap) {
         if (httpMethod === method) {
             const wrappedMiddleware = middleware.map(mw => asyncMiddleware(mw));
-            app[appMethod](urlPattern, ...wrappedMiddleware, asyncMiddleware(handler));
+            app[appMethod](urlPattern, ...wrappedMiddleware, handler);
             return;
         }
     }

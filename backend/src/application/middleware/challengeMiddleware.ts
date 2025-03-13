@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { ChallengeManager } from "../challenge";
 import { services } from "../../config/services";
+import { ChallengeManager } from "../challenge";
 
 const challengeManager = new ChallengeManager(services.users.get);
 

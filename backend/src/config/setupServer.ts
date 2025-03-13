@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { Express } from "express";
-import { ChallengeManager } from "../application/challenge";
 import { services } from "./services";
+import { ChallengeManager } from "../application/challenge";
 
 export const challengeManager = new ChallengeManager(services.users.get);
 
