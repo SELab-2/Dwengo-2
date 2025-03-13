@@ -5,7 +5,6 @@ import { IDatasourceAssignment } from "../database/data/data_sources/datasourceA
 import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 
 export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
-
     private datasource: IDatasource;
     private datasourceAssignment: Promise<IDatasourceAssignment>;
 
@@ -15,16 +14,15 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
         this.datasourceAssignment = this.datasource.getDatasourceAssignment();
     }
 
-
-    public async createAssignment(assignment: Assignment, teacherId: string): Promise<Assignment> {
-        return await (await this.datasourceAssignment).createAssignment(assignment, teacherId);
+    public async createAssignment(assignment: Assignment, classId: string): Promise<Assignment> {
+        return await (await this.datasourceAssignment).createAssignment(assignment, classId);
     }
 
     public async getAssignmentById(id: string): Promise<Assignment> {
-        const assignment: Assignment| null = await (await this.datasourceAssignment).getAssignmentById(id);
+        const assignment: Assignment | null = await (await this.datasourceAssignment).getAssignmentById(id);
 
-        if(assignment) {
-            return assignment
+        if (assignment) {
+            return assignment;
         } else {
             throw new EntityNotFoundError(`Assignment with id ${id} not found`);
         }
@@ -47,13 +45,14 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
     }
 
     public async updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment> {
-        const updatedAssignment: Assignment| null = await (await this.datasourceAssignment).updateAssignmentById(id, updatedFields);
+        const updatedAssignment: Assignment | null = await (
+            await this.datasourceAssignment
+        ).updateAssignmentById(id, updatedFields);
 
-        if(updatedAssignment) {
+        if (updatedAssignment) {
             return updatedAssignment;
         } else {
             throw new EntityNotFoundError(`Assignment with id ${id} not found`);
         }
     }
-
 }

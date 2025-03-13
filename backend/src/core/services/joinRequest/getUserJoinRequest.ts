@@ -1,9 +1,9 @@
 import { Service, ServiceParams } from "../../../config/service";
 
 export class GetUserJoinRequest implements Service<ServiceParams> {
-  constructor() {}
+    constructor() {}
 
-  async execute(input: ServiceParams): Promise<object> {
-    return {};
-  }
+    async execute(input: ServiceParams): Promise<object> {
+        return {};
+    }
 }

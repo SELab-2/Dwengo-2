@@ -6,7 +6,6 @@ import { IDatasourceClass } from "../database/data/data_sources/datasourceClassI
 import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 
 export class ClassRepositoryTypeORM extends IClassRepository {
-
     private datasource: IDatasource;
     private datasourceClass: Promise<IDatasourceClass>;
 
@@ -25,9 +24,9 @@ export class ClassRepositoryTypeORM extends IClassRepository {
     }
 
     public async getClassById(id: string): Promise<Class> {
-        const _class: Class|null = await (await this.datasourceClass).getClassById(id);
+        const _class: Class | null = await (await this.datasourceClass).getClassById(id);
 
-        if(_class) {
+        if (_class) {
             return _class;
         } else {
             throw new EntityNotFoundError(`Class with id: ${id} not found`);
@@ -35,9 +34,9 @@ export class ClassRepositoryTypeORM extends IClassRepository {
     }
 
     public async getClassByName(name: string): Promise<Class> {
-        const _class: Class|null = await (await this.datasourceClass).getClassByName(name);
+        const _class: Class | null = await (await this.datasourceClass).getClassByName(name);
 
-        if(_class) {
+        if (_class) {
             return _class;
         } else {
             throw new EntityNotFoundError(`Class with name: ${name} not found`);
@@ -67,5 +66,4 @@ export class ClassRepositoryTypeORM extends IClassRepository {
     public async addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void> {
         await (await this.datasourceClass).addUserToClass(classId, userId, userType);
     }
-
 }

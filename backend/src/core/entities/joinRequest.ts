@@ -1,6 +1,6 @@
 export enum JoinRequestType {
     TEACHER = "teacher",
-    STUDENT = "student"
+    STUDENT = "student",
 }
 
 export class JoinRequest {
@@ -9,18 +9,21 @@ export class JoinRequest {
         private _classId: string,
         private _type: JoinRequestType,
         private _id?: string,
-    ){}
+    ) {}
 
     //getters
     public get requester(): string {
         return this._requester;
     }
+
     public get classId(): string {
         return this._classId;
     }
+
     public get type(): JoinRequestType {
         return this._type;
     }
+
     public get id(): string | undefined {
         return this._id;
     }
@@ -29,12 +32,15 @@ export class JoinRequest {
     public set requester(newRequester: string) {
         this._requester = newRequester;
     }
+
     public set classId(newClassId: string) {
         this._classId = newClassId;
     }
+
     public set type(newType: JoinRequestType) {
         this._type = newType;
     }
+
     public set id(newId: string) {
         this._id = newId;
     }
@@ -44,7 +50,7 @@ export class JoinRequest {
             requester: this._requester,
             classId: this._classId,
             type: this._type,
-            id: this._id
+            id: this._id,
         };
     }
 }

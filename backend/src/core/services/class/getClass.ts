@@ -1,10 +1,13 @@
-import { ServiceParams } from "../../../config/service";
 import { ClassBaseService } from "./baseClassService";
-
+import { ServiceParams } from "../../../config/service";
 
 export class GetClassParams implements ServiceParams {
     // fields may be null: GetClassParams for GetClassByName only requires name, GetClassByClassId only requires classId...
-    constructor(private _classId?: string, private _className?: string, private _id?: string) { }
+    constructor(
+        private _classId?: string,
+        private _className?: string,
+        private _id?: string,
+    ) {}
 
     public get classId(): string | undefined {
         return this._classId;

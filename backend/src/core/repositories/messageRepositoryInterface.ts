@@ -1,12 +1,11 @@
-import { Message } from "../entities/message";
 import { AbstractRepository } from "./abstractRepository";
+import { Message } from "../entities/message";
 
 /**
  * Interface for message repositories.
  * Allows CRUD operations on message entities.
  */
 export abstract class IMessageRepository extends AbstractRepository {
-
     /**
      * Insert a new message in the repository. The `id` field of the message should be empty.
      * The `id` field will be set by the repository to a uuid.
@@ -32,5 +31,4 @@ export abstract class IMessageRepository extends AbstractRepository {
      * @returns A promise that resolves to void.
      */
     public abstract deleteMessageById(id: string): Promise<void>;
-
 }

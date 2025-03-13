@@ -3,12 +3,10 @@ import { Assignment } from "../../../../../core/entities/assignment";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
 
 export class DatasourceAssignmentTypeORM extends IDatasourceAssignment {
-
-    public async createAssignment(newAssignment: Assignment, teacherId: string): Promise<Assignment> {
+    public async createAssignment(newAssignment: Assignment, classId: string): Promise<Assignment> {
         // Check if the class exists
         const classModel: ClassTypeORM | null = await this.datasource
             .getRepository(ClassTypeORM)
@@ -18,37 +16,26 @@ export class DatasourceAssignmentTypeORM extends IDatasourceAssignment {
             throw new EntityNotFoundError(`Class with id ${newAssignment.classId} not found`);
         }
 
-        // Class exists, check if teacher exists
-        const teacherModel: TeacherTypeORM | null = await this.datasource
-            .getRepository(TeacherTypeORM)
-            .findOne({ where: { id: teacherId } });
-
-        if(!teacherModel) {
-            throw new EntityNotFoundError(`Teacher with id ${teacherId} not found`);
-        }
-
         // Class exists and teacher exist: insert assignment into the database
-        const assignmentModel: AssignmentTypeORM = this.datasource
-            .getRepository(AssignmentTypeORM)
-            .create({
-                class: { id: newAssignment.classId },
-                learning_path_id: newAssignment.learningPathId,
-                start: newAssignment.startDate,
-                deadline: newAssignment.deadline,
-                extra_instructions: newAssignment.extraInstructions
-            });
+        const assignmentModel: AssignmentTypeORM = this.datasource.getRepository(AssignmentTypeORM).create({
+            class: { id: newAssignment.classId },
+            learning_path_id: newAssignment.learningPathId,
+            start: newAssignment.startDate,
+            deadline: newAssignment.deadline,
+            extra_instructions: newAssignment.extraInstructions,
+        });
 
         await this.datasource.getRepository(AssignmentTypeORM).save(assignmentModel);
 
         return assignmentModel.toAssignmentEntity();
     }
 
-    public async getAssignmentById(id: string): Promise<Assignment|null> {
+    public async getAssignmentById(id: string): Promise<Assignment | null> {
         const assignmentModel: AssignmentTypeORM | null = await this.datasource
             .getRepository(AssignmentTypeORM)
-            .findOne({ 
+            .findOne({
                 where: { id: id },
-                relations: ["class"]
+                relations: ["class"],
             });
 
         if (assignmentModel !== null) {
@@ -58,12 +45,10 @@ export class DatasourceAssignmentTypeORM extends IDatasourceAssignment {
     }
 
     public async getAssignmentsByClassId(classId: string): Promise<Assignment[]> {
-        const assignmentModels: AssignmentTypeORM[] = await this.datasource
-            .getRepository(AssignmentTypeORM)
-            .find({ 
-                where: { class: { id: classId } },
-                relations: ["class"]
-            });
+        const assignmentModels: AssignmentTypeORM[] = await this.datasource.getRepository(AssignmentTypeORM).find({
+            where: { class: { id: classId } },
+            relations: ["class"],
+        });
 
         return assignmentModels.map((assignmentModel: AssignmentTypeORM) => assignmentModel.toAssignmentEntity());
     }
@@ -76,23 +61,21 @@ export class DatasourceAssignmentTypeORM extends IDatasourceAssignment {
             // Join StudentOfGroup
             .leftJoinAndSelect("StudentOfGroupTypeORM.group", "group") // Last one is alias
             // Join Group to AssignmentGroup
-            .leftJoinAndSelect("group.assignment", "assignment")        
+            .leftJoinAndSelect("group.assignment", "assignment")
             // Join Assignment to Class
             .leftJoinAndSelect("assignment.class", "class")
             .getMany();
 
-        return assignmentsJoinResult.map((assignmentJoinResult) => {
+        return assignmentsJoinResult.map(assignmentJoinResult => {
             return assignmentJoinResult.group.assignment.toAssignmentEntity();
         });
     }
 
     public async getAssignmentsByLearningPathId(learningPathId: string): Promise<Assignment[]> {
-        const assignmentModels: AssignmentTypeORM[] = await this.datasource
-            .getRepository(AssignmentTypeORM)
-            .find({ 
-                where: { learning_path_id: learningPathId },
-                relations: ["class"]
-            });
+        const assignmentModels: AssignmentTypeORM[] = await this.datasource.getRepository(AssignmentTypeORM).find({
+            where: { learning_path_id: learningPathId },
+            relations: ["class"],
+        });
 
         return assignmentModels.map((assignmentModel: AssignmentTypeORM) => assignmentModel.toAssignmentEntity());
     }
@@ -102,43 +85,39 @@ export class DatasourceAssignmentTypeORM extends IDatasourceAssignment {
     }
 
     public async updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment | null> {
-        const assignmentModel: AssignmentTypeORM | null = 
-            await this.datasource
-                .getRepository(AssignmentTypeORM)
-                .findOne({ where: { id: id } });
+        const assignmentModel: AssignmentTypeORM | null = await this.datasource
+            .getRepository(AssignmentTypeORM)
+            .findOne({ where: { id: id } });
         let updateResult;
-        if(!assignmentModel){
+        if (!assignmentModel) {
             throw new EntityNotFoundError("Assignment not found");
         }
-        if(updatedFields.classId) {
+        if (updatedFields.classId) {
             const classModel: ClassTypeORM | null = await this.datasource
                 .getRepository(ClassTypeORM)
                 .findOne({ where: { id: id } });
-            
-            if(!classModel) {
+
+            if (!classModel) {
                 throw new EntityNotFoundError("Class not found");
             }
 
             updateResult = await this.datasource
                 .getRepository(AssignmentTypeORM)
                 .update(id, assignmentModel.fromPartialAssignmentEntity(updatedFields, classModel));
-
-            
         } else {
             updateResult = await this.datasource
-            .getRepository(AssignmentTypeORM)
-            .update(id, assignmentModel.fromPartialAssignmentEntity(updatedFields, undefined));
+                .getRepository(AssignmentTypeORM)
+                .update(id, assignmentModel.fromPartialAssignmentEntity(updatedFields, undefined));
         }
-        
+
         /* Some notes: I did not found any documentation on the return value of update.
          * So i asked ChatGPT: https://chatgpt.com/share/67d1c206-18f4-8004-a760-b40d3d2ef2d0
          * Postgresql has affected >= 1 even if it finds an entry that doesn't need to be updated.
          * So it only has affected == 0 if it doesn't find any entry to update.
          */
-        if (updateResult.affected || 0 > 0) { 
+        if (updateResult.affected || 0 > 0) {
             return await this.getAssignmentById(id);
-        } 
+        }
         return null;
     }
-
 }
