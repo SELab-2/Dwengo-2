@@ -53,19 +53,19 @@ export class ClassRepositoryTypeORM extends IClassRepository {
     }
 
     public async getUserClasses(id: string): Promise<Class[]> {
-        throw new Error("Not implemented yet");
+        return await (await this.datasourceClass).getUserClasses(id);
     }
 
     public async getAllClassesByTeacherId(teacherId: string): Promise<Class[]> {
-        throw new Error("Not implemented yet");
+        return await this.getUserClasses(teacherId);
     }
 
     public async getAllClassesByStudentId(studentId: string): Promise<Class[]> {
-        throw new Error("Not implemented yet");
+        return await this.getUserClasses(studentId);
     }
 
     public async addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void> {
-        throw new Error("Not implemented yet");
+        await (await this.datasourceClass).addUserToClass(classId, userId, userType);
     }
 
 }
