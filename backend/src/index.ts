@@ -48,7 +48,7 @@ const services = {
     removeUserFromGroup: new UserServices.RemoveUserFromGroup(repos.student),
     getAssignmentUsers: new UserServices.GetAssignmentUsers(repos.teacher, repos.student),
     // assignUserToAssignment: new UserServices.AssignUserToAssignment(repos.student, repos.teacher),
-    // getAll: new UserServices.GetAllUsers(repos.student, repos.teacher),
+    getAll: new UserServices.GetAllUsers(repos.teacher, repos.student),
     create: new UserServices.CreateUser(repos.student, repos.teacher)
   },
   class: {
@@ -100,7 +100,7 @@ const controllers = {
   users: new UsersController(services.users.get, services.users.update, services.users.remove,
     services.users.getClassUsers, services.users.removeUserFromClass, services.users.getGroupUsers,
     services.users.assignStudentToGroup, services.users.removeUserFromGroup, services.users.getAssignmentUsers,
-    services.users.create
+    services.users.getAll, services.users.create
   ),
   class: new ClassController(services.class.get, services.class.getUserClasses, services.class.update,
     services.class.remove, services.class.create
