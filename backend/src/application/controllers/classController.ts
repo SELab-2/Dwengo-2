@@ -5,8 +5,8 @@ import { createParamsExtractor } from "../extractors";
 import { HttpMethod, Request, RouteHandlers } from "../types";
 
 const extractors = {
-    getClass: createParamsExtractor(ClassServices.GetClassParams, { _classId: "id" }, {}, ["_className", "_id"]),
-    getUserClasses: createParamsExtractor(ClassServices.GetClassParams, { _classId: "id" }, {}, ["_className", "_id"]),
+    getClass: createParamsExtractor(ClassServices.GetClassParams, { _id: "idParent", _classId: "id" }, {}, ["_className"]),
+    getUserClasses: createParamsExtractor(ClassServices.GetClassParams, { _id: "idParent" }, {}, ["_className", "_classId"]),
     updateClass: createParamsExtractor(
         ClassServices.UpdateClassParams,
         { _id: "id", _name: "name", _description: "description", _targetAudience: "audience" },
@@ -42,7 +42,8 @@ export class ClassController extends Controller {
         const handlers: RouteHandlers = {
             [HttpMethod.GET]: [
                 {
-                    hasId: false,
+                    parent: "users",
+                    hasId: true,
                     hasParentId: true,
                     extractor: extractors.getClass,
                     handler: (req: Request, data: ServiceParams) => this.getOne(req, data),
