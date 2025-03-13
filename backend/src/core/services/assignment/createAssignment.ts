@@ -8,11 +8,11 @@ import { Assignment } from "../../entities/assignment";
 export class CreateAssignmentParams implements ServiceParams {
     public constructor(
         private _classId: string,
-        private _learningPathId: string,
-        private _startDate: Date,
-        private _deadline: Date,
-        private _extraInstructions: string,
-        private _teacherId: string,
+        private _learningPathId?: string,
+        private _startDate?: Date,
+        private _deadline?: Date,
+        private _extraInstructions?: string,
+        private _teacherId?: string,
     ) {}
 
     public get classId(): string {
