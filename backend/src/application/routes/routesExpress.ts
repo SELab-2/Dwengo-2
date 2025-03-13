@@ -14,6 +14,10 @@ interface RouteConfig {
     middleware?: RequestHandler[];
 }
 
+const asyncMiddleware = (fn: any) => (req: any, res: any, next: any) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+};
+
 /**
  * Configures a single route using the provided configuration and method map.
  * Maps HTTP requests to the controller's handle method after
@@ -47,7 +51,8 @@ export function configureRoute(
 
     for (const [httpMethod, appMethod] of methodMap) {
         if (httpMethod === method) {
-            app[appMethod](urlPattern, ...middleware, handler);
+            const wrappedMiddleware = middleware.map(mw => asyncMiddleware(mw));
+            app[appMethod](urlPattern, ...wrappedMiddleware, asyncMiddleware(handler));
             return;
         }
     }
