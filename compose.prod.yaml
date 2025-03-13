@@ -14,8 +14,6 @@ services:
     volumes:
       - /workspace/backend/node_modules
     restart: always
-    networks:
-      - dwengo_network
 
   database:
     build:
@@ -34,9 +32,3 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       retries: 5
-    networks:
-      - dwengo_network
-
-networks:
-  dwengo_network:
-    external: true

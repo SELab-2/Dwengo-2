@@ -27,7 +27,7 @@ export function authenticationRoutes(
                 method: HttpMethod.POST,
                 urlPattern: "/login",
                 controller,
-                middleware: [loginMw.challengeMiddleware, ...middleware],
+                middleware: [...middleware],
             },
             { app, method: HttpMethod.POST, urlPattern: "/register", controller, middleware },
             {
@@ -35,7 +35,7 @@ export function authenticationRoutes(
                 method: HttpMethod.GET,
                 urlPattern: "/challenge",
                 controller: undefined,
-                middleware: [challengeMw.challengeMiddleware, ...middleware],
+                middleware: [...middleware],
             },
         ],
         DEFAULT_METHOD_MAP,
