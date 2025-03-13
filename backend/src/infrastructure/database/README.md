@@ -1,0 +1,1 @@
+![Database schema](./dwengo_database.drawio.svg)

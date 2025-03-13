@@ -1,0 +1,48 @@
+services:
+  backend:
+    build:
+      context: .
+      target: backend
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./backend:/workspace/backend  # Bind local backend folder to container
+      - /workspace/backend/node_modules  # Anonymous volume for node_modules
+    restart: always
+
+  frontend:
+    build:
+      context: .
+      target: frontend
+    ports:
+      - "4201:4200"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/workspace/frontend  # Bind local frontend folder to container
+      - /workspace/frontend/node_modules  # Anonymous volume for node_modules
+    restart: always
+
+  database:
+    build:
+      context: .
+      target: database
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./backend/src/infrastructure/database:/workspace/database  # Bind local database folder
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=dwengo-database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 5

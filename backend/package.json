@@ -1,0 +1,62 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "description": "backend for Dwengo-2 interactive learning application",
+  "main": "app.ts",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/src/app.js",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/app.ts",
+    "lint": "eslint src",
+    "test": "jest",
+    "test-coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SELab-2/Dwengo-2.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "typescript",
+    "education",
+    "rest"
+  ],
+  "author": "Dwengo-2 Development Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SELab-2/Dwengo-2/issues"
+  },
+  "homepage": "https://github.com/SELab-2/Dwengo-2#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "reflect-metadata": "^0.2.1",
+    "typeorm": "^0.3.17",
+    "pg": "^8.13.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^20.8.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.0.0",
+    "typescript": "^5.7.3",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "jest": "^29.7.0",
+    "jest-mock": "^26.6.2",
+    "ts-jest": "^29.1.0",
+    "@types/jest": "^29.5.0",
+    "supertest": "^6.3.0",
+    "prettier": "^3.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-no-only-tests": "^3.0.0"
+  }
+}

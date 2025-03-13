@@ -1,0 +1,42 @@
+# Backend set-up
+FROM node:22-alpine AS backend
+WORKDIR /workspace/backend
+COPY ./backend/ ./
+
+RUN npm install
+RUN npm install -g nodemon ts-node typescript tsconfig-paths pg
+
+
+EXPOSE 3001
+CMD ["npm", "run", "dev"]
+
+# Frontend setup
+FROM node:22-alpine AS frontend 
+# Use stable LTS Node version
+WORKDIR /workspace/frontend
+# Copy application files
+COPY ./frontend/ ./
+
+RUN npm install
+RUN npm install -g @angular/cli
+
+# Install chromium for headless browser testing
+RUN apk add --no-cache chromium harfbuzz ttf-freefont
+# Set the chromium binary path
+ENV CHROME_BIN=/usr/bin/chromium
+
+EXPOSE 4201
+CMD ["npm", "start"]
+
+# Database set-up
+FROM postgres:alpine AS database
+WORKDIR /workspace/database
+#Moved database to infrastructure in backend
+COPY ./backend/src/infrastructure/database/ ./
+
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=postgres
+ENV POSTGRES_DB=dwengo-database
+
+EXPOSE 5433
+CMD ["postgres"]
