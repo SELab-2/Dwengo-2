@@ -1,15 +1,23 @@
 module.exports = {
+    root: true,
     parser: "@typescript-eslint/parser",
-    parserOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
-    },
-    plugins: ["@typescript-eslint"],
+    plugins: ["@typescript-eslint", "prettier", "no-only-tests", "import"],
     extends: [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
     ],
     rules: {
-      "@typescript-eslint/no-unused-vars": "warn",  // Turns unused var error into warning
+        "prettier/prettier": ["error", { "semi": true, "singleQuote": false, "tabWidth": 4, "printWidth": 120 }],
+        "import/order": [
+            "error",
+            {
+                "groups": ["builtin", "external", "internal"],
+                "alphabetize": { "order": "asc", "caseInsensitive": true }
+            }
+        ],
+        "no-console": "off",
+        "no-only-tests/no-only-tests": "warn",
+        "@typescript-eslint/no-unused-vars": "warn",
     }
 };

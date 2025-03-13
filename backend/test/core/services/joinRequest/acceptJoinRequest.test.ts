@@ -1,7 +1,7 @@
 import {
   AcceptJoinRequest,
   AcceptJoinRequestParams,
-} from '../../../../src/core/services/join_request/acceptJoinRequest';
+} from '../../../../src/core/services/joinRequest/acceptJoinRequest';
 import { IJoinRequestRepository } from '../../../../src/core/repositories/joinRequestRepositoryInterface';
 import { IClassRepository } from '../../../../src/core/repositories/classRepositoryInterface';
 import {

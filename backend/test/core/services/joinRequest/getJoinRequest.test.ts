@@ -1,4 +1,4 @@
-import { GetJoinRequests, GetJoinRequest, GetJoinRequestsParams, GetJoinRequestParams } from '../../../../src/core/services/join_request/getJoinRequest';
+import { GetJoinRequests, GetJoinRequest, GetJoinRequestsParams, GetJoinRequestParams } from '../../../../src/core/services/joinRequest/getJoinRequest';
 import { IJoinRequestRepository } from '../../../../src/core/repositories/joinRequestRepositoryInterface';
 import { JoinRequest, JoinRequestType } from '../../../../src/core/entities/joinRequest';
 import { ApiError, ErrorCode } from '../../../../src/application/types';

@@ -1,8 +1,8 @@
-import { ServiceParams } from "../../../config/service";
 import { UserBaseService } from "./userBaseService";
+import { ServiceParams } from "../../../config/service";
 
 export class GetAssignmentUsersParams implements ServiceParams {
-    constructor(private _assignmentId: string) { }
+    constructor(private _assignmentId: string) {}
 
     public get assignmentId(): string {
         return this._assignmentId;
@@ -11,7 +11,9 @@ export class GetAssignmentUsersParams implements ServiceParams {
 
 export class GetAssignmentUsers extends UserBaseService<GetAssignmentUsersParams> {
     async execute(input: GetAssignmentUsersParams): Promise<object> {
-        const students: object[] = (await this.studentRepository.getAssignmentStudents(input.assignmentId)).map(s => s.toObject());
+        const students: object[] = (await this.studentRepository.getAssignmentStudents(input.assignmentId)).map(s =>
+            s.toObject(),
+        );
         return { students: students };
     }
 }

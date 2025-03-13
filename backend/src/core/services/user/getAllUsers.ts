@@ -2,7 +2,7 @@ import { UserBaseService } from "./userBaseService";
 import { ServiceParams } from "../../../config/service";
 
 export class GetAllUsersParams implements ServiceParams {
-    public constructor(){} //needed for controller
+    public constructor() {} //needed for controller
 }
 
 export class GetAllUsers extends UserBaseService<GetAllUsersParams> {

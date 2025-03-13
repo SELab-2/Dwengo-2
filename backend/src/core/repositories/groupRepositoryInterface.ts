@@ -1,12 +1,11 @@
-import { Group } from "../entities/group";
 import { AbstractGenericRepository } from "./abstractGenericRepository";
+import { Group } from "../entities/group";
 
 /**
  * Interface for group repositories.
  * Allows CRUD operations on group entities.
  */
 export abstract class IGroupRepository extends AbstractGenericRepository<Group> {
-
     // All the operations that are specific for the group repository.
 
     /**
@@ -24,5 +23,4 @@ export abstract class IGroupRepository extends AbstractGenericRepository<Group> 
      * @throws EntityNotFoundError when no groups are found.
      */
     public abstract getByAssignmentId(assignmentId: string): Promise<Group[]>;
-    
 }

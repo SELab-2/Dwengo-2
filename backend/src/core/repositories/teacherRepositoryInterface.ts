@@ -1,12 +1,11 @@
-import { Teacher } from "../entities/teacher";
 import { AbstractRepository } from "./abstractRepository";
+import { Teacher } from "../entities/teacher";
 
 /**
  * Interface for teacher repositories.
  * Allows CRUD operations on teacher entities.
  */
 export abstract class ITeacherRepository extends AbstractRepository {
-
     /**
      * Insert a new teacher in the repository. The `id` field of the teacher should be empty.
      * The `id` field will be set by the repository to a uuid.
@@ -22,7 +21,6 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @returns A promise that resolves to the teacher with the given id or null if no results are found.
      */
     public abstract getTeacherById(id: string): Promise<Teacher>;
-
 
     /**
      * Check if a teacher with this email exists.
@@ -88,5 +86,4 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @throws {EntityNotFoundError} when the class doesn't exist.
      */
     public abstract getClassTeachers(classId: string): Promise<Teacher[]>;
-
 }

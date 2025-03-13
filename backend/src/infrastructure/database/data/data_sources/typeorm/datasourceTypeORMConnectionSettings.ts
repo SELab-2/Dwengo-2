@@ -4,7 +4,6 @@
  */
 
 export class DatasourceTypeORMConnectionSettings {
-
     public constructor(
         private type: string,
         private host: string,
@@ -18,7 +17,7 @@ export class DatasourceTypeORMConnectionSettings {
 
         // Next any[] is not possible to replace with a more specific type
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        private entities: any[]
+        private entities: any[],
     ) {}
 
     public getType(): string {
@@ -118,7 +117,7 @@ export class DatasourceTypeORMConnectionSettings {
             synchronize: this.synchronize,
             logging: this.logging,
             dropschema: this.dropschema,
-            entities: this.entities
+            entities: this.entities,
         };
     }
 }

@@ -1,16 +1,15 @@
-import { JoinRequest } from "../entities/joinRequest";
 import { AbstractRepository } from "./abstractRepository";
+import { JoinRequest } from "../entities/joinRequest";
 
 /**
  * Interface for join request repositories.
  * Allows CRUD operations on join request entities.
  */
 export abstract class IJoinRequestRepository extends AbstractRepository {
-
     /**
      * Insert a new join request in the repository. The `id` field of the join request should be empty.
      * The `id` field will be set by the repository to a uuid.
-     * 
+     *
      * @param joinRequest The new join request to insert.
      * @throws EntityNotFoundError when the requester id in `joinRequest` does not exist.
      * @returns A promise that resolves to the inserted join request.
@@ -42,5 +41,4 @@ export abstract class IJoinRequestRepository extends AbstractRepository {
      * @param id The id of the join request to delete.
      */
     public abstract deleteJoinRequestById(id: string): Promise<void>;
-    
 }

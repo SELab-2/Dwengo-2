@@ -1,7 +1,7 @@
-import { Express } from 'express';
-import { configureRoutes, DEFAULT_METHOD_MAP } from './routesExpress';
-import { UsersController } from '../controllers/usersController';
-import { HttpMethod } from '../types';
+import { Express } from "express";
+import { configureRoutes, DEFAULT_METHOD_MAP } from "./routesExpress";
+import { UsersController } from "../controllers/usersController";
+import { HttpMethod } from "../types";
 
 /**
  * RESTful routing configuration for common user-related endpoints.
@@ -23,18 +23,21 @@ import { HttpMethod } from '../types';
  * - POST /users - Create new user
  */
 export function usersRoutes(app: Express, controller: UsersController): void {
-  configureRoutes([
-    { app, method: HttpMethod.GET,    urlPattern: '/users/:id', controller },
-    { app, method: HttpMethod.PATCH,  urlPattern: '/users/:id', controller },
-    { app, method: HttpMethod.DELETE, urlPattern: '/users/:id', controller },
-    { app, method: HttpMethod.GET,    urlPattern: '/classes/:idParent/users', controller },
-    { app, method: HttpMethod.DELETE, urlPattern: '/classes/:idParent/users/:id', controller },
-    { app, method: HttpMethod.GET,    urlPattern: '/groups/:idParent/users', controller },
-    { app, method: HttpMethod.POST,   urlPattern: '/groups/:idParent/users', controller },
-    { app, method: HttpMethod.DELETE, urlPattern: '/groups/:idParent/users/:id', controller },
-    { app, method: HttpMethod.GET,    urlPattern: '/assignments/:idParent/users', controller },
-    // { app, method: HttpMethod.POST,   urlPattern: '/assignments/:idParent/users', controller },
-    { app, method: HttpMethod.GET,    urlPattern: '/users', controller },
-    { app, method: HttpMethod.POST,   urlPattern: '/users', controller }
-  ], DEFAULT_METHOD_MAP);
+    configureRoutes(
+        [
+            { app, method: HttpMethod.GET, urlPattern: "/users/:id", controller },
+            { app, method: HttpMethod.PATCH, urlPattern: "/users/:id", controller },
+            { app, method: HttpMethod.DELETE, urlPattern: "/users/:id", controller },
+            { app, method: HttpMethod.GET, urlPattern: "/classes/:idParent/users", controller },
+            { app, method: HttpMethod.DELETE, urlPattern: "/classes/:idParent/users/:id", controller },
+            { app, method: HttpMethod.GET, urlPattern: "/groups/:idParent/users", controller },
+            { app, method: HttpMethod.POST, urlPattern: "/groups/:idParent/users", controller },
+            { app, method: HttpMethod.DELETE, urlPattern: "/groups/:idParent/users/:id", controller },
+            { app, method: HttpMethod.GET, urlPattern: "/assignments/:idParent/users", controller },
+            // { app, method: HttpMethod.POST,   urlPattern: '/assignments/:idParent/users', controller },
+            { app, method: HttpMethod.GET, urlPattern: "/users", controller },
+            { app, method: HttpMethod.POST, urlPattern: "/users", controller },
+        ],
+        DEFAULT_METHOD_MAP,
+    );
 }

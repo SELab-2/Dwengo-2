@@ -1,13 +1,13 @@
 import { EntityNotFoundError } from "../../config/error";
 import { Group } from "../../core/entities/group";
 import { IGroupRepository } from "../../core/repositories/groupRepositoryInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 import { IDatasourceGroup } from "../database/data/data_sources/datasourceGroupInterface";
+import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 
 export class GroupRepositoryTypeORM extends IGroupRepository {
     private datasource: IDatasource;
-    private datasourceGroup: Promise<IDatasourceGroup>
-    
+    private datasourceGroup: Promise<IDatasourceGroup>;
+
     public constructor() {
         super();
         this.datasource = this.datasourceFactory.createDatasource();
@@ -19,9 +19,9 @@ export class GroupRepositoryTypeORM extends IGroupRepository {
     }
 
     async getById(id: string): Promise<Group> {
-        const group: Group|null = await (await this.datasourceGroup).getById(id);
+        const group: Group | null = await (await this.datasourceGroup).getById(id);
 
-        if(group) {
+        if (group) {
             return group;
         } else {
             throw new EntityNotFoundError(`Group with id: ${id} not found`);
@@ -44,5 +44,4 @@ export class GroupRepositoryTypeORM extends IGroupRepository {
     public async getByAssignmentId(assignmentId: string): Promise<Group[]> {
         return await (await this.datasourceGroup).getByAssignmentId(assignmentId);
     }
-
 }

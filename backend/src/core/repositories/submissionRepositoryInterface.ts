@@ -1,8 +1,7 @@
-import { Submission } from "../entities/submission";
 import { AbstractRepository } from "./abstractRepository";
+import { Submission } from "../entities/submission";
 
 export abstract class ISubmissionRepository extends AbstractRepository {
-
     /**
      * Inserts a new submission into the repository. The `id` field of the submission should be empty.
      * @param submission The submission object to be created.

@@ -1,4 +1,4 @@
-import { DeleteQuestionThread, DeleteQuestionThreadParams } from '../../../../src/core/services/question_thread/deleteQuestionThread';
+import { DeleteQuestionThread, DeleteQuestionThreadParams } from '../../../../src/core/services/questionThread/deleteQuestionThread';
 import { DatabaseError } from '../../../../src/config/error';
 
 // Mock repository

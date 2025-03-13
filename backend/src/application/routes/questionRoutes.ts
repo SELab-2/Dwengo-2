@@ -16,11 +16,14 @@ import { HttpMethod } from "../types";
  * - POST /assignments/:idParent/questions - Create new question
  */
 export function questionThreadRoutes(app: Express, controller: QuestionThreadController): void {
-  configureRoutes([
-    { app, method: HttpMethod.GET,    urlPattern: "/assignments/:idParent/questions/:id", controller },
-    { app, method: HttpMethod.GET,    urlPattern: "/assignments/:idParent/questions", controller },
-    { app, method: HttpMethod.PATCH,  urlPattern: "/assignments/:idParent/questions/:id", controller },
-    { app, method: HttpMethod.DELETE, urlPattern: "/assignments/:idParent/questions/:id", controller },
-    { app, method: HttpMethod.POST,   urlPattern: "/assignments/:idParent/questions", controller },
-  ], DEFAULT_METHOD_MAP);
+    configureRoutes(
+        [
+            { app, method: HttpMethod.GET, urlPattern: "/assignments/:idParent/questions/:id", controller },
+            { app, method: HttpMethod.GET, urlPattern: "/assignments/:idParent/questions", controller },
+            { app, method: HttpMethod.PATCH, urlPattern: "/assignments/:idParent/questions/:id", controller },
+            { app, method: HttpMethod.DELETE, urlPattern: "/assignments/:idParent/questions/:id", controller },
+            { app, method: HttpMethod.POST, urlPattern: "/assignments/:idParent/questions", controller },
+        ],
+        DEFAULT_METHOD_MAP,
+    );
 }

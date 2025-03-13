@@ -1,45 +1,45 @@
-import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, Column, CreateDateColumn } from "typeorm"
-import { AssignmentTypeORM } from "./assignmentTypeorm"
-import { StudentTypeORM } from "./studentTypeorm"
-import { StatusType, Submission } from "../../../../core/entities/submission"
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, Column, CreateDateColumn } from "typeorm";
+import { AssignmentTypeORM } from "./assignmentTypeorm";
+import { StudentTypeORM } from "./studentTypeorm";
+import { StatusType, Submission } from "../../../../core/entities/submission";
 
 export enum SubmissionStatus {
     NOT_ACCEPTED = "not_accepted",
-    ACCEPTED = "accepted"
+    ACCEPTED = "accepted",
 }
 
 @Entity()
 export class SubmissionTypeORM {
     @PrimaryGeneratedColumn("uuid")
-    id!: string
+    id!: string;
 
     @OneToOne(() => StudentTypeORM)
     @JoinColumn({ name: "student_id" })
-    student!: StudentTypeORM
+    student!: StudentTypeORM;
 
     @OneToOne(() => AssignmentTypeORM)
     @JoinColumn({ name: "assignment_id" })
-    assignment!: AssignmentTypeORM
+    assignment!: AssignmentTypeORM;
 
-    @Column({ type: "varchar"}) // In the Dwengo API docs a uuid is a string
-    learning_object_id!: string // uuid of corresponding learning object
+    @Column({ type: "varchar" }) // In the Dwengo API docs a uuid is a string
+    learning_object_id!: string; // uuid of corresponding learning object
 
     @CreateDateColumn()
-    time!: Date
-    
+    time!: Date;
+
     @Column({ type: "bytea" }) // Equivalent to a blob
-    contents!: Buffer
+    contents!: Buffer;
 
     @Column({
         type: "enum",
         enum: SubmissionStatus,
-        default: SubmissionStatus.ACCEPTED
+        default: SubmissionStatus.ACCEPTED,
     })
-    progress_status!: SubmissionStatus
+    progress_status!: SubmissionStatus;
 
     public toEntity(): Submission {
-        let status : StatusType;
-        if (this.progress_status == SubmissionStatus.ACCEPTED){
+        let status: StatusType;
+        if (this.progress_status == SubmissionStatus.ACCEPTED) {
             status = StatusType.ACCEPTED;
         } else {
             status = StatusType.NOT_ACCEPTED;
@@ -51,15 +51,19 @@ export class SubmissionTypeORM {
             this.time,
             this.contents,
             status,
-            this.id
+            this.id,
         );
     }
 
-    public static createTypeORM(submission: Submission, studentModel: StudentTypeORM, assignmentModel: AssignmentTypeORM): SubmissionTypeORM {
-        const submissionModel: SubmissionTypeORM = new SubmissionTypeORM()
+    public static createTypeORM(
+        submission: Submission,
+        studentModel: StudentTypeORM,
+        assignmentModel: AssignmentTypeORM,
+    ): SubmissionTypeORM {
+        const submissionModel: SubmissionTypeORM = new SubmissionTypeORM();
 
-        let status : SubmissionStatus;
-        if (submission.status == StatusType.ACCEPTED){
+        let status: SubmissionStatus;
+        if (submission.status == StatusType.ACCEPTED) {
             status = SubmissionStatus.ACCEPTED;
         } else {
             status = SubmissionStatus.NOT_ACCEPTED;
@@ -71,7 +75,7 @@ export class SubmissionTypeORM {
         submissionModel.time = submission.time;
         submissionModel.contents = submission.contents;
         submissionModel.progress_status = status;
-        
+
         return submissionModel;
     }
 }

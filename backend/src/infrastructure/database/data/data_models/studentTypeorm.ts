@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
-import { UserTypeORM } from "./userTypeorm"
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { UserTypeORM } from "./userTypeorm";
 import { Student } from "../../../../core/entities/student";
 
 @Entity()
@@ -9,8 +9,7 @@ export class StudentTypeORM {
 
     @OneToOne(() => UserTypeORM)
     @JoinColumn({ name: "user_id" })
-    student!: UserTypeORM
-
+    student!: UserTypeORM;
 
     // Since multiple constructors isn't supported by Typescript:
     // https://stackoverflow.com/questions/12702548/constructor-overload-in-typescript

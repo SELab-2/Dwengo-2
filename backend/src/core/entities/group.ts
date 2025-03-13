@@ -1,4 +1,3 @@
-
 export class Group {
     constructor(
         private _memberIds: string[],
@@ -11,7 +10,7 @@ export class Group {
     }
 
     public get memberIds(): string[] {
-        return [...this._memberIds];  // Prevent direct modification
+        return [...this._memberIds]; // Prevent direct modification
     }
 
     public get id(): string | undefined {
@@ -30,4 +29,3 @@ export class Group {
         };
     }
 }
-

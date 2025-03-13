@@ -16,11 +16,14 @@ import { HttpMethod } from "../types";
  * - POST /classes - Create a new class
  */
 export function classRoutes(app: Express, controller: ClassController): void {
-  configureRoutes([
-    { app, method: HttpMethod.GET,    urlPattern: "/users/:idParent/classes/:id", controller },
-    { app, method: HttpMethod.GET,    urlPattern: "/users/:idParent/classes", controller },
-    { app, method: HttpMethod.PATCH,  urlPattern: "/classes/:id", controller },
-    { app, method: HttpMethod.DELETE, urlPattern: "/classes/:id", controller },
-    { app, method: HttpMethod.POST,   urlPattern: "/classes", controller },
-  ], DEFAULT_METHOD_MAP);
+    configureRoutes(
+        [
+            { app, method: HttpMethod.GET, urlPattern: "/users/:idParent/classes/:id", controller },
+            { app, method: HttpMethod.GET, urlPattern: "/users/:idParent/classes", controller },
+            { app, method: HttpMethod.PATCH, urlPattern: "/classes/:id", controller },
+            { app, method: HttpMethod.DELETE, urlPattern: "/classes/:id", controller },
+            { app, method: HttpMethod.POST, urlPattern: "/classes", controller },
+        ],
+        DEFAULT_METHOD_MAP,
+    );
 }
