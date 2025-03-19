@@ -1,6 +1,6 @@
-import { Service, ServiceParams, Services } from "../../config/service";
-import { statusMap, extractPathParams, extractQueryParams } from "../helpersExpress";
-import { ApiError, Request, Response, RouteHandlers, ResponseBody, ErrorCode } from "../types";
+import { Service, Services } from "../../config/service";
+import { statusMap } from "../helpersExpress";
+import { ApiError, Request, Response, ResponseBody, ErrorCode } from "../types";
 
 /**
  * Abstract base Controller class implementing RESTful routing with path parameter-based routing.
@@ -10,18 +10,15 @@ import { ApiError, Request, Response, RouteHandlers, ResponseBody, ErrorCode } f
  * route matching logic while centralizing error handling.
  */
 export abstract class Controller {
-    protected services: Services;
-    protected handlers: RouteHandlers;
+    public services: Services;
 
     /**
      * Create a controller with injected services and route handlers.
      *
      * @param services - Service objects needed by this controller
-     * @param handlers - Mapping of HTTP methods to route pattern definitions
      */
-    public constructor(services: Services, handlers: RouteHandlers) {
+    public constructor(services: Services) {
         this.services = services;
-        this.handlers = handlers;
     }
 
     /**
@@ -31,23 +28,13 @@ export abstract class Controller {
      * @param req - HTTP request object
      * @returns Promise resolving to HTTP response with appropriate status and body
      */
-    public async handle(req: Request): Promise<Response> {
-        const { method } = req;
-        req.pathParams = extractPathParams(req);
-        req.queryParams = extractQueryParams(req);
-        const { id, idParent, parent } = req.pathParams;
-
-        const methodHandlers = this.handlers[method];
-        if (!methodHandlers) return this.handleError({ code: ErrorCode.NOT_FOUND, message: "Method not supported" });
-
-        const match = methodHandlers.find(
-            p => p.hasId === !!id && p.hasParentId === !!idParent && (!p.parent || p.parent === parent),
-        );
-
-        if (!match) return this.handleError({ code: ErrorCode.NOT_FOUND, message: "Endpoint not found" });
-
+    public async handle<T>(
+        req: Request,
+        extractor: (req: Request) => T,
+        handler: (req: Request, params: T) => Promise<Response>,
+    ): Promise<Response> {
         try {
-            return await match.handler(req, match.extractor(req));
+            return await handler(req, extractor(req));
         } catch (error) {
             return this.handleError(error);
         }
@@ -85,6 +72,7 @@ export abstract class Controller {
         return this.respond(status, {
             code: apiError.code || "INTERNAL_ERROR",
             message: apiError.message || "Server error",
+            ...Object.fromEntries(Object.entries(apiError).filter(([key]) => !["code", "message"].includes(key))),
         });
     }
 
@@ -109,7 +97,7 @@ export abstract class Controller {
      * @param operationName - Name of the operation for error message
      * @returns Response with appropriate status and data
      */
-    protected async _executeService<T extends ServiceParams>(
+    protected async _executeService<T>(
         service: Service<T> | undefined,
         data: T,
         statusCode: number,
@@ -131,7 +119,7 @@ export abstract class Controller {
      * @param data - Parameters for the service extracted by the route's extractor
      * @returns Response with status 200 and entity data
      */
-    protected async getOne(req: Request, data: ServiceParams): Promise<Response> {
+    public async getOne<T>(req: Request, data: T): Promise<Response> {
         return this._executeService(this.services.get, data, 200, "Get");
     }
 
@@ -141,7 +129,7 @@ export abstract class Controller {
      * @param data - Parameters for the service extracted by the route's extractor
      * @returns Response with status 200 and list of entities
      */
-    protected async getAll(req: Request, data: ServiceParams): Promise<Response> {
+    public async getAll<T>(req: Request, data: T): Promise<Response> {
         return this._executeService(this.services.getAll, data, 200, "GetAll");
     }
 
@@ -152,11 +140,7 @@ export abstract class Controller {
      * @param service - Service to execute
      * @returns Response with status 200 and list of child entities
      */
-    protected async getChildren<T extends ServiceParams>(
-        req: Request,
-        data: T,
-        service: Service<T>,
-    ): Promise<Response> {
+    public async getChildren<T>(req: Request, data: T, service: Service<T>): Promise<Response> {
         return this._executeService(service, data, 200, "GetChildren");
     }
 
@@ -167,7 +151,7 @@ export abstract class Controller {
      * @param service - Service to execute
      * @returns Response with status 201 and created child entity data
      */
-    protected async addChild<T extends ServiceParams>(req: Request, data: T, service: Service<T>): Promise<Response> {
+    public async addChild<T>(req: Request, data: T, service: Service<T>): Promise<Response> {
         return this._executeService(service, data, 201, "AddChild");
     }
 
@@ -178,11 +162,7 @@ export abstract class Controller {
      * @param service - Service to execute
      * @returns Response with status 204 (No Content)
      */
-    protected async removeChild<T extends ServiceParams>(
-        req: Request,
-        data: T,
-        service: Service<T>,
-    ): Promise<Response> {
+    public async removeChild<T>(req: Request, data: T, service: Service<T>): Promise<Response> {
         return this._executeService(service, data, 204, "RemoveChild");
     }
 
@@ -192,7 +172,7 @@ export abstract class Controller {
      * @param data - Parameters for the service extracted by the route's extractor
      * @returns Response with status 200 and updated entity data
      */
-    protected async update(req: Request, data: ServiceParams): Promise<Response> {
+    public async update<T>(req: Request, data: T): Promise<Response> {
         return this._executeService(this.services.update, data, 200, "Update");
     }
 
@@ -202,7 +182,7 @@ export abstract class Controller {
      * @param data - Parameters for the service extracted by the route's extractor
      * @returns Response with status 204 (No Content)
      */
-    protected async delete(req: Request, data: ServiceParams): Promise<Response> {
+    public async delete<T>(req: Request, data: T): Promise<Response> {
         return this._executeService(this.services.remove, data, 204, "Delete");
     }
 
@@ -212,7 +192,7 @@ export abstract class Controller {
      * @param data - Parameters for the service extracted by the route's extractor
      * @returns Response with status 201 and created entity data
      */
-    protected async create(req: Request, data: ServiceParams): Promise<Response> {
+    public async create<T>(req: Request, data: T): Promise<Response> {
         return this._executeService(this.services.create, data, 201, "Create");
     }
 }
