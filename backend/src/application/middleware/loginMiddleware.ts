@@ -1,32 +1,44 @@
-import { UUID } from "crypto";
-import { Request, Response, NextFunction } from "express";
-import { challengeManager } from "../../config/setupServer";
-import { UserType } from "../../core/entities/user";
+import { Request as ExpressRequest, Response as ExpressResponse } from "express";
+import { AuthenticationManager } from "../auth";
 
-export const challengeMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    const { signedChallenge, role: userTypeString } = req.body;
+export function loginMiddleware(
+    authManager: AuthenticationManager,
+): (req: ExpressRequest, res: ExpressResponse) => Promise<void> {
+    return async (req: ExpressRequest, res: ExpressResponse): Promise<void> => {
+        if (
+            "authenticatedUserId" in req ||
+            (req.body && "authenticatedUserId" in req.body) ||
+            (req.params && "authenticatedUserId" in req.params) ||
+            (req.query && "authenticatedUserId" in req.query)
+        ) {
+            res.status(400).json({ message: "Request manipulation detected" });
+            return;
+        }
 
-    // assume every userId is a UUID
-    const userId: UUID = req.query.userId as UUID;
+        const { email, password } = req.body;
+        if (!email || !password) {
+            res.status(400).json({ message: "Email and password are required" });
+            return;
+        }
 
-    if (!signedChallenge || typeof signedChallenge !== "string") {
-        res.status(400).send("Invalid or missing signedChallenge");
-        return;
-    }
-    if (userTypeString !== "teacher" && userTypeString !== "student") {
-        res.status(400).send("Invalid userType");
-        return;
-    }
+        try {
+            const token = await authManager.authenticate(email, password);
+            if (!token) {
+                res.status(401).json({ message: "Invalid credentials" });
+                return;
+            }
 
-    const userType = userTypeString === "teacher" ? UserType.TEACHER : UserType.STUDENT;
-    const isValid = await challengeManager.verifyChallenge(userId, signedChallenge, userType);
+            const payload = authManager.verifyToken(token);
+            if (!payload || !payload.id) {
+                res.status(500).json({ message: "Error processing authentication token" });
+                return;
+            }
 
-    if (!isValid) {
-        res.status(401).send("Login failed");
-        return;
-    }
-
-    // Hijack getUser
-    req.body.id = userId;
-    next();
-};
+            req.body.authenticatedUserId = payload.id;
+            res.status(200).json({ token, userId: payload.id, message: "Authentication successful" });
+        } catch (error) {
+            console.error("Login error:", error);
+            res.status(500).json({ message: "Internal server error during authentication" });
+        }
+    };
+}

@@ -1,62 +1,36 @@
-import { UUID } from "crypto";
-import express, { Request, Response, NextFunction } from "express";
-import { services } from "../../config/services";
-import { UserType } from "../../core/entities/user";
-import { ChallengeManager } from "../challenge";
+import { Request as ExpressRequest, Response as ExpressResponse, NextFunction } from "express";
+import { AuthenticationManager } from "../auth";
 
-const challengeManager = new ChallengeManager(services.users.get);
-
-export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    // Assume userId is a UUID
-    const userId: UUID = req.query.userId as UUID;
-    const signedChallenge: string = req.query.signedChallenge as string;
-    const userTypeString = req.query.userType;
-
-    // Validate query params
-    if (!signedChallenge || typeof signedChallenge !== "string") {
-        res.status(400).send("Invalid or missing signedChallenge");
-    }
-    if (userTypeString !== "teacher" && userTypeString !== "student") {
-        res.status(400).send("Invalid userType");
-    }
-
-    const userType = userTypeString === "teacher" ? UserType.TEACHER : UserType.STUDENT;
-
-    // Verify the challenge itself
-    if (await challengeManager.verifyChallenge(userId, signedChallenge, userType)) {
-        // Call next middleware or route
-        return next();
-    } else {
-        res.status(401).send("Invalid Challenge");
-    }
-};
-
-export const teacherAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    await authMiddleware(req, res, () => {
-        if (req.query.userType === "teacher") {
-            return next();
+export function authMiddleware(
+    authService: AuthenticationManager,
+): (req: ExpressRequest, res: ExpressResponse, next: NextFunction) => void {
+    return (req: ExpressRequest, res: ExpressResponse, next: NextFunction): void => {
+        if (
+            "authenticatedUserId" in req ||
+            (req.body && "authenticatedUserId" in req.body) ||
+            (req.params && "authenticatedUserId" in req.params) ||
+            (req.query && "authenticatedUserId" in req.query)
+        ) {
+            res.status(400).json({ message: "Request manipulation detected" });
+            return;
         }
-        return res.status(403).send("Access denied: only teachers allowed");
-    });
-};
 
-export const studentAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    await authMiddleware(req, res, () => {
-        if (req.query.userType === "student") {
-            return next();
+        const authHeader = req.header("Authorization");
+        if (!authHeader || !authHeader.startsWith("Bearer")) {
+            res.status(401).json({ message: "No authentication token provided" });
+            return;
         }
-        return res.status(403).send("Access denied: only teachers allowed");
-    });
-};
 
-const router = express.Router();
+        const token = authHeader.substring(7); // Remove 'Bearer ' prefix
 
-router.get("/challenge", (_: express.Request, res: express.Response) => {
-    res.send(challengeManager.getChallenge());
-});
+        const payload = authService.verifyToken(token);
+        if (!payload) {
+            res.status(401).json({ message: "Invalid or expired token" });
+            return;
+        }
 
-router.get("/login", authMiddleware, (_req, res) => {
-    res.send("Login successful");
-});
+        req.body.authenticatedUserId = payload.id;
 
-export default router;
+        next();
+    };
+}
