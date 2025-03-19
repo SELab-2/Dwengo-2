@@ -4,14 +4,17 @@ import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
 import { IDatasourceTeacher } from "../datasourceTeacherInterface";
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 
-export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
+export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
     public async createTeacher(teacher: Teacher): Promise<Teacher> {
-        const userModel: UserTypeORM = await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const userModel: UserTypeORM = await datasource
             .getRepository(UserTypeORM)
             .save(UserTypeORM.createUserTypeORM(teacher));
 
-        const teacherModel: TeacherTypeORM = await this.datasource
+        const teacherModel: TeacherTypeORM = await datasource
             .getRepository(TeacherTypeORM)
             .save(TeacherTypeORM.createTeacherTypeORM(teacher, userModel));
 
@@ -19,7 +22,9 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
     }
 
     public async getTeacherById(id: string): Promise<Teacher | null> {
-        const teacherModel: TeacherTypeORM | null = await this.datasource.getRepository(TeacherTypeORM).findOne({
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
             where: { id: id },
             relations: ["teacher"],
         });
@@ -33,12 +38,14 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
     }
 
     public async getTeacherByEmail(email: string): Promise<Teacher | null> {
-        const userModel: UserTypeORM | null = await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const userModel: UserTypeORM | null = await datasource
             .getRepository(UserTypeORM)
             .findOne({ where: { email: email } });
 
         if (userModel !== null) {
-            const teacherModel: TeacherTypeORM | null = await this.datasource
+            const teacherModel: TeacherTypeORM | null = await datasource
                 .getRepository(TeacherTypeORM)
                 .findOne({ where: { teacher: userModel } });
 
@@ -50,12 +57,14 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
     }
 
     public async getTeacherByFirstName(first_name: string): Promise<Teacher | null> {
-        const userModel: UserTypeORM | null = await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const userModel: UserTypeORM | null = await datasource
             .getRepository(UserTypeORM)
             .findOne({ where: { first_name: first_name } });
 
         if (userModel !== null) {
-            const teacherModel: TeacherTypeORM | null = await this.datasource
+            const teacherModel: TeacherTypeORM | null = await datasource
                 .getRepository(TeacherTypeORM)
                 .findOne({ where: { teacher: userModel } });
 
@@ -67,12 +76,14 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
     }
 
     public async getTeacherByLastName(last_name: string): Promise<Teacher | null> {
-        const userModel: UserTypeORM | null = await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const userModel: UserTypeORM | null = await datasource
             .getRepository(UserTypeORM)
             .findOne({ where: { last_name: last_name } });
 
         if (userModel !== null) {
-            const teacherModel: TeacherTypeORM | null = await this.datasource
+            const teacherModel: TeacherTypeORM | null = await datasource
                 .getRepository(TeacherTypeORM)
                 .findOne({ where: { teacher: userModel } });
 
@@ -84,7 +95,9 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
     }
 
     public async getAllTeachers(): Promise<Teacher[]> {
-        const teacherModels: TeacherTypeORM[] = await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const teacherModels: TeacherTypeORM[] = await datasource
             .getRepository(TeacherTypeORM)
             .find({ relations: ["teacher"] });
 
@@ -92,7 +105,9 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
     }
 
     public async updateTeacher(teacher: Teacher): Promise<Teacher> {
-        await this.datasource.getRepository(UserTypeORM).update(teacher.id!, UserTypeORM.createUserTypeORM(teacher));
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        await datasource.getRepository(UserTypeORM).update(teacher.id!, UserTypeORM.createUserTypeORM(teacher));
 
         // For now, there is no need to update the Teacher table
 
@@ -100,7 +115,9 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
     }
 
     public async deleteTeacherWithId(id: string): Promise<void> {
-        const teacherModel: TeacherTypeORM | null = await this.datasource.getRepository(TeacherTypeORM).findOne({
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
             where: { id: id },
             relations: ["teacher"],
         });
@@ -108,13 +125,15 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
         // TODO: check if teacherModel!.teacher.id! is not null
 
         if (teacherModel && teacherModel.teacher.id) {
-            await this.datasource.getRepository(UserTypeORM).delete(teacherModel!.teacher.id!);
-            await this.datasource.getRepository(TeacherTypeORM).delete(id);
+            await datasource.getRepository(UserTypeORM).delete(teacherModel!.teacher.id!);
+            await datasource.getRepository(TeacherTypeORM).delete(id);
         }
     }
 
     public async deleteTeacherFromClass(teacherId: string, classId: string): Promise<void> {
-        await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        await datasource
             .createQueryBuilder()
             .delete()
             .from(TeacherOfClassTypeORM)
@@ -123,7 +142,9 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
     }
 
     public async getClassTeachers(classId: string): Promise<Teacher[]> {
-        const teacherOfClassModels: TeacherOfClassTypeORM[] = await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const teacherOfClassModels: TeacherOfClassTypeORM[] = await datasource
             .getRepository(TeacherOfClassTypeORM)
             .find({
                 where: { class: { id: classId } },
@@ -138,7 +159,7 @@ export class DatasourceTeacherTypeORM extends IDatasourceTeacher {
             teacherOfClassModels.map(
                 // We have a list of teacherOfClass models
                 async (teacherOfClassModel: TeacherOfClassTypeORM) => {
-                    const teacherUserModel: UserTypeORM | null = await this.datasource // We need to find their corresponding teachers
+                    const teacherUserModel: UserTypeORM | null = await datasource // We need to find their corresponding teachers
                         .getRepository(UserTypeORM)
                         .findOne({ where: { id: teacherOfClassModel.teacher.id } }); // So we use their id
 
