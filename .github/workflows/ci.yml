@@ -1,11 +1,9 @@
 name: CI
-
 on:
-  push:
   pull_request:
 
 jobs:
-  lint-and-test:
+  docker-setup:
     runs-on: self-hosted
     steps:
       - name: Fix permissions
@@ -13,7 +11,7 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@v4
-      
+
       - name: Build Docker image
         run: docker compose -f compose.yaml build
 
@@ -23,18 +21,32 @@ jobs:
       - name: Start new containers
         run: docker compose -f compose.yaml up -d
 
+  backend:
+    runs-on: self-hosted
+    needs: docker-setup
+    if: contains(github.event.pull_request.head.ref, 'backend/')
+    steps:
       - name: Lint backend
         run: docker exec $(docker ps -qf "name=dwengo-2-backend") npm run lint
-
-      - name: Lint frontend
-        run: docker exec $(docker ps -qf "name=dwengo-2-frontend") npm run lint
 
       - name: Test backend
         run: docker exec $(docker ps -qf "name=dwengo-2-backend") npm test
 
+  frontend:
+    runs-on: self-hosted
+    needs: docker-setup
+    if: contains(github.event.pull_request.head.ref, 'frontend/')
+    steps:
+      - name: Lint frontend
+        run: docker exec $(docker ps -qf "name=dwengo-2-frontend") npm run lint
+
       - name: Test frontend
         run: docker exec $(docker ps -qf "name=dwengo-2-frontend") npm test
-      
-      - name: Stop containers # Make sure containers will be stopped even if testing/linting fails
-        if: always()
+
+  stop-containers:
+    runs-on: self-hosted
+    needs: [backend, frontend, docker-setup]
+    if: always()
+    steps:
+      - name: Stop containers
         run: docker compose down
