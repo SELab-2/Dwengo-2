@@ -41,10 +41,6 @@ export class DatasourceTypeORM implements IDatasource {
         this.datasourceConnectionSettings,
     );
 
-    public async getDatasourceGroup(): Promise<IDatasourceGroup> {
-        return new DatasourceGroupTypeORM(await DatasourceTypeORM.datasourcePromise);
-    }
-
     public async getDatasourceJoinRequest(): Promise<IDatasourceJoinRequest> {
         return new DatasourceJoinRequestTypeORM(await DatasourceTypeORM.datasourcePromise);
     }

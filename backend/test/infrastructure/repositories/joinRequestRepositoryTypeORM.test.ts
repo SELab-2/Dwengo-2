@@ -13,7 +13,6 @@ describe("JoinRequestRepositoryTypeORM", () => {
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceGroup: jest.fn(),
             getDatasourceJoinRequest: jest.fn(),
             getDatasourceAssignment: jest.fn(),
             getDatasourceSubmission: jest.fn(),

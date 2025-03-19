@@ -15,7 +15,6 @@ describe("StudentRepositoryTypeORM", () => {
         datasourceMock = {
             getDatasourceAssignment: jest.fn(),
             getDatasourceJoinRequest: jest.fn(),
-            getDatasourceGroup: jest.fn(),
             getDatasourceMessage: jest.fn(),
             getDatasourceThread: jest.fn(),
             getDatasourceSubmission: jest.fn()

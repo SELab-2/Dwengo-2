@@ -5,12 +5,15 @@ import { GroupTypeORM } from "../../data_models/groupTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { IDatasourceGroup } from "../datasourceGroupInterface";
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 
-export class DatasourceGroupTypeORM extends IDatasourceGroup {
+export class DatasourceGroupTypeORM extends DatasourceTypeORM {
     public async create(entity: Group): Promise<Group> {
-        const groupRepository = this.datasource.getRepository(GroupTypeORM);
-        const studentOfGroupRepository = this.datasource.getRepository(StudentOfGroupTypeORM);
-        const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const groupRepository = datasource.getRepository(GroupTypeORM);
+        const studentOfGroupRepository = datasource.getRepository(StudentOfGroupTypeORM);
+        const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
 
         const groupModel = new GroupTypeORM();
         if (!entity.assignmentId) {
@@ -43,8 +46,10 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
     }
 
     public async getById(id: string): Promise<Group | null> {
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
         // Fetch the group model
-        const groupModel: GroupTypeORM | null = await this.datasource.getRepository(GroupTypeORM).findOne({
+        const groupModel: GroupTypeORM | null = await datasource.getRepository(GroupTypeORM).findOne({
             where: { id: id },
         });
 
@@ -53,7 +58,7 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         }
 
         // Fetch all students in that group
-        const studentOfGroups: StudentOfGroupTypeORM[] = await this.datasource
+        const studentOfGroups: StudentOfGroupTypeORM[] = await datasource
             .getRepository(StudentOfGroupTypeORM)
             .find({
                 where: { group: groupModel },
@@ -67,8 +72,10 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
     }
 
     public async update(group: Group): Promise<Group> {
-        const groupRepository = this.datasource.getRepository(GroupTypeORM);
-        const studentOfGroupRepository = this.datasource.getRepository(StudentOfGroupTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const groupRepository = datasource.getRepository(GroupTypeORM);
+        const studentOfGroupRepository = datasource.getRepository(StudentOfGroupTypeORM);
 
         let groupModel: GroupTypeORM | null = null;
 
@@ -101,8 +108,10 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
     }
 
     public async delete(id: string): Promise<void> {
-        const groupRepository = this.datasource.getRepository(GroupTypeORM);
-        const studentOfGroupRepository = this.datasource.getRepository(StudentOfGroupTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const groupRepository = datasource.getRepository(GroupTypeORM);
+        const studentOfGroupRepository = datasource.getRepository(StudentOfGroupTypeORM);
 
         let groupModel: GroupTypeORM | null = null;
 
@@ -124,7 +133,9 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
     }
 
     public async getByUserId(userId: string): Promise<Group[]> {
-        const groupsJoinResult = await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const groupsJoinResult = await datasource
             .getRepository(StudentOfGroupTypeORM)
             .createQueryBuilder("studentOfGroup")
             .where("studentOfGroup.student.id = :id", { id: userId })
@@ -134,7 +145,7 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
         const groups = await Promise.all(
             groupsJoinResult.map(async groupJoinResult => {
                 const group: GroupTypeORM = groupJoinResult.group;
-                const datasourceGroup = new DatasourceGroupTypeORM(this.datasource);
+                const datasourceGroup = new DatasourceGroupTypeORM();
                 return await datasourceGroup.getById(group.id);
             }),
         );
@@ -143,7 +154,9 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
     }
 
     public async getByAssignmentId(assignmentId: string): Promise<Group[]> {
-        const groupsJoinResult = await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const groupsJoinResult = await datasource
             .getRepository(GroupTypeORM)
             .createQueryBuilder("group")
             .where("group.assignment.id = :id", { id: assignmentId })
@@ -151,7 +164,7 @@ export class DatasourceGroupTypeORM extends IDatasourceGroup {
 
         const groups = await Promise.all(
             groupsJoinResult.map(async group => {
-                const datasourceGroup = new DatasourceGroupTypeORM(this.datasource);
+                const datasourceGroup = new DatasourceGroupTypeORM();
                 return await datasourceGroup.getById(group.id);
             }),
         );

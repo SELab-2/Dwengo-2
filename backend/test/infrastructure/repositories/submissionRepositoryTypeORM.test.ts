@@ -17,7 +17,6 @@ describe("SubmissionRepositoryTypeORM", () => {
             getDatasourceJoinRequest: jest.fn(),
             getDatasourceAssignment: jest.fn(),
             getDatasourceMessage: jest.fn(),
-            getDatasourceGroup: jest.fn(),
             getDatasourceSubmission: jest.fn(),
             getDatasourceThread: jest.fn(),
         };

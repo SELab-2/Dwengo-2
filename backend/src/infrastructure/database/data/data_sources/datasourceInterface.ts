@@ -15,12 +15,6 @@ import { IDatasourceThread } from "./datasourceThreadInterface";
 export interface IDatasource {
 
     /**
-     * Retrieves the data source for groups.
-     * @returns A promise that resolves to an instance of `IDatasourceGroup`.
-     */
-    getDatasourceGroup(): Promise<IDatasourceGroup>;
-
-    /**
      * Retrieves the data source for join requests.
      * @returns A promise that resolves to an instance of `IDatasourceJoinRequest`.
      */
