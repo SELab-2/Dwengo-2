@@ -1,24 +1,18 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { z } from "zod";
+import { Service } from "../../../config/service";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 
-export class AssignStudentToGroupParams implements ServiceParams {
-    constructor(
-        private _studentId: string,
-        private _groupId: string,
-    ) {}
+export const assignStudentToGroupSchema = z.object({
+    studentId: z.string(),
+    groupId: z.string(),
+});
 
-    public get studentId(): string {
-        return this._studentId;
-    }
+export type AssignStudentToGroupInput = z.infer<typeof assignStudentToGroupSchema>;
 
-    public get groupId(): string {
-        return this._groupId;
-    }
-}
-
-export class AssignStudentToGroup implements Service<AssignStudentToGroupParams> {
+export class AssignStudentToGroup implements Service<AssignStudentToGroupInput> {
     constructor(private studentRepository: IStudentRepository) {}
-    async execute(input: AssignStudentToGroupParams): Promise<object> {
+
+    async execute(input: AssignStudentToGroupInput): Promise<object> {
         await this.studentRepository.assignStudentToGroup(input.studentId, input.groupId);
         return {};
     }
