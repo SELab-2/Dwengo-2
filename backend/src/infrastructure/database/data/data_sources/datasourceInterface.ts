@@ -13,11 +13,6 @@ import { IDatasourceThread } from "./datasourceThreadInterface";
  * Interface representing a data source.
  */
 export interface IDatasource {
-    /**
-     * Retrieves the data source for classes.
-     * @returns A promise that resolves to an instance of `IDatasourceClass`.
-     */
-    getDatasourceClass(): Promise<IDatasourceClass>;
 
     /**
      * Retrieves the data source for groups.

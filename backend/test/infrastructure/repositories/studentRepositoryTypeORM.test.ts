@@ -16,7 +16,6 @@ describe("StudentRepositoryTypeORM", () => {
             getDatasourceAssignment: jest.fn(),
             getDatasourceJoinRequest: jest.fn(),
             getDatasourceGroup: jest.fn(),
-            getDatasourceClass: jest.fn(),
             getDatasourceMessage: jest.fn(),
             getDatasourceThread: jest.fn(),
             getDatasourceSubmission: jest.fn()
