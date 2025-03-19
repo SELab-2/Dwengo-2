@@ -1,8 +1,11 @@
 import { Express, RequestHandler } from "express";
 import { configureRoutes, DEFAULT_METHOD_MAP } from "./routesExpress";
-import { AuthenticationController } from "../controllers/authenticationController";
-import * as challengeMw from "../middleware/challengeMiddleware";
-import * as loginMw from "../middleware/loginMiddleware";
+import { controllers } from "../../config/controllers";
+import * as UserServices from "../../core/services/user";
+import { getAuthManager } from "../auth";
+import { Controller } from "../controllers";
+import { createZodParamsExtractor } from "../extractors";
+import { loginMiddleware } from "../middleware/loginMiddleware";
 import { HttpMethod } from "../types";
 
 /**
@@ -13,29 +16,47 @@ import { HttpMethod } from "../types";
  * Supported endpoints:
  * - POST /login - Log in user
  * - POST /register - Register new user
- * - GET /challenge - Get challenge for user
  */
+
+/* ************* Extractors ************* */
+
+const extractors = {
+    createUser: createZodParamsExtractor(UserServices.createUserSchema),
+};
+
+/* ************* Controller ************* */
+
+export class AuthenticationController extends Controller {
+    constructor(register: UserServices.CreateUser) {
+        super({ create: register });
+    }
+}
+
+/* ************* Routes ************* */
+
 export function authenticationRoutes(
     app: Express,
     controller: AuthenticationController,
     middleware: RequestHandler[] = [],
-) {
+): void {
+    const authManager = getAuthManager(controllers.users.services.get);
+    const login = loginMiddleware(authManager);
     configureRoutes(
         [
             {
                 app,
                 method: HttpMethod.POST,
                 urlPattern: "/login",
-                controller,
-                middleware: [...middleware],
+                middleware: [login, ...middleware],
             },
-            { app, method: HttpMethod.POST, urlPattern: "/register", controller, middleware },
             {
                 app,
-                method: HttpMethod.GET,
-                urlPattern: "/challenge",
-                controller: undefined,
-                middleware: [...middleware],
+                method: HttpMethod.POST,
+                urlPattern: "/register",
+                controller,
+                extractor: extractors.createUser,
+                handler: (req, data) => controller.create(req, data),
+                middleware,
             },
         ],
         DEFAULT_METHOD_MAP,
