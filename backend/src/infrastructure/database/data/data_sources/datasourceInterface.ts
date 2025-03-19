@@ -20,12 +20,6 @@ export interface IDatasource {
     getDatasourceTeacher(): Promise<IDatasourceTeacher>;
 
     /**
-     * Retrieves the data source for students.
-     * @returns A promise that resolves to an instance of `IDatasourceStudent`.
-     */
-    getDatasourceStudent(): Promise<IDatasourceStudent>;
-
-    /**
      * Retrieves the data source for classes.
      * @returns A promise that resolves to an instance of `IDatasourceClass`.
      */

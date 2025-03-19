@@ -37,13 +37,9 @@ export class DatasourceTypeORM implements IDatasource {
 
     // Promise of the TypeORM DataSource object
     // This object is needed for the repositories to be able to ask queries.
-    private static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(
+    protected static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(
         this.datasourceConnectionSettings,
     );
-
-    public async getDatasourceStudent(): Promise<IDatasourceStudent> {
-        return new DatasourceStudentTypeORM(await DatasourceTypeORM.datasourcePromise);
-    }
 
     public async getDatasourceTeacher(): Promise<IDatasourceTeacher> {
         return new DatasourceTeacherTypeORM(await DatasourceTypeORM.datasourcePromise);

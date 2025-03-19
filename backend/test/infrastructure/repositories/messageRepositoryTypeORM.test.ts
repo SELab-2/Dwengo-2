@@ -21,7 +21,6 @@ describe("MessageRepositoryTypeORM", () => {
             getDatasourceAssignment: jest.fn(),
             getDatasourceMessage: jest.fn(),
             getDatasourceThread: jest.fn(),
-            getDatasourceStudent: jest.fn(),
             getDatasourceGroup: jest.fn(),
             getDatasourceSubmission: jest.fn()
         };
