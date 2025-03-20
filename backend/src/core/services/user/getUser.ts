@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ApiError, ErrorCode } from "../../../application/types";
+import { EntityNotFoundError } from "../../../config/error";
 import { Service } from "../../../config/service";
 import { UserType } from "../../entities/user";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
@@ -49,14 +50,17 @@ export class GetUser implements Service<GetUserInput> {
                       getByEmail: (email: string) => this.teacherRepository.getTeacherByEmail(email),
                   };
 
-        const user = await (input.id ? getById(input.id) : getByEmail(input.email as string));
-        if (!user) {
-            throw {
-                code: ErrorCode.NOT_FOUND,
-                message: `User ${input.userType} with ${input.id ? `ID ${input.id}` : `email ${input.email}`} not found`,
-            } as ApiError;
+        try {
+            const user = await (input.id ? getById(input.id) : getByEmail(input.email as string));
+            return user;
+        } catch (error) {
+            if (error instanceof EntityNotFoundError) {
+                throw {
+                    code: ErrorCode.NOT_FOUND,
+                    message: `User ${input.userType} with ${input.id ? `ID ${input.id}` : `email ${input.email}`} not found`,
+                } as ApiError;
+            }
+            throw error;
         }
-
-        return user;
     }
 }
