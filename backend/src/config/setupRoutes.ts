@@ -1,7 +1,5 @@
 import { Express } from "express";
 import { middleware } from "./middleware";
-import { getAuthManager } from "../application/auth";
-import { authMiddleware } from "../application/middleware/authenticationMiddleware";
 import { controllers } from "../config/controllers";
 // eslint-disable-next-line import/order
 import {

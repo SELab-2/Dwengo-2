@@ -1,11 +1,12 @@
 import dotenv from "dotenv";
 import express from "express";
-import { setupMiddleware } from "./config/setupMiddleware";
+import { setupDefaultMiddleware, setupErrorMiddleware } from "./config/setupMiddleware";
 import { setupRoutes } from "./config/setupRoutes";
 import { setupServer } from "./config/setupServer";
 
 dotenv.config();
 const app = express();
-setupMiddleware(app);
+setupDefaultMiddleware(app);
 setupRoutes(app);
+setupErrorMiddleware(app);
 setupServer(app);
