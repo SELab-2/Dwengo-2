@@ -1,6 +1,6 @@
+import { z } from "zod";
 import { deleteAssignmentSchema } from "./assignmentSchemas";
 import { AssignmentService } from "./assignmentService";
-import { z } from "zod";
 
 type DeleteAssignmentInput = z.infer<typeof deleteAssignmentSchema>;
 

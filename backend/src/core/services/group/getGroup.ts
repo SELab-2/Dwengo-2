@@ -1,6 +1,6 @@
-import { GroupService } from "./groupService";
 import { z } from "zod";
 import { getGroupSchema } from "./groupSchemas";
+import { GroupService } from "./groupService";
 
 type GetGroupInput = z.infer<typeof getGroupSchema>;
 

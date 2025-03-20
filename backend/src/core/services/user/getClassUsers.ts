@@ -1,10 +1,9 @@
 import { z } from "zod";
+import { getClassUsersSchema } from "./userSchemas";
+
 import { Service } from "../../../config/service";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
-import { getClassUsersSchema } from "./userSchemas";
-
-
 
 export type GetClassUsersInput = z.infer<typeof getClassUsersSchema>;
 

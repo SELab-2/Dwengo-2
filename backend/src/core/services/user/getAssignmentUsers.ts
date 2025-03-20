@@ -1,7 +1,7 @@
 import { z } from "zod";
+import { getAssignmentUsersSchema } from "./userSchemas";
 import { Service } from "../../../config/service";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
-import { getAssignmentUsersSchema } from "./userSchemas";
 
 export type GetAssignmentUsersInput = z.infer<typeof getAssignmentUsersSchema>;
 

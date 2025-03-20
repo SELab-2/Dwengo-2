@@ -1,8 +1,7 @@
 import { z } from "zod";
+import { getGroupUsersSchema } from "./userSchemas";
 import { Service } from "../../../config/service";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
-import { getGroupUsersSchema } from "./userSchemas";
-
 
 export type GetGroupUsersInput = z.infer<typeof getGroupUsersSchema>;
 

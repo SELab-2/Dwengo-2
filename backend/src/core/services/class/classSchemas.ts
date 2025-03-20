@@ -16,7 +16,7 @@ export const deleteClassSchema = z.object({
 });
 
 export const getClassByIdSchema = z.object({
-    id: z.string()
+    id: z.string(),
 });
 
 export const getClassByNameSchema = z.object({

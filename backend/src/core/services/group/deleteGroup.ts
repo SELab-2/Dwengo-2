@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { GroupService } from "./groupService";
 import { deleteGroupSchema } from "./groupSchemas";
+import { GroupService } from "./groupService";
 
 type DeleteGroupInput = z.infer<typeof deleteGroupSchema>;
 

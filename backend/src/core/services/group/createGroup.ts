@@ -1,7 +1,7 @@
-import { GroupService } from "./groupService";
-import { Group } from "../../entities/group";
 import { z } from "zod";
 import { createGroupSchema } from "./groupSchemas";
+import { GroupService } from "./groupService";
+import { Group } from "../../entities/group";
 
 type CreateGroupInput = z.infer<typeof createGroupSchema>;
 

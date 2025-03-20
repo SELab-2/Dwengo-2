@@ -1,13 +1,11 @@
 import { z } from "zod";
+import { getUserSchema } from "./userSchemas";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { EntityNotFoundError } from "../../../config/error";
 import { Service } from "../../../config/service";
 import { UserType } from "../../entities/user";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
-import { getUserSchema } from "./userSchemas";
-
-
 
 export type GetUserInput = z.infer<typeof getUserSchema>;
 

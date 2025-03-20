@@ -1,7 +1,7 @@
-import { AssignmentService } from "./assignmentService";
-import { Assignment } from "../../entities/assignment";
 import { z } from "zod";
 import { createAssignmentSchema } from "./assignmentSchemas";
+import { AssignmentService } from "./assignmentService";
+import { Assignment } from "../../entities/assignment";
 
 type CreateAssignmentInput = z.infer<typeof createAssignmentSchema>;
 

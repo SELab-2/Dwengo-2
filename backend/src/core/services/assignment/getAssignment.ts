@@ -1,7 +1,7 @@
 import { z } from "zod";
+import { getAssignmentSchema } from "./assignmentSchemas";
 import { Service } from "../../../config/service";
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
-import { getAssignmentSchema } from "./assignmentSchemas";
 
 type GetAssignmentInput = z.infer<typeof getAssignmentSchema>;
 

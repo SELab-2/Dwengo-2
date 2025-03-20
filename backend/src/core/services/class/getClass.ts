@@ -49,7 +49,6 @@ export class GetClassByName extends ClassBaseService<GetClassByNameInput> {
             }
             throw error;
         }
-        
     }
 }
 
@@ -74,7 +73,6 @@ export class GetUserClasses extends ClassBaseService<GetClassByUserInput> {
             }
             throw error;
         }
-        
     }
 }
 

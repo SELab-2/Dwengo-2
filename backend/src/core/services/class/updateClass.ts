@@ -1,7 +1,7 @@
-import { ClassBaseService } from "./baseClassService";
-import { Class } from "../../entities/class";
-import { updateClassSchema } from "./classSchemas";
 import { z } from "zod";
+import { ClassBaseService } from "./baseClassService";
+import { updateClassSchema } from "./classSchemas";
+import { Class } from "../../entities/class";
 
 type UpdateClassInput = z.infer<typeof updateClassSchema>;
 

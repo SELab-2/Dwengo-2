@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createUserSchema } from "./userSchemas";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { Service } from "../../../config/service";
 import { Student } from "../../entities/student";
@@ -6,9 +7,6 @@ import { Teacher } from "../../entities/teacher";
 import { User, UserType } from "../../entities/user";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
-import { createUserSchema } from "./userSchemas";
-
-
 
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 
