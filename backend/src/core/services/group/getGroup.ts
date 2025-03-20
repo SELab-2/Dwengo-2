@@ -1,16 +1,11 @@
 import { GroupService } from "./groupService";
-import { ServiceParams } from "../../../config/service";
+import { z } from "zod";
+import { getGroupSchema } from "./groupSchemas";
 
-export class GetGroupParams implements ServiceParams {
-    constructor(private _id: string) {}
+type GetGroupInput = z.infer<typeof getGroupSchema>;
 
-    get id(): string {
-        return this._id;
-    }
-}
-
-export class GetGroup extends GroupService<GetGroupParams> {
-    async execute(input: GetGroupParams): Promise<object> {
+export class GetGroup extends GroupService<GetGroupInput> {
+    async execute(input: GetGroupInput): Promise<object> {
         return (await this.groupRepository.getById(input.id)).toObject();
     }
 }

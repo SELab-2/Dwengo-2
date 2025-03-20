@@ -1,24 +1,12 @@
 import { GroupService } from "./groupService";
-import { ServiceParams } from "../../../config/service";
 import { Group } from "../../entities/group";
+import { z } from "zod";
+import { createGroupSchema } from "./groupSchemas";
 
-export class CreateGroupParams implements ServiceParams {
-    constructor(
-        private _memberIds: string[],
-        private _assignmentId: string,
-    ) {}
+type CreateGroupInput = z.infer<typeof createGroupSchema>;
 
-    get memberIds(): string[] {
-        return this._memberIds;
-    }
-
-    get assignmentId(): string {
-        return this._assignmentId;
-    }
-}
-
-export class CreateGroup extends GroupService<CreateGroupParams> {
-    async execute(input: CreateGroupParams): Promise<object> {
+export class CreateGroup extends GroupService<CreateGroupInput> {
+    async execute(input: CreateGroupInput): Promise<object> {
         const newGroup = new Group(input.memberIds, input.assignmentId);
         return { id: (await this.groupRepository.create(newGroup)).id };
     }

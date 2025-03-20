@@ -1,16 +1,11 @@
+import { z } from "zod";
 import { GroupService } from "./groupService";
-import { ServiceParams } from "../../../config/service";
+import { deleteGroupSchema } from "./groupSchemas";
 
-export class DeleteGroupParams implements ServiceParams {
-    constructor(private _id: string) {}
+type DeleteGroupInput = z.infer<typeof deleteGroupSchema>;
 
-    get id(): string {
-        return this._id;
-    }
-}
-
-export class DeleteGroup extends GroupService<DeleteGroupParams> {
-    async execute(input: DeleteGroupParams): Promise<object> {
+export class DeleteGroup extends GroupService<DeleteGroupInput> {
+    async execute(input: DeleteGroupInput): Promise<object> {
         await this.groupRepository.delete(input.id);
         return {};
     }

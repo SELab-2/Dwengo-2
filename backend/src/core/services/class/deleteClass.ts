@@ -1,18 +1,11 @@
+import { z } from "zod";
 import { ClassBaseService } from "./baseClassService";
-import { ServiceParams } from "../../../config/service";
+import { deleteClassSchema } from "./classSchemas";
 
-export class DeleteClassParams implements ServiceParams {
-    constructor(
-        private _id: string, //id of the class to delete
-    ) {}
+type DeleteClassInput = z.infer<typeof deleteClassSchema>;
 
-    public get id(): string {
-        return this._id;
-    }
-}
-
-export class DeleteClass extends ClassBaseService<DeleteClassParams> {
-    async execute(input: DeleteClassParams): Promise<object> {
+export class DeleteClass extends ClassBaseService<DeleteClassInput> {
+    async execute(input: DeleteClassInput): Promise<object> {
         await this.classRepository.deleteClassById(input.id);
         return {};
     }

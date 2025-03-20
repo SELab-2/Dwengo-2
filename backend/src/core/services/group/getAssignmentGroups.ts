@@ -1,18 +1,13 @@
 import { GroupService } from "./groupService";
-import { ServiceParams } from "../../../config/service";
 import { Group } from "../../entities/group";
+import { z } from "zod";
+import { getAssignmentGroupSchema } from "./groupSchemas";
 
-export class GetAssignmentGroupsParams implements ServiceParams {
-    constructor(private _assignmentId: string) {}
+type GetAssignmentGroupsInput = z.infer<typeof getAssignmentGroupSchema>;
 
-    get assignmentId(): string {
-        return this._assignmentId;
-    }
-}
-
-export class GetAssignmentGroups extends GroupService<GetAssignmentGroupsParams> {
-    async execute(input: GetAssignmentGroupsParams): Promise<object> {
-        const groups: Group[] = await this.groupRepository.getByAssignmentId(input.assignmentId);
+export class GetAssignmentGroups extends GroupService<GetAssignmentGroupsInput> {
+    async execute(input: GetAssignmentGroupsInput): Promise<object> {
+        const groups: Group[] = await this.groupRepository.getByAssignmentId(input.id);
         return { groups: groups.map(group => group.toObject()) };
     }
 }
