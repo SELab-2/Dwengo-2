@@ -1,10 +1,10 @@
 import { services } from "./services";
-import { ClassController } from "../application/controllers";
-import { GroupController } from "../application/controllers";
-import { AssignmentController } from "../application/controllers";
-import { JoinRequestController } from "../application/controllers";
-import { QuestionThreadController } from "../application/controllers";
-import { MessageController } from "../application/controllers";
+// import { ClassController } from "../application/controllers";
+// import { GroupController } from "../application/controllers";
+// import { AssignmentController } from "../application/controllers";
+// import { JoinRequestController } from "../application/controllers";
+// import { QuestionThreadController } from "../application/controllers";
+// import { MessageController } from "../application/controllers";
 import { UsersController, AuthenticationController } from "../application/routes";
 
 /**
@@ -22,7 +22,6 @@ export const controllers = {
         services.users.removeUserFromGroup,
         services.users.getAssignmentUsers,
         services.users.getAll,
-        services.users.create,
     ),
     // class: new ClassController(
     //     services.class.get,

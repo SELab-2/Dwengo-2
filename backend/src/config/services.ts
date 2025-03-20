@@ -22,7 +22,6 @@ export const services = {
         removeUserFromGroup: new UserServices.RemoveUserFromGroup(repos.student),
         getAssignmentUsers: new UserServices.GetAssignmentUsers(repos.student),
         getAll: new UserServices.GetAllUsers(repos.student, repos.teacher),
-        create: new UserServices.CreateUser(repos.student, repos.teacher),
     },
     // class: {
     //     get: new ClassServices.GetClassByClassId(repos.class),
