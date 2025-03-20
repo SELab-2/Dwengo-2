@@ -1,5 +1,7 @@
 import { Request as ExpressRequest, Response as ExpressResponse, NextFunction } from "express";
 import { AuthenticationManager } from "../auth";
+import { defaultErrorHandler, responseToExpress } from "../helpersExpress";
+import { ErrorCode } from "../types";
 
 export function authMiddleware(
     authService: AuthenticationManager,
@@ -11,13 +13,21 @@ export function authMiddleware(
             (req.params && "authenticatedUserId" in req.params) ||
             (req.query && "authenticatedUserId" in req.query)
         ) {
-            res.status(400).json({ message: "Request manipulation detected" });
+            const response = defaultErrorHandler({
+                code: ErrorCode.BAD_REQUEST,
+                message: "Request manipulation detected",
+            });
+            responseToExpress(response, res);
             return;
         }
 
         const authHeader = req.header("Authorization");
         if (!authHeader || !authHeader.startsWith("Bearer")) {
-            res.status(401).json({ message: "No authentication token provided" });
+            const response = defaultErrorHandler({
+                code: ErrorCode.UNAUTHORIZED,
+                message: "No authentication token provided",
+            });
+            responseToExpress(response, res);
             return;
         }
 
@@ -25,7 +35,11 @@ export function authMiddleware(
 
         const payload = authService.verifyToken(token);
         if (!payload) {
-            res.status(401).json({ message: "Invalid or expired token" });
+            const response = defaultErrorHandler({
+                code: ErrorCode.UNAUTHORIZED,
+                message: "Invalid or expired token",
+            });
+            responseToExpress(response, res);
             return;
         }
 
