@@ -35,11 +35,15 @@ export function createErrorHandler(responder: ResponderFunction): (error: ApiErr
         const apiError = error as ApiError;
         const status = statusMap[apiError.code] || 500;
 
-        return responder(status, {
-            code: apiError.code || "INTERNAL_ERROR",
-            message: apiError.message || "Server error",
-            ...Object.fromEntries(Object.entries(apiError).filter(([key]) => !["code", "message"].includes(key))),
-        });
+        if (status === 500) {
+            return responder(500, { code: "INTERNAL_ERROR", message: "Unexpected server error" });
+        } else {
+            return responder(status, {
+                code: apiError.code,
+                message: apiError.message || "Unknown error",
+                ...Object.fromEntries(Object.entries(apiError).filter(([key]) => !["code", "message"].includes(key))),
+            });
+        }
     };
 }
 
