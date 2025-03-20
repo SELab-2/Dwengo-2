@@ -1,8 +1,5 @@
 name: CI
 on:
-  push:
-    branches:
-      - 318-impromevement-to-ci
   pull_request:
 jobs:
   backend:
@@ -34,7 +31,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Fix package issues
+      - name: Install dependencies
         run: npm install
         working-directory: frontend
 
