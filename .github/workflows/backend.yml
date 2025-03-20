@@ -1,0 +1,21 @@
+name: CI-backend
+on:
+  push:
+    branches:
+      - 318-impromevement-to-ci
+    paths:
+      - backend/**
+  pull_request:
+    paths:
+      - backend/**
+
+jobs:
+  backend:
+    runs-on: self-hosted
+    
+    steps:
+      - name: Lint backend
+        run: cd backend && npm run lint
+
+      - name: Test backend
+        run: cd backend && npm run test

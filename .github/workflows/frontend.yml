@@ -1,0 +1,20 @@
+name: CI-frontend
+on:
+  push:
+    branches:
+      - 318-impromevement-to-ci
+    paths:
+      - frontend/**
+  pull_request:
+    paths:
+      - frontend/**
+
+jobs:
+  frontend:
+    runs-on: self-hosted
+    steps:
+      - name: Lint frontend
+        run: npm run lint
+
+      - name: Test frontend
+        run: npm test
