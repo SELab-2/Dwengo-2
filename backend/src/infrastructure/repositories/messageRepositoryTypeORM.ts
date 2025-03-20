@@ -1,8 +1,6 @@
 import { EntityNotFoundError } from "../../config/error";
 import { Message } from "../../core/entities/message";
 import { IMessageRepository } from "../../core/repositories/messageRepositoryInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
-import { IDatasourceMessage } from "../database/data/data_sources/datasourceMessageInterface";
 import { DatasourceMessageTypeORM } from "../database/data/data_sources/typeorm/datasourceMessageTypeORM";
 
 export class MessageRepositoryTypeORM extends IMessageRepository {

@@ -3,7 +3,6 @@ import { Teacher } from "../../../../../core/entities/teacher";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
-import { IDatasourceTeacher } from "../datasourceTeacherInterface";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceTeacherTypeORM extends DatasourceTypeORM {

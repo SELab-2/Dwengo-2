@@ -1,8 +1,6 @@
 import { DatabaseEntryNotFoundError, EntityNotFoundError } from "../../config/error";
 import { JoinRequest } from "../../core/entities/joinRequest";
 import { IJoinRequestRepository } from "../../core/repositories/joinRequestRepositoryInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
-import { IDatasourceJoinRequest } from "../database/data/data_sources/datasourceJoinRequestInterface";
 import { DatasourceJoinRequestTypeORM } from "../database/data/data_sources/typeorm/datasourceJoinRequestTypeORM";
 
 export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {

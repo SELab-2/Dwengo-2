@@ -4,7 +4,6 @@ import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
-import { IDatasourceThread } from "../datasourceThreadInterface";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceThreadTypeORM extends DatasourceTypeORM {
@@ -155,7 +154,7 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
 
     public async getQuestionThreadsByCreatorId(createrId: string): Promise<QuestionThread[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-        
+
         const questionThreads: QuestionThreadTypeORM[] = await datasource
             .getRepository(QuestionThreadTypeORM)
             .find({

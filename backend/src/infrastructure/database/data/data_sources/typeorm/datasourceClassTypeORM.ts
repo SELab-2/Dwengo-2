@@ -4,7 +4,6 @@ import { JoinRequestType } from "../../../../../core/entities/joinRequest";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
-import { IDatasourceClass } from "../datasourceClassInterface";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceClassTypeORM extends DatasourceTypeORM {

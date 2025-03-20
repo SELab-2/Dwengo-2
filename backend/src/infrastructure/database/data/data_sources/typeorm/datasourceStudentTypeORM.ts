@@ -1,6 +1,5 @@
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Student } from "../../../../../core/entities/student";
-import { AssignStudentToGroup } from "../../../../../core/services/user";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
@@ -8,7 +7,6 @@ import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
-import { IDatasourceStudent } from "../datasourceStudentInterface";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceStudentTypeORM extends DatasourceTypeORM {

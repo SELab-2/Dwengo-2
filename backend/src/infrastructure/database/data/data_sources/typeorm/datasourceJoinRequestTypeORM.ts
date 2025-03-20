@@ -3,7 +3,6 @@ import { JoinRequest, JoinRequestType } from "../../../../../core/entities/joinR
 import { JoinAsType, JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
-import { IDatasourceJoinRequest } from "../datasourceJoinRequestInterface";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {

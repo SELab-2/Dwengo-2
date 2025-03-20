@@ -1,8 +1,6 @@
 import { EntityNotFoundError } from "../../config/error";
 import { Assignment } from "../../core/entities/assignment";
 import { IAssignmentRepository } from "../../core/repositories/assignmentRepositoryInterface";
-import { IDatasourceAssignment } from "../database/data/data_sources/datasourceAssignmentInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 import { DatasourceAssignmentTypeORM } from "../database/data/data_sources/typeorm/datasourceAssignmentTypeORM";
 
 export class AssignmentRepositoryTypeORM extends IAssignmentRepository {

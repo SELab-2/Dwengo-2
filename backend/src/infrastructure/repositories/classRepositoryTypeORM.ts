@@ -2,8 +2,6 @@ import { EntityNotFoundError } from "../../config/error";
 import { Class } from "../../core/entities/class";
 import { JoinRequestType } from "../../core/entities/joinRequest";
 import { IClassRepository } from "../../core/repositories/classRepositoryInterface";
-import { IDatasourceClass } from "../database/data/data_sources/datasourceClassInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 import { DatasourceClassTypeORM } from "../database/data/data_sources/typeorm/datasourceClassTypeORM";
 
 export class ClassRepositoryTypeORM extends IClassRepository {

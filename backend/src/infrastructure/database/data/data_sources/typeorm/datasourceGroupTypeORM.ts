@@ -4,7 +4,6 @@ import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
-import { IDatasourceGroup } from "../datasourceGroupInterface";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceGroupTypeORM extends DatasourceTypeORM {

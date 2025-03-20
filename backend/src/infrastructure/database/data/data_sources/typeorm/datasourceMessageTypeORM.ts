@@ -3,7 +3,6 @@ import { Message } from "../../../../../core/entities/message";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
-import { IDatasourceMessage } from "../datasourceMessageInterface";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceMessageTypeORM extends DatasourceTypeORM {

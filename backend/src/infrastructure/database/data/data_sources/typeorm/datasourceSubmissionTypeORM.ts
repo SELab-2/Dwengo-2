@@ -3,7 +3,6 @@ import { Submission } from "../../../../../core/entities/submission";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
-import { IDatasourceSubmission } from "../datasourceSubmissionInterface";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {

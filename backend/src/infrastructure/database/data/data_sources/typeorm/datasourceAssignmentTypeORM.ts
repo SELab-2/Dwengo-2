@@ -3,7 +3,6 @@ import { Assignment } from "../../../../../core/entities/assignment";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {

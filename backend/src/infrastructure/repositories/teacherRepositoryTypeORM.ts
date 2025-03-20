@@ -1,8 +1,6 @@
 import { EntityNotFoundError } from "../../config/error";
 import { Teacher } from "../../core/entities/teacher";
 import { ITeacherRepository } from "../../core/repositories/teacherRepositoryInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
-import { IDatasourceTeacher } from "../database/data/data_sources/datasourceTeacherInterface";
 import { DatasourceTeacherTypeORM } from "../database/data/data_sources/typeorm/datasourceTeacherTypeORM";
 
 export class TeacherRepositoryTypeORM extends ITeacherRepository {
