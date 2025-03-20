@@ -4,12 +4,15 @@ import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
 import { IDatasourceSubmission } from "../datasourceSubmissionInterface";
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 
-export class DatasourceSubmissionTypeORM extends IDatasourceSubmission {
+export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     public async create(submission: Submission): Promise<string> {
-        const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
-        const studentRepository = this.datasource.getRepository(StudentTypeORM);
-        const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
+        const studentRepository = datasource.getRepository(StudentTypeORM);
+        const submissionRepository = datasource.getRepository(SubmissionTypeORM);
 
         // Check if the assignment exists
         const assignmentModel: AssignmentTypeORM | null = await assignmentRepository.findOne({
@@ -41,7 +44,9 @@ export class DatasourceSubmissionTypeORM extends IDatasourceSubmission {
     }
 
     public async getById(id: string): Promise<Submission | null> {
-        const submissionModel: SubmissionTypeORM | null = await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const submissionModel: SubmissionTypeORM | null = await datasource
             .getRepository(SubmissionTypeORM)
             .findOne({
                 where: { id: id },
@@ -54,7 +59,9 @@ export class DatasourceSubmissionTypeORM extends IDatasourceSubmission {
     }
 
     public async update(submission: Submission): Promise<Submission> {
-        const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const submissionRepository = datasource.getRepository(SubmissionTypeORM);
         const submissionModel: SubmissionTypeORM | null = await submissionRepository.findOne({
             where: { id: submission.id },
         });
@@ -78,6 +85,8 @@ export class DatasourceSubmissionTypeORM extends IDatasourceSubmission {
     }
 
     public async delete(submission: string): Promise<void> {
-        await this.datasource.getRepository(SubmissionTypeORM).delete(submission);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+        
+        await datasource.getRepository(SubmissionTypeORM).delete(submission);
     }
 }

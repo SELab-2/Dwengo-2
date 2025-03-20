@@ -15,11 +15,6 @@ import { IDatasourceThread } from "./datasourceThreadInterface";
 export interface IDatasource {
 
     /**
-     * Retrieves the data source for submissions;
-     * @returns A promise that resolves to an instance of `IDatasourceSubmission`.
-     */
-    getDatasourceSubmission(): Promise<IDatasourceSubmission>;
-    /**
      * Retrieves the data source for messages.
      * @returns A promise that resolves to an instance of `IDatasourceMessage`.
      */
