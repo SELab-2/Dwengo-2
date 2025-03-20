@@ -1,22 +1,14 @@
+import { deleteAssignmentSchema } from "./assignmentSchemas";
 import { AssignmentService } from "./assignmentService";
-import { ServiceParams } from "../../../config/service";
+import { z } from "zod";
 
-/**
- * Wrapper class for the input parameters of the DeleteAssignment service.
- */
-export class DeleteAssignmentParams implements ServiceParams {
-    public constructor(private _id: string) {}
-
-    public get id(): string {
-        return this._id;
-    }
-}
+type DeleteAssignmentInput = z.infer<typeof deleteAssignmentSchema>;
 
 /**
  * Service class to delete an assignment.
  */
-export class DeleteAssignment extends AssignmentService<DeleteAssignmentParams> {
-    async execute(input: DeleteAssignmentParams): Promise<object> {
+export class DeleteAssignment extends AssignmentService<DeleteAssignmentInput> {
+    async execute(input: DeleteAssignmentInput): Promise<object> {
         await this.assignmentRepository.deleteAssignmentById(input.id);
         return {};
     }

@@ -3,8 +3,6 @@ import { Service } from "../../../config/service";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { getAssignmentUsersSchema } from "./userSchemas";
 
-
-
 export type GetAssignmentUsersInput = z.infer<typeof getAssignmentUsersSchema>;
 
 export class GetAssignmentUsers implements Service<GetAssignmentUsersInput> {
