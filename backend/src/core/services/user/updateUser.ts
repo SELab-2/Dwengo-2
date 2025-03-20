@@ -6,16 +6,9 @@ import { Teacher } from "../../entities/teacher";
 import { User, UserType } from "../../entities/user";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
+import { updateUserSchema } from "./userSchemas";
 
-export const updateUserSchema = z.object({
-    id: z.string(),
-    userType: z.nativeEnum(UserType),
-    email: z.string().email().optional(),
-    firstName: z.string().min(1).optional(),
-    familyName: z.string().min(1).optional(),
-    passwordHash: z.string().optional(),
-    schoolName: z.string().optional(),
-});
+
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
 

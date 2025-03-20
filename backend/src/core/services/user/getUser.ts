@@ -5,17 +5,9 @@ import { Service } from "../../../config/service";
 import { UserType } from "../../entities/user";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
+import { getUserSchema } from "./userSchemas";
 
-export const getUserSchema = z
-    .object({
-        userType: z.nativeEnum(UserType),
-        id: z.string().optional(),
-        email: z.string().email().optional(),
-    })
-    .refine(data => data.id !== undefined || data.email !== undefined, {
-        message: "Either ID or email must be provided",
-        path: ["id", "email"],
-    });
+
 
 export type GetUserInput = z.infer<typeof getUserSchema>;
 
