@@ -74,6 +74,6 @@ export class CreateUser implements Service<CreateUserParams> {
             input.userType === UserType.STUDENT
                 ? await this.studentRepository.createStudent(user as Student)
                 : await this.teacherRepository.createTeacher(user as Teacher);
-        return { id: createdUser.id! };
+        return { userId: createdUser.id! };
     }
 }
