@@ -2,8 +2,9 @@ import { z } from "zod";
 import { Service } from "../../../config/service";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
+import { getAllUsersSchema } from "./userSchemas";
 
-export const getAllUsersSchema = z.object({});
+
 
 export type GetAllUsersInput = z.infer<typeof getAllUsersSchema>;
 

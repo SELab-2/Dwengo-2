@@ -1,11 +1,9 @@
 import { z } from "zod";
 import { Service } from "../../../config/service";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
+import { assignStudentToGroupSchema } from "./userSchemas";
 
-export const assignStudentToGroupSchema = z.object({
-    studentId: z.string(),
-    groupId: z.string(),
-});
+
 
 export type AssignStudentToGroupInput = z.infer<typeof assignStudentToGroupSchema>;
 

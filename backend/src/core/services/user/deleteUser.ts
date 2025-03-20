@@ -3,11 +3,9 @@ import { Service } from "../../../config/service";
 import { UserType } from "../../entities/user";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
+import { deleteUserSchema } from "./userSchemas";
 
-export const deleteUserSchema = z.object({
-    id: z.string(),
-    userType: z.nativeEnum(UserType),
-});
+
 
 export type DeleteUserInput = z.infer<typeof deleteUserSchema>;
 
