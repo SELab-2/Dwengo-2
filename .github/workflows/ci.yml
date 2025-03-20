@@ -1,4 +1,4 @@
-name: CI-frontend
+name: CI
 on:
   push:
     branches:
@@ -8,29 +8,40 @@ jobs:
   backend:
     runs-on: self-hosted
     steps:
+      - name: Fix permissions
+        run: sudo chown -R $USER:$USER /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2 || true
+
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Install dependencies
         run: npm ci
+        working-directory: backend
 
       - name: Lint backend
         run: npm run lint
+        working-directory: backend
 
       - name: Test backend
         run: npm test
+        working-directory: backend
 
   frontend:
     runs-on: self-hosted
     steps:
+      - name: Fix permissions
+        run: sudo chown -R $USER:$USER /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2 || true
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Install dependencies
         run: npm ci
+        working-directory: frontend
 
       - name: Lint frontend
         run: npm run lint
+        working-directory: frontend
 
       - name: Test frontend
         run: npm test
+        working-directory: frontend
