@@ -37,7 +37,6 @@ const extractors = {
     removeUserFromGroup: createZodParamsExtractor(UserServices.removeUserFromSchema),
     getAssignmentUsers: createZodParamsExtractor(UserServices.getAssignmentUsersSchema),
     getAllUsers: createZodParamsExtractor(UserServices.getAllUsersSchema),
-    createUser: createZodParamsExtractor(UserServices.createUserSchema),
 };
 
 /* ************* Controller ************* */
@@ -54,7 +53,6 @@ export class UsersController extends Controller {
         removeUserFromGroup: UserServices.RemoveUserFromGroup,
         getAssignmentUsers: UserServices.GetAssignmentUsers,
         getAll: UserServices.GetAllUsers,
-        create: UserServices.CreateUser,
     ) {
         super({
             get,
@@ -67,7 +65,6 @@ export class UsersController extends Controller {
             removeUserFromGroup,
             getAssignmentUsers,
             getAll,
-            create,
         });
     }
 }
@@ -165,15 +162,6 @@ export function usersRoutes(app: Express, controller: UsersController, middlewar
                 controller,
                 extractor: extractors.getAllUsers,
                 handler: (req, data) => controller.getAll(req, data),
-                middleware,
-            },
-            {
-                app,
-                method: HttpMethod.POST,
-                urlPattern: "/users",
-                controller,
-                extractor: extractors.createUser,
-                handler: (req, data) => controller.create(req, data),
                 middleware,
             },
         ],
