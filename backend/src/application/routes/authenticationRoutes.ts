@@ -1,11 +1,9 @@
 import { Express, RequestHandler } from "express";
 import { configureRoutes, DEFAULT_METHOD_MAP } from "./routesExpress";
-import { controllers } from "../../config/controllers";
+import { middleware as mw } from "../../config/middleware";
 import * as UserServices from "../../core/services/user";
-import { getAuthManager } from "../auth";
 import { Controller } from "../controllers";
 import { createZodParamsExtractor } from "../extractors";
-import { loginMiddleware } from "../middleware/loginMiddleware";
 import { HttpMethod } from "../types";
 
 /**
@@ -39,15 +37,13 @@ export function authenticationRoutes(
     controller: AuthenticationController,
     middleware: RequestHandler[] = [],
 ): void {
-    const authManager = getAuthManager(controllers.users.services.get);
-    const login = loginMiddleware(authManager);
     configureRoutes(
         [
             {
                 app,
                 method: HttpMethod.POST,
                 urlPattern: "/login",
-                middleware: [login, ...middleware],
+                middleware: [mw.login, ...middleware],
             },
             {
                 app,
@@ -56,7 +52,7 @@ export function authenticationRoutes(
                 controller,
                 extractor: extractors.createUser,
                 handler: (req, data) => controller.create(req, data),
-                middleware,
+                middleware: [mw.password, ...middleware],
             },
         ],
         DEFAULT_METHOD_MAP,
