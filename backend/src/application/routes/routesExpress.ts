@@ -1,4 +1,5 @@
 import { Express, RequestHandler } from "express";
+import { errorLogger, logger } from "../../config/logger";
 import { Controller } from "../controllers/controllerExpress";
 import { requestFromExpress, responseToExpress } from "../helpersExpress";
 import { HttpMethod, Request, Response } from "../types";
@@ -41,12 +42,12 @@ export function configureRoute(
     methodMap: [HttpMethod, keyof Express][],
 ): void {
     if (!controller && middleware.length === 0) {
-        console.warn(`Warning: Route ${urlPattern} for method ${method} has no controller or middleware.`);
+        logger.warn(`Route ${urlPattern} for method ${method} has no controller or middleware.`);
         return;
     }
     if (controller && (!extractor || !handler)) {
-        console.error(
-            `Error: Route ${urlPattern} for method ${method} has a controller but is missing required extractor or handler.`,
+        errorLogger.error(
+            `Route ${urlPattern} for method ${method} has a controller but is missing required extractor or handler.`,
         );
         return;
     }
@@ -74,6 +75,8 @@ export function configureRoute(
             return;
         }
     }
+
+    errorLogger.error(`Unsupported HTTP method: ${method}`);
     throw new Error(`Unsupported HTTP method: ${method}`);
 }
 
@@ -84,7 +87,12 @@ export function configureRoute(
  * @param methodMap - Array of [HttpMethod, Express method name] pairs defining supported methods
  */
 export function configureRoutes(configs: RouteConfig[], methodMap: [HttpMethod, keyof Express][]): void {
-    configs.forEach(config => configureRoute(config, methodMap));
+    configs.forEach(config => {
+        logger.info(
+            `Registering route: ${config.method} ${config.urlPattern}, Middleware Count: ${config.middleware?.length || 0}`,
+        );
+        configureRoute(config, methodMap);
+    });
 }
 
 // Default method map for common use
