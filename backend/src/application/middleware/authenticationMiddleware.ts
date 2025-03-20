@@ -1,4 +1,5 @@
 import { Request as ExpressRequest, Response as ExpressResponse, NextFunction } from "express";
+import { logger } from "../../config/logger";
 import { AuthenticationManager } from "../auth";
 import { defaultErrorHandler, responseToExpress } from "../helpersExpress";
 import { ErrorCode } from "../types";
@@ -13,6 +14,10 @@ export function authMiddleware(
             (req.params && "authenticatedUserId" in req.params) ||
             (req.query && "authenticatedUserId" in req.query)
         ) {
+            logger.warn(`Authentication manipulation detected`, {
+                ip: req.ip,
+                path: req.path,
+            });
             const response = defaultErrorHandler({
                 code: ErrorCode.BAD_REQUEST,
                 message: "Request manipulation detected",

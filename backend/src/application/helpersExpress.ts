@@ -1,5 +1,6 @@
 import { Request as ExpressRequest, Response as ExpressResponse } from "express";
 import { ErrorCode, Request, Response, HttpMethod, ApiError, ResponseHeaders, ResponseBody } from "./types";
+import { errorLogger, logger } from "../config/logger";
 
 /* ************* Constants ************* */
 
@@ -28,12 +29,20 @@ export type ResponderFunction = (status: number, body: unknown, headers?: Respon
 export function createErrorHandler(responder: ResponderFunction): (error: ApiError | unknown) => Response {
     return function handleError(error: ApiError | unknown): Response {
         if (!(error && typeof error === "object" && "code" in error && "message" in error)) {
-            console.error("ERROR:", error);
+            errorLogger.error("Unhandled error:", error);
             return responder(500, { code: "INTERNAL_ERROR", message: "Unexpected server error" });
         }
 
         const apiError = error as ApiError;
         const status = statusMap[apiError.code] || 500;
+
+        if (status >= 500) {
+            errorLogger.error(`Server error (${apiError.code}): ${apiError.message}`);
+        } else if (status >= 400) {
+            logger.warn(`Client error (${apiError.code}): ${apiError.message}`);
+        } else {
+            logger.info(`Response (${apiError.code}): ${apiError.message}`);
+        }
 
         if (status === 500) {
             return responder(500, { code: "INTERNAL_ERROR", message: "Unexpected server error" });

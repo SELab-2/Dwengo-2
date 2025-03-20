@@ -1,3 +1,4 @@
+import { logger } from "../../config/logger";
 import { Service, Services } from "../../config/service";
 import { createErrorHandler, defaultResponder, ResponderFunction } from "../helpersExpress";
 import { ApiError, Request, Response, ErrorCode } from "../types";
@@ -13,6 +14,8 @@ export abstract class Controller {
     public services: Services;
     protected respond: ResponderFunction;
     protected handleError: (error: ApiError | unknown) => Response;
+    protected logger = logger;
+
     /**
      * Create a controller with injected services and route handlers.
      *
@@ -37,6 +40,7 @@ export abstract class Controller {
         handler: (req: Request, params: T) => Promise<Response>,
     ): Promise<Response> {
         try {
+            this.logger.info(`Processing ${req.method} request to ${handler.toString()}`);
             return await handler(req, extractor(req));
         } catch (error) {
             return this.handleError(error);
@@ -57,12 +61,14 @@ export abstract class Controller {
         statusCode: number,
         operationName: string,
     ): Promise<Response> {
-        if (!service)
+        if (!service) {
+            this.logger.warn(`${operationName} operation not implemented`);
             return this.handleError({
                 code: ErrorCode.NOT_FOUND,
                 message: `${operationName} operation not implemented`,
             });
-
+        }
+        this.logger.info(`Executing service: ${operationName}`, { statusCode });
         const body = await service.execute(data);
         return this.respond(statusCode, body);
     }
