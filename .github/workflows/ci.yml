@@ -9,7 +9,7 @@ jobs:
   # Only runs if there are changes to the backend
   backend:
     runs-on: self-hosted
-    if: contains(github.event.pull_request.head.ref, 'backend/')
+    if: contains(github.event.pull_request.head.ref, 'backend/') || contains(github.event.head_commit.modified, 'backend/')
     steps:
       - name: Lint backend
         run: cd backend && npm run lint
@@ -20,7 +20,7 @@ jobs:
   # Only runs if there are changes to the frontend
   frontend:
     runs-on: self-hosted
-    if: contains(github.event.pull_request.head.ref, 'frontend/')
+    if: contains(github.event.pull_request.head.ref, 'frontend/') || contains(github.event.head_commit.modified, 'frontend/')
     steps:
       - name: Lint frontend
         run: npm run lint
