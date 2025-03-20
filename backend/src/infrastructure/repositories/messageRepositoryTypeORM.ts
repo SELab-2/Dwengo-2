@@ -3,23 +3,22 @@ import { Message } from "../../core/entities/message";
 import { IMessageRepository } from "../../core/repositories/messageRepositoryInterface";
 import { IDatasource } from "../database/data/data_sources/datasourceInterface";
 import { IDatasourceMessage } from "../database/data/data_sources/datasourceMessageInterface";
+import { DatasourceMessageTypeORM } from "../database/data/data_sources/typeorm/datasourceMessageTypeORM";
 
 export class MessageRepositoryTypeORM extends IMessageRepository {
-    private datasource: IDatasource;
-    private datasourceMessage: Promise<IDatasourceMessage>;
+    private datasourceMessage: DatasourceMessageTypeORM;
 
     public constructor() {
         super();
-        this.datasource = this.datasourceFactory.createDatasource();
-        this.datasourceMessage = this.datasource.getDatasourceMessage();
+        this.datasourceMessage = new DatasourceMessageTypeORM();
     }
 
     public async createMessage(message: Message): Promise<Message> {
-        return await (await this.datasourceMessage).createMessage(message);
+        return await this.datasourceMessage.createMessage(message);
     }
 
     public async getMessageById(id: string): Promise<Message> {
-        const message: Message | null = await (await this.datasourceMessage).getMessageById(id);
+        const message: Message | null = await this.datasourceMessage.getMessageById(id);
 
         if (message) {
             return message;
@@ -29,10 +28,10 @@ export class MessageRepositoryTypeORM extends IMessageRepository {
     }
 
     public async updateMessage(message: Message): Promise<Message> {
-        return await (await this.datasourceMessage).updateMessage(message);
+        return await this.datasourceMessage.updateMessage(message);
     }
 
     public async deleteMessageById(id: string): Promise<void> {
-        return await (await this.datasourceMessage).deleteMessageById(id);
+        return await this.datasourceMessage.deleteMessageById(id);
     }
 }

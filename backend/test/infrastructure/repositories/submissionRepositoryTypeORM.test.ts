@@ -14,7 +14,6 @@ describe("SubmissionRepositoryTypeORM", () => {
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceMessage: jest.fn(),
             getDatasourceThread: jest.fn(),
         };
         datasourceFactoryMock = {
