@@ -17,7 +17,7 @@ interface RouteConfig {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const asyncMiddleware = async (fn: any) => {
+const asyncMiddleware = (fn: any) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return async (req: any, res: any, next: any) => {
         try {
