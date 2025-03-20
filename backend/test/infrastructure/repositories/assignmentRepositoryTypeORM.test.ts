@@ -13,7 +13,6 @@ describe("ClassRepositoryTypeORM", () => {
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceAssignment: jest.fn(),
             getDatasourceSubmission: jest.fn(),
             getDatasourceMessage: jest.fn(),
             getDatasourceThread: jest.fn(),
