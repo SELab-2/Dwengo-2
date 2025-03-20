@@ -2,25 +2,8 @@ import { DataSource } from "typeorm";
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
 import { DatasourceTypeORMConnectionSettingsFactory } from "./datasourceTypeORMConnectionSettingsFactory";
 import { DatasourceTypeORMSingleton } from "./datasourceTypeORMSingleton";
-import { IDatasourceAssignment } from "../datasourceAssignmentInterface";
-import { IDatasourceClass } from "../datasourceClassInterface";
-import { IDatasourceGroup } from "../datasourceGroupInterface";
 import { IDatasource } from "../datasourceInterface";
-import { IDatasourceJoinRequest } from "../datasourceJoinRequestInterface";
-import { IDatasourceMessage } from "../datasourceMessageInterface";
-import { IDatasourceStudent } from "../datasourceStudentInterface";
-import { IDatasourceSubmission } from "../datasourceSubmissionInterface";
-import { IDatasourceTeacher } from "../datasourceTeacherInterface";
-import { DatasourceAssignmentTypeORM } from "./datasourceAssignmentTypeORM";
-import { DatasourceClassTypeORM } from "./datasourceClassTypeORM";
-import { DatasourceGroupTypeORM } from "./datasourceGroupTypeORM";
-import { DatasourceJoinRequestTypeORM } from "./datasourceJoinRequestTypeORM";
-import { DatasourceStudentTypeORM } from "./datasourceStudentTypeORM";
-import { DatasourceSubmissionTypeORM } from "./datasourceSubmissionTypeORM";
-import { DatasourceTeacherTypeORM } from "./datasourceTeacherTypeORM";
-import { IDatasourceThread } from "../datasourceThreadInterface";
-import { DatasourceMessageTypeORM } from "./datasourceMessageTypeORM";
-import { DatasourceThreadTypeORM } from "./datasourceThreadTypeORM";
+
 
 export class DatasourceTypeORM implements IDatasource {
     // Connection for the TypeORM - postgres database
@@ -40,8 +23,4 @@ export class DatasourceTypeORM implements IDatasource {
     protected static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(
         this.datasourceConnectionSettings,
     );
-
-    public async getDatasourceThread(): Promise<IDatasourceThread> {
-        return new DatasourceThreadTypeORM(await DatasourceTypeORM.datasourcePromise);
-    }
 }

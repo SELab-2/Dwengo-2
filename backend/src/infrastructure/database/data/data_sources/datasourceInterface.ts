@@ -1,22 +1,7 @@
-import { IDatasourceAssignment } from "./datasourceAssignmentInterface";
-import { IDatasourceClass } from "./datasourceClassInterface";
-import { IDatasourceGroup } from "./datasourceGroupInterface";
-import { IDatasourceJoinRequest } from "./datasourceJoinRequestInterface";
-import { IDatasourceMessage } from "./datasourceMessageInterface";
-import { IDatasourceStudent } from "./datasourceStudentInterface";
-import { IDatasourceSubmission } from "./datasourceSubmissionInterface";
-import { IDatasourceTeacher } from "./datasourceTeacherInterface";
-
-import { IDatasourceThread } from "./datasourceThreadInterface";
 
 /**
  * Interface representing a data source.
  */
 export interface IDatasource {
 
-    /**
-     * Retrieves the data source for thread.
-     * @returns A promise that resolves to an instance of `IDatasourceThread`.
-     */
-    getDatasourceThread(): Promise<IDatasourceThread>;
 }
