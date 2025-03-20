@@ -1,5 +1,5 @@
 import { Request as ExpressRequest, Response as ExpressResponse } from "express";
-import { ErrorCode, Request, Response, HttpMethod } from "./types";
+import { ErrorCode, Request, Response, HttpMethod, ApiError, ResponseHeaders, ResponseBody } from "./types";
 
 /* ************* Constants ************* */
 
@@ -14,6 +14,64 @@ export const statusMap: Record<ErrorCode, number> = {
 export const prefixPatterns: Record<string, Record<string, string>> = {
     users: { "t-": "teacher", "s-": "student" },
 };
+
+/* ************* Error Handling ************* */
+
+export type ResponderFunction = (status: number, body: unknown, headers?: ResponseHeaders) => Response;
+
+/**
+ * Creates an error handler function that uses the provided responder to generate responses
+ *
+ * @param responder - Function to create standardized responses
+ * @returns An error handling function
+ */
+export function createErrorHandler(responder: ResponderFunction): (error: ApiError | unknown) => Response {
+    return function handleError(error: ApiError | unknown): Response {
+        if (!(error && typeof error === "object" && "code" in error && "message" in error)) {
+            console.error("ERROR:", error);
+            return responder(500, { code: "INTERNAL_ERROR", message: "Unexpected server error" });
+        }
+
+        const apiError = error as ApiError;
+        const status = statusMap[apiError.code] || 500;
+
+        return responder(status, {
+            code: apiError.code || "INTERNAL_ERROR",
+            message: apiError.message || "Server error",
+            ...Object.fromEntries(Object.entries(apiError).filter(([key]) => !["code", "message"].includes(key))),
+        });
+    };
+}
+
+/**
+ * Default function to serialize service responses to ResponseBody objects
+ *
+ * @param response The response from the service
+ * @returns The response as a ResponseBody object
+ */
+export function defaultSerializer(response: unknown): ResponseBody {
+    try {
+        return response as ResponseBody;
+    } catch (error) {
+        throw new Error(`Failed to serialize service response: ${error}`);
+    }
+}
+
+/**
+ * Creates a default responder function that converts responses to the standard format
+ *
+ * @param serializer Optional custom serializer function
+ * @returns A responder function
+ */
+export function createResponder(serializer: (resp: unknown) => ResponseBody = defaultSerializer): ResponderFunction {
+    return (status: number, responseBody: unknown, headers: ResponseHeaders = {}): Response => {
+        const body = serializer(responseBody);
+        return { status, headers: { "Content-Type": "application/json", ...headers }, body };
+    };
+}
+
+export const defaultResponder = createResponder();
+export const defaultErrorHandler = createErrorHandler(defaultResponder);
 
 /* ************* Request/Response Conversion ************* */
 
