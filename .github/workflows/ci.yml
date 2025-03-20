@@ -1,0 +1,36 @@
+name: CI-frontend
+on:
+  push:
+    branches:
+      - 318-impromevement-to-ci
+  pull_request:
+jobs:
+  backend:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint backend
+        run: npm run lint
+
+      - name: Test backend
+        run: npm test
+
+  frontend:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint frontend
+        run: npm run lint
+
+      - name: Test frontend
+        run: npm test
