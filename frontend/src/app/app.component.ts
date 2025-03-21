@@ -11,5 +11,4 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
   styleUrl: './app.component.less'
 })
 export class AppComponent {
-  title = 'Dwengo';
 }
