@@ -1,6 +1,6 @@
 import { DatabaseError } from '../../../../src/config/error';
 import { Assignment} from '../../../../src/core/entities/assignment';
-import { CreateAssignment, CreateAssignmentParams } from '../../../../src/core/services/assignment';
+import { CreateAssignment, CreateAssignmentInput } from '../../../../src/core/services/assignment';
 
 // Mock repository
 const mockAssignmentRepository = {
@@ -11,7 +11,7 @@ describe('CreateAssignment', () => {
     let createAssignment: CreateAssignment;
     let startDate: Date;
     let deadline: Date;
-    let inputAssignmentParams: CreateAssignmentParams;
+    let inputAssignmentParams: CreateAssignmentInput;
     let inputAssignment: Assignment;
     let createdAssignment: Assignment;
 
@@ -21,7 +21,13 @@ describe('CreateAssignment', () => {
         startDate = new Date();
         deadline = new Date();
         // Reset mocks voor elke test
-        inputAssignmentParams = new CreateAssignmentParams("1", "1", startDate, deadline, "Extra Instructions");
+        inputAssignmentParams = {
+            classId: "1",
+            learningPathId: "1",
+            startDate,
+            deadline,
+            extraInstructions: "Extra Instructions",
+        };
         inputAssignment = new Assignment("1", "1", startDate, deadline, "Extra Instructions");
         createdAssignment = new Assignment("1", "1", startDate, deadline, "Extra Instructions", "1");
     });

@@ -1,7 +1,7 @@
 import { EntityNotFoundError } from "../../../../src/config/error";
 import { Assignment } from "../../../../src/core/entities/assignment";
 import { IAssignmentRepository } from "../../../../src/core/repositories/assignmentRepositoryInterface";
-import { GetUserAssignments, GetUserAssignmentsParams } from "../../../../src/core/services/assignment";
+import { GetUserAssignments, GetUserAssignmentsInput } from "../../../../src/core/services/assignment";
 
 const mockAssignmentRepository = {
   getAssignmentsByUserId: jest.fn()
@@ -9,7 +9,7 @@ const mockAssignmentRepository = {
 
 describe("GetUserAssignments Service", () => {
   let userId: string;
-  let params: GetUserAssignmentsParams;
+  let params: GetUserAssignmentsInput;
   let getUserAssignments: GetUserAssignments;
   let assignments: Assignment[];
   let startDate: Date;
@@ -18,7 +18,7 @@ describe("GetUserAssignments Service", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     userId = "1";
-    params = new GetUserAssignmentsParams(userId);
+    params = {id: userId};
     getUserAssignments = new GetUserAssignments(mockAssignmentRepository)
     startDate = new Date();
     deadline = new Date();

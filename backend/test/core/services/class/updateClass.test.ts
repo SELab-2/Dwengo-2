@@ -1,5 +1,5 @@
 import { Class } from "../../../../src/core/entities/class";
-import { UpdateClass, UpdateClassParams } from "../../../../src/core/services/class";
+import { UpdateClass } from "../../../../src/core/services/class";
 
 // Mock repository
 const mockClassRepository = {
@@ -27,13 +27,21 @@ describe("UpdateClass Service", () => {
             targetAudience: "Target Audience"
         }));
 
-        const params = new UpdateClassParams(classId, updatedName, updatedDescription);
+        const params = {
+            id: classId,
+            name: updatedName,
+            description: updatedDescription,
+            targetAudience: "Target Audience"
+        };
+
         const result = await updateClassService.execute(params);
 
         expect(mockClassRepository.updateClass).toHaveBeenCalledWith(classId, {
             name: updatedName,
-            description: updatedDescription
+            description: updatedDescription,
+            targetAudience: "Target Audience"
         });
+
         expect(result).toEqual({
             id: classId,
             name: updatedName,
@@ -54,8 +62,11 @@ describe("UpdateClass Service", () => {
             description: "Original Description",
             targetAudience: updatedTargetAudience
         }));
-
-        const params = new UpdateClassParams(classId, undefined, undefined, updatedTargetAudience);
+        const params = {
+            id: classId,
+            targetAudience: updatedTargetAudience
+        };
+        
         const result = await updateClassService.execute(params);
 
         expect(mockClassRepository.updateClass).toHaveBeenCalledWith(classId, {

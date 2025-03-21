@@ -2,7 +2,7 @@ import { z } from "zod";
 import { deleteGroupSchema } from "./groupSchemas";
 import { GroupService } from "./groupService";
 
-type DeleteGroupInput = z.infer<typeof deleteGroupSchema>;
+export type DeleteGroupInput = z.infer<typeof deleteGroupSchema>;
 
 export class DeleteGroup extends GroupService<DeleteGroupInput> {
     async execute(input: DeleteGroupInput): Promise<object> {

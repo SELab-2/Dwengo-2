@@ -3,7 +3,7 @@ import { getAssignmentGroupSchema } from "./groupSchemas";
 import { GroupService } from "./groupService";
 import { Group } from "../../entities/group";
 
-type GetAssignmentGroupsInput = z.infer<typeof getAssignmentGroupSchema>;
+export type GetAssignmentGroupsInput = z.infer<typeof getAssignmentGroupSchema>;
 
 export class GetAssignmentGroups extends GroupService<GetAssignmentGroupsInput> {
     async execute(input: GetAssignmentGroupsInput): Promise<object> {

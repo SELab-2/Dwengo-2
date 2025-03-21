@@ -3,7 +3,7 @@ import { getUserAssignmentsSchema } from "./assignmentSchemas";
 import { AssignmentService } from "./assignmentService";
 import { Assignment } from "../../entities/assignment";
 
-type GetUserAssignmentsInput = z.infer<typeof getUserAssignmentsSchema>;
+export type GetUserAssignmentsInput = z.infer<typeof getUserAssignmentsSchema>;
 
 /**
  * Service class to get all assignments of a user.

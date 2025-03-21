@@ -1,6 +1,6 @@
 import { Class } from "../../../../src/core/entities/class";
 import { IClassRepository } from "../../../../src/core/repositories/classRepositoryInterface";
-import { GetClassByClassId, GetClassParams } from "../../../../src/core/services/class";
+import { GetClassByClassId } from "../../../../src/core/services/class";
 
 describe("GetClassByClassId", () => {
     let getClassByClassId: GetClassByClassId;
@@ -15,13 +15,12 @@ describe("GetClassByClassId", () => {
     });
 
     it("should return a class as an object", async () => {
-        const classInstance = new Class("Math", "Basic Math", "8th grade", "123");
+        const id = "123";
+        const classInstance = new Class("Math", "Basic Math", "8th grade", id);
         mockRepository.getClassById.mockResolvedValue(classInstance);
+        const result = await getClassByClassId.execute({ id });
 
-        const params = new GetClassParams("123");
-        const result = await getClassByClassId.execute(params);
-
-        expect(mockRepository.getClassById).toHaveBeenCalledWith("123");
+        expect(mockRepository.getClassById).toHaveBeenCalledWith(id);
         expect(result).toEqual(classInstance.toObject());
     });
 });

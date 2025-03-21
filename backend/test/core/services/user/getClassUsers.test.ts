@@ -1,6 +1,6 @@
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../../../src/core/repositories/teacherRepositoryInterface";
-import { GetClassUsers, GetClassUsersParams } from "../../../../src/core/services/user";
+import { GetClassUsers } from "../../../../src/core/services/user";
 import { User } from "../../../../src/core/entities/user";
 
 describe("GetClassUsers Service", () => {
@@ -12,7 +12,7 @@ describe("GetClassUsers Service", () => {
         studentRepository = { getClassStudents: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
         teacherRepository = { getClassTeachers: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
 
-        getClassUsers = new GetClassUsers(teacherRepository, studentRepository);
+        getClassUsers = new GetClassUsers(studentRepository, teacherRepository);
     });
 
     it("should return students and teachers as objects", async () => {
@@ -23,9 +23,7 @@ describe("GetClassUsers Service", () => {
         teacherRepository.getClassTeachers.mockResolvedValue([mockTeacher as unknown as User]);
 
         const classId = "class-123";
-        const params = new GetClassUsersParams(classId);
-
-        const result = await getClassUsers.execute(params);
+        const result = await getClassUsers.execute({classId});
 
         expect(result).toEqual({
             teachers: [{ id: "t1", email: "teacher@example.com" }],
@@ -41,9 +39,7 @@ describe("GetClassUsers Service", () => {
         teacherRepository.getClassTeachers.mockResolvedValue([]);
 
         const classId = "class-456";
-        const params = new GetClassUsersParams(classId);
-
-        const result = await getClassUsers.execute(params);
+        const result = await getClassUsers.execute({classId});
 
         expect(result).toEqual({ teachers: [], students: [] });
     });

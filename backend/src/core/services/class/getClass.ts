@@ -4,7 +4,7 @@ import { getAllClassesSchema, getClassByIdSchema, getClassByNameSchema, getClass
 import { ApiError, ErrorCode } from "../../../application/types";
 import { EntityNotFoundError } from "../../../config/error";
 
-type GetClassByIdInput = z.infer<typeof getClassByIdSchema>;
+export type GetClassByIdInput = z.infer<typeof getClassByIdSchema>;
 
 export class GetClassByClassId extends ClassBaseService<GetClassByIdInput> {
     /**
@@ -28,7 +28,7 @@ export class GetClassByClassId extends ClassBaseService<GetClassByIdInput> {
     }
 }
 
-type GetClassByNameInput = z.infer<typeof getClassByNameSchema>;
+export type GetClassByNameInput = z.infer<typeof getClassByNameSchema>;
 
 export class GetClassByName extends ClassBaseService<GetClassByNameInput> {
     /**
@@ -52,7 +52,7 @@ export class GetClassByName extends ClassBaseService<GetClassByNameInput> {
     }
 }
 
-type GetClassByUserInput = z.infer<typeof getClassByUserSchema>;
+export type GetClassByUserInput = z.infer<typeof getClassByUserSchema>;
 
 export class GetUserClasses extends ClassBaseService<GetClassByUserInput> {
     /**
@@ -76,7 +76,7 @@ export class GetUserClasses extends ClassBaseService<GetClassByUserInput> {
     }
 }
 
-type GetAllClassesInput = z.infer<typeof getAllClassesSchema>;
+export type GetAllClassesInput = z.infer<typeof getAllClassesSchema>;
 
 export class GetAllClasses extends ClassBaseService<GetAllClassesInput> {
     /**

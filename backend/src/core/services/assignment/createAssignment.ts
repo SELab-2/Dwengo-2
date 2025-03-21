@@ -3,7 +3,7 @@ import { createAssignmentSchema } from "./assignmentSchemas";
 import { AssignmentService } from "./assignmentService";
 import { Assignment } from "../../entities/assignment";
 
-type CreateAssignmentInput = z.infer<typeof createAssignmentSchema>;
+export type CreateAssignmentInput = z.infer<typeof createAssignmentSchema>;
 
 /**
  * Service to create an assignment

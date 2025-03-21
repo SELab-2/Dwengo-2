@@ -3,7 +3,7 @@ import { ClassBaseService } from "./baseClassService";
 import { createClassSchema } from "./classSchemas";
 import { Class } from "../../entities/class";
 
-type CreateClassInput = z.infer<typeof createClassSchema>;
+export type CreateClassInput = z.infer<typeof createClassSchema>;
 
 export class CreateClass extends ClassBaseService<CreateClassInput> {
     async execute(input: CreateClassInput): Promise<object> {

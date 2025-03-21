@@ -1,5 +1,5 @@
 import { Assignment } from "../../../../src/core/entities/assignment";
-import { UpdateAssignment, UpdateAssignmentParams } from "../../../../src/core/services/assignment";
+import { UpdateAssignment } from "../../../../src/core/services/assignment";
 
 // Mock repository
 const mockAssignmentRepository = {
@@ -32,14 +32,10 @@ describe("UpdateAssignment Service", () => {
             extraInstructions: updatedExtraInstructions
         }));
 
-        const params = new UpdateAssignmentParams(
-            teacherId, 
-            undefined, 
-            undefined, 
-            undefined, 
-            undefined, 
-            updatedExtraInstructions
-        );
+        const params = {
+            id: teacherId,
+            extraInstructions: updatedExtraInstructions
+        }
         const result = await updateAssignmentService.execute(params);
 
         expect(mockAssignmentRepository.updateAssignmentById).toHaveBeenCalledWith(teacherId, {

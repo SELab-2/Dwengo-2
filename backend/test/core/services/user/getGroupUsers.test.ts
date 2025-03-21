@@ -1,18 +1,14 @@
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
-import { ITeacherRepository } from "../../../../src/core/repositories/teacherRepositoryInterface";
-import { GetGroupUsers, GetGroupUsersParams } from "../../../../src/core/services/user";
+import { GetGroupUsers} from "../../../../src/core/services/user";
 import { User } from "../../../../src/core/entities/user";
 
 describe("GetGroupUsers Service", () => {
     let studentRepository: jest.Mocked<IStudentRepository>;
-    let teacherRepository: jest.Mocked<ITeacherRepository>;
     let getGroupUsers: GetGroupUsers;
 
     beforeEach(() => {
         studentRepository = { getGroupStudents: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
-        teacherRepository = { getGroupTeachers: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
-
-        getGroupUsers = new GetGroupUsers(teacherRepository, studentRepository);
+        getGroupUsers = new GetGroupUsers(studentRepository);
     });
 
     it("should return students and teachers as objects", async () => {
@@ -21,9 +17,7 @@ describe("GetGroupUsers Service", () => {
         studentRepository.getGroupStudents.mockResolvedValue([mockStudent as unknown as User]);
 
         const groupId = "group-123";
-        const params = new GetGroupUsersParams(groupId);
-
-        const result = await getGroupUsers.execute(params);
+        const result = await getGroupUsers.execute({groupId});
 
         expect(result).toEqual({
             students: [{ id: "s2", email: "student2@example.com" }],
@@ -35,9 +29,7 @@ describe("GetGroupUsers Service", () => {
         studentRepository.getGroupStudents.mockResolvedValue([]);
 
         const groupId = "group-456";
-        const params = new GetGroupUsersParams(groupId);
-
-        const result = await getGroupUsers.execute(params);
+        const result = await getGroupUsers.execute({groupId});
 
         expect(result).toEqual({ students: [] });
     });

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { deleteAssignmentSchema } from "./assignmentSchemas";
 import { AssignmentService } from "./assignmentService";
 
-type DeleteAssignmentInput = z.infer<typeof deleteAssignmentSchema>;
+export type DeleteAssignmentInput = z.infer<typeof deleteAssignmentSchema>;
 
 /**
  * Service class to delete an assignment.

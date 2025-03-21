@@ -3,7 +3,7 @@ import { updateGroupSchema } from "./groupSchemas";
 import { GroupService } from "./groupService";
 import { Group } from "../../entities/group";
 
-type UpdateGroupInput = z.infer<typeof updateGroupSchema>;
+export type UpdateGroupInput = z.infer<typeof updateGroupSchema>;
 
 export class UpdateGroup extends GroupService<UpdateGroupInput> {
     async execute(input: UpdateGroupInput): Promise<object> {
