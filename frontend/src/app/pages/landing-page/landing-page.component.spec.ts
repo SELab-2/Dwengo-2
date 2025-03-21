@@ -6,26 +6,26 @@ import { By } from '@angular/platform-browser';
 
 describe('LandingPageComponent', () => {
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-				LandingPageComponent,
-				RouterTestingModule
-			],
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [
+						LandingPageComponent,
+						RouterTestingModule
+					],
 
 			// Mock the router
-      providers: [
-        provideRouter([])
-      ]
-    }).compileComponents();
-  });
+			providers: [
+				provideRouter([])
+			]
+		}).compileComponents();
+	});
 
-  it('should create the component', () => {
-    const fixture = TestBed.createComponent(LandingPageComponent);
-    const component = fixture.componentInstance;
+	it('should create the component', () => {
+		const fixture = TestBed.createComponent(LandingPageComponent);
+		const component = fixture.componentInstance;
 
-    expect(component).toBeTruthy();
-  });
+		expect(component).toBeTruthy();
+	});
 
 	it('should have a description', () => {
 		const fixture = TestBed.createComponent(LandingPageComponent);
@@ -38,13 +38,13 @@ describe('LandingPageComponent', () => {
 
 	it('should have a login and register link', () => {
 		const fixture = TestBed.createComponent(LandingPageComponent);
-		const compiled = fixture.nativeElement as HTMLElement;
 
 		const anchors = fixture.debugElement.queryAll(By.css('a'));
 		const routerLinkInstances = anchors.map((anchor) => anchor.injector.get(RouterLinkWithHref));
 
 		expect(routerLinkInstances.length).toBe(2);
-		// expect(routerLinkInstances[0]['href']).toBe('/login');
+		expect(routerLinkInstances[0]['commands']).toEqual(['/login']);
+		expect(routerLinkInstances[1]['commands']).toEqual(['/register']);
 	});
 
 });
