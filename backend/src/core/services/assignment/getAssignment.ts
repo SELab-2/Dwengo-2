@@ -19,6 +19,6 @@ export class GetAssignment implements Service<GetAssignmentParams> {
     public constructor(private assignmentRepository: IAssignmentRepository) {}
 
     async execute(input: GetAssignmentParams): Promise<object> {
-        return (await this.assignmentRepository.getAssignmentById(input.id)).toObject();
+        return (await this.assignmentRepository.getById(input.id)).toObject();
     }
 }

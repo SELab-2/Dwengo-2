@@ -3,7 +3,7 @@ import { UpdateAssignment, UpdateAssignmentParams } from "../../../../src/core/s
 
 // Mock repository
 const mockAssignmentRepository = {
-    updateAssignmentById: jest.fn()
+    updateById: jest.fn()
 };
 
 describe("UpdateAssignment Service", () => {
@@ -22,7 +22,7 @@ describe("UpdateAssignment Service", () => {
         const updatedExtraInstructions = "Updated Instructions";
 
         const mockUpdatedAssignment = new Assignment("1", "1", startDate, deadline, updatedExtraInstructions, "1");
-        mockAssignmentRepository.updateAssignmentById.mockResolvedValue(mockUpdatedAssignment);
+        mockAssignmentRepository.updateById.mockResolvedValue(mockUpdatedAssignment);
         mockUpdatedAssignment.toObject = jest.fn(() => ({
             id: teacherId,
             classId: "1",
@@ -42,7 +42,7 @@ describe("UpdateAssignment Service", () => {
         );
         const result = await updateAssignmentService.execute(params);
 
-        expect(mockAssignmentRepository.updateAssignmentById).toHaveBeenCalledWith(teacherId, {
+        expect(mockAssignmentRepository.updateById).toHaveBeenCalledWith(teacherId, {
             extraInstructions: updatedExtraInstructions
         });
         expect(result).toEqual({

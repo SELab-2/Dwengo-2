@@ -17,7 +17,7 @@ export class DeleteAssignmentParams implements ServiceParams {
  */
 export class DeleteAssignment extends AssignmentService<DeleteAssignmentParams> {
     async execute(input: DeleteAssignmentParams): Promise<object> {
-        await this.assignmentRepository.deleteAssignmentById(input.id);
+        await this.assignmentRepository.deleteById(input.id);
         return {};
     }
 }

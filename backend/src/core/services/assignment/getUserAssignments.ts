@@ -18,7 +18,7 @@ export class GetUserAssignmentsParams implements ServiceParams {
  */
 export class GetUserAssignments extends AssignmentService<GetUserAssignmentsParams> {
     async execute(input: GetUserAssignmentsParams): Promise<object> {
-        const assignments: Assignment[] = await this.assignmentRepository.getAssignmentsByUserId(input.id);
+        const assignments: Assignment[] = await this.assignmentRepository.getByUserId(input.id);
         return { assignments: assignments.map(assignment => assignment.toObject()) };
     }
 }
