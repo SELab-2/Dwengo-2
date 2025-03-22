@@ -11,8 +11,7 @@ import { HttpMethod } from "../types";
  * converting Express request/response objects to our internal format.
  *
  * Supported endpoints:
- * - GET /users/:idParent/groups/:id - Get specific group from a user
- * - GET /assignments/:idParent/groups/:id - Get specific group from an assignment
+ * - GET /groups/:id - Get specific group
  * - PATCH /groups/:id - Update group
  * - DELETE /groups/:id - Delete group
  * - POST /groups - Create new group
@@ -54,16 +53,7 @@ export function groupRoutes(app: Express, controller: GroupController, middlewar
             {
                 app,
                 method: HttpMethod.GET,
-                urlPattern: "/users/:idParent/groups/:id",
-                controller,
-                extractor: extractors.getGroup,
-                handler: (req, data) => controller.getOne(req, data),
-                middleware,
-            },
-            {
-                app,
-                method: HttpMethod.GET,
-                urlPattern: "/assignments/:idParent/groups/:id",
+                urlPattern: "/groups/:id",
                 controller,
                 extractor: extractors.getGroup,
                 handler: (req, data) => controller.getOne(req, data),

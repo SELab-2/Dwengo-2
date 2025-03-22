@@ -11,7 +11,7 @@ import { HttpMethod } from "../types";
  * converting Express request/response objects to our internal format.
  *
  * Supported endpoints:
- * - GET /users/:idParent/assignments/:id - Get specific assignment of a user
+ * - GET /assignments/:id - Get specific assignment
  * - PATCH /assignments/:id - Update assignment
  * - DELETE /assignments/:id - Delete assignment
  * - POST /assignments - Create new assignment
@@ -54,7 +54,7 @@ export function assignmentRoutes(
             {
                 app,
                 method: HttpMethod.GET,
-                urlPattern: "/users/:idParent/assignments/:id",
+                urlPattern: "/assignments/:id",
                 controller,
                 extractor: extractors.getAssignment,
                 handler: (req, data) => controller.getOne(req, data),
