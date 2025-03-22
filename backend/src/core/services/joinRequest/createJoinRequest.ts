@@ -16,7 +16,7 @@ export class CreateJoinRequestParams implements ServiceParams {
         classRepository: IClassRepository,
     ): Promise<JoinRequest> {
         // Check if user hasn't already requested to join the class
-        const classRequests: JoinRequest[] = await joinRequestRepository.getJoinRequestByClassId(this._classId);
+        const classRequests: JoinRequest[] = await joinRequestRepository.getByClassId(this._classId);
         for (const req of classRequests) {
             if (req.requester == this._requesterId) {
                 throw {
@@ -60,7 +60,7 @@ export class CreateJoinRequest implements Service<CreateJoinRequestParams> {
     ) {}
 
     async execute(input: CreateJoinRequestParams): Promise<object> {
-        const joinRequest: JoinRequest = await this._joinRequestRepository.createJoinRequest(
+        const joinRequest: JoinRequest = await this._joinRequestRepository.create(
             await input.fromObject(this._joinRequestRepository, this._classRepository),
         );
         return { id: joinRequest.id };

@@ -10,7 +10,7 @@ describe('GetJoinRequests Service', () => {
 
   beforeEach(() => {
     mockJoinRequestRepository = {
-      getJoinRequestByRequesterId: jest.fn(),
+      getByRequesterId: jest.fn(),
     } as unknown as jest.Mocked<IJoinRequestRepository>;
 
     getJoinRequestsService = new GetJoinRequests(mockJoinRequestRepository);
@@ -24,12 +24,12 @@ describe('GetJoinRequests Service', () => {
       new JoinRequest('user1', 'class2', JoinRequestType.TEACHER, "2"),
     ];
 
-    mockJoinRequestRepository.getJoinRequestByRequesterId.mockResolvedValue(joinRequests);
+    mockJoinRequestRepository.getByRequesterId.mockResolvedValue(joinRequests);
 
     await expect(getJoinRequestsService.execute(params)).resolves.toEqual({
       requests: joinRequests.map(request => request.toObject()),
     });
-    expect(mockJoinRequestRepository.getJoinRequestByRequesterId).toHaveBeenCalledWith(params.userId);
+    expect(mockJoinRequestRepository.getByRequesterId).toHaveBeenCalledWith(params.userId);
   });
 });
 
@@ -40,7 +40,7 @@ describe('GetJoinRequest Service', () => {
 
   beforeEach(() => {
     mockJoinRequestRepository = {
-      getJoinRequestByRequesterId: jest.fn(),
+      getByRequesterId: jest.fn(),
     } as unknown as jest.Mocked<IJoinRequestRepository>;
 
     getJoinRequestService = new GetJoinRequest(mockJoinRequestRepository);
@@ -54,16 +54,16 @@ describe('GetJoinRequest Service', () => {
       new JoinRequest('user1', 'class2', JoinRequestType.STUDENT, "2"),
     ];
 
-    mockJoinRequestRepository.getJoinRequestByRequesterId.mockResolvedValue(joinRequests);
+    mockJoinRequestRepository.getByRequesterId.mockResolvedValue(joinRequests);
 
     await expect(getJoinRequestService.execute(params)).resolves.toEqual({
       request: joinRequests[0].toObject(),
     });
-    expect(mockJoinRequestRepository.getJoinRequestByRequesterId).toHaveBeenCalledWith(params.userId);
+    expect(mockJoinRequestRepository.getByRequesterId).toHaveBeenCalledWith(params.userId);
   });
 
   test('Should throw error if join request not found', async () => {
-    mockJoinRequestRepository.getJoinRequestByRequesterId.mockResolvedValue([]);
+    mockJoinRequestRepository.getByRequesterId.mockResolvedValue([]);
 
     await expect(getJoinRequestService.execute(params)).rejects.toEqual({
       code: ErrorCode.NOT_FOUND,

@@ -43,7 +43,7 @@ export class GetJoinRequests implements Service<GetJoinRequestsParams> {
 
     async execute(input: GetJoinRequestsParams): Promise<object> {
         // Get all requests for user
-        const requests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByRequesterId(input.userId);
+        const requests: JoinRequest[] = await this.joinRequestRepository.getByRequesterId(input.userId);
         return {
             requests: requests.map(request => request.toObject()),
         };
@@ -59,7 +59,7 @@ export class GetJoinRequest implements Service<GetJoinRequestParams> {
     async execute(input: GetJoinRequestParams): Promise<object> {
         console.log(input.requestId, input.userId);
         // Get all requests
-        const requests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByRequesterId(input.userId);
+        const requests: JoinRequest[] = await this.joinRequestRepository.getByRequesterId(input.userId);
 
         // Search for request with id
         const joinRequest: JoinRequest[] = requests.filter(request => request.id === input.requestId);
