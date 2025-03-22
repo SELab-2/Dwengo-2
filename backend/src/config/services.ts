@@ -1,16 +1,31 @@
 import { repositories as repos } from "./repositories";
+// import * as ClassServices from "../core/services/class";
+// import * as JoinRequestServices from "../core/services/joinRequest";
+// import * as MessageServices from "../core/services/message";
+// import * as QuestionThreadServices from "../core/services/questionThread";
 import * as AssignmentServices from "../core/services/assignment";
-import * as ClassServices from "../core/services/class";
 import * as GroupServices from "../core/services/group";
-import * as JoinRequestServices from "../core/services/joinRequest";
-import * as MessageServices from "../core/services/message";
-import * as QuestionThreadServices from "../core/services/questionThread";
 import * as UserServices from "../core/services/user";
 
 /**
  * The services needed for the Dwengo-2 backend application.
  */
 export const services = {
+    assignment: {
+        get: new AssignmentServices.GetAssignment(repos.assignment),
+        update: new AssignmentServices.UpdateAssignment(repos.assignment),
+        remove: new AssignmentServices.DeleteAssignment(repos.assignment),
+        create: new AssignmentServices.CreateAssignment(repos.assignment),
+        getUserAssignments: new AssignmentServices.GetUserAssignments(repos.assignment),
+    },
+    group: {
+        get: new GroupServices.GetGroup(repos.group),
+        update: new GroupServices.UpdateGroup(repos.group),
+        remove: new GroupServices.DeleteGroup(repos.group),
+        create: new GroupServices.CreateGroup(repos.group),
+        getUserGroups: new GroupServices.GetUserGroups(repos.group),
+        getAssignmentGroups: new GroupServices.GetAssignmentGroups(repos.group),
+    },
     users: {
         get: new UserServices.GetUser(repos.student, repos.teacher),
         update: new UserServices.UpdateUser(repos.student, repos.teacher),
@@ -29,21 +44,6 @@ export const services = {
     //     update: new ClassServices.UpdateClass(repos.class),
     //     remove: new ClassServices.DeleteClass(repos.class),
     //     create: new ClassServices.CreateClass(repos.class),
-    // },
-    // group: {
-    //     get: new GroupServices.GetGroup(repos.group),
-    //     getUserGroups: new GroupServices.GetUserGroups(repos.group),
-    //     getAssignmentGroups: new GroupServices.GetAssignmentGroups(repos.group),
-    //     update: new GroupServices.UpdateGroup(repos.group),
-    //     remove: new GroupServices.DeleteGroup(repos.group),
-    //     create: new GroupServices.CreateGroup(repos.group),
-    // },
-    // assignment: {
-    //     get: new AssignmentServices.GetAssignment(repos.assignment),
-    //     getUserAssignments: new AssignmentServices.GetUserAssignments(repos.assignment),
-    //     update: new AssignmentServices.UpdateAssignment(repos.assignment),
-    //     remove: new AssignmentServices.DeleteAssignment(repos.assignment),
-    //     create: new AssignmentServices.CreateAssignment(repos.assignment),
     // },
     // joinRequest: {
     //     get: new JoinRequestServices.GetJoinRequest(repos.joinRequest),

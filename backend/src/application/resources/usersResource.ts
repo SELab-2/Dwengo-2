@@ -1,8 +1,8 @@
 import { Express, RequestHandler } from "express";
-import { configureRoutes, DEFAULT_METHOD_MAP } from "./routesExpress";
 import * as UserServices from "../../core/services/user";
 import { Controller } from "../controllers/controllerExpress";
 import { createZodParamsExtractor } from "../extractors";
+import { configureRoutes, DEFAULT_METHOD_MAP } from "../routes/routesExpress";
 import { HttpMethod } from "../types";
 
 /**
@@ -21,7 +21,6 @@ import { HttpMethod } from "../types";
  * - DELETE /groups/:idParent/users/:id - Remove user from group
  * - GET /assignments/:idParent/users - Get all users in an assignment
  * - GET /users - Get all users
- * - POST /users - Create new user
  */
 
 /* ************* Extractors ************* */

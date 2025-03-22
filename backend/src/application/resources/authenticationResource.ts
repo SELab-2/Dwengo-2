@@ -1,9 +1,9 @@
 import { Express, RequestHandler } from "express";
-import { configureRoutes, DEFAULT_METHOD_MAP } from "./routesExpress";
 import { middleware as mw } from "../../config/middleware";
 import * as UserServices from "../../core/services/user";
 import { Controller } from "../controllers";
 import { createZodParamsExtractor } from "../extractors";
+import { configureRoutes, DEFAULT_METHOD_MAP } from "../routes/routesExpress";
 import { HttpMethod } from "../types";
 
 /**

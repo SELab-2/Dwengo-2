@@ -1,16 +1,35 @@
 import { services } from "./services";
 // import { ClassController } from "../application/controllers";
-// import { GroupController } from "../application/controllers";
-// import { AssignmentController } from "../application/controllers";
 // import { JoinRequestController } from "../application/controllers";
 // import { QuestionThreadController } from "../application/controllers";
 // import { MessageController } from "../application/controllers";
-import { UsersController, AuthenticationController } from "../application/routes";
+import {
+    AssignmentController,
+    AuthenticationController,
+    GroupController,
+    UsersController,
+} from "../application/resources";
 
 /**
  * The controllers needed for the Dwengo-2 backend application.
  */
 export const controllers = {
+    authentication: new AuthenticationController(services.authentication.register),
+    assignment: new AssignmentController(
+        services.assignment.get,
+        services.assignment.update,
+        services.assignment.remove,
+        services.assignment.create,
+        services.assignment.getUserAssignments,
+    ),
+    group: new GroupController(
+        services.group.get,
+        services.group.update,
+        services.group.remove,
+        services.group.create,
+        services.group.getUserGroups,
+        services.group.getAssignmentGroups,
+    ),
     users: new UsersController(
         services.users.get,
         services.users.update,
@@ -29,21 +48,6 @@ export const controllers = {
     //     services.class.update,
     //     services.class.remove,
     //     services.class.create,
-    // ),
-    // group: new GroupController(
-    //     services.group.get,
-    //     services.group.getUserGroups,
-    //     services.group.getAssignmentGroups,
-    //     services.group.update,
-    //     services.group.remove,
-    //     services.group.create,
-    // ),
-    // assignment: new AssignmentController(
-    //     services.assignment.get,
-    //     services.assignment.getUserAssignments,
-    //     services.assignment.update,
-    //     services.assignment.remove,
-    //     services.assignment.create,
     // ),
     // joinRequest: new JoinRequestController(
     //     services.joinRequest.get,
@@ -65,5 +69,4 @@ export const controllers = {
     //     services.message.remove,
     //     services.message.create,
     // ),
-    authentication: new AuthenticationController(services.authentication.register),
 };
