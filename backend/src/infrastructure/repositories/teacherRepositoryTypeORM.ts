@@ -75,7 +75,7 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
         return await (await this.datasourceTeacher).updateTeacher(teacher);
     }
 
-    public async deleteById(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         return await (await this.datasourceTeacher).deleteTeacherWithId(id);
     }
 

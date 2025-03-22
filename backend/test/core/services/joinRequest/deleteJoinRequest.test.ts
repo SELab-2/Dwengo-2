@@ -12,7 +12,7 @@ describe('DeleteJoinRequest Service', () => {
 
   beforeEach(() => {
     mockJoinRequestRepository = {
-      deleteById: jest.fn(),
+      delete: jest.fn(),
     } as unknown as jest.Mocked<IJoinRequestRepository>;
 
     deleteJoinRequestService = new DeleteJoinRequest(mockJoinRequestRepository);
@@ -21,7 +21,7 @@ describe('DeleteJoinRequest Service', () => {
   });
 
   test('Should throw error if join request not found in database', async () => {
-    mockJoinRequestRepository.deleteById.mockRejectedValue(
+    mockJoinRequestRepository.delete.mockRejectedValue(
       new EntityNotFoundError('Join request not found'),
     );
 
@@ -31,13 +31,13 @@ describe('DeleteJoinRequest Service', () => {
   });
 
   test('Should return empty object if join request is deleted', async () => {
-    mockJoinRequestRepository.deleteById.mockResolvedValue(
+    mockJoinRequestRepository.delete.mockResolvedValue(
       undefined,
     );
 
     await expect(deleteJoinRequestService.execute(params)).resolves.toEqual({});
     expect(
-      mockJoinRequestRepository.deleteById,
+      mockJoinRequestRepository.delete,
     ).toHaveBeenCalledWith(params.id);
   });
 });

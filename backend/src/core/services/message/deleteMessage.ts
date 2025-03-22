@@ -11,7 +11,7 @@ export class DeleteMessageParams implements ServiceParams {
 
 export class DeleteMessage extends MessageService<DeleteMessageParams> {
     async execute(input: DeleteMessageParams): Promise<object> {
-        await this.messageRepository.deleteById(input.id);
+        await this.messageRepository.delete(input.id);
         return {};
     }
 }

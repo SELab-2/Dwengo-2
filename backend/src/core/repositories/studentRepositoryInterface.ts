@@ -57,7 +57,7 @@ export abstract class IStudentRepository extends AbstractRepository {
      * Delete a student from the repository.
      * @param id The id of the student to delete.
      */
-    public abstract deleteById(id: string): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 
     /**
      * Function to remove a student from a class.

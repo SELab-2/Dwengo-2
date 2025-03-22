@@ -32,7 +32,7 @@ export class MessageRepositoryTypeORM extends IMessageRepository {
         return await (await this.datasourceMessage).updateMessage(message);
     }
 
-    public async deleteById(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         return await (await this.datasourceMessage).deleteMessageById(id);
     }
 }

@@ -40,5 +40,5 @@ export abstract class IJoinRequestRepository extends AbstractRepository {
      * Delete a join request from the repository.
      * @param id The id of the join request to delete.
      */
-    public abstract deleteById(id: string): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 }

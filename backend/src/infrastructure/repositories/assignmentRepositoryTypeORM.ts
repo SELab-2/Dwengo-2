@@ -40,11 +40,11 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
         return await (await this.datasourceAssignment).getAssignmentsByLearningPathId(learningPathId);
     }
 
-    public async deleteById(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         return await (await this.datasourceAssignment).deleteAssignmentById(id);
     }
 
-    public async updateById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment> {
+    public async update(id: string, updatedFields: Partial<Assignment>): Promise<Assignment> {
         const updatedAssignment: Assignment | null = await (
             await this.datasourceAssignment
         ).updateAssignmentById(id, updatedFields);

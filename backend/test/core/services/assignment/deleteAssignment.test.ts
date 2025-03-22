@@ -3,7 +3,7 @@ import { IAssignmentRepository } from "../../../../src/core/repositories/assignm
 import { EntityNotFoundError } from "../../../../src/config/error";
 
 const mockAssignmentRepository: jest.Mocked<IAssignmentRepository> = {
-    deleteById: jest.fn().mockResolvedValue(undefined), // Simuleert een succesvolle verwijdering
+    delete: jest.fn().mockResolvedValue(undefined), // Simuleert een succesvolle verwijdering
 } as unknown as jest.Mocked<IAssignmentRepository>;
 
 describe("DeleteAssignment Use Case", () => {
@@ -20,8 +20,8 @@ describe("DeleteAssignment Use Case", () => {
 
         await deleteAssignment.execute(params);
 
-        expect(mockAssignmentRepository.deleteById).toHaveBeenCalledWith(AssignmentId);
-        expect(mockAssignmentRepository.deleteById).toHaveBeenCalledTimes(1);
+        expect(mockAssignmentRepository.delete).toHaveBeenCalledWith(AssignmentId);
+        expect(mockAssignmentRepository.delete).toHaveBeenCalledTimes(1);
     });
 
     test("Should return an empty object after successful deletion", async () => {
@@ -34,7 +34,7 @@ describe("DeleteAssignment Use Case", () => {
     });
 
     test("Should throw an error if assignment is not present in database", async () => {
-        mockAssignmentRepository.deleteById.mockRejectedValue(new EntityNotFoundError("Assignment not found"));
+        mockAssignmentRepository.delete.mockRejectedValue(new EntityNotFoundError("Assignment not found"));
 
         const params = new DeleteAssignmentParams("Assignment-789");
 

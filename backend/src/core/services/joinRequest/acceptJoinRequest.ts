@@ -30,7 +30,7 @@ export class AcceptJoinRequest implements Service<AcceptJoinRequestParams> {
         await this._classRepository.addUserToClass(joinRequest.classId, joinRequest.requester, joinRequest.type);
 
         // Delete joinRequest after successfully adding user to class
-        await this._joinRequestRepository.deleteById(input.requestId);
+        await this._joinRequestRepository.delete(input.requestId);
         return {};
     }
 }

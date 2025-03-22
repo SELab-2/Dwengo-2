@@ -44,7 +44,7 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
         return await (await this.datasourceJoinRequest).getJoinRequestByClassId(classId);
     }
 
-    public async deleteById(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         await (await this.datasourceJoinRequest).deleteJoinRequestById(id);
     }
 }

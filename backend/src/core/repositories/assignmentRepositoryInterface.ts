@@ -50,7 +50,7 @@ export abstract class IAssignmentRepository extends AbstractRepository {
      * @param id - The id of the assignment to delete.
      * @returns A promise that resolves when the assignment is deleted.
      */
-    public abstract deleteById(id: string): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 
     /**
      * Updates an assignment by its id.
@@ -59,5 +59,5 @@ export abstract class IAssignmentRepository extends AbstractRepository {
      * @returns A promise that resolves to the Assignment that is updated
      * @throws EntityNotFound error when the assignment that needs to be updated does not exist
      */
-    public abstract updateById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment>;
+    public abstract update(id: string, updatedFields: Partial<Assignment>): Promise<Assignment>;
 }

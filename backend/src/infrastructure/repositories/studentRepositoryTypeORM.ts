@@ -66,7 +66,7 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
         return await (await this.datasourceStudent).updateStudent(student);
     }
 
-    public async deleteById(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         return await (await this.datasourceStudent).deleteStudentWithId(id);
     }
 

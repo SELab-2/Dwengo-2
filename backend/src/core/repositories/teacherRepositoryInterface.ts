@@ -70,7 +70,7 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * Delete a teacher from the repository.
      * @param id The id of the teacher to delete.
      */
-    public abstract deleteById(id: string): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 
     /**
      * Delete a teacher from a class.

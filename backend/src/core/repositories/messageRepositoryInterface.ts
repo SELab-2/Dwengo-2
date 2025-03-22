@@ -30,5 +30,5 @@ export abstract class IMessageRepository extends AbstractRepository {
      * @param threadId The id of the thread
      * @returns A promise that resolves to void.
      */
-    public abstract deleteById(id: string): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 }

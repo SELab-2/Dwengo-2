@@ -13,7 +13,7 @@ export class DeleteJoinRequest implements Service<DeleteJoinRequestParams> {
     constructor(private joinRequestRepository: IJoinRequestRepository) {}
 
     async execute(input: DeleteJoinRequestParams): Promise<object> {
-        await this.joinRequestRepository.deleteById(input.id);
+        await this.joinRequestRepository.delete(input.id);
         return {};
     }
 }

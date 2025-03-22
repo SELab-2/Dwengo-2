@@ -19,7 +19,7 @@ describe('AcceptJoinRequest Service', () => {
   beforeEach(() => {
     mockJoinRequestRepository = {
       getById: jest.fn(),
-      deleteById: jest.fn(),
+      delete: jest.fn(),
     } as unknown as jest.Mocked<IJoinRequestRepository>;
 
     mockClassRepository = {
@@ -54,7 +54,7 @@ describe('AcceptJoinRequest Service', () => {
 
     mockJoinRequestRepository.getById.mockResolvedValue(joinRequest);
     mockClassRepository.addUserToClass.mockResolvedValue(undefined);
-    mockJoinRequestRepository.deleteById.mockResolvedValue(
+    mockJoinRequestRepository.delete.mockResolvedValue(
       undefined,
     );
 
@@ -68,7 +68,7 @@ describe('AcceptJoinRequest Service', () => {
       joinRequest.type,
     );
     expect(
-      mockJoinRequestRepository.deleteById,
+      mockJoinRequestRepository.delete,
     ).toHaveBeenCalledWith(params.requestId);
   });
 });
