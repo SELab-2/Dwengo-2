@@ -13,7 +13,7 @@ export abstract class IClassRepository extends AbstractRepository {
      * @param newClass The new class to insert.
      * @returns A promise that resolves to the inserted class.
      */
-    public abstract createClass(newClass: Class): Promise<Class>;
+    public abstract create(newClass: Class): Promise<Class>;
 
     /**
      * Updates an existing class.
@@ -21,7 +21,7 @@ export abstract class IClassRepository extends AbstractRepository {
      * @param updatedClass the params to be updated.
      * @returns the new version of the class.
      */
-    public abstract updateClass(classId: string, updatedClass: Partial<Class>): Promise<Class>;
+    public abstract update(classId: string, updatedClass: Partial<Class>): Promise<Class>;
 
     /**
      * Get a class by its id.
@@ -29,7 +29,7 @@ export abstract class IClassRepository extends AbstractRepository {
      * @throws EntityNotFoundError when no class is found.
      * @returns A promise that resolves to the class with the given id or null if no results are found.
      */
-    public abstract getClassById(id: string): Promise<Class>;
+    public abstract getById(id: string): Promise<Class>;
 
     /**
      * Get a class by its name.
@@ -37,13 +37,13 @@ export abstract class IClassRepository extends AbstractRepository {
      * @throws EntityNotFoundError when no class is found.
      * @returns A promise that resolves to the class with the given name or null if no results are found.
      */
-    public abstract getClassByName(name: string): Promise<Class>;
+    public abstract getByName(name: string): Promise<Class>;
 
     /**
      * Get all classes in the repository.
      * @returns A promise that resolves to an array of all classes.
      */
-    public abstract getAllClasses(): Promise<Class[]>;
+    public abstract getAll(): Promise<Class[]>;
 
     /**
      * Get all classes for a user.
@@ -51,7 +51,7 @@ export abstract class IClassRepository extends AbstractRepository {
      * @returns A promise that resolves to an array of all classes for that user.
      * @throws {EntityNotFoundError} when the user is not found.
      */
-    public abstract getUserClasses(id: string): Promise<Class[]>;
+    public abstract getByUserId(id: string): Promise<Class[]>;
 
     /**
      * Get all classes for a teacher.
@@ -59,7 +59,7 @@ export abstract class IClassRepository extends AbstractRepository {
      * @returns A promise that resolves to an array of all classes for that teacher.
      * @throws {EntityNotFoundError} when the teacher is not found.
      */
-    public abstract getAllClassesByTeacherId(id: string): Promise<Class[]>;
+    public abstract getByTeacherId(id: string): Promise<Class[]>;
 
     /**
      * Get all classes where a student is part of.
@@ -67,14 +67,14 @@ export abstract class IClassRepository extends AbstractRepository {
      * @returns A promise that resolves to an array of all classes for that student.
      * @throws {EntityNotFoundError} when the student is not found.
      */
-    public abstract getAllClassesByStudentId(id: string): Promise<Class[]>;
+    public abstract getByStudentId(id: string): Promise<Class[]>;
 
     /**
      * Delete a class by its id.
      * @param id The id of the class to delete.
      * @returns A promise that resolves when the class is deleted.
      */
-    public abstract deleteClassById(id: string): Promise<void>;
+    public abstract deleteById(id: string): Promise<void>;
 
     /**
      * Add a student/teacher to a class.

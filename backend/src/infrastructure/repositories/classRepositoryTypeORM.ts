@@ -15,15 +15,15 @@ export class ClassRepositoryTypeORM extends IClassRepository {
         this.datasourceClass = this.datasource.getDatasourceClass();
     }
 
-    public async createClass(newClass: Class): Promise<Class> {
+    public async create(newClass: Class): Promise<Class> {
         return await (await this.datasourceClass).createClass(newClass);
     }
 
-    public async updateClass(classId: string, updatedClass: Partial<Class>): Promise<Class> {
+    public async update(classId: string, updatedClass: Partial<Class>): Promise<Class> {
         throw new Error("Not implemented yet");
     }
 
-    public async getClassById(id: string): Promise<Class> {
+    public async getById(id: string): Promise<Class> {
         const _class: Class | null = await (await this.datasourceClass).getClassById(id);
 
         if (_class) {
@@ -33,7 +33,7 @@ export class ClassRepositoryTypeORM extends IClassRepository {
         }
     }
 
-    public async getClassByName(name: string): Promise<Class> {
+    public async getByName(name: string): Promise<Class> {
         const _class: Class | null = await (await this.datasourceClass).getClassByName(name);
 
         if (_class) {
@@ -43,24 +43,24 @@ export class ClassRepositoryTypeORM extends IClassRepository {
         }
     }
 
-    public async getAllClasses(): Promise<Class[]> {
+    public async getAll(): Promise<Class[]> {
         return await (await this.datasourceClass).getAllClasses();
     }
 
-    public async deleteClassById(id: string): Promise<void> {
+    public async deleteById(id: string): Promise<void> {
         return await (await this.datasourceClass).deleteClassById(id);
     }
 
-    public async getUserClasses(id: string): Promise<Class[]> {
+    public async getByUserId(id: string): Promise<Class[]> {
         return await (await this.datasourceClass).getUserClasses(id);
     }
 
-    public async getAllClassesByTeacherId(teacherId: string): Promise<Class[]> {
-        return await this.getUserClasses(teacherId);
+    public async getByTeacherId(teacherId: string): Promise<Class[]> {
+        return await this.getByUserId(teacherId);
     }
 
-    public async getAllClassesByStudentId(studentId: string): Promise<Class[]> {
-        return await this.getUserClasses(studentId);
+    public async getByStudentId(studentId: string): Promise<Class[]> {
+        return await this.getByUserId(studentId);
     }
 
     public async addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void> {

@@ -20,15 +20,15 @@ describe('CreateJoinRequest', () => {
       } as unknown as jest.Mocked<IJoinRequestRepository>;
   
       classRepository = {
-        createClass: jest.fn(),
-        updateClass: jest.fn(),
-        getClassById: jest.fn(),
-        getClassByName: jest.fn(),
-        getAllClasses: jest.fn(),
-        getUserClasses: jest.fn(),
-        getAllClassesByTeacherId: jest.fn(),
-        getAllClassesByStudentId: jest.fn(),
-        deleteClassById: jest.fn(),
+        create: jest.fn(),
+        update: jest.fn(),
+        getById: jest.fn(),
+        getByName: jest.fn(),
+        getAll: jest.fn(),
+        getByUserId: jest.fn(),
+        getByTeacherId: jest.fn(),
+        getByStudentId: jest.fn(),
+        deleteById: jest.fn(),
       } as unknown as jest.Mocked<IClassRepository>;
   
       service = new CreateJoinRequest(joinRequestRepository, classRepository);
@@ -49,7 +49,7 @@ describe('CreateJoinRequest', () => {
     it('should throw an error if user is already part of the class', async () => {
       const params = new CreateJoinRequestParams('user1', 'class1', JoinRequestType.STUDENT);
       joinRequestRepository.getJoinRequestByClassId.mockResolvedValue([]);
-      classRepository.getAllClassesByStudentId.mockResolvedValue([
+      classRepository.getByStudentId.mockResolvedValue([
         { id: 'class1' } as Class,
       ]);
   
@@ -64,7 +64,7 @@ describe('CreateJoinRequest', () => {
     it('should create a join request successfully', async () => {
       const params = new CreateJoinRequestParams('user1', 'class1', JoinRequestType.STUDENT);
       joinRequestRepository.getJoinRequestByClassId.mockResolvedValue([]);
-      classRepository.getAllClassesByStudentId.mockResolvedValue([]);
+      classRepository.getByStudentId.mockResolvedValue([]);
       joinRequestRepository.createJoinRequest.mockResolvedValue(new JoinRequest('user1', 'class1', JoinRequestType.STUDENT));
   
       const result = await service.execute(params);

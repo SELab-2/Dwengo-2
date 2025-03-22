@@ -8,7 +8,7 @@ describe("GetClassByClassId", () => {
 
     beforeEach(() => {
         mockRepository = {
-            getClassById: jest.fn(),
+            getById: jest.fn(),
         } as unknown as jest.Mocked<IClassRepository>;
 
         getClassByClassId = new GetClassByClassId(mockRepository as any);
@@ -16,12 +16,12 @@ describe("GetClassByClassId", () => {
 
     it("should return a class as an object", async () => {
         const classInstance = new Class("Math", "Basic Math", "8th grade", "123");
-        mockRepository.getClassById.mockResolvedValue(classInstance);
+        mockRepository.getById.mockResolvedValue(classInstance);
 
         const params = new GetClassParams("123");
         const result = await getClassByClassId.execute(params);
 
-        expect(mockRepository.getClassById).toHaveBeenCalledWith("123");
+        expect(mockRepository.getById).toHaveBeenCalledWith("123");
         expect(result).toEqual(classInstance.toObject());
     });
 });

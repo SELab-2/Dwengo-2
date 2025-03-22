@@ -32,6 +32,6 @@ export class UpdateClass extends ClassBaseService<UpdateClassParams> {
         if (input.description) updatedFields.description = input.description;
         if (input.targetAudience) updatedFields.targetAudience = input.targetAudience;
 
-        return (await this.classRepository.updateClass(input.id, updatedFields)).toObject();
+        return (await this.classRepository.update(input.id, updatedFields)).toObject();
     }
 }

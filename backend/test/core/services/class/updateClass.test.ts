@@ -3,7 +3,7 @@ import { UpdateClass, UpdateClassParams } from "../../../../src/core/services/cl
 
 // Mock repository
 const mockClassRepository = {
-    updateClass: jest.fn()
+    update: jest.fn()
 };
 
 describe("UpdateClass Service", () => {
@@ -19,7 +19,7 @@ describe("UpdateClass Service", () => {
         const updatedDescription = "Updated Description";
 
         const mockUpdatedClass = new Class(updatedName, updatedDescription, "Target Audience", classId);
-        mockClassRepository.updateClass.mockResolvedValue(mockUpdatedClass);
+        mockClassRepository.update.mockResolvedValue(mockUpdatedClass);
         mockUpdatedClass.toObject = jest.fn(() => ({
             id: classId,
             name: updatedName,
@@ -30,7 +30,7 @@ describe("UpdateClass Service", () => {
         const params = new UpdateClassParams(classId, updatedName, updatedDescription);
         const result = await updateClassService.execute(params);
 
-        expect(mockClassRepository.updateClass).toHaveBeenCalledWith(classId, {
+        expect(mockClassRepository.update).toHaveBeenCalledWith(classId, {
             name: updatedName,
             description: updatedDescription
         });
@@ -47,7 +47,7 @@ describe("UpdateClass Service", () => {
         const updatedTargetAudience = "Advanced Students";
 
         const mockUpdatedClass = new Class("Original Name", "Original Description", updatedTargetAudience, classId);
-        mockClassRepository.updateClass.mockResolvedValue(mockUpdatedClass);
+        mockClassRepository.update.mockResolvedValue(mockUpdatedClass);
         mockUpdatedClass.toObject = jest.fn(() => ({
             id: classId,
             name: "Original Name",
@@ -58,7 +58,7 @@ describe("UpdateClass Service", () => {
         const params = new UpdateClassParams(classId, undefined, undefined, updatedTargetAudience);
         const result = await updateClassService.execute(params);
 
-        expect(mockClassRepository.updateClass).toHaveBeenCalledWith(classId, {
+        expect(mockClassRepository.update).toHaveBeenCalledWith(classId, {
             targetAudience: updatedTargetAudience
         });
         expect(result).toEqual({
