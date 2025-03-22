@@ -44,7 +44,7 @@ export class DeleteUser implements Service<DeleteUserParams> {
         if (input.userType == UserType.STUDENT) {
             await this.studentRepository.deleteById(input.id);
         } else {
-            await this.teacherRepository.deleteTeacherWithId(input.id);
+            await this.teacherRepository.deleteById(input.id);
         }
         return {};
     }

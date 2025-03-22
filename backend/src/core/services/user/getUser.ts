@@ -45,7 +45,7 @@ export class GetUser implements Service<GetUserParams> {
         const user: User =
             input.userType === UserType.STUDENT
                 ? await this.studentRepository.getById(input.id)
-                : await this.teacherRepository.getTeacherById(input.id);
+                : await this.teacherRepository.getById(input.id);
 
         return user;
     }

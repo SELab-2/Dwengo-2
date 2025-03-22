@@ -16,12 +16,12 @@ describe('deleteTeacher Service', () => {
 
   beforeEach(() => {
     mockTeacherRepository = {
-      getTeacherById: jest.fn(),
-      deleteTeacherWithId: jest.fn(),
+      getById: jest.fn(),
+      deleteById: jest.fn(),
     } as unknown as jest.Mocked<ITeacherRepository>;
     mockStudentRepository = {
-      getStudentById: jest.fn(),
-      deleteStudentById: jest.fn(),
+      getById: jest.fn(),
+      deleteById: jest.fn(),
     } as unknown as jest.Mocked<IStudentRepository>;
 
     deleteTeacherService = new DeleteUser(
@@ -33,7 +33,7 @@ describe('deleteTeacher Service', () => {
   });
 
   test('Should throw error if teacher not found in database', async () => {
-    mockTeacherRepository.deleteTeacherWithId.mockRejectedValue(
+    mockTeacherRepository.deleteById.mockRejectedValue(
       new EntityNotFoundError('Teacher not found'),
     );
 
@@ -52,11 +52,11 @@ describe('deleteTeacher Service', () => {
       '1',
     );
 
-    mockTeacherRepository.getTeacherById.mockResolvedValue(teacher);
-    mockTeacherRepository.deleteTeacherWithId.mockResolvedValue(undefined);
+    mockTeacherRepository.getById.mockResolvedValue(teacher);
+    mockTeacherRepository.deleteById.mockResolvedValue(undefined);
 
     await expect(deleteTeacherService.execute(params)).resolves.toEqual({});
-    expect(mockTeacherRepository.deleteTeacherWithId).toHaveBeenCalledWith(
+    expect(mockTeacherRepository.deleteById).toHaveBeenCalledWith(
       params.id,
     );
   });

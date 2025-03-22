@@ -10,7 +10,7 @@ describe("GetClassUsers Service", () => {
 
     beforeEach(() => {
         studentRepository = { getByClassId: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
-        teacherRepository = { getClassTeachers: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
+        teacherRepository = { getByClassId: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
 
         getClassUsers = new GetClassUsers(teacherRepository, studentRepository);
     });
@@ -20,7 +20,7 @@ describe("GetClassUsers Service", () => {
         const mockTeacher = { id: "t1", email: "teacher@example.com", toObject: jest.fn().mockReturnValue({ id: "t1", email: "teacher@example.com" }) };
 
         studentRepository.getByClassId.mockResolvedValue([mockStudent as unknown as User]);
-        teacherRepository.getClassTeachers.mockResolvedValue([mockTeacher as unknown as User]);
+        teacherRepository.getByClassId.mockResolvedValue([mockTeacher as unknown as User]);
 
         const classId = "class-123";
         const params = new GetClassUsersParams(classId);
@@ -33,12 +33,12 @@ describe("GetClassUsers Service", () => {
         });
 
         expect(studentRepository.getByClassId).toHaveBeenCalledWith(classId);
-        expect(teacherRepository.getClassTeachers).toHaveBeenCalledWith(classId);
+        expect(teacherRepository.getByClassId).toHaveBeenCalledWith(classId);
     });
 
     it("should return empty arrays if no users found", async () => {
         studentRepository.getByClassId.mockResolvedValue([]);
-        teacherRepository.getClassTeachers.mockResolvedValue([]);
+        teacherRepository.getByClassId.mockResolvedValue([]);
 
         const classId = "class-456";
         const params = new GetClassUsersParams(classId);

@@ -38,7 +38,7 @@ export class CreateUserParams implements ServiceParams {
         // Check if email not already in use
         const emailInUse = await Promise.all([
             studentRepository.checkByEmail(this._email),
-            teacherRepository.checkTeacherByEmail(this._email),
+            teacherRepository.checkByEmail(this._email),
         ]);
         if (emailInUse.some(present => present)) {
             throw {
@@ -73,7 +73,7 @@ export class CreateUser implements Service<CreateUserParams> {
         const createdUser: User =
             input.userType === UserType.STUDENT
                 ? await this.studentRepository.create(user as Student)
-                : await this.teacherRepository.createTeacher(user as Teacher);
+                : await this.teacherRepository.create(user as Teacher);
         return { id: createdUser.id! };
     }
 }

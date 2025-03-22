@@ -10,7 +10,7 @@ describe("GetAssignmentUsers Service", () => {
 
     beforeEach(() => {
         studentRepository = { getByAssignmentId: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
-        teacherRepository = { getAssignmentTeachers: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
+        teacherRepository = { getByAssignmentId: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
 
         getAssignmentUsers = new GetAssignmentUsers(teacherRepository, studentRepository);
     });

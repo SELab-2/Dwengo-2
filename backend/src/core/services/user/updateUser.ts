@@ -41,7 +41,7 @@ export class UpdateUserParams implements ServiceParams {
         if (this._userType == UserType.STUDENT) {
             oldUser = await studentRepository.getById(this._id);
         } else {
-            oldUser = await teacherRepository.getTeacherById(this._id);
+            oldUser = await teacherRepository.getById(this._id);
         }
 
         // Check if email is not same when being updated
@@ -55,7 +55,7 @@ export class UpdateUserParams implements ServiceParams {
         // Check if email is already in use
         if (this._email) {
             const studentPresent: boolean = await studentRepository.checkByEmail(this._email);
-            const teacherPresent: boolean = await teacherRepository.checkTeacherByEmail(this._email);
+            const teacherPresent: boolean = await teacherRepository.checkByEmail(this._email);
             if (studentPresent || teacherPresent) {
                 throw {
                     code: ErrorCode.BAD_REQUEST,
@@ -115,7 +115,7 @@ export class UpdateUser implements Service<UpdateUserParams> {
         if (input.userType == UserType.STUDENT) {
             await this.studentRepository.update(user as Student);
         } else {
-            await this.teacherRepository.updateTeacher(user as Teacher);
+            await this.teacherRepository.update(user as Teacher);
         }
 
         return {};

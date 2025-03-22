@@ -10,7 +10,7 @@ describe("GetGroupUsers Service", () => {
 
     beforeEach(() => {
         studentRepository = { getByGroupId: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
-        teacherRepository = { getGroupTeachers: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
+        teacherRepository = { getByGroupId: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
 
         getGroupUsers = new GetGroupUsers(teacherRepository, studentRepository);
     });

@@ -12,10 +12,10 @@ describe('getTeacher Use Case', () => {
 
   beforeEach(() => {
     mockTeacherRepository = {
-      getTeacherById: jest.fn(), // Mock DB function
+      getById: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<ITeacherRepository>;
     mockStudentRepository = {
-      getStudentById: jest.fn(), // Mock DB function
+      getById: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<IStudentRepository>;
 
     getTeacherUseCase = new GetUser(
@@ -36,21 +36,21 @@ describe('getTeacher Use Case', () => {
 
     const params: GetUserParams = new GetUserParams('1', UserType.TEACHER);
 
-    mockTeacherRepository.getTeacherById.mockResolvedValue(teacher);
+    mockTeacherRepository.getById.mockResolvedValue(teacher);
     const result = await getTeacherUseCase.execute(params);
 
     expect(result).toEqual(teacher);
-    expect(mockTeacherRepository.getTeacherById).toHaveBeenCalledWith('1');
+    expect(mockTeacherRepository.getById).toHaveBeenCalledWith('1');
   });
 
   test('Should throw error', async () => {
-    mockTeacherRepository.getTeacherById.mockRejectedValue(
+    mockTeacherRepository.getById.mockRejectedValue(
       new EntityNotFoundError('Teacher not found'),
     );
 
     const params: GetUserParams = new GetUserParams('999', UserType.TEACHER);
 
     await expect(getTeacherUseCase.execute(params)).rejects.toThrow();
-    expect(mockTeacherRepository.getTeacherById).toHaveBeenCalledWith('999');
+    expect(mockTeacherRepository.getById).toHaveBeenCalledWith('999');
   });
 });

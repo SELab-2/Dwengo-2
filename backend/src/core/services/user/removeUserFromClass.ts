@@ -28,7 +28,7 @@ export class RemoveUserFromClass extends RemoveUserFrom {
         if (userType == UserType.STUDENT) {
             await this.studentRepository.removeFromClass(userId, otherId);
         } else {
-            await this.teacherRepository.deleteTeacherFromClass(userId, otherId);
+            await this.teacherRepository.removeFromClass(userId, otherId);
         }
     }
 }

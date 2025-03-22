@@ -17,7 +17,7 @@ describe('UpdateStudent Service', () => {
       update: jest.fn(),
     } as unknown as jest.Mocked<IStudentRepository>;
     teacherRepository = {
-      checkTeacherByEmail: jest.fn()
+      checkByEmail: jest.fn()
     } as unknown as jest.Mocked<ITeacherRepository>;
 
     updateStudent = new UpdateUser(studentRepository, teacherRepository);
@@ -50,7 +50,7 @@ describe('UpdateStudent Service', () => {
     expect(studentRepository.checkByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
-    expect(teacherRepository.checkTeacherByEmail).toHaveBeenCalledWith(
+    expect(teacherRepository.checkByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
     expect(studentRepository.update).toHaveBeenCalledWith(
@@ -93,7 +93,7 @@ describe('UpdateStudent Service', () => {
     expect(studentRepository.checkByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
-    expect(teacherRepository.checkTeacherByEmail).toHaveBeenCalledWith(
+    expect(teacherRepository.checkByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
     expect(studentRepository.update).toHaveBeenCalledWith(

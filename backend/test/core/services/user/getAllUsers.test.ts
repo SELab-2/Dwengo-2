@@ -10,7 +10,7 @@ describe("GetAllUsers Service", () => {
 
     beforeEach(() => {
         studentRepository = { getAll: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
-        teacherRepository = { getAllTeachers: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
+        teacherRepository = { getAll: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
 
         getAllUsers = new GetAllUsers(teacherRepository, studentRepository);
     });
@@ -23,7 +23,7 @@ describe("GetAllUsers Service", () => {
         mockTeacher.toObject.mockReturnValue({ id: "t1", email: "teacher@example.com", firstName: "Jane", familyName: "Smith", schoolName: "School B" });
 
         studentRepository.getAll.mockResolvedValue([mockStudent as unknown as User]);
-        teacherRepository.getAllTeachers.mockResolvedValue([mockTeacher as unknown as User]);
+        teacherRepository.getAll.mockResolvedValue([mockTeacher as unknown as User]);
 
         const result = await getAllUsers.execute();
 
@@ -33,12 +33,12 @@ describe("GetAllUsers Service", () => {
         });
 
         expect(studentRepository.getAll).toHaveBeenCalledTimes(1);
-        expect(teacherRepository.getAllTeachers).toHaveBeenCalledTimes(1);
+        expect(teacherRepository.getAll).toHaveBeenCalledTimes(1);
     });
 
     it("should return empty lists if no students or teachers exist", async () => {
         studentRepository.getAll.mockResolvedValue([]);
-        teacherRepository.getAllTeachers.mockResolvedValue([]);
+        teacherRepository.getAll.mockResolvedValue([]);
 
         const result = await getAllUsers.execute();
 
