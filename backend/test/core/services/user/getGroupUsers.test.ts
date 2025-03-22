@@ -9,7 +9,7 @@ describe("GetGroupUsers Service", () => {
     let getGroupUsers: GetGroupUsers;
 
     beforeEach(() => {
-        studentRepository = { getGroupStudents: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
+        studentRepository = { getByGroupId: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
         teacherRepository = { getGroupTeachers: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
 
         getGroupUsers = new GetGroupUsers(teacherRepository, studentRepository);
@@ -18,7 +18,7 @@ describe("GetGroupUsers Service", () => {
     it("should return students and teachers as objects", async () => {
         const mockStudent = { id: "s2", email: "student2@example.com", toObject: jest.fn().mockReturnValue({ id: "s2", email: "student2@example.com" }) };
 
-        studentRepository.getGroupStudents.mockResolvedValue([mockStudent as unknown as User]);
+        studentRepository.getByGroupId.mockResolvedValue([mockStudent as unknown as User]);
 
         const groupId = "group-123";
         const params = new GetGroupUsersParams(groupId);
@@ -29,10 +29,10 @@ describe("GetGroupUsers Service", () => {
             students: [{ id: "s2", email: "student2@example.com" }],
         });
 
-        expect(studentRepository.getGroupStudents).toHaveBeenCalledWith(groupId);    });
+        expect(studentRepository.getByGroupId).toHaveBeenCalledWith(groupId);    });
 
     it("should return empty arrays if no users found", async () => {
-        studentRepository.getGroupStudents.mockResolvedValue([]);
+        studentRepository.getByGroupId.mockResolvedValue([]);
 
         const groupId = "group-456";
         const params = new GetGroupUsersParams(groupId);

@@ -12,7 +12,7 @@ describe('RemoveStudentFromGroup', () => {
 
   beforeEach(() => {
     mockStudentRepository = {
-      removeStudentFromGroup: jest.fn(),
+      removeFromGroup: jest.fn(),
     } as unknown as jest.Mocked<IStudentRepository>;
     removeStudentFromGroup = new RemoveUserFromGroup(mockStudentRepository);
   });
@@ -22,17 +22,17 @@ describe('RemoveStudentFromGroup', () => {
 
     await removeStudentFromGroup.execute(params);
 
-    expect(mockStudentRepository.removeStudentFromGroup).toHaveBeenCalledWith(
+    expect(mockStudentRepository.removeFromGroup).toHaveBeenCalledWith(
       '123',
       '456',
     );
-    expect(mockStudentRepository.removeStudentFromGroup).toHaveBeenCalledTimes(
+    expect(mockStudentRepository.removeFromGroup).toHaveBeenCalledTimes(
       1,
     );
   });
 
   it('should throw error when trying to remove a teacher from a group', async () => {
-    mockStudentRepository.removeStudentFromGroup.mockRejectedValue(
+    mockStudentRepository.removeFromGroup.mockRejectedValue(
       new Error('Student not found'),
     );
     const params = new RemoveUserFromParams('123', '456', UserType.TEACHER);
@@ -44,7 +44,7 @@ describe('RemoveStudentFromGroup', () => {
   });
 
   it('should handle errors thrown by the repository', async () => {
-    mockStudentRepository.removeStudentFromGroup.mockRejectedValue(
+    mockStudentRepository.removeFromGroup.mockRejectedValue(
       new Error('Student not found'),
     );
     const params = new RemoveUserFromParams('123', '456', UserType.STUDENT);

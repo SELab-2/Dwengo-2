@@ -24,7 +24,7 @@ export class RemoveUserFromGroup extends RemoveUserFrom {
      */
     public async removeUser(userId: string, otherId: string, userType: UserType): Promise<void> {
         if (userType == UserType.STUDENT) {
-            await this.studentRepository.removeStudentFromGroup(userId, otherId);
+            await this.studentRepository.removeFromGroup(userId, otherId);
         } else {
             throw {
                 code: ErrorCode.BAD_REQUEST,

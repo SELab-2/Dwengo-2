@@ -19,7 +19,7 @@ export class AssignStudentToGroupParams implements ServiceParams {
 export class AssignStudentToGroup implements Service<AssignStudentToGroupParams> {
     constructor(private studentRepository: IStudentRepository) {}
     async execute(input: AssignStudentToGroupParams): Promise<object> {
-        await this.studentRepository.assignStudentToGroup(input.studentId, input.groupId);
+        await this.studentRepository.assignToGroup(input.studentId, input.groupId);
         return {};
     }
 }

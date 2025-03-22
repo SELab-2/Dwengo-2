@@ -42,7 +42,7 @@ export class DeleteUser implements Service<DeleteUserParams> {
      */
     async execute(input: DeleteUserParams): Promise<object> {
         if (input.userType == UserType.STUDENT) {
-            await this.studentRepository.deleteStudentById(input.id);
+            await this.studentRepository.deleteById(input.id);
         } else {
             await this.teacherRepository.deleteTeacherWithId(input.id);
         }

@@ -9,7 +9,7 @@ import {
 
 const mockStudentRepository = {
   checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
-  createStudent: jest.fn().mockResolvedValue('mock-user-id'), // Simulate user
+  create: jest.fn().mockResolvedValue('mock-user-id'), // Simulate user
 } as unknown as jest.Mocked<IStudentRepository>;
 
 const mockTeacherRepository = {

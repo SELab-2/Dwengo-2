@@ -13,7 +13,7 @@ describe("getStudent Service", () => {
 
   beforeEach(() => {
     mockStudentRepository = {
-      getStudentById: jest.fn(), // Mock DB function
+      getById: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<IStudentRepository>;
     mockTeacherRepository = {} as unknown as jest.Mocked<ITeacherRepository>;
 
@@ -32,19 +32,19 @@ describe("getStudent Service", () => {
 
     const params: GetUserParams = new GetUserParams("1", UserType.STUDENT);
 
-    mockStudentRepository.getStudentById.mockResolvedValue(student);
+    mockStudentRepository.getById.mockResolvedValue(student);
     const result = await getStudentService.execute(params);
 
     expect(result).toEqual(student);
-    expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("1");
+    expect(mockStudentRepository.getById).toHaveBeenCalledWith("1");
   });
 
   test("Should throw error", async () => {
-    mockStudentRepository.getStudentById.mockRejectedValue(new EntityNotFoundError("Student not found"));
+    mockStudentRepository.getById.mockRejectedValue(new EntityNotFoundError("Student not found"));
     
     const params: GetUserParams = new GetUserParams("999", UserType.STUDENT);
 
     await expect(getStudentService.execute(params)).rejects.toThrow();
-    expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("999");
+    expect(mockStudentRepository.getById).toHaveBeenCalledWith("999");
   });
 });

@@ -44,7 +44,7 @@ export class GetUser implements Service<GetUserParams> {
     async execute(input: GetUserParams): Promise<object> {
         const user: User =
             input.userType === UserType.STUDENT
-                ? await this.studentRepository.getStudentById(input.id)
+                ? await this.studentRepository.getById(input.id)
                 : await this.teacherRepository.getTeacherById(input.id);
 
         return user;

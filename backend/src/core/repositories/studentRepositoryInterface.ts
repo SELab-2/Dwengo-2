@@ -10,54 +10,54 @@ export abstract class IStudentRepository extends AbstractRepository {
      * @param student The new student to insert.
      * @returns A promise that resolves to the inserted student.
      */
-    public abstract createStudent(student: Student): Promise<Student>;
+    public abstract create(student: Student): Promise<Student>;
 
     /**
      * Get a student by its id. Throws an `EntityNotFoundError` when no student is found.
      * @param id The id of the student
      * @returns A promise that resolves to the student with the given id or null if no results are found.
      */
-    public abstract getStudentById(id: string): Promise<Student>;
+    public abstract getById(id: string): Promise<Student>;
 
     /**
      * Get a student by their email. Throws an `EntityNotFoundError` when no student is found.
      * @param email The email of the student
      * @returns A promise that resolves to the student with the given email or null if no results are found.
      */
-    public abstract getStudentByEmail(email: string): Promise<Student>;
+    public abstract getByEmail(email: string): Promise<Student>;
 
     /**
      * Get a student by their first name. Throws an `EntityNotFoundError` when no student is found.
      * @param first_name The first name of the student
      * @returns A promise that resolves to the student with the given first name.
      */
-    public abstract getStudentByFirstName(first_name: string): Promise<Student>;
+    public abstract getByFirstName(first_name: string): Promise<Student>;
 
     /**
      * Get a student by their last name. Throws an `EntityNotFoundError` when no student is found.
      * @param last_name The last name of the student
      * @returns A promise that resolves to the student with the given last name.
      */
-    public abstract getStudentByLastName(last_name: string): Promise<Student>;
+    public abstract getByLastName(last_name: string): Promise<Student>;
 
     /**
      * Get all students in the repository.
      * @returns A promise that resolves to an array of all students.
      */
-    public abstract getAllStudents(): Promise<Student[]>;
+    public abstract getAll(): Promise<Student[]>;
 
     /**
      * Update an existing student in the repository.
      * @param student The student to update.
      * @returns A promise that resolves to the updated student.
      */
-    public abstract updateStudent(student: Student): Promise<Student>;
+    public abstract update(student: Student): Promise<Student>;
 
     /**
      * Delete a student from the repository.
      * @param id The id of the student to delete.
      */
-    public abstract deleteStudentById(id: string): Promise<void>;
+    public abstract deleteById(id: string): Promise<void>;
 
     /**
      * Function to remove a student from a class.
@@ -69,7 +69,7 @@ export abstract class IStudentRepository extends AbstractRepository {
      * @throws Error if student is not in class
      * @throws Error if class does not exist
      */
-    public abstract removeStudentFromClass(studentId: string, classId: string): Promise<void>;
+    public abstract removeFromClass(studentId: string, classId: string): Promise<void>;
 
     /**
      * Function to remove a student from a group.
@@ -81,7 +81,7 @@ export abstract class IStudentRepository extends AbstractRepository {
      * @throws Error if student is not in group
      * @throws Error if group does not exist
      */
-    public abstract removeStudentFromGroup(studentId: string, groupId: string): Promise<void>;
+    public abstract removeFromGroup(studentId: string, groupId: string): Promise<void>;
 
     /**
      * Check if a student is present in the DB.
@@ -97,7 +97,7 @@ export abstract class IStudentRepository extends AbstractRepository {
      * @param groupId the group in the assignment where the student is part of.
      * @throws {EntityNotFoundError} when the student or group could not be found.
      */
-    public abstract assignStudentToGroup(studentId: string, groupId: string): Promise<void>;
+    public abstract assignToGroup(studentId: string, groupId: string): Promise<void>;
 
     /**
      * Get all students for a class
@@ -105,7 +105,7 @@ export abstract class IStudentRepository extends AbstractRepository {
      * @returns the id of the students
      * @throws {EntityNotFoundError} when the assignment could not be found.
      */
-    public abstract getClassStudents(classId: string): Promise<Student[]>;
+    public abstract getByClassId(classId: string): Promise<Student[]>;
 
     /**
      * Get all students for an assignment.
@@ -113,7 +113,7 @@ export abstract class IStudentRepository extends AbstractRepository {
      * @returns the id of the students
      * @throws {EntityNotFoundError} when the assignment could not be found.
      */
-    public abstract getAssignmentStudents(assignmentId: string): Promise<Student[]>;
+    public abstract getByAssignmentId(assignmentId: string): Promise<Student[]>;
 
     /**
      * Get all students for a group.
@@ -121,5 +121,5 @@ export abstract class IStudentRepository extends AbstractRepository {
      * @returns the id of the students
      * @throws {EntityNotFoundError} when the group could not be found.
      */
-    public abstract getGroupStudents(groupId: string): Promise<Student[]>;
+    public abstract getByGroupId(groupId: string): Promise<Student[]>;
 }

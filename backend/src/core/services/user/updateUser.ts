@@ -39,7 +39,7 @@ export class UpdateUserParams implements ServiceParams {
         // Get the old info of the user
         let oldUser: User;
         if (this._userType == UserType.STUDENT) {
-            oldUser = await studentRepository.getStudentById(this._id);
+            oldUser = await studentRepository.getById(this._id);
         } else {
             oldUser = await teacherRepository.getTeacherById(this._id);
         }
@@ -113,7 +113,7 @@ export class UpdateUser implements Service<UpdateUserParams> {
     async execute(input: UpdateUserParams): Promise<object> {
         const user: User = await input.fromObject(this.studentRepository, this.teacherRepository);
         if (input.userType == UserType.STUDENT) {
-            await this.studentRepository.updateStudent(user as Student);
+            await this.studentRepository.update(user as Student);
         } else {
             await this.teacherRepository.updateTeacher(user as Teacher);
         }
