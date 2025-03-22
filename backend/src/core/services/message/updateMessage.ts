@@ -19,9 +19,9 @@ export class UpdateMessageParams implements ServiceParams {
 
 export class UpdateMessage extends MessageService<UpdateMessageParams> {
     async execute(input: UpdateMessageParams): Promise<object> {
-        const message: Message = await this.messageRepository.getMessageById(input.id);
+        const message: Message = await this.messageRepository.getById(input.id);
         message.content = input.content;
-        await this.messageRepository.updateMessage(message);
+        await this.messageRepository.update(message);
         return message.toObject();
     }
 }

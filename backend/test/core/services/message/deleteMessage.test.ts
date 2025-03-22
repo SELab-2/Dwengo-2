@@ -3,7 +3,7 @@ import { DatabaseError } from '../../../../src/config/error';
 
 // Mock repository
 const mockMessageRepository = {
-    deleteMessageById: jest.fn(),
+    deleteById: jest.fn(),
 };
 
 describe('DeleteMessage', () => {
@@ -16,19 +16,19 @@ describe('DeleteMessage', () => {
 
     test('Should delete a message successfully', async () => {
         const inputParams = new DeleteMessageParams("message-123");
-        mockMessageRepository.deleteMessageById.mockResolvedValue(undefined);
+        mockMessageRepository.deleteById.mockResolvedValue(undefined);
 
         const result = await deleteMessage.execute(inputParams);
 
         expect(result).toEqual({});
-        expect(mockMessageRepository.deleteMessageById).toHaveBeenCalledWith("message-123");
+        expect(mockMessageRepository.deleteById).toHaveBeenCalledWith("message-123");
     });
 
     test('Should throw a DatabaseError if deletion fails', async () => {
         const inputParams = new DeleteMessageParams("message-123");
-        mockMessageRepository.deleteMessageById.mockRejectedValue(new DatabaseError('Deletion failed'));
+        mockMessageRepository.deleteById.mockRejectedValue(new DatabaseError('Deletion failed'));
 
         await expect(deleteMessage.execute(inputParams)).rejects.toThrow(DatabaseError);
-        expect(mockMessageRepository.deleteMessageById).toHaveBeenCalledWith("message-123");
+        expect(mockMessageRepository.deleteById).toHaveBeenCalledWith("message-123");
     });
 });

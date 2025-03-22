@@ -30,6 +30,6 @@ export class CreateMessageParams implements ServiceParams {
 export class CreateMessage extends MessageService<CreateMessageParams> {
     async execute(input: CreateMessageParams): Promise<object> {
         const newMessage = new Message(input.senderId, input.createdAt, input.threadId, input.content);
-        return { id: (await this.messageRepository.createMessage(newMessage)).id };
+        return { id: (await this.messageRepository.create(newMessage)).id };
     }
 }

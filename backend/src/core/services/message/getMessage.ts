@@ -11,6 +11,6 @@ export class GetMessageParams implements ServiceParams {
 
 export class GetMessage extends MessageService<GetMessageParams> {
     async execute(input: GetMessageParams): Promise<object> {
-        return (await this.messageRepository.getMessageById(input.id)).toObject();
+        return (await this.messageRepository.getById(input.id)).toObject();
     }
 }
