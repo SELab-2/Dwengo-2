@@ -4,7 +4,7 @@ import { QuestionThread, VisibilityType } from '../../../../src/core/entities/qu
 
 // Mock repository
 const mockQuestionThreadRepository = {
-    getQuestionThreadsByAssignmentId: jest.fn(),
+    getByAssignmentId: jest.fn(),
 };
 
 describe('GetAssignmentQuestionThreads', () => {
@@ -23,7 +23,7 @@ describe('GetAssignmentQuestionThreads', () => {
             new QuestionThread("creator-2", "assignment-123", "learningObj-789", true, VisibilityType.PRIVATE, ["msg-3"], "thread-2")
         ];
 
-        mockQuestionThreadRepository.getQuestionThreadsByAssignmentId.mockResolvedValue(questionThreads);
+        mockQuestionThreadRepository.getByAssignmentId.mockResolvedValue(questionThreads);
 
         const result = await getAssignmentQuestionThreads.execute(inputParams);
 
@@ -31,27 +31,27 @@ describe('GetAssignmentQuestionThreads', () => {
             threads: questionThreads.map(qt => qt.toObject())
         });
 
-        expect(mockQuestionThreadRepository.getQuestionThreadsByAssignmentId).toHaveBeenCalledWith("assignment-123");
+        expect(mockQuestionThreadRepository.getByAssignmentId).toHaveBeenCalledWith("assignment-123");
     });
 
     test('Should return an empty list if no threads are found', async () => {
         const inputParams = new GetAssignmentQuestionThreadsParams("assignment-123");
 
-        mockQuestionThreadRepository.getQuestionThreadsByAssignmentId.mockResolvedValue([]);
+        mockQuestionThreadRepository.getByAssignmentId.mockResolvedValue([]);
 
         const result = await getAssignmentQuestionThreads.execute(inputParams);
 
         expect(result).toEqual({ threads: [] });
 
-        expect(mockQuestionThreadRepository.getQuestionThreadsByAssignmentId).toHaveBeenCalledWith("assignment-123");
+        expect(mockQuestionThreadRepository.getByAssignmentId).toHaveBeenCalledWith("assignment-123");
     });
 
     test('Should throw a DatabaseError if database retrieval fails', async () => {
         const inputParams = new GetAssignmentQuestionThreadsParams("assignment-123");
 
-        mockQuestionThreadRepository.getQuestionThreadsByAssignmentId.mockRejectedValue(new DatabaseError('Database error'));
+        mockQuestionThreadRepository.getByAssignmentId.mockRejectedValue(new DatabaseError('Database error'));
 
         await expect(getAssignmentQuestionThreads.execute(inputParams)).rejects.toThrow(DatabaseError);
-        expect(mockQuestionThreadRepository.getQuestionThreadsByAssignmentId).toHaveBeenCalledWith("assignment-123");
+        expect(mockQuestionThreadRepository.getByAssignmentId).toHaveBeenCalledWith("assignment-123");
     });
 });

@@ -4,7 +4,7 @@ import { DatabaseError } from '../../../../src/config/error';
 
 // Mock repositories
 const mockQuestionThreadRepository = {
-    getQuestionThreadById: jest.fn(),
+    getById: jest.fn(),
 };
 
 const mockMessageRepository = {
@@ -27,7 +27,7 @@ describe('GetThreadMessages', () => {
             new Message("sender-456", new Date(), "thread-456", "Hi there", "message-456"),
         ];
 
-        mockQuestionThreadRepository.getQuestionThreadById.mockResolvedValue(threadData);
+        mockQuestionThreadRepository.getById.mockResolvedValue(threadData);
         mockMessageRepository.getById.mockImplementation((id) =>
             Promise.resolve(retrievedMessages.find(msg => msg.id === id))
         );
@@ -35,15 +35,15 @@ describe('GetThreadMessages', () => {
         const result = await getThreadMessages.execute(inputParams);
 
         expect(result).toEqual({ messages: retrievedMessages.map(msg => msg.toObject()) });
-        expect(mockQuestionThreadRepository.getQuestionThreadById).toHaveBeenCalledWith("thread-456");
+        expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-456");
         expect(mockMessageRepository.getById).toHaveBeenCalledTimes(2);
     });
 
     test('Should throw a DatabaseError if retrieval fails', async () => {
         const inputParams = new GetThreadMessagesParams("thread-456");
-        mockQuestionThreadRepository.getQuestionThreadById.mockRejectedValue(new DatabaseError('Retrieval failed'));
+        mockQuestionThreadRepository.getById.mockRejectedValue(new DatabaseError('Retrieval failed'));
 
         await expect(getThreadMessages.execute(inputParams)).rejects.toThrow(DatabaseError);
-        expect(mockQuestionThreadRepository.getQuestionThreadById).toHaveBeenCalledWith("thread-456");
+        expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-456");
     });
 });

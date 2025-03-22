@@ -4,7 +4,7 @@ import { DatabaseError } from '../../../../src/config/error';
 
 // Mock repository
 const mockQuestionThreadRepository = {
-    updateQuestionThread: jest.fn(),
+    update: jest.fn(),
 };
 
 describe('UpdateQuestionThread', () => {
@@ -27,12 +27,12 @@ describe('UpdateQuestionThread', () => {
             "thread-123"
         );
 
-        mockQuestionThreadRepository.updateQuestionThread.mockResolvedValue(updatedThread);
+        mockQuestionThreadRepository.update.mockResolvedValue(updatedThread);
 
         const result = await updateQuestionThread.execute(inputParams);
 
         expect(result).toEqual(updatedThread.toObject());
-        expect(mockQuestionThreadRepository.updateQuestionThread).toHaveBeenCalledWith("thread-123", {
+        expect(mockQuestionThreadRepository.update).toHaveBeenCalledWith("thread-123", {
             isClosed: true,
             visibility: VisibilityType.PRIVATE,
         });
@@ -41,10 +41,10 @@ describe('UpdateQuestionThread', () => {
     test('Should throw a DatabaseError if update fails', async () => {
         const inputParams = new UpdateQuestionThreadParams("thread-123", true, VisibilityType.PUBLIC);
 
-        mockQuestionThreadRepository.updateQuestionThread.mockRejectedValue(new DatabaseError('Update failed'));
+        mockQuestionThreadRepository.update.mockRejectedValue(new DatabaseError('Update failed'));
 
         await expect(updateQuestionThread.execute(inputParams)).rejects.toThrow(DatabaseError);
-        expect(mockQuestionThreadRepository.updateQuestionThread).toHaveBeenCalledWith("thread-123", {
+        expect(mockQuestionThreadRepository.update).toHaveBeenCalledWith("thread-123", {
             isClosed: true,
             visibility: VisibilityType.PUBLIC,
         });

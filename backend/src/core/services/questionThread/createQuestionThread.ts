@@ -48,6 +48,6 @@ export class CreateQuestionThread extends QuestionThreadBaseService<CreateQuesti
             input.messageIds,
             undefined,
         );
-        return (await this.questionThreadRepository.createQuestionThread(qT)).toObject();
+        return (await this.questionThreadRepository.create(qT)).toObject();
     }
 }

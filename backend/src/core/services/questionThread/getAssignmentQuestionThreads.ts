@@ -12,7 +12,7 @@ export class GetAssignmentQuestionThreads extends QuestionThreadBaseService<GetA
     async execute(input: GetAssignmentQuestionThreadsParams): Promise<object> {
         return {
             threads:
-                (await this.questionThreadRepository.getQuestionThreadsByAssignmentId(input.assignmentId)).map(qt =>
+                (await this.questionThreadRepository.getByAssignmentId(input.assignmentId)).map(qt =>
                     qt.toObject(),
                 ) ?? [],
         };

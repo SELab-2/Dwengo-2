@@ -4,7 +4,7 @@ import { QuestionThread, VisibilityType } from '../../../../src/core/entities/qu
 
 // Mock repository
 const mockQuestionThreadRepository = {
-    getQuestionThreadById: jest.fn(),
+    getById: jest.fn(),
 };
 
 describe('GetQuestionThread', () => {
@@ -28,29 +28,29 @@ describe('GetQuestionThread', () => {
             "thread-999"
         );
 
-        mockQuestionThreadRepository.getQuestionThreadById.mockResolvedValue(existingQuestionThread);
+        mockQuestionThreadRepository.getById.mockResolvedValue(existingQuestionThread);
 
         const result = await getQuestionThread.execute(inputParams);
 
         expect(result).toEqual(existingQuestionThread.toObject());
-        expect(mockQuestionThreadRepository.getQuestionThreadById).toHaveBeenCalledWith("thread-999");
+        expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-999");
     });
 
     test('Should throw an EntityNotFoundError if the question thread does not exist', async () => {
         const inputParams = new GetQuestionThreadParams("nonexistent-thread");
 
-        mockQuestionThreadRepository.getQuestionThreadById.mockRejectedValue(new EntityNotFoundError('Thread not found'));
+        mockQuestionThreadRepository.getById.mockRejectedValue(new EntityNotFoundError('Thread not found'));
 
         await expect(getQuestionThread.execute(inputParams)).rejects.toThrow(EntityNotFoundError);
-        expect(mockQuestionThreadRepository.getQuestionThreadById).toHaveBeenCalledWith("nonexistent-thread");
+        expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("nonexistent-thread");
     });
 
     test('Should throw a DatabaseError if database retrieval fails', async () => {
         const inputParams = new GetQuestionThreadParams("thread-999");
 
-        mockQuestionThreadRepository.getQuestionThreadById.mockRejectedValue(new DatabaseError('Database error'));
+        mockQuestionThreadRepository.getById.mockRejectedValue(new DatabaseError('Database error'));
 
         await expect(getQuestionThread.execute(inputParams)).rejects.toThrow(DatabaseError);
-        expect(mockQuestionThreadRepository.getQuestionThreadById).toHaveBeenCalledWith("thread-999");
+        expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-999");
     });
 });

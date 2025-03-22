@@ -10,6 +10,6 @@ export class GetQuestionThreadParams implements ServiceParams {
 
 export class GetQuestionThread extends QuestionThreadBaseService<GetQuestionThreadParams> {
     async execute(input: GetQuestionThreadParams): Promise<object> {
-        return (await this.questionThreadRepository.getQuestionThreadById(input.id)).toObject();
+        return (await this.questionThreadRepository.getById(input.id)).toObject();
     }
 }

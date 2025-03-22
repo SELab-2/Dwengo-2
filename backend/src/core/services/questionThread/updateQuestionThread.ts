@@ -27,6 +27,6 @@ export class UpdateQuestionThread extends QuestionThreadBaseService<UpdateQuesti
         if (input.isClosed !== undefined) updatedFields.isClosed = input.isClosed;
         if (input.visibility) updatedFields.visibility = input.visibility;
 
-        return (await this.questionThreadRepository.updateQuestionThread(input.id, updatedFields)).toObject();
+        return (await this.questionThreadRepository.update(input.id, updatedFields)).toObject();
     }
 }

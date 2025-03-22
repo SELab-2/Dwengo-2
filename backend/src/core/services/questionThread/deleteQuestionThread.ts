@@ -11,7 +11,7 @@ export class DeleteQuestionThreadParams implements ServiceParams {
 
 export class DeleteQuestionThread extends QuestionThreadBaseService<DeleteQuestionThreadParams> {
     async execute(input: DeleteQuestionThreadParams): Promise<object> {
-        await this.questionThreadRepository.deleteQuestionThread(input.id);
+        await this.questionThreadRepository.delete(input.id);
         return {};
     }
 }
