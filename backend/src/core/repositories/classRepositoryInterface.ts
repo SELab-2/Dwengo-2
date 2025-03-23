@@ -74,7 +74,7 @@ export abstract class IClassRepository extends AbstractRepository {
      * @param id The id of the class to delete.
      * @returns A promise that resolves when the class is deleted.
      */
-    public abstract deleteById(id: string): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 
     /**
      * Add a student/teacher to a class.

@@ -2,7 +2,7 @@ import { DeleteClass, DeleteClassParams } from "../../../../src/core/services/cl
 import { IClassRepository } from "../../../../src/core/repositories/classRepositoryInterface";
 
 const mockClassRepository: jest.Mocked<IClassRepository> = {
-    deleteById: jest.fn().mockResolvedValue(undefined), // Simuleert een succesvolle verwijdering
+    delete: jest.fn().mockResolvedValue(undefined), // Simuleert een succesvolle verwijdering
 } as unknown as jest.Mocked<IClassRepository>;
 
 describe("DeleteClass Use Case", () => {
@@ -19,8 +19,8 @@ describe("DeleteClass Use Case", () => {
 
         await deleteClass.execute(params);
 
-        expect(mockClassRepository.deleteById).toHaveBeenCalledWith(classId);
-        expect(mockClassRepository.deleteById).toHaveBeenCalledTimes(1);
+        expect(mockClassRepository.delete).toHaveBeenCalledWith(classId);
+        expect(mockClassRepository.delete).toHaveBeenCalledTimes(1);
     });
 
     test("Should return an empty object after successful deletion", async () => {
@@ -33,7 +33,7 @@ describe("DeleteClass Use Case", () => {
     });
 
     test("Should throw an error if repository throws", async () => {
-        mockClassRepository.deleteById.mockRejectedValue(new Error("Database error"));
+        mockClassRepository.delete.mockRejectedValue(new Error("Database error"));
 
         const params = new DeleteClassParams("class-789");
 

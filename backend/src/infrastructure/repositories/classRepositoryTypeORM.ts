@@ -47,7 +47,7 @@ export class ClassRepositoryTypeORM extends IClassRepository {
         return await (await this.datasourceClass).getAllClasses();
     }
 
-    public async deleteById(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         return await (await this.datasourceClass).deleteClassById(id);
     }
 

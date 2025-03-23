@@ -13,7 +13,7 @@ export class DeleteClassParams implements ServiceParams {
 
 export class DeleteClass extends ClassBaseService<DeleteClassParams> {
     async execute(input: DeleteClassParams): Promise<object> {
-        await this.classRepository.deleteById(input.id);
+        await this.classRepository.delete(input.id);
         return {};
     }
 }
