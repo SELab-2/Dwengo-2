@@ -5,12 +5,12 @@
     </div>
 
     <div class="register-password">
-        <label for="password">Password:</label>
+        <label i18n for="password">Password:</label>
         <input name="password" type="password" id="password" formControlName="password" required>
     </div>
 
     <div class="register-password">
-        <label for="confirmPassword">Confirm Password:</label>
+        <label i18n for="confirmPassword">Confirm Password:</label>
         <input 
             name="confirm-password" 
             type="password" 
@@ -21,10 +21,10 @@
 
     <div class="register-teacher">
         <input type="checkbox" id="teacher" formControlName="teacher">
-        <label for="teacher">Teacher</label>
+        <label i18n for="teacher">Teacher</label>
     </div>
 
     <div class="register-submit">
-        <button type="submit" [disabled]="registrationForm.invalid">Register</button>
+        <button i18n type="submit" [disabled]="registrationForm.invalid">Register</button>
     </div>
 </form>
