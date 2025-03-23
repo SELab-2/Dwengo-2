@@ -6,6 +6,7 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
  * Based on https://angular.dev/guide/routing/common-router-tasks
  */
 export const routes: Routes = [
+    { path: '', component: LandingPageComponent },
     { path: 'login', component: LandingPageComponent }, // TODO: Change to LoginComponent
     { path: 'register', component: LandingPageComponent }, // TODO: Change to RegisterComponent
 ];
