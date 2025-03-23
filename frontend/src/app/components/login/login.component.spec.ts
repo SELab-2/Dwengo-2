@@ -23,4 +23,19 @@ describe('LoginComponent', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
+    it('should have a login form', () => {
+        const loginForm = harness.fixture.nativeElement.querySelector('form');
+        expect(loginForm).toBeTruthy();
+    });
+
+    it('should have an email input', () => {
+        const emailInput = harness.fixture.nativeElement.querySelector('input[type="email"]');
+        expect(emailInput).toBeTruthy();
+    });
+
+    it('should have a password input', () => {
+        const passwordInput = harness.fixture.nativeElement.querySelector('input[type="password"]');
+        expect(passwordInput).toBeTruthy();
+    });
 });
