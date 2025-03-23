@@ -1,7 +1,7 @@
 {
   "locale": "en-US",
   "translations": {
-    "1316294820039224255": " Welcome to Dwengo, the platform for learning and teaching STEM related topics.",
+    "1316294820039224255": " Welcome to Dwengo!",
     "1369970239719875835": "{$START_LINK}Login{$CLOSE_LINK} with an existing account",
     "1097902218739754919": "{$START_LINK}Register{$CLOSE_LINK} a new account"
   }
