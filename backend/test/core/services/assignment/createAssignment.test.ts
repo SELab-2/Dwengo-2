@@ -32,13 +32,13 @@ describe('CreateAssignment', () => {
         const result = await create.execute(inputAssignmentParams);
 
         expect(result).toEqual({ id: "1" });
-        expect(mockAssignmentRepository.create).toHaveBeenCalledWith(inputAssignment, "1");
+        expect(mockAssignmentRepository.create).toHaveBeenCalledWith(inputAssignment);
     });
 
     test('Should throw a DatabaseError if creation fails', async () => {
         mockAssignmentRepository.create.mockRejectedValue(new DatabaseError('Creation failed'));
 
         await expect(create.execute(inputAssignmentParams)).rejects.toThrow(DatabaseError);
-        expect(mockAssignmentRepository.create).toHaveBeenCalledWith(inputAssignment, "1");
+        expect(mockAssignmentRepository.create).toHaveBeenCalledWith(inputAssignment);
     });
 });

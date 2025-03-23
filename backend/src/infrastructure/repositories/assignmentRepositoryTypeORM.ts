@@ -14,8 +14,8 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
         this.datasourceAssignment = this.datasource.getDatasourceAssignment();
     }
 
-    public async create(assignment: Assignment, classId: string): Promise<Assignment> {
-        return await (await this.datasourceAssignment).createAssignment(assignment, classId);
+    public async create(assignment: Assignment): Promise<Assignment> {
+        return await (await this.datasourceAssignment).createAssignment(assignment, assignment.classId);
     }
 
     public async getById(id: string): Promise<Assignment> {

@@ -9,12 +9,10 @@ export abstract class IAssignmentRepository extends AbstractRepository {
     /**
      * Inserts a new assignment into the repository. The `id` field of the assignment should be empty.
      * @param assignment The assignment object to be created.
-     * @param classId The id of the teacher that is creating the assignment.
      * @throws EntityNotFoundError when no the class that the assigment belongs to does not exist.
-     * @throws EntityNotFoundError when the teacher does not exist.
      * @returns A promise that resolves to the created assignment.
      */
-    public abstract create(assignment: Assignment, classId: string): Promise<Assignment>;
+    public abstract create(assignment: Assignment): Promise<Assignment>;
 
     /**
      * Get an assignment by its id.
