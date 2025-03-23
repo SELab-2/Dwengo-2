@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { UnauthenticatedHeaderComponent } from '../../components/unauthenticated-header/unauthenticated-header.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [UnauthenticatedHeaderComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.less'
 })
