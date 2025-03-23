@@ -1,0 +1,25 @@
+<form [formGroup]="registrationForm" (ngSubmit)="register()">
+    <div class="register-email">
+        <label for="email">Email:</label>
+        <input type="email" id="email" formControlName="email" required>
+    </div>
+
+    <div class="register-password">
+        <label for="password">Password:</label>
+        <input type="password" id="password" formControlName="password" required>
+    </div>
+
+    <div class="register-password">
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" formControlName="confirmPassword" required>
+    </div>
+
+    <div class="register-teacher">
+        <label for="teacher">Teacher:</label>
+        <input type="checkbox" id="teacher" formControlName="teacher">
+    </div>
+
+    <div class="register-submit">
+        <button type="submit" [disabled]="registrationForm.invalid">Register</button>
+    </div>
+</form>
