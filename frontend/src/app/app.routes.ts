@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 /**
  * Routing of our frontend.
@@ -7,6 +9,6 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
  */
 export const routes: Routes = [
     { path: '', component: LandingPageComponent },
-    { path: 'login', component: LandingPageComponent }, // TODO: Change to LoginComponent
-    { path: 'register', component: LandingPageComponent }, // TODO: Change to RegisterComponent
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
 ];
