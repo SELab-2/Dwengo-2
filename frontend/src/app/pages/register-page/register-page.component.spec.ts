@@ -1,20 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { RouterTestingHarness } from "@angular/router/testing";
+import { RegisterPageComponent } from "./register-page.component"
 
-import { RegisterPageComponent } from './register-page.component';
-
-describe('RegisterComponent', () => {
+describe('RegisterPageComponent', () => {
   let component: RegisterPageComponent;
-  let fixture: ComponentFixture<RegisterPageComponent>;
+  let harness: RouterTestingHarness;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [RegisterPageComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(RegisterPageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      imports: [RegisterPageComponent],
+      providers: [
+        provideRouter([{ path: "**", component: RegisterPageComponent }])
+      ]
+    });
+
+    harness = await RouterTestingHarness.create();
+    component = await harness.navigateByUrl('/', RegisterPageComponent);
+    harness.detectChanges();
   });
 
   it('should create', () => {

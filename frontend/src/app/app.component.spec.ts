@@ -1,27 +1,26 @@
-import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
-import { provideRouter } from '@angular/router';
+import { TestBed } from "@angular/core/testing";
+import { provideRouter } from "@angular/router";
+import { RouterTestingHarness } from "@angular/router/testing";
+import { AppComponent } from "./app.component";
 
 describe('AppComponent', () => {
+    let component: AppComponent;
+    let harness: RouterTestingHarness;
 
     beforeEach(async () => {
-        await TestBed.configureTestingModule({
-            imports: [
-                AppComponent
-            ],
-            
-            // Mock the router
+        TestBed.configureTestingModule({
+            imports: [AppComponent],
             providers: [
-				provideRouter([])
-			]
-        }).compileComponents();
+                provideRouter([{ path: "**", component: AppComponent }])
+            ]
+        });
+
+        harness = await RouterTestingHarness.create();
+        component = await harness.navigateByUrl('/', AppComponent);
+        harness.detectChanges();
     });
 
-    it('should create the app', () => {
-        const fixture = TestBed.createComponent(AppComponent);
-        const app = fixture.componentInstance;
-
-        expect(app).toBeTruthy();
+    it('should create', () => {
+        expect(component).toBeTruthy();
     });
-
 });

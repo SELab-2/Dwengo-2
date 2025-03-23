@@ -1,20 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { UnauthenticatedHeaderComponent } from './unauthenticated-header.component';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { RouterTestingHarness } from "@angular/router/testing";
+import { UnauthenticatedHeaderComponent } from "./unauthenticated-header.component"
 
 describe('UnauthenticatedHeaderComponent', () => {
   let component: UnauthenticatedHeaderComponent;
-  let fixture: ComponentFixture<UnauthenticatedHeaderComponent>;
+  let harness: RouterTestingHarness;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [UnauthenticatedHeaderComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(UnauthenticatedHeaderComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    TestBed.configureTestingModule({
+      imports: [UnauthenticatedHeaderComponent],
+      providers: [
+        provideRouter([{ path: "**", component: UnauthenticatedHeaderComponent }])
+      ]
+    });
+
+    harness = await RouterTestingHarness.create();
+    component = await harness.navigateByUrl('/', UnauthenticatedHeaderComponent);
+    harness.detectChanges();
   });
 
   it('should create', () => {
