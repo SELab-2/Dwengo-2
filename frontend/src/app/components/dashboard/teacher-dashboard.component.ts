@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
@@ -53,6 +53,15 @@ export type LineChartOptions = {
   providers: [TeacherDashboardService]
 })
 export class TeacherDashboardComponent {
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.onResize);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.initializeBarChart()
+  }
+
   id: string = "test";
   learningPathsLink: string = '/teacher/learning-paths';
   createClassLink: string = '/teacher/classes/new/select';
@@ -61,16 +70,21 @@ export class TeacherDashboardComponent {
 
   // This is all mock data, awaiting some API functionality after refactor
   classes = ["Class 1", "Class 2", "Class 3"];
-  deadlines = ["Math Exam - 03/30", "History Essay - 04/02", "Science Report - 04/05"];
+  deadlines = ["Math Exam - Jan 17th", "History Essay - Feb 7th", "Science Report - May 26th"];
   questions = [
     { assignment: "Math Homework", question: "What is Pythagoras' theorem?" },
     { assignment: "Science Project", question: "How do you calculate force?" }
   ];
 
-  public barChartOptions: Partial<BarChartOptions>;
-  public lineChartOptions: Partial<LineChartOptions>;
+  public barChartOptions: Partial<BarChartOptions> = {};
+  public lineChartOptions: Partial<LineChartOptions> = {};
 
   constructor(private dashboardService: TeacherDashboardService) {
+    this.initializeBarChart();
+    this.initializeLineChart();
+  }
+
+  private initializeBarChart() {
     // Again, this is mock data. 
     this.barChartOptions = {
       series: [
@@ -85,7 +99,10 @@ export class TeacherDashboardComponent {
       ],
       chart: {
         type: "bar",
-        height: 350
+        height: 350,
+        zoom: {
+          enabled: false
+        }
       },
       plotOptions: {
         bar: {
@@ -121,7 +138,9 @@ export class TeacherDashboardComponent {
         }
       }
     };
+  }
 
+  private initializeLineChart() {
     this.lineChartOptions = {
       series: [
         {
