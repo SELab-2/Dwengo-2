@@ -7,7 +7,9 @@
       "i18n": {
         "sourceLocale": "en-US",
         "locales": {
-          "nl": "src/locale/messages.nl.json"
+          "nl": {
+            "translation": "src/locale/messages.nl.json"
+          }
         }
       },
       "projectType": "application",
