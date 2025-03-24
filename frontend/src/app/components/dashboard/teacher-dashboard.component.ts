@@ -52,7 +52,7 @@ export type LineChartOptions = {
   styleUrls: ['./teacher-dashboard.component.less'],
   providers: [TeacherDashboardService]
 })
-export class TeacherDashboardComponent implements OnInit {
+export class TeacherDashboardComponent {
   id: string = "test";
   learningPathsLink: string = '/teacher/learning-paths';
   createClassLink: string = '/teacher/classes/new/select';
@@ -179,7 +179,6 @@ export class TeacherDashboardComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void { }
 
   setView(view: string) {
     this.selectedView = this.selectedView === view ? null : view;
