@@ -125,6 +125,22 @@
     border: 1px solid #d2d2d3;
     border-radius: 5px;
     box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    /* Zorg ervoor dat het de volle breedte gebruikt */
+    max-width: 100%;
+    /* Voorkomt overflow issues */
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.chart {
+    width: 100% !important;
+    /* Zorgt dat ApexCharts correct schaalt */
+    height: 100% !important;
+    min-height: 350px;
+    /* Voorkomt dat de chart te klein wordt */
 }
 
 .chart-title {
@@ -134,6 +150,7 @@
     font-size: 22px;
     font-weight: 600;
 }
+
 
 .button-widget {
     margin: 20px;

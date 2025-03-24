@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,7 +17,8 @@ import {
   ApexTooltip,
   NgApexchartsModule,
   ApexGrid,
-  ApexTitleSubtitle
+  ApexTitleSubtitle,
+  ChartComponent
 } from "ng-apexcharts";
 
 export type BarChartOptions = {
@@ -53,14 +54,8 @@ export type LineChartOptions = {
   providers: [TeacherDashboardService]
 })
 export class TeacherDashboardComponent {
-  ngOnDestroy(): void {
-    window.removeEventListener('resize', this.onResize);
-  }
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.initializeBarChart()
-  }
+  @ViewChild('chart') chart!: ChartComponent;
 
   id: string = "test";
   learningPathsLink: string = '/teacher/learning-paths';
@@ -102,7 +97,8 @@ export class TeacherDashboardComponent {
         height: 350,
         zoom: {
           enabled: false
-        }
+        },
+        redrawOnWindowResize: true
       },
       plotOptions: {
         bar: {
