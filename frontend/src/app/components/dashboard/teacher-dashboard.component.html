@@ -1,0 +1,30 @@
+<div class="dashboard">
+    <h1>Teacher Dashboard</h1>
+
+    <section class="progress-section">
+        <h2>Group Progress</h2>
+        <ul>
+            <li *ngFor="let group of groupsProgress">
+                {{ group.group }}: {{ group.progress }}%
+            </li>
+        </ul>
+    </section>
+
+    <section class="classes-section">
+        <h2>Your Classes</h2>
+        <ul>
+            <li *ngFor="let class of classes">{{ class }}</li>
+        </ul>
+    </section>
+
+    <section class="assignments-section">
+        <h2>Your Assignments</h2>
+        <ul>
+            <li *ngFor="let assignment of assignments">{{ assignment }}</li>
+        </ul>
+    </section>
+
+    <a [routerLink]="learningPathsLink" class="learning-paths-link">
+        Explore New Learning Paths
+    </a>
+</div>
