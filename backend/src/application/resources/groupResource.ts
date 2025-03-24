@@ -1,17 +1,6 @@
-import { Express, RequestHandler } from "express";
+import * as deps from "./dependencies";
 import * as GroupServices from "../../core/services/group";
-import { Controller } from "../controllers/controllerExpress";
-import { createZodParamsExtractor } from "../extractors";
-import { configureRoutes, DEFAULT_METHOD_MAP } from "../routes/routesExpress";
-import {
-    createGroupSchema,
-    deleteGroupSchema,
-    getAssignmentGroupsSchema,
-    getGroupSchema,
-    getUserGroupsSchema,
-    updateGroupSchema,
-} from "../schemas";
-import { HttpMethod } from "../types";
+import * as GroupSchemas from "../schemas/groupSchemas";
 
 /**
  * RESTful routing configuration for group-related endpoints.
@@ -30,17 +19,17 @@ import { HttpMethod } from "../types";
 /* ************* Extractors ************* */
 
 const extractors = {
-    getGroup: createZodParamsExtractor(getGroupSchema),
-    updateGroup: createZodParamsExtractor(updateGroupSchema),
-    deleteGroup: createZodParamsExtractor(deleteGroupSchema),
-    createGroup: createZodParamsExtractor(createGroupSchema),
-    getUserGroups: createZodParamsExtractor(getUserGroupsSchema),
-    getAssignmentGroups: createZodParamsExtractor(getAssignmentGroupsSchema),
+    getGroup: deps.createZodParamsExtractor(GroupSchemas.getGroupSchema),
+    updateGroup: deps.createZodParamsExtractor(GroupSchemas.updateGroupSchema),
+    deleteGroup: deps.createZodParamsExtractor(GroupSchemas.deleteGroupSchema),
+    createGroup: deps.createZodParamsExtractor(GroupSchemas.createGroupSchema),
+    getUserGroups: deps.createZodParamsExtractor(GroupSchemas.getUserGroupsSchema),
+    getAssignmentGroups: deps.createZodParamsExtractor(GroupSchemas.getAssignmentGroupsSchema),
 };
 
 /* ************* Controller ************* */
 
-export class GroupController extends Controller {
+export class GroupController extends deps.Controller {
     constructor(
         get: GroupServices.GetGroup,
         update: GroupServices.UpdateGroup,
@@ -55,12 +44,16 @@ export class GroupController extends Controller {
 
 /* ************* Routes ************* */
 
-export function groupRoutes(app: Express, controller: GroupController, middleware: RequestHandler[] = []): void {
-    configureRoutes(
+export function groupRoutes(
+    app: deps.Express,
+    controller: GroupController,
+    middleware: deps.RequestHandler[] = [],
+): void {
+    deps.configureRoutes(
         [
             {
                 app,
-                method: HttpMethod.GET,
+                method: deps.HttpMethod.GET,
                 urlPattern: "/groups/:id",
                 controller,
                 extractor: extractors.getGroup,
@@ -69,7 +62,7 @@ export function groupRoutes(app: Express, controller: GroupController, middlewar
             },
             {
                 app,
-                method: HttpMethod.PATCH,
+                method: deps.HttpMethod.PATCH,
                 urlPattern: "/groups/:id",
                 controller,
                 extractor: extractors.updateGroup,
@@ -78,7 +71,7 @@ export function groupRoutes(app: Express, controller: GroupController, middlewar
             },
             {
                 app,
-                method: HttpMethod.DELETE,
+                method: deps.HttpMethod.DELETE,
                 urlPattern: "/groups/:id",
                 controller,
                 extractor: extractors.deleteGroup,
@@ -87,7 +80,7 @@ export function groupRoutes(app: Express, controller: GroupController, middlewar
             },
             {
                 app,
-                method: HttpMethod.POST,
+                method: deps.HttpMethod.POST,
                 urlPattern: "/groups",
                 controller,
                 extractor: extractors.createGroup,
@@ -96,7 +89,7 @@ export function groupRoutes(app: Express, controller: GroupController, middlewar
             },
             {
                 app,
-                method: HttpMethod.GET,
+                method: deps.HttpMethod.GET,
                 urlPattern: "/users/:idParent/groups",
                 controller,
                 extractor: extractors.getUserGroups,
@@ -105,7 +98,7 @@ export function groupRoutes(app: Express, controller: GroupController, middlewar
             },
             {
                 app,
-                method: HttpMethod.GET,
+                method: deps.HttpMethod.GET,
                 urlPattern: "/assignments/:idParent/groups",
                 controller,
                 extractor: extractors.getAssignmentGroups,
@@ -113,6 +106,6 @@ export function groupRoutes(app: Express, controller: GroupController, middlewar
                 middleware,
             },
         ],
-        DEFAULT_METHOD_MAP,
+        deps.DEFAULT_METHOD_MAP,
     );
 }

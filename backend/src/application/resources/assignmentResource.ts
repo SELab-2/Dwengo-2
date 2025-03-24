@@ -1,16 +1,6 @@
-import { Express, RequestHandler } from "express";
+import * as deps from "./dependencies";
 import * as AssignmentServices from "../../core/services/assignment";
-import { Controller } from "../controllers/controllerExpress";
-import { createZodParamsExtractor } from "../extractors";
-import { configureRoutes, DEFAULT_METHOD_MAP } from "../routes/routesExpress";
-import {
-    createAssignmentSchema,
-    deleteAssignmentSchema,
-    getAssignmentSchema,
-    getUserAssignmentsSchema,
-    updateAssignmentSchema,
-} from "../schemas";
-import { HttpMethod } from "../types";
+import * as AssignmentSchemas from "../schemas/assignmentSchemas";
 
 /**
  * RESTful routing configuration for assignment-related endpoints.
@@ -28,16 +18,16 @@ import { HttpMethod } from "../types";
 /* ************* Extractors ************* */
 
 const extractors = {
-    getAssignment: createZodParamsExtractor(getAssignmentSchema),
-    updateAssignment: createZodParamsExtractor(updateAssignmentSchema),
-    deleteAssignment: createZodParamsExtractor(deleteAssignmentSchema),
-    createAssignment: createZodParamsExtractor(createAssignmentSchema),
-    getUserAssignments: createZodParamsExtractor(getUserAssignmentsSchema),
+    getAssignment: deps.createZodParamsExtractor(AssignmentSchemas.getAssignmentSchema),
+    updateAssignment: deps.createZodParamsExtractor(AssignmentSchemas.updateAssignmentSchema),
+    deleteAssignment: deps.createZodParamsExtractor(AssignmentSchemas.deleteAssignmentSchema),
+    createAssignment: deps.createZodParamsExtractor(AssignmentSchemas.createAssignmentSchema),
+    getUserAssignments: deps.createZodParamsExtractor(AssignmentSchemas.getUserAssignmentsSchema),
 };
 
 /* ************* Controller ************* */
 
-export class AssignmentController extends Controller {
+export class AssignmentController extends deps.Controller {
     constructor(
         get: AssignmentServices.GetAssignment,
         update: AssignmentServices.UpdateAssignment,
@@ -52,15 +42,15 @@ export class AssignmentController extends Controller {
 /* ************* Routes ************* */
 
 export function assignmentRoutes(
-    app: Express,
+    app: deps.Express,
     controller: AssignmentController,
-    middleware: RequestHandler[] = [],
+    middleware: deps.RequestHandler[] = [],
 ): void {
-    configureRoutes(
+    deps.configureRoutes(
         [
             {
                 app,
-                method: HttpMethod.GET,
+                method: deps.HttpMethod.GET,
                 urlPattern: "/assignments/:id",
                 controller,
                 extractor: extractors.getAssignment,
@@ -69,7 +59,7 @@ export function assignmentRoutes(
             },
             {
                 app,
-                method: HttpMethod.POST,
+                method: deps.HttpMethod.PATCH,
                 urlPattern: "/assignments/:id",
                 controller,
                 extractor: extractors.updateAssignment,
@@ -78,7 +68,7 @@ export function assignmentRoutes(
             },
             {
                 app,
-                method: HttpMethod.DELETE,
+                method: deps.HttpMethod.DELETE,
                 urlPattern: "/assignments/:id",
                 controller,
                 extractor: extractors.deleteAssignment,
@@ -87,7 +77,7 @@ export function assignmentRoutes(
             },
             {
                 app,
-                method: HttpMethod.POST,
+                method: deps.HttpMethod.POST,
                 urlPattern: "/assignments",
                 controller,
                 extractor: extractors.createAssignment,
@@ -96,7 +86,7 @@ export function assignmentRoutes(
             },
             {
                 app,
-                method: HttpMethod.GET,
+                method: deps.HttpMethod.GET,
                 urlPattern: "/users/:idParent/assignments",
                 controller,
                 extractor: extractors.getUserAssignments,
@@ -104,6 +94,6 @@ export function assignmentRoutes(
                 middleware,
             },
         ],
-        DEFAULT_METHOD_MAP,
+        deps.DEFAULT_METHOD_MAP,
     );
 }

@@ -1,20 +1,6 @@
-import { Express, RequestHandler } from "express";
+import * as deps from "./dependencies";
 import * as UserServices from "../../core/services/user";
-import { Controller } from "../controllers/controllerExpress";
-import { createZodParamsExtractor } from "../extractors";
-import { configureRoutes, DEFAULT_METHOD_MAP } from "../routes/routesExpress";
-import {
-    assignStudentToGroupSchema,
-    deleteUserSchema,
-    getAllUsersSchema,
-    getAssignmentUsersSchema,
-    getClassUsersSchema,
-    getGroupUsersSchema,
-    getUserSchema,
-    removeUserFromSchema,
-    updateUserSchema,
-} from "../schemas";
-import { HttpMethod } from "../types";
+import * as UserSchemas from "../schemas/userSchemas";
 
 /**
  * RESTful routing configuration for common user-related endpoints.
@@ -37,21 +23,21 @@ import { HttpMethod } from "../types";
 /* ************* Extractors ************* */
 
 const extractors = {
-    getUser: createZodParamsExtractor(getUserSchema),
-    updateUser: createZodParamsExtractor(updateUserSchema),
-    deleteUser: createZodParamsExtractor(deleteUserSchema),
-    getClassUsers: createZodParamsExtractor(getClassUsersSchema),
-    removeUserFromClass: createZodParamsExtractor(removeUserFromSchema),
-    getGroupUsers: createZodParamsExtractor(getGroupUsersSchema),
-    assignStudentToGroup: createZodParamsExtractor(assignStudentToGroupSchema),
-    removeUserFromGroup: createZodParamsExtractor(removeUserFromSchema),
-    getAssignmentUsers: createZodParamsExtractor(getAssignmentUsersSchema),
-    getAllUsers: createZodParamsExtractor(getAllUsersSchema),
+    getUser: deps.createZodParamsExtractor(UserSchemas.getUserSchema),
+    updateUser: deps.createZodParamsExtractor(UserSchemas.updateUserSchema),
+    deleteUser: deps.createZodParamsExtractor(UserSchemas.deleteUserSchema),
+    getClassUsers: deps.createZodParamsExtractor(UserSchemas.getClassUsersSchema),
+    removeUserFromClass: deps.createZodParamsExtractor(UserSchemas.removeUserFromSchema),
+    getGroupUsers: deps.createZodParamsExtractor(UserSchemas.getGroupUsersSchema),
+    assignStudentToGroup: deps.createZodParamsExtractor(UserSchemas.assignStudentToGroupSchema),
+    removeUserFromGroup: deps.createZodParamsExtractor(UserSchemas.removeUserFromSchema),
+    getAssignmentUsers: deps.createZodParamsExtractor(UserSchemas.getAssignmentUsersSchema),
+    getAllUsers: deps.createZodParamsExtractor(UserSchemas.getAllUsersSchema),
 };
 
 /* ************* Controller ************* */
 
-export class UsersController extends Controller {
+export class UserController extends deps.Controller {
     constructor(
         get: UserServices.GetUser,
         update: UserServices.UpdateUser,
@@ -81,12 +67,16 @@ export class UsersController extends Controller {
 
 /* ************* Routes ************* */
 
-export function usersRoutes(app: Express, controller: UsersController, middleware: RequestHandler[] = []): void {
-    configureRoutes(
+export function userRoutes(
+    app: deps.Express,
+    controller: UserController,
+    middleware: deps.RequestHandler[] = [],
+): void {
+    deps.configureRoutes(
         [
             {
                 app,
-                method: HttpMethod.GET,
+                method: deps.HttpMethod.GET,
                 urlPattern: "/users/:id",
                 controller,
                 extractor: extractors.getUser,
@@ -95,7 +85,7 @@ export function usersRoutes(app: Express, controller: UsersController, middlewar
             },
             {
                 app,
-                method: HttpMethod.PATCH,
+                method: deps.HttpMethod.PATCH,
                 urlPattern: "/users/:id",
                 controller,
                 extractor: extractors.updateUser,
@@ -104,7 +94,7 @@ export function usersRoutes(app: Express, controller: UsersController, middlewar
             },
             {
                 app,
-                method: HttpMethod.DELETE,
+                method: deps.HttpMethod.DELETE,
                 urlPattern: "/users/:id",
                 controller,
                 extractor: extractors.deleteUser,
@@ -113,7 +103,7 @@ export function usersRoutes(app: Express, controller: UsersController, middlewar
             },
             {
                 app,
-                method: HttpMethod.GET,
+                method: deps.HttpMethod.GET,
                 urlPattern: "/classes/:idParent/users",
                 controller,
                 extractor: extractors.getClassUsers,
@@ -122,7 +112,7 @@ export function usersRoutes(app: Express, controller: UsersController, middlewar
             },
             {
                 app,
-                method: HttpMethod.DELETE,
+                method: deps.HttpMethod.DELETE,
                 urlPattern: "/classes/:idParent/users/:id",
                 controller,
                 extractor: extractors.removeUserFromClass,
@@ -131,7 +121,7 @@ export function usersRoutes(app: Express, controller: UsersController, middlewar
             },
             {
                 app,
-                method: HttpMethod.GET,
+                method: deps.HttpMethod.GET,
                 urlPattern: "/groups/:idParent/users",
                 controller,
                 extractor: extractors.getGroupUsers,
@@ -140,7 +130,7 @@ export function usersRoutes(app: Express, controller: UsersController, middlewar
             },
             {
                 app,
-                method: HttpMethod.POST,
+                method: deps.HttpMethod.POST,
                 urlPattern: "/groups/:idParent/users",
                 controller,
                 extractor: extractors.assignStudentToGroup,
@@ -149,7 +139,7 @@ export function usersRoutes(app: Express, controller: UsersController, middlewar
             },
             {
                 app,
-                method: HttpMethod.DELETE,
+                method: deps.HttpMethod.DELETE,
                 urlPattern: "/groups/:idParent/users/:id",
                 controller,
                 extractor: extractors.removeUserFromGroup,
@@ -158,7 +148,7 @@ export function usersRoutes(app: Express, controller: UsersController, middlewar
             },
             {
                 app,
-                method: HttpMethod.GET,
+                method: deps.HttpMethod.GET,
                 urlPattern: "/assignments/:idParent/users",
                 controller,
                 extractor: extractors.getAssignmentUsers,
@@ -167,7 +157,7 @@ export function usersRoutes(app: Express, controller: UsersController, middlewar
             },
             {
                 app,
-                method: HttpMethod.GET,
+                method: deps.HttpMethod.GET,
                 urlPattern: "/users",
                 controller,
                 extractor: extractors.getAllUsers,
@@ -175,6 +165,6 @@ export function usersRoutes(app: Express, controller: UsersController, middlewar
                 middleware,
             },
         ],
-        DEFAULT_METHOD_MAP,
+        deps.DEFAULT_METHOD_MAP,
     );
 }

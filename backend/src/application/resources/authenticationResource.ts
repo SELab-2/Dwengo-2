@@ -1,11 +1,7 @@
-import { Express, RequestHandler } from "express";
+import * as deps from "./dependencies";
 import { middleware as mw } from "../../config/middleware";
 import * as UserServices from "../../core/services/user";
-import { Controller } from "../controllers";
-import { createZodParamsExtractor } from "../extractors";
-import { configureRoutes, DEFAULT_METHOD_MAP } from "../routes/routesExpress";
-import { createUserSchema } from "../schemas";
-import { HttpMethod } from "../types";
+import * as UserSchemas from "../schemas/userSchemas";
 
 /**
  * RESTful routing configuration for authentication-related endpoints.
@@ -20,12 +16,12 @@ import { HttpMethod } from "../types";
 /* ************* Extractors ************* */
 
 const extractors = {
-    createUser: createZodParamsExtractor(createUserSchema),
+    createUser: deps.createZodParamsExtractor(UserSchemas.createUserSchema),
 };
 
 /* ************* Controller ************* */
 
-export class AuthenticationController extends Controller {
+export class AuthenticationController extends deps.Controller {
     constructor(register: UserServices.CreateUser) {
         super({ create: register });
     }
@@ -34,21 +30,21 @@ export class AuthenticationController extends Controller {
 /* ************* Routes ************* */
 
 export function authenticationRoutes(
-    app: Express,
+    app: deps.Express,
     controller: AuthenticationController,
-    middleware: RequestHandler[] = [],
+    middleware: deps.RequestHandler[] = [],
 ): void {
-    configureRoutes(
+    deps.configureRoutes(
         [
             {
                 app,
-                method: HttpMethod.POST,
+                method: deps.HttpMethod.POST,
                 urlPattern: "/login",
                 middleware: [mw.login, ...middleware],
             },
             {
                 app,
-                method: HttpMethod.POST,
+                method: deps.HttpMethod.POST,
                 urlPattern: "/register",
                 controller,
                 extractor: extractors.createUser,
@@ -56,6 +52,6 @@ export function authenticationRoutes(
                 middleware: [mw.password, ...middleware],
             },
         ],
-        DEFAULT_METHOD_MAP,
+        deps.DEFAULT_METHOD_MAP,
     );
 }
