@@ -38,7 +38,7 @@ export class GetJoinRequestParams extends GetJoinRequestsParams {
  * @description class representing service to get all joinRequests of a user
  *
  */
-export class GetJoinRequests implements Service<GetJoinRequestsParams> {
+export class GetUserJoinRequests implements Service<GetJoinRequestsParams> {
     constructor(private joinRequestRepository: IJoinRequestRepository) {}
 
     async execute(input: GetJoinRequestsParams): Promise<object> {
