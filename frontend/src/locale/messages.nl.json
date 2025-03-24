@@ -1,8 +1,13 @@
 {
   "locale": "nl-BE",
   "translations": {
-    "1316294820039224255": " Welkom bij Dwengo! ",
-    "1369970239719875835": "{$START_LINK}Log in{$CLOSE_LINK} met een bestaand account",
-    "1097902218739754919": "{$START_LINK}Registreer{$CLOSE_LINK} je bij ons platform! "
+    "6865009229971482891": "Wachtwoord:",
+    "2454050363478003966": "Inloggen",
+    "539810244244331475": "Bevestig wachtwoord:",
+    "4250948520990652627": "Leerkracht",
+    "3301086086650990787": "Registreren",
+    "2821179408673282599": "Home",
+    "5576381001830472560": "Dwengo logo",
+    "5849573010227956913": "Nog geen account?"
   }
 }
