@@ -7,9 +7,6 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [ 
     CommonModule,
-
-    // For routing to other pages
-    // Based on https://angular.dev/guide/routing/common-router-tasks
     RouterLink,
     RouterLinkActive,
     RouterOutlet
