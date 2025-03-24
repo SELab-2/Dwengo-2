@@ -4,6 +4,7 @@ import * as UserServices from "../../core/services/user";
 import { Controller } from "../controllers";
 import { createZodParamsExtractor } from "../extractors";
 import { configureRoutes, DEFAULT_METHOD_MAP } from "../routes/routesExpress";
+import { createUserSchema } from "../schemas";
 import { HttpMethod } from "../types";
 
 /**
@@ -19,7 +20,7 @@ import { HttpMethod } from "../types";
 /* ************* Extractors ************* */
 
 const extractors = {
-    createUser: createZodParamsExtractor(UserServices.createUserSchema),
+    createUser: createZodParamsExtractor(createUserSchema),
 };
 
 /* ************* Controller ************* */

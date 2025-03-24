@@ -8,7 +8,7 @@ const mockAssignmentRepository = {
 } as unknown as jest.Mocked<IAssignmentRepository>;
 
 describe("GetUserAssignments Service", () => {
-  let userId: string;
+  let idParent: string;
   let params: GetUserAssignmentsInput;
   let getUserAssignments: GetUserAssignments;
   let assignments: Assignment[];
@@ -17,8 +17,8 @@ describe("GetUserAssignments Service", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    userId = "1";
-    params = {id: userId};
+    idParent = "1";
+    params = {idParent: idParent};
     getUserAssignments = new GetUserAssignments(mockAssignmentRepository)
     startDate = new Date();
     deadline = new Date();
@@ -43,7 +43,7 @@ describe("GetUserAssignments Service", () => {
 
     expect(result).toEqual({assignments: assignments});
     expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledTimes(1);
-    expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledWith(params.id);
+    expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledWith(params.idParent);
   });
 
   test("Should throw error if user not found", async () => {
@@ -51,6 +51,6 @@ describe("GetUserAssignments Service", () => {
 
     await expect(getUserAssignments.execute(params)).rejects.toThrow(EntityNotFoundError);
     expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledTimes(1);
-    expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledWith(params.id);
+    expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledWith(params.idParent);
   });
 });

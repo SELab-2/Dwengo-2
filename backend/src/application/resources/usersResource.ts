@@ -3,6 +3,17 @@ import * as UserServices from "../../core/services/user";
 import { Controller } from "../controllers/controllerExpress";
 import { createZodParamsExtractor } from "../extractors";
 import { configureRoutes, DEFAULT_METHOD_MAP } from "../routes/routesExpress";
+import {
+    assignStudentToGroupSchema,
+    deleteUserSchema,
+    getAllUsersSchema,
+    getAssignmentUsersSchema,
+    getClassUsersSchema,
+    getGroupUsersSchema,
+    getUserSchema,
+    removeUserFromSchema,
+    updateUserSchema,
+} from "../schemas";
 import { HttpMethod } from "../types";
 
 /**
@@ -26,16 +37,16 @@ import { HttpMethod } from "../types";
 /* ************* Extractors ************* */
 
 const extractors = {
-    getUser: createZodParamsExtractor(UserServices.getUserSchema),
-    updateUser: createZodParamsExtractor(UserServices.updateUserSchema),
-    deleteUser: createZodParamsExtractor(UserServices.deleteUserSchema),
-    getClassUsers: createZodParamsExtractor(UserServices.getClassUsersSchema),
-    removeUserFromClass: createZodParamsExtractor(UserServices.removeUserFromSchema),
-    getGroupUsers: createZodParamsExtractor(UserServices.getGroupUsersSchema),
-    assignStudentToGroup: createZodParamsExtractor(UserServices.assignStudentToGroupSchema),
-    removeUserFromGroup: createZodParamsExtractor(UserServices.removeUserFromSchema),
-    getAssignmentUsers: createZodParamsExtractor(UserServices.getAssignmentUsersSchema),
-    getAllUsers: createZodParamsExtractor(UserServices.getAllUsersSchema),
+    getUser: createZodParamsExtractor(getUserSchema),
+    updateUser: createZodParamsExtractor(updateUserSchema),
+    deleteUser: createZodParamsExtractor(deleteUserSchema),
+    getClassUsers: createZodParamsExtractor(getClassUsersSchema),
+    removeUserFromClass: createZodParamsExtractor(removeUserFromSchema),
+    getGroupUsers: createZodParamsExtractor(getGroupUsersSchema),
+    assignStudentToGroup: createZodParamsExtractor(assignStudentToGroupSchema),
+    removeUserFromGroup: createZodParamsExtractor(removeUserFromSchema),
+    getAssignmentUsers: createZodParamsExtractor(getAssignmentUsersSchema),
+    getAllUsers: createZodParamsExtractor(getAllUsersSchema),
 };
 
 /* ************* Controller ************* */

@@ -16,20 +16,20 @@ describe("GetAssignmentUsers Service", () => {
 
         studentRepository.getAssignmentStudents.mockResolvedValue([mockStudent as unknown as User]);
 
-        const assignmentId = "assignment-123";
-        const result = await getAssignmentUsers.execute({ assignmentId });
+        const idParent = "assignment-123";
+        const result = await getAssignmentUsers.execute({ idParent });
 
         expect(result).toEqual({students: [{ id: "s3", email: "student3@example.com" }]});
 
-        expect(studentRepository.getAssignmentStudents).toHaveBeenCalledWith(assignmentId);
+        expect(studentRepository.getAssignmentStudents).toHaveBeenCalledWith(idParent);
     });
 
     it("should return empty arrays if no users found", async () => {
         studentRepository.getAssignmentStudents.mockResolvedValue([]);
 
-        const assignmentId = "assignment-456";
+        const idParent = "assignment-456";
 
-        const result = await getAssignmentUsers.execute({assignmentId});
+        const result = await getAssignmentUsers.execute({idParent});
 
         expect(result).toEqual({ students: [] });
     });

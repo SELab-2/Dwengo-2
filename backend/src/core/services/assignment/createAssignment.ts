@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { createAssignmentSchema } from "../../../application/schemas/assignmentSchemas";
 import { AssignmentService } from "./assignmentService";
+import { createAssignmentSchema } from "../../../application/schemas";
 import { Assignment } from "../../entities/assignment";
 
 export type CreateAssignmentInput = z.infer<typeof createAssignmentSchema>;

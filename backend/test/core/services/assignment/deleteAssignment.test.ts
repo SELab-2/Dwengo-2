@@ -1,4 +1,4 @@
-import { DeleteAssignment, deleteAssignmentSchema } from "../../../../src/core/services/assignment";
+import { DeleteAssignment } from "../../../../src/core/services/assignment";
 import { IAssignmentRepository } from "../../../../src/core/repositories/assignmentRepositoryInterface";
 import { EntityNotFoundError } from "../../../../src/config/error";
 
@@ -6,7 +6,7 @@ const mockAssignmentRepository: jest.Mocked<IAssignmentRepository> = {
     deleteAssignmentById: jest.fn().mockResolvedValue(undefined), // Simuleert een succesvolle verwijdering
 } as unknown as jest.Mocked<IAssignmentRepository>;
 
-describe("DeleteAssignment Use Case", () => {
+describe("DeleteAssignment service", () => {
     let deleteAssignment: DeleteAssignment;
 
     beforeEach(() => {

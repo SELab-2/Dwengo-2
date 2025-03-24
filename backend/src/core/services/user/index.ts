@@ -10,4 +10,3 @@ export * from "./removeUserFrom";
 export * from "./removeUserFromClass";
 export * from "./removeUserFromGroup";
 export * from "./updateUser";
-export * from "../../../application/schemas/userSchemas";

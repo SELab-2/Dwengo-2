@@ -3,6 +3,13 @@ import * as AssignmentServices from "../../core/services/assignment";
 import { Controller } from "../controllers/controllerExpress";
 import { createZodParamsExtractor } from "../extractors";
 import { configureRoutes, DEFAULT_METHOD_MAP } from "../routes/routesExpress";
+import {
+    createAssignmentSchema,
+    deleteAssignmentSchema,
+    getAssignmentSchema,
+    getUserAssignmentsSchema,
+    updateAssignmentSchema,
+} from "../schemas";
 import { HttpMethod } from "../types";
 
 /**
@@ -21,11 +28,11 @@ import { HttpMethod } from "../types";
 /* ************* Extractors ************* */
 
 const extractors = {
-    getAssignment: createZodParamsExtractor(AssignmentServices.getAssignmentSchema),
-    updateAssignment: createZodParamsExtractor(AssignmentServices.updateAssignmentSchema),
-    deleteAssignment: createZodParamsExtractor(AssignmentServices.deleteAssignmentSchema),
-    createAssignment: createZodParamsExtractor(AssignmentServices.createAssignmentSchema),
-    getUserAssignments: createZodParamsExtractor(AssignmentServices.getUserAssignmentsSchema),
+    getAssignment: createZodParamsExtractor(getAssignmentSchema),
+    updateAssignment: createZodParamsExtractor(updateAssignmentSchema),
+    deleteAssignment: createZodParamsExtractor(deleteAssignmentSchema),
+    createAssignment: createZodParamsExtractor(createAssignmentSchema),
+    getUserAssignments: createZodParamsExtractor(getUserAssignmentsSchema),
 };
 
 /* ************* Controller ************* */

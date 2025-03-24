@@ -16,20 +16,20 @@ describe("GetGroupUsers Service", () => {
 
         studentRepository.getGroupStudents.mockResolvedValue([mockStudent as unknown as User]);
 
-        const groupId = "group-123";
-        const result = await getGroupUsers.execute({groupId});
+        const idParent = "group-123";
+        const result = await getGroupUsers.execute({idParent});
 
         expect(result).toEqual({
             students: [{ id: "s2", email: "student2@example.com" }],
         });
 
-        expect(studentRepository.getGroupStudents).toHaveBeenCalledWith(groupId);    });
+        expect(studentRepository.getGroupStudents).toHaveBeenCalledWith(idParent);    });
 
     it("should return empty arrays if no users found", async () => {
         studentRepository.getGroupStudents.mockResolvedValue([]);
 
-        const groupId = "group-456";
-        const result = await getGroupUsers.execute({groupId});
+        const idParent = "group-456";
+        const result = await getGroupUsers.execute({idParent});
 
         expect(result).toEqual({ students: [] });
     });

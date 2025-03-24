@@ -6,8 +6,8 @@ import { UserType } from "../../core/entities/user";
  */
 
 export const assignStudentToGroupSchema = z.object({
-    studentId: z.string(),
-    groupId: z.string(),
+    id: z.string(),
+    idParent: z.string(),
 });
 
 export const createUserSchema = z.object({
@@ -38,7 +38,7 @@ export const getGroupUsersSchema = z.object({
     idParent: z.string(),
 });
 
-export const getClassSchema = z
+export const getUserSchema = z
     .object({
         userType: z.nativeEnum(UserType),
         id: z.string().optional(),

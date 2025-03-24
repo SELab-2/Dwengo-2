@@ -22,24 +22,24 @@ describe("GetClassUsers Service", () => {
         studentRepository.getClassStudents.mockResolvedValue([mockStudent as unknown as User]);
         teacherRepository.getClassTeachers.mockResolvedValue([mockTeacher as unknown as User]);
 
-        const classId = "class-123";
-        const result = await getClassUsers.execute({classId});
+        const idParent = "class-123";
+        const result = await getClassUsers.execute({idParent});
 
         expect(result).toEqual({
             teachers: [{ id: "t1", email: "teacher@example.com" }],
             students: [{ id: "s1", email: "student@example.com" }],
         });
 
-        expect(studentRepository.getClassStudents).toHaveBeenCalledWith(classId);
-        expect(teacherRepository.getClassTeachers).toHaveBeenCalledWith(classId);
+        expect(studentRepository.getClassStudents).toHaveBeenCalledWith(idParent);
+        expect(teacherRepository.getClassTeachers).toHaveBeenCalledWith(idParent);
     });
 
     it("should return empty arrays if no users found", async () => {
         studentRepository.getClassStudents.mockResolvedValue([]);
         teacherRepository.getClassTeachers.mockResolvedValue([]);
 
-        const classId = "class-456";
-        const result = await getClassUsers.execute({classId});
+        const idParent = "class-456";
+        const result = await getClassUsers.execute({idParent});
 
         expect(result).toEqual({ teachers: [], students: [] });
     });

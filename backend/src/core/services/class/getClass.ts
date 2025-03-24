@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { ClassBaseService } from "./baseClassService";
+import { getAllClassesSchema, getClassSchema, getUserClassesSchema } from "../../../application/schemas/classSchemas";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { EntityNotFoundError } from "../../../config/error";
-import { getAllClassesSchema, getClassSchema, getUserClassesSchema } from "../../../application/schemas/classSchemas";
 
 export type GetClassInput = z.infer<typeof getClassSchema>;
 
@@ -19,7 +19,7 @@ export class GetClass extends ClassBaseService<GetClassInput> {
             if (id) {
                 return (await this.classRepository.getClassById(id)).toObject();
             }
-            return (await this.classRepository.getClassByName(className)).toObject()
+            return (await this.classRepository.getClassByName(className!)).toObject();
         } catch (error) {
             if (error instanceof EntityNotFoundError) {
                 throw {
@@ -43,12 +43,12 @@ export class GetUserClasses extends ClassBaseService<GetUserClassInput> {
      */
     async execute(input: GetUserClassInput): Promise<object> {
         try {
-            return { classes: (await this.classRepository.getUserClasses(input.userId)).map(c => c.toObject()) };
+            return { classes: (await this.classRepository.getUserClasses(input.idParent)).map(c => c.toObject()) };
         } catch (error) {
             if (error instanceof EntityNotFoundError) {
                 throw {
                     code: ErrorCode.NOT_FOUND,
-                    message: `User with ID ${input.userId!} not found`,
+                    message: `User with ID ${input.idParent!} not found`,
                 } as ApiError;
             }
             throw error;

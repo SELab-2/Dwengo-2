@@ -9,7 +9,7 @@ export class GetGroupUsers implements Service<GetGroupUsersInput> {
     constructor(private studentRepository: IStudentRepository) {}
 
     async execute(input: GetGroupUsersInput): Promise<object> {
-        const students: object[] = (await this.studentRepository.getGroupStudents(input.groupId)).map(s =>
+        const students: object[] = (await this.studentRepository.getGroupStudents(input.idParent)).map(s =>
             s.toObject(),
         );
         return { students: students };

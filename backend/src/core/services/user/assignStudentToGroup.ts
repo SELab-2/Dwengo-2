@@ -9,7 +9,7 @@ export class AssignStudentToGroup implements Service<AssignStudentToGroupInput> 
     constructor(private studentRepository: IStudentRepository) {}
 
     async execute(input: AssignStudentToGroupInput): Promise<object> {
-        await this.studentRepository.assignStudentToGroup(input.studentId, input.groupId);
+        await this.studentRepository.assignStudentToGroup(input.id, input.idParent);
         return {};
     }
 }

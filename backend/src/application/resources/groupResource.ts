@@ -3,6 +3,14 @@ import * as GroupServices from "../../core/services/group";
 import { Controller } from "../controllers/controllerExpress";
 import { createZodParamsExtractor } from "../extractors";
 import { configureRoutes, DEFAULT_METHOD_MAP } from "../routes/routesExpress";
+import {
+    createGroupSchema,
+    deleteGroupSchema,
+    getAssignmentGroupsSchema,
+    getGroupSchema,
+    getUserGroupsSchema,
+    updateGroupSchema,
+} from "../schemas";
 import { HttpMethod } from "../types";
 
 /**
@@ -22,12 +30,12 @@ import { HttpMethod } from "../types";
 /* ************* Extractors ************* */
 
 const extractors = {
-    getGroup: createZodParamsExtractor(GroupServices.getGroupSchema),
-    updateGroup: createZodParamsExtractor(GroupServices.updateGroupSchema),
-    deleteGroup: createZodParamsExtractor(GroupServices.deleteGroupSchema),
-    createGroup: createZodParamsExtractor(GroupServices.createGroupSchema),
-    getUserGroups: createZodParamsExtractor(GroupServices.getUserGroupsSchema),
-    getAssignmentGroups: createZodParamsExtractor(GroupServices.getAssignmentGroupSchema),
+    getGroup: createZodParamsExtractor(getGroupSchema),
+    updateGroup: createZodParamsExtractor(updateGroupSchema),
+    deleteGroup: createZodParamsExtractor(deleteGroupSchema),
+    createGroup: createZodParamsExtractor(createGroupSchema),
+    getUserGroups: createZodParamsExtractor(getUserGroupsSchema),
+    getAssignmentGroups: createZodParamsExtractor(getAssignmentGroupsSchema),
 };
 
 /* ************* Controller ************* */

@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { getAssignmentGroupsSchema } from "../../../application/schemas/groupSchemas";
 import { GroupService } from "./groupService";
+import { getAssignmentGroupsSchema } from "../../../application/schemas/groupSchemas";
 import { Group } from "../../entities/group";
 
 export type GetAssignmentGroupsInput = z.infer<typeof getAssignmentGroupsSchema>;

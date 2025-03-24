@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { createGroupSchema } from "../../../application/schemas/groupSchemas";
 import { GroupService } from "./groupService";
+import { createGroupSchema } from "../../../application/schemas/groupSchemas";
 import { Group } from "../../entities/group";
 
 export type CreateGroupInput = z.infer<typeof createGroupSchema>;

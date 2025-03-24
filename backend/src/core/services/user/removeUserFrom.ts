@@ -13,11 +13,11 @@ export abstract class RemoveUserFrom implements Service<RemoveUserFromInput> {
 
     /** Function that calls the appropriate method of the repository.
      *
-     * @param userId - The ID of the user to be removed.
-     * @param otherId - The ID of the group or class.
+     * @param id - The ID of the user to be removed.
+     * @param idParent - The ID of the group or class.
      * @param userType - The type of the user (student or teacher).
      */
-    abstract removeUser(userId: string, otherId: string, userType: UserType): Promise<void>;
+    abstract removeUser(id: string, idParent: string, userType: UserType): Promise<void>;
 
     /**
      * Removes a user from a group/class.
@@ -26,7 +26,7 @@ export abstract class RemoveUserFrom implements Service<RemoveUserFromInput> {
      * @returns empty object no extra info needed.
      */
     async execute(input: RemoveUserFromInput): Promise<object> {
-        await this.removeUser(input.userId, input.otherId, input.userType);
+        await this.removeUser(input.id, input.idParent, input.userType);
         return {};
     }
 }

@@ -33,11 +33,11 @@ export const getClassSchema = z
     .refine(data => data.id !== undefined || data.className !== undefined, {
         message: "Either ID or email must be provided",
         path: ["id", "className"],
-});
+    });
 
 export const getUserClassesSchema = z.object({
-    idParent: z.string()
-})
+    idParent: z.string(),
+});
 
 export const getAllClassesSchema = z.object({});
 

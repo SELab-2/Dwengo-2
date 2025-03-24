@@ -32,9 +32,9 @@ describe('CreateStudent', () => {
           email: 'incorrect-email',
           firstName: 'John',
           familyName: 'Doe',
-          'hashedpassword123',
-          'Harvard',
-          UserType.STUDENT,
+          passwordHash: 'hashedpassword123',
+          schoolName: 'Harvard',
+          userType: UserType.STUDENT,
         },
       ),
     ).rejects.toEqual({
@@ -45,18 +45,16 @@ describe('CreateStudent', () => {
 
   test('Should throw error if email is already in use by student', async () => {
     mockStudentRepository.checkByEmail.mockResolvedValue(true);
-
+    const params = {
+      email: 'test@example.com',
+      firstName: 'John',
+      familyName: 'Doe',
+      passwordHash: 'hashedpassword123',
+      schoolName: 'Oxford',
+      userType: UserType.STUDENT,
+    }
     await expect(
-      createStudent.execute(
-        new CreateUserParams(
-          'test@example.com',
-          'John',
-          'Doe',
-          'hashedpassword123',
-          'Oxford',
-          UserType.STUDENT
-        ),
-      ),
+      createStudent.execute(params),
     ).rejects.toEqual({
       code: ErrorCode.CONFLICT,
       message: 'Email already in use.',
@@ -70,17 +68,17 @@ describe('CreateStudent', () => {
 
   test('Should throw error if email is already in use by teacher', async () => {
     mockTeacherRepository.checkTeacherByEmail.mockResolvedValue(true);
-
+    const params = {
+      email: 'test@example.com',
+      firstName: 'John',
+      familyName: 'Doe',
+      passwordHash: 'hashedpassword123',
+      schoolName: 'Oxford',
+      userType: UserType.STUDENT,
+    }
     await expect(
       createStudent.execute(
-        new CreateUserParams(
-          'test@example.com',
-          'John',
-          'Doe',
-          'hashedpassword123',
-          'Oxford',
-          UserType.STUDENT
-        ),
+        params,
       ),
     ).rejects.toEqual({
       code: ErrorCode.CONFLICT,

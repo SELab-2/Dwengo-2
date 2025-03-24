@@ -14,10 +14,10 @@ export class GetClassUsers implements Service<GetClassUsersInput> {
     ) {}
 
     async execute(input: GetClassUsersInput): Promise<object> {
-        const students: object[] = (await this.studentRepository.getClassStudents(input.classId)).map(s =>
+        const students: object[] = (await this.studentRepository.getClassStudents(input.idParent)).map(s =>
             s.toObject(),
         );
-        const teachers: object[] = (await this.teacherRepository.getClassTeachers(input.classId)).map(t =>
+        const teachers: object[] = (await this.teacherRepository.getClassTeachers(input.idParent)).map(t =>
             t.toObject(),
         );
         return { teachers: teachers, students: students };
