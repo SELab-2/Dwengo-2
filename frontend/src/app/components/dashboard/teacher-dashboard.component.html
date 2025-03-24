@@ -64,12 +64,18 @@
     <div class="charts">
         <div class="charts-card">
             <p class="chart-title">Progress</p>
-            <div id="bar-chart"></div>
+            <apx-chart [series]="barChartOptions.series!" [chart]="barChartOptions.chart!"
+                [dataLabels]="barChartOptions.dataLabels!" [xaxis]="barChartOptions.xaxis!"
+                [legend]="barChartOptions.legend!" [fill]="barChartOptions.fill!" [tooltip]="barChartOptions.tooltip!">
+            </apx-chart>
         </div>
 
         <div class="charts-card">
             <p class="chart-title">Timeline</p>
-            <div id="area-chart"></div>
+            <apx-chart [series]="lineChartOptions.series!" [chart]="lineChartOptions.chart!"
+                [xaxis]="lineChartOptions.xaxis!" [dataLabels]="lineChartOptions.dataLabels!"
+                [grid]="lineChartOptions.grid!" [stroke]="lineChartOptions.stroke!"
+                [tooltip]="lineChartOptions.tooltip!"></apx-chart>
         </div>
     </div>
 </main>
