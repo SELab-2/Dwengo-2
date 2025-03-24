@@ -1,5 +1,5 @@
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
-import { AssignStudentToGroup, AssignStudentToGroupParams } from "../../../../src/core/services/user";
+import { AssignStudentToGroup } from "../../../../src/core/services/user";
 import { EntityNotFoundError } from "../../../../src/config/error";
 
 describe("AssignStudentToGroup Service", () => {
@@ -15,7 +15,7 @@ describe("AssignStudentToGroup Service", () => {
     it("should call assignStudentToGroup with correct parameters", async () => {
         const studentId = "student-123";
         const groupId = "group-456";
-        const params = new AssignStudentToGroupParams(studentId, groupId);
+        const params = {studentId, groupId};
 
         await assignStudentToGroup.execute(params);
 
@@ -28,7 +28,7 @@ describe("AssignStudentToGroup Service", () => {
 
         const studentId = "nonexistent-student";
         const groupId = "group-456";
-        const params = new AssignStudentToGroupParams(studentId, groupId);
+        const params = {studentId, groupId};
 
         await expect(assignStudentToGroup.execute(params)).rejects.toThrow(EntityNotFoundError);
         expect(studentRepository.assignStudentToGroup).toHaveBeenCalledWith(studentId, groupId);
@@ -39,7 +39,7 @@ describe("AssignStudentToGroup Service", () => {
 
         const studentId = "student-123";
         const groupId = "group-456";
-        const params = new AssignStudentToGroupParams(studentId, groupId);
+        const params = {studentId, groupId};
 
         await expect(assignStudentToGroup.execute(params)).rejects.toThrow("Database error");
         expect(studentRepository.assignStudentToGroup).toHaveBeenCalledWith(studentId, groupId);

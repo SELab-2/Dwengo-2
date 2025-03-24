@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createUserSchema } from "./userSchemas";
+import { createUserSchema } from "../../../application/schemas/userSchemas";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { Service } from "../../../config/service";
 import { Student } from "../../entities/student";

@@ -21,7 +21,7 @@ export const getAssignmentSchema = z.object({
 });
 
 export const getUserAssignmentsSchema = z.object({
-    id: z.string(),
+    idParent: z.string(),
 });
 
 export const updateAssignmentSchema = z.object({

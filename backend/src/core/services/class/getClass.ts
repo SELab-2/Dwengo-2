@@ -1,21 +1,25 @@
 import { z } from "zod";
 import { ClassBaseService } from "./baseClassService";
-import { getAllClassesSchema, getClassByIdSchema, getClassByNameSchema, getClassByUserSchema } from "./classSchemas";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { EntityNotFoundError } from "../../../config/error";
+import { getAllClassesSchema, getClassSchema, getUserClassesSchema } from "../../../application/schemas/classSchemas";
 
-export type GetClassByIdInput = z.infer<typeof getClassByIdSchema>;
+export type GetClassInput = z.infer<typeof getClassSchema>;
 
-export class GetClassByClassId extends ClassBaseService<GetClassByIdInput> {
+export class GetClass extends ClassBaseService<GetClassInput> {
     /**
-     * Gets a class from the DB given its ID.
-     * @param input ID of the class to get from the DB.
-     * @returns the class with the given id.
+     * Gets a class from the DB given its ID/name.
+     * @param input object containing either the class ID or name.
+     * @returns the class with the given id/name.
      * @throws {EntityNotFoundError} if the class could not be found.
      */
-    async execute(input: GetClassByIdInput): Promise<object> {
+    async execute(input: GetClassInput): Promise<object> {
+        const { id, className } = input;
         try {
-            return (await this.classRepository.getClassById(input.id)).toObject();
+            if (id) {
+                return (await this.classRepository.getClassById(id)).toObject();
+            }
+            return (await this.classRepository.getClassByName(className)).toObject()
         } catch (error) {
             if (error instanceof EntityNotFoundError) {
                 throw {
@@ -28,40 +32,16 @@ export class GetClassByClassId extends ClassBaseService<GetClassByIdInput> {
     }
 }
 
-export type GetClassByNameInput = z.infer<typeof getClassByNameSchema>;
+export type GetUserClassInput = z.infer<typeof getUserClassesSchema>;
 
-export class GetClassByName extends ClassBaseService<GetClassByNameInput> {
-    /**
-     * Gets a class from the DB given its name.
-     * @param input name of the class to get.
-     * @returns the class with the given name.
-     * @throws {EntityNotFoundError} if the class could not be found.
-     */
-    async execute(input: GetClassByNameInput): Promise<object> {
-        try {
-            return (await this.classRepository.getClassByName(input.className)).toObject();
-        } catch (error) {
-            if (error instanceof EntityNotFoundError) {
-                throw {
-                    code: ErrorCode.NOT_FOUND,
-                    message: `Class with name ${input.className!} not found`,
-                } as ApiError;
-            }
-            throw error;
-        }
-    }
-}
-
-export type GetClassByUserInput = z.infer<typeof getClassByUserSchema>;
-
-export class GetUserClasses extends ClassBaseService<GetClassByUserInput> {
+export class GetUserClasses extends ClassBaseService<GetUserClassInput> {
     /**
      * Get all classes for a user.
      * @param input the id of the user.
      * @returns every class for a user.
      * @throws {EntityNotFoundError} if the user could not be found.
      */
-    async execute(input: GetClassByUserInput): Promise<object> {
+    async execute(input: GetUserClassInput): Promise<object> {
         try {
             return { classes: (await this.classRepository.getUserClasses(input.userId)).map(c => c.toObject()) };
         } catch (error) {

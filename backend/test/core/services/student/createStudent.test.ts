@@ -4,7 +4,6 @@ import { IStudentRepository } from '../../../../src/core/repositories/studentRep
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
 import {
   CreateUser,
-  CreateUserParams,
 } from '../../../../src/core/services/user/createUser';
 
 const mockStudentRepository = {
@@ -29,14 +28,14 @@ describe('CreateStudent', () => {
   test('Should throw error because of invalid email', async () => {
     await expect(
       createStudent.execute(
-        new CreateUserParams(
-          'incorrect-email',
-          'John',
-          'Doe',
+        {
+          email: 'incorrect-email',
+          firstName: 'John',
+          familyName: 'Doe',
           'hashedpassword123',
           'Harvard',
           UserType.STUDENT,
-        ),
+        },
       ),
     ).rejects.toEqual({
       code: ErrorCode.BAD_REQUEST,

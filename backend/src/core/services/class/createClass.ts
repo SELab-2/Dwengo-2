@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { ClassBaseService } from "./baseClassService";
-import { createClassSchema } from "./classSchemas";
+import { createClassSchema } from "../../../application/schemas/classSchemas";
 import { Class } from "../../entities/class";
 
 export type CreateClassInput = z.infer<typeof createClassSchema>;

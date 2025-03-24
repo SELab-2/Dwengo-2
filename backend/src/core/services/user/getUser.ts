@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getUserSchema } from "./userSchemas";
+import { getUserSchema } from "../../../application/schemas/userSchemas";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { EntityNotFoundError } from "../../../config/error";
 import { Service } from "../../../config/service";

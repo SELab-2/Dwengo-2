@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getAllUsersSchema } from "./userSchemas";
+import { getAllUsersSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";

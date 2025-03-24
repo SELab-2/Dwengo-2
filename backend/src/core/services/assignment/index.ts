@@ -3,4 +3,4 @@ export * from "./deleteAssignment";
 export * from "./getAssignment";
 export * from "./getUserAssignments";
 export * from "./updateAssignment";
-export * from "./assignmentSchemas";
+export * from "../../../application/schemas/assignmentSchemas";

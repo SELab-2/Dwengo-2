@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { deleteUserSchema } from "./userSchemas";
+import { deleteUserSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
 import { UserType } from "../../entities/user";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";

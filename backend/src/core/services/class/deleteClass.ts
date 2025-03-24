@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { ClassBaseService } from "./baseClassService";
-import { deleteClassSchema } from "./classSchemas";
+import { deleteClassSchema } from "../../../application/schemas/classSchemas";
 
 export type DeleteClassInput = z.infer<typeof deleteClassSchema>;
 

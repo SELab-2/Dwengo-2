@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { updateGroupSchema } from "./groupSchemas";
+import { updateGroupSchema } from "../../../application/schemas/groupSchemas";
 import { GroupService } from "./groupService";
 import { Group } from "../../entities/group";
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { UserType } from "../../entities/user";
+import { UserType } from "../../core/entities/user";
 
 /**
  * Schemas for user services
@@ -27,18 +27,18 @@ export const deleteUserSchema = z.object({
 export const getAllUsersSchema = z.object({});
 
 export const getAssignmentUsersSchema = z.object({
-    assignmentId: z.string(),
+    idParent: z.string(),
 });
 
 export const getClassUsersSchema = z.object({
-    classId: z.string(),
+    idParent: z.string(),
 });
 
 export const getGroupUsersSchema = z.object({
-    groupId: z.string(),
+    idParent: z.string(),
 });
 
-export const getUserSchema = z
+export const getClassSchema = z
     .object({
         userType: z.nativeEnum(UserType),
         id: z.string().optional(),
@@ -50,8 +50,8 @@ export const getUserSchema = z
     });
 
 export const removeUserFromSchema = z.object({
-    userId: z.string(),
-    otherId: z.string(),
+    id: z.string(),
+    idParent: z.string(),
     userType: z.nativeEnum(UserType),
 });
 

@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { getAssignmentGroupSchema } from "./groupSchemas";
+import { getAssignmentGroupsSchema } from "../../../application/schemas/groupSchemas";
 import { GroupService } from "./groupService";
 import { Group } from "../../entities/group";
 
-export type GetAssignmentGroupsInput = z.infer<typeof getAssignmentGroupSchema>;
+export type GetAssignmentGroupsInput = z.infer<typeof getAssignmentGroupsSchema>;
 
 export class GetAssignmentGroups extends GroupService<GetAssignmentGroupsInput> {
     async execute(input: GetAssignmentGroupsInput): Promise<object> {

@@ -9,7 +9,7 @@ export const deleteGroupSchema = z.object({
     id: z.string(),
 });
 
-export const getAssignmentGroupSchema = z.object({
+export const getAssignmentGroupsSchema = z.object({
     id: z.string(),
 });
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { removeUserFromSchema } from "./userSchemas";
+import { removeUserFromSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
 import { UserType } from "../../entities/user";
 

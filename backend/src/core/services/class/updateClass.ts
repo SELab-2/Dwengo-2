@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { ClassBaseService } from "./baseClassService";
-import { updateClassSchema } from "./classSchemas";
+import { updateClassSchema } from "../../../application/schemas/classSchemas";
 import { Class } from "../../entities/class";
 
 export type UpdateClassInput = z.infer<typeof updateClassSchema>;

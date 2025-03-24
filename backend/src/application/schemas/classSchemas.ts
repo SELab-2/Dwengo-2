@@ -25,17 +25,19 @@ export const deleteClassSchema = z.object({
     id: z.string(),
 });
 
-export const getClassByIdSchema = z.object({
-    id: z.string(),
+export const getClassSchema = z
+    .object({
+        id: z.string().optional(),
+        className: z.string().email().optional(),
+    })
+    .refine(data => data.id !== undefined || data.className !== undefined, {
+        message: "Either ID or email must be provided",
+        path: ["id", "className"],
 });
 
-export const getClassByNameSchema = z.object({
-    className: z.string(),
-});
-
-export const getClassByUserSchema = z.object({
-    userId: z.string(),
-});
+export const getUserClassesSchema = z.object({
+    idParent: z.string()
+})
 
 export const getAllClassesSchema = z.object({});
 

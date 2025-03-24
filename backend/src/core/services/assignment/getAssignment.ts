@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getAssignmentSchema } from "./assignmentSchemas";
+import { getAssignmentSchema } from "../../../application/schemas/assignmentSchemas";
 import { Service } from "../../../config/service";
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
 
