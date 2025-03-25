@@ -11,12 +11,8 @@ export class GetClassUsersParams implements ServiceParams {
 
 export class GetClassUsers extends UserBaseService<GetClassUsersParams> {
     async execute(input: GetClassUsersParams): Promise<object> {
-        const students: object[] = (await this.studentRepository.getByClassId(input.classId)).map(s =>
-            s.toObject(),
-        );
-        const teachers: object[] = (await this.teacherRepository.getByClassId(input.classId)).map(t =>
-            t.toObject(),
-        );
+        const students: object[] = (await this.studentRepository.getByClassId(input.classId)).map(s => s.toObject());
+        const teachers: object[] = (await this.teacherRepository.getByClassId(input.classId)).map(t => t.toObject());
         return { teachers: teachers, students: students };
     }
 }
