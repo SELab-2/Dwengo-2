@@ -55,9 +55,9 @@ paths:
       security: []
       summary: Register a new user
       description: |
-        Create a new user account with email and public key (derived from locally hashed password).
-        The email must be unique and not already registered in the system. The public key will be
-        used to verify signed challenges during authentication. Returns 201 on successful registration.
+        Create a new user account with email and and password.
+        The email must be unique and not already registered in the system. The password will be
+        used to authenticate the user. Returns 201 on successful registration.
       operationId: registerUser
       requestBody:
         required: true
@@ -79,8 +79,8 @@ paths:
       security: []
       summary: Login user
       description: |
-        Authenticate a user by verifying their signed challenge. Returns user ID and challenge expiration
-        for constructing the X-API-Token header (format: `userId.signedChallenge`).'
+        Authenticate a user by verifying their email and password. Returns user ID and token
+        for constructing the X-API-Token header.'
       operationId: loginUser
       requestBody:
         required: true
@@ -369,25 +369,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/UsersOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-    post:
-      tags:
-        - users
-      summary: Create new user
-      description: Create a new user account with specified role and permissions. Only accessible by administrators.
-      operationId: createUser
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-      responses:
-        '201':
-          $ref: '#/components/responses/UserCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
 
@@ -1868,24 +1849,28 @@ components:
           format: uuid
           readOnly: true
           description: Unique identifier for the user.
-        expiresAt:
+        expiresAfter:
           type: string
-          format: date-time
+          format: time
           description: When this challenge expires
+        token:
+          type: string
+          format: uuid 
+          description: The token for this session.
     LoginRequest:
       type: object
       required:
         - email
-        - signedChallenge
+        - password
       additionalProperties: false
       properties:
         email:
           type: string
           format: email
           description: User's email address
-        serverChallenge:
+        password:
           type: string
-          description: Temporary challenge string signed with private key derived from locally hashed password (acts as X-API-Token).
+          description: User's.
 
     RegisterResponse:
       type: object
@@ -1901,36 +1886,36 @@ components:
       type: object
       required:
         - email
-        - forename
+        - firstName
         - familyName
-        - school
-        - publicKey
-        - role
+        - schoolName
+        - password
+        - userType
       additionalProperties: false
       properties:
         email:
           type: string
           format: email
           description: User's email address.
-        forename:
+        firstName:
           type: string
           minLength: 1
           maxLength: 50
-          description: User's forename.
+          description: User's firstname.
         familyName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's family name.
-        school:
+        schoolName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's school name.
-        publicKey:
+        password:
           type: string
-          description: Public key derived from locally hashed password
-        role:
+          description: Users password
+        userType:
           type: string
           enum: [STUDENT, TEACHER]
           default: STUDENT
@@ -1955,10 +1940,10 @@ components:
       required:
         - id
         - email
-        - forename
+        - firstName
         - familyName
-        - school
-        - role
+        - schooName
+        - userType
       properties:
         id:
           type: string
@@ -1969,22 +1954,22 @@ components:
           type: string
           format: email
           description: User's email address.
-        forename:
+        firstName:
           type: string
           minLength: 1
           maxLength: 50
-          description: User's forename.
+          description: User's firstname.
         familyName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's family name.
-        school:
+        schoolName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's school name.
-        role:
+        userType:
           type: string
           enum: [STUDENT, TEACHER, ADMIN]
           description: User's role in the system.
@@ -1992,9 +1977,9 @@ components:
       type: object
       required:
         - email
-        - forename
+        - firstName
         - familyName
-        - school
+        - schoolName
         - publicKey
         - role
       additionalProperties: false
