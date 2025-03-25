@@ -1,5 +1,5 @@
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
-import { AssignStudentToGroup, AssignStudentToGroupParams } from "../../../../src/core/services/user";
+import { AssignStudentToGroup } from "../../../../src/core/services/user";
 import { EntityNotFoundError } from "../../../../src/config/error";
 
 describe("AssignStudentToGroup Service", () => {
@@ -13,35 +13,35 @@ describe("AssignStudentToGroup Service", () => {
     });
 
     it("should call assignStudentToGroup with correct parameters", async () => {
-        const studentId = "student-123";
-        const groupId = "group-456";
-        const params = new AssignStudentToGroupParams(studentId, groupId);
+        const id = "student-123";
+        const idParent = "group-456";
+        const params = {id, idParent};
 
         await assignStudentToGroup.execute(params);
 
         expect(studentRepository.assignStudentToGroup).toHaveBeenCalledTimes(1);
-        expect(studentRepository.assignStudentToGroup).toHaveBeenCalledWith(studentId, groupId);
+        expect(studentRepository.assignStudentToGroup).toHaveBeenCalledWith(id, idParent);
     });
 
     it("should throw an error if the student or group does not exist", async () => {
         studentRepository.assignStudentToGroup.mockRejectedValue(new EntityNotFoundError("Student or group not found"));
 
-        const studentId = "nonexistent-student";
-        const groupId = "group-456";
-        const params = new AssignStudentToGroupParams(studentId, groupId);
+        const id = "nonexistent-student";
+        const idParent = "group-456";
+        const params = {id, idParent};
 
         await expect(assignStudentToGroup.execute(params)).rejects.toThrow(EntityNotFoundError);
-        expect(studentRepository.assignStudentToGroup).toHaveBeenCalledWith(studentId, groupId);
+        expect(studentRepository.assignStudentToGroup).toHaveBeenCalledWith(id, idParent);
     });
 
     it("should throw an error if the repository encounters an unexpected error", async () => {
         studentRepository.assignStudentToGroup.mockRejectedValue(new Error("Database error"));
 
-        const studentId = "student-123";
-        const groupId = "group-456";
-        const params = new AssignStudentToGroupParams(studentId, groupId);
+        const id = "student-123";
+        const idParent = "group-456";
+        const params = {id, idParent};
 
         await expect(assignStudentToGroup.execute(params)).rejects.toThrow("Database error");
-        expect(studentRepository.assignStudentToGroup).toHaveBeenCalledWith(studentId, groupId);
+        expect(studentRepository.assignStudentToGroup).toHaveBeenCalledWith(id, idParent);
     });
 });
