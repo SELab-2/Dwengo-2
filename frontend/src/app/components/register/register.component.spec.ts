@@ -2,7 +2,6 @@ import { TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { RegisterComponent } from "./register.component";
-import { By } from "@angular/platform-browser";
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
