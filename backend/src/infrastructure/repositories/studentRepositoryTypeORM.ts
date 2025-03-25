@@ -3,7 +3,7 @@ import { Student } from "../../core/entities/student";
 import { IStudentRepository } from "../../core/repositories/studentRepositoryInterface";
 import { DatasourceStudentTypeORM } from "../database/data/data_sources/typeorm/datasourceStudentTypeORM";
 
-export class StudentRepositoryTypeORM extends IStudentRepository{
+export class StudentRepositoryTypeORM extends IStudentRepository {
     private datasourceStudent: DatasourceStudentTypeORM;
 
     public constructor() {

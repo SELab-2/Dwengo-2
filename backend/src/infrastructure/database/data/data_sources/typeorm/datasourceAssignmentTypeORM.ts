@@ -1,12 +1,11 @@
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Assignment } from "../../../../../core/entities/assignment";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
-
     public async createAssignment(newAssignment: Assignment, classId: string): Promise<Assignment> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
@@ -36,12 +35,10 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     public async getAssignmentById(id: string): Promise<Assignment | null> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const assignmentModel: AssignmentTypeORM | null = await datasource
-            .getRepository(AssignmentTypeORM)
-            .findOne({
-                where: { id: id },
-                relations: ["class"],
-            });
+        const assignmentModel: AssignmentTypeORM | null = await datasource.getRepository(AssignmentTypeORM).findOne({
+            where: { id: id },
+            relations: ["class"],
+        });
 
         if (assignmentModel !== null) {
             return assignmentModel.toAssignmentEntity();
@@ -93,7 +90,6 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
 
     public async deleteAssignmentById(id: string): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-        
         await datasource.getRepository(AssignmentTypeORM).delete(id);
     }
 

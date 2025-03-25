@@ -1,9 +1,9 @@
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { DatabaseEntryNotFoundError } from "../../../../../config/error";
 import { JoinRequest, JoinRequestType } from "../../../../../core/entities/joinRequest";
 import { JoinAsType, JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
-import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
     public async createJoinRequest(joinRequest: JoinRequest): Promise<JoinRequest> {
@@ -79,7 +79,6 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
 
     public async deleteJoinRequestById(id: string): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-        
         await datasource.getRepository(JoinRequestTypeORM).delete({ id: id });
     }
 }

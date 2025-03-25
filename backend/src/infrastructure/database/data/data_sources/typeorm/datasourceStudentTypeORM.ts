@@ -1,3 +1,4 @@
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Student } from "../../../../../core/entities/student";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
@@ -7,7 +8,6 @@ import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
-import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceStudentTypeORM extends DatasourceTypeORM {
     public async createStudent(student: Student): Promise<Student> {
@@ -241,12 +241,10 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
     public async getAssignmentStudents(assignmentId: string): Promise<Student[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const assignmentModel: AssignmentTypeORM | null = await datasource
-            .getRepository(AssignmentTypeORM)
-            .findOne({
-                where: { id: assignmentId },
-                relations: ["class"],
-            });
+        const assignmentModel: AssignmentTypeORM | null = await datasource.getRepository(AssignmentTypeORM).findOne({
+            where: { id: assignmentId },
+            relations: ["class"],
+        });
 
         console.log(assignmentModel);
 
@@ -256,7 +254,6 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
 
     public async getGroupStudents(groupId: string): Promise<Student[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-        
         const groupJoinResult = await datasource
             .getRepository(StudentOfGroupTypeORM)
             .createQueryBuilder("studentOfGroup")

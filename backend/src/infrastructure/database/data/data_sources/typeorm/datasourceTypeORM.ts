@@ -4,7 +4,6 @@ import { DatasourceTypeORMConnectionSettingsFactory } from "./datasourceTypeORMC
 import { DatasourceTypeORMSingleton } from "./datasourceTypeORMSingleton";
 import { IDatasource } from "../datasourceInterface";
 
-
 export class DatasourceTypeORM implements IDatasource {
     // Connection for the TypeORM - postgres database
     private static datasourceConnectionSettings: DatasourceTypeORMConnectionSettings =

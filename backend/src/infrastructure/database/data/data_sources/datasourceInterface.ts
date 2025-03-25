@@ -1,7 +1,4 @@
-
 /**
  * Interface representing a data source.
  */
-export interface IDatasource {
-
-}
+export interface IDatasource {}

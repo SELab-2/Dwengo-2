@@ -1,10 +1,10 @@
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { QuestionThread } from "../../../../../core/entities/questionThread";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
-import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceThreadTypeORM extends DatasourceTypeORM {
     public async create(thread: QuestionThread): Promise<QuestionThread> {
@@ -128,12 +128,10 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
     public async getQuestionThreadsByAssignmentId(assignmentId: string): Promise<QuestionThread[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const questionThreads: QuestionThreadTypeORM[] = await datasource
-            .getRepository(QuestionThreadTypeORM)
-            .find({
-                where: { assignment: { id: assignmentId } },
-                relations: ["student", "assignment"],
-            });
+        const questionThreads: QuestionThreadTypeORM[] = await datasource.getRepository(QuestionThreadTypeORM).find({
+            where: { assignment: { id: assignmentId } },
+            relations: ["student", "assignment"],
+        });
 
         if (!questionThreads) {
             throw new EntityNotFoundError(`No threads found for assignment with id: ${assignmentId}`);
@@ -155,12 +153,10 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
     public async getQuestionThreadsByCreatorId(createrId: string): Promise<QuestionThread[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const questionThreads: QuestionThreadTypeORM[] = await datasource
-            .getRepository(QuestionThreadTypeORM)
-            .find({
-                where: { student: { id: createrId } },
-                relations: ["student", "assignment"],
-            });
+        const questionThreads: QuestionThreadTypeORM[] = await datasource.getRepository(QuestionThreadTypeORM).find({
+            where: { student: { id: createrId } },
+            relations: ["student", "assignment"],
+        });
 
         const threads = await Promise.all(
             questionThreads.map(async questionThread => {

@@ -1,9 +1,9 @@
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Submission } from "../../../../../core/entities/submission";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
-import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     public async create(submission: Submission): Promise<string> {
@@ -45,11 +45,9 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     public async getById(id: string): Promise<Submission | null> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const submissionModel: SubmissionTypeORM | null = await datasource
-            .getRepository(SubmissionTypeORM)
-            .findOne({
-                where: { id: id },
-            });
+        const submissionModel: SubmissionTypeORM | null = await datasource.getRepository(SubmissionTypeORM).findOne({
+            where: { id: id },
+        });
 
         if (submissionModel) {
             return submissionModel.toEntity();
@@ -85,7 +83,6 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
 
     public async delete(submission: string): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-        
         await datasource.getRepository(SubmissionTypeORM).delete(submission);
     }
 }

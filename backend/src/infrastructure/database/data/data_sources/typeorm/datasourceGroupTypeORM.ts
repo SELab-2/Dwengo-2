@@ -1,10 +1,10 @@
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Group } from "../../../../../core/entities/group";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
-import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceGroupTypeORM extends DatasourceTypeORM {
     public async create(entity: Group): Promise<Group> {
@@ -57,12 +57,10 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         }
 
         // Fetch all students in that group
-        const studentOfGroups: StudentOfGroupTypeORM[] = await datasource
-            .getRepository(StudentOfGroupTypeORM)
-            .find({
-                where: { group: groupModel },
-                relations: ["student", "student.student"], // student.student fetches UserTypeORM
-            });
+        const studentOfGroups: StudentOfGroupTypeORM[] = await datasource.getRepository(StudentOfGroupTypeORM).find({
+            where: { group: groupModel },
+            relations: ["student", "student.student"], // student.student fetches UserTypeORM
+        });
 
         // Extract StudentTypeORM models
         const studentModels: StudentTypeORM[] = studentOfGroups.map(entry => entry.student);

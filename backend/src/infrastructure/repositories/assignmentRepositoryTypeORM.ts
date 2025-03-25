@@ -4,11 +4,11 @@ import { IAssignmentRepository } from "../../core/repositories/assignmentReposit
 import { DatasourceAssignmentTypeORM } from "../database/data/data_sources/typeorm/datasourceAssignmentTypeORM";
 
 export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
-    private datasourceAssignment: DatasourceAssignmentTypeORM
+    private datasourceAssignment: DatasourceAssignmentTypeORM;
 
     public constructor() {
         super();
-        this.datasourceAssignment = new DatasourceAssignmentTypeORM;
+        this.datasourceAssignment = new DatasourceAssignmentTypeORM();
     }
 
     public async createAssignment(assignment: Assignment, classId: string): Promise<Assignment> {
@@ -42,9 +42,10 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
     }
 
     public async updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment> {
-        const updatedAssignment: Assignment | null = await 
-            this.datasourceAssignment
-        .updateAssignmentById(id, updatedFields);
+        const updatedAssignment: Assignment | null = await this.datasourceAssignment.updateAssignmentById(
+            id,
+            updatedFields,
+        );
 
         if (updatedAssignment) {
             return updatedAssignment;

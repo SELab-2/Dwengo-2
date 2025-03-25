@@ -1,9 +1,9 @@
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Message } from "../../../../../core/entities/message";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
-import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceMessageTypeORM extends DatasourceTypeORM {
     public async createMessage(message: Message): Promise<Message> {
@@ -69,7 +69,6 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
 
     public async deleteMessageById(id: string): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-        
         const messageRepository = datasource.getRepository(MessageTypeORM);
 
         const messageModel: MessageTypeORM | null = await messageRepository.findOne({ where: { id: id } });

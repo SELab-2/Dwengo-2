@@ -1,9 +1,9 @@
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Teacher } from "../../../../../core/entities/teacher";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
-import { DatasourceTypeORM } from "./datasourceTypeORM";
 
 export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
     public async createTeacher(teacher: Teacher): Promise<Teacher> {
