@@ -111,8 +111,8 @@ paths:
             type: string
             format: uuid
         - in: query
-          name: role
-          required: false
+          name: userType
+          required: true
           schema:
             type: string
             enum: [student, teacher]
@@ -127,7 +127,7 @@ paths:
       tags:
         - users
       summary: Update user data
-      description: Modify user information such as name, email, or role. Only accessible by the user themselves or administrators.
+      description: Modify user information such as name, email, or userType. Only accessible by the user themselves or administrators.
       operationId: updateUser
       parameters:
         - in: path
@@ -137,7 +137,7 @@ paths:
             type: string
             format: uuid
         - in: query
-          name: role
+          name: userType
           required: false
           schema:
             type: string
@@ -1598,7 +1598,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/User'
+            $ref: '#/components/schemas/UserPublic'
     JoinRequestOK:
       description: Invite request completed successfully
       content:
@@ -1919,7 +1919,7 @@ components:
           type: string
           enum: [STUDENT, TEACHER]
           default: STUDENT
-          description: User's role in the system.
+          description: User's type in the system.
 
     LearningObject:
       type: object
@@ -1942,7 +1942,7 @@ components:
         - email
         - firstName
         - familyName
-        - schooName
+        - schoolName
         - userType
       properties:
         id:
@@ -1972,7 +1972,40 @@ components:
         userType:
           type: string
           enum: [STUDENT, TEACHER, ADMIN]
-          description: User's role in the system.
+          description: User's type in the system.
+    UserPublic:
+      type: object
+      required:
+        - id
+        - email
+        - firstName
+        - familyName
+        - schoolName
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the user.
+        email:
+          type: string
+          format: email
+          description: User's email address.
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: User's firstname.
+        familyName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: User's family name.
+        schoolName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: User's school name.
     UserCreate:
       type: object
       required:
@@ -1980,19 +2013,19 @@ components:
         - firstName
         - familyName
         - schoolName
-        - publicKey
-        - role
+        - password
+        - userType
       additionalProperties: false
       properties:
         email:
           type: string
           format: email
           description: User's email address.
-        forename:
+        firstName:
           type: string
           minLength: 1
           maxLength: 50
-          description: User's forename.
+          description: User's firstname.
         familyName:
           type: string
           minLength: 1
@@ -2003,14 +2036,14 @@ components:
           minLength: 1
           maxLength: 50
           description: User's school name.
-        publicKey:
+        password:
           type: string
-          description: Public key derived from locally hashed password
-        role:
+          description: The user's password
+        userType:
           type: string
           enum: [STUDENT, TEACHER]
           default: STUDENT
-          description: User's role in the system.
+          description: User's type in the system.
     UserUpdate:
       type: object
       minProperties: 1
@@ -2038,11 +2071,11 @@ components:
         publicKey:
           type: string
           description: Public key derived from locally hashed password
-        role:
+        userType:
           type: string
           enum: [STUDENT, TEACHER]
           default: STUDENT
-          description: User's role in the system.
+          description: User's type in the system.
     UserDelete:
       type: object
       minProperties: 2
@@ -2053,11 +2086,11 @@ components:
           format: uuid
           readOnly: true
           description: Unique identifier for the user.
-        role:
+        userType:
           type: string
           enum: [STUDENT, TEACHER]
           default: STUDENT
-          description: User's role in the system.
+          description: User's type in the system.
     CollectionUserCreate:
       type: object
       required:
@@ -2074,7 +2107,7 @@ components:
         - id
         - requester
         - class
-        - role
+        - userType
       properties:
         id:
           type: string
@@ -2089,16 +2122,16 @@ components:
           type: string
           format: uuid
           description: ID of the class.
-        role:
+        userType:
           type: string
           enum: [STUDENT, TEACHER]
-          description: Role of requester.
+          description: Type of requester.
     JoinRequestCreate:
       type: object
       required:
         - requester
         - class
-        - role
+        - userType
       additionalProperties: false
       properties:
         requester:
@@ -2109,10 +2142,10 @@ components:
           type: string
           format: uuid
           description: ID of the class.
-        role:
+        userType:
           type: string
           enum: [STUDENT, TEACHER]
-          description: Role of requester.
+          description: Type of requester.
     Class:
       type: object
       required:

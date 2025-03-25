@@ -35,7 +35,7 @@ const requestConversionTestCases: Record<string, {
       familyName: 'Doe',
       school: 'Example School',
       publicKey: 'abc123',
-      role: 'STUDENT'
+      userType: 'STUDENT'
     },
     expectedMethod: HttpMethod.POST,
     description: 'converts POST request for user creation'
@@ -96,7 +96,7 @@ const responseConversionTestCases: Record<string, {
       forename: 'John',
       familyName: 'Doe',
       school: 'Example School',
-      role: 'STUDENT'
+      userType: 'STUDENT'
     },
     description: 'converts 200 response with user details'
   },
