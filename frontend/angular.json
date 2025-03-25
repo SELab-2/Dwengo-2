@@ -4,6 +4,14 @@
   "newProjectRoot": "projects",
   "projects": {
     "frontend": {
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "nl": {
+            "translation": "src/locale/messages.nl.json"
+          }
+        }
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,6 +25,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "localize": [
+              "en-US"
+            ],
             "outputPath": "dist/frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -30,7 +41,6 @@
               "src/assets"
             ],
             "styles": [
-              "src/custom-theme.scss",
               "src/styles.less"
             ],
             "scripts": []
@@ -100,10 +110,16 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
