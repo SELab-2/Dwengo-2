@@ -1,7 +1,11 @@
 import { TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
+import { provideHttpClient } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+
 import { RegisterComponent } from "./register.component";
+import { AuthenticationService } from "../../services/authentication.service";
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -11,10 +15,13 @@ describe('RegisterComponent', () => {
     TestBed.configureTestingModule({
       imports: [RegisterComponent],
       providers: [
-        provideRouter([{ path: "**", component: RegisterComponent }])
+        provideRouter([{ path: "**", component: RegisterComponent }]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        AuthenticationService,
       ]
-    });
-
+    }).compileComponents();
+    
     harness = await RouterTestingHarness.create();
     component = await harness.navigateByUrl('/', RegisterComponent);
     harness.detectChanges();
