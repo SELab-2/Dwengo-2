@@ -1,24 +1,12 @@
 import { MessageService } from "./messageService";
-import { ServiceParams } from "../../../config/service";
 import { Message } from "../../entities/message";
+import { z } from "zod";
+import { updateMessageSchema } from "../../../application/schemas/messageSchemas";
 
-export class UpdateMessageParams implements ServiceParams {
-    constructor(
-        private _id: string,
-        private _content: string,
-    ) {}
+export type UpdateMessageInput = z.infer<typeof updateMessageSchema>;
 
-    get id(): string {
-        return this._id;
-    }
-
-    get content(): string {
-        return this._content;
-    }
-}
-
-export class UpdateMessage extends MessageService<UpdateMessageParams> {
-    async execute(input: UpdateMessageParams): Promise<object> {
+export class UpdateMessage extends MessageService<UpdateMessageInput> {
+    async execute(input: UpdateMessageInput): Promise<object> {
         const message: Message = await this.messageRepository.getMessageById(input.id);
         message.content = input.content;
         await this.messageRepository.updateMessage(message);

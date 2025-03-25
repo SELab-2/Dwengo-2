@@ -23,7 +23,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./backend/src/infrastructure/database:/workspace/database
+      - pg_data:/var/lib/postgresql/data
+
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -32,3 +33,6 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       retries: 5
+
+volumes:
+  pg_data:
