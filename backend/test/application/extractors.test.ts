@@ -14,7 +14,7 @@ const userSchema = z.object({
     id: z.string(),
     name: z.string(),
     email: z.string().email(),
-    role: z.string().default("user"),
+    userType: z.string().default("user"),
 });
 
 const studentSchema = z.object({
@@ -23,7 +23,7 @@ const studentSchema = z.object({
     email: z.string().email(),
     grade: z.number(),
     schoolName: z.string().optional(),
-    role: z.literal("student").default("student"),
+    userType: z.literal("student").default("student"),
 });
 
 const teacherSchema = z.object({
@@ -32,7 +32,7 @@ const teacherSchema = z.object({
     email: z.string().email(),
     subjects: z.array(z.string()),
     department: z.string().optional(),
-    role: z.literal("teacher").default("teacher"),
+    userType: z.literal("teacher").default("teacher"),
 });
 
 const classSchema = z.object({
@@ -106,7 +106,7 @@ const testCases: Record<
     ],
     userSchema: [
         {
-            name: "extracts user parameters with default role",
+            name: "extracts user parameters with default type",
             schema: userSchema,
             request: {
                 method: HttpMethod.POST,
@@ -115,7 +115,7 @@ const testCases: Record<
                 pathParams: {},
                 queryParams: {},
             },
-            expected: { id: "u-123", name: "John Doe", email: "john@example.com", role: "user" },
+            expected: { id: "u-123", name: "John Doe", email: "john@example.com", userType: "user" },
         },
         {
             name: "extracts parameters from mixed sources",
@@ -127,7 +127,7 @@ const testCases: Record<
                 pathParams: { id: "u-999" },
                 queryParams: { email: "mixed@example.com" },
             },
-            expected: { id: "u-999", name: "Mixed Source User", email: "mixed@example.com", role: "user" },
+            expected: { id: "u-999", name: "Mixed Source User", email: "mixed@example.com", userType: "user" },
         },
     ],
     studentSchema: [
@@ -153,7 +153,7 @@ const testCases: Record<
                 email: "jane@school.edu",
                 grade: 10,
                 schoolName: "High School",
-                role: "student",
+                userType: "student",
             },
         },
         {
@@ -171,7 +171,7 @@ const testCases: Record<
                 name: "Bob Student",
                 email: "bob@school.edu",
                 grade: 11,
-                role: "student",
+                userType: "student",
             },
         },
     ],
@@ -198,7 +198,7 @@ const testCases: Record<
                 email: "teacher@school.edu",
                 subjects: ["Math", "Physics"],
                 department: "Science",
-                role: "teacher",
+                userType: "teacher",
             },
         },
     ],
