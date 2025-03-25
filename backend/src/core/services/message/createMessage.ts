@@ -1,34 +1,12 @@
 import { MessageService } from "./messageService";
-import { ServiceParams } from "../../../config/service";
 import { Message } from "../../entities/message";
+import { z } from "zod";
+import { createMessageSchema } from "../../../application/schemas/messageSchemas";
 
-export class CreateMessageParams implements ServiceParams {
-    constructor(
-        private _senderId: string,
-        private _createdAt: Date,
-        private _threadId: string,
-        private _content: string,
-    ) {}
+export type CreateMessageInput = z.infer<typeof createMessageSchema>;
 
-    get senderId(): string {
-        return this._senderId;
-    }
-
-    get createdAt(): Date {
-        return this._createdAt;
-    }
-
-    get threadId(): string {
-        return this._threadId;
-    }
-
-    get content(): string {
-        return this._content;
-    }
-}
-
-export class CreateMessage extends MessageService<CreateMessageParams> {
-    async execute(input: CreateMessageParams): Promise<object> {
+export class CreateMessage extends MessageService<CreateMessageInput> {
+    async execute(input: CreateMessageInput): Promise<object> {
         const newMessage = new Message(input.senderId, input.createdAt, input.threadId, input.content);
         return { id: (await this.messageRepository.createMessage(newMessage)).id };
     }
