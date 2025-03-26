@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Class } from '../../interfaces/classes/class';
@@ -14,7 +14,7 @@ import { LoadingComponent } from '../loading/loading.component';
   templateUrl: './class.component.html',
   styleUrl: './class.component.less'
 })
-export class ClassComponent {
+export class ClassComponent implements OnInit {
 
   private readonly route = inject(ActivatedRoute);
 

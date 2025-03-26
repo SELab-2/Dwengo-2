@@ -59,7 +59,7 @@ import { NewClass } from "../interfaces/classes/newClass";
 
     // TODO: vergadering 10 => de creates geven enkel id's
     public createClass(newClass: NewClass): Observable<string> {
-        return of("coolid");
+        return of(newClass.name + "123");
     }
     
   }

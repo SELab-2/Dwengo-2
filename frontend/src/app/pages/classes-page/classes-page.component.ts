@@ -14,7 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 
 
 // Type alias
-type classFilterType = (c: Class) => Boolean;
+type classFilterType = (c: Class) => boolean;
 
 @Component({
   standalone: true,
@@ -40,10 +40,10 @@ export class ClassesPageComponent {
   // Class filter used in the `classes` getter
   // By default we don't filter any classes (return true)
   // You can specify this function all you want as long as it returns a boolean
-  private classFilter: classFilterType = (c: Class) => true;
+  private classFilter: classFilterType = () => true;
 
   // To show the create component or not
-  showCreate: Boolean = false;
+  showCreate: boolean = false;
 
   constructor(
     private classesService: ClassesService
