@@ -1,0 +1,22 @@
+<div class="create-class">
+    <form [formGroup]="createForm" (ngSubmit)="create()">
+        <div class="class-name">
+            <label for="name">Class name:</label>
+            <input name="name" id="name" formControlName="name" required>
+        </div>
+
+        <div class="class-description">
+            <label for="description">Description</label>
+            <input name="description" id="description" formControlName="description" required>
+        </div>
+
+        <div class="class-target-audience">
+            <label for="target-audience">Target audience</label>
+            <input name="target-audience" id="target-audience" formControlName="targetAudience" required>
+        </div>
+
+        <div class="class-submit">
+            <button i18n type="submit" [disabled]="createForm.invalid">Create</button>
+        </div>
+    </form>
+</div>

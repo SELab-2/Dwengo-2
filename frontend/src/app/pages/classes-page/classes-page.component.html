@@ -17,7 +17,9 @@
         </button>
     </mat-toolbar>
 
-    
+    @if (showCreate) {
+        <app-create-class></app-create-class>
+    }
 
     <mat-list>
         @for (class of classes; track class.classId) {

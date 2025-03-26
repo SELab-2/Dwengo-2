@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { Class } from '../../interfaces/classes/class';
 import { CommonModule } from "@angular/common";
 import { ClassesService } from '../../services/classes.service';
+import { CreateClassComponent } from '../../components/create-class/create-class.component';
 
 import { MiniClassComponent } from '../../components/mini-class/mini-class.component';
-import { MatList, MatListItem } from '@angular/material/list'
+import { MatList } from '@angular/material/list'
 import { MatToolbar } from '@angular/material/toolbar'
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,10 +20,10 @@ type classFilterType = (c: Class) => Boolean;
   imports: [
     CommonModule,
     MiniClassComponent,
+    CreateClassComponent,
 
     // Material design
     MatList,
-    MatListItem,
     MatToolbar,
     MatIconModule,
     MatButtonModule
@@ -32,20 +33,23 @@ type classFilterType = (c: Class) => Boolean;
 })
 export class ClassesPageComponent {
 
-  constructor(
-    private classesService: ClassesService
-  ) {}
-
   // Class filter used in the `classes` getter
   // By default we don't filter any classes (return true)
   // You can specify this function all you want as long as it returns a boolean
   private classFilter: classFilterType = (c: Class) => true;
 
+  // To show the create component or not
+  showCreate: Boolean = false;
+
+  constructor(
+    private classesService: ClassesService
+  ) {}
+
   /**
    * Create a class by letting the user fill in a form and send it to the API
    */
   public createClass(): void {
-    window.alert("Create class");
+    this.showCreate = !this.showCreate;
   }
 
   /**
