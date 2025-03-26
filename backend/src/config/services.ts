@@ -37,12 +37,13 @@ export const services = {
         getUserGroups: new GroupServices.GetUserGroups(repos.group),
         getAssignmentGroups: new GroupServices.GetAssignmentGroups(repos.group),
     },
-    // TODO joinRequest: {
-    //          get: new JoinRequestServices.GetJoinRequest(repos.joinRequest),
-    //          remove: new JoinRequestServices.DeleteJoinRequest(repos.joinRequest),
-    //          create: new JoinRequestServices.CreateJoinRequest(repos.joinRequest, repos.class),
-    //          getUserJoinRequests: new JoinRequestServices.GetUserJoinRequests(repos.joinRequest),
-    //      },
+    joinRequest: {
+        get: new JoinRequestServices.GetJoinRequest(repos.joinRequest),
+        update: new JoinRequestServices.AcceptJoinRequest(repos.joinRequest, repos.class),
+        remove: new JoinRequestServices.DeleteJoinRequest(repos.joinRequest),
+        create: new JoinRequestServices.CreateJoinRequest(repos.joinRequest, repos.class),
+        getUserJoinRequests: new JoinRequestServices.GetUserJoinRequests(repos.joinRequest),
+    },
     message: {
         get: new MessageServices.GetMessage(repos.message),
         update: new MessageServices.UpdateMessage(repos.message),

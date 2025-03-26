@@ -31,12 +31,13 @@ export const controllers = {
         services.group.getUserGroups,
         services.group.getAssignmentGroups,
     ),
-    // TODO joinRequest: new Resources.JoinRequestController(
-    //          services.joinRequest.get,
-    //          services.joinRequest.remove,
-    //          services.joinRequest.create,
-    //          services.joinRequest.getUserJoinRequests,
-    //      ),
+    joinRequest: new Resources.JoinRequestController(
+        services.joinRequest.get,
+        services.joinRequest.update,
+        services.joinRequest.remove,
+        services.joinRequest.create,
+        services.joinRequest.getUserJoinRequests,
+    ),
     message: new Resources.MessageController(
         services.message.get,
         services.message.update,

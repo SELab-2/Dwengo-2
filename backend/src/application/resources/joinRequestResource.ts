@@ -1,5 +1,6 @@
 import * as deps from "./dependencies";
 import * as JoinRequestServices from "../../core/services/joinRequest";
+import * as JoinRequestSchemas from "../schemas/joinRequestSchemas";
 
 /**
  * RESTful routing configuration for JoinRequest related endpoints.
@@ -8,6 +9,7 @@ import * as JoinRequestServices from "../../core/services/joinRequest";
  *
  * Supported endpoints:
  * - GET /requests/:id - Get specific invite
+ * - PATCH /requests/:id - Accept request
  * - DELETE /requests/:id - Delete invite
  * - POST /requests - Create new invite
  * - GET /users/:idParent/requests - Get all pending invites for a user
@@ -16,10 +18,11 @@ import * as JoinRequestServices from "../../core/services/joinRequest";
 /* ************* Extractors ************* */
 
 const extractors = {
-    getJoinRequest: undefined, // TODO
-    deleteJoinRequest: undefined, // TODO
-    createJoinRequest: undefined, // TODO
-    getUserJoinRequests: undefined, // TODO
+    getJoinRequest: deps.createZodParamsExtractor(JoinRequestSchemas.getJoinRequestSchema),
+    updateJoinRequest: deps.createZodParamsExtractor(JoinRequestSchemas.acceptJoinRequestSchema),
+    deleteJoinRequest: deps.createZodParamsExtractor(JoinRequestSchemas.deleteJoinRequestSchema),
+    createJoinRequest: deps.createZodParamsExtractor(JoinRequestSchemas.createJoinRequestSchema),
+    getUserJoinRequests: deps.createZodParamsExtractor(JoinRequestSchemas.getUserJoinRequestsSchema),
 };
 
 /* ************* Controller ************* */
@@ -27,11 +30,12 @@ const extractors = {
 export class JoinRequestController extends deps.Controller {
     constructor(
         get: JoinRequestServices.GetJoinRequest,
+        update: JoinRequestServices.AcceptJoinRequest,
         remove: JoinRequestServices.DeleteJoinRequest,
         create: JoinRequestServices.CreateJoinRequest,
         getUserJoinRequests: JoinRequestServices.GetUserJoinRequests,
     ) {
-        super({ get, remove, create, getUserJoinRequests });
+        super({ get, update, remove, create, getUserJoinRequests });
     }
 }
 
@@ -51,6 +55,15 @@ export function joinRequestRoutes(
                 controller,
                 extractor: extractors.getJoinRequest,
                 handler: (req, data) => controller.getOne(req, data),
+                middleware,
+            },
+            {
+                app,
+                method: deps.HttpMethod.PATCH,
+                urlPattern: "/requests/:id",
+                controller,
+                extractor: extractors.updateJoinRequest,
+                handler: (req, data) => controller.update(req, data),
                 middleware,
             },
             {
