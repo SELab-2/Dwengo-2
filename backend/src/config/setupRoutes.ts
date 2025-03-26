@@ -14,8 +14,8 @@ export const setupRoutes = (app: Express) => {
     Resources.classRoutes(app, controllers.class, [middleware.auth]);
     Resources.groupRoutes(app, controllers.group, [middleware.auth]);
     // TODO Resources.joinRequestRoutes(app, controllers.joinRequest, [middleware.auth]);
-    // TODO Resources.messageRoutes(app, controllers.message, [middleware.auth]);
-    // TODO Resources.questionThreadRoutes(app, controllers.questionThread, [middleware.auth]);
+    Resources.messageRoutes(app, controllers.message, [middleware.auth]);
+    Resources.questionThreadRoutes(app, controllers.questionThread, [middleware.auth]);
     Resources.submissionRoutes(app, controllers.submission, [middleware.auth]);
     Resources.userRoutes(app, controllers.user, [middleware.auth]);
 };

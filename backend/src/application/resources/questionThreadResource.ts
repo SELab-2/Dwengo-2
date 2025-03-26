@@ -1,5 +1,6 @@
 import * as deps from "./dependencies";
 import * as QuestionThreadServices from "../../core/services/questionThread";
+import * as QuestionThreadSchemas from "../schemas/questionThreadSchema";
 
 /**
  * RESTful routing configuration for question-thread-related endpoints.
@@ -17,11 +18,13 @@ import * as QuestionThreadServices from "../../core/services/questionThread";
 /* ************* Extractors ************* */
 
 const extractors = {
-    getQuestionThread: undefined, // TODO
-    updateQuestionThread: undefined, // TODO
-    deleteQuestionThread: undefined, // TODO
-    createQuestionThread: undefined, // TODO
-    getAssignmentQuestionThreads: undefined, // TODO
+    getQuestionThread: deps.createZodParamsExtractor(QuestionThreadSchemas.getQuestionThreadSchema),
+    updateQuestionThread: deps.createZodParamsExtractor(QuestionThreadSchemas.updateQuestionThreadSchema),
+    deleteQuestionThread: deps.createZodParamsExtractor(QuestionThreadSchemas.deleteQuestionThreadSchema),
+    createQuestionThread: deps.createZodParamsExtractor(QuestionThreadSchemas.createQuestionThreadSchema),
+    getAssignmentQuestionThreads: deps.createZodParamsExtractor(
+        QuestionThreadSchemas.getAssignmentQuestionThreadsSchema,
+    ),
 };
 
 /* ************* Controller ************* */
