@@ -175,7 +175,7 @@ paths:
       tags:
         - users
       summary: Get all users in class
-      description: Retrieves a list of all users enrolled in a specific class.
+      description: Retrieves a list of all users in a specific class.
       operationId: getClassUsers
       parameters:
         - in: path
@@ -188,7 +188,7 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/UsersOK'
+          $ref: '#/components/responses/AllUsers'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -212,7 +212,14 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
+            format: uuidµ
+        - in: query
+          name: userType
+          required: true
+          schema:
+            type: string
+            enum: [student, teacher]
+              
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -238,7 +245,7 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/UsersOK'
+          $ref: '#/components/responses/AllStudents'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -264,7 +271,7 @@ paths:
               $ref: '#/components/schemas/CollectionUserCreate'
       responses:
         '201':
-          $ref: '#/components/responses/EntityCreated'
+          $ref: '#/components/responses/CreateOK'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -289,6 +296,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: userType
+          required: true
+          schema:
+            type: string
+            enum: [student, teacher]
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -314,7 +327,7 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/UsersOK'
+          $ref: '#/components/responses/AllStudents'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -331,7 +344,7 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/Allusers'
+          $ref: '#/components/responses/AllUsers'
         '401':
           $ref: '#/components/responses/Unauthorized'
 
@@ -359,7 +372,7 @@ paths:
     patch:
       tags:
         - requests
-      summary: Update a request
+      summary: Accept a request
       description: Update a request by its unique identifier (accept).
       operationId: updateRequest
       parameters:
@@ -371,7 +384,7 @@ paths:
             format: uuid
       responses:
         '204':
-          $ref: '#/components/responses/NoContent'
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1469,10 +1482,8 @@ components:
             $ref: '#/components/schemas/Error'
     UpdateOK:
       description: Update on entity successful.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/EmptyObject'
+    CreateOK: # Creation with empty return, so no ID
+      description: Creation on collection successful.
     UserOK:
       description: User request completed successfully
       content:
@@ -1549,7 +1560,7 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/UserPublic'
-    Allusers:
+    AllUsers:
       description: User collection  request completed successfully
       content:
         application/json:
@@ -1566,14 +1577,30 @@ components:
                 items:
                   type: string
                   format: uuid
+    AllStudents:
+      description: User collection request completed successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              students:
+                type: array
+                items:
+                  type: string
+                  format: uuid
     RequestsOK:
       description: Requests collection request completed successfully
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/JoinRequest'
+            type: object
+            properties:
+              requests:
+                type: array
+                items:
+                  type: string
+                  format: uuid
     ClassesOK:
       description: Classes collection request completed successfully
       content:

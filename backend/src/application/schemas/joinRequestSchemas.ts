@@ -6,13 +6,13 @@ import { JoinRequestType } from "../../core/entities/joinRequest";
  */
 
 export const acceptJoinRequestSchema = z.object({
-    requestId: z.string(),
+    id: z.string(),
 });
 
 export const createJoinRequestSchema = z.object({
-    requesterId: z.string(),
-    classId: z.string(),
-    type: z.nativeEnum(JoinRequestType),
+    requester: z.string(),
+    class: z.string(),
+    userType: z.nativeEnum(JoinRequestType),
 });
 
 export const deleteJoinRequestSchema = z.object({
@@ -20,10 +20,9 @@ export const deleteJoinRequestSchema = z.object({
 });
 
 export const getUserJoinRequestsSchema = z.object({
-    userId: z.string(),
+    idParent: z.string(),
 });
 
 export const getJoinRequestSchema = z.object({
-    userId: z.string(),
-    requestId: z.string(),
+    id: z.string(),
 });

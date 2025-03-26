@@ -12,9 +12,8 @@ import { JoinRequest } from "../../entities/joinRequest";
 export type GetUserJoinRequestsInput = z.infer<typeof getUserJoinRequestsSchema>;
 
 /**
- * @description paramaters to get a single joinRequest of a user
- * @param _userId The id of the user.
- * @param _requestId The id of the joinRequest.
+ * @description paramaters to get a single joinRequest
+ * @param id The id of the joinRequest.
  */
 export type GetJoinRequestInput = z.infer<typeof getJoinRequestSchema>;
 
@@ -25,32 +24,28 @@ export type GetJoinRequestInput = z.infer<typeof getJoinRequestSchema>;
 export class GetUserJoinRequests extends JoinRequestService<GetUserJoinRequestsInput> {
     async execute(input: GetUserJoinRequestsInput): Promise<object> {
         // Get all requests for user
-        const requests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByRequesterId(input.userId);
+        const requests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByRequesterId(input.idParent);
         return {
-            requests: requests.map(request => request.toObject()),
+            requests: requests.map(request => request.id),
         };
     }
 }
 
 /**
- * @description class representing service to get a single joinRequest of a user
+ * @description class representing service to get a single joinRequest
  */
 export class GetJoinRequest extends JoinRequestService<GetJoinRequestInput> {
     async execute(input: GetJoinRequestInput): Promise<object> {
-        console.log(input.requestId, input.userId);
-        // Get all requests
-        const requests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByRequesterId(input.userId);
-
-        // Search for request with id
-        const joinRequest: JoinRequest[] = requests.filter(request => request.id === input.requestId);
+        // Get request
+        const request: JoinRequest = await this.joinRequestRepository.getJoinRequestById(input.id);
 
         // No request found for this user with the given id.
-        if (joinRequest.length === 0) {
+        if (!request) {
             throw {
                 code: ErrorCode.NOT_FOUND,
                 message: "joinRequest not found.",
             } as ApiError;
         }
-        return { request: joinRequest[0].toObject() };
+        return { request: request.toObject() };
     }
 }

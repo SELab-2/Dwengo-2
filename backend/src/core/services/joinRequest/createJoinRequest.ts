@@ -10,10 +10,10 @@ export type CreateJoinRequestInput = z.infer<typeof createJoinRequestSchema>;
 
 export class CreateJoinRequest extends JoinRequestService<CreateJoinRequestInput> {
     constructor(
-        private _joinRequestRepository: IJoinRequestRepository,
+        joinRequestRepository: IJoinRequestRepository,
         private _classRepository: IClassRepository,
     ) {
-        super(_joinRequestRepository);
+        super(joinRequestRepository);
     }
 
     async execute(input: CreateJoinRequestInput): Promise<object> {
@@ -25,9 +25,9 @@ export class CreateJoinRequest extends JoinRequestService<CreateJoinRequestInput
 
     async fromObject(input: CreateJoinRequestInput): Promise<JoinRequest> {
         // Check if user hasn't already requested to join the class
-        const classRequests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByClassId(input.classId);
+        const classRequests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByClassId(input.class);
         for (const req of classRequests) {
-            if (req.requester == input.requesterId) {
+            if (req.requester == input.requester) {
                 throw {
                     code: ErrorCode.CONFLICT,
                     message: "User already has a join request for this class.",
@@ -58,6 +58,6 @@ export class CreateJoinRequest extends JoinRequestService<CreateJoinRequestInput
             } as ApiError;
         } catch (EntityNotFoundError) {}
         */
-        return new JoinRequest(input.requesterId, input.classId, input.type);
+        return new JoinRequest(input.requester, input.class, input.userType);
     }
 }
