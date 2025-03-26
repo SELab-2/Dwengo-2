@@ -1,16 +1,11 @@
+import { z } from "zod";
 import { SubmissionBaseService } from "./submissionBaseService";
-import { ServiceParams } from "../../../config/service";
+import { deleteSubmissionSchema } from "../../../application/schemas";
 
-export class DeleteSubmissionParams implements ServiceParams {
-    constructor(private _id: string) {}
+export type DeleteSubmissionInput = z.infer<typeof deleteSubmissionSchema>;
 
-    public get id(): string {
-        return this._id;
-    }
-}
-
-export class DeleteSubmission extends SubmissionBaseService<DeleteSubmissionParams> {
-    async execute(input: DeleteSubmissionParams): Promise<object> {
+export class DeleteSubmission extends SubmissionBaseService<DeleteSubmissionInput> {
+    async execute(input: DeleteSubmissionInput): Promise<object> {
         await this.submissionRepository.delete(input.id);
         return {};
     }

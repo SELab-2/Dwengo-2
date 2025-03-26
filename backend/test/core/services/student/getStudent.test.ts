@@ -2,9 +2,9 @@ import { GetUser } from "../../../../src/core/services/user/getUser";
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { Student } from "../../../../src/core/entities/student";
 import { EntityNotFoundError } from "../../../../src/config/error";
-import { GetUserParams } from "../../../../src/core/services/user";
 import { ITeacherRepository } from "../../../../src/core/repositories/teacherRepositoryInterface";
 import { UserType } from "../../../../src/core/entities/user";
+import { ApiError, ErrorCode } from "../../../../src/application/types";
 
 describe("getStudent Service", () => {
   let getStudentService: GetUser;
@@ -30,7 +30,7 @@ describe("getStudent Service", () => {
       "1"
     );
 
-    const params: GetUserParams = new GetUserParams("1", UserType.STUDENT);
+    const params = {id: "1", userType: UserType.STUDENT};
 
     mockStudentRepository.getStudentById.mockResolvedValue(student);
     const result = await getStudentService.execute(params);
@@ -42,9 +42,12 @@ describe("getStudent Service", () => {
   test("Should throw error", async () => {
     mockStudentRepository.getStudentById.mockRejectedValue(new EntityNotFoundError("Student not found"));
     
-    const params: GetUserParams = new GetUserParams("999", UserType.STUDENT);
+    const params = {id: "999", userType: UserType.STUDENT};
 
-    await expect(getStudentService.execute(params)).rejects.toThrow();
+    await expect(getStudentService.execute(params)).rejects.toEqual({
+      code: ErrorCode.NOT_FOUND,
+      message:  `User ${UserType.STUDENT} with ID 999 not found`,
+    } as ApiError);
     expect(mockStudentRepository.getStudentById).toHaveBeenCalledWith("999");
   });
 });

@@ -1,4 +1,4 @@
-import { UpdateGroup, UpdateGroupParams } from '../../../../src/core/services/group/updateGroup';
+import { UpdateGroup } from '../../../../src/core/services/group/updateGroup';
 import { Group } from '../../../../src/core/entities/group';
 import { DatabaseError } from '../../../../src/config/error';
 
@@ -17,7 +17,10 @@ describe('UpdateGroup', () => {
     });
 
     test('Should update group members successfully', async () => {
-        const inputParams = new UpdateGroupParams("group-123", ["user-1", "user-2", "user-3"]);
+        const inputParams = {
+            id: "group-123",
+            memberIds: ["user-1", "user-2", "user-3"]
+        }
         const existingGroup = new Group(["user-1", "user-2"], "class-456", "group-123");
 
         mockGroupRepository.getById.mockResolvedValue(existingGroup);
@@ -31,7 +34,10 @@ describe('UpdateGroup', () => {
     });
 
     test('Should throw a DatabaseError if update fails', async () => {
-        const inputParams = new UpdateGroupParams("group-123", ["user-1", "user-2", "user-3"]);
+        const inputParams = {
+            id: "group-123",
+            memberIds: ["user-1", "user-2", "user-3"]
+        }
         mockGroupRepository.getById.mockRejectedValue(new DatabaseError('Retrieval failed'));
 
         await expect(updateGroup.execute(inputParams)).rejects.toThrow(DatabaseError);

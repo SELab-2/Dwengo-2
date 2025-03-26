@@ -1,20 +1,23 @@
-import { UserBaseService } from "./userBaseService";
-import { Service, ServiceParams } from "../../../config/service";
+import { z } from "zod";
+import { getClassUsersSchema } from "../../../application/schemas/userSchemas";
 
-export class GetClassUsersParams implements ServiceParams {
-    constructor(private _classId: string) {}
+import { Service } from "../../../config/service";
+import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
+import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
 
-    public get classId(): string {
-        return this._classId;
-    }
-}
+export type GetClassUsersInput = z.infer<typeof getClassUsersSchema>;
 
-export class GetClassUsers extends UserBaseService<GetClassUsersParams> {
-    async execute(input: GetClassUsersParams): Promise<object> {
-        const students: object[] = (await this.studentRepository.getClassStudents(input.classId)).map(s =>
+export class GetClassUsers implements Service<GetClassUsersInput> {
+    constructor(
+        private studentRepository: IStudentRepository,
+        private teacherRepository: ITeacherRepository,
+    ) {}
+
+    async execute(input: GetClassUsersInput): Promise<object> {
+        const students: object[] = (await this.studentRepository.getClassStudents(input.idParent)).map(s =>
             s.toObject(),
         );
-        const teachers: object[] = (await this.teacherRepository.getClassTeachers(input.classId)).map(t =>
+        const teachers: object[] = (await this.teacherRepository.getClassTeachers(input.idParent)).map(t =>
             t.toObject(),
         );
         return { teachers: teachers, students: students };
