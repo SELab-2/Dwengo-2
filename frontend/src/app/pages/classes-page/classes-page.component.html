@@ -1,0 +1,23 @@
+<div class="classes">
+    <button (click)="createClass()">Create</button>
+    
+    <br>
+
+    <label for="nameFilterInput">Filter your classes by name</label>
+    <input
+        #nameFilter
+        placeholder="..."
+        (keyup.enter)="classNameFilter(nameFilter.value)"
+        class="lg-text-input"
+        id="nameFilterInput" />
+
+    <ul>
+        @for (class of classes; track class.classId) {
+            <li>
+                <p>{{ class.name }}</p>
+            </li>
+        } @empty {
+            <p>No classes found</p>
+        }
+    </ul>
+</div>
