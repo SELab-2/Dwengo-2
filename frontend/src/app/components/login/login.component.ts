@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { AuthenticationService } from '../../services/authentication.service';
+import { UserLoginCredentials } from '../../interfaces';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -11,19 +14,46 @@ import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angula
 export class LoginComponent {
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
+  constructor(
+    private formBuilder: FormBuilder,
+    private authenticationService: AuthenticationService
+  ) {
+    this.loginForm = this.buildLoginForm();
   }
 
   login() {
-    // TODO: include logic
     if(this.loginForm.valid) {
-      window.alert(`Login successful!\n${this.loginForm.value.email}`);
+      const loginData = this.extractLoginFormValues();
+      this.sendLoginData(loginData);
     } else {
       console.error('Invalid login form');
     }
+  }
+
+  private sendLoginData(loginData: UserLoginCredentials) {
+    this.authenticationService.login(loginData).pipe(
+      catchError((error) => {
+        window.alert(`Login failed: ${error.message}`);
+        return of(null);
+      }))
+      .subscribe((response) => {
+        if (response) {
+          window.alert(`Login successful: ${response.message}`);
+        }
+      });
+  }
+
+  private extractLoginFormValues(): UserLoginCredentials {
+    return {
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password
+    }
+  }
+
+  private buildLoginForm(): FormGroup {
+    return this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
   }
 }
