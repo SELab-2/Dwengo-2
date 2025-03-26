@@ -16,11 +16,15 @@ export class ClassComponent {
 
   private readonly route = inject(ActivatedRoute);
 
+  // The class
+  _class?: Class;
+
+  // Is the class of this component available from the services?
+  available: Boolean = false;
+
   public constructor(
     private classesService: ClassesService
   ) {}
-
-  _class?: Class;
 
   public ngOnInit() {
     const id: string | null = this.route.snapshot.paramMap.get('id');
@@ -31,6 +35,7 @@ export class ClassComponent {
       classObservable.pipe().subscribe(
         (response) => {
           if(response) {
+            this.available = true;
             this._class = response;
           }
         }
