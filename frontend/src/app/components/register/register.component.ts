@@ -26,24 +26,34 @@ export class RegisterComponent {
     if (this.registrationForm.valid) {
       if (this.registrationForm.value.password === this.registrationForm.value.confirmPassword) {
         const registrationData = this.extractRegistrationFormValues();
-        
-        this.authenticationService.register(registrationData).pipe(
-          catchError((error) => {
-            window.alert(`Registration failed: ${error.message}`);
-            return of(null);
-          }))
-          .subscribe((response) => {
-            if (response) {
-              window.alert(`Registration successful: ${response.id}`);
-            }
-          });
-  
+        this.sendRegisterData(registrationData);
       } else {
         window.alert("Passwords don't match!");
       }
     } else {
       window.alert("Invalid registration");
     }
+  }
+
+  /**
+   * Use the authentication service to send the registration data to the server.
+   * 
+   * This function sends the registration data through to the server
+   * and handles the response.
+   * 
+   * @param registrationData the registration data to send to the server
+   */
+  private sendRegisterData(registrationData: UserRegistration) {
+    this.authenticationService.register(registrationData).pipe(
+      catchError((error) => {
+        window.alert(`Registration failed: ${error.message}`);
+        return of(null);
+      }))
+      .subscribe((response) => {
+        if (response) {
+          window.alert(`Registration successful: ${response.id}`);
+        }
+      });
   }
 
   private extractRegistrationFormValues(): UserRegistration {
