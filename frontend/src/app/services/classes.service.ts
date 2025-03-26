@@ -38,7 +38,7 @@ import { NewClass } from "../interfaces/classes/newClass";
 
     public classWithId(id: string): Observable<Class> {
         // TODO
-        if(id === "123") {
+        if(id === "321") {
             return of({
                 name: "Math",
                 description: "Mathematics",

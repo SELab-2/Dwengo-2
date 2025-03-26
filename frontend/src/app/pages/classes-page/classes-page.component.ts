@@ -76,7 +76,7 @@ export class ClassesPageComponent {
       .pipe()
       .subscribe((classesReponse) => {
         classes = classesReponse;
-      })
+      });
 
     return classes.filter(this.classFilter);
   }
