@@ -1,6 +1,14 @@
 import { Component } from '@angular/core';
 import { Class } from '../../interfaces/classes/class';
 import { CommonModule } from "@angular/common";
+import { ClassesService } from '../../services/classes.service';
+
+import { MiniClassComponent } from '../../components/mini-class/mini-class.component';
+import { MatList, MatListItem } from '@angular/material/list'
+import { MatToolbar } from '@angular/material/toolbar'
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
 
 // Type alias
 type classFilterType = (c: Class) => Boolean;
@@ -9,12 +17,24 @@ type classFilterType = (c: Class) => Boolean;
   standalone: true,
   selector: 'app-classes-page',
   imports: [
-    CommonModule
+    CommonModule,
+    MiniClassComponent,
+
+    // Material design
+    MatList,
+    MatListItem,
+    MatToolbar,
+    MatIconModule,
+    MatButtonModule
   ],
   templateUrl: './classes-page.component.html',
   styleUrl: './classes-page.component.less'
 })
 export class ClassesPageComponent {
+
+  constructor(
+    private classesService: ClassesService
+  ) {}
 
   // Class filter used in the `classes` getter
   // By default we don't filter any classes (return true)
@@ -30,27 +50,29 @@ export class ClassesPageComponent {
 
   /**
    * Filter the classes by a name, 
-   * filter passes as long as the class name contains the given anme
+   * filter passes as long as the class name contains the given name.
    * @param name Name of the class
    */
   public classNameFilter(name: string) {
-    this.classFilter = (c: Class) => c.name.includes(name);
+    const lowerCaseName = name.toLowerCase();
+    this.classFilter = (c: Class) => c
+      .name
+      .toLowerCase()
+      .includes(lowerCaseName);
   }
 
   /**
-   * Get all classes of the currently logged in user
-   * Applies `classFilter`
+   * Get all classes of the currently logged in user.
+   * Applies the currently installed filter.
    */
   public get classes(): Class[] {
-    const classes = [
-      {
-        name: "Math",
-        description: "Mathematics",
-        targetAudience: "Students",
-        teacherId: "123",
-        classId: "321"
-      }
-    ];
+    let classes: Class[] = [];
+
+    this.classesService.classesOfUSer()
+      .pipe()
+      .subscribe((classesReponse) => {
+        classes = classesReponse;
+      })
 
     return classes.filter(this.classFilter);
   }
