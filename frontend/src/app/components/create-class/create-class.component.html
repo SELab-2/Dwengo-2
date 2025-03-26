@@ -1,10 +1,10 @@
 <div class="create-class">
     <mat-card>
-        <mat-card-title>Create a class</mat-card-title>
+        <mat-card-title i18n>Create a class</mat-card-title>
         <mat-card-content>
             <form [formGroup]="createForm" (ngSubmit)="create()" class="create-class-form">
                 <mat-form-field>
-                    <mat-label for="name">Class name</mat-label>
+                    <mat-label for="name" i18n>Class name</mat-label>
                     <input 
                         matInput 
                         name="name" 
@@ -14,7 +14,7 @@
                 </mat-form-field>
                 <br>
                 <mat-form-field>
-                    <mat-label for="description">Description</mat-label>
+                    <mat-label for="description" i18n>Description</mat-label>
                     <textarea 
                         matInput
                         name="description" 
@@ -24,7 +24,7 @@
                 </mat-form-field>
                 <br>
                 <mat-form-field>
-                    <mat-label for="target-audience">Target audience</mat-label>
+                    <mat-label for="target-audience" i18n>Target audience</mat-label>
                     <input 
                         matInput
                         name="target-audience" 
@@ -33,7 +33,7 @@
                         required >
                 </mat-form-field>
                 <br>
-                <button mat-raised-button type="submit" [disabled]="createForm.invalid">  
+                <button mat-raised-button type="submit" [disabled]="createForm.invalid" i18n>  
                     Create
                 </button>
             </form>

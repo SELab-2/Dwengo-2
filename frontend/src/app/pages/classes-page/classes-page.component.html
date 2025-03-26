@@ -1,7 +1,7 @@
 <div class="classes">
     <div id="tool-container">
         <mat-form-field>
-            <mat-label>Name</mat-label>
+            <mat-label i18n>Name</mat-label>
             <input
                 matInput
                 #nameFilter
@@ -11,7 +11,7 @@
                 id="nameFilterInput" />
         </mat-form-field>
 
-        <button mat-fab extended (click)="createClass()">
+        <button mat-fab extended (click)="createClass()" i18n>
             <mat-icon>add</mat-icon>
             Create
         </button>
@@ -24,7 +24,7 @@
     }
 
     <div id="center-container">
-        <h2>Your classes</h2>
+        <h2 i18n>Your classes</h2>
     </div>
     <div id="center-container">
         <mat-list>
@@ -33,7 +33,7 @@
                     <app-mini-class [_class]="class"></app-mini-class>
                 </li>
             } @empty {
-                <p>No classes found</p>
+                <p i18n>No classes found</p>
             }
         </mat-list>
     </div>
