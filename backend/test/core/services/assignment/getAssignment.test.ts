@@ -1,11 +1,11 @@
-import { GetAssignment, GetAssignmentParams } from "../../../../src/core/services/assignment/getAssignment";
+import { GetAssignment, GetAssignmentInput } from "../../../../src/core/services/assignment/getAssignment";
 import { IAssignmentRepository } from "../../../../src/core/repositories/assignmentRepositoryInterface"; 
 import { Assignment } from "../../../../src/core/entities/assignment";
 import { EntityNotFoundError } from "../../../../src/config/error";
 
 describe("getAssignment Service", () => {
   let getAssignmentService: GetAssignment;
-  let getAssignmentParams: GetAssignmentParams;
+  let getAssignmentParams: GetAssignmentInput;
   let mockAssignmentRepository: jest.Mocked<IAssignmentRepository>;
   let date: Date
 
@@ -16,7 +16,9 @@ describe("getAssignment Service", () => {
 
     getAssignmentService = new GetAssignment(mockAssignmentRepository);
 
-    getAssignmentParams = new GetAssignmentParams("1");
+    getAssignmentParams = {
+      id: "1"
+    };
 
     date = new Date();
   });

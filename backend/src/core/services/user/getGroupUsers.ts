@@ -1,17 +1,17 @@
-import { UserBaseService } from "./userBaseService";
-import { ServiceParams } from "../../../config/service";
+import { z } from "zod";
+import { getGroupUsersSchema } from "../../../application/schemas/userSchemas";
+import { Service } from "../../../config/service";
+import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 
-export class GetGroupUsersParams implements ServiceParams {
-    constructor(private _groupId: string) {}
+export type GetGroupUsersInput = z.infer<typeof getGroupUsersSchema>;
 
-    public get groupId(): string {
-        return this._groupId;
-    }
-}
+export class GetGroupUsers implements Service<GetGroupUsersInput> {
+    constructor(private studentRepository: IStudentRepository) {}
 
-export class GetGroupUsers extends UserBaseService<GetGroupUsersParams> {
-    async execute(input: GetGroupUsersParams): Promise<object> {
-        const students: object[] = (await this.studentRepository.getByGroupId(input.groupId)).map(s => s.toObject());
+    async execute(input: GetGroupUsersInput): Promise<object> {
+        const students: object[] = (await this.studentRepository.getByGroupId(input.idParent)).map(s =>
+            s.toObject(),
+        );
         return { students: students };
     }
 }

@@ -1,27 +1,21 @@
 import { Express } from "express";
-import {
-    assignmentRoutes,
-    groupRoutes,
-    classRoutes,
-    joinRequestRoutes,
-    messageRoutes,
-    questionThreadRoutes,
-    usersRoutes,
-    authenticationRoutes,
-} from "../application/routes";
+import { middleware } from "./middleware";
 import { controllers } from "../config/controllers";
+// eslint-disable-next-line import/order
+import * as Resources from "../application/resources";
 
 /**
  * Setup all routes for the Dwengo-2 backend application
  * @param app Express instance
  */
 export const setupRoutes = (app: Express) => {
-    usersRoutes(app, controllers.users);
-    classRoutes(app, controllers.class);
-    groupRoutes(app, controllers.group);
-    assignmentRoutes(app, controllers.assignment);
-    joinRequestRoutes(app, controllers.joinRequest);
-    questionThreadRoutes(app, controllers.questionThread);
-    messageRoutes(app, controllers.message);
-    authenticationRoutes(app, controllers.authentication);
+    Resources.assignmentRoutes(app, controllers.assignment, [middleware.auth]);
+    Resources.authenticationRoutes(app, controllers.authentication);
+    Resources.classRoutes(app, controllers.class, [middleware.auth]);
+    Resources.groupRoutes(app, controllers.group, [middleware.auth]);
+    // TODO Resources.joinRequestRoutes(app, controllers.joinRequest, [middleware.auth]);
+    // TODO Resources.messageRoutes(app, controllers.message, [middleware.auth]);
+    // TODO Resources.questionThreadRoutes(app, controllers.questionThread, [middleware.auth]);
+    Resources.submissionRoutes(app, controllers.submission, [middleware.auth]);
+    Resources.userRoutes(app, controllers.user, [middleware.auth]);
 };

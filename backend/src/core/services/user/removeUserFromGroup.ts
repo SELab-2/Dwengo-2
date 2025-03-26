@@ -15,16 +15,16 @@ export class RemoveUserFromGroup extends RemoveUserFrom {
     /**
      * Removes a user from a group.
      *
-     * @param userId - The ID of the user to be removed.
-     * @param otherId - The ID of the group.
+     * @param id - The ID of the user to be removed.
+     * @param idParent - The ID of the group.
      * @param userType - The type of the user (should be student).
      *
      * @returns A promise that resolves when the user is removed.
      * @throws ApiError if the user type is not a student.
      */
-    public async removeUser(userId: string, otherId: string, userType: UserType): Promise<void> {
+    public async removeUser(id: string, idParent: string, userType: UserType): Promise<void> {
         if (userType == UserType.STUDENT) {
-            await this.studentRepository.removeFromGroup(userId, otherId);
+            await this.studentRepository.removeFromGroup(id, idParent);
         } else {
             throw {
                 code: ErrorCode.BAD_REQUEST,

@@ -12,7 +12,7 @@ describe("GetAllUsers Service", () => {
         studentRepository = { getAll: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
         teacherRepository = { getAll: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
 
-        getAllUsers = new GetAllUsers(teacherRepository, studentRepository);
+        getAllUsers = new GetAllUsers(studentRepository, teacherRepository);
     });
 
     it("should return all students and teachers as objects", async () => {

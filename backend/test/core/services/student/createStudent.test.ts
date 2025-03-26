@@ -4,7 +4,6 @@ import { IStudentRepository } from '../../../../src/core/repositories/studentRep
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
 import {
   CreateUser,
-  CreateUserParams,
 } from '../../../../src/core/services/user/createUser';
 
 const mockStudentRepository = {
@@ -29,14 +28,14 @@ describe('CreateStudent', () => {
   test('Should throw error because of invalid email', async () => {
     await expect(
       createStudent.execute(
-        new CreateUserParams(
-          'incorrect-email',
-          'John',
-          'Doe',
-          'hashedpassword123',
-          'Harvard',
-          UserType.STUDENT,
-        ),
+        {
+          email: 'incorrect-email',
+          firstName: 'John',
+          familyName: 'Doe',
+          passwordHash: 'hashedpassword123',
+          schoolName: 'Harvard',
+          userType: UserType.STUDENT,
+        },
       ),
     ).rejects.toEqual({
       code: ErrorCode.BAD_REQUEST,
@@ -46,18 +45,16 @@ describe('CreateStudent', () => {
 
   test('Should throw error if email is already in use by student', async () => {
     mockStudentRepository.checkByEmail.mockResolvedValue(true);
-
+    const params = {
+      email: 'test@example.com',
+      firstName: 'John',
+      familyName: 'Doe',
+      passwordHash: 'hashedpassword123',
+      schoolName: 'Oxford',
+      userType: UserType.STUDENT,
+    }
     await expect(
-      createStudent.execute(
-        new CreateUserParams(
-          'test@example.com',
-          'John',
-          'Doe',
-          'hashedpassword123',
-          'Oxford',
-          UserType.STUDENT
-        ),
-      ),
+      createStudent.execute(params),
     ).rejects.toEqual({
       code: ErrorCode.CONFLICT,
       message: 'Email already in use.',
@@ -71,17 +68,17 @@ describe('CreateStudent', () => {
 
   test('Should throw error if email is already in use by teacher', async () => {
     mockTeacherRepository.checkByEmail.mockResolvedValue(true);
-
+    const params = {
+      email: 'test@example.com',
+      firstName: 'John',
+      familyName: 'Doe',
+      passwordHash: 'hashedpassword123',
+      schoolName: 'Oxford',
+      userType: UserType.STUDENT,
+    }
     await expect(
       createStudent.execute(
-        new CreateUserParams(
-          'test@example.com',
-          'John',
-          'Doe',
-          'hashedpassword123',
-          'Oxford',
-          UserType.STUDENT
-        ),
+        params,
       ),
     ).rejects.toEqual({
       code: ErrorCode.CONFLICT,

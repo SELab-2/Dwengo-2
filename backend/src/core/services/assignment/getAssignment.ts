@@ -1,24 +1,17 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { z } from "zod";
+import { getAssignmentSchema } from "../../../application/schemas/assignmentSchemas";
+import { Service } from "../../../config/service";
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
 
-/**
- * Wrapper class for the input parameters of the GetAssignment service.
- */
-export class GetAssignmentParams implements ServiceParams {
-    public constructor(private _id: string) {}
-
-    public get id(): string {
-        return this._id;
-    }
-}
+export type GetAssignmentInput = z.infer<typeof getAssignmentSchema>;
 
 /**
  * Service class to get an assignment.
  */
-export class GetAssignment implements Service<GetAssignmentParams> {
+export class GetAssignment implements Service<GetAssignmentInput> {
     public constructor(private assignmentRepository: IAssignmentRepository) {}
 
-    async execute(input: GetAssignmentParams): Promise<object> {
+    async execute(input: GetAssignmentInput): Promise<object> {
         return (await this.assignmentRepository.getById(input.id)).toObject();
     }
 }

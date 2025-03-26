@@ -1,17 +1,15 @@
-import { UserBaseService } from "./userBaseService";
-import { ServiceParams } from "../../../config/service";
+import { z } from "zod";
+import { getAssignmentUsersSchema } from "../../../application/schemas/userSchemas";
+import { Service } from "../../../config/service";
+import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 
-export class GetAssignmentUsersParams implements ServiceParams {
-    constructor(private _assignmentId: string) {}
+export type GetAssignmentUsersInput = z.infer<typeof getAssignmentUsersSchema>;
 
-    public get assignmentId(): string {
-        return this._assignmentId;
-    }
-}
+export class GetAssignmentUsers implements Service<GetAssignmentUsersInput> {
+    constructor(private studentRepository: IStudentRepository) {}
 
-export class GetAssignmentUsers extends UserBaseService<GetAssignmentUsersParams> {
-    async execute(input: GetAssignmentUsersParams): Promise<object> {
-        const students: object[] = (await this.studentRepository.getByAssignmentId(input.assignmentId)).map(s =>
+    async execute(input: GetAssignmentUsersInput): Promise<object> {
+        const students: object[] = (await this.studentRepository.getByAssignmentId(input.idParent)).map(s =>
             s.toObject(),
         );
         return { students: students };

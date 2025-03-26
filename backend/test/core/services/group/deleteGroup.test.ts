@@ -1,4 +1,4 @@
-import { DeleteGroup, DeleteGroupParams } from '../../../../src/core/services/group/deleteGroup';
+import { DeleteGroup } from '../../../../src/core/services/group/deleteGroup';
 import { DatabaseError } from '../../../../src/config/error';
 
 // Mock repository
@@ -15,20 +15,20 @@ describe('DeleteGroup', () => {
     });
 
     test('Should delete a group successfully', async () => {
-        const inputParams = new DeleteGroupParams("group-123");
+        const id = "group-123";
         mockGroupRepository.delete.mockResolvedValue(undefined);
 
-        const result = await deleteGroup.execute(inputParams);
+        const result = await deleteGroup.execute({id});
 
         expect(result).toEqual({});
-        expect(mockGroupRepository.delete).toHaveBeenCalledWith("group-123");
+        expect(mockGroupRepository.delete).toHaveBeenCalledWith(id);
     });
 
     test('Should throw a DatabaseError if deletion fails', async () => {
-        const inputParams = new DeleteGroupParams("group-123");
+        const id = "group-123";
         mockGroupRepository.delete.mockRejectedValue(new DatabaseError('Deletion failed'));
 
-        await expect(deleteGroup.execute(inputParams)).rejects.toThrow(DatabaseError);
+        await expect(deleteGroup.execute({id})).rejects.toThrow(DatabaseError);
         expect(mockGroupRepository.delete).toHaveBeenCalledWith("group-123");
     });
 });

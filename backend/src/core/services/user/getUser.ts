@@ -1,52 +1,56 @@
-import { Service, ServiceParams } from "../../../config/service";
-import { User, UserType } from "../../entities/user";
+import { z } from "zod";
+import { getUserSchema } from "../../../application/schemas/userSchemas";
+import { ApiError, ErrorCode } from "../../../application/types";
+import { EntityNotFoundError } from "../../../config/error";
+import { Service } from "../../../config/service";
+import { UserType } from "../../entities/user";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
 
-/**
- * @description Parameters required to get a user.
- * @param _id - The ID of the user to get.
- * @param _userType - The type of the user (student or teacher).
- */
-export class GetUserParams implements ServiceParams {
-    constructor(
-        private _id: string,
-        private _userType: UserType,
-    ) {}
-
-    public get id() {
-        return this._id;
-    }
-
-    public get userType() {
-        return this._userType;
-    }
-}
+export type GetUserInput = z.infer<typeof getUserSchema>;
 
 /**
  * @description Class representing the service for getting a user.
  * @param {IStudentRepository} studentRepository - The student repository.
  * @param {ITeacherRepository} teacherRepository - The teacher repository.
  */
-export class GetUser implements Service<GetUserParams> {
+export class GetUser implements Service<GetUserInput> {
     constructor(
         private studentRepository: IStudentRepository,
         private teacherRepository: ITeacherRepository,
     ) {}
+
     /**
-     * Gets a user from the DB.
+     * Gets a user from the DB by either ID or email.
      *
-     * @param id ID of the user to get from the DB.
-     * @returns the user with the given id.
+     * @param input Parameters containing either ID or email and the user type
+     * @returns the user with the given id or email.
      *
      * @throws Error if the user is not present.
      */
-    async execute(input: GetUserParams): Promise<object> {
-        const user: User =
+    async execute(input: GetUserInput): Promise<object> {
+        const { getById, getByEmail } =
             input.userType === UserType.STUDENT
-                ? await this.studentRepository.getById(input.id)
-                : await this.teacherRepository.getById(input.id);
+                ? {
+                      getById: (id: string) => this.studentRepository.getById(id),
+                      getByEmail: (email: string) => this.studentRepository.getByEmail(email),
+                  }
+                : {
+                      getById: (id: string) => this.teacherRepository.getById(id),
+                      getByEmail: (email: string) => this.teacherRepository.getByEmail(email),
+                  };
 
-        return user;
+        try {
+            const user = await (input.id ? getById(input.id) : getByEmail(input.email as string));
+            return user;
+        } catch (error) {
+            if (error instanceof EntityNotFoundError) {
+                throw {
+                    code: ErrorCode.NOT_FOUND,
+                    message: `User ${input.userType} with ${input.id ? `ID ${input.id}` : `email ${input.email}`} not found`,
+                } as ApiError;
+            }
+            throw error;
+        }
     }
 }

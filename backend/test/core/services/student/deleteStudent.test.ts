@@ -2,7 +2,6 @@ import { DeleteUser } from '../../../../src/core/services/user/deleteUser';
 import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
 import { Student } from '../../../../src/core/entities/student';
 import { EntityNotFoundError } from '../../../../src/config/error';
-import { DeleteUserParams } from '../../../../src/core/services/user/deleteUser';
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
 import { User, UserType } from '../../../../src/core/entities/user';
 
@@ -10,8 +9,8 @@ describe('deleteStudent Service', () => {
   let deleteStudentService: DeleteUser;
   let mockStudentRepository: jest.Mocked<IStudentRepository>;
   let mockTeacherRepository: jest.Mocked<ITeacherRepository>;
-  let params: DeleteUserParams;
-
+  let params: {id: string; userType: UserType};
+  
   beforeEach(() => {
     mockStudentRepository = {
       getById: jest.fn(),
@@ -24,7 +23,7 @@ describe('deleteStudent Service', () => {
       mockTeacherRepository,
     );
 
-    params = new DeleteUserParams('1', UserType.STUDENT);
+    params = {id: '1', userType: UserType.STUDENT};
   });
 
   test('Should throw error if student not found in database', async () => {

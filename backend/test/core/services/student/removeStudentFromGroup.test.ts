@@ -1,7 +1,6 @@
 import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
 import {
   RemoveUserFromGroup,
-  RemoveUserFromParams,
 } from '../../../../src/core/services/user';
 import { UserType } from '../../../../src/core/entities/user';
 import { ErrorCode } from '../../../../src/application/types';
@@ -18,13 +17,16 @@ describe('RemoveStudentFromGroup', () => {
   });
 
   it('should call removeStudentFromGroup on the repository with correct parameters', async () => {
-    const params = new RemoveUserFromParams('123', '456', UserType.STUDENT);
+    const id = '123';
+    const idParent = '456';
+    const userType = UserType.STUDENT;
+    const params = { id, idParent, userType };
 
     await removeStudentFromGroup.execute(params);
 
     expect(mockStudentRepository.removeFromGroup).toHaveBeenCalledWith(
-      '123',
-      '456',
+      id,
+      idParent,
     );
     expect(mockStudentRepository.removeFromGroup).toHaveBeenCalledTimes(
       1,
@@ -35,7 +37,10 @@ describe('RemoveStudentFromGroup', () => {
     mockStudentRepository.removeFromGroup.mockRejectedValue(
       new Error('Student not found'),
     );
-    const params = new RemoveUserFromParams('123', '456', UserType.TEACHER);
+    const id = '123';
+    const idParent = '456';
+    const userType = UserType.TEACHER;
+    const params = { id, idParent, userType };
 
     await expect(removeStudentFromGroup.execute(params)).rejects.toEqual({
       code: ErrorCode.BAD_REQUEST,
@@ -47,7 +52,10 @@ describe('RemoveStudentFromGroup', () => {
     mockStudentRepository.removeFromGroup.mockRejectedValue(
       new Error('Student not found'),
     );
-    const params = new RemoveUserFromParams('123', '456', UserType.STUDENT);
+    const id = '123';
+    const idParent = '456';
+    const userType = UserType.STUDENT;
+    const params = { id, idParent, userType };
 
     await expect(removeStudentFromGroup.execute(params)).rejects.toThrow(
       'Student not found',

@@ -1,4 +1,4 @@
-import { CreateGroup, CreateGroupParams } from '../../../../src/core/services/group/createGroup';
+import { CreateGroup } from '../../../../src/core/services/group/createGroup';
 import { Group } from '../../../../src/core/entities/group';
 import { DatabaseError } from '../../../../src/config/error';
 
@@ -16,8 +16,11 @@ describe('CreateGroup', () => {
     });
 
     test('Should create a group successfully', async () => {
-        const inputParams = new CreateGroupParams(["user-123", "user-456"], "class-789");
-        const createdGroup = new Group(["user-123", "user-456"], "class-789", "group-999");
+        const inputParams = {
+            memberIds: ["user-123", "user-456"],
+            assignmentId: "assigment-789",
+        }
+        const createdGroup = new Group(["user-123", "user-456"], "assigment-789", "group-999");
 
         mockGroupRepository.create.mockResolvedValue(createdGroup);
 
@@ -28,7 +31,10 @@ describe('CreateGroup', () => {
     });
 
     test('Should throw a DatabaseError if creation fails', async () => {
-        const inputParams = new CreateGroupParams(["user-123", "user-456"], "class-789");
+        const inputParams = {
+            memberIds: ["user-123", "user-456"],
+            assignmentId: "assigment-789",
+        }
         mockGroupRepository.create.mockRejectedValue(new DatabaseError('Creation failed'));
 
         await expect(createGroup.execute(inputParams)).rejects.toThrow(DatabaseError);

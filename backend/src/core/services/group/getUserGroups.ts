@@ -1,18 +1,13 @@
+import { z } from "zod";
 import { GroupService } from "./groupService";
-import { ServiceParams } from "../../../config/service";
+import { getUserGroupsSchema } from "../../../application/schemas/groupSchemas";
 import { Group } from "../../entities/group";
 
-export class GetUserGroupsParams implements ServiceParams {
-    constructor(private _userId: string) {}
+export type GetUserGroupsInput = z.infer<typeof getUserGroupsSchema>;
 
-    get userId(): string {
-        return this._userId;
-    }
-}
-
-export class GetUserGroups extends GroupService<GetUserGroupsParams> {
-    async execute(input: GetUserGroupsParams): Promise<object> {
-        const groups: Group[] = await this.groupRepository.getByUserId(input.userId);
+export class GetUserGroups extends GroupService<GetUserGroupsInput> {
+    async execute(input: GetUserGroupsInput): Promise<object> {
+        const groups: Group[] = await this.groupRepository.getByUserId(input.id);
         return { groups: groups.map(group => group.toObject()) };
     }
 }
