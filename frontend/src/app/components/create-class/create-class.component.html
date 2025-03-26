@@ -1,22 +1,37 @@
 <div class="create-class">
-    <form [formGroup]="createForm" (ngSubmit)="create()">
-        <div class="class-name">
-            <label for="name">Class name:</label>
-            <input name="name" id="name" formControlName="name" required>
-        </div>
-
-        <div class="class-description">
-            <label for="description">Description</label>
-            <input name="description" id="description" formControlName="description" required>
-        </div>
-
-        <div class="class-target-audience">
-            <label for="target-audience">Target audience</label>
-            <input name="target-audience" id="target-audience" formControlName="targetAudience" required>
-        </div>
-
-        <div class="class-submit">
-            <button i18n type="submit" [disabled]="createForm.invalid">Create</button>
-        </div>
+    <form [formGroup]="createForm" (ngSubmit)="create()" class="create-class-form">
+        <mat-form-field>
+            <mat-label for="name">Class name</mat-label>
+            <input 
+                matInput 
+                name="name" 
+                id="name" 
+                formControlName="name" 
+                required >
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label for="description">Description</mat-label>
+            <textarea 
+                matInput
+                name="description" 
+                id="description" 
+                formControlName="description" 
+                required ></textarea>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label for="target-audience">Target audience</mat-label>
+            <input 
+                matInput
+                name="target-audience" 
+                id="target-audience" 
+                formControlName="targetAudience" 
+                required >
+        </mat-form-field>
+        <br>
+        <button mat-raised-button type="submit" [disabled]="createForm.invalid">  
+            Create
+        </button>
     </form>
 </div>
