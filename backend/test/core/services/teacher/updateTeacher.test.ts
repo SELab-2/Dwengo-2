@@ -33,6 +33,7 @@ describe('UpdateTeacher Service', () => {
       '1',
     );
     teacherRepository.getTeacherById.mockResolvedValue(teacher);
+    teacherRepository.updateTeacher.mockResolvedValue(teacher);
     teacherRepository.checkTeacherByEmail.mockResolvedValue(false);
 
     const params = {
@@ -64,7 +65,7 @@ describe('UpdateTeacher Service', () => {
         schoolName: 'newSchool',
       }),
     );
-    expect(result).toEqual({});
+    expect(result).toEqual(teacher.toObject());
   });
 
   it('should update one field successfully', async () => {
@@ -77,6 +78,7 @@ describe('UpdateTeacher Service', () => {
       '1',
     );
     teacherRepository.getTeacherById.mockResolvedValue(teacher);
+    teacherRepository.updateTeacher.mockResolvedValue(teacher);
     teacherRepository.checkTeacherByEmail.mockResolvedValue(false);
 
     const params = {
@@ -104,7 +106,7 @@ describe('UpdateTeacher Service', () => {
         schoolName: 'oldSchool',
       }),
     );
-    expect(result).toEqual({});
+    expect(result).toEqual(teacher.toObject());
   });
 
   it('should throw error if email is the same as old one', async () => {
@@ -117,6 +119,7 @@ describe('UpdateTeacher Service', () => {
       '1',
     );
     teacherRepository.getTeacherById.mockResolvedValue(teacher);
+    teacherRepository.updateTeacher.mockResolvedValue(teacher);
 
     const params = {
       id: '1',
@@ -144,6 +147,7 @@ describe('UpdateTeacher Service', () => {
       '1',
     );
     teacherRepository.getTeacherById.mockResolvedValue(teacher);
+    teacherRepository.updateTeacher.mockResolvedValue(teacher);
     teacherRepository.checkTeacherByEmail.mockResolvedValue(true);
 
     const params  = {
@@ -172,6 +176,7 @@ describe('UpdateTeacher Service', () => {
       '1',
     );
     teacherRepository.getTeacherById.mockResolvedValue(teacher);
+    teacherRepository.updateTeacher.mockResolvedValue(teacher);
 
     const params = {
       id: '1',

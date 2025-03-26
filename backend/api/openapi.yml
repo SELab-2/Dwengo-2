@@ -37,17 +37,6 @@ security:
   - apiKeyAuth: []
 
 paths:
-  /challenge:
-    get:
-      tags:
-        - authentication
-      security: []
-      summary: Get authentication challenge
-      description: Retrieve a temporary challenge string that must be signed for login
-      operationId: getChallenge
-      responses:
-        '200':
-          $ref: '#/components/responses/ChallengeOK'
   /register:
     post:
       tags:
@@ -127,7 +116,7 @@ paths:
       tags:
         - users
       summary: Update user data
-      description: Modify user information such as name, email, or userType. Only accessible by the user themselves or administrators.
+      description: Modify user information such as name, email, or userType. Only accessible by the user themselves or administrators. Will return the updated user data.
       operationId: updateUser
       parameters:
         - in: path
@@ -168,12 +157,12 @@ paths:
           schema:
             type: string
             format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserDelete'
+        - in: query
+          name: userType
+          required: false
+          schema:
+            type: string
+            enum: [student, teacher]
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -1586,13 +1575,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-
-    ChallengeOK:
-      description: Challenge retrieved successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Challenge'
     UserOK:
       description: User request completed successfully
       content:
@@ -1825,19 +1807,6 @@ components:
           type: string
           description: Human-readable error message
 
-    Challenge:
-      type: object
-      required:
-        - challenge
-        - expiresAt
-      properties:
-        challenge:
-          type: string
-          description: Server-generated temporary secret to be signed by client
-        expiresAt:
-          type: string
-          format: date-time
-          description: When this challenge expires
     LoginResponse:
       type: object
       required:
@@ -1870,7 +1839,7 @@ components:
           description: User's email address
         password:
           type: string
-          description: User's.
+          description: User's password.
 
     RegisterResponse:
       type: object
@@ -1917,8 +1886,8 @@ components:
           description: Users password
         userType:
           type: string
-          enum: [STUDENT, TEACHER]
-          default: STUDENT
+          enum: [student, teacher]
+          default: student
           description: User's type in the system.
 
     LearningObject:
@@ -1971,7 +1940,7 @@ components:
           description: User's school name.
         userType:
           type: string
-          enum: [STUDENT, TEACHER, ADMIN]
+          enum: [student, teacher]
           description: User's type in the system.
     UserPublic:
       type: object
@@ -1981,6 +1950,7 @@ components:
         - firstName
         - familyName
         - schoolName
+        - passwordHash
       additionalProperties: false
       properties:
         id:
@@ -2006,6 +1976,9 @@ components:
           minLength: 1
           maxLength: 50
           description: User's school name.
+        passwordHash:
+          type: string
+          description: User's password hash.
     UserCreate:
       type: object
       required:
@@ -2041,8 +2014,8 @@ components:
           description: The user's password
         userType:
           type: string
-          enum: [STUDENT, TEACHER]
-          default: STUDENT
+          enum: [student, teacher]
+          default: student
           description: User's type in the system.
     UserUpdate:
       type: object
@@ -2053,43 +2026,28 @@ components:
           type: string
           format: email
           description: User's email address.
-        forename:
+        firstName:
           type: string
           minLength: 1
           maxLength: 50
-          description: User's forename.
+          description: User's firstname.
         familyName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's family name.
-        school:
+        schoolName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's school name.
-        publicKey:
+        password:
           type: string
-          description: Public key derived from locally hashed password
+          description: User's password
         userType:
           type: string
-          enum: [STUDENT, TEACHER]
-          default: STUDENT
-          description: User's type in the system.
-    UserDelete:
-      type: object
-      minProperties: 2
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Unique identifier for the user.
-        userType:
-          type: string
-          enum: [STUDENT, TEACHER]
-          default: STUDENT
+          enum: [student, teacher]
+          default: student
           description: User's type in the system.
     CollectionUserCreate:
       type: object
@@ -2124,7 +2082,7 @@ components:
           description: ID of the class.
         userType:
           type: string
-          enum: [STUDENT, TEACHER]
+          enum: [student, teacher]
           description: Type of requester.
     JoinRequestCreate:
       type: object
@@ -2144,7 +2102,7 @@ components:
           description: ID of the class.
         userType:
           type: string
-          enum: [STUDENT, TEACHER]
+          enum: [student, teacher]
           description: Type of requester.
     Class:
       type: object

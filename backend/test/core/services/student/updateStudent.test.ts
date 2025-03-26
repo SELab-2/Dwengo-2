@@ -33,6 +33,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.updateStudent.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
     const params = {
@@ -64,7 +65,7 @@ describe('UpdateStudent Service', () => {
         schoolName: 'newSchool'
       }),
     );
-    expect(result).toEqual({});
+    expect(result).toEqual(student.toObject());
   });
 
   it('should update one field successfully', async () => {
@@ -77,6 +78,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.updateStudent.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
     const params = {
@@ -104,7 +106,7 @@ describe('UpdateStudent Service', () => {
         schoolName: "oldSchool",
       }),
     );
-    expect(result).toEqual({});
+    expect(result).toEqual(student.toObject());
   });
 
   it('should throw error if email is the same as old one', async () => {
@@ -117,6 +119,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.updateStudent.mockResolvedValue(student);
 
     const params = {
       id: '1',
@@ -144,6 +147,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.updateStudent.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(true);
 
     const params = {
@@ -172,6 +176,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.updateStudent.mockResolvedValue(student);
 
     const params = {
       id: '1',
