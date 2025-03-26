@@ -7,7 +7,7 @@ export type GetUserGroupsInput = z.infer<typeof getUserGroupsSchema>;
 
 export class GetUserGroups extends GroupService<GetUserGroupsInput> {
     async execute(input: GetUserGroupsInput): Promise<object> {
-        const groups: Group[] = await this.groupRepository.getByUserId(input.id);
-        return { groups: groups.map(group => group.toObject()) };
+        const groups: Group[] = await this.groupRepository.getByUserId(input.idParent);
+        return { groups: groups.map(group => group.id) };
     }
 }
