@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Class } from '../../interfaces/classes/class';
 import { ClassesService } from '../../services/classes.service';
+import { LoadingComponent } from '../loading/loading.component';
 
 @Component({
   selector: 'app-class',
   imports: [
-    CommonModule
+    CommonModule,
+    LoadingComponent
   ],
   templateUrl: './class.component.html',
   styleUrl: './class.component.less'
@@ -18,9 +20,6 @@ export class ClassComponent {
 
   // The class
   _class?: Class;
-
-  // Is the class of this component available from the services?
-  available: Boolean = false;
 
   public constructor(
     private classesService: ClassesService
@@ -34,10 +33,7 @@ export class ClassComponent {
 
       classObservable.pipe().subscribe(
         (response) => {
-          if(response) {
-            this.available = true;
-            this._class = response;
-          }
+          if(response) this._class = response;
         }
       );
     } else {
