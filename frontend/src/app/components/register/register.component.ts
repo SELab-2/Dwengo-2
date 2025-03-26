@@ -4,6 +4,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { UserRegistration } from '../../interfaces';
 import { UserType } from '../../interfaces/user/user';
 import { catchError, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +17,7 @@ export class RegisterComponent {
   registrationForm: FormGroup;
 
   constructor(
+    private router: Router,
     private formBuilder: FormBuilder, 
     private authenticationService: AuthenticationService,
   ) {
@@ -51,7 +53,7 @@ export class RegisterComponent {
       }))
       .subscribe((response) => {
         if (response) {
-          window.alert(`Registration successful: ${response.id}`);
+          this.router.navigateByUrl('/login');
         }
       });
   }
