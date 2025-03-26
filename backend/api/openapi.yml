@@ -56,7 +56,7 @@ paths:
               $ref: '#/components/schemas/RegisterRequest'
       responses:
         '201':
-          $ref: '#/components/responses/RegisterCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '409':
@@ -138,8 +138,8 @@ paths:
             schema:
               $ref: '#/components/schemas/UserUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/UserOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -264,7 +264,7 @@ paths:
               $ref: '#/components/schemas/CollectionUserCreate'
       responses:
         '201':
-          $ref: '#/components/responses/UserCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -340,7 +340,7 @@ paths:
               $ref: '#/components/schemas/CollectionUserCreate'
       responses:
         '201':
-          $ref: '#/components/responses/UserCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -357,7 +357,7 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/UsersOK'
+          $ref: '#/components/responses/Allusers'
         '401':
           $ref: '#/components/responses/Unauthorized'
 
@@ -445,7 +445,7 @@ paths:
               $ref: '#/components/schemas/JoinRequestCreate'
       responses:
         '201':
-          $ref: '#/components/responses/JoinRequestCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -525,8 +525,8 @@ paths:
                 data:
                   $ref: '#/components/schemas/ClassUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/ClassOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -568,7 +568,7 @@ paths:
               $ref: '#/components/schemas/ClassCreate'
       responses:
         '201':
-          $ref: '#/components/responses/ClassCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -700,8 +700,8 @@ paths:
                 data:
                   $ref: '#/components/schemas/GroupUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/GroupOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -743,7 +743,7 @@ paths:
               $ref: '#/components/schemas/GroupCreate'
       responses:
         '201':
-          $ref: '#/components/responses/GroupCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -818,8 +818,8 @@ paths:
             schema:
               $ref: '#/components/schemas/LearningObjectUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/LearningObjectOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -859,7 +859,7 @@ paths:
               $ref: '#/components/schemas/LearningObjectCreate'
       responses:
         '201':
-          $ref: '#/components/responses/LearningObjectCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -906,8 +906,8 @@ paths:
             schema:
               $ref: '#/components/schemas/LearningPathUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/LearningPathOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -961,7 +961,7 @@ paths:
               $ref: '#/components/schemas/LearningPathCreate'
       responses:
         '201':
-          $ref: '#/components/responses/LearningPathCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1036,8 +1036,8 @@ paths:
             schema:
               $ref: '#/components/schemas/AssignmentUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/AssignmentOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1077,7 +1077,7 @@ paths:
               $ref: '#/components/schemas/AssignmentCreate'
       responses:
         '201':
-          $ref: '#/components/responses/AssignmentCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1207,8 +1207,8 @@ paths:
                 data:
                   $ref: '#/components/schemas/ProgressUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/ProgressOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1250,7 +1250,7 @@ paths:
               $ref: '#/components/schemas/ProgressCreate'
       responses:
         '201':
-          $ref: '#/components/responses/ProgressCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1309,8 +1309,8 @@ paths:
             schema:
               $ref: '#/components/schemas/QuestionUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/QuestionOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1383,7 +1383,7 @@ paths:
               $ref: '#/components/schemas/QuestionCreate'
       responses:
         '201':
-          $ref: '#/components/responses/QuestionCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1442,8 +1442,8 @@ paths:
             schema:
               $ref: '#/components/schemas/MessageUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/MessageOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1517,7 +1517,7 @@ paths:
               $ref: '#/components/schemas/MessageCreate'
       responses:
         '201':
-          $ref: '#/components/responses/MessageCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1575,6 +1575,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    UpdateOK:
+      description: Update on entity successful.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EmptyObject'
     UserOK:
       description: User request completed successfully
       content:
@@ -1650,7 +1656,24 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserPublic'
+    Allusers:
+      description: User collection  request completed successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              students:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+              teachers:
+                type: array
+                items:
+                  type: string
+                  format: uuid
     RequestsOK:
       description: Requests collection request completed successfully
       content:
@@ -1724,76 +1747,21 @@ components:
             items:
               $ref: '#/components/schemas/Message'
 
-    JoinRequestCreated:
-      description: Invite created successfully
+    EntityCreated:
+      description: Entity created successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/JoinRequest'
-    UserCreated:
-      description: User created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/User'
-    ClassCreated:
-      description: Class created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Class'
-    GroupCreated:
-      description: Group created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Group'
-    LearningObjectCreated:
-      description: Learning object created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/LearningObject'
-    LearningPathCreated:
-      description: Learning path created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/LearningPath'
-    AssignmentCreated:
-      description: Assignment created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Assignment'
-    ProgressCreated:
-      description: Progress created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Progress'
-    QuestionCreated:
-      description: Question created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Question'
-    RegisterCreated:
-      description: Registration completed successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RegisterResponse'
-    MessageCreated:
-      description: Message created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Message'
-
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
     NoContent:
       description: Resource deleted successfully
   schemas:
+    EmptyObject:
+      type: object
     Error:
       type: object
       required:
@@ -1902,8 +1870,7 @@ components:
     LearningPathUpdate:
       type: object
     LearningPathCreate:
-      type: object
-
+      type: object            
     User:
       type: object
       required:
@@ -1978,7 +1945,6 @@ components:
           description: User's school name.
         passwordHash:
           type: string
-          description: User's password hash.
     UserCreate:
       type: object
       required:
@@ -2129,7 +2095,9 @@ components:
       type: object
       required:
         - name
-        - year
+        - description
+        - targetAudience
+        - teacherId
       additionalProperties: false
       properties:
         name:
@@ -2137,10 +2105,16 @@ components:
           minLength: 1
           maxLength: 50
           description: Name of the class.
-        year:
-          type: integer
-          format: int64
-          description: Academic year of the class.
+        description:
+          type: string
+          description: Description of a class.
+        targetAudience:
+          type: string
+          description: The target audience of a class.
+        teacherId:
+          type: string
+          format: uuid
+
     ClassUpdate:
       type: object
       minProperties: 1

@@ -29,7 +29,7 @@ describe('UpdateMessage', () => {
 
         const result = await updateMessage.execute(input);
 
-        expect(result).toEqual({ ...existingMessage.toObject(), content: "Updated content" });
+        expect(result).toEqual({});
         expect(mockMessageRepository.getMessageById).toHaveBeenCalledWith("message-123");
         expect(mockMessageRepository.updateMessage).toHaveBeenCalledWith(expect.any(Message));
     });

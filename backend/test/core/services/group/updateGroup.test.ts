@@ -28,7 +28,7 @@ describe('UpdateGroup', () => {
 
         const result = await updateGroup.execute(inputParams);
 
-        expect(result).toEqual(existingGroup.toObject());
+        expect(result).toEqual({});
         expect(mockGroupRepository.getById).toHaveBeenCalledWith("group-123");
         expect(mockGroupRepository.update).toHaveBeenCalledWith(expect.any(Group));
     });

@@ -42,12 +42,7 @@ describe("UpdateClass Service", () => {
             targetAudience: "Target Audience"
         });
 
-        expect(result).toEqual({
-            id: id,
-            name: updatedName,
-            description: updatedDescription,
-            targetAudience: "Target Audience"
-        });
+        expect(result).toEqual({});
     });
 
     it("should update only the targetAudience if only that is provided", async () => {
@@ -72,11 +67,6 @@ describe("UpdateClass Service", () => {
         expect(mockClassRepository.updateClass).toHaveBeenCalledWith(id, {
             targetAudience: updatedTargetAudience
         });
-        expect(result).toEqual({
-            id: id,
-            name: "Original Name",
-            description: "Original Description",
-            targetAudience: updatedTargetAudience
-        });
+        expect(result).toEqual({});
     });
 });
