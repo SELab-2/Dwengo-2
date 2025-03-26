@@ -319,32 +319,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-    post:
-      tags:
-        - users
-      summary: Assign teacher to assignment
-      description: Assign a new teacher to a specific assignment. Only allowed by teachers and admins, can't be undone.
-      operationId: createAssignmentUser
-      parameters:
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CollectionUserCreate'
-      responses:
-        '201':
-          $ref: '#/components/responses/EntityCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
   /users:
     get:
       tags:
