@@ -7,7 +7,7 @@ export type CreateQuestionThreadInput = z.infer<typeof createQuestionThreadSchem
 
 export class CreateQuestionThread extends QuestionThreadService<CreateQuestionThreadInput> {
     async execute(input: CreateQuestionThreadInput): Promise<object> {
-        const qT: QuestionThread = new QuestionThread(
+        let questionThread = new QuestionThread(
             input.creatorId,
             input.assignmentId,
             input.learningObjectId,
@@ -16,6 +16,7 @@ export class CreateQuestionThread extends QuestionThreadService<CreateQuestionTh
             input.messageIds,
             undefined,
         );
-        return (await this.questionThreadRepository.createQuestionThread(qT)).toObject();
+        questionThread = await this.questionThreadRepository.createQuestionThread(questionThread);
+        return { id: questionThread.id };
     }
 }

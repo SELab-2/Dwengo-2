@@ -48,7 +48,7 @@ export const services = {
         update: new MessageServices.UpdateMessage(repos.message),
         remove: new MessageServices.DeleteMessage(repos.message),
         create: new MessageServices.CreateMessage(repos.message),
-        getThreadMessages: new MessageServices.GetThreadMessages(repos.questionThread, repos.message),
+        getThreadMessages: new MessageServices.GetThreadMessages(repos.questionThread),
     },
     questionThread: {
         get: new QuestionThreadServices.GetQuestionThread(repos.questionThread),
