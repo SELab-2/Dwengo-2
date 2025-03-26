@@ -9,6 +9,8 @@ import { MatList } from '@angular/material/list'
 import { MatToolbar } from '@angular/material/toolbar'
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 
 // Type alias
@@ -26,7 +28,9 @@ type classFilterType = (c: Class) => Boolean;
     MatList,
     MatToolbar,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './classes-page.component.html',
   styleUrl: './classes-page.component.less'

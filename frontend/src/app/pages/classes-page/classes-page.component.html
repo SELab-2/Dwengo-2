@@ -1,33 +1,40 @@
 <div class="classes">
+    <div id="tool-container">
+        <!-- <label for="nameFilterInput">Filter your classes by name</label> -->
+        <mat-form-field class="example-full-width">
+            <mat-label>Name</mat-label>
+            <input
+                matInput
+                #nameFilter
+                placeholder="..."
+                (keyup)="classNameFilter(nameFilter.value)"
+                class="lg-text-input"
+                id="nameFilterInput" />
+        </mat-form-field>
 
-    <mat-toolbar>
-        <label for="nameFilterInput">Filter your classes by name</label>
-        <input
-            #nameFilter
-            placeholder="..."
-            (keyup)="classNameFilter(nameFilter.value)"
-            class="lg-text-input"
-            id="nameFilterInput" />
-
-        <span style="flex: 1 1 auto;"></span>
+        <!-- <span style="flex: 1 1 auto;"></span> -->
 
         <button mat-fab extended (click)="createClass()">
             <mat-icon>add</mat-icon>
             Create
         </button>
-    </mat-toolbar>
-
+    </div>
+    
     @if (showCreate) {
-        <app-create-class></app-create-class>
+        <div id="center-container">
+            <app-create-class></app-create-class>
+        </div>
     }
 
-    <mat-list>
-        @for (class of classes; track class.classId) {
-            <li>
-                <app-mini-class [_class]="class"></app-mini-class>
-            </li>
-        } @empty {
-            <p>No classes found</p>
-        }
-    </mat-list>
+    <div id="center-container">
+        <mat-list>
+            @for (class of classes; track class.classId) {
+                <li>
+                    <app-mini-class [_class]="class"></app-mini-class>
+                </li>
+            } @empty {
+                <p>No classes found</p>
+            }
+        </mat-list>
+    </div>
 </div>
