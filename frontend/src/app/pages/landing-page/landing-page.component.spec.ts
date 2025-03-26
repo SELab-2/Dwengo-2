@@ -1,5 +1,4 @@
 import { TestBed } from "@angular/core/testing";
-import { By } from "@angular/platform-browser";
 import { provideRouter } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { LandingPageComponent } from "./landing-page.component";
@@ -31,12 +30,12 @@ describe('LandingPageComponent', () => {
 	});
 
 	it('should contain the login button', () => {
-		const loginButton = harness.fixture.debugElement.query(By.css('button[name="login-button"]'));
+		const loginButton = harness.fixture.nativeElement.querySelector('button[name="login-button"]');
 		expect(loginButton).toBeTruthy();
 	});
 
 	it('should contain the register button', () => {
-		const registerButton = harness.fixture.debugElement.query(By.css('button[name="register-button"]'));
+		const registerButton = harness.fixture.nativeElement.querySelector('button[name="register-button"]');
 		expect(registerButton).toBeTruthy();
 	});
 });

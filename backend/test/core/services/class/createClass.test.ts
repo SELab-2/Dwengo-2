@@ -1,6 +1,6 @@
 import { DatabaseError } from '../../../../src/config/error';
 import { Class } from '../../../../src/core/entities/class';
-import { CreateClass, CreateClassParams } from '../../../../src/core/services/class/createClass';
+import { CreateClass } from '../../../../src/core/services/class/createClass';
 
 // Mock repository
 const mockClassRepository = {
@@ -9,8 +9,12 @@ const mockClassRepository = {
 
 describe('CreateClass', () => {
     let createClass: CreateClass;
-
-    const inputClass = new CreateClassParams("Math 101", "Basic math class", "Primary School", "teacher_id");
+    const inputClass = {
+        name: "Math 101",
+        description: "Basic math class",
+        targetAudience: "Primary School",
+        teacherId: "teacher_id",
+    };
 
     beforeEach(() => {
         createClass = new CreateClass(mockClassRepository as any);

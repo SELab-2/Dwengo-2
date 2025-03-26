@@ -3,7 +3,6 @@ import { IStudentRepository } from '../../../../src/core/repositories/studentRep
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
 import {
   RemoveUserFromClass,
-  RemoveUserFromParams,
 } from '../../../../src/core/services/user';
 
 describe('RemoveStudentFromClass', () => {
@@ -23,30 +22,23 @@ describe('RemoveStudentFromClass', () => {
   });
 
   it('should remove a student from a class', async () => {
-    const studentId = 'student123';
-    const classId = 'class456';
-    const params = new RemoveUserFromParams(
-      studentId,
-      classId,
-      UserType.STUDENT,
-    );
+    const id = 'student123';
+    const idParent = 'class456';
+    const userType = UserType.STUDENT;
 
-    await removeStudentFromClass.execute(params);
+    await removeStudentFromClass.execute({id, idParent, userType});
 
     expect(studentRepository.removeStudentFromClass).toHaveBeenCalledWith(
-      studentId,
-      classId,
+      id,
+      idParent,
     );
   });
 
   it('should return an empty object after removing a student', async () => {
-    const studentId = 'student123';
-    const classId = 'class456';
-    const params = new RemoveUserFromParams(
-      studentId,
-      classId,
-      UserType.STUDENT,
-    );
+    const id = 'student123';
+    const idParent = 'class456';
+    const userType = UserType.STUDENT;
+    const params = {id, idParent, userType};
 
     const result = await removeStudentFromClass.execute(params);
 

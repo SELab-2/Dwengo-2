@@ -2,7 +2,7 @@ import { IStudentRepository } from '../../../../src/core/repositories/studentRep
 import { Student } from '../../../../src/core/entities/student';
 import { ErrorCode } from '../../../../src/application/types';
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
-import { UpdateUser, UpdateUserParams } from '../../../../src/core/services/user';
+import { UpdateUser } from '../../../../src/core/services/user';
 import { UserType } from '../../../../src/core/entities/user';
 
 describe('UpdateStudent Service', () => {
@@ -35,15 +35,16 @@ describe('UpdateStudent Service', () => {
     studentRepository.getStudentById.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
-    const params = new UpdateUserParams(
-      '1',
-      UserType.STUDENT,
-      'newemail@example.com',
-      'NewFirstName',
-      'NewFamilyName',
-      'newpasswordhash',
-      'newSchool'
-    );
+    const params = {
+      id: '1',
+      userType: UserType.STUDENT,
+      email: 'newemail@example.com',
+      firstName: 'NewFirstName',
+      familyName: 'NewFamilyName',
+      passwordHash: 'newpasswordhash',
+      schoolName: 'newSchool'
+    }
+
     const result = await updateStudent.execute(params);
 
     expect(studentRepository.getStudentById).toHaveBeenCalledWith('1');
@@ -78,15 +79,12 @@ describe('UpdateStudent Service', () => {
     studentRepository.getStudentById.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
-    const params = new UpdateUserParams(
-      '1',
-      UserType.STUDENT,
-      'newemail@example.com',
-      undefined,
-      undefined,
-      undefined,
-      undefined
-    );
+    const params = {
+      id: '1',
+      userType: UserType.STUDENT,
+      email: 'newemail@example.com',
+    }
+    
     const result = await updateStudent.execute(params);
 
     expect(studentRepository.getStudentById).toHaveBeenCalledWith('1');
@@ -120,15 +118,15 @@ describe('UpdateStudent Service', () => {
     );
     studentRepository.getStudentById.mockResolvedValue(student);
 
-    const params = new UpdateUserParams(
-      '1',
-      UserType.STUDENT,
-      'sameemail@example.com',
-      'NewFirstName',
-      'NewFamilyName',
-      'newpasswordhash',
-      'newSchool'
-    );
+    const params = {
+      id: '1',
+      userType: UserType.STUDENT,
+      email: 'sameemail@example.com',
+      firstName: 'NewFirstName',
+      familyName: 'NewFamilyName',
+      passwordHash: 'newpasswordhash',
+      schoolName: 'newSchool'
+    }
 
     await expect(updateStudent.execute(params)).rejects.toEqual({
       code: ErrorCode.BAD_REQUEST,
@@ -148,15 +146,15 @@ describe('UpdateStudent Service', () => {
     studentRepository.getStudentById.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(true);
 
-    const params = new UpdateUserParams(
-      '1',
-      UserType.STUDENT,
-      'newemail@example.com',
-      'NewFirstName',
-      'NewFamilyName',
-      'newpasswordhash',
-      'newSchool'
-    );
+    const params = {
+      id: '1',
+      userType: UserType.STUDENT,
+      email: 'newemail@example.com',
+      firstName: 'NewFirstName',
+      familyName: 'NewFamilyName',
+      passwordHash: 'newpasswordhash',
+      schoolName: 'newSchool'
+    }
 
     await expect(updateStudent.execute(params)).rejects.toEqual({
       code: ErrorCode.BAD_REQUEST,
@@ -175,15 +173,15 @@ describe('UpdateStudent Service', () => {
     );
     studentRepository.getStudentById.mockResolvedValue(student);
 
-    const params = new UpdateUserParams(
-      '1',
-      UserType.STUDENT,
-      'newemail@example.com',
-      'NewFirstName',
-      'NewFamilyName',
-      'samepasswordhash',
-      'newSchool'
-    );
+    const params = {
+      id: '1',
+      userType: UserType.STUDENT,
+      email: 'newemail@example.com',
+      firstName: 'NewFirstName',
+      familyName: 'NewFamilyName',
+      passwordHash: 'samepasswordhash',
+      schoolName: 'newSchool',
+    }
 
     await expect(updateStudent.execute(params)).rejects.toEqual({
       code: ErrorCode.BAD_REQUEST,

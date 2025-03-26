@@ -1,4 +1,24 @@
 <form [formGroup]="registrationForm" (ngSubmit)="register()">
+    <div class="register-first-name">
+        <label i18n for="first-name">First Name:</label>
+        <input name="first-name" id="first-name" formControlName="firstName" required>
+    </div>
+
+    <div class="register-last-name">
+        <label i18n for="last-name">Last Name:</label>
+        <input name="last-name" id="last-name" formControlName="lastName" required>
+    </div>
+
+    <div class="register-school-name">
+        <label i18n for="school-name">Your school:</label>
+        <input name="school-name" id="school-name" formControlName="school" required>
+    </div>
+
+    <div class="register-teacher">
+        <input type="checkbox" id="teacher" formControlName="teacher">
+        <label i18n for="teacher">I'm a teacher</label>
+    </div>
+    
     <div class="register-email">
         <label for="email">Email:</label>
         <input type="email" id="email" formControlName="email" required>
@@ -17,11 +37,6 @@
             id="confirmPassword" 
             formControlName="confirmPassword" 
         required>
-    </div>
-
-    <div class="register-teacher">
-        <input type="checkbox" id="teacher" formControlName="teacher">
-        <label i18n for="teacher">Teacher</label>
     </div>
 
     <div class="register-submit">
