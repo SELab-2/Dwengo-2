@@ -1,18 +1,20 @@
 import { z } from "zod";
+import { JoinRequestService } from "./joinRequestService";
+import { createJoinRequestSchema } from "../../../application/schemas";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { JoinRequest } from "../../entities/joinRequest";
-import { createJoinRequestSchema } from "../../../application/schemas";
-import { JoinRequestService } from "./joinRequestService";
-import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
 import { IClassRepository } from "../../repositories/classRepositoryInterface";
+import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
 
 export type CreateJoinRequestInput = z.infer<typeof createJoinRequestSchema>;
 
 export class CreateJoinRequest extends JoinRequestService<CreateJoinRequestInput> {
     constructor(
-            private _joinRequestRepository: IJoinRequestRepository,
-            private _classRepository: IClassRepository
-    ){super(_joinRequestRepository)}
+        private _joinRequestRepository: IJoinRequestRepository,
+        private _classRepository: IClassRepository,
+    ) {
+        super(_joinRequestRepository);
+    }
 
     async execute(input: CreateJoinRequestInput): Promise<object> {
         const joinRequest: JoinRequest = await this.joinRequestRepository.createJoinRequest(

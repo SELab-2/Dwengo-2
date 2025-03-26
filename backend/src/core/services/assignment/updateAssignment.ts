@@ -18,7 +18,7 @@ export class UpdateAssignment extends AssignmentService<UpdateAssignmentInput> {
         if (input.deadline) updatedFields.deadline = input.deadline;
         if (input.extraInstructions) updatedFields.extraInstructions = input.extraInstructions;
 
-        await this.assignmentRepository.updateAssignmentById(input.id, updatedFields)
+        await this.assignmentRepository.updateAssignmentById(input.id, updatedFields);
         return {};
     }
 }

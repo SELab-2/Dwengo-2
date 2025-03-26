@@ -13,7 +13,7 @@ export class UpdateClass extends ClassBaseService<UpdateClassInput> {
         if (input.description) updatedFields.description = input.description;
         if (input.targetAudience) updatedFields.targetAudience = input.targetAudience;
 
-        await this.classRepository.updateClass(input.id, updatedFields)
+        await this.classRepository.updateClass(input.id, updatedFields);
         return {};
     }
 }

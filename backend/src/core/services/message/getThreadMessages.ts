@@ -1,8 +1,8 @@
 import { z } from "zod";
+import { getThreadMessagesSchema } from "../../../application/schemas/messageSchemas";
 import { Service } from "../../../config/service";
 import { IMessageRepository } from "../../repositories/messageRepositoryInterface";
 import { IQuestionThreadRepository } from "../../repositories/questionThreadRepositoryInterface";
-import { getThreadMessagesSchema } from "../../../application/schemas/messageSchemas";
 
 export type GetThreadMessagesInput = z.infer<typeof getThreadMessagesSchema>;
 

@@ -1,8 +1,8 @@
+import { z } from "zod";
 import { QuestionThreadService } from "./questionThreadService";
 import { getAssignmentQuestionThreadsSchema } from "../../../application/schemas/questionThreadSchemas";
-import { z } from "zod";
 
-export type GetAssignmentQuestionThreadsInput = z.infer<typeof getAssignmentQuestionThreadsSchema>
+export type GetAssignmentQuestionThreadsInput = z.infer<typeof getAssignmentQuestionThreadsSchema>;
 
 export class GetAssignmentQuestionThreads extends QuestionThreadService<GetAssignmentQuestionThreadsInput> {
     async execute(input: GetAssignmentQuestionThreadsInput): Promise<object> {

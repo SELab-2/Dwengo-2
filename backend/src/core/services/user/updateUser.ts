@@ -87,7 +87,7 @@ export class UpdateUser implements Service<UpdateUserInput> {
             );
             await this.teacherRepository.updateTeacher(updatedUser as Teacher);
         }
-        
+
         return {};
     }
 }

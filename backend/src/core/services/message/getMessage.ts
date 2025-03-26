@@ -1,5 +1,5 @@
-import { MessageService } from "./messageService";
 import { z } from "zod";
+import { MessageService } from "./messageService";
 import { getMessageSchema } from "../../../application/schemas/messageSchemas";
 
 export type GetMessageInput = z.infer<typeof getMessageSchema>;

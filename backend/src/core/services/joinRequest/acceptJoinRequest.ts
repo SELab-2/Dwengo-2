@@ -1,9 +1,9 @@
 import { z } from "zod";
+import { JoinRequestService } from "./joinRequestService";
+import { acceptJoinRequestSchema } from "../../../application/schemas";
 import { JoinRequest } from "../../entities/joinRequest";
 import { IClassRepository } from "../../repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
-import { acceptJoinRequestSchema } from "../../../application/schemas";
-import { JoinRequestService } from "./joinRequestService";
 
 /**
  * Parameters required to accept a join request.
@@ -16,9 +16,11 @@ export type AcceptJoinRequestInput = z.infer<typeof acceptJoinRequestSchema>;
 export class AcceptJoinRequest extends JoinRequestService<AcceptJoinRequestInput> {
     constructor(
         private _joinRequestRepository: IJoinRequestRepository,
-        private _classRepository: IClassRepository
-    ){super(_joinRequestRepository)}
-    
+        private _classRepository: IClassRepository,
+    ) {
+        super(_joinRequestRepository);
+    }
+
     async execute(input: AcceptJoinRequestInput): Promise<object> {
         // Get the info of the join request
         const joinRequest: JoinRequest = await this.joinRequestRepository.getJoinRequestById(input.requestId);

@@ -1,8 +1,8 @@
 import { z } from "zod";
+import { JoinRequestService } from "./joinRequestService"; // Adjust the path as needed
+import { getJoinRequestSchema, getUserJoinRequestsSchema } from "../../../application/schemas";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { JoinRequest } from "../../entities/joinRequest";
-import { getJoinRequestSchema, getUserJoinRequestsSchema } from "../../../application/schemas";
-import { JoinRequestService } from "./joinRequestService"; // Adjust the path as needed
 
 /**
  * @description paramaters to get all joinRequests of a user

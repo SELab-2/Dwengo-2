@@ -1,5 +1,5 @@
-import { QuestionThreadService } from "./questionThreadService";
 import { z } from "zod";
+import { QuestionThreadService } from "./questionThreadService";
 import { getQuestionThreadSchema } from "../../../application/schemas/questionThreadSchemas";
 
 export type GetQuestionThreadInput = z.infer<typeof getQuestionThreadSchema>;

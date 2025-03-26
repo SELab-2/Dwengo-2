@@ -1,7 +1,7 @@
-import { QuestionThreadService } from "./questionThreadService";
-import { QuestionThread, VisibilityType } from "../../entities/questionThread";
 import { z } from "zod";
+import { QuestionThreadService } from "./questionThreadService";
 import { updateQuestionThreadSchema } from "../../../application/schemas/questionThreadSchemas";
+import { QuestionThread, VisibilityType } from "../../entities/questionThread";
 
 export type UpdateQuestionThreadInput = z.infer<typeof updateQuestionThreadSchema>;
 
@@ -12,7 +12,7 @@ export class UpdateQuestionThread extends QuestionThreadService<UpdateQuestionTh
         if (input.isClosed !== undefined) updatedFields.isClosed = input.isClosed;
         if (input.visibility) updatedFields.visibility = input.visibility;
 
-        await this.questionThreadRepository.updateQuestionThread(input.id, updatedFields)
+        await this.questionThreadRepository.updateQuestionThread(input.id, updatedFields);
         return {};
     }
 }

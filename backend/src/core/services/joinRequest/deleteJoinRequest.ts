@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { deleteJoinRequestSchema } from "../../../application/schemas";
 import { JoinRequestService } from "./joinRequestService";
+import { deleteJoinRequestSchema } from "../../../application/schemas";
 
 export type DeleteJoinRequestInput = z.infer<typeof deleteJoinRequestSchema>;
 
