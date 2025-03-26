@@ -1,23 +1,38 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { MiniClassComponent } from './mini-class.component';
+import { Class } from '../../interfaces/classes/class';
 
-// describe('MiniClassComponent', () => {
-//   let component: MiniClassComponent;
-//   let fixture: ComponentFixture<MiniClassComponent>;
+describe('MiniClassComponent', () => {
+  let component: MiniClassComponent;
+  let fixture: ComponentFixture<MiniClassComponent>;
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       imports: [MiniClassComponent]
-//     })
-//     .compileComponents();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MiniClassComponent],
+      providers: [
+        provideRouter([])
+      ]
+    })
+    .compileComponents();
 
-//     fixture = TestBed.createComponent(MiniClassComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+    fixture = TestBed.createComponent(MiniClassComponent);
+    component = fixture.componentInstance;
 
-//   it('should create', () => {
-//     expect(component).toBeTruthy();
-//   });
-// });
+    const testClass: Class = {
+        name: "TestMath",
+        description: "This is a test class",
+        targetAudience: "Testers",
+        teacherId: "123",
+        classId: "123"
+    }
+    component._class = testClass;
+    
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
