@@ -55,7 +55,7 @@ export class Class {
             name: this._name,
             description: this._description,
             targetAudience: this._targetAudience,
-            teacherId: this.teacherId
+            teacherId: this.teacherId,
         };
     }
 }
