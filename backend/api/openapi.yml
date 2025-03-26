@@ -1637,9 +1637,13 @@ components:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Assignment'
+            type: object
+            properties: 
+              assignments:
+                type: array
+                items:
+                  type: string
+                  format: uuid
     ProgressesOK:
       description: Progresses collection request completed successfully
       content:
@@ -2119,22 +2123,23 @@ components:
       type: object
       required:
         - id
-        - group
-        - start
+        - classId
+        - learningPathId
+        - startDate
         - deadline
-        - instructions
+        - extraInstructions
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
           description: Unique identifier for the assignment.
-        group:
+        classId:
           type: string
           format: uuid
           readOnly: true
-          description: Unique identifier for the assignment's group.
-        start:
+          description: Unique identifier for class that the assignment's belongs to.
+        startDate:
           type: string
           format: date
           description: Start date of the assignment.
@@ -2142,29 +2147,28 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
-        instructions:
+        extraInstructions:
           type: string
           minLength: 0
           description: Instructions for the assignment.
     AssignmentCreate:
       type: object
       required:
-        - class
-        - group
-        - start
+        - classId
+        - learningPathId
+        - startDate
         - deadline
-        - instructions
+        - extraInstructions
       additionalProperties: false
       properties:
-        class:
+        classId:
           type: string
           format: uuid
           description: Unique identifier for the assignment's class.
-        group:
+        learningPathId:
           type: string
-          format: uuid
-          description: Unique identifier for the assignment's group.
-        start:
+          description: Unique identifier for the assignment's learning path.
+        startDate:
           type: string
           format: date
           description: Start date of the assignment.
@@ -2172,7 +2176,7 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
-        instructions:
+        extraInstructions:
           type: string
           minLength: 0
           description: Instructions for the assignment.
@@ -2181,7 +2185,15 @@ components:
       minProperties: 1
       additionalProperties: false
       properties:
-        start:
+        classId:
+          type: string
+          format: uuid
+          description: Unique id of class this assignment belongs to.
+        learningPathId:
+          type: string
+          format: string
+          description: Unique id of learning path that belongs to this assignment.
+        startDate:
           type: string
           format: date
           description: Start date of the assignment.
@@ -2189,7 +2201,7 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
-        instructions:
+        extraInstructions:
           type: string
           minLength: 0
           description: Instructions for the assignment.
