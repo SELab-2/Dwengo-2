@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
-import { RegisterResponse, UserRegistration } from '../../interfaces';
-import { UserType } from '../../../shared/entities/user';
+import { UserRegistration } from '../../interfaces';
+import { UserType } from '../../interfaces/user/user';
 import { catchError, of } from 'rxjs';
 
 @Component({

@@ -1,4 +1,4 @@
-import { UserType } from "../../../shared/entities/user"
+import { UserType } from "../user"
 
 /**
  * Interface for the body of a register request.
