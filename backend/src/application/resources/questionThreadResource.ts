@@ -1,6 +1,6 @@
 import * as deps from "./dependencies";
 import * as QuestionThreadServices from "../../core/services/questionThread";
-import * as QuestionThreadSchemas from "../schemas/questionThreadSchema";
+import * as QuestionThreadSchemas from "../schemas/questionThreadSchemas";
 
 /**
  * RESTful routing configuration for question-thread-related endpoints.
