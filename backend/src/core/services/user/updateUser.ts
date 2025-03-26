@@ -75,7 +75,7 @@ export class UpdateUser implements Service<UpdateUserInput> {
                 input.schoolName ?? oldUser.schoolName,
                 input.id,
             );
-                return (await this.studentRepository.updateStudent(updatedUser as Student)).toObject();
+                await this.studentRepository.updateStudent(updatedUser as Student);
         } else {
             updatedUser = new Teacher(
                 input.email ?? oldUser.email,
@@ -85,7 +85,9 @@ export class UpdateUser implements Service<UpdateUserInput> {
                 input.schoolName ?? oldUser.schoolName,
                 input.id,
             );
-            return (await this.teacherRepository.updateTeacher(updatedUser as Teacher)).toObject();
+            await this.teacherRepository.updateTeacher(updatedUser as Teacher);
         }
+        
+        return {};
     }
 }

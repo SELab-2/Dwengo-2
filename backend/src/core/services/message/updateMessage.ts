@@ -10,6 +10,6 @@ export class UpdateMessage extends MessageService<UpdateMessageInput> {
         const message: Message = await this.messageRepository.getMessageById(input.id);
         message.content = input.content;
         await this.messageRepository.updateMessage(message);
-        return message.toObject();
+        return {};
     }
 }
