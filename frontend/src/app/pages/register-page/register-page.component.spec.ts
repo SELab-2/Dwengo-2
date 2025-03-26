@@ -3,8 +3,9 @@ import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from "@angular/router/testing";
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { RegisterPageComponent } from "./register-page.component"
 import { AuthenticationService } from '../../services/authentication.service';
+
+import { RegisterPageComponent } from "./register-page.component"
 
 describe('RegisterPageComponent', () => {
   let component: RegisterPageComponent;
@@ -19,7 +20,7 @@ describe('RegisterPageComponent', () => {
         provideHttpClientTesting(),
         AuthenticationService,
       ]
-    }).compileComponents();
+    });
 
     harness = await RouterTestingHarness.create();
     component = await harness.navigateByUrl('/', RegisterPageComponent);
