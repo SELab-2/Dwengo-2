@@ -46,6 +46,6 @@ export class GetJoinRequest extends JoinRequestService<GetJoinRequestInput> {
                 message: "joinRequest not found.",
             } as ApiError;
         }
-        return { request: request.toObject() };
+        return request.toObject();
     }
 }

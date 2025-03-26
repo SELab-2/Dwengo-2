@@ -34,9 +34,9 @@ describe('CreateJoinRequest', () => {
   
       service = new CreateJoinRequest(joinRequestRepository, classRepository);
       input = {
-        requesterId: "user1",
-        classId: "class1",
-        type: JoinRequestType.STUDENT
+        requester: "user1",
+        class: "class1",
+        userType: JoinRequestType.STUDENT
       };
     });
   

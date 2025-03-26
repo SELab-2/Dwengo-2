@@ -30,7 +30,7 @@ describe('GetAssignmentQuestionThreads', () => {
         const result = await getAssignmentQuestionThreads.execute(input);
 
         expect(result).toEqual({
-            threads: questionThreads.map(qt => qt.toObject())
+            threads: questionThreads.map(qt => qt.id)
         });
 
         expect(mockQuestionThreadRepository.getQuestionThreadsByAssignmentId).toHaveBeenCalledWith("assignment-123");

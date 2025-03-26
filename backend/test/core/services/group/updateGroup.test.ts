@@ -19,7 +19,7 @@ describe('UpdateGroup', () => {
     test('Should update group members successfully', async () => {
         const inputParams = {
             id: "group-123",
-            memberIds: ["user-1", "user-2", "user-3"]
+            members: ["user-1", "user-2", "user-3"]
         }
         const existingGroup = new Group(["user-1", "user-2"], "class-456", "group-123");
 
@@ -36,7 +36,7 @@ describe('UpdateGroup', () => {
     test('Should throw a DatabaseError if update fails', async () => {
         const inputParams = {
             id: "group-123",
-            memberIds: ["user-1", "user-2", "user-3"]
+            members: ["user-1", "user-2", "user-3"]
         }
         mockGroupRepository.getById.mockRejectedValue(new DatabaseError('Retrieval failed'));
 

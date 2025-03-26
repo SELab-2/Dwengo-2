@@ -39,7 +39,7 @@ describe('CreateQuestionThread', () => {
 
         const result = await createQuestionThread.execute(input);
 
-        expect(result).toEqual(createdQuestionThread.toObject());
+        expect(result).toEqual({id: createdQuestionThread.id});
         expect(mockQuestionThreadRepository.createQuestionThread).toHaveBeenCalledWith(expect.any(QuestionThread));
     });
 

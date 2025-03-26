@@ -34,7 +34,7 @@ describe('GetSubmission', () => {
 
         const result = await getSubmission.execute(input);
 
-        expect(result).toEqual(submission.toObject());
+        expect(result).toEqual({ id: submission.id });
         expect(mockSubmissionRepository.getById).toHaveBeenCalledWith("submission-123");
     });
 

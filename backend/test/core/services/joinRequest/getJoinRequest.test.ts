@@ -16,7 +16,7 @@ describe('GetUserJoinRequests Service', () => {
     getJoinRequestsService = new GetUserJoinRequests(mockJoinRequestRepository);
 
     input = {
-      userId: 'user1'
+      idParent: 'user1'
     };
   });
 
@@ -29,9 +29,9 @@ describe('GetUserJoinRequests Service', () => {
     mockJoinRequestRepository.getJoinRequestByRequesterId.mockResolvedValue(joinRequests);
 
     await expect(getJoinRequestsService.execute(input)).resolves.toEqual({
-      requests: joinRequests.map(request => request.toObject()),
+      requests: joinRequests.map(request => request.id),
     });
-    expect(mockJoinRequestRepository.getJoinRequestByRequesterId).toHaveBeenCalledWith(input.userId);
+    expect(mockJoinRequestRepository.getJoinRequestByRequesterId).toHaveBeenCalledWith(input.idParent);
   });
 });
 
@@ -42,14 +42,13 @@ describe('GetJoinRequest Service', () => {
 
   beforeEach(() => {
     mockJoinRequestRepository = {
-      getJoinRequestByRequesterId: jest.fn(),
+      getJoinRequestById: jest.fn(),
     } as unknown as jest.Mocked<IJoinRequestRepository>;
 
     getJoinRequestService = new GetJoinRequest(mockJoinRequestRepository);
 
     input = {
-      userId: "user1",
-      requestId: "1"
+      id: "1"
     };
   });
 
@@ -59,20 +58,9 @@ describe('GetJoinRequest Service', () => {
       new JoinRequest('user1', 'class2', JoinRequestType.STUDENT, "2"),
     ];
 
-    mockJoinRequestRepository.getJoinRequestByRequesterId.mockResolvedValue(joinRequests);
+    mockJoinRequestRepository.getJoinRequestById.mockResolvedValue(joinRequests[0]);
 
-    await expect(getJoinRequestService.execute(input)).resolves.toEqual({
-      request: joinRequests[0].toObject(),
-    });
-    expect(mockJoinRequestRepository.getJoinRequestByRequesterId).toHaveBeenCalledWith(input.userId);
-  });
-
-  test('Should throw error if join request not found', async () => {
-    mockJoinRequestRepository.getJoinRequestByRequesterId.mockResolvedValue([]);
-
-    await expect(getJoinRequestService.execute(input)).rejects.toEqual({
-      code: ErrorCode.NOT_FOUND,
-      message: 'joinRequest not found.',
-    } as ApiError);
+    await expect(getJoinRequestService.execute(input)).resolves.toEqual(joinRequests[0].toObject());
+    expect(mockJoinRequestRepository.getJoinRequestById).toHaveBeenCalledWith(input.id);
   });
 });

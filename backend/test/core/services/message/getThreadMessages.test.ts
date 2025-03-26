@@ -7,16 +7,13 @@ const mockQuestionThreadRepository = {
     getQuestionThreadById: jest.fn(),
 };
 
-const mockMessageRepository = {
-    getMessageById: jest.fn(),
-};
 
 describe('GetThreadMessages', () => {
     let getThreadMessages: GetThreadMessages;
     let input: GetThreadMessagesInput;
 
     beforeEach(() => {
-        getThreadMessages = new GetThreadMessages(mockQuestionThreadRepository as any, mockMessageRepository as any);
+        getThreadMessages = new GetThreadMessages(mockQuestionThreadRepository as any);
         jest.clearAllMocks();
         input = {
             threadId: "thread-456"
@@ -31,15 +28,11 @@ describe('GetThreadMessages', () => {
         ];
 
         mockQuestionThreadRepository.getQuestionThreadById.mockResolvedValue(threadData);
-        mockMessageRepository.getMessageById.mockImplementation((id) =>
-            Promise.resolve(retrievedMessages.find(msg => msg.id === id))
-        );
 
         const result = await getThreadMessages.execute(input);
 
-        expect(result).toEqual({ messages: retrievedMessages.map(msg => msg.toObject()) });
+        expect(result).toEqual({ messages: retrievedMessages.map(msg => msg.id) });
         expect(mockQuestionThreadRepository.getQuestionThreadById).toHaveBeenCalledWith("thread-456");
-        expect(mockMessageRepository.getMessageById).toHaveBeenCalledTimes(2);
     });
 
     test('Should throw a DatabaseError if retrieval fails', async () => {

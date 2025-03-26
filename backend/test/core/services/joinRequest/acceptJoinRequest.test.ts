@@ -32,7 +32,7 @@ describe('AcceptJoinRequest Service', () => {
     );
 
     params = {
-      requestId: '1'
+      id: '1'
     };
   });
 
@@ -62,7 +62,7 @@ describe('AcceptJoinRequest Service', () => {
 
     await expect(acceptJoinRequestService.execute(params)).resolves.toEqual({});
     expect(mockJoinRequestRepository.getJoinRequestById).toHaveBeenCalledWith(
-      params.requestId,
+      params.id,
     );
     expect(mockClassRepository.addUserToClass).toHaveBeenCalledWith(
       joinRequest.classId,
@@ -71,6 +71,6 @@ describe('AcceptJoinRequest Service', () => {
     );
     expect(
       mockJoinRequestRepository.deleteJoinRequestById,
-    ).toHaveBeenCalledWith(params.requestId);
+    ).toHaveBeenCalledWith(params.id);
   });
 });
