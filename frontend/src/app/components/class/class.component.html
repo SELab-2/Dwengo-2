@@ -1,8 +1,14 @@
 <div class="class">
     @if(_class) {
-        <p>{{ _class.classId }}</p>
-        <p>{{ _class.description }}</p>
-        <p>{{ _class.targetAudience }}</p>
+        <div id="center-container">
+            <h2>{{ _class.name }}</h2>
+        </div>
+        <div id="center-container">
+            <span>
+                <p><strong>Description:</strong> {{ _class.description }}</p>
+                <p><strong>Target audience:</strong> {{ _class.targetAudience }}</p>
+            </span>
+        </div>
     } @else {
         <app-loading></app-loading>
     }

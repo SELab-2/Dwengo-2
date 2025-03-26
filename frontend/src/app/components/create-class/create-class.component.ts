@@ -3,9 +3,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ClassesService } from '../../services/classes.service';
 import { NewClass } from '../../interfaces/classes/newClass';
 import { Observable } from 'rxjs';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card'
 
 
 @Component({
@@ -17,7 +19,10 @@ import { MatButtonModule } from '@angular/material/button';
     // Material design
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCard, 
+    MatCardTitle,
+    MatCardContent
   ],
   templateUrl: './create-class.component.html',
   styleUrl: './create-class.component.less'

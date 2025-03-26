@@ -1,6 +1,5 @@
 <div class="classes">
     <div id="tool-container">
-        <!-- <label for="nameFilterInput">Filter your classes by name</label> -->
         <mat-form-field>
             <mat-label>Name</mat-label>
             <input
@@ -11,8 +10,6 @@
                 class="lg-text-input"
                 id="nameFilterInput" />
         </mat-form-field>
-
-        <!-- <span style="flex: 1 1 auto;"></span> -->
 
         <button mat-fab extended (click)="createClass()">
             <mat-icon>add</mat-icon>
@@ -26,6 +23,9 @@
         </div>
     }
 
+    <div id="center-container">
+        <h2>Your classes</h2>
+    </div>
     <div id="center-container">
         <mat-list>
             @for (class of classes; track class.classId) {

@@ -18,7 +18,6 @@ export class ClassComponent {
 
   private readonly route = inject(ActivatedRoute);
 
-  // The class
   _class?: Class;
 
   public constructor(
