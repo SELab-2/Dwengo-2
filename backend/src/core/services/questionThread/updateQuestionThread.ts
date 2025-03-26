@@ -1,27 +1,12 @@
-import { QuestionThreadBaseService } from "./questionThreadBaseService";
-import { ServiceParams } from "../../../config/service";
+import { QuestionThreadService } from "./questionThreadService";
 import { QuestionThread, VisibilityType } from "../../entities/questionThread";
+import { z } from "zod";
+import { updateQuestionThreadSchema } from "../../../application/schemas/questionThreadSchema";
 
-export class UpdateQuestionThreadParams implements ServiceParams {
-    constructor(
-        private _id: string,
-        private _isClosed?: boolean,
-        private _visibility?: VisibilityType,
-    ) {}
+export type UpdateQuestionThreadInput = z.infer<typeof updateQuestionThreadSchema>;
 
-    public get id(): string {
-        return this._id;
-    }
-    public get isClosed(): boolean | undefined {
-        return this._isClosed;
-    }
-    public get visibility(): VisibilityType | undefined {
-        return this._visibility;
-    }
-}
-
-export class UpdateQuestionThread extends QuestionThreadBaseService<UpdateQuestionThreadParams> {
-    async execute(input: UpdateQuestionThreadParams): Promise<object> {
+export class UpdateQuestionThread extends QuestionThreadService<UpdateQuestionThreadInput> {
+    async execute(input: UpdateQuestionThreadInput): Promise<object> {
         const updatedFields: Partial<QuestionThread> = {};
 
         if (input.isClosed !== undefined) updatedFields.isClosed = input.isClosed;

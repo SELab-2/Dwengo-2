@@ -1,15 +1,11 @@
-import { QuestionThreadBaseService } from "./questionThreadBaseService";
-import { ServiceParams } from "../../../config/service";
+import { QuestionThreadService } from "./questionThreadService";
+import { getAssignmentQuestionThreadsSchema } from "../../../application/schemas/questionThreadSchema";
+import { z } from "zod";
 
-export class GetAssignmentQuestionThreadsParams implements ServiceParams {
-    constructor(private _assignmentId: string) {}
-    public get assignmentId(): string {
-        return this._assignmentId;
-    }
-}
+export type GetAssignmentQuestionThreadsInput = z.infer<typeof getAssignmentQuestionThreadsSchema>
 
-export class GetAssignmentQuestionThreads extends QuestionThreadBaseService<GetAssignmentQuestionThreadsParams> {
-    async execute(input: GetAssignmentQuestionThreadsParams): Promise<object> {
+export class GetAssignmentQuestionThreads extends QuestionThreadService<GetAssignmentQuestionThreadsInput> {
+    async execute(input: GetAssignmentQuestionThreadsInput): Promise<object> {
         return {
             threads:
                 (await this.questionThreadRepository.getQuestionThreadsByAssignmentId(input.assignmentId)).map(qt =>

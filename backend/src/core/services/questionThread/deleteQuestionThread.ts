@@ -1,16 +1,11 @@
-import { QuestionThreadBaseService } from "./questionThreadBaseService";
-import { ServiceParams } from "../../../config/service";
+import { QuestionThreadService } from "./questionThreadService";
+import { deleteQuestionThreadSchema } from "../../../application/schemas/questionThreadSchema";
+import { z } from "zod";
 
-export class DeleteQuestionThreadParams implements ServiceParams {
-    constructor(private _id: string) {}
+export type DeleteQuestionThreadInput = z.infer<typeof deleteQuestionThreadSchema>;
 
-    public get id(): string {
-        return this._id;
-    }
-}
-
-export class DeleteQuestionThread extends QuestionThreadBaseService<DeleteQuestionThreadParams> {
-    async execute(input: DeleteQuestionThreadParams): Promise<object> {
+export class DeleteQuestionThread extends QuestionThreadService<DeleteQuestionThreadInput> {
+    async execute(input: DeleteQuestionThreadInput): Promise<object> {
         await this.questionThreadRepository.deleteQuestionThread(input.id);
         return {};
     }
