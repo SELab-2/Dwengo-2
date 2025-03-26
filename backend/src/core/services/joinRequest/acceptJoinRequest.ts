@@ -1,36 +1,33 @@
-import { Service, ServiceParams } from "../../../config/service";
+import { z } from "zod";
 import { JoinRequest } from "../../entities/joinRequest";
 import { IClassRepository } from "../../repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
+import { acceptJoinRequestSchema } from "../../../application/schemas";
+import { JoinRequestService } from "./joinRequestService";
 
 /**
  * Parameters required to accept a join request.
  */
-export class AcceptJoinRequestParams implements ServiceParams {
-    constructor(private _requestId: string) {}
+export type AcceptJoinRequestInput = z.infer<typeof acceptJoinRequestSchema>;
 
-    public get requestId(): string {
-        return this._requestId;
-    }
-}
 /**
  * @description Service to accept a join request.
  */
-export class AcceptJoinRequest implements Service<AcceptJoinRequestParams> {
+export class AcceptJoinRequest extends JoinRequestService<AcceptJoinRequestInput> {
     constructor(
         private _joinRequestRepository: IJoinRequestRepository,
-        private _classRepository: IClassRepository,
-    ) {}
-
-    async execute(input: AcceptJoinRequestParams): Promise<object> {
+        private _classRepository: IClassRepository
+    ){super(_joinRequestRepository)}
+    
+    async execute(input: AcceptJoinRequestInput): Promise<object> {
         // Get the info of the join request
-        const joinRequest: JoinRequest = await this._joinRequestRepository.getJoinRequestById(input.requestId);
+        const joinRequest: JoinRequest = await this.joinRequestRepository.getJoinRequestById(input.requestId);
 
         // Add the user to the class
         await this._classRepository.addUserToClass(joinRequest.classId, joinRequest.requester, joinRequest.type);
 
         // Delete joinRequest after successfully adding user to class
-        await this._joinRequestRepository.deleteJoinRequestById(input.requestId);
+        await this.joinRequestRepository.deleteJoinRequestById(input.requestId);
         return {};
     }
 }

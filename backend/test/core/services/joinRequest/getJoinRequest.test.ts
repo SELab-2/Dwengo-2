@@ -1,21 +1,23 @@
-import { GetJoinRequests, GetJoinRequest, GetJoinRequestsParams, GetJoinRequestParams } from '../../../../src/core/services/joinRequest/getJoinRequest';
+import { GetUserJoinRequests, GetJoinRequest, GetUserJoinRequestsInput, GetJoinRequestInput } from '../../../../src/core/services/joinRequest/getJoinRequest';
 import { IJoinRequestRepository } from '../../../../src/core/repositories/joinRequestRepositoryInterface';
 import { JoinRequest, JoinRequestType } from '../../../../src/core/entities/joinRequest';
 import { ApiError, ErrorCode } from '../../../../src/application/types';
 
-describe('GetJoinRequests Service', () => {
-  let getJoinRequestsService: GetJoinRequests;
+describe('GetUserJoinRequests Service', () => {
+  let getJoinRequestsService: GetUserJoinRequests;
   let mockJoinRequestRepository: jest.Mocked<IJoinRequestRepository>;
-  let params: GetJoinRequestsParams;
+  let input: GetUserJoinRequestsInput;
 
   beforeEach(() => {
     mockJoinRequestRepository = {
       getJoinRequestByRequesterId: jest.fn(),
     } as unknown as jest.Mocked<IJoinRequestRepository>;
 
-    getJoinRequestsService = new GetJoinRequests(mockJoinRequestRepository);
+    getJoinRequestsService = new GetUserJoinRequests(mockJoinRequestRepository);
 
-    params = new GetJoinRequestsParams('user1');
+    input = {
+      userId: 'user1'
+    };
   });
 
   test('Should return all join requests for a user', async () => {
@@ -26,17 +28,17 @@ describe('GetJoinRequests Service', () => {
 
     mockJoinRequestRepository.getJoinRequestByRequesterId.mockResolvedValue(joinRequests);
 
-    await expect(getJoinRequestsService.execute(params)).resolves.toEqual({
+    await expect(getJoinRequestsService.execute(input)).resolves.toEqual({
       requests: joinRequests.map(request => request.toObject()),
     });
-    expect(mockJoinRequestRepository.getJoinRequestByRequesterId).toHaveBeenCalledWith(params.userId);
+    expect(mockJoinRequestRepository.getJoinRequestByRequesterId).toHaveBeenCalledWith(input.userId);
   });
 });
 
 describe('GetJoinRequest Service', () => {
   let getJoinRequestService: GetJoinRequest;
   let mockJoinRequestRepository: jest.Mocked<IJoinRequestRepository>;
-  let params: GetJoinRequestParams;
+  let input: GetJoinRequestInput;
 
   beforeEach(() => {
     mockJoinRequestRepository = {
@@ -45,7 +47,10 @@ describe('GetJoinRequest Service', () => {
 
     getJoinRequestService = new GetJoinRequest(mockJoinRequestRepository);
 
-    params = new GetJoinRequestParams('user1', '1');
+    input = {
+      userId: "user1",
+      requestId: "1"
+    };
   });
 
   test('Should return a single join request for a user', async () => {
@@ -56,16 +61,16 @@ describe('GetJoinRequest Service', () => {
 
     mockJoinRequestRepository.getJoinRequestByRequesterId.mockResolvedValue(joinRequests);
 
-    await expect(getJoinRequestService.execute(params)).resolves.toEqual({
+    await expect(getJoinRequestService.execute(input)).resolves.toEqual({
       request: joinRequests[0].toObject(),
     });
-    expect(mockJoinRequestRepository.getJoinRequestByRequesterId).toHaveBeenCalledWith(params.userId);
+    expect(mockJoinRequestRepository.getJoinRequestByRequesterId).toHaveBeenCalledWith(input.userId);
   });
 
   test('Should throw error if join request not found', async () => {
     mockJoinRequestRepository.getJoinRequestByRequesterId.mockResolvedValue([]);
 
-    await expect(getJoinRequestService.execute(params)).rejects.toEqual({
+    await expect(getJoinRequestService.execute(input)).rejects.toEqual({
       code: ErrorCode.NOT_FOUND,
       message: 'joinRequest not found.',
     } as ApiError);

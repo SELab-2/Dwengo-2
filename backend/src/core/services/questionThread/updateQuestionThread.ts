@@ -1,7 +1,7 @@
 import { QuestionThreadService } from "./questionThreadService";
 import { QuestionThread, VisibilityType } from "../../entities/questionThread";
 import { z } from "zod";
-import { updateQuestionThreadSchema } from "../../../application/schemas/questionThreadSchema";
+import { updateQuestionThreadSchema } from "../../../application/schemas/questionThreadSchemas";
 
 export type UpdateQuestionThreadInput = z.infer<typeof updateQuestionThreadSchema>;
 

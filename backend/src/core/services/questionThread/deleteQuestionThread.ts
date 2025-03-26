@@ -1,5 +1,5 @@
 import { QuestionThreadService } from "./questionThreadService";
-import { deleteQuestionThreadSchema } from "../../../application/schemas/questionThreadSchema";
+import { deleteQuestionThreadSchema } from "../../../application/schemas/questionThreadSchemas";
 import { z } from "zod";
 
 export type DeleteQuestionThreadInput = z.infer<typeof deleteQuestionThreadSchema>;

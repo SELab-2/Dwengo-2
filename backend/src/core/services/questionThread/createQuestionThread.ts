@@ -1,7 +1,7 @@
 import { QuestionThreadService } from "./questionThreadService";
 import { QuestionThread } from "../../entities/questionThread";
 import { z } from "zod";
-import { createQuestionThreadSchema } from "../../../application/schemas/questionThreadSchema";
+import { createQuestionThreadSchema } from "../../../application/schemas/questionThreadSchemas";
 
 export type CreateQuestionThreadInput = z.infer<typeof createQuestionThreadSchema>;
 

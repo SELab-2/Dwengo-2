@@ -1,4 +1,4 @@
-import { GetSubmission, GetSubmissionParams } from "../../../../src/core/services/submission/getSubmission";
+import { GetSubmission, GetSubmissionInput } from "../../../../src/core/services/submission/getSubmission";
 import { Submission, StatusType } from "../../../../src/core/entities/submission";
 import { DatabaseError } from "../../../../src/config/error";
 
@@ -9,14 +9,17 @@ const mockSubmissionRepository = {
 
 describe('GetSubmission', () => {
     let getSubmission: GetSubmission;
+    let input: GetSubmissionInput;
 
     beforeEach(() => {
         getSubmission = new GetSubmission(mockSubmissionRepository as any);
         jest.clearAllMocks();
+        input = {
+            id: "submission-123"
+        }
     });
 
     test('Should retrieve a submission by ID and return it as an object', async () => {
-        const inputParams = new GetSubmissionParams("submission-123");
         const submission = new Submission(
             "student-456",
             "assignment-789",
@@ -29,18 +32,16 @@ describe('GetSubmission', () => {
 
         mockSubmissionRepository.getById.mockResolvedValue(submission);
 
-        const result = await getSubmission.execute(inputParams);
+        const result = await getSubmission.execute(input);
 
         expect(result).toEqual(submission.toObject());
         expect(mockSubmissionRepository.getById).toHaveBeenCalledWith("submission-123");
     });
 
     test('Should throw a DatabaseError if retrieval fails', async () => {
-        const inputParams = new GetSubmissionParams("submission-123");
-
         mockSubmissionRepository.getById.mockRejectedValue(new DatabaseError('Retrieval failed'));
 
-        await expect(getSubmission.execute(inputParams)).rejects.toThrow(DatabaseError);
+        await expect(getSubmission.execute(input)).rejects.toThrow(DatabaseError);
         expect(mockSubmissionRepository.getById).toHaveBeenCalledWith("submission-123");
     });
 });

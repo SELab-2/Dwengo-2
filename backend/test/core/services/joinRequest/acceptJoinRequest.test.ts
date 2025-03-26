@@ -1,6 +1,6 @@
 import {
   AcceptJoinRequest,
-  AcceptJoinRequestParams,
+  AcceptJoinRequestInput,
 } from '../../../../src/core/services/joinRequest/acceptJoinRequest';
 import { IJoinRequestRepository } from '../../../../src/core/repositories/joinRequestRepositoryInterface';
 import { IClassRepository } from '../../../../src/core/repositories/classRepositoryInterface';
@@ -14,7 +14,7 @@ describe('AcceptJoinRequest Service', () => {
   let acceptJoinRequestService: AcceptJoinRequest;
   let mockJoinRequestRepository: jest.Mocked<IJoinRequestRepository>;
   let mockClassRepository: jest.Mocked<IClassRepository>;
-  let params: AcceptJoinRequestParams;
+  let params: AcceptJoinRequestInput;
 
   beforeEach(() => {
     mockJoinRequestRepository = {
@@ -31,7 +31,9 @@ describe('AcceptJoinRequest Service', () => {
       mockClassRepository,
     );
 
-    params = new AcceptJoinRequestParams('1');
+    params = {
+      requestId: '1'
+    };
   });
 
   test('Should throw error if join request not found', async () => {
