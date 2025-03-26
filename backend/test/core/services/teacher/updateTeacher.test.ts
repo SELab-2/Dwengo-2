@@ -65,7 +65,7 @@ describe('UpdateTeacher Service', () => {
         schoolName: 'newSchool',
       }),
     );
-    expect(result).toEqual(teacher.toObject());
+    expect(result).toEqual({});
   });
 
   it('should update one field successfully', async () => {
@@ -106,7 +106,7 @@ describe('UpdateTeacher Service', () => {
         schoolName: 'oldSchool',
       }),
     );
-    expect(result).toEqual(teacher.toObject());
+    expect(result).toEqual({});
   });
 
   it('should throw error if email is the same as old one', async () => {

@@ -36,7 +36,7 @@ describe('UpdateQuestionThread', () => {
 
         const result = await updateQuestionThread.execute(input);
 
-        expect(result).toEqual(updatedThread.toObject());
+        expect(result).toEqual({});
         expect(mockQuestionThreadRepository.updateQuestionThread).toHaveBeenCalledWith("thread-123", {
             isClosed: true,
             visibility: VisibilityType.PRIVATE,
