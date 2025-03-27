@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from "@angular/common/http";
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 
@@ -38,7 +38,7 @@ describe('ClassesPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should make an HTTP request': () => {
+  it('should make an HTTP request', () => {
     // TODO
   });
 

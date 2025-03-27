@@ -1,12 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from "@angular/common/http";
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { ClassComponent } from './class.component';
 import { ClassesService } from '../../services/classes.service';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { firstValueFrom } from 'rxjs';
 import { Class } from '../../interfaces/classes/class';
 
 describe('ClassComponent', () => {
@@ -52,14 +51,14 @@ describe('ClassComponent', () => {
 
   it('should make a request to the API', async () => {
     // Inject a mock HTTP client and service
-    const httpTesting = TestBed.inject(HttpTestingController);
-    const service = TestBed.inject(ClassesService);
+    // const httpTesting = TestBed.inject(HttpTestingController);
+    // const service = TestBed.inject(ClassesService);
 
     // Call the service
-    const _class$ = service.classWithId('123');
+    // const _class$ = service.classWithId('123');
 
     // Subscribe to the observable which returns a promise
-    const _classPromise = firstValueFrom(_class$);
+    // const _classPromise = firstValueFrom(_class$);
 
     // Check the made request
     // TODO
