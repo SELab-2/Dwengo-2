@@ -55,7 +55,7 @@ export class CreateClassComponent {
       name: this.createForm.value.name,
       description: this.createForm.value.description,
       targetAudience: this.createForm.value.targetAudience
-    }
+    };
   }
 
   private buildCreateForm(): FormGroup {

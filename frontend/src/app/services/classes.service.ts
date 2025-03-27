@@ -61,5 +61,21 @@ import { NewClass } from "../interfaces/classes/newClass";
     public createClass(newClass: NewClass): Observable<string> {
         return of(newClass.name + "123");
     }
+
+    // TODO
+    public deleteClass(classId: string): Observable<boolean> {
+        return of(classId !== undefined);
+    }
     
+    // TODO
+    public updateClass(_class: Class): Observable<Class> {
+        return of({
+            name: _class.name,
+            description: _class.description,
+            targetAudience: _class.targetAudience,
+            teacherId: _class.teacherId,
+            classId: _class.classId
+        });
+    }
+
   }

@@ -4,12 +4,23 @@ import { ActivatedRoute } from '@angular/router';
 import { Class } from '../../interfaces/classes/class';
 import { ClassesService } from '../../services/classes.service';
 import { LoadingComponent } from '../loading/loading.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+
 
 @Component({
   selector: 'app-class',
   imports: [
     CommonModule,
-    LoadingComponent
+    LoadingComponent,
+
+    // Angular material
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
   ],
   templateUrl: './class.component.html',
   styleUrl: './class.component.less'
@@ -20,9 +31,16 @@ export class ClassComponent implements OnInit {
 
   _class?: Class;
 
+  editing: boolean = false;
+
+  updateForm: FormGroup;
+
   public constructor(
+    private formBuilder: FormBuilder,
     private classesService: ClassesService
-  ) {}
+  ) {
+    this.updateForm = this.buildUpdateForm();
+  }
 
   public ngOnInit() {
     const id: string | null = this.route.snapshot.paramMap.get('id');
@@ -38,6 +56,59 @@ export class ClassComponent implements OnInit {
     } else {
       window.alert('Unable to retrieve id from this route');
     }
+  }
+
+  public delete() {
+    const delClassObservable = this.classesService.deleteClass(this._class!.classId);
+
+    delClassObservable.pipe().subscribe(
+      (response) => {
+        if(response) window.alert('Class deleted succesfully!');
+        // TODO: redirect to class overview
+      }
+    );
+  }
+
+  public startEdit() {
+    this.editing = true;
+  }
+
+  public cancelEdit() {
+    this.editing = false;
+  }
+
+  public saveEdit() {
+    const newClass = this.extractUpdateFormValues();
+    const updateClassObservable = this.classesService.updateClass(newClass);
+
+    updateClassObservable.pipe().subscribe(
+      (response) => {
+        if(response) {
+          window.alert('Class updated succesfully!');
+          this._class = response;
+        }
+      }
+    );
+
+    this.editing = false;
+  }
+
+  private extractUpdateFormValues(): Class {
+    return {
+      name: this.updateForm.value.name,
+      description: this.updateForm.value.description,
+      targetAudience: this.updateForm.value.targetAudience,
+      classId: this._class!.classId,
+      teacherId: this._class!.teacherId
+    };
+  }
+
+  private buildUpdateForm(): FormGroup {
+    return this.formBuilder.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      targetAudience: ['', Validators.required]
+    });
   }
 
 }

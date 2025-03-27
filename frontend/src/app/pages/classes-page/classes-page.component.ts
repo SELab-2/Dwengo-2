@@ -3,8 +3,8 @@ import { Class } from '../../interfaces/classes/class';
 import { CommonModule } from "@angular/common";
 import { ClassesService } from '../../services/classes.service';
 import { CreateClassComponent } from '../../components/create-class/create-class.component';
-
 import { MiniClassComponent } from '../../components/mini-class/mini-class.component';
+
 import { MatList } from '@angular/material/list'
 import { MatToolbar } from '@angular/material/toolbar'
 import { MatIconModule } from '@angular/material/icon';
