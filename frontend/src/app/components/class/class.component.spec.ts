@@ -73,17 +73,17 @@ describe('ClassComponent', () => {
   });
 
   it('should have a class name', () => {
-    const name = harness.fixture.nativeElement.querySelector('h2');
-    expect(name.textContent).toBe(testClass.name);
+    const name = harness.fixture.nativeElement.querySelector('input[id="name"]');
+    expect(name.value).toBe(testClass.name);
   });
 
   it('should have a class description', () => {
-    const description = harness.fixture.nativeElement.querySelector('p[id="description"]');
+    const description = harness.fixture.nativeElement.querySelector('input[id="description"]');
     expect(description).toBeDefined();
   });
 
   it('should have a target audience', () => {
-    const targetAudience = harness.fixture.nativeElement.querySelector('p[id="target-audience"]');
+    const targetAudience = harness.fixture.nativeElement.querySelector('input[id="target-audience"]');
     expect(targetAudience).toBeDefined();
   });
 
