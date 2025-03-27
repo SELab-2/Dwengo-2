@@ -27,7 +27,7 @@
         <h2 i18n>Your classes</h2>
     </div>
     <div id="center-container">
-        <mat-list>
+        <mat-list id="class-list">
             @for (class of classes; track class.classId) {
                 <li>
                     <app-mini-class [_class]="class"></app-mini-class>
