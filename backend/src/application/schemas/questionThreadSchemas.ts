@@ -20,7 +20,7 @@ export const deleteQuestionThreadSchema = z.object({
 });
 
 export const getAssignmentQuestionThreadsSchema = z.object({
-    assignmentId: z.string(),
+    idParent: z.string(),
 });
 
 export const getQuestionThreadSchema = z.object({

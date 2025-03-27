@@ -15,7 +15,7 @@ describe('GetAssignmentQuestionThreads', () => {
         getAssignmentQuestionThreads = new GetAssignmentQuestionThreads(mockQuestionThreadRepository as any);
         jest.clearAllMocks();
         input = {
-            assignmentId: "assignment-123"
+            idParent: "assignment-123"
         };
     });
 

@@ -1333,7 +1333,7 @@ paths:
       tags:
         - messages
       summary: Update message
-      description: Modify a message, such as adding a reply or changing the content.
+      description: Modify a message.
       operationId: updateMessage
       parameters:
         - in: path
@@ -1657,17 +1657,26 @@ components:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Question'
+            type: object
+            properties:
+              threads:
+                type: array
+                items:
+                  type: string
+                  format: uuid
     MessagesOK:
       description: Messages collection request completed successfully
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Message'
+            type: object
+            properties:
+              messages:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+            
 
     EntityCreated:
       description: Entity created successfully
@@ -2314,86 +2323,149 @@ components:
       type: object
       required:
         - id
-        - question
-        - questionDate
+        - creatorId
+        - assignmentId
+        - learningObjectId
+        - isClosed
+        - visibility
+        - messageIds
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
           description: Unique identifier for the question.
-        question:
+        creatorId:
           type: string
-          minLength: 1
-          description: The question text.
-        answer:
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the user that made this QT.
+        assignmentId:
           type: string
-          minLength: 1
-          description: The answer text.
-        questionDate:
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the assignment linked to this QT.
+        learningObjectId:
           type: string
-          format: date
-          description: Date when the question was asked.
-        answerDate:
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the learning object linked to the QT.          
+        isClosed:
+          type: boolean
+          default: false
+        visibility:
           type: string
-          format: date
-          description: Date when the question was answered.
+          enum: [public, group, private]
+        messageIds:
+          type: array
+          items:
+            type: string
+            format: uuid
     QuestionCreate:
       type: object
       required:
-        - question
-      additionalProperties: false
+        - creatorId
+        - assignmentId
+        - learningObjectId
+        - isClosed
+        - visibility
+        - messageIds
       properties:
-        question:
+        creatorId:
           type: string
-          minLength: 1
-          description: The question text.
+          format: uuid
+          description: Unique identifier for the user that made this QT.
+        assignmentId:
+          type: string
+          format: uuid
+          description: Unique identifier for the assignment linked to this QT.
+        learningObjectId:
+          type: string
+          format: uuid
+          description: Unique identifier for the learning object linked to the QT.          
+        isClosed:
+          type: boolean
+          default: false
+        visibility:
+          type: string
+          enum: [public, group, private]
+        messageIds:
+          type: array
+          items:
+            type: string
+            format: uuid
     QuestionUpdate:
       type: object
       minProperties: 1
       additionalProperties: false
       properties:
-        answer:
+        isClosed:
+          type: boolean
+        visibility:
           type: string
-          minLength: 1
-          description: The answer text.
+          enum: [public, group, private]
 
     Message:
       type: object
       required:
         - id
-        - message
-        - date
+        - senderId
+        - threadId
+        - content
+        - createdAt
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
           description: Unique identifier for the message.
-        message:
+        senderId:
           type: string
-          minLength: 1
-          description: The message text.
-        date:
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the sender of this message.
+        threadId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the thread this message belongs to.
+        content:
+          type: string
+          description: The content of the message.
+        createdAt:
           type: string
           format: date
-          description: Date when the message was sent.
+        
     MessageCreate:
       type: object
       required:
-        - message
+        - senderId
+        - threadId
+        - createdAt
+        - content
       additionalProperties: false
       properties:
-        message:
+        senderId:
+          type: string
+          format: uuid
+          description: Unique identifier for the sender of this message.
+        threadId:
+          type: string
+          format: uuid
+          description: Unique identifier for the thread this message belongs to.
+        createdAt:
+          type: string
+          format: date
+        content:
           type: string
           minLength: 1
-          description: The message text.
+          description: The content of the message.
     MessageUpdate:
       type: object
       minProperties: 1
       additionalProperties: false
       properties:
-        message:
+        content:
           type: string
           minLength: 1
-          description: The message text.
+          description: The new content of the message.

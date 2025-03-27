@@ -16,7 +16,7 @@ describe('GetThreadMessages', () => {
         getThreadMessages = new GetThreadMessages(mockQuestionThreadRepository as any);
         jest.clearAllMocks();
         input = {
-            threadId: "thread-456"
+            idParent: "thread-456"
         }
     });
 

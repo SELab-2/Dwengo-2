@@ -20,7 +20,7 @@ export const getMessageSchema = z.object({
 });
 
 export const getThreadMessagesSchema = z.object({
-    threadId: z.string(),
+    idParent: z.string(),
 });
 
 export const updateMessageSchema = z.object({

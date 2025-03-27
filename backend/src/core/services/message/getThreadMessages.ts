@@ -11,7 +11,7 @@ export type GetThreadMessagesInput = z.infer<typeof getThreadMessagesSchema>;
 export class GetThreadMessages implements Service<GetThreadMessagesInput> {
     constructor(private questionThreadRepository: IQuestionThreadRepository) {}
     async execute(input: GetThreadMessagesInput): Promise<object> {
-        const thread = await this.questionThreadRepository.getQuestionThreadById(input.threadId);
+        const thread = await this.questionThreadRepository.getQuestionThreadById(input.idParent);
         return { messages: thread.messageIds };
     }
 }
