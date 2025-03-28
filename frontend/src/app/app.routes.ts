@@ -4,6 +4,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
 import { ClassesPageComponent } from './pages/classes-page/classes-page.component';
 import { ClassComponent } from './components/class/class.component';
+import { StudentDashboardPageComponent } from './pages/student-dashboard-page/student-dashboard-page.component';
 
 /**
  * Routing of our frontend.
@@ -14,5 +15,10 @@ export const routes: Routes = [
     { path: 'login', component: LoginPageComponent },
     { path: 'register', component: RegisterPageComponent },
     { path: 'teacher/classes', component: ClassesPageComponent },
-    { path: 'teacher/classes/:id', component: ClassComponent }
+    { path: 'teacher/classes/:id', component: ClassComponent },
+    { path: 'student', children: [
+        {path: 'dashboard', component: StudentDashboardPageComponent},
+        {path: 'classes', component: ClassesPageComponent},
+    ]
+    },
 ];
