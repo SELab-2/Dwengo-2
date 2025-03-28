@@ -1,24 +1,16 @@
+import { z } from "zod";
 import { AssignmentService } from "./assignmentService";
-import { ServiceParams } from "../../../config/service";
+import { getUserAssignmentsSchema } from "../../../application/schemas/assignmentSchemas";
 import { Assignment } from "../../entities/assignment";
 
-/**
- * Wrapper class for the input parameters of the GetUserAssignments service.
- */
-export class GetUserAssignmentsParams implements ServiceParams {
-    public constructor(private _id: string) {}
-
-    public get id() {
-        return this._id;
-    }
-}
+export type GetUserAssignmentsInput = z.infer<typeof getUserAssignmentsSchema>;
 
 /**
  * Service class to get all assignments of a user.
  */
-export class GetUserAssignments extends AssignmentService<GetUserAssignmentsParams> {
-    async execute(input: GetUserAssignmentsParams): Promise<object> {
-        const assignments: Assignment[] = await this.assignmentRepository.getAssignmentsByUserId(input.id);
+export class GetUserAssignments extends AssignmentService<GetUserAssignmentsInput> {
+    async execute(input: GetUserAssignmentsInput): Promise<object> {
+        const assignments: Assignment[] = await this.assignmentRepository.getAssignmentsByUserId(input.idParent);
         return { assignments: assignments.map(assignment => assignment.toObject()) };
     }
 }

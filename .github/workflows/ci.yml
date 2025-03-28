@@ -1,40 +1,46 @@
 name: CI
-
 on:
-  push:
   pull_request:
-
 jobs:
-  lint-and-test:
+  backend:
     runs-on: self-hosted
     steps:
       - name: Fix permissions
         run: sudo chown -R $USER:$USER /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2 || true
 
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v4
-      
-      - name: Build Docker image
-        run: docker compose -f compose.yaml build
 
-      - name: Stop old containers
-        run: docker compose -f compose.yaml down
-
-      - name: Start new containers
-        run: docker compose -f compose.yaml up -d
+      - name: Install dependencies
+        run: npm install
+        working-directory: backend
 
       - name: Lint backend
-        run: docker exec $(docker ps -qf "name=dwengo-2-backend") npm run lint
-
-      - name: Lint frontend
-        run: docker exec $(docker ps -qf "name=dwengo-2-frontend") npm run lint
+        run: npm run lint
+        working-directory: backend
 
       - name: Test backend
-        run: docker exec $(docker ps -qf "name=dwengo-2-backend") npm test
+        run: npm test
+        working-directory: backend
+
+  frontend:
+    runs-on: self-hosted
+    steps:
+      - name: Fix permissions
+        run: sudo chown -R $USER:$USER /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2 || true
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: Lint frontend
+        run: npm run lint
+        working-directory: frontend
 
       - name: Test frontend
-        run: docker exec $(docker ps -qf "name=dwengo-2-frontend") npm test
-      
-      - name: Stop containers # Make sure containers will be stopped even if testing/linting fails
-        if: always()
-        run: docker compose down
+        run: npm test
+        working-directory: frontend
+        env:
+          CHROME_BIN: "/usr/bin/chromium-browser"

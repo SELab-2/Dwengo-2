@@ -1,16 +1,24 @@
+import { z } from "zod";
 import { SubmissionBaseService } from "./submissionBaseService";
-import { ServiceParams } from "../../../config/service";
+import { getSubmissionSchema } from "../../../application/schemas/submissionSchemas";
 
-export class GetSubmissionParams implements ServiceParams {
-    constructor(private _id: string) {}
+export type GetSubmissionInput = z.infer<typeof getSubmissionSchema>;
 
-    public get id(): string {
-        return this._id;
-    }
-}
-
-export class GetSubmission extends SubmissionBaseService<GetSubmissionParams> {
-    async execute(input: GetSubmissionParams): Promise<object> {
+export class GetSubmission extends SubmissionBaseService<GetSubmissionInput> {
+    async execute(input: GetSubmissionInput): Promise<object> {
         return (await this.submissionRepository.getById(input.id)).toObject();
     }
 }
+
+// TODO export type GetUsertSubmissionsInput = z.infer<typeof getUserSubmissionsSchema>;
+//
+// TODO export class GetUserSubmissions extends SubmissionBaseService<GetUsertSubmissionsInput> {
+//          TODO
+//          async execute(input: GetUsertSubmissionsInput): Promise<object> {
+//              const students: object[] = (await this.submissionRepository.getAssignmentStudents(input.assignmentId)).map(s =>
+//                  s.toObject(),
+//              );
+//              return { students: students };
+//          }
+//      }
+//

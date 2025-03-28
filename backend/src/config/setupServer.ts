@@ -1,14 +1,10 @@
-import dotenv from "dotenv";
+import { Server } from "http";
 import { Express } from "express";
-import { services } from "./services";
-import { ChallengeManager } from "../application/challenge";
+import { logger } from "./logger";
 
-export const challengeManager = new ChallengeManager(services.users.get);
-
-export const setupServer = (app: Express) => {
-    dotenv.config();
+export const setupServer = (app: Express): Server => {
     const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`Server is running at http://localhost:${PORT}`);
+    return app.listen(PORT, () => {
+        logger.info(`Server is running at http://localhost:${PORT}`);
     });
 };

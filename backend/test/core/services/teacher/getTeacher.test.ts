@@ -1,12 +1,13 @@
 import { EntityNotFoundError } from '../../../../src/config/error';
 import { Teacher } from '../../../../src/core/entities/teacher';
-import { GetUser, GetUserParams } from '../../../../src/core/services/user';
+import { GetUser } from '../../../../src/core/services/user';
 import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
 import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
 import { UserType } from '../../../../src/core/entities/user';
+import { ApiError, ErrorCode } from '../../../../src/application/types';
 
-describe('getTeacher Use Case', () => {
-  let getTeacherUseCase: GetUser;
+describe('getTeacher service', () => {
+  let getTeacherService: GetUser;
   let mockStudentRepository: jest.Mocked<IStudentRepository>;
   let mockTeacherRepository: jest.Mocked<ITeacherRepository>;
 
@@ -18,7 +19,7 @@ describe('getTeacher Use Case', () => {
       getStudentById: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<IStudentRepository>;
 
-    getTeacherUseCase = new GetUser(
+    getTeacherService = new GetUser(
       mockStudentRepository,
       mockTeacherRepository,
     );
@@ -34,10 +35,10 @@ describe('getTeacher Use Case', () => {
       '1',
     );
 
-    const params: GetUserParams = new GetUserParams('1', UserType.TEACHER);
+    const params = {id: '1', userType: UserType.TEACHER};
 
     mockTeacherRepository.getTeacherById.mockResolvedValue(teacher);
-    const result = await getTeacherUseCase.execute(params);
+    const result = await getTeacherService.execute(params);
 
     expect(result).toEqual(teacher);
     expect(mockTeacherRepository.getTeacherById).toHaveBeenCalledWith('1');
@@ -48,9 +49,12 @@ describe('getTeacher Use Case', () => {
       new EntityNotFoundError('Teacher not found'),
     );
 
-    const params: GetUserParams = new GetUserParams('999', UserType.TEACHER);
+    const params = {id: '999', userType: UserType.TEACHER};
 
-    await expect(getTeacherUseCase.execute(params)).rejects.toThrow();
+    await expect(getTeacherService.execute(params)).rejects.toEqual({
+          code: ErrorCode.NOT_FOUND,
+          message:  `User ${UserType.TEACHER} with ID 999 not found`,
+        } as ApiError);
     expect(mockTeacherRepository.getTeacherById).toHaveBeenCalledWith('999');
   });
 });
