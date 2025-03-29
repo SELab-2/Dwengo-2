@@ -5,7 +5,7 @@ import { TeacherTypeORM } from "./teacherTypeorm";
 @Entity()
 export class TeacherOfClassTypeORM {
     @PrimaryGeneratedColumn("uuid")
-    id!: string;    
+    id!: string;
 
     @ManyToOne(() => TeacherTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "teacher_id" })
