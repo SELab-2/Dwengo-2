@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
 import { AssignmentTypeORM } from "./assignmentTypeorm";
 import { MessageTypeORM } from "./messageTypeorm";
 import { StudentTypeORM } from "./studentTypeorm";

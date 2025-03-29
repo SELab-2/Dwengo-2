@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column} from "typeorm";
 import { TeacherOfClassTypeORM } from "./teacherOfClassTypeorm";
 import { Class } from "../../../../core/entities/class";
 
