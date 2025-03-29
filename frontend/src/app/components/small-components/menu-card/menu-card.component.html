@@ -1,0 +1,7 @@
+<div class="card" (click)="setView('classes')" [ngClass]="{ 'selected-card': selectedView === 'classes' }">
+    <div class="card-inner">
+        <p class="text-primary" i18n>View Classes</p>
+        <mat-icon fontIcon="school"></mat-icon>
+    </div>
+    <span class="text-primary font-weight-bold">{{ classes.length }}</span>
+</div>
