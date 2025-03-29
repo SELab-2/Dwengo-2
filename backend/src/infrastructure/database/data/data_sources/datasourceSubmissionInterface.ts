@@ -12,4 +12,5 @@ export abstract class IDatasourceSubmission {
         assignmentId: string,
         learningObjectId: string,
     ): Promise<Submission[]>;
+    public abstract getByStudentId(studentId: string): Promise<Submission[]>;
 }

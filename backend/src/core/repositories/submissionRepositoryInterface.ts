@@ -39,4 +39,12 @@ export abstract class ISubmissionRepository extends AbstractRepository {
         assignmentId: string,
         learning_object_id: string,
     ): Promise<Submission[]>;
+
+    /**
+     * Get all submissions for a specific student, for any assignment and step in that assignment.
+     * @param studentId The id of the student.
+     * @throws EntityNotFoundError when the student is not found.
+     * @returns A promise that resolves to the retrieved submissions.
+     */
+    public abstract getByStudentId(studentId: string): Promise<Submission[]>;
 }
