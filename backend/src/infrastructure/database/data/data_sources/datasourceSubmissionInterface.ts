@@ -7,4 +7,5 @@ export abstract class IDatasourceSubmission {
     public abstract getById(id: string): Promise<Submission | null>;
     public abstract update(submission: Submission): Promise<Submission>;
     public abstract delete(submissionId: string): Promise<void>;
+    public abstract getAllForStudentInAssignmentStep(studentId: string, assignmentId: string, learningObjectId: string): Promise<Submission[]>;
 }

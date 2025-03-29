@@ -34,7 +34,8 @@ describe("SubmissionRepositoryTypeORM", () => {
             update: jest.fn(() => Promise.resolve(submission)),
             getSubmissionsByClassId: jest.fn(() => Promise.resolve(submission)),
             getSubmissionsByLearningPathId: jest.fn(() => Promise.resolve([submission, submission])),
-            delete: jest.fn()
+            delete: jest.fn(),
+            getAllForStudentInAssignmentStep: jest.fn(() => Promise.resolve(submission))
         } as any;
 
         // Mock submission
@@ -83,6 +84,24 @@ describe("SubmissionRepositoryTypeORM", () => {
     
             expect(datasourceSubmission.delete).toHaveBeenCalledTimes(1);
             expect(datasourceSubmission.delete).toHaveBeenCalledWith(createdSubmissionId);
+    });
+
+    test("getAllForStudentInAssignmentStep", async () => {
+
+        const id: string = await datasourceSubmission.create(submission);
+
+        const result: Submission[] = await datasourceSubmission.getAllForStudentInAssignmentStep(
+            submission.studentId,
+            submission.assignmentId,
+            submission.learningObjectId
+        );
+
+        expect(datasourceSubmission.getAllForStudentInAssignmentStep).toHaveBeenCalledTimes(1);
+        expect(datasourceSubmission.getAllForStudentInAssignmentStep).toHaveBeenCalledWith(
+            submission.studentId,
+            submission.assignmentId,
+            submission.learningObjectId
+        )
     });
 
 });
