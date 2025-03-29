@@ -58,20 +58,8 @@
     </div>
 
     <div class="charts">
-        <div class="charts-card">
-            <p class="chart-title" i18n>Progress</p>
-            <apx-chart class="chart" [series]="barChartOptions.series!" [chart]="barChartOptions.chart!"
-                [dataLabels]="barChartOptions.dataLabels!" [xaxis]="barChartOptions.xaxis!"
-                [legend]="barChartOptions.legend!" [fill]="barChartOptions.fill!" [tooltip]="barChartOptions.tooltip!">
-            </apx-chart>
-        </div>
+        <app-class-chart [classChartData]="classChartData"></app-class-chart>
 
-        <div class="charts-card">
-            <p class="chart-title" i18n>Timeline</p>
-            <apx-chart class="chart" [series]="lineChartOptions.series!" [chart]="lineChartOptions.chart!"
-                [xaxis]="lineChartOptions.xaxis!" [dataLabels]="lineChartOptions.dataLabels!"
-                [grid]="lineChartOptions.grid!" [stroke]="lineChartOptions.stroke!"
-                [tooltip]="lineChartOptions.tooltip!"></apx-chart>
-        </div>
+        <app-activity-chart [activityChartData]="activityChartData"></app-activity-chart>
     </div>
 </main>

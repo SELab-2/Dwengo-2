@@ -18,6 +18,20 @@
     "3301086086650990787": "Register",
     "2821179408673282599": "Home",
     "5576381001830472560": "Dwengo logo",
-    "5849573010227956913": "No account yet?"
+    "5849573010227956913": "No account yet?",
+    "month_Jan": "January",
+    "month_Feb": "February",
+    "month_Mar": "March",
+    "month_Apr": "April",
+    "month_May": "May",
+    "month_Jun": "June",
+    "month_Jul": "July",
+    "month_Aug": "August",
+    "month_Sep": "September",
+    "month_Oct": "October",
+    "month_Nov": "November",
+    "month_Dec": "December",
+    "progress": "Assignment Progress",
+    "finished": "Finished Students"
   }
 }

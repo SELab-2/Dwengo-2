@@ -1,60 +1,28 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 import { TeacherDashboardService } from '../../services/getClasses.service';
 import {
-  ApexAxisChartSeries,
-  ApexChart,
-  ApexDataLabels,
-  ApexPlotOptions,
-  ApexYAxis,
-  ApexLegend,
-  ApexStroke,
-  ApexXAxis,
-  ApexFill,
-  ApexTooltip,
   NgApexchartsModule,
-  ApexGrid,
-  ApexTitleSubtitle,
   ChartComponent
 } from "ng-apexcharts";
+import { ClassChartComponent, ClassChartData } from '../graphs/class-graph/class-graph.component';
+import { ActivityChartComponent, ActivityChartData } from '../graphs/activity-graph/activity-graph.component';
 
-export type BarChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  dataLabels: ApexDataLabels;
-  plotOptions: ApexPlotOptions;
-  yaxis: ApexYAxis;
-  xaxis: ApexXAxis;
-  fill: ApexFill;
-  tooltip: ApexTooltip;
-  stroke: ApexStroke;
-  legend: ApexLegend;
-};
 
-export type LineChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  xaxis: ApexXAxis;
-  dataLabels: ApexDataLabels;
-  grid: ApexGrid;
-  stroke: ApexStroke;
-  title: ApexTitleSubtitle;
-  tooltip: ApexTooltip;
-};
+
 
 @Component({
   selector: 'app-teacher-dashboard',
   standalone: true,
-  imports: [RouterLink, CommonModule, HttpClientModule, MatIconModule, NgApexchartsModule],
+  imports: [RouterLink, CommonModule, HttpClientModule, MatIconModule, NgApexchartsModule, ClassChartComponent, ActivityChartComponent],
   templateUrl: './teacher-dashboard.component.html',
   styleUrls: ['./teacher-dashboard.component.less'],
   providers: [TeacherDashboardService]
 })
-export class TeacherDashboardComponent {
-
+export class TeacherDashboardComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
 
   id: string = "test";
@@ -70,128 +38,27 @@ export class TeacherDashboardComponent {
     { assignment: "Math Homework", question: "What is Pythagoras' theorem?" },
     { assignment: "Science Project", question: "How do you calculate force?" }
   ];
-
-  public barChartOptions: Partial<BarChartOptions> = {};
-  public lineChartOptions: Partial<LineChartOptions> = {};
+  public classChartData!: ClassChartData[];
+  public activityChartData!: ActivityChartData[];
 
   constructor(private dashboardService: TeacherDashboardService) {
-    this.initializeBarChart();
-    this.initializeLineChart();
   }
 
-  private initializeBarChart() {
-    // Again, this is mock data. 
-    this.barChartOptions = {
-      series: [
-        {
-          name: "Assignment Progress",
-          data: [76, 85, 99, 98, 87]
-        },
-        {
-          name: "Finished students",
-          data: [44, 55, 57, 56, 61]
-        }
-      ],
-      chart: {
-        type: "bar",
-        height: 350,
-        zoom: {
-          enabled: false
-        },
-        redrawOnWindowResize: true
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: "55%",
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ["transparent"]
-      },
-      xaxis: {
-        categories: [
-          "Maths",
-          "Physics",
-          "Biology",
-          "STEM",
-          "Literature"
-        ]
-      },
-      fill: {
-        opacity: 1
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return val + "%";
-          }
-        }
-      }
-    };
-  }
-
-  private initializeLineChart() {
-    this.lineChartOptions = {
-      series: [
-        {
-          name: "Maths",
-          data: [10, 41, 35, 51, 49, 62, 69, 73, 86]
-        },
-        {
-          name: "Physics",
-          data: [5, 8, 12, 16, 28, 35, 43, 48, 54]
-        },
-        {
-          name: "STEM",
-          data: [15, 35, 42, 51, 58, 64, 72, 81, 95]
-        }
-      ],
-      chart: {
-        height: 350,
-        type: "line",
-        zoom: {
-          enabled: false
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: "straight"
-      },
-      grid: {
-        row: {
-          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-          opacity: 0.5
-        }
-      },
-      xaxis: {
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep"
-        ]
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return val + " submissions (in total)";
-          }
-        }
-      }
-    };
+  ngOnInit(): void {
+    // verander zodat je api callt
+    this.classChartData = [
+      new ClassChartData("Maths", 76, 44),
+      new ClassChartData("Physics", 82, 47),
+      new ClassChartData("Biology", 99, 59),
+      new ClassChartData("STEM", 72, 34),
+      new ClassChartData("Literature", 79, 39),
+    ]
+    //new ClassChartData([40, 36, 57, 82, 65], [13, 15, 10, 43, 61]);
+    this.activityChartData = [
+      new ActivityChartData("Maths", [10, 41, 35, 51, 49, 62, 69, 73, 86]),
+      new ActivityChartData("Physics", [5, 8, 12, 16, 28, 35, 43, 48, 54]),
+      new ActivityChartData("STEM", [15, 35, 42, 51, 58, 64, 72, 81, 95])
+    ]
   }
 
 
