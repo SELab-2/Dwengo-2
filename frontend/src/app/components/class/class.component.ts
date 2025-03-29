@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Class } from '../../interfaces/classes/class';
 import { ClassesService } from '../../services/classes.service';
 import { LoadingComponent } from '../loading/loading.component';
@@ -36,10 +36,10 @@ export class ClassComponent implements OnInit {
   // Snackbar
   private readonly snackBar = inject(MatSnackBar);
 
-  // Snackback messages // TODO i18n
-  private readonly errorMessage = 'An error occured, please try again.';
-  private readonly updateSuccesMessage = 'Class updated succesfully!';
-  private readonly deleteSuccesMessage = 'Class deleted succesfully!';
+  // Snackback messages
+  private readonly errorMessage = $localize `An error occured, please try again.`;
+  private readonly updateSuccesMessage = $localize `Class updated succesfully!`;
+  private readonly deleteSuccesMessage = $localize `Class deleted succesfully!`;
 
   // The current class represented by this component
   public _class?: Class;
@@ -51,6 +51,7 @@ export class ClassComponent implements OnInit {
   public updateForm: FormGroup;
 
   public constructor(
+    private router: Router,
     private formBuilder: FormBuilder,
     private classesService: ClassesService
   ) {
@@ -99,7 +100,10 @@ export class ClassComponent implements OnInit {
       (response) => {
         if(response) {
           this.openSnackBar(this.deleteSuccesMessage);
-          // TODO: redirect to class overview
+          
+          // TODO: use register service to see if we're a student or teacher
+          const teacher_or_student = true ? 'teacher' : 'student';
+          this.router.navigate([`/${teacher_or_student}/classes`]);
         } else {
           this.openSnackBar(this.errorMessage);
         }
