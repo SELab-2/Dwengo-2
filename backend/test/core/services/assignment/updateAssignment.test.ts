@@ -41,13 +41,6 @@ describe("UpdateAssignment Service", () => {
         expect(mockAssignmentRepository.updateAssignmentById).toHaveBeenCalledWith(teacherId, {
             extraInstructions: updatedExtraInstructions
         });
-        expect(result).toEqual({
-            id: teacherId,
-            classId: "1",
-            learningPathId: "1",
-            startDate: startDate,
-            deadline: deadline,
-            extraInstructions: updatedExtraInstructions
-        });
+        expect(result).toEqual({});
     });
 });

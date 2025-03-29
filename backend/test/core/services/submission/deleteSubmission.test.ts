@@ -1,4 +1,4 @@
-import { DeleteSubmission, DeleteSubmissionParams } from "../../../../src/core/services/submission/deleteSubmission";
+import { DeleteSubmission, DeleteSubmissionInput } from "../../../../src/core/services/submission/deleteSubmission";
 import { DatabaseError } from "../../../../src/config/error";
 
 // Mock repository
@@ -8,29 +8,29 @@ const mockSubmissionRepository = {
 
 describe('DeleteSubmission', () => {
     let deleteSubmission: DeleteSubmission;
+    let input: DeleteSubmissionInput;
 
     beforeEach(() => {
         deleteSubmission = new DeleteSubmission(mockSubmissionRepository as any);
         jest.clearAllMocks();
+        input = {
+            id: 'submission-123'
+        };
     });
 
     test('Should delete a submission successfully', async () => {
-        const inputParams = new DeleteSubmissionParams("submission-123");
-
         mockSubmissionRepository.delete.mockResolvedValue(undefined);
 
-        const result = await deleteSubmission.execute(inputParams);
+        const result = await deleteSubmission.execute(input);
 
         expect(result).toEqual({});
         expect(mockSubmissionRepository.delete).toHaveBeenCalledWith("submission-123");
     });
 
     test('Should throw a DatabaseError if deletion fails', async () => {
-        const inputParams = new DeleteSubmissionParams("submission-123");
-
         mockSubmissionRepository.delete.mockRejectedValue(new DatabaseError('Deletion failed'));
 
-        await expect(deleteSubmission.execute(inputParams)).rejects.toThrow(DatabaseError);
+        await expect(deleteSubmission.execute(input)).rejects.toThrow(DatabaseError);
         expect(mockSubmissionRepository.delete).toHaveBeenCalledWith("submission-123");
     });
 });

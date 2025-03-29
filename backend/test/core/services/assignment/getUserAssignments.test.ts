@@ -41,7 +41,7 @@ describe("GetUserAssignments Service", () => {
 
     const result = await getUserAssignments.execute(params);
 
-    expect(result).toEqual({assignments: assignments});
+    expect(result).toEqual({assignments: assignments.map(a => a.id)});
     expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledTimes(1);
     expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledWith(params.idParent);
   });

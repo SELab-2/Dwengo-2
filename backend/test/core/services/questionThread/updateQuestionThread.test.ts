@@ -1,4 +1,4 @@
-import { UpdateQuestionThread, UpdateQuestionThreadParams } from '../../../../src/core/services/questionThread/updateQuestionThread';
+import { UpdateQuestionThread, UpdateQuestionThreadInput } from '../../../../src/core/services/questionThread/updateQuestionThread';
 import { QuestionThread, VisibilityType } from '../../../../src/core/entities/questionThread';
 import { DatabaseError } from '../../../../src/config/error';
 
@@ -9,14 +9,19 @@ const mockQuestionThreadRepository = {
 
 describe('UpdateQuestionThread', () => {
     let updateQuestionThread: UpdateQuestionThread;
+    let input: UpdateQuestionThreadInput;
 
     beforeEach(() => {
         updateQuestionThread = new UpdateQuestionThread(mockQuestionThreadRepository as any);
         jest.clearAllMocks();
+        input = {
+            id: "thread-123",
+            isClosed: true,
+            visibility: VisibilityType.PRIVATE
+        };
     });
 
     test('Should update a question thread and return the updated object', async () => {
-        const inputParams = new UpdateQuestionThreadParams("thread-123", true, VisibilityType.PRIVATE);
         const updatedThread = new QuestionThread(
             "creator-123",
             "assignment-456",
@@ -29,9 +34,9 @@ describe('UpdateQuestionThread', () => {
 
         mockQuestionThreadRepository.updateQuestionThread.mockResolvedValue(updatedThread);
 
-        const result = await updateQuestionThread.execute(inputParams);
+        const result = await updateQuestionThread.execute(input);
 
-        expect(result).toEqual(updatedThread.toObject());
+        expect(result).toEqual({});
         expect(mockQuestionThreadRepository.updateQuestionThread).toHaveBeenCalledWith("thread-123", {
             isClosed: true,
             visibility: VisibilityType.PRIVATE,
@@ -39,14 +44,12 @@ describe('UpdateQuestionThread', () => {
     });
 
     test('Should throw a DatabaseError if update fails', async () => {
-        const inputParams = new UpdateQuestionThreadParams("thread-123", true, VisibilityType.PUBLIC);
-
         mockQuestionThreadRepository.updateQuestionThread.mockRejectedValue(new DatabaseError('Update failed'));
 
-        await expect(updateQuestionThread.execute(inputParams)).rejects.toThrow(DatabaseError);
+        await expect(updateQuestionThread.execute(input)).rejects.toThrow(DatabaseError);
         expect(mockQuestionThreadRepository.updateQuestionThread).toHaveBeenCalledWith("thread-123", {
             isClosed: true,
-            visibility: VisibilityType.PUBLIC,
+            visibility: VisibilityType.PRIVATE,
         });
     });
 });

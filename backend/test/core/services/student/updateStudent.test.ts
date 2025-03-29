@@ -33,6 +33,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.updateStudent.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
     const params = {
@@ -77,6 +78,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.updateStudent.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
     const params = {
@@ -117,6 +119,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.updateStudent.mockResolvedValue(student);
 
     const params = {
       id: '1',
@@ -144,6 +147,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.updateStudent.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(true);
 
     const params = {
@@ -172,6 +176,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.updateStudent.mockResolvedValue(student);
 
     const params = {
       id: '1',

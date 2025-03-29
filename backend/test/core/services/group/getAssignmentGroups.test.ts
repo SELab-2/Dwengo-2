@@ -16,7 +16,7 @@ describe('GetAssignmentGroups', () => {
     });
 
     test('Should retrieve all groups for a given assignment successfully', async () => {
-        const id = "assignment-123";
+        const idParent = "assignment-123";
         const groups = [
             new Group(["user-1", "user-2"], "class-123", "group-1"),
             new Group(["user-3", "user-4"], "class-123", "group-2")
@@ -24,17 +24,17 @@ describe('GetAssignmentGroups', () => {
 
         mockGroupRepository.getByAssignmentId.mockResolvedValue(groups);
 
-        const result = await getAssignmentGroups.execute({id});
+        const result = await getAssignmentGroups.execute({idParent});
 
-        expect(result).toEqual({ groups: groups.map(group => group.toObject()) });
-        expect(mockGroupRepository.getByAssignmentId).toHaveBeenCalledWith(id);
+        expect(result).toEqual({ groups: groups.map(group => group.id) });
+        expect(mockGroupRepository.getByAssignmentId).toHaveBeenCalledWith(idParent);
     });
 
     test('Should throw a DatabaseError if retrieval fails', async () => {
-        const id = "assignment-123";
+        const idParent = "assignment-123";
         mockGroupRepository.getByAssignmentId.mockRejectedValue(new DatabaseError('Retrieval failed'));
 
-        await expect(getAssignmentGroups.execute({id})).rejects.toThrow(DatabaseError);
-        expect(mockGroupRepository.getByAssignmentId).toHaveBeenCalledWith(id);
+        await expect(getAssignmentGroups.execute({idParent})).rejects.toThrow(DatabaseError);
+        expect(mockGroupRepository.getByAssignmentId).toHaveBeenCalledWith(idParent);
     });
 });
