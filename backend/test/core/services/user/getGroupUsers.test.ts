@@ -20,7 +20,7 @@ describe("GetGroupUsers Service", () => {
         const result = await getGroupUsers.execute({idParent});
 
         expect(result).toEqual({
-            students: [{ id: "s2", email: "student2@example.com" }],
+            students: ["s2"],
         });
 
         expect(studentRepository.getByGroupId).toHaveBeenCalledWith(idParent);    });

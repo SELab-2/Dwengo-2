@@ -35,13 +35,13 @@ describe("getStudent Service", () => {
     mockStudentRepository.getById.mockResolvedValue(student);
     const result = await getStudentService.execute(params);
 
-    expect(result).toEqual(student);
+    expect(result).toEqual(student.toObject());
     expect(mockStudentRepository.getById).toHaveBeenCalledWith("1");
   });
 
   test("Should throw error", async () => {
     mockStudentRepository.getById.mockRejectedValue(new EntityNotFoundError("Student not found"));
-    
+
     const params = {id: "999", userType: UserType.STUDENT};
 
     await expect(getStudentService.execute(params)).rejects.toEqual({

@@ -28,8 +28,8 @@ describe("GetAllUsers Service", () => {
         const result = await getAllUsers.execute();
 
         expect(result).toEqual({
-            students: [{ id: "s1", email: "student@example.com", firstName: "John", familyName: "Doe", schoolName: "School A" }],
-            teachers: [{ id: "t1", email: "teacher@example.com", firstName: "Jane", familyName: "Smith", schoolName: "School B" }]
+            students: ["s1"],
+            teachers: ["t1"],
         });
 
         expect(studentRepository.getAll).toHaveBeenCalledTimes(1);

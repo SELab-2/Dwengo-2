@@ -40,7 +40,7 @@ describe('getTeacher service', () => {
     mockTeacherRepository.getById.mockResolvedValue(teacher);
     const result = await getTeacherService.execute(params);
 
-    expect(result).toEqual(teacher);
+    expect(result).toEqual(teacher.toObject());
     expect(mockTeacherRepository.getById).toHaveBeenCalledWith('1');
   });
 

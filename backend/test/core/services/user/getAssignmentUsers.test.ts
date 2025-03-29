@@ -19,7 +19,7 @@ describe("GetAssignmentUsers Service", () => {
         const idParent = "assignment-123";
         const result = await getAssignmentUsers.execute({ idParent });
 
-        expect(result).toEqual({students: [{ id: "s3", email: "student3@example.com" }]});
+        expect(result).toEqual({students: ["s3"]});
 
         expect(studentRepository.getByAssignmentId).toHaveBeenCalledWith(idParent);
     });

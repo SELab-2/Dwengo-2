@@ -33,6 +33,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getById.mockResolvedValue(student);
+    studentRepository.update.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
     const params = {
@@ -77,6 +78,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getById.mockResolvedValue(student);
+    studentRepository.update.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
     const params = {
@@ -84,7 +86,7 @@ describe('UpdateStudent Service', () => {
       userType: UserType.STUDENT,
       email: 'newemail@example.com',
     }
-    
+
     const result = await updateStudent.execute(params);
 
     expect(studentRepository.getById).toHaveBeenCalledWith('1');
@@ -117,6 +119,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getById.mockResolvedValue(student);
+    studentRepository.update.mockResolvedValue(student);
 
     const params = {
       id: '1',
@@ -144,6 +147,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getById.mockResolvedValue(student);
+    studentRepository.update.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(true);
 
     const params = {
@@ -172,6 +176,7 @@ describe('UpdateStudent Service', () => {
       '1',
     );
     studentRepository.getById.mockResolvedValue(student);
+    studentRepository.update.mockResolvedValue(student);
 
     const params = {
       id: '1',

@@ -9,9 +9,7 @@ export class GetAssignmentUsers implements Service<GetAssignmentUsersInput> {
     constructor(private studentRepository: IStudentRepository) {}
 
     async execute(input: GetAssignmentUsersInput): Promise<object> {
-        const students: object[] = (await this.studentRepository.getByAssignmentId(input.idParent)).map(s =>
-            s.toObject(),
-        );
-        return { students: students };
+        const studentIds = (await this.studentRepository.getByAssignmentId(input.idParent)).map(s => s.id);
+        return { students: studentIds };
     }
 }

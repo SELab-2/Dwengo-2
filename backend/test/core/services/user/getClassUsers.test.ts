@@ -26,8 +26,8 @@ describe("GetClassUsers Service", () => {
         const result = await getClassUsers.execute({idParent});
 
         expect(result).toEqual({
-            teachers: [{ id: "t1", email: "teacher@example.com" }],
-            students: [{ id: "s1", email: "student@example.com" }],
+            teachers: ["t1"],
+            students: ["s1"],
         });
 
         expect(studentRepository.getByClassId).toHaveBeenCalledWith(idParent);

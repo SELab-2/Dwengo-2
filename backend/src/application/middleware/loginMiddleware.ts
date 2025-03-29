@@ -52,7 +52,7 @@ export function loginMiddleware(
             req.body.authenticatedUserId = payload.id;
             const response = defaultResponder(200, {
                 token,
-                userId: payload.id,
+                id: payload.id,
                 message: "Authentication successful",
             });
             responseToExpress(response, res);

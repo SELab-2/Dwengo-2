@@ -1,6 +1,6 @@
 import {
   DeleteJoinRequest,
-  DeleteJoinRequestParams,
+  DeleteJoinRequestInput,
 } from '../../../../src/core/services/joinRequest/deleteJoinRequest';
 import { IJoinRequestRepository } from '../../../../src/core/repositories/joinRequestRepositoryInterface';
 import { EntityNotFoundError } from '../../../../src/config/error';
@@ -8,7 +8,7 @@ import { EntityNotFoundError } from '../../../../src/config/error';
 describe('DeleteJoinRequest Service', () => {
   let deleteJoinRequestService: DeleteJoinRequest;
   let mockJoinRequestRepository: jest.Mocked<IJoinRequestRepository>;
-  let params: DeleteJoinRequestParams;
+  let input: DeleteJoinRequestInput;
 
   beforeEach(() => {
     mockJoinRequestRepository = {
@@ -17,7 +17,9 @@ describe('DeleteJoinRequest Service', () => {
 
     deleteJoinRequestService = new DeleteJoinRequest(mockJoinRequestRepository);
 
-    params = new DeleteJoinRequestParams('1');
+    input = {
+      id: "1"
+    };
   });
 
   test('Should throw error if join request not found in database', async () => {
@@ -25,7 +27,7 @@ describe('DeleteJoinRequest Service', () => {
       new EntityNotFoundError('Join request not found'),
     );
 
-    await expect(deleteJoinRequestService.execute(params)).rejects.toThrow(
+    await expect(deleteJoinRequestService.execute(input)).rejects.toThrow(
       'Join request not found',
     );
   });
@@ -35,9 +37,9 @@ describe('DeleteJoinRequest Service', () => {
       undefined,
     );
 
-    await expect(deleteJoinRequestService.execute(params)).resolves.toEqual({});
+    await expect(deleteJoinRequestService.execute(input)).resolves.toEqual({});
     expect(
       mockJoinRequestRepository.delete,
-    ).toHaveBeenCalledWith(params.id);
+    ).toHaveBeenCalledWith(input.id);
   });
 });

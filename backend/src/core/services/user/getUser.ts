@@ -42,7 +42,7 @@ export class GetUser implements Service<GetUserInput> {
 
         try {
             const user = await (input.id ? getById(input.id) : getByEmail(input.email as string));
-            return user;
+            return user.toObject();
         } catch (error) {
             if (error instanceof EntityNotFoundError) {
                 throw {
