@@ -6,10 +6,10 @@ import { ClassesService } from '../../services/classes.service';
 import { LoadingComponent } from '../loading/loading.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -30,13 +30,25 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class ClassComponent implements OnInit {
 
+  // The current activated route
   private readonly route = inject(ActivatedRoute);
 
-  _class?: Class;
+  // Snackbar
+  private readonly snackBar = inject(MatSnackBar);
 
-  editing: boolean = false;
+  // Snackback messages // TODO i18n
+  private readonly errorMessage = 'An error occured, please try again.';
+  private readonly updateSuccesMessage = 'Class updated succesfully!';
+  private readonly deleteSuccesMessage = 'Class deleted succesfully!';
 
-  updateForm: FormGroup;
+  // The current class represented by this component
+  public _class?: Class;
+
+  // Whether the class is being edited
+  public editing: boolean = false;
+
+  // The form used to update the class
+  public updateForm: FormGroup;
 
   public constructor(
     private formBuilder: FormBuilder,
@@ -45,6 +57,13 @@ export class ClassComponent implements OnInit {
     this.updateForm = this.buildUpdateForm();
   }
 
+  /**
+   * Initialization of this component, retrieves the class id from the route.
+   * If the id is found we retrieve this class from the API and fill in the fields.
+   * Otherwise we alert the user that this class was not found.
+   * 
+   * Also see: https://stackoverflow.com/questions/35763730/difference-between-constructor-and-ngoninit
+   */
   public ngOnInit() {
     const id: string | null = this.route.snapshot.paramMap.get('id');
 
@@ -55,28 +74,35 @@ export class ClassComponent implements OnInit {
         (response) => {
           if(response) {
             this._class = response;
-
-            // TODO: clean this
-            this.updateForm.setValue({
-              name: response.name,
-              description: response.description,
-              targetAudience: response.targetAudience
-            });
+            this.fillUpdateForm(response);
           };
         }
       );
     } else {
-      window.alert('Unable to retrieve id from this route');
+      this.openSnackBar('Invalid URL', 'Close');
     }
   }
 
+  /**
+   * Delete this class based on it's id.
+   * Notifies the user if this fails or succeeds.
+   */
   public delete() {
-    const delClassObservable = this.classesService.deleteClass(this._class!.classId);
+    if(!this._class) {
+      this.openSnackBar(this.errorMessage);
+      return;
+    };
+
+    const delClassObservable = this.classesService.deleteClass(this._class.classId);
 
     delClassObservable.pipe().subscribe(
       (response) => {
-        if(response) window.alert('Class deleted succesfully!');
-        // TODO: redirect to class overview
+        if(response) {
+          this.openSnackBar(this.deleteSuccesMessage);
+          // TODO: redirect to class overview
+        } else {
+          this.openSnackBar(this.errorMessage);
+        }
       }
     );
   }
@@ -87,26 +113,36 @@ export class ClassComponent implements OnInit {
 
   public cancelEdit() {
     this.editing = false;
+    this.fillUpdateForm(this._class!);
   }
 
+  /**
+   * Save the edit that the user made on this class.
+   * Done by extracting the values from the form and sending them to the API.
+   * Notifies the user if this fails or succeeds.
+   */
   public saveEdit() {
     const newClass = this.extractUpdateFormValues();
-    window.alert(newClass.name);
     const updateClassObservable = this.classesService.updateClass(newClass);
 
     updateClassObservable.pipe().subscribe(
       (response) => {
         if(response) {
-          // window.alert('Class updated succesfully!');
-          window.alert(response.name);
           this._class = response;
+          this.openSnackBar(this.updateSuccesMessage);
+          this.editing = false;
+        } else {
+          this.openSnackBar(this.errorMessage);
+          this.cancelEdit();
         }
       }
     );
-
-    this.editing = false;
   }
 
+  /**
+   * Extract the values from the update form and return them as a Class object.
+   * @returns The class object
+   */
   private extractUpdateFormValues(): Class {
     return {
       name: this.updateForm.value.name,
@@ -117,11 +153,33 @@ export class ClassComponent implements OnInit {
     };
   }
 
+  /**
+   * Build the update form on initialization of this component.
+   * @returns The form group
+   */
   private buildUpdateForm(): FormGroup {
     return this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
       targetAudience: ['', Validators.required]
+    });
+  }
+
+  /**
+   * Fill in the fields of the update form based on the given class.
+   * @param _class The given class
+   */
+  private fillUpdateForm(_class: Class): void {
+    this.updateForm.setValue({
+      name: _class.name,
+      description: _class.description,
+      targetAudience: _class.targetAudience
+    });
+  }
+
+  private openSnackBar(message: string, action: string="Ok") {
+    this.snackBar.open(message, action, {
+        duration: 2500
     });
   }
 

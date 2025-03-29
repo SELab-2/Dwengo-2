@@ -1,6 +1,6 @@
 <div class="class">
     @if(_class) {
-        <form [formGroup]="updateForm" (ngSubmit)="saveEdit()" id="class-update-form">
+        <form [formGroup]="updateForm" id="class-update-form">
             <div id="center-container">
                 <span>
                     <h2 i18n>Class name</h2>
@@ -46,7 +46,7 @@
             <div id="center-container">
                 <span>
                     @if (editing) {
-                        <button mat-raised-button type="submit" [disabled]="!updateForm.valid" i18n>
+                        <button mat-raised-button (click)="saveEdit()" [disabled]="!updateForm.valid" i18n>
                             Save
                         </button>
                         <button mat-raised-button (click)="cancelEdit()" i18n>
