@@ -1,5 +1,6 @@
 import * as deps from "./dependencies";
 import * as MessageServices from "../../core/services/message";
+import * as MessageSchemas from "../schemas/messageSchemas";
 
 /**
  * RESTful routing configuration for message-related endpoints.
@@ -17,11 +18,11 @@ import * as MessageServices from "../../core/services/message";
 /* ************* Extractors ************* */
 
 const extractors = {
-    getMessage: undefined, // TODO
-    updateMessage: undefined, // TODO
-    deleteMessage: undefined, // TODO
-    createMessage: undefined, // TODO
-    getThreadMessages: undefined, // TODO
+    getMessage: deps.createZodParamsExtractor(MessageSchemas.getMessageSchema),
+    updateMessage: deps.createZodParamsExtractor(MessageSchemas.updateMessageSchema),
+    deleteMessage: deps.createZodParamsExtractor(MessageSchemas.deleteMessageSchema),
+    createMessage: deps.createZodParamsExtractor(MessageSchemas.createMessageSchema),
+    getThreadMessages: deps.createZodParamsExtractor(MessageSchemas.getThreadMessagesSchema),
 };
 
 /* ************* Controller ************* */

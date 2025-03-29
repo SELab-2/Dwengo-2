@@ -10,14 +10,14 @@ import { ApiError, ErrorCode, Request } from "./types";
  *   lastName: z.string().min(1),
  *   passwordHash: z.string(),
  *   schoolName: z.string().optional(),
- *   role: z.string().default("user")
+ *   userType: z.string().default("user")
  * });
  *
  * const extractUserParams = createZodParamsExtractor(
  *   userSchema,
  *   (data) => {
- *     if (data.email.includes('admin') && data.role !== 'admin') {
- *       throw new Error('Admin emails must have admin role');
+ *     if (data.email.includes('admin') && data.userType !== 'admin') {
+ *       throw new Error('Admin emails must have admin type');
  *     }
  *   }
  * );

@@ -24,8 +24,8 @@ export class Group {
     public toObject(): object {
         return {
             id: this._id,
-            memberIds: this._memberIds,
-            assignmentId: this._assignmentId,
+            members: this._memberIds,
+            assignment: this._assignmentId,
         };
     }
 }
