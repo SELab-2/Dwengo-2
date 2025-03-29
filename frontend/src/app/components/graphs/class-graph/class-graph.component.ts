@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import {
@@ -14,7 +14,6 @@ import {
   ApexFill,
   ApexTooltip,
   NgApexchartsModule,
-  ChartComponent
 } from "ng-apexcharts";
 
 export type BarChartOptions = {

@@ -1,20 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import {
   ApexAxisChartSeries,
   ApexChart,
   ApexDataLabels,
-  ApexPlotOptions,
-  ApexYAxis,
-  ApexLegend,
   ApexStroke,
   ApexXAxis,
-  ApexFill,
   ApexTooltip,
   NgApexchartsModule,
-  ChartComponent,
   ApexGrid,
   ApexTitleSubtitle
 } from "ng-apexcharts";
