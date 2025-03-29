@@ -7,11 +7,11 @@ export class StudentOfGroupTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @ManyToOne(() => StudentTypeORM, { cascade: true, onDelete: 'CASCADE' })
+    @ManyToOne(() => StudentTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "student_id" })
     student!: StudentTypeORM;
 
-    @ManyToOne(() => GroupTypeORM, { cascade: true, onDelete: 'CASCADE' })
+    @ManyToOne(() => GroupTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "group_id" })
     group!: GroupTypeORM;
 

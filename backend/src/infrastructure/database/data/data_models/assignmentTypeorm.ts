@@ -7,7 +7,7 @@ export class AssignmentTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @ManyToOne(() => ClassTypeORM, { cascade: true, onDelete: 'CASCADE' })
+    @ManyToOne(() => ClassTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "class_id" })
     class!: ClassTypeORM;
 

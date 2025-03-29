@@ -8,11 +8,11 @@ export class MessageTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @ManyToOne(() => QuestionThreadTypeORM, { cascade: true, onDelete: 'CASCADE' })
+    @ManyToOne(() => QuestionThreadTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "thread_id" })
     thread!: QuestionThreadTypeORM;
 
-    @ManyToOne(() => UserTypeORM, { cascade: true, onDelete: 'CASCADE' })
+    @ManyToOne(() => UserTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "user_id" })
     sent_by!: UserTypeORM;
 

@@ -8,7 +8,7 @@ export class GroupTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @ManyToOne(() => AssignmentTypeORM, { cascade: true, onDelete: 'CASCADE' })
+    @ManyToOne(() => AssignmentTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "assignment" })
     assignment!: AssignmentTypeORM;
 

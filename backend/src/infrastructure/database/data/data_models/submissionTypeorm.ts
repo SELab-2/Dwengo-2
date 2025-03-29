@@ -13,11 +13,11 @@ export class SubmissionTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @ManyToOne(() => StudentTypeORM, { cascade: true, onDelete: 'CASCADE' })
+    @ManyToOne(() => StudentTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "student_id" })
     student!: StudentTypeORM;
 
-    @ManyToOne(() => AssignmentTypeORM, { cascade: true, onDelete: 'CASCADE' })
+    @ManyToOne(() => AssignmentTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "assignment_id" })
     assignment!: AssignmentTypeORM;
 
