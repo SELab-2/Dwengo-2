@@ -1,15 +1,15 @@
 <div class="class">
     @if(_class) {
-        <form>
+        <form [formGroup]="updateForm" (ngSubmit)="saveEdit()" id="class-update-form">
             <div id="center-container">
                 <span>
                     <h2 i18n>Class name</h2>
                     <mat-form-field>
                         <input
                             matInput
+                            name="name"
                             id="name"
                             formControlName="name"
-                            value="{{ _class.name }}"
                             readonly="{{ !editing }}"
                             required >
                     </mat-form-field>   
@@ -19,13 +19,13 @@
                 <span>
                     <h4 i18n>Description</h4>
                     <mat-form-field>
-                        <input
+                        <textarea
                             matInput
+                            name="description"
                             id="description"
                             formControlName="description"
-                            value="{{ _class.description }}"
                             readonly="{{ !editing }}"
-                            required >
+                            required ></textarea>
                     </mat-form-field>
                 </span>
             </div>
@@ -35,9 +35,9 @@
                     <mat-form-field>
                         <input
                             matInput
+                            name="target-audience"
                             id="target-audience"
-                            formControlName="target-audience"
-                            value="{{ _class.targetAudience }}"
+                            formControlName="targetAudience"
                             readonly="{{ !editing }}"
                             required >
                     </mat-form-field>
@@ -46,7 +46,7 @@
             <div id="center-container">
                 <span>
                     @if (editing) {
-                        <button mat-raised-button (click)="saveEdit()" i18n>
+                        <button mat-raised-button type="submit" [disabled]="!updateForm.valid" i18n>
                             Save
                         </button>
                         <button mat-raised-button (click)="cancelEdit()" i18n>

@@ -5,6 +5,7 @@ import { Class } from '../../interfaces/classes/class';
 import { ClassesService } from '../../services/classes.service';
 import { LoadingComponent } from '../loading/loading.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,9 +14,11 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-class',
+  standalone: true,
   imports: [
     CommonModule,
     LoadingComponent,
+    ReactiveFormsModule,
 
     // Angular material
     MatFormFieldModule,
@@ -50,7 +53,16 @@ export class ClassComponent implements OnInit {
 
       classObservable.pipe().subscribe(
         (response) => {
-          if(response) this._class = response;
+          if(response) {
+            this._class = response;
+
+            // TODO: clean this
+            this.updateForm.setValue({
+              name: response.name,
+              description: response.description,
+              targetAudience: response.targetAudience
+            });
+          };
         }
       );
     } else {
@@ -79,12 +91,14 @@ export class ClassComponent implements OnInit {
 
   public saveEdit() {
     const newClass = this.extractUpdateFormValues();
+    window.alert(newClass.name);
     const updateClassObservable = this.classesService.updateClass(newClass);
 
     updateClassObservable.pipe().subscribe(
       (response) => {
         if(response) {
-          window.alert('Class updated succesfully!');
+          // window.alert('Class updated succesfully!');
+          window.alert(response.name);
           this._class = response;
         }
       }
