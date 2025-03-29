@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from "typeorm";
 import { AssignmentTypeORM } from "./assignmentTypeorm";
 import { MessageTypeORM } from "./messageTypeorm";
 import { StudentTypeORM } from "./studentTypeorm";
@@ -15,11 +15,11 @@ export class QuestionThreadTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @OneToOne(() => StudentTypeORM)
+    @ManyToOne(() => StudentTypeORM, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: "creator_id" })
     student!: StudentTypeORM;
 
-    @OneToOne(() => AssignmentTypeORM)
+    @ManyToOne(() => AssignmentTypeORM, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: "assignment_id" })
     assignment!: AssignmentTypeORM;
 

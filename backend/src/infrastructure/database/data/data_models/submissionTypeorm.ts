@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, Column, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, Column, CreateDateColumn, ManyToOne } from "typeorm";
 import { AssignmentTypeORM } from "./assignmentTypeorm";
 import { StudentTypeORM } from "./studentTypeorm";
 import { StatusType, Submission } from "../../../../core/entities/submission";
@@ -13,11 +13,11 @@ export class SubmissionTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @OneToOne(() => StudentTypeORM)
+    @ManyToOne(() => StudentTypeORM, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: "student_id" })
     student!: StudentTypeORM;
 
-    @OneToOne(() => AssignmentTypeORM)
+    @ManyToOne(() => AssignmentTypeORM, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: "assignment_id" })
     assignment!: AssignmentTypeORM;
 

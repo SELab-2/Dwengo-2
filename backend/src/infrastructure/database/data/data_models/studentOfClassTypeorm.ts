@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn, ManyToOne } from "typeorm";
 import { ClassTypeORM } from "./classTypeorm";
 import { StudentTypeORM } from "./studentTypeorm";
 
@@ -7,11 +7,11 @@ export class StudentOfClassTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @OneToOne(() => StudentTypeORM)
+    @ManyToOne(() => StudentTypeORM, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: "student_id" })
     student!: StudentTypeORM;
 
-    @OneToOne(() => ClassTypeORM)
+    @ManyToOne(() => ClassTypeORM, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: "class_id" })
     class!: ClassTypeORM;
 
