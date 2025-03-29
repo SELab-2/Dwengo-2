@@ -34,5 +34,9 @@ export abstract class ISubmissionRepository extends AbstractRepository {
      * @throws EntityNotFoundError when the assignment or student is not found.
      * @returns A promise that resolves to the retrieved submissions.
      */
-    public abstract getAllForStudentInAssignmentStep(studentId: string, assignmentId: string, learning_object_id: string): Promise<Submission[]>;
+    public abstract getAllForStudentInAssignmentStep(
+        studentId: string,
+        assignmentId: string,
+        learning_object_id: string,
+    ): Promise<Submission[]>;
 }

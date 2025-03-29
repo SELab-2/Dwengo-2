@@ -81,7 +81,11 @@ export class DatasourceSubmissionTypeORM extends IDatasourceSubmission {
         await this.datasource.getRepository(SubmissionTypeORM).delete(submission);
     }
 
-    public async getAllForStudentInAssignmentStep(studentId: string, assignmentId: string, learningObjectId: string): Promise<Submission[]> {
+    public async getAllForStudentInAssignmentStep(
+        studentId: string,
+        assignmentId: string,
+        learningObjectId: string,
+    ): Promise<Submission[]> {
         const studentRepository = this.datasource.getRepository(StudentTypeORM);
         const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
         const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
@@ -90,19 +94,19 @@ export class DatasourceSubmissionTypeORM extends IDatasourceSubmission {
         const studentModel: StudentTypeORM | null = await studentRepository.findOne({
             where: { id: studentId },
         });
-        if (!studentModel){
-            throw new EntityNotFoundError(`Student with id ${studentId} not found`)
+        if (!studentModel) {
+            throw new EntityNotFoundError(`Student with id ${studentId} not found`);
         }
         // Then get the assignment
         const assignmentModel: AssignmentTypeORM | null = await assignmentRepository.findOne({
-            where: { id: assignmentId }
-        })
-        if (!assignmentModel){
-            throw new EntityNotFoundError(`Assignment with id ${assignmentId} not found`)
+            where: { id: assignmentId },
+        });
+        if (!assignmentModel) {
+            throw new EntityNotFoundError(`Assignment with id ${assignmentId} not found`);
         }
         // Now get all the student's submissions for the step of the assignment
         const submissionModels: SubmissionTypeORM[] = await submissionRepository.find({
-            where: { assignment: assignmentModel, student: studentModel, learning_object_id: learningObjectId},
+            where: { assignment: assignmentModel, student: studentModel, learning_object_id: learningObjectId },
             relations: ["student", "assignment"],
         });
         // Return the submissions as entities
