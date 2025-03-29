@@ -11,6 +11,6 @@ export type GetUserAssignmentsInput = z.infer<typeof getUserAssignmentsSchema>;
 export class GetUserAssignments extends AssignmentService<GetUserAssignmentsInput> {
     async execute(input: GetUserAssignmentsInput): Promise<object> {
         const assignments: Assignment[] = await this.assignmentRepository.getAssignmentsByUserId(input.idParent);
-        return { assignments: assignments.map(assignment => assignment.toObject()) };
+        return { assignments: assignments.map(assignment => assignment.id) };
     }
 }

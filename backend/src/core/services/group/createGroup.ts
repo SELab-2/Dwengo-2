@@ -7,7 +7,7 @@ export type CreateGroupInput = z.infer<typeof createGroupSchema>;
 
 export class CreateGroup extends GroupService<CreateGroupInput> {
     async execute(input: CreateGroupInput): Promise<object> {
-        const newGroup = new Group(input.memberIds, input.assignmentId);
+        const newGroup = new Group(input.members, input.assignment);
         return { id: (await this.groupRepository.create(newGroup)).id };
     }
 }

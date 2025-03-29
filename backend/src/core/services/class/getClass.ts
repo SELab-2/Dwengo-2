@@ -14,12 +14,12 @@ export class GetClass extends ClassBaseService<GetClassInput> {
      * @throws {EntityNotFoundError} if the class could not be found.
      */
     async execute(input: GetClassInput): Promise<object> {
-        const { id, className } = input;
+        const { id, name } = input;
         try {
             if (id) {
                 return (await this.classRepository.getClassById(id)).toObject();
             }
-            return (await this.classRepository.getClassByName(className!)).toObject();
+            return (await this.classRepository.getClassByName(name!)).toObject();
         } catch (error) {
             if (error instanceof EntityNotFoundError) {
                 throw {
@@ -43,7 +43,7 @@ export class GetUserClasses extends ClassBaseService<GetUserClassInput> {
      */
     async execute(input: GetUserClassInput): Promise<object> {
         try {
-            return { classes: (await this.classRepository.getUserClasses(input.idParent)).map(c => c.toObject()) };
+            return { classes: (await this.classRepository.getUserClasses(input.idParent)).map(c => c.id) };
         } catch (error) {
             if (error instanceof EntityNotFoundError) {
                 throw {

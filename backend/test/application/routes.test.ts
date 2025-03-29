@@ -91,10 +91,10 @@ const routeFunctions = {
     authenticationRoutes: Resources.authenticationRoutes,
     classRoutes: Resources.classRoutes,
     groupRoutes: Resources.groupRoutes,
-    // TODO joinRequestRoutes: Resources.joinRequestRoutes,
-    // TODO messageRoutes: Resources.messageRoutes,
-    // TODO questionThreadRoutes: Resources.questionThreadRoutes,
-    // TODO submissionRoutes: Resources.submissionRoutes,
+    joinRequestRoutes: Resources.joinRequestRoutes,
+    messageRoutes: Resources.messageRoutes,
+    questionThreadRoutes: Resources.questionThreadRoutes,
+    submissionRoutes: Resources.submissionRoutes,
     userRoutes: Resources.userRoutes,
 };
 
@@ -282,10 +282,193 @@ const routeConfigs: Record<
             },
         },
     ],
-    // TODO joinRequestRoutes: [],
-    // TODO messageRoutes: [],
-    // TODO questionThreadRoutes: [],
-    // TODO submissionRoutes: [],
+    joinRequestRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/requests/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "request-1" },
+            },
+        },
+        {
+            method: HttpMethod.PATCH,
+            path: "/requests/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "request-1" },
+                body: {
+                    status: "accepted",
+                },
+            },
+        },
+        {
+            method: HttpMethod.DELETE,
+            path: "/requests/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "request-1" },
+            },
+        },
+        {
+            method: HttpMethod.POST,
+            path: "/requests",
+            hasController: true,
+            request: {
+                body: {
+                    userId: "user-1",
+                    classId: "class-1",
+                    status: "pending",
+                },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/users/:idParent/requests",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "user-1" },
+            },
+        },
+    ],
+    messageRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/messages/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "message-1" },
+            },
+        },
+        {
+            method: HttpMethod.PATCH,
+            path: "/messages/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "message-1" },
+                body: {
+                    content: "Updated message content",
+                },
+            },
+        },
+        {
+            method: HttpMethod.DELETE,
+            path: "/messages/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "message-1" },
+            },
+        },
+        {
+            method: HttpMethod.POST,
+            path: "/messages",
+            hasController: true,
+            request: {
+                body: {
+                    content: "New message content",
+                    questionThreadId: "question-1",
+                    authorId: "user-1",
+                },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/questions/:idParent/messages",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "question-1" },
+            },
+        },
+    ],
+    questionThreadRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/questions/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "question-1" },
+            },
+        },
+        {
+            method: HttpMethod.PATCH,
+            path: "/questions/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "question-1" },
+                body: {
+                    title: "Updated question title",
+                },
+            },
+        },
+        {
+            method: HttpMethod.DELETE,
+            path: "/questions/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "question-1" },
+            },
+        },
+        {
+            method: HttpMethod.POST,
+            path: "/questions",
+            hasController: true,
+            request: {
+                body: {
+                    title: "New question",
+                    content: "Question content",
+                    assignmentId: "assignment-1",
+                    authorId: "user-1",
+                },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/assignments/:idParent/questions",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "assignment-1" },
+            },
+        },
+    ],
+    submissionRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/submissions/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "submission-1" },
+            },
+        },
+        {
+            method: HttpMethod.DELETE,
+            path: "/submissions/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "submission-1" },
+            },
+        },
+        {
+            method: HttpMethod.POST,
+            path: "/submissions",
+            hasController: true,
+            request: {
+                body: {
+                    assignmentId: "assignment-1",
+                    userId: "user-1",
+                    content: "Submission content",
+                    submissionDate: new Date("2025-01-15"),
+                },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/users/:idParent/submissions",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "user-1" },
+            },
+        },
+    ],
     userRoutes: [
         {
             method: HttpMethod.GET,

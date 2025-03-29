@@ -6,7 +6,8 @@ export type GetSubmissionInput = z.infer<typeof getSubmissionSchema>;
 
 export class GetSubmission extends SubmissionBaseService<GetSubmissionInput> {
     async execute(input: GetSubmissionInput): Promise<object> {
-        return (await this.submissionRepository.getById(input.id)).toObject();
+        const submission = await this.submissionRepository.getById(input.id);
+        return { id: submission.id };
     }
 }
 
