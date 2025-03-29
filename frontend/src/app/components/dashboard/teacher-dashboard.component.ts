@@ -10,6 +10,7 @@ import {
 } from "ng-apexcharts";
 import { ClassChartComponent, ClassChartData } from '../graphs/class-graph/class-graph.component';
 import { ActivityChartComponent, ActivityChartData } from '../graphs/activity-graph/activity-graph.component';
+import { MenuCardComponent } from '../small-components/menu-card/menu-card.component';
 
 
 
@@ -17,7 +18,7 @@ import { ActivityChartComponent, ActivityChartData } from '../graphs/activity-gr
 @Component({
   selector: 'app-teacher-dashboard',
   standalone: true,
-  imports: [RouterLink, CommonModule, HttpClientModule, MatIconModule, NgApexchartsModule, ClassChartComponent, ActivityChartComponent],
+  imports: [RouterLink, CommonModule, HttpClientModule, MatIconModule, NgApexchartsModule, ClassChartComponent, ActivityChartComponent, MenuCardComponent],
   templateUrl: './teacher-dashboard.component.html',
   styleUrls: ['./teacher-dashboard.component.less'],
   providers: [TeacherDashboardService]
@@ -32,6 +33,9 @@ export class TeacherDashboardComponent implements OnInit {
   selectedView: string | null = null;
 
   // This is all mock data, awaiting some API functionality after refactor
+  classesTitle: string = $localize`:@@viewClasses:View Classes`;
+  deadlinesTitle: string = $localize`:@@incomingDeadlines:Current Deadlines`;
+  questionsTitle: string = $localize`:@@answerQuestions:Answer Questions`;
   classes = ["Class 1", "Class 2", "Class 3"];
   deadlines = ["Math Exam - Jan 17th", "History Essay - Feb 7th", "Science Report - May 26th"];
   questions = [

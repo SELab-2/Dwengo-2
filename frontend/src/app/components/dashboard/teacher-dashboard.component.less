@@ -52,58 +52,6 @@
     margin: 20px 0;
 }
 
-.card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    padding: 25px;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    border: 1px solid #d2d2d3;
-    border-radius: 5px;
-    box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
-}
-
-.card:hover {
-    background: #e3f2fd;
-}
-
-.clickable:hover {
-    transform: scale(1.05);
-}
-
-
-.card:first-child {
-    border-left: 7px solid #246dec;
-}
-
-.card:nth-child(2) {
-    border-left: 7px solid #f5b74f;
-}
-
-.card:nth-child(3) {
-    border-left: 7px solid #367952;
-}
-
-.card>span {
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.card-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.card-inner>p {
-    font-size: 18px;
-}
-
-.card-inner>span {
-    font-size: 35px;
-}
-
 .main-content {
     display: grid;
     grid-template-columns: 1fr;
@@ -115,8 +63,6 @@
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
-
-
 
 .button-widget {
     margin: 20px;
@@ -143,11 +89,6 @@
     box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
 }
 
-.selected-card {
-    background: #e3f2fd;
-    transform: scale(1.05);
-    transition: all 0.2s ease-in-out;
-}
 
 /* ---------- SCROLLBARS ---------- */
 
@@ -170,6 +111,9 @@
     background-color: #a5aaad;
 }
 
+.clickable:hover {
+    transform: scale(1.05);
+}
 
 /* ---------- MEDIA QUERIES ---------- */
 

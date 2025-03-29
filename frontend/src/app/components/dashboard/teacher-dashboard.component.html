@@ -9,7 +9,19 @@
     </div>
 
     <div class="main-cards">
-        <div class="card" (click)="setView('classes')" [ngClass]="{ 'selected-card': selectedView === 'classes' }">
+        <app-menu-card [title]="classesTitle" [count]="classes.length" icon="school"
+            [selected]="selectedView === 'classes'" color="blue" (cardClick)="setView('classes')">
+        </app-menu-card>
+
+        <app-menu-card [title]="deadlinesTitle" [count]="deadlines.length" icon="timer"
+            [selected]="selectedView === 'deadlines'" color="yellow" (cardClick)="setView('deadlines')">
+        </app-menu-card>
+
+        <app-menu-card [title]="questionsTitle" [count]="questions.length" icon="contact_support"
+            [selected]="selectedView === 'questions'" color="green" (cardClick)="setView('questions')">
+        </app-menu-card>
+
+        <!-- <div class="card" (click)="setView('classes')" [ngClass]="{ 'selected-card': selectedView === 'classes' }">
             <div class="card-inner">
                 <p class="text-primary" i18n>View Classes</p>
                 <mat-icon fontIcon="school"></mat-icon>
@@ -31,7 +43,7 @@
                 <mat-icon fontIcon="contact_support"></mat-icon>
             </div>
             <span class="text-primary font-weight-bold">{{ questions.length }}</span>
-        </div>
+        </div> -->
     </div>
 
     <div class="dynamic-section overview" *ngIf="selectedView === 'classes'">
