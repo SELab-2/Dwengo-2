@@ -10,22 +10,20 @@ export type CreateJoinRequestInput = z.infer<typeof createJoinRequestSchema>;
 
 export class CreateJoinRequest extends JoinRequestService<CreateJoinRequestInput> {
     constructor(
-        joinRequestRepository: IJoinRequestRepository,
+        _joinRequestRepository: IJoinRequestRepository,
         private _classRepository: IClassRepository,
     ) {
-        super(joinRequestRepository);
+        super(_joinRequestRepository);
     }
 
     async execute(input: CreateJoinRequestInput): Promise<object> {
-        const joinRequest: JoinRequest = await this.joinRequestRepository.createJoinRequest(
-            await this.fromObject(input),
-        );
+        const joinRequest: JoinRequest = await this.joinRequestRepository.create(await this.fromObject(input));
         return { id: joinRequest.id };
     }
 
     async fromObject(input: CreateJoinRequestInput): Promise<JoinRequest> {
         // Check if user hasn't already requested to join the class
-        const classRequests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByClassId(input.class);
+        const classRequests: JoinRequest[] = await this.joinRequestRepository.getByClassId(input.class);
         for (const req of classRequests) {
             if (req.requester == input.requester) {
                 throw {

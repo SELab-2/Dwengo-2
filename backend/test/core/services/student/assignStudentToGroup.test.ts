@@ -7,7 +7,7 @@ describe("AssignStudentToGroup Service", () => {
     let assignStudentToGroup: AssignStudentToGroup;
 
     beforeEach(() => {
-        studentRepository = { assignStudentToGroup: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
+        studentRepository = { assignToGroup: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
 
         assignStudentToGroup = new AssignStudentToGroup(studentRepository);
     });
@@ -19,29 +19,29 @@ describe("AssignStudentToGroup Service", () => {
 
         await assignStudentToGroup.execute(params);
 
-        expect(studentRepository.assignStudentToGroup).toHaveBeenCalledTimes(1);
-        expect(studentRepository.assignStudentToGroup).toHaveBeenCalledWith(id, idParent);
+        expect(studentRepository.assignToGroup).toHaveBeenCalledTimes(1);
+        expect(studentRepository.assignToGroup).toHaveBeenCalledWith(id, idParent);
     });
 
     it("should throw an error if the student or group does not exist", async () => {
-        studentRepository.assignStudentToGroup.mockRejectedValue(new EntityNotFoundError("Student or group not found"));
+        studentRepository.assignToGroup.mockRejectedValue(new EntityNotFoundError("Student or group not found"));
 
         const id = "nonexistent-student";
         const idParent = "group-456";
         const params = {id, idParent};
 
         await expect(assignStudentToGroup.execute(params)).rejects.toThrow(EntityNotFoundError);
-        expect(studentRepository.assignStudentToGroup).toHaveBeenCalledWith(id, idParent);
+        expect(studentRepository.assignToGroup).toHaveBeenCalledWith(id, idParent);
     });
 
     it("should throw an error if the repository encounters an unexpected error", async () => {
-        studentRepository.assignStudentToGroup.mockRejectedValue(new Error("Database error"));
+        studentRepository.assignToGroup.mockRejectedValue(new Error("Database error"));
 
         const id = "student-123";
         const idParent = "group-456";
         const params = {id, idParent};
 
         await expect(assignStudentToGroup.execute(params)).rejects.toThrow("Database error");
-        expect(studentRepository.assignStudentToGroup).toHaveBeenCalledWith(id, idParent);
+        expect(studentRepository.assignToGroup).toHaveBeenCalledWith(id, idParent);
     });
 });

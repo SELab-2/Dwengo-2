@@ -16,7 +16,7 @@ export class CreateQuestionThread extends QuestionThreadService<CreateQuestionTh
             input.messageIds,
             undefined,
         );
-        questionThread = await this.questionThreadRepository.createQuestionThread(questionThread);
+        questionThread = await this.questionThreadRepository.create(questionThread);
         return { id: questionThread.id };
     }
 }

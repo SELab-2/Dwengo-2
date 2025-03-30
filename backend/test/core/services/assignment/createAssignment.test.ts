@@ -4,11 +4,11 @@ import { CreateAssignment, CreateAssignmentInput } from '../../../../src/core/se
 
 // Mock repository
 const mockAssignmentRepository = {
-    createAssignment: jest.fn(),
+    create: jest.fn(),
 };
 
 describe('CreateAssignment', () => {
-    let createAssignment: CreateAssignment;
+    let create: CreateAssignment;
     let startDate: Date;
     let deadline: Date;
     let inputAssignmentParams: CreateAssignmentInput;
@@ -16,7 +16,7 @@ describe('CreateAssignment', () => {
     let createdAssignment: Assignment;
 
     beforeEach(() => {
-        createAssignment = new CreateAssignment(mockAssignmentRepository as any);
+        create = new CreateAssignment(mockAssignmentRepository as any);
         jest.clearAllMocks();
         startDate = new Date();
         deadline = new Date();
@@ -33,18 +33,18 @@ describe('CreateAssignment', () => {
     });
 
     test('Should create a Assignment and return its ID', async () => {
-        mockAssignmentRepository.createAssignment.mockResolvedValue(createdAssignment);
+        mockAssignmentRepository.create.mockResolvedValue(createdAssignment);
 
-        const result = await createAssignment.execute(inputAssignmentParams);
+        const result = await create.execute(inputAssignmentParams);
 
         expect(result).toEqual({ id: "1" });
-        expect(mockAssignmentRepository.createAssignment).toHaveBeenCalledWith(inputAssignment, "1");
+        expect(mockAssignmentRepository.create).toHaveBeenCalledWith(inputAssignment);
     });
 
     test('Should throw a DatabaseError if creation fails', async () => {
-        mockAssignmentRepository.createAssignment.mockRejectedValue(new DatabaseError('Creation failed'));
+        mockAssignmentRepository.create.mockRejectedValue(new DatabaseError('Creation failed'));
 
-        await expect(createAssignment.execute(inputAssignmentParams)).rejects.toThrow(DatabaseError);
-        expect(mockAssignmentRepository.createAssignment).toHaveBeenCalledWith(inputAssignment, "1");
+        await expect(create.execute(inputAssignmentParams)).rejects.toThrow(DatabaseError);
+        expect(mockAssignmentRepository.create).toHaveBeenCalledWith(inputAssignment);
     });
 });

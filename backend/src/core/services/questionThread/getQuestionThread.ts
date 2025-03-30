@@ -6,6 +6,6 @@ export type GetQuestionThreadInput = z.infer<typeof getQuestionThreadSchema>;
 
 export class GetQuestionThread extends QuestionThreadService<GetQuestionThreadInput> {
     async execute(input: GetQuestionThreadInput): Promise<object> {
-        return (await this.questionThreadRepository.getQuestionThreadById(input.id)).toObject();
+        return (await this.questionThreadRepository.getById(input.id)).toObject();
     }
 }

@@ -4,7 +4,7 @@ import { QuestionThread, VisibilityType } from '../../../../src/core/entities/qu
 
 // Mock repository
 const mockQuestionThreadRepository = {
-    createQuestionThread: jest.fn(),
+    create: jest.fn(),
 };
 
 describe('CreateQuestionThread', () => {
@@ -35,18 +35,18 @@ describe('CreateQuestionThread', () => {
             "thread-999"
         );
 
-        mockQuestionThreadRepository.createQuestionThread.mockResolvedValue(createdQuestionThread);
+        mockQuestionThreadRepository.create.mockResolvedValue(createdQuestionThread);
 
         const result = await createQuestionThread.execute(input);
 
         expect(result).toEqual({id: createdQuestionThread.id});
-        expect(mockQuestionThreadRepository.createQuestionThread).toHaveBeenCalledWith(expect.any(QuestionThread));
+        expect(mockQuestionThreadRepository.create).toHaveBeenCalledWith(expect.any(QuestionThread));
     });
 
     test('Should throw a DatabaseError if creation fails', async () => {
-        mockQuestionThreadRepository.createQuestionThread.mockRejectedValue(new DatabaseError('Creation failed'));
+        mockQuestionThreadRepository.create.mockRejectedValue(new DatabaseError('Creation failed'));
 
         await expect(createQuestionThread.execute(input)).rejects.toThrow(DatabaseError);
-        expect(mockQuestionThreadRepository.createQuestionThread).toHaveBeenCalledWith(expect.any(QuestionThread));
+        expect(mockQuestionThreadRepository.create).toHaveBeenCalledWith(expect.any(QuestionThread));
     });
 });

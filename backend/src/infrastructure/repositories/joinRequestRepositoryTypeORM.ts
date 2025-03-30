@@ -11,7 +11,7 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
         this.datasourceJoinRequest = new DatasourceJoinRequestTypeORM();
     }
 
-    public async createJoinRequest(joinRequest: JoinRequest): Promise<JoinRequest> {
+    public async create(joinRequest: JoinRequest): Promise<JoinRequest> {
         try {
             return await this.datasourceJoinRequest.createJoinRequest(joinRequest);
         } catch (error: unknown) {
@@ -23,7 +23,7 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
         }
     }
 
-    public async getJoinRequestById(id: string): Promise<JoinRequest> {
+    public async getById(id: string): Promise<JoinRequest> {
         const joinRequest: JoinRequest | null = await this.datasourceJoinRequest.getJoinRequestById(id);
 
         if (joinRequest) {
@@ -33,15 +33,15 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
         }
     }
 
-    public async getJoinRequestByRequesterId(requesterId: string): Promise<JoinRequest[]> {
+    public async getByRequesterId(requesterId: string): Promise<JoinRequest[]> {
         return await this.datasourceJoinRequest.getJoinRequestByRequesterId(requesterId);
     }
 
-    public async getJoinRequestByClassId(classId: string): Promise<JoinRequest[]> {
+    public async getByClassId(classId: string): Promise<JoinRequest[]> {
         return await this.datasourceJoinRequest.getJoinRequestByClassId(classId);
     }
 
-    public async deleteJoinRequestById(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         await this.datasourceJoinRequest.deleteJoinRequestById(id);
     }
 }

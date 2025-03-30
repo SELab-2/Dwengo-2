@@ -31,9 +31,9 @@ export class UpdateUser implements Service<UpdateUserInput> {
         // Get the old info of the user
         let oldUser: User;
         if (input.userType == UserType.STUDENT) {
-            oldUser = await this.studentRepository.getStudentById(input.id);
+            oldUser = await this.studentRepository.getById(input.id);
         } else {
-            oldUser = await this.teacherRepository.getTeacherById(input.id);
+            oldUser = await this.teacherRepository.getById(input.id);
         }
 
         // Check if email is not same when being updated
@@ -47,7 +47,7 @@ export class UpdateUser implements Service<UpdateUserInput> {
         // Check if email is already in use
         if (input.email) {
             const studentPresent: boolean = await this.studentRepository.checkByEmail(input.email);
-            const teacherPresent: boolean = await this.teacherRepository.checkTeacherByEmail(input.email);
+            const teacherPresent: boolean = await this.teacherRepository.checkByEmail(input.email);
             if (studentPresent || teacherPresent) {
                 throw {
                     code: ErrorCode.BAD_REQUEST,
@@ -75,7 +75,7 @@ export class UpdateUser implements Service<UpdateUserInput> {
                 input.schoolName ?? oldUser.schoolName,
                 input.id,
             );
-            await this.studentRepository.updateStudent(updatedUser as Student);
+            await this.studentRepository.update(updatedUser as Student);
         } else {
             updatedUser = new Teacher(
                 input.email ?? oldUser.email,
@@ -85,7 +85,7 @@ export class UpdateUser implements Service<UpdateUserInput> {
                 input.schoolName ?? oldUser.schoolName,
                 input.id,
             );
-            await this.teacherRepository.updateTeacher(updatedUser as Teacher);
+            await this.teacherRepository.update(updatedUser as Teacher);
         }
 
         return {};

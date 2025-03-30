@@ -4,7 +4,7 @@ import { DatabaseError } from '../../../../src/config/error';
 
 // Mock repository
 const mockMessageRepository = {
-    createMessage: jest.fn(),
+    create: jest.fn(),
 };
 
 describe('CreateMessage', () => {
@@ -31,19 +31,19 @@ describe('CreateMessage', () => {
             "message-999"
         );
 
-        mockMessageRepository.createMessage.mockResolvedValue({id: "message-999"});
+        mockMessageRepository.create.mockResolvedValue({id: "message-999"});
 
         const result = await createMessage.execute(input);
 
         expect(result).toEqual({ id: "message-999" });
-        expect(mockMessageRepository.createMessage).toHaveBeenCalledWith(expect.any(Message));
+        expect(mockMessageRepository.create).toHaveBeenCalledWith(expect.any(Message));
 
     });
 
     test('Should throw a DatabaseError if creation fails', async () => {
-        mockMessageRepository.createMessage.mockRejectedValue(new DatabaseError('Creation failed'));
+        mockMessageRepository.create.mockRejectedValue(new DatabaseError('Creation failed'));
 
         await expect(createMessage.execute(input)).rejects.toThrow(DatabaseError);
-        expect(mockMessageRepository.createMessage).toHaveBeenCalledWith(expect.any(Message));
+        expect(mockMessageRepository.create).toHaveBeenCalledWith(expect.any(Message));
     });
 });

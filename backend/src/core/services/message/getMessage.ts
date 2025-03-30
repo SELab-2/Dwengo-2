@@ -6,6 +6,6 @@ export type GetMessageInput = z.infer<typeof getMessageSchema>;
 
 export class GetMessage extends MessageService<GetMessageInput> {
     async execute(input: GetMessageInput): Promise<object> {
-        return (await this.messageRepository.getMessageById(input.id)).toObject();
+        return (await this.messageRepository.getById(input.id)).toObject();
     }
 }

@@ -11,11 +11,11 @@ export class MessageRepositoryTypeORM extends IMessageRepository {
         this.datasourceMessage = new DatasourceMessageTypeORM();
     }
 
-    public async createMessage(message: Message): Promise<Message> {
+    public async create(message: Message): Promise<Message> {
         return await this.datasourceMessage.createMessage(message);
     }
 
-    public async getMessageById(id: string): Promise<Message> {
+    public async getById(id: string): Promise<Message> {
         const message: Message | null = await this.datasourceMessage.getMessageById(id);
 
         if (message) {
@@ -25,11 +25,11 @@ export class MessageRepositoryTypeORM extends IMessageRepository {
         }
     }
 
-    public async updateMessage(message: Message): Promise<Message> {
+    public async update(message: Message): Promise<Message> {
         return await this.datasourceMessage.updateMessage(message);
     }
 
-    public async deleteMessageById(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         return await this.datasourceMessage.deleteMessageById(id);
     }
 }

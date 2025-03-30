@@ -11,11 +11,11 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
         this.datasourceAssignment = new DatasourceAssignmentTypeORM();
     }
 
-    public async createAssignment(assignment: Assignment, classId: string): Promise<Assignment> {
-        return await this.datasourceAssignment.createAssignment(assignment, classId);
+    public async create(assignment: Assignment): Promise<Assignment> {
+        return await this.datasourceAssignment.createAssignment(assignment, assignment.classId);
     }
 
-    public async getAssignmentById(id: string): Promise<Assignment> {
+    public async getById(id: string): Promise<Assignment> {
         const assignment: Assignment | null = await this.datasourceAssignment.getAssignmentById(id);
 
         if (assignment) {
@@ -25,23 +25,23 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
         }
     }
 
-    public async getAssignmentsByClassId(classId: string): Promise<Assignment[]> {
+    public async getByClassId(classId: string): Promise<Assignment[]> {
         return await this.datasourceAssignment.getAssignmentsByClassId(classId);
     }
 
-    public async getAssignmentsByUserId(userId: string): Promise<Assignment[]> {
+    public async getByUserId(userId: string): Promise<Assignment[]> {
         return await this.datasourceAssignment.getAssignmentsByUserId(userId);
     }
 
-    public async getAssignmentsByLearningPathId(learningPathId: string): Promise<Assignment[]> {
+    public async getByLearningPathId(learningPathId: string): Promise<Assignment[]> {
         return await this.datasourceAssignment.getAssignmentsByLearningPathId(learningPathId);
     }
 
-    public async deleteAssignmentById(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         return await this.datasourceAssignment.deleteAssignmentById(id);
     }
 
-    public async updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment> {
+    public async update(id: string, updatedFields: Partial<Assignment>): Promise<Assignment> {
         const updatedAssignment: Assignment | null = await this.datasourceAssignment.updateAssignmentById(
             id,
             updatedFields,

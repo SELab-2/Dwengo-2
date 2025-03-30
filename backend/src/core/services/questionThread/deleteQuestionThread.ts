@@ -6,7 +6,7 @@ export type DeleteQuestionThreadInput = z.infer<typeof deleteQuestionThreadSchem
 
 export class DeleteQuestionThread extends QuestionThreadService<DeleteQuestionThreadInput> {
     async execute(input: DeleteQuestionThreadInput): Promise<object> {
-        await this.questionThreadRepository.deleteQuestionThread(input.id);
+        await this.questionThreadRepository.delete(input.id);
         return {};
     }
 }
