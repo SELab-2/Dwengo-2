@@ -6,7 +6,7 @@ export type DeleteClassInput = z.infer<typeof deleteClassSchema>;
 
 export class DeleteClass extends ClassBaseService<DeleteClassInput> {
     async execute(input: DeleteClassInput): Promise<object> {
-        await this.classRepository.deleteClassById(input.id);
+        await this.classRepository.delete(input.id);
         return {};
     }
 }

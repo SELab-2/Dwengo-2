@@ -22,9 +22,9 @@ export class DeleteUser implements Service<DeleteUserInput> {
      */
     async execute(input: DeleteUserInput): Promise<object> {
         if (input.userType == UserType.STUDENT) {
-            await this.studentRepository.deleteStudentById(input.id);
+            await this.studentRepository.delete(input.id);
         } else {
-            await this.teacherRepository.deleteTeacherWithId(input.id);
+            await this.teacherRepository.delete(input.id);
         }
         return {};
     }

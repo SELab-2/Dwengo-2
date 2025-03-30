@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const createGroupSchema = z.object({
-    memberIds: z.array(z.string()),
-    assignmentId: z.string(),
+    members: z.array(z.string()),
+    assignment: z.string(),
 });
 
 export const deleteGroupSchema = z.object({
@@ -10,7 +10,7 @@ export const deleteGroupSchema = z.object({
 });
 
 export const getAssignmentGroupsSchema = z.object({
-    id: z.string(),
+    idParent: z.string(),
 });
 
 export const getGroupSchema = z.object({
@@ -18,10 +18,10 @@ export const getGroupSchema = z.object({
 });
 
 export const getUserGroupsSchema = z.object({
-    id: z.string(),
+    idParent: z.string(),
 });
 
 export const updateGroupSchema = z.object({
     id: z.string(),
-    memberIds: z.array(z.string()),
+    members: z.array(z.string()),
 });
