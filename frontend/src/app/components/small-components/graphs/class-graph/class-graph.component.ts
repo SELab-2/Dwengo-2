@@ -110,6 +110,10 @@ export class ClassChartComponent implements OnInit {
       xaxis: {
         categories: classChartData.map(data => data.name)
       },
+      yaxis: {
+        max: 100,
+        min: 100,
+      },
       fill: {
         opacity: 1
       },

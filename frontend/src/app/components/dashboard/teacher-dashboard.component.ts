@@ -3,13 +3,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
-import { TeacherDashboardService } from '../../services/getClasses.service';
 import {
   NgApexchartsModule,
   ChartComponent
 } from "ng-apexcharts";
-import { ClassChartComponent, ClassChartData } from '../graphs/class-graph/class-graph.component';
-import { ActivityChartComponent, ActivityChartData } from '../graphs/activity-graph/activity-graph.component';
+import { ClassChartComponent, ClassChartData } from '../small-components/graphs/class-graph/class-graph.component';
+import { ActivityChartComponent, ActivityChartData } from '../small-components/graphs/activity-graph/activity-graph.component';
 import { MenuCardComponent } from '../small-components/menu-card/menu-card.component';
 
 
@@ -20,8 +19,7 @@ import { MenuCardComponent } from '../small-components/menu-card/menu-card.compo
   standalone: true,
   imports: [RouterLink, CommonModule, HttpClientModule, MatIconModule, NgApexchartsModule, ClassChartComponent, ActivityChartComponent, MenuCardComponent],
   templateUrl: './teacher-dashboard.component.html',
-  styleUrls: ['./teacher-dashboard.component.less'],
-  providers: [TeacherDashboardService]
+  styleUrls: ['./teacher-dashboard.component.less']
 })
 export class TeacherDashboardComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
@@ -51,8 +49,6 @@ export class TeacherDashboardComponent implements OnInit {
   public classChartData!: ClassChartData[];
   public activityChartData!: ActivityChartData[];
 
-  constructor(private dashboardService: TeacherDashboardService) {
-  }
 
   ngOnInit(): void {
     // verander zodat je api callt
