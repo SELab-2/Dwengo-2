@@ -36,7 +36,7 @@ export class ClassComponent implements OnInit {
   // Snackbar
   private readonly snackBar = inject(MatSnackBar);
 
-  // Snackback messages
+  // Snackbar messages
   private readonly errorMessage = $localize `An error occured, please try again.`;
   private readonly updateSuccesMessage = $localize `Class updated succesfully!`;
   private readonly deleteSuccesMessage = $localize `Class deleted succesfully!`;

@@ -24,7 +24,7 @@ type classFilterType = (c: Class) => boolean;
     MiniClassComponent,
     CreateClassComponent,
 
-    // Material design
+    // Angular material
     MatList,
     MatToolbar,
     MatIconModule,

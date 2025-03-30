@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+/**
+ * This is just a small temporary component to show a loading page.
+ */
 @Component({
   selector: 'app-loading',
   standalone: true,
