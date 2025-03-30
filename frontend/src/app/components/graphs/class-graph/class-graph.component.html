@@ -1,5 +1,13 @@
 <div class="charts-card">
-    <p class="chart-title" i18n>Progress</p>
+    <div class="chart-header">
+        <p class="chart-title" i18n>
+            Progress
+        </p>
+        <mat-icon class="info-icon">info</mat-icon>
+        <p class="info-text">This chart shows you the amount of assignments that have been completed
+            for each class, together with the amount of students that finished every assignment within that
+            class.</p>
+    </div>
     <apx-chart class="chart" [series]="barChartOptions.series!" [chart]="barChartOptions.chart!"
         [dataLabels]="barChartOptions.dataLabels!" [xaxis]="barChartOptions.xaxis!" [legend]="barChartOptions.legend!"
         [fill]="barChartOptions.fill!" [tooltip]="barChartOptions.tooltip!">

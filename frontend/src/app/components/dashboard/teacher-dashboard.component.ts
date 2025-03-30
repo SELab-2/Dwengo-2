@@ -36,6 +36,8 @@ export class TeacherDashboardComponent implements OnInit {
   classesTitle: string = $localize`:@@viewClasses:View Classes`;
   deadlinesTitle: string = $localize`:@@incomingDeadlines:Current Deadlines`;
   questionsTitle: string = $localize`:@@answerQuestions:Answer Questions`;
+
+
   classes = ["Class 1", "Class 2", "Class 3"];
   deadlines = ["Math Exam - Jan 17th", "History Essay - Feb 7th", "Science Report - May 26th"];
   questions = [
@@ -59,9 +61,9 @@ export class TeacherDashboardComponent implements OnInit {
     ]
     //new ClassChartData([40, 36, 57, 82, 65], [13, 15, 10, 43, 61]);
     this.activityChartData = [
-      new ActivityChartData("Maths", [10, 41, 35, 51, 49, 62, 69, 73, 86]),
+      new ActivityChartData("Maths", [4, 10, 41, 35, 51, 49, 62, 69, 73, 86]),
       new ActivityChartData("Physics", [5, 8, 12, 16, 28, 35, 43, 48, 54]),
-      new ActivityChartData("STEM", [15, 35, 42, 51, 58, 64, 72, 81, 95])
+      new ActivityChartData("STEM", [3, 5, 7, 10, 15, 35, 42, 51, 58, 64, 72, 81, 95])
     ]
   }
 

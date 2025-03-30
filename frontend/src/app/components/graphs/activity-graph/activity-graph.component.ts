@@ -31,7 +31,14 @@ export class ActivityChartData {
    * @param _name the name of the class
    * @param _data a list of length 12 that has the number of submissions per month
    */
-  constructor(private _name: string, private _data: number[]) { }
+  constructor(private _name: string, private _data: number[]) {
+    if (_data.length < 12) {
+      this._data = (new Array(12 - _data.length)).fill(0).concat(_data)
+    } else if (_data.length > 12) {
+      this._data = _data.slice(-12)
+    }
+
+  }
   public get data(): number[] {
     return this._data;
   }
