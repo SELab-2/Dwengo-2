@@ -37,17 +37,6 @@ security:
   - apiKeyAuth: []
 
 paths:
-  /challenge:
-    get:
-      tags:
-        - authentication
-      security: []
-      summary: Get authentication challenge
-      description: Retrieve a temporary challenge string that must be signed for login
-      operationId: getChallenge
-      responses:
-        '200':
-          $ref: '#/components/responses/ChallengeOK'
   /register:
     post:
       tags:
@@ -55,9 +44,9 @@ paths:
       security: []
       summary: Register a new user
       description: |
-        Create a new user account with email and public key (derived from locally hashed password).
-        The email must be unique and not already registered in the system. The public key will be
-        used to verify signed challenges during authentication. Returns 201 on successful registration.
+        Create a new user account with email and and password.
+        The email must be unique and not already registered in the system. The password will be
+        used to authenticate the user. Returns 201 on successful registration.
       operationId: registerUser
       requestBody:
         required: true
@@ -67,7 +56,7 @@ paths:
               $ref: '#/components/schemas/RegisterRequest'
       responses:
         '201':
-          $ref: '#/components/responses/RegisterCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '409':
@@ -79,8 +68,8 @@ paths:
       security: []
       summary: Login user
       description: |
-        Authenticate a user by verifying their signed challenge. Returns user ID and challenge expiration
-        for constructing the X-API-Token header (format: `userId.signedChallenge`).'
+        Authenticate a user by verifying their email and password. Returns user ID and token
+        for constructing the X-API-Token header.'
       operationId: loginUser
       requestBody:
         required: true
@@ -111,8 +100,8 @@ paths:
             type: string
             format: uuid
         - in: query
-          name: role
-          required: false
+          name: userType
+          required: true
           schema:
             type: string
             enum: [student, teacher]
@@ -127,7 +116,7 @@ paths:
       tags:
         - users
       summary: Update user data
-      description: Modify user information such as name, email, or role. Only accessible by the user themselves or administrators.
+      description: Modify user information such as name, email, or userType. Only accessible by the user themselves or administrators. Will return the updated user data.
       operationId: updateUser
       parameters:
         - in: path
@@ -137,7 +126,7 @@ paths:
             type: string
             format: uuid
         - in: query
-          name: role
+          name: userType
           required: false
           schema:
             type: string
@@ -149,8 +138,8 @@ paths:
             schema:
               $ref: '#/components/schemas/UserUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/UserOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -168,12 +157,12 @@ paths:
           schema:
             type: string
             format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserDelete'
+        - in: query
+          name: userType
+          required: false
+          schema:
+            type: string
+            enum: [student, teacher]
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -186,7 +175,7 @@ paths:
       tags:
         - users
       summary: Get all users in class
-      description: Retrieves a list of all users enrolled in a specific class.
+      description: Retrieves a list of all users in a specific class.
       operationId: getClassUsers
       parameters:
         - in: path
@@ -199,7 +188,7 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/UsersOK'
+          $ref: '#/components/responses/AllUsers'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -223,7 +212,14 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
+            format: uuidµ
+        - in: query
+          name: userType
+          required: true
+          schema:
+            type: string
+            enum: [student, teacher]
+              
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -249,7 +245,7 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/UsersOK'
+          $ref: '#/components/responses/AllStudents'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -275,7 +271,7 @@ paths:
               $ref: '#/components/schemas/CollectionUserCreate'
       responses:
         '201':
-          $ref: '#/components/responses/UserCreated'
+          $ref: '#/components/responses/CreateOK'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -300,6 +296,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: userType
+          required: true
+          schema:
+            type: string
+            enum: [student, teacher]
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -325,37 +327,11 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/UsersOK'
+          $ref: '#/components/responses/AllStudents'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-    post:
-      tags:
-        - users
-      summary: Assign teacher to assignment
-      description: Assign a new teacher to a specific assignment. Only allowed by teachers and admins, can't be undone.
-      operationId: createAssignmentUser
-      parameters:
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CollectionUserCreate'
-      responses:
-        '201':
-          $ref: '#/components/responses/UserCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
   /users:
     get:
       tags:
@@ -368,45 +344,20 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/UsersOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-    post:
-      tags:
-        - users
-      summary: Create new user
-      description: Create a new user account with specified role and permissions. Only accessible by administrators.
-      operationId: createUser
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCreate'
-      responses:
-        '201':
-          $ref: '#/components/responses/UserCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/AllUsers'
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  '/users/{idParent}/requests/{id}':
+  '/requests/{id}':
     get:
       tags:
         - requests
-      summary: Get user's request by ID
-      description: Retrieves detailed information about a specific request belonging to a user by its unique identifier.
-      operationId: getUserRequestById
+      summary: Get request by ID
+      description: Retrieves detailed information about a specific request using its unique identifier.
+      operationId: getRequestById
       parameters:
         - in: path
           name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
           required: true
           schema:
             type: string
@@ -418,32 +369,30 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/users/{idParent}/requests':
-    get:
+    patch:
       tags:
         - requests
-      summary: Get all user's requests
-      description: Retrieve a list of all requests belonging to a specific user.
-      operationId: getUserrequests
+      summary: Accept a request
+      description: Update a request by its unique identifier (accept).
+      operationId: updateRequest
       parameters:
         - in: path
-          name: idParent
+          name: id
           required: true
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
       responses:
-        '200':
-          $ref: '#/components/responses/RequestsOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  '/requests/{id}':
+        '404':
+          $ref: '#/components/responses/NotFound'
     delete:
       tags:
         - requests
-      summary: Delete an request
+      summary: Delete a request
       description: Permanently delete a request by its unique identifier.
       operationId: deleteRequest
       parameters:
@@ -475,46 +424,18 @@ paths:
               $ref: '#/components/schemas/JoinRequestCreate'
       responses:
         '201':
-          $ref: '#/components/responses/JoinRequestCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-
-  '/users/{idParent}/classes/{id}':
+  '/users/{idParent}/requests':
     get:
       tags:
-        - classes
-      summary: Get user's class by ID
-      description: Retrieve detailed information about a specific class belonging to a user by its unique identifier.
-      operationId: getUserClassById
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          $ref: '#/components/responses/ClassOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/users/{idParent}/classes':
-    get:
-      tags:
-        - classes
-      summary: Get all user's classes
-      description: Retrieve a list of all classes belonging to a specific user.
-      operationId: getUserClasses
+        - requests
+      summary: Get all user's requests
+      description: Retrieve a list of all requests belonging to a specific user.
+      operationId: getUserRequests
       parameters:
         - in: path
           name: idParent
@@ -526,10 +447,31 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/ClassesOK'
+          $ref: '#/components/responses/RequestsOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   '/classes/{id}':
+    get:
+      tags:
+        - classes
+      summary: Get class by ID
+      description: Retrieve detailed information about a specific class belonging using its unique identifier.
+      operationId: getClassById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ClassOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
     patch:
       tags:
         - classes
@@ -548,15 +490,10 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - data
-              properties:
-                data:
-                  $ref: '#/components/schemas/ClassUpdate'
+              $ref: '#/components/schemas/ClassUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/ClassOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -598,113 +535,54 @@ paths:
               $ref: '#/components/schemas/ClassCreate'
       responses:
         '201':
-          $ref: '#/components/responses/ClassCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+  '/users/{idParent}/classes':
+    get:
+      tags:
+        - classes
+      summary: Get all user's classes
+      description: Retrieve a list of all classes belonging to a specific user.
+      operationId: getUserClasses
+      parameters:
+        - in: path
+          name: idParent
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/ClassesOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
-  '/users/{idParent}/groups/{id}':
-    get:
-      tags:
-        - groups
-      summary: Get user group by ID
-      description: Retrieve detailed information about a specific group within a user by its unique identifier.
-      operationId: getUserGroupById
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          $ref: '#/components/responses/GroupOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/users/{idParent}/groups':
-    get:
-      tags:
-        - groups
-      summary: Get all groups for user
-      description: Retrieve a list of all groups associated with a specific user.
-      operationId: getUserGroups
-      parameters:
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
-      responses:
-        '200':
-          $ref: '#/components/responses/GroupsOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/assignments/{idParent}/groups/{id}':
-    get:
-      tags:
-        - groups
-      summary: Get assignment group by ID
-      description: Retrieve detailed information about a specific group from an assignment by its unique identifier.
-      operationId: getAssignmentGroupById
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          $ref: '#/components/responses/GroupOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/assignments/{idParent}/groups':
-    get:
-      tags:
-        - groups
-      summary: Get all groups for an assignment
-      description: Retrieve a list of all groups associated with a specific assignment.
-      operationId: getAssignmentGroups
-      parameters:
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
-      responses:
-        '200':
-          $ref: '#/components/responses/GroupsOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
   '/groups/{id}':
+    get:
+      tags:
+        - groups
+      summary: Get group by ID
+      description: Retrieve detailed information about a specific group using its unique identifier.
+      operationId: getGroupById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/GroupOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
     patch:
       tags:
         - groups
@@ -723,15 +601,11 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - data
-              properties:
-                data:
-                  $ref: '#/components/schemas/GroupUpdate'
+              $ref: '#/components/schemas/GroupUpdate'
+                  
       responses:
-        '200':
-          $ref: '#/components/responses/GroupOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -773,46 +647,18 @@ paths:
               $ref: '#/components/schemas/GroupCreate'
       responses:
         '201':
-          $ref: '#/components/responses/GroupCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-
-  '/paths/{idParent}/objects/{id}':
+  '/users/{idParent}/groups':
     get:
       tags:
-        - objects
-      summary: Get learning object from path by ID
-      description: Retrieve detailed information about a specific learning object within a learning path by their unique identifiers.
-      operationId: getPathObjectById
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          $ref: '#/components/responses/LearningObjectOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/paths/{idParent}/objects':
-    get:
-      tags:
-        - objects
-      summary: Get all learning objects from path
-      description: Retrieve a list of all learning objects associated with a specific learning path.
-      operationId: getPathObjects
+        - groups
+      summary: Get all groups for user
+      description: Retrieve a list of all groups associated with a specific user.
+      operationId: getUserGroups
       parameters:
         - in: path
           name: idParent
@@ -824,195 +670,263 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/LearningObjectsOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/objects/{id}':
-    patch:
-      tags:
-        - objects
-      summary: Update learning object
-      description: Modify an existing learning object's properties.
-      operationId: updateObject
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LearningObjectUpdate'
-      responses:
-        '200':
-          $ref: '#/components/responses/LearningObjectOK'
+          $ref: '#/components/responses/GroupsOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-    delete:
-      tags:
-        - objects
-      summary: Delete learning object
-      description: Permanently delete a learning object by its unique identifier.
-      operationId: deleteObject
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  /objects:
-    post:
-      tags:
-        - objects
-      summary: Create new learning object
-      description: Create a new learning object with the specified properties.
-      operationId: createObject
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LearningObjectCreate'
-      responses:
-        '201':
-          $ref: '#/components/responses/LearningObjectCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-
-  '/paths/{id}':
+  '/assignments/{idParent}/groups':
     get:
       tags:
-        - paths
-      summary: Get learning path details
-      description: Retrieve detailed information about a specific learning path, including its objects and metadata.
-      operationId: getPathById
+        - groups
+      summary: Get all groups for an assignment
+      description: Retrieve a list of all groups associated with a specific assignment.
+      operationId: getAssignmentGroups
       parameters:
         - in: path
-          name: id
+          name: idParent
           required: true
           schema:
             type: string
             format: uuid
-      responses:
-        '200':
-          $ref: '#/components/responses/LearningPathOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-    patch:
-      tags:
-        - paths
-      summary: Update learning path properties
-      description: Modify a learning path's properties such as name, description, and object sequence.
-      operationId: updatePath
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LearningPathUpdate'
-      responses:
-        '200':
-          $ref: '#/components/responses/LearningPathOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-    delete:
-      tags:
-        - paths
-      summary: Delete learning path permanently
-      description: Permanently remove a learning path and its associations by its unique identifier.
-      operationId: deletePath
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  /paths:
-    get:
-      tags:
-        - paths
-      summary: List all learning paths
-      description: Retrieve a paginated list of all learning paths with their basic information.
-      operationId: getPaths
-      parameters:
         - $ref: '#/components/parameters/PageParam'
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/LearningPathsOK'
+          $ref: '#/components/responses/GroupsOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
-    post:
-      tags:
-        - paths
-      summary: Create learning path
-      description: Create a new learning path with specified name, description and sequence of learning objects.
-      operationId: createPath
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LearningPathCreate'
-      responses:
-        '201':
-          $ref: '#/components/responses/LearningPathCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
-  '/users/{idParent}/assignments/{id}':
+# TODO  '/paths/{idParent}/objects/{id}':
+#    get:
+#      tags:
+#        - objects
+#      summary: Get learning object from path by ID
+#      description: Retrieve detailed information about a specific learning object within a learning path by their unique identifiers.
+#      operationId: getPathObjectById
+#      parameters:
+#        - in: path
+#          name: id
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#        - in: path
+#          name: idParent
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#      responses:
+#        '200':
+#          $ref: '#/components/responses/LearningObjectOK'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#  '/paths/{idParent}/objects':
+#    get:
+#      tags:
+#        - objects
+#      summary: Get all learning objects from path
+#      description: Retrieve a list of all learning objects associated with a specific learning path.
+#      operationId: getPathObjects
+#      parameters:
+#        - in: path
+#          name: idParent
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#        - $ref: '#/components/parameters/PageParam'
+#        - $ref: '#/components/parameters/PageSizeParam'
+#      responses:
+#        '200':
+#          $ref: '#/components/responses/LearningObjectsOK'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#  '/objects/{id}':
+#    patch:
+#      tags:
+#        - objects
+#      summary: Update learning object
+#      description: Modify an existing learning object's properties.
+#      operationId: updateObject
+#      parameters:
+#        - in: path
+#          name: id
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/LearningObjectUpdate'
+#      responses:
+#        '204':
+#          $ref: '#/components/responses/UpdateOK'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#    delete:
+#      tags:
+#        - objects
+#      summary: Delete learning object
+#      description: Permanently delete a learning object by its unique identifier.
+#      operationId: deleteObject
+#      parameters:
+#        - in: path
+#          name: id
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#      responses:
+#        '204':
+#          $ref: '#/components/responses/NoContent'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#  /objects:
+#    post:
+#      tags:
+#        - objects
+#      summary: Create new learning object
+#      description: Create a new learning object with the specified properties.
+#      operationId: createObject
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/LearningObjectCreate'
+#      responses:
+#        '201':
+#          $ref: '#/components/responses/EntityCreated'
+#        '400':
+#          $ref: '#/components/responses/BadRequest'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+
+# TODO  '/paths/{id}':
+#    get:
+#      tags:
+#        - paths
+#      summary: Get learning path details
+#      description: Retrieve detailed information about a specific learning path, including its objects and metadata.
+#      operationId: getPathById
+#      parameters:
+#        - in: path
+#          name: id
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#      responses:
+#        '200':
+#          $ref: '#/components/responses/LearningPathOK'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#    patch:
+#      tags:
+#        - paths
+#      summary: Update learning path properties
+#      description: Modify a learning path's properties such as name, description, and object sequence.
+#      operationId: updatePath
+#      parameters:
+#        - in: path
+#          name: id
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/LearningPathUpdate'
+#      responses:
+#        '204':
+#          $ref: '#/components/responses/UpdateOK'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#    delete:
+#      tags:
+#        - paths
+#      summary: Delete learning path permanently
+#      description: Permanently remove a learning path and its associations by its unique identifier.
+#      operationId: deletePath
+#      parameters:
+#        - in: path
+#          name: id
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#      responses:
+#        '204':
+#          $ref: '#/components/responses/NoContent'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#  /paths:
+#    get:
+#      tags:
+#        - paths
+#      summary: List all learning paths
+#      description: Retrieve a paginated list of all learning paths with their basic information.
+#      operationId: getPaths
+#      parameters:
+#        - $ref: '#/components/parameters/PageParam'
+#        - $ref: '#/components/parameters/PageSizeParam'
+#      responses:
+#        '200':
+#          $ref: '#/components/responses/LearningPathsOK'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#    post:
+#      tags:
+#        - paths
+#      summary: Create learning path
+#      description: Create a new learning path with specified name, description and sequence of learning objects.
+#      operationId: createPath
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/LearningPathCreate'
+#      responses:
+#        '201':
+#          $ref: '#/components/responses/EntityCreated'
+#        '400':
+#          $ref: '#/components/responses/BadRequest'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+
+  '/assignments/{id}':
     get:
       tags:
         - assignments
-      summary: Get user's assignment by ID
-      description: Retrieve detailed information about a specific assignment of a user by their unique identifiers.
-      operationId: getUserAssignmentById
+      summary: Get assignment by ID
+      description: Retrieve detailed information about a specific assignment using its unique identifier.
+      operationId: getAssignmentById
       parameters:
         - in: path
           name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
           required: true
           schema:
             type: string
@@ -1024,28 +938,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/users/{idParent}/assignments':
-    get:
-      tags:
-        - assignments
-      summary: Get all user's assignments
-      description: Retrieve a list of all assignments associated with a specific user.
-      operationId: getUserAssignments
-      parameters:
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
-      responses:
-        '200':
-          $ref: '#/components/responses/AssignmentsOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/assignments/{id}':
     patch:
       tags:
         - assignments
@@ -1066,8 +958,8 @@ paths:
             schema:
               $ref: '#/components/schemas/AssignmentUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/AssignmentOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1107,46 +999,18 @@ paths:
               $ref: '#/components/schemas/AssignmentCreate'
       responses:
         '201':
-          $ref: '#/components/responses/AssignmentCreated'
+          $ref: '#/components/responses/EntityCreated'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-
-  '/users/{idParent}/progresses/{id}':
+  '/users/{idParent}/assignments':
     get:
       tags:
-        - progresses
-      summary: Get user progress by ID
-      description: Retrieve detailed information about a specific progress entry for a user by their unique identifiers.
-      operationId: getUserProgressById
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          $ref: '#/components/responses/ProgressOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/users/{idParent}/progresses':
-    get:
-      tags:
-        - progresses
-      summary: Get all user progresses
-      description: Retrieve a list of all progress entries for a specific user.
-      operationId: getUserProgresses
+        - assignments
+      summary: Get all user's assignments
+      description: Retrieve a list of all assignments associated with a specific user.
+      operationId: getUserAssignments
       parameters:
         - in: path
           name: idParent
@@ -1158,150 +1022,193 @@ paths:
         - $ref: '#/components/parameters/PageSizeParam'
       responses:
         '200':
-          $ref: '#/components/responses/ProgressesOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/users-assignments/{idParent}/progresses/{id}':
-    get:
-      tags:
-        - progresses
-      summary: Get user assignment progress by ID
-      description: Retrieve detailed information about a specific progress entry for a user assignment by their unique identifiers.
-      operationId: getUserAssignmentProgressById
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            pattern: '^u[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}-a[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
-          description: Compound identifier in format 'u{userUuid}-a{assignmentUuid}'
-      responses:
-        '200':
-          $ref: '#/components/responses/ProgressOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/users-assignments/{idParent}/progresses':
-    get:
-      tags:
-        - progresses
-      summary: Get all user asignment progresses
-      description: Retrieve a list of all progress entries for a specific user asignment.
-      operationId: getUserAssignmentProgresses
-      parameters:
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            pattern: '^u[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}-a[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
-          description: Compound identifier in format 'u{userUuid}-a{assignmentUuid}'
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
-      responses:
-        '200':
-          $ref: '#/components/responses/ProgressesOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/progresses/{id}':
-    patch:
-      tags:
-        - progresses
-      summary: Update progress status
-      description: 'Modify progress information including status, answers and completion details.'
-      operationId: updateProgress
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - data
-              properties:
-                data:
-                  $ref: '#/components/schemas/ProgressUpdate'
-      responses:
-        '200':
-          $ref: '#/components/responses/ProgressOK'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-    delete:
-      tags:
-        - progresses
-      summary: Delete progress entry
-      description: Permanently delete a progress entry and its associated data by its unique identifier.
-      operationId: deleteProgress
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  /progresses:
-    post:
-      tags:
-        - progresses
-      summary: Create new progress entry
-      description: Create a new progress entry for tracking user advancement through learning content.
-      operationId: createProgress
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProgressCreate'
-      responses:
-        '201':
-          $ref: '#/components/responses/ProgressCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/AssignmentsOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  '/assignments/{idParent}/questions/{id}':
+# TODO  '/users/{idParent}/progresses/{id}':
+#    get:
+#      tags:
+#        - progresses
+#      summary: Get user progress by ID
+#      description: Retrieve detailed information about a specific progress entry for a user by their unique identifiers.
+#      operationId: getUserProgressById
+#      parameters:
+#        - in: path
+#          name: id
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#        - in: path
+#          name: idParent
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#      responses:
+#        '200':
+#          $ref: '#/components/responses/ProgressOK'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#  '/users/{idParent}/progresses':
+#    get:
+#      tags:
+#        - progresses
+#      summary: Get all user progresses
+#      description: Retrieve a list of all progress entries for a specific user.
+#      operationId: getUserProgresses
+#      parameters:
+#        - in: path
+#          name: idParent
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#        - $ref: '#/components/parameters/PageParam'
+#        - $ref: '#/components/parameters/PageSizeParam'
+#      responses:
+#        '200':
+#          $ref: '#/components/responses/ProgressesOK'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#  '/users-assignments/{idParent}/progresses/{id}':
+#    get:
+#      tags:
+#        - progresses
+#      summary: Get user assignment progress by ID
+#      description: Retrieve detailed information about a specific progress entry for a user assignment by their unique identifiers.
+#      operationId: getUserAssignmentProgressById
+#      parameters:
+#        - in: path
+#          name: id
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#        - in: path
+#          name: idParent
+#          required: true
+#          schema:
+#            type: string
+#            pattern: '^u[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}-a[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+#          description: Compound identifier in format 'u{userUuid}-a{assignmentUuid}'
+#      responses:
+#        '200':
+#          $ref: '#/components/responses/ProgressOK'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#  '/users-assignments/{idParent}/progresses':
+#    get:
+#      tags:
+#        - progresses
+#      summary: Get all user asignment progresses
+#      description: Retrieve a list of all progress entries for a specific user asignment.
+#      operationId: getUserAssignmentProgresses
+#      parameters:
+#        - in: path
+#          name: idParent
+#          required: true
+#          schema:
+#            type: string
+#            pattern: '^u[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}-a[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+#          description: Compound identifier in format 'u{userUuid}-a{assignmentUuid}'
+#        - $ref: '#/components/parameters/PageParam'
+#        - $ref: '#/components/parameters/PageSizeParam'
+#      responses:
+#        '200':
+#          $ref: '#/components/responses/ProgressesOK'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#  '/progresses/{id}':
+#    patch:
+#      tags:
+#        - progresses
+#      summary: Update progress status
+#      description: 'Modify progress information including status, answers and completion details.'
+#      operationId: updateProgress
+#      parameters:
+#        - in: path
+#          name: id
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              type: object
+#              required:
+#                - data
+#              properties:
+#                data:
+#                  $ref: '#/components/schemas/ProgressUpdate'
+#      responses:
+#        '204':
+#          $ref: '#/components/responses/UpdateOK'
+#        '400':
+#          $ref: '#/components/responses/BadRequest'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#    delete:
+#      tags:
+#        - progresses
+#      summary: Delete progress entry
+#      description: Permanently delete a progress entry and its associated data by its unique identifier.
+#      operationId: deleteProgress
+#      parameters:
+#        - in: path
+#          name: id
+#          required: true
+#          schema:
+#            type: string
+#            format: uuid
+#      responses:
+#        '204':
+#          $ref: '#/components/responses/NoContent'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+#        '404':
+#          $ref: '#/components/responses/NotFound'
+#  /progresses:
+#    post:
+#      tags:
+#        - progresses
+#      summary: Create new progress entry
+#      description: Create a new progress entry for tracking user advancement through learning content.
+#      operationId: createProgress
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/ProgressCreate'
+#      responses:
+#        '201':
+#          $ref: '#/components/responses/EntityCreated'
+#        '400':
+#          $ref: '#/components/responses/BadRequest'
+#        '401':
+#          $ref: '#/components/responses/Unauthorized'
+
+  '/questions/{id}':
     get:
       tags:
         - questions
-      summary: Get assignment question by ID
-      description: Retrieve detailed information about a specific question within an assignment entry by their unique identifiers.
-      operationId: getAssignmentQuestionById
+      summary: Get question by ID
+      description: Retrieve detailed information about a specific question its unique identifier.
+      operationId: getQuestionById
       parameters:
         - in: path
           name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
           required: true
           schema:
             type: string
@@ -1316,18 +1223,12 @@ paths:
     patch:
       tags:
         - questions
-      summary: Update assignment question
-      description: Modify a question within an assignment entry, such as providing an answer or adding remarks.
-      operationId: updateAssignmentQuestion
+      summary: Update question
+      description: Modify a question, such as providing an answer or adding remarks.
+      operationId: updateQuestion
       parameters:
         - in: path
           name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
           required: true
           schema:
             type: string
@@ -1339,8 +1240,8 @@ paths:
             schema:
               $ref: '#/components/schemas/QuestionUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/QuestionOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1348,18 +1249,12 @@ paths:
     delete:
       tags:
         - questions
-      summary: Delete asignment question
-      description: Permanently delete a question from an assignment entry by its unique identifier.
-      operationId: deleteAssignmentQuestion
+      summary: Delete question
+      description: Permanently delete a question using its unique identifier.
+      operationId: deleteQuestion
       parameters:
         - in: path
           name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
           required: true
           schema:
             type: string
@@ -1371,6 +1266,26 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+  /questions:
+    post:
+      tags:
+        - questions
+      summary: Create new question
+      description: Create a new question.
+      operationId: createQuestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/EntityCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
   '/assignments/{idParent}/questions':
     get:
       tags:
@@ -1392,49 +1307,17 @@ paths:
           $ref: '#/components/responses/QuestionsOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
-    post:
-      tags:
-        - questions
-      summary: Create new assignment question
-      description: Create a new question within a specific assignment entry.
-      operationId: createAssignmentQuestion
-      parameters:
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/QuestionCreate'
-      responses:
-        '201':
-          $ref: '#/components/responses/QuestionCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
 
-  '/questions/{idParent}/messages/{id}':
+  '/messages/{id}':
     get:
       tags:
         - messages
-      summary: Get question message by ID
-      description: Retrieve detailed information about a specific message within a question by their unique identifiers.
-      operationId: getQuestionMessageById
+      summary: Get message by ID
+      description: Retrieve detailed information about a specific message using its unique identifier.
+      operationId: getMessageById
       parameters:
         - in: path
           name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
           required: true
           schema:
             type: string
@@ -1449,18 +1332,12 @@ paths:
     patch:
       tags:
         - messages
-      summary: Update question message
-      description: Modify a message within a question, such as adding a reply or changing the content.
-      operationId: updateQuestionMessage
+      summary: Update message
+      description: Modify a message.
+      operationId: updateMessage
       parameters:
         - in: path
           name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
           required: true
           schema:
             type: string
@@ -1472,8 +1349,8 @@ paths:
             schema:
               $ref: '#/components/schemas/MessageUpdate'
       responses:
-        '200':
-          $ref: '#/components/responses/MessageOK'
+        '204':
+          $ref: '#/components/responses/UpdateOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1481,18 +1358,12 @@ paths:
     delete:
       tags:
         - messages
-      summary: Delete question message
-      description: Permanently delete a message from a question by its unique identifier.
-      operationId: deleteQuestionMessage
+      summary: Delete message
+      description: Permanently delete a message.
+      operationId: deleteMessage
       parameters:
         - in: path
           name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: path
-          name: idParent
           required: true
           schema:
             type: string
@@ -1504,7 +1375,26 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-
+  /messages:
+    post:
+      tags:
+        - messages
+      summary: Create new message
+      description: Create a new message.
+      operationId: createMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/EntityCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
   '/questions/{idParent}/messages':
     get:
       tags:
@@ -1526,32 +1416,8 @@ paths:
           $ref: '#/components/responses/MessagesOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
-    post:
-      tags:
-        - messages
-      summary: Create new question message
-      description: Create a new message within a specific question.
-      operationId: createQuestionMessage
-      parameters:
-        - in: path
-          name: idParent
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MessageCreate'
-      responses:
-        '201':
-          $ref: '#/components/responses/MessageCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+
+# TODO - Submissions
 
 components:
   securitySchemes:
@@ -1605,19 +1471,16 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-
-    ChallengeOK:
-      description: Challenge retrieved successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Challenge'
+    UpdateOK:
+      description: Update on entity successful.
+    CreateOK: # Creation with empty return, so no ID
+      description: Creation on collection successful.
     UserOK:
       description: User request completed successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/User'
+            $ref: '#/components/schemas/UserPublic'
     JoinRequestOK:
       description: Invite request completed successfully
       content:
@@ -1687,31 +1550,72 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserPublic'
+    AllUsers:
+      description: User collection  request completed successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              students:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+              teachers:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+    AllStudents:
+      description: User collection request completed successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              students:
+                type: array
+                items:
+                  type: string
+                  format: uuid
     RequestsOK:
       description: Requests collection request completed successfully
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/JoinRequest'
+            type: object
+            properties:
+              requests:
+                type: array
+                items:
+                  type: string
+                  format: uuid
     ClassesOK:
       description: Classes collection request completed successfully
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Class'
+            type: object
+            properties:
+              classes:
+                type: array
+                items:
+                  type: string
+                  format: uuid
     GroupsOK:
       description: Groups collection request completed successfully
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Group'
+            type: object
+            properties:
+              groups:
+                items:
+                  type: string
+                  format: uuid
+                description: All groups of a specific user.
     LearningObjectsOK:
       description: Learning objects collection request completed successfully
       content:
@@ -1733,9 +1637,13 @@ components:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Assignment'
+            type: object
+            properties: 
+              assignments:
+                type: array
+                items:
+                  type: string
+                  format: uuid
     ProgressesOK:
       description: Progresses collection request completed successfully
       content:
@@ -1749,88 +1657,42 @@ components:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Question'
+            type: object
+            properties:
+              threads:
+                type: array
+                items:
+                  type: string
+                  format: uuid
     MessagesOK:
       description: Messages collection request completed successfully
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Message'
+            type: object
+            properties:
+              messages:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+            
 
-    JoinRequestCreated:
-      description: Invite created successfully
+    EntityCreated:
+      description: Entity created successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/JoinRequest'
-    UserCreated:
-      description: User created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/User'
-    ClassCreated:
-      description: Class created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Class'
-    GroupCreated:
-      description: Group created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Group'
-    LearningObjectCreated:
-      description: Learning object created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/LearningObject'
-    LearningPathCreated:
-      description: Learning path created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/LearningPath'
-    AssignmentCreated:
-      description: Assignment created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Assignment'
-    ProgressCreated:
-      description: Progress created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Progress'
-    QuestionCreated:
-      description: Question created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Question'
-    RegisterCreated:
-      description: Registration completed successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RegisterResponse'
-    MessageCreated:
-      description: Message created successfully
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Message'
-
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
     NoContent:
       description: Resource deleted successfully
   schemas:
+    EmptyObject:
+      type: object
     Error:
       type: object
       required:
@@ -1844,19 +1706,6 @@ components:
           type: string
           description: Human-readable error message
 
-    Challenge:
-      type: object
-      required:
-        - challenge
-        - expiresAt
-      properties:
-        challenge:
-          type: string
-          description: Server-generated temporary secret to be signed by client
-        expiresAt:
-          type: string
-          format: date-time
-          description: When this challenge expires
     LoginResponse:
       type: object
       required:
@@ -1868,24 +1717,28 @@ components:
           format: uuid
           readOnly: true
           description: Unique identifier for the user.
-        expiresAt:
+        expiresAfter:
           type: string
-          format: date-time
+          format: time
           description: When this challenge expires
+        token:
+          type: string
+          format: uuid
+          description: The token for this session.
     LoginRequest:
       type: object
       required:
         - email
-        - signedChallenge
+        - password
       additionalProperties: false
       properties:
         email:
           type: string
           format: email
           description: User's email address
-        serverChallenge:
+        password:
           type: string
-          description: Temporary challenge string signed with private key derived from locally hashed password (acts as X-API-Token).
+          description: User's password.
 
     RegisterResponse:
       type: object
@@ -1901,40 +1754,40 @@ components:
       type: object
       required:
         - email
-        - forename
+        - firstName
         - familyName
-        - school
-        - publicKey
-        - role
+        - schoolName
+        - password
+        - userType
       additionalProperties: false
       properties:
         email:
           type: string
           format: email
           description: User's email address.
-        forename:
+        firstName:
           type: string
           minLength: 1
           maxLength: 50
-          description: User's forename.
+          description: User's firstname.
         familyName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's family name.
-        school:
+        schoolName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's school name.
-        publicKey:
+        password:
           type: string
-          description: Public key derived from locally hashed password
-        role:
+          description: Users password
+        userType:
           type: string
-          enum: [STUDENT, TEACHER]
-          default: STUDENT
-          description: User's role in the system.
+          enum: [student, teacher]
+          default: student
+          description: User's type in the system.
 
     LearningObject:
       type: object
@@ -1949,16 +1802,15 @@ components:
       type: object
     LearningPathCreate:
       type: object
-
     User:
       type: object
       required:
         - id
         - email
-        - forename
+        - firstName
         - familyName
-        - school
-        - role
+        - schoolName
+        - userType
       properties:
         id:
           type: string
@@ -1969,45 +1821,81 @@ components:
           type: string
           format: email
           description: User's email address.
-        forename:
+        firstName:
           type: string
           minLength: 1
           maxLength: 50
-          description: User's forename.
+          description: User's firstname.
         familyName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's family name.
-        school:
+        schoolName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's school name.
-        role:
+        userType:
           type: string
-          enum: [STUDENT, TEACHER, ADMIN]
-          description: User's role in the system.
+          enum: [student, teacher]
+          description: User's type in the system.
+    UserPublic:
+      type: object
+      required:
+        - id
+        - email
+        - firstName
+        - familyName
+        - schoolName
+        - passwordHash
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the user.
+        email:
+          type: string
+          format: email
+          description: User's email address.
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: User's firstname.
+        familyName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: User's family name.
+        schoolName:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: User's school name.
+        passwordHash:
+          type: string
     UserCreate:
       type: object
       required:
         - email
-        - forename
+        - firstName
         - familyName
-        - school
-        - publicKey
-        - role
+        - schoolName
+        - password
+        - userType
       additionalProperties: false
       properties:
         email:
           type: string
           format: email
           description: User's email address.
-        forename:
+        firstName:
           type: string
           minLength: 1
           maxLength: 50
-          description: User's forename.
+          description: User's firstname.
         familyName:
           type: string
           minLength: 1
@@ -2018,14 +1906,14 @@ components:
           minLength: 1
           maxLength: 50
           description: User's school name.
-        publicKey:
+        password:
           type: string
-          description: Public key derived from locally hashed password
-        role:
+          description: The user's password
+        userType:
           type: string
-          enum: [STUDENT, TEACHER]
-          default: STUDENT
-          description: User's role in the system.
+          enum: [student, teacher]
+          default: student
+          description: User's type in the system.
     UserUpdate:
       type: object
       minProperties: 1
@@ -2035,44 +1923,29 @@ components:
           type: string
           format: email
           description: User's email address.
-        forename:
+        firstName:
           type: string
           minLength: 1
           maxLength: 50
-          description: User's forename.
+          description: User's firstname.
         familyName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's family name.
-        school:
+        schoolName:
           type: string
           minLength: 1
           maxLength: 50
           description: User's school name.
-        publicKey:
+        password:
           type: string
-          description: Public key derived from locally hashed password
-        role:
+          description: User's password
+        userType:
           type: string
-          enum: [STUDENT, TEACHER]
-          default: STUDENT
-          description: User's role in the system.
-    UserDelete:
-      type: object
-      minProperties: 2
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Unique identifier for the user.
-        role:
-          type: string
-          enum: [STUDENT, TEACHER]
-          default: STUDENT
-          description: User's role in the system.
+          enum: [student, teacher]
+          default: student
+          description: User's type in the system.
     CollectionUserCreate:
       type: object
       required:
@@ -2089,7 +1962,7 @@ components:
         - id
         - requester
         - class
-        - role
+        - userType
       properties:
         id:
           type: string
@@ -2104,16 +1977,16 @@ components:
           type: string
           format: uuid
           description: ID of the class.
-        role:
+        userType:
           type: string
-          enum: [STUDENT, TEACHER]
-          description: Role of requester.
+          enum: [student, teacher]
+          description: Type of requester.
     JoinRequestCreate:
       type: object
       required:
         - requester
         - class
-        - role
+        - userType
       additionalProperties: false
       properties:
         requester:
@@ -2124,36 +1997,45 @@ components:
           type: string
           format: uuid
           description: ID of the class.
-        role:
+        userType:
           type: string
-          enum: [STUDENT, TEACHER]
-          description: Role of requester.
+          enum: [student, teacher]
+          description: Type of requester.
     Class:
       type: object
       required:
         - id
         - name
-        - year
+        - description
+        - targetAudience
+        - teacherId
       properties:
         id:
           type: string
           format: uuid
-          readOnly: true
-          description: Unique identifier for the class.
+          description: Unique id of the class
         name:
           type: string
           minLength: 1
           maxLength: 50
           description: Name of the class.
-        year:
-          type: integer
-          format: int64
-          description: Academic year of the class.
+        description:
+          type: string
+          description: Description of a class.
+        targetAudience:
+          type: string
+          description: The target audience of a class.
+        teacherId:
+          type: string
+          format: uuid
+          description: Unique id of the teacher (owner) of this class
     ClassCreate:
       type: object
       required:
         - name
-        - year
+        - description
+        - targetAudience
+        - teacherId
       additionalProperties: false
       properties:
         name:
@@ -2161,13 +2043,21 @@ components:
           minLength: 1
           maxLength: 50
           description: Name of the class.
-        year:
-          type: integer
-          format: int64
-          description: Academic year of the class.
+        description:
+          type: string
+          description: Description of a class.
+        targetAudience:
+          type: string
+          description: The target audience of a class.
+        teacherId:
+          type: string
+          format: uuid
     ClassUpdate:
       type: object
-      minProperties: 1
+      required:
+        - name
+        - description
+        - targetAudience
       additionalProperties: false
       properties:
         name:
@@ -2175,11 +2065,12 @@ components:
           minLength: 1
           maxLength: 50
           description: Name of the class.
-        year:
-          type: integer
-          format: int64
-          description: Academic year of the class.
-
+        description:
+          type: string
+          description: Description of a class.
+        targetAudience:
+          type: string
+          description: The target audience of a class.
     Group:
       type: object
       required:
@@ -2222,29 +2113,42 @@ components:
             description: An array of student IDs assigned to this group.
     GroupUpdate:
       type: object
-      additionalProperties: false
-      properties: {}
+      required:
+        - members
+        - assignment
+      properties:
+        members:
+          type: array
+          items: 
+            type: string
+            format: uuid
+            description: The new members of the group.
+        assignment:
+          type: string
+          format: uuid
+          description: The new assignment of the group.
 
     Assignment:
       type: object
       required:
         - id
-        - group
-        - start
+        - classId
+        - learningPathId
+        - startDate
         - deadline
-        - instructions
+        - extraInstructions
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
           description: Unique identifier for the assignment.
-        group:
+        classId:
           type: string
           format: uuid
           readOnly: true
-          description: Unique identifier for the assignment's group.
-        start:
+          description: Unique identifier for class that the assignment's belongs to.
+        startDate:
           type: string
           format: date
           description: Start date of the assignment.
@@ -2252,29 +2156,28 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
-        instructions:
+        extraInstructions:
           type: string
           minLength: 0
           description: Instructions for the assignment.
     AssignmentCreate:
       type: object
       required:
-        - class
-        - group
-        - start
+        - classId
+        - learningPathId
+        - startDate
         - deadline
-        - instructions
+        - extraInstructions
       additionalProperties: false
       properties:
-        class:
+        classId:
           type: string
           format: uuid
           description: Unique identifier for the assignment's class.
-        group:
+        learningPathId:
           type: string
-          format: uuid
-          description: Unique identifier for the assignment's group.
-        start:
+          description: Unique identifier for the assignment's learning path.
+        startDate:
           type: string
           format: date
           description: Start date of the assignment.
@@ -2282,7 +2185,7 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
-        instructions:
+        extraInstructions:
           type: string
           minLength: 0
           description: Instructions for the assignment.
@@ -2291,7 +2194,15 @@ components:
       minProperties: 1
       additionalProperties: false
       properties:
-        start:
+        classId:
+          type: string
+          format: uuid
+          description: Unique id of class this assignment belongs to.
+        learningPathId:
+          type: string
+          format: string
+          description: Unique id of learning path that belongs to this assignment.
+        startDate:
           type: string
           format: date
           description: Start date of the assignment.
@@ -2299,7 +2210,7 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
-        instructions:
+        extraInstructions:
           type: string
           minLength: 0
           description: Instructions for the assignment.
@@ -2412,86 +2323,149 @@ components:
       type: object
       required:
         - id
-        - question
-        - questionDate
+        - creatorId
+        - assignmentId
+        - learningObjectId
+        - isClosed
+        - visibility
+        - messageIds
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
           description: Unique identifier for the question.
-        question:
+        creatorId:
           type: string
-          minLength: 1
-          description: The question text.
-        answer:
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the user that made this QT.
+        assignmentId:
           type: string
-          minLength: 1
-          description: The answer text.
-        questionDate:
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the assignment linked to this QT.
+        learningObjectId:
           type: string
-          format: date
-          description: Date when the question was asked.
-        answerDate:
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the learning object linked to the QT.          
+        isClosed:
+          type: boolean
+          default: false
+        visibility:
           type: string
-          format: date
-          description: Date when the question was answered.
+          enum: [public, group, private]
+        messageIds:
+          type: array
+          items:
+            type: string
+            format: uuid
     QuestionCreate:
       type: object
       required:
-        - question
-      additionalProperties: false
+        - creatorId
+        - assignmentId
+        - learningObjectId
+        - isClosed
+        - visibility
+        - messageIds
       properties:
-        question:
+        creatorId:
           type: string
-          minLength: 1
-          description: The question text.
+          format: uuid
+          description: Unique identifier for the user that made this QT.
+        assignmentId:
+          type: string
+          format: uuid
+          description: Unique identifier for the assignment linked to this QT.
+        learningObjectId:
+          type: string
+          format: uuid
+          description: Unique identifier for the learning object linked to the QT.          
+        isClosed:
+          type: boolean
+          default: false
+        visibility:
+          type: string
+          enum: [public, group, private]
+        messageIds:
+          type: array
+          items:
+            type: string
+            format: uuid
     QuestionUpdate:
       type: object
       minProperties: 1
       additionalProperties: false
       properties:
-        answer:
+        isClosed:
+          type: boolean
+        visibility:
           type: string
-          minLength: 1
-          description: The answer text.
+          enum: [public, group, private]
 
     Message:
       type: object
       required:
         - id
-        - message
-        - date
+        - senderId
+        - threadId
+        - content
+        - createdAt
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
           description: Unique identifier for the message.
-        message:
+        senderId:
           type: string
-          minLength: 1
-          description: The message text.
-        date:
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the sender of this message.
+        threadId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the thread this message belongs to.
+        content:
+          type: string
+          description: The content of the message.
+        createdAt:
           type: string
           format: date
-          description: Date when the message was sent.
+        
     MessageCreate:
       type: object
       required:
-        - message
+        - senderId
+        - threadId
+        - createdAt
+        - content
       additionalProperties: false
       properties:
-        message:
+        senderId:
+          type: string
+          format: uuid
+          description: Unique identifier for the sender of this message.
+        threadId:
+          type: string
+          format: uuid
+          description: Unique identifier for the thread this message belongs to.
+        createdAt:
+          type: string
+          format: date
+        content:
           type: string
           minLength: 1
-          description: The message text.
+          description: The content of the message.
     MessageUpdate:
       type: object
       minProperties: 1
       additionalProperties: false
       properties:
-        message:
+        content:
           type: string
           minLength: 1
-          description: The message text.
+          description: The new content of the message.

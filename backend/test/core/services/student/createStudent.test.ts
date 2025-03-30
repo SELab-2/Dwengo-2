@@ -8,11 +8,11 @@ import {
 
 const mockStudentRepository = {
   checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
-  createStudent: jest.fn().mockResolvedValue('mock-user-id'), // Simulate user
+  create: jest.fn().mockResolvedValue('mock-user-id'), // Simulate user
 } as unknown as jest.Mocked<IStudentRepository>;
 
 const mockTeacherRepository = {
-  checkTeacherByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
+  checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
 } as unknown as jest.Mocked<ITeacherRepository>;
 
 describe('CreateStudent', () => {
@@ -67,7 +67,7 @@ describe('CreateStudent', () => {
   });
 
   test('Should throw error if email is already in use by teacher', async () => {
-    mockTeacherRepository.checkTeacherByEmail.mockResolvedValue(true);
+    mockTeacherRepository.checkByEmail.mockResolvedValue(true);
     const params = {
       email: 'test@example.com',
       firstName: 'John',

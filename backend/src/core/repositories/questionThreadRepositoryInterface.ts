@@ -13,7 +13,7 @@ export abstract class IQuestionThreadRepository extends AbstractRepository {
      * @throws EntityNotFoundError when the related assignment does not exist.
      * @returns A promise that resolves to the inserted thread.
      */
-    public abstract createQuestionThread(thread: QuestionThread): Promise<QuestionThread>;
+    public abstract create(thread: QuestionThread): Promise<QuestionThread>;
 
     /**
      * Retrieve a question thread by its ID. Throws an `EntityNotFoundError` if not found.
@@ -21,7 +21,7 @@ export abstract class IQuestionThreadRepository extends AbstractRepository {
      * @throws EntityNotFoundError when no question thread is found.
      * @returns A promise that resolves to the question thread.
      */
-    public abstract getQuestionThreadById(id: string): Promise<QuestionThread>;
+    public abstract getById(id: string): Promise<QuestionThread>;
 
     /**
      * Retrieve all question threads for a specific assignment.
@@ -29,7 +29,7 @@ export abstract class IQuestionThreadRepository extends AbstractRepository {
      * @throws EntityNotFoundError when the assignment does not exist.
      * @returns A promise that resolves to an array of question threads for the given assignment.
      */
-    public abstract getQuestionThreadsByAssignmentId(assignmentId: string): Promise<QuestionThread[]>;
+    public abstract getByAssignmentId(assignmentId: string): Promise<QuestionThread[]>;
 
     /**
      * Retrieve all question threads created by a specific user.
@@ -37,7 +37,7 @@ export abstract class IQuestionThreadRepository extends AbstractRepository {
      * @throws EntityNotFoundError when the creator does not exist.
      * @returns A promise that resolves to an array of question threads created by the given user.
      */
-    public abstract getQuestionThreadsByCreatorId(creatorId: string): Promise<QuestionThread[]>;
+    public abstract getByCreatorId(creatorId: string): Promise<QuestionThread[]>;
 
     /**
      * Update a question thread by its ID. Throws an `EntityNotFoundError` if not found.
@@ -46,7 +46,7 @@ export abstract class IQuestionThreadRepository extends AbstractRepository {
      * @throws EntityNotFoundError when no question thread is found.
      * @returns A promise that resolves to the updated question thread.
      */
-    public abstract updateQuestionThread(id: string, updatedThread: Partial<QuestionThread>): Promise<QuestionThread>;
+    public abstract update(id: string, updatedThread: Partial<QuestionThread>): Promise<QuestionThread>;
 
     /**
      * Delete a question thread by its ID. Also deletes all messages within the thread.
@@ -55,5 +55,5 @@ export abstract class IQuestionThreadRepository extends AbstractRepository {
      * @throws EntityNotFoundError when no question thread is found.
      * @returns A promise that resolves to void.
      */
-    public abstract deleteQuestionThread(id: string): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 }

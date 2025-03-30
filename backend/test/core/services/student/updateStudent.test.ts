@@ -12,12 +12,12 @@ describe('UpdateStudent Service', () => {
 
   beforeEach(() => {
     studentRepository = {
-      getStudentById: jest.fn(),
+      getById: jest.fn(),
       checkByEmail: jest.fn(),
-      updateStudent: jest.fn(),
+      update: jest.fn(),
     } as unknown as jest.Mocked<IStudentRepository>;
     teacherRepository = {
-      checkTeacherByEmail: jest.fn()
+      checkByEmail: jest.fn()
     } as unknown as jest.Mocked<ITeacherRepository>;
 
     updateStudent = new UpdateUser(studentRepository, teacherRepository);
@@ -32,7 +32,8 @@ describe('UpdateStudent Service', () => {
       'oldSchool',
       '1',
     );
-    studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.getById.mockResolvedValue(student);
+    studentRepository.update.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
     const params = {
@@ -47,14 +48,14 @@ describe('UpdateStudent Service', () => {
 
     const result = await updateStudent.execute(params);
 
-    expect(studentRepository.getStudentById).toHaveBeenCalledWith('1');
+    expect(studentRepository.getById).toHaveBeenCalledWith('1');
     expect(studentRepository.checkByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
-    expect(teacherRepository.checkTeacherByEmail).toHaveBeenCalledWith(
+    expect(teacherRepository.checkByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
-    expect(studentRepository.updateStudent).toHaveBeenCalledWith(
+    expect(studentRepository.update).toHaveBeenCalledWith(
       expect.objectContaining({
         id: '1',
         email: 'newemail@example.com',
@@ -76,7 +77,8 @@ describe('UpdateStudent Service', () => {
       'oldSchool',
       '1',
     );
-    studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.getById.mockResolvedValue(student);
+    studentRepository.update.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(false);
 
     const params = {
@@ -84,17 +86,17 @@ describe('UpdateStudent Service', () => {
       userType: UserType.STUDENT,
       email: 'newemail@example.com',
     }
-    
+
     const result = await updateStudent.execute(params);
 
-    expect(studentRepository.getStudentById).toHaveBeenCalledWith('1');
+    expect(studentRepository.getById).toHaveBeenCalledWith('1');
     expect(studentRepository.checkByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
-    expect(teacherRepository.checkTeacherByEmail).toHaveBeenCalledWith(
+    expect(teacherRepository.checkByEmail).toHaveBeenCalledWith(
       'newemail@example.com',
     );
-    expect(studentRepository.updateStudent).toHaveBeenCalledWith(
+    expect(studentRepository.update).toHaveBeenCalledWith(
       expect.objectContaining({
         id: '1',
         email: 'newemail@example.com',
@@ -116,7 +118,8 @@ describe('UpdateStudent Service', () => {
       'School',
       '1',
     );
-    studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.getById.mockResolvedValue(student);
+    studentRepository.update.mockResolvedValue(student);
 
     const params = {
       id: '1',
@@ -143,7 +146,8 @@ describe('UpdateStudent Service', () => {
       'school',
       '1',
     );
-    studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.getById.mockResolvedValue(student);
+    studentRepository.update.mockResolvedValue(student);
     studentRepository.checkByEmail.mockResolvedValue(true);
 
     const params = {
@@ -171,7 +175,8 @@ describe('UpdateStudent Service', () => {
       'school',
       '1',
     );
-    studentRepository.getStudentById.mockResolvedValue(student);
+    studentRepository.getById.mockResolvedValue(student);
+    studentRepository.update.mockResolvedValue(student);
 
     const params = {
       id: '1',

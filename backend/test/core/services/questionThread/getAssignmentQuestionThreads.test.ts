@@ -1,57 +1,55 @@
 import { DatabaseError } from '../../../../src/config/error';
-import { GetAssignmentQuestionThreads, GetAssignmentQuestionThreadsParams } from '../../../../src/core/services/questionThread/getAssignmentQuestionThreads';
+import { GetAssignmentQuestionThreads, GetAssignmentQuestionThreadsInput } from '../../../../src/core/services/questionThread/getAssignmentQuestionThreads';
 import { QuestionThread, VisibilityType } from '../../../../src/core/entities/questionThread';
 
 // Mock repository
 const mockQuestionThreadRepository = {
-    getQuestionThreadsByAssignmentId: jest.fn(),
+    getByAssignmentId: jest.fn(),
 };
 
 describe('GetAssignmentQuestionThreads', () => {
     let getAssignmentQuestionThreads: GetAssignmentQuestionThreads;
+    let input: GetAssignmentQuestionThreadsInput;
 
     beforeEach(() => {
         getAssignmentQuestionThreads = new GetAssignmentQuestionThreads(mockQuestionThreadRepository as any);
         jest.clearAllMocks();
+        input = {
+            idParent: "assignment-123"
+        };
     });
 
     test('Should retrieve question threads for an assignment and return them as an object list', async () => {
-        const inputParams = new GetAssignmentQuestionThreadsParams("assignment-123");
-
         const questionThreads = [
             new QuestionThread("creator-1", "assignment-123", "learningObj-456", false, VisibilityType.PUBLIC, ["msg-1", "msg-2"], "thread-1"),
             new QuestionThread("creator-2", "assignment-123", "learningObj-789", true, VisibilityType.PRIVATE, ["msg-3"], "thread-2")
         ];
 
-        mockQuestionThreadRepository.getQuestionThreadsByAssignmentId.mockResolvedValue(questionThreads);
+        mockQuestionThreadRepository.getByAssignmentId.mockResolvedValue(questionThreads);
 
-        const result = await getAssignmentQuestionThreads.execute(inputParams);
+        const result = await getAssignmentQuestionThreads.execute(input);
 
         expect(result).toEqual({
-            threads: questionThreads.map(qt => qt.toObject())
+            threads: questionThreads.map(qt => qt.id)
         });
 
-        expect(mockQuestionThreadRepository.getQuestionThreadsByAssignmentId).toHaveBeenCalledWith("assignment-123");
+        expect(mockQuestionThreadRepository.getByAssignmentId).toHaveBeenCalledWith("assignment-123");
     });
 
     test('Should return an empty list if no threads are found', async () => {
-        const inputParams = new GetAssignmentQuestionThreadsParams("assignment-123");
+        mockQuestionThreadRepository.getByAssignmentId.mockResolvedValue([]);
 
-        mockQuestionThreadRepository.getQuestionThreadsByAssignmentId.mockResolvedValue([]);
-
-        const result = await getAssignmentQuestionThreads.execute(inputParams);
+        const result = await getAssignmentQuestionThreads.execute(input);
 
         expect(result).toEqual({ threads: [] });
 
-        expect(mockQuestionThreadRepository.getQuestionThreadsByAssignmentId).toHaveBeenCalledWith("assignment-123");
+        expect(mockQuestionThreadRepository.getByAssignmentId).toHaveBeenCalledWith("assignment-123");
     });
 
     test('Should throw a DatabaseError if database retrieval fails', async () => {
-        const inputParams = new GetAssignmentQuestionThreadsParams("assignment-123");
+        mockQuestionThreadRepository.getByAssignmentId.mockRejectedValue(new DatabaseError('Database error'));
 
-        mockQuestionThreadRepository.getQuestionThreadsByAssignmentId.mockRejectedValue(new DatabaseError('Database error'));
-
-        await expect(getAssignmentQuestionThreads.execute(inputParams)).rejects.toThrow(DatabaseError);
-        expect(mockQuestionThreadRepository.getQuestionThreadsByAssignmentId).toHaveBeenCalledWith("assignment-123");
+        await expect(getAssignmentQuestionThreads.execute(input)).rejects.toThrow(DatabaseError);
+        expect(mockQuestionThreadRepository.getByAssignmentId).toHaveBeenCalledWith("assignment-123");
     });
 });

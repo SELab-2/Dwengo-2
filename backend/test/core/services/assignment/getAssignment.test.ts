@@ -11,7 +11,7 @@ describe("getAssignment Service", () => {
 
   beforeEach(() => {
     mockAssignmentRepository = {
-      getAssignmentById: jest.fn(), // Mock DB function
+      getById: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<IAssignmentRepository>;
 
     getAssignmentService = new GetAssignment(mockAssignmentRepository);
@@ -33,7 +33,7 @@ describe("getAssignment Service", () => {
       "1"
     );
 
-    mockAssignmentRepository.getAssignmentById.mockResolvedValue(assignment);
+    mockAssignmentRepository.getById.mockResolvedValue(assignment);
     const result = await getAssignmentService.execute(getAssignmentParams);
 
     expect(result).toEqual({
@@ -44,13 +44,13 @@ describe("getAssignment Service", () => {
         extraInstructions: "extra_instructions",
         learningPathId: "1"
     });
-    expect(mockAssignmentRepository.getAssignmentById).toHaveBeenCalledWith("1");
+    expect(mockAssignmentRepository.getById).toHaveBeenCalledWith("1");
   });
 
   test("Should throw error", async () => {
-    mockAssignmentRepository.getAssignmentById.mockRejectedValue(new EntityNotFoundError("Assignment not found"));
+    mockAssignmentRepository.getById.mockRejectedValue(new EntityNotFoundError("Assignment not found"));
     
     await expect(getAssignmentService.execute(getAssignmentParams)).rejects.toThrow();
-    expect(mockAssignmentRepository.getAssignmentById).toHaveBeenCalledWith("1");
+    expect(mockAssignmentRepository.getById).toHaveBeenCalledWith("1");
   });
 });

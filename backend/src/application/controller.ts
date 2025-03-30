@@ -133,7 +133,7 @@ export abstract class Controller {
      * @returns Response with status 200 and updated entity data
      */
     public async update<T>(req: Request, data: T): Promise<Response> {
-        return this._executeService(this.services.update, data, 200, "Update");
+        return this._executeService(this.services.update, data, 204, "Update");
     }
 
     /**

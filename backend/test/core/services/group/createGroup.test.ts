@@ -17,8 +17,8 @@ describe('CreateGroup', () => {
 
     test('Should create a group successfully', async () => {
         const inputParams = {
-            memberIds: ["user-123", "user-456"],
-            assignmentId: "assigment-789",
+            members: ["user-123", "user-456"],
+            assignment: "assigment-789",
         }
         const createdGroup = new Group(["user-123", "user-456"], "assigment-789", "group-999");
 
@@ -32,8 +32,8 @@ describe('CreateGroup', () => {
 
     test('Should throw a DatabaseError if creation fails', async () => {
         const inputParams = {
-            memberIds: ["user-123", "user-456"],
-            assignmentId: "assigment-789",
+            members: ["user-123", "user-456"],
+            assignment: "assigment-789",
         }
         mockGroupRepository.create.mockRejectedValue(new DatabaseError('Creation failed'));
 
