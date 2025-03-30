@@ -3,6 +3,7 @@ import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angula
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserLoginCredentials } from '../../interfaces';
 import { catchError, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ export class LoginComponent {
   loginForm: FormGroup;
 
   constructor(
+    private router: Router,
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService
   ) {
@@ -38,7 +40,7 @@ export class LoginComponent {
       }))
       .subscribe((response) => {
         if (response) {
-          window.alert(`Login successful: ${response.message}`);
+          this.router.navigateByUrl('/home');
         }
       });
   }
