@@ -36,7 +36,7 @@ export class TeacherDashboardComponent implements OnInit {
   classesTitle: string = $localize`:@@viewClasses:View Classes`;
   deadlinesTitle: string = $localize`:@@incomingDeadlines:Current Deadlines`;
   questionsTitle: string = $localize`:@@answerQuestions:Answer Questions`;
-
+  notificationsTitle: string = $localize`:@@notifications:Notifications`;
 
   classes = ["Class 1", "Class 2", "Class 3"];
   deadlines = ["Math Exam - Jan 17th", "History Essay - Feb 7th", "Science Report - May 26th"];
@@ -44,6 +44,10 @@ export class TeacherDashboardComponent implements OnInit {
     { assignment: "Math Homework", question: "What is Pythagoras' theorem?" },
     { assignment: "Science Project", question: "How do you calculate force?" }
   ];
+  notifications = [
+    { name: "Dirk", data: "Wants to join 'Physics'" },
+    { name: "Kevin", data: "Asked you a question" },
+  ]
   public classChartData!: ClassChartData[];
   public activityChartData!: ActivityChartData[];
 
