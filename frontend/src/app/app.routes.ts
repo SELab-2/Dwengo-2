@@ -9,9 +9,9 @@ import { UnknownRouteComponent } from './components/unknown-route/unknown-route.
  * Based on https://angular.dev/guide/routing/common-router-tasks
  */
 export const routes: Routes = [
-    { path: '', component: LandingPageComponent },
-    { path: 'login', component: LoginPageComponent },
-    { path: 'register', component: RegisterPageComponent },
-    { path: 'placeholder', component: UnknownRouteComponent },
+    { path: '', component: LandingPageComponent, title: 'Landing Page' },
+    { path: 'login', component: LoginPageComponent, title: 'Login' },
+    { path: 'register', component: RegisterPageComponent, title: 'Register' },
+    { path: 'placeholder', component: UnknownRouteComponent, title: 'Aur Naur!' },
     { path: '**', redirectTo: '/placeholder' },
 ];
