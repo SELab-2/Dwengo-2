@@ -12,7 +12,7 @@ describe('RemoveStudentFromClass', () => {
 
   beforeEach(() => {
     studentRepository = {
-      removeStudentFromClass: jest.fn(),
+      removeFromClass: jest.fn(),
     } as unknown as jest.Mocked<IStudentRepository>;
     teacherRepository = {} as unknown as jest.Mocked<ITeacherRepository>;
     removeStudentFromClass = new RemoveUserFromClass(
@@ -28,7 +28,7 @@ describe('RemoveStudentFromClass', () => {
 
     await removeStudentFromClass.execute({id, idParent, userType});
 
-    expect(studentRepository.removeStudentFromClass).toHaveBeenCalledWith(
+    expect(studentRepository.removeFromClass).toHaveBeenCalledWith(
       id,
       idParent,
     );

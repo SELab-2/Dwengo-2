@@ -4,7 +4,7 @@ import { DatabaseError } from '../../../../src/config/error';
 
 // Mock repository
 const mockMessageRepository = {
-    getMessageById: jest.fn(),
+    getById: jest.fn(),
 };
 
 describe('GetMessage', () => {
@@ -22,18 +22,18 @@ describe('GetMessage', () => {
     test('Should retrieve a message successfully', async () => {
         const retrievedMessage = new Message("sender-123", new Date(), "thread-456", "Hello World", "message-123");
 
-        mockMessageRepository.getMessageById.mockResolvedValue(retrievedMessage);
+        mockMessageRepository.getById.mockResolvedValue(retrievedMessage);
 
         const result = await getMessage.execute(input);
 
         expect(result).toEqual(retrievedMessage.toObject());
-        expect(mockMessageRepository.getMessageById).toHaveBeenCalledWith("message-123");
+        expect(mockMessageRepository.getById).toHaveBeenCalledWith("message-123");
     });
 
     test('Should throw a DatabaseError if retrieval fails', async () => {
-        mockMessageRepository.getMessageById.mockRejectedValue(new DatabaseError('Retrieval failed'));
+        mockMessageRepository.getById.mockRejectedValue(new DatabaseError('Retrieval failed'));
 
         await expect(getMessage.execute(input)).rejects.toThrow(DatabaseError);
-        expect(mockMessageRepository.getMessageById).toHaveBeenCalledWith("message-123");
+        expect(mockMessageRepository.getById).toHaveBeenCalledWith("message-123");
     });
 });

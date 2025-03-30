@@ -6,9 +6,7 @@ export type GetAssignmentQuestionThreadsInput = z.infer<typeof getAssignmentQues
 
 export class GetAssignmentQuestionThreads extends QuestionThreadService<GetAssignmentQuestionThreadsInput> {
     async execute(input: GetAssignmentQuestionThreadsInput): Promise<object> {
-        const threadIds = (await this.questionThreadRepository.getQuestionThreadsByAssignmentId(input.idParent)).map(
-            qt => qt.id,
-        );
+        const threadIds = (await this.questionThreadRepository.getByAssignmentId(input.idParent)).map(qt => qt.id);
         return { threads: threadIds };
     }
 }

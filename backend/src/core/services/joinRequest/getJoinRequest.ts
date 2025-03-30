@@ -24,7 +24,7 @@ export type GetJoinRequestInput = z.infer<typeof getJoinRequestSchema>;
 export class GetUserJoinRequests extends JoinRequestService<GetUserJoinRequestsInput> {
     async execute(input: GetUserJoinRequestsInput): Promise<object> {
         // Get all requests for user
-        const requests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByRequesterId(input.idParent);
+        const requests: JoinRequest[] = await this.joinRequestRepository.getByRequesterId(input.idParent);
         return {
             requests: requests.map(request => request.id),
         };
@@ -37,7 +37,7 @@ export class GetUserJoinRequests extends JoinRequestService<GetUserJoinRequestsI
 export class GetJoinRequest extends JoinRequestService<GetJoinRequestInput> {
     async execute(input: GetJoinRequestInput): Promise<object> {
         // Get request
-        const request: JoinRequest = await this.joinRequestRepository.getJoinRequestById(input.id);
+        const request: JoinRequest = await this.joinRequestRepository.getById(input.id);
 
         // No request found for this user with the given id.
         if (!request) {

@@ -18,8 +18,8 @@ describe('AcceptJoinRequest Service', () => {
 
   beforeEach(() => {
     mockJoinRequestRepository = {
-      getJoinRequestById: jest.fn(),
-      deleteJoinRequestById: jest.fn(),
+      getById: jest.fn(),
+      delete: jest.fn(),
     } as unknown as jest.Mocked<IJoinRequestRepository>;
 
     mockClassRepository = {
@@ -37,7 +37,7 @@ describe('AcceptJoinRequest Service', () => {
   });
 
   test('Should throw error if join request not found', async () => {
-    mockJoinRequestRepository.getJoinRequestById.mockRejectedValue(
+    mockJoinRequestRepository.getById.mockRejectedValue(
       new EntityNotFoundError('Join request not found'),
     );
 
@@ -54,14 +54,14 @@ describe('AcceptJoinRequest Service', () => {
       '1',
     );
 
-    mockJoinRequestRepository.getJoinRequestById.mockResolvedValue(joinRequest);
+    mockJoinRequestRepository.getById.mockResolvedValue(joinRequest);
     mockClassRepository.addUserToClass.mockResolvedValue(undefined);
-    mockJoinRequestRepository.deleteJoinRequestById.mockResolvedValue(
+    mockJoinRequestRepository.delete.mockResolvedValue(
       undefined,
     );
 
     await expect(acceptJoinRequestService.execute(params)).resolves.toEqual({});
-    expect(mockJoinRequestRepository.getJoinRequestById).toHaveBeenCalledWith(
+    expect(mockJoinRequestRepository.getById).toHaveBeenCalledWith(
       params.id,
     );
     expect(mockClassRepository.addUserToClass).toHaveBeenCalledWith(
@@ -70,7 +70,7 @@ describe('AcceptJoinRequest Service', () => {
       joinRequest.type,
     );
     expect(
-      mockJoinRequestRepository.deleteJoinRequestById,
+      mockJoinRequestRepository.delete,
     ).toHaveBeenCalledWith(params.id);
   });
 });

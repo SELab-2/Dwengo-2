@@ -24,7 +24,7 @@ export class CreateUser implements Service<CreateUserInput> {
     async execute(input: CreateUserInput): Promise<object> {
         const emailInUse = await Promise.all([
             this.studentRepository.checkByEmail(input.email),
-            this.teacherRepository.checkTeacherByEmail(input.email),
+            this.teacherRepository.checkByEmail(input.email),
         ]);
 
         if (emailInUse.some(present => present)) {
@@ -35,10 +35,10 @@ export class CreateUser implements Service<CreateUserInput> {
 
         if (input.userType === UserType.STUDENT) {
             user = new Student(input.email, input.firstName, input.familyName, input.passwordHash, input.schoolName);
-            user = await this.studentRepository.createStudent(user as Student);
+            user = await this.studentRepository.create(user as Student);
         } else {
             user = new Teacher(input.email, input.firstName, input.familyName, input.passwordHash, input.schoolName);
-            user = await this.teacherRepository.createTeacher(user as Teacher);
+            user = await this.teacherRepository.create(user as Teacher);
         }
 
         return { id: user.id! };
