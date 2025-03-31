@@ -6,11 +6,11 @@ import { CreateClassComponent } from '../../components/create-class/create-class
 import { MiniClassComponent } from '../../components/mini-class/mini-class.component';
 
 import { MatList } from '@angular/material/list'
-import { MatToolbar } from '@angular/material/toolbar'
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { RouterOutlet } from '@angular/router';
 
 
 // Type alias
@@ -24,9 +24,10 @@ type classFilterType = (c: Class) => boolean;
     MiniClassComponent,
     CreateClassComponent,
 
+    RouterOutlet,
+
     // Angular material
     MatList,
-    MatToolbar,
     MatIconModule,
     MatButtonModule,
     MatFormFieldModule,

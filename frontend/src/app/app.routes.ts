@@ -4,6 +4,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
 import { ClassesPageComponent } from './pages/classes-page/classes-page.component';
 import { ClassComponent } from './components/class/class.component';
+import { idText } from 'typescript';
 
 /**
  * Routing of our frontend.
