@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
-import { UserRegistration } from '../../interfaces';
+import { RegisterResponse, UserRegistration } from '../../interfaces';
 import { UserType } from '../../interfaces/user/user';
-import { catchError, of } from 'rxjs';
+import { catchError, of, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -37,16 +37,13 @@ export class RegisterComponent {
     }
   }
 
-  /**
-   * Use the authentication service to send the registration data to the server.
-   * 
-   * This function sends the registration data through to the server
-   * and handles the response.
-   * 
-   * @param registrationData the registration data to send to the server
-   */
   private sendRegisterData(registrationData: UserRegistration) {
-    this.authenticationService.register(registrationData).pipe(
+    const observable = this.authenticationService.register(registrationData);
+    this.pipeRegisterResponse(observable);
+  }
+
+  private pipeRegisterResponse(observable: Observable<RegisterResponse>) {
+    observable.pipe(
       catchError((error) => {
         window.alert(`Registration failed: ${error.message}`);
         return of(null);

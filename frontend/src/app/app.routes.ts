@@ -10,7 +10,8 @@ import { UnknownRouteComponent } from './components/unknown-route/unknown-route.
  */
 export const routes: Routes = [
     { path: '', component: LandingPageComponent, title: 'Landing Page' },
-    { path: 'login', component: LoginPageComponent, title: 'Login' },
+    { path: 'teacher-login', component: LoginPageComponent, title: 'Teacher Login', data: { isTeacher: true } },
+    { path: 'student-login', component: LoginPageComponent, title: 'Student Login', data: { isTeacher: false } },
     { path: 'register', component: RegisterPageComponent, title: 'Register' },
     { path: 'placeholder', component: UnknownRouteComponent, title: 'Aur Naur!' },
     { path: '**', redirectTo: '/placeholder' },

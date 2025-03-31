@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
-import { UserLoginCredentials } from '../../interfaces';
-import { catchError, of } from 'rxjs';
+import { UserLoginCredentials, UserType } from '../../interfaces';
+import { catchError, of, Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { LoginResponse } from '../../interfaces/authentication/login-response';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  userType = input('userType');
 
   constructor(
     private router: Router,
@@ -28,20 +30,33 @@ export class LoginComponent {
       const loginData = this.extractLoginFormValues();
       this.sendLoginData(loginData);
     } else {
-      console.error('Invalid login form');
+      window.alert('Please fill in all required fields correctly.');
     }
   }
 
   private sendLoginData(loginData: UserLoginCredentials) {
-    this.authenticationService.login(loginData).pipe(
+    const observable = this.authenticationService.login(loginData);
+    this.pipeLoginResponse(observable);
+  }
+
+  private pipeLoginResponse(observable: Observable<LoginResponse>) {
+    observable.pipe(
       catchError((error) => {
         window.alert(`Login failed: ${error.message}`);
         return of(null);
       }))
-      .subscribe((response) => {
-        if (response) {
-          this.router.navigateByUrl('/home');
+      .subscribe((_) => {
+        let url: string;
+
+        if (this.userType() === UserType.STUDENT) {
+          url = 'student/dashboard'
+        } else if (this.userType() === UserType.TEACHER) {
+          url = 'teacher/dashboard'
+        } else {
+          url = 'placeholder'
         }
+
+        this.router.navigateByUrl(url)
       });
   }
 
