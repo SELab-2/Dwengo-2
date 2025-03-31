@@ -45,7 +45,7 @@ export class LoginComponent {
         window.alert(`Login failed: ${error.message}`);
         return of(null);
       }))
-      .subscribe((_) => {
+      .subscribe((response) => {
         let url: string;
 
         if (this.userType() === UserType.STUDENT) {
@@ -56,7 +56,12 @@ export class LoginComponent {
           url = 'placeholder'
         }
 
-        this.router.navigateByUrl(url)
+        if (response) {
+          console.log(`Login successful: ${response.message}`);
+          this.authenticationService.storeToken(response.token);
+        }
+        
+        this.router.navigateByUrl(url);
       });
   }
 
