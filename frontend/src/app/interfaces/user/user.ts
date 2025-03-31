@@ -4,5 +4,5 @@ export enum UserType {
 }
 
 export interface User {
-    name: string; // TODO: update (left like this to avoid breaking the linter)
+    name: string;
 }

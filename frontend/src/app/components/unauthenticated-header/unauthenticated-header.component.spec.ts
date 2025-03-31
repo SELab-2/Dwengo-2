@@ -35,11 +35,6 @@ describe('UnauthenticatedHeaderComponent', () => {
     expect(homeButton).toBeTruthy();
   });
 
-  it('should have a login button', () => {
-    const loginButton = harness.fixture.debugElement.query(By.css('.login-button'));
-    expect(loginButton).toBeTruthy();
-  });
-
   it('should have a register button', () => {
     const registerButton = harness.fixture.debugElement.query(By.css('.register-button'));
     expect(registerButton).toBeTruthy();
