@@ -16,7 +16,7 @@ describe('ClassComponent', () => {
     description: "Price go up, price go down",
     targetAudience: "Students",
     teacherId: "123",
-    classId: "4321"
+    id: "4321"
   };
 
   beforeEach(async () => {

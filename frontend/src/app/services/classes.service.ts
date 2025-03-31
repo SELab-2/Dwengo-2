@@ -1,8 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { of, Observable, forkJoin, switchMap, map } from 'rxjs';
+import { of, Observable, tap, forkJoin, switchMap } from 'rxjs';
 import { Class } from "../interfaces/classes/class";
 import { NewClass } from "../interfaces/classes/newClass";
+
+interface ClassesReponse {
+    classes: string[]
+}
 
 @Injectable({
     providedIn: 'root'
@@ -15,8 +19,8 @@ import { NewClass } from "../interfaces/classes/newClass";
   
     public constructor(private http: HttpClient) {
         this.userCreds = {
-            "userId": "ff534bac-9c13-43f1-8cd0-01db69bb425a",
-            "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZmNTM0YmFjLTljMTMtNDNmMS04Y2QwLTAxZGI2OWJiNDI1YSIsImlhdCI6MTc0MzQxODQwNiwiZXhwIjoxNzQzNDIyMDA2fQ.U2ktN4gBCpt95hoWS5af6wPirqh1zYxfN9Gf6L9gZes"
+            "userId": "219c1e2f-488a-4f94-a9d8-38b7c9bede1f",
+            "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxOWMxZTJmLTQ4OGEtNGY5NC1hOWQ4LTM4YjdjOWJlZGUxZiIsImlhdCI6MTc0MzQ0ODgyNywiZXhwIjoxNzQzNDUyNDI3fQ.IGY_mzLrSW6WQW-GFJ8upgLbYEvjiwAxL9a1DK4MeCs"
         };
     }
   
@@ -31,50 +35,26 @@ import { NewClass } from "../interfaces/classes/newClass";
             }
         };
         
-        const ids$: Observable<string[]> = this.http.get<string[]>(
+        const classIds$: Observable<ClassesReponse> = this.http.get<ClassesReponse>(
             `http://localhost:3001/users/${this.userCreds.userId}/classes`,
             headers
-        );
+        )
 
-        return of([]);
-        // return ids$
-        //     .pipe(
-        //         switchMap((ids) => 
-        //             forkJoin(
-        //                 ids.map((id) =>
-        //                     this.http.get<Class>(
-        //                         `http://localhost:3001/classes/${id}`,
-        //                         headers
-        //                     )
-        //                 )
-        //             )
-        //         )
-        //     )
+        return classIds$
+            .pipe(
+                switchMap((response,) => {
+                    const ids = response.classes;
 
-        // // window.alert("123");
-        // // // return of([]);
+                    const classes$ = ids.map((id) => {
+                        return this.http.get<Class>(
+                            `http://localhost:3001/classes/${id}`,
+                            headers
+                        )
+                    })
 
-        // // // let ids: string[];
-        // // // ids$.subscribe((_ids: string[]) => ids=_ids);
-
-        // // return of([]);
-
-        // return ids$
-        //     .pipe(
-        //         switchMap(
-        //             (ids: string[]) => 
-        //                 forkJoin(
-        //                     ids.map((id: string) =>
-        //                         this.http.get<Class>(
-        //                             `http://localhost:3001/classes/${id}`,
-        //                             headers
-        //                         )
-        //                     )
-        //                 )
-        //         )
-        //     );
-
-
+                    return forkJoin(classes$);
+                })
+            );
     }
 
     public classWithId(id: string): Observable<Class> {
@@ -85,7 +65,7 @@ import { NewClass } from "../interfaces/classes/newClass";
                 description: "Mathematics",
                 targetAudience: "Students",
                 teacherId: "123",
-                classId: "321"
+                id: "321"
             });
         } else {
             return of({
@@ -93,7 +73,7 @@ import { NewClass } from "../interfaces/classes/newClass";
                 description: "Price go up, price go down",
                 targetAudience: "Students",
                 teacherId: "123",
-                classId: "4321"
+                id: "4321"
             });
         }
     }
@@ -104,8 +84,8 @@ import { NewClass } from "../interfaces/classes/newClass";
     }
 
     // TODO
-    public deleteClass(classId: string): Observable<boolean> {
-        return of(classId !== undefined);
+    public deleteClass(id: string): Observable<boolean> {
+        return of(id !== undefined);
     }
     
     // TODO
@@ -115,7 +95,7 @@ import { NewClass } from "../interfaces/classes/newClass";
             description: _class.description,
             targetAudience: _class.targetAudience,
             teacherId: _class.teacherId,
-            classId: _class.classId
+            id: _class.id
         });
     }
 

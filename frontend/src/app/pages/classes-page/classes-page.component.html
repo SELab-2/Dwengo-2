@@ -32,7 +32,7 @@
     </div>
     <div id="center-container">
         <mat-list id="class-list">
-            @for (class of classes; track class.classId) {
+            @for (class of classes; track class.id) {
                 <li>
                     <app-mini-class [_class]="class"></app-mini-class>
                 </li>

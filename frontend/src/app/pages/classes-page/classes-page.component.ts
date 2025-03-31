@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Class } from '../../interfaces/classes/class';
 import { CommonModule } from "@angular/common";
 import { ClassesService } from '../../services/classes.service';
@@ -33,12 +33,14 @@ type classFilterType = (c: Class) => boolean;
   templateUrl: './classes-page.component.html',
   styleUrl: './classes-page.component.less'
 })
-export class ClassesPageComponent {
+export class ClassesPageComponent implements OnInit {
 
   // Class filter used in the `classes` getter
   // By default we don't filter any classes (return true)
   // You can specify this function all you want as long as it returns a boolean
   private classFilter: classFilterType = () => true;
+
+  private _classes: Class[] = [];
 
   // To show the create component or not
   showCreate: boolean = false;
@@ -46,6 +48,15 @@ export class ClassesPageComponent {
   constructor(
     private classesService: ClassesService
   ) {}
+
+  public ngOnInit(): void {
+    this.classesService
+      .classesOfUSer()
+      .subscribe({
+        next: (classes) => this._classes = classes,
+        error: (err) => window.alert(err)
+      });
+  }
 
   /**
    * Create a class by letting the user fill in a form and send it to the API
@@ -72,15 +83,15 @@ export class ClassesPageComponent {
    * Applies the currently installed filter.
    */
   public get classes(): Class[] {
-    let classes: Class[] = [];
 
-    this.classesService.classesOfUSer()
-      .pipe()
-      .subscribe((classesReponse) => {
-        if(classesReponse) classes = classesReponse;
-      });
+    // window.alert("Fetching classes...");
 
-    return classes.filter(this.classFilter);
+    // this.classesService.classesOfUSer()
+    //   .pipe()
+    //   .subscribe((classesReponse) => {
+    //     if(classesReponse) classes = classesReponse;
+    //   });
+    return this._classes.filter(this.classFilter);
   }
 
 }

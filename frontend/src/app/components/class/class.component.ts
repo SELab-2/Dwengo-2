@@ -94,7 +94,7 @@ export class ClassComponent implements OnInit {
       return;
     };
 
-    const delClassObservable = this.classesService.deleteClass(this._class.classId);
+    const delClassObservable = this.classesService.deleteClass(this._class.id);
 
     delClassObservable.pipe().subscribe(
       (response) => {
@@ -152,7 +152,7 @@ export class ClassComponent implements OnInit {
       name: this.updateForm.value.name,
       description: this.updateForm.value.description,
       targetAudience: this.updateForm.value.targetAudience,
-      classId: this._class!.classId,
+      id: this._class!.id,
       teacherId: this._class!.teacherId
     };
   }
