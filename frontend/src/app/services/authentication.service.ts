@@ -8,12 +8,14 @@ import {
   UserLoginCredentials
 } from '../interfaces';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  private readonly apiUrl = 'http://localhost:3001';
+  private readonly apiUrl = environment.API_URL;
   private readonly registerUrl = `${this.apiUrl}/register`;
   private readonly loginUrl = `${this.apiUrl}/login`;
 
