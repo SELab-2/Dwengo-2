@@ -73,7 +73,8 @@ export class CreateClassComponent {
     return {
       name: this.createForm.value.name,
       description: this.createForm.value.description,
-      targetAudience: this.createForm.value.targetAudience
+      targetAudience: this.createForm.value.targetAudience,
+      teacherId: "219c1e2f-488a-4f94-a9d8-38b7c9bede1f" // TODO
     };
   }
 

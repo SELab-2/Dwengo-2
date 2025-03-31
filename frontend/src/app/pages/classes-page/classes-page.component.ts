@@ -40,6 +40,7 @@ export class ClassesPageComponent implements OnInit {
   // You can specify this function all you want as long as it returns a boolean
   private classFilter: classFilterType = () => true;
 
+  // Classes of the currently logged in user
   private _classes: Class[] = [];
 
   // To show the create component or not
@@ -49,9 +50,13 @@ export class ClassesPageComponent implements OnInit {
     private classesService: ClassesService
   ) {}
 
+  /**
+   * We fetch the classes here since Angular getters shouldn't be async.
+   * If we do we get the equivalent of a forkbomb.
+   */
   public ngOnInit(): void {
     this.classesService
-      .classesOfUSer()
+      .classesOfUser()
       .subscribe({
         next: (classes) => this._classes = classes,
         error: (err) => window.alert(err)

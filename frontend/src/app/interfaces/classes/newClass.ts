@@ -5,5 +5,6 @@
 export interface NewClass {
     name: string,
     description: string,
-    targetAudience: string
+    targetAudience: string,
+    teacherId: string,
 }
