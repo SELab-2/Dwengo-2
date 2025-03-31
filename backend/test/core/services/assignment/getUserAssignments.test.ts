@@ -4,7 +4,7 @@ import { IAssignmentRepository } from "../../../../src/core/repositories/assignm
 import { GetUserAssignments, GetUserAssignmentsInput } from "../../../../src/core/services/assignment";
 
 const mockAssignmentRepository = {
-  getAssignmentsByUserId: jest.fn()
+  getByUserId: jest.fn()
 } as unknown as jest.Mocked<IAssignmentRepository>;
 
 describe("GetUserAssignments Service", () => {
@@ -37,20 +37,20 @@ describe("GetUserAssignments Service", () => {
   });
 
   test("Should return assignments of a user if found", async () => {
-    mockAssignmentRepository.getAssignmentsByUserId.mockResolvedValue(assignments);
+    mockAssignmentRepository.getByUserId.mockResolvedValue(assignments);
 
     const result = await getUserAssignments.execute(params);
 
-    expect(result).toEqual({assignments: assignments});
-    expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledTimes(1);
-    expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledWith(params.idParent);
+    expect(result).toEqual({assignments: assignments.map(a => a.id)});
+    expect(mockAssignmentRepository.getByUserId).toHaveBeenCalledTimes(1);
+    expect(mockAssignmentRepository.getByUserId).toHaveBeenCalledWith(params.idParent);
   });
 
   test("Should throw error if user not found", async () => {
-    mockAssignmentRepository.getAssignmentsByUserId.mockRejectedValue(new EntityNotFoundError("User not found"));
+    mockAssignmentRepository.getByUserId.mockRejectedValue(new EntityNotFoundError("User not found"));
 
     await expect(getUserAssignments.execute(params)).rejects.toThrow(EntityNotFoundError);
-    expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledTimes(1);
-    expect(mockAssignmentRepository.getAssignmentsByUserId).toHaveBeenCalledWith(params.idParent);
+    expect(mockAssignmentRepository.getByUserId).toHaveBeenCalledTimes(1);
+    expect(mockAssignmentRepository.getByUserId).toHaveBeenCalledWith(params.idParent);
   });
 });

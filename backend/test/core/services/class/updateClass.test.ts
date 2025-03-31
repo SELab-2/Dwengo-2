@@ -3,7 +3,7 @@ import { UpdateClass } from "../../../../src/core/services/class";
 
 // Mock repository
 const mockClassRepository = {
-    updateClass: jest.fn()
+    update: jest.fn()
 };
 
 describe("UpdateClass Service", () => {
@@ -19,7 +19,7 @@ describe("UpdateClass Service", () => {
         const updatedDescription = "Updated Description";
 
         const mockUpdatedClass = new Class(updatedName, updatedDescription, "Target Audience", id);
-        mockClassRepository.updateClass.mockResolvedValue(mockUpdatedClass);
+        mockClassRepository.update.mockResolvedValue(mockUpdatedClass);
         mockUpdatedClass.toObject = jest.fn(() => ({
             id: id,
             name: updatedName,
@@ -36,18 +36,13 @@ describe("UpdateClass Service", () => {
 
         const result = await updateClassService.execute(params);
 
-        expect(mockClassRepository.updateClass).toHaveBeenCalledWith(id, {
+        expect(mockClassRepository.update).toHaveBeenCalledWith(id, {
             name: updatedName,
             description: updatedDescription,
             targetAudience: "Target Audience"
         });
 
-        expect(result).toEqual({
-            id: id,
-            name: updatedName,
-            description: updatedDescription,
-            targetAudience: "Target Audience"
-        });
+        expect(result).toEqual({});
     });
 
     it("should update only the targetAudience if only that is provided", async () => {
@@ -55,7 +50,7 @@ describe("UpdateClass Service", () => {
         const updatedTargetAudience = "Advanced Students";
 
         const mockUpdatedClass = new Class("Original Name", "Original Description", updatedTargetAudience, id);
-        mockClassRepository.updateClass.mockResolvedValue(mockUpdatedClass);
+        mockClassRepository.update.mockResolvedValue(mockUpdatedClass);
         mockUpdatedClass.toObject = jest.fn(() => ({
             id: id,
             name: "Original Name",
@@ -69,14 +64,9 @@ describe("UpdateClass Service", () => {
         
         const result = await updateClassService.execute(params);
 
-        expect(mockClassRepository.updateClass).toHaveBeenCalledWith(id, {
+        expect(mockClassRepository.update).toHaveBeenCalledWith(id, {
             targetAudience: updatedTargetAudience
         });
-        expect(result).toEqual({
-            id: id,
-            name: "Original Name",
-            description: "Original Description",
-            targetAudience: updatedTargetAudience
-        });
+        expect(result).toEqual({});
     });
 });

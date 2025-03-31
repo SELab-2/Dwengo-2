@@ -73,6 +73,7 @@ export abstract class User {
             firstName: this._firstName,
             familyName: this._familyName,
             schoolName: this._schoolName,
+            passwordHash: this._passwordHash,
         };
     }
 }

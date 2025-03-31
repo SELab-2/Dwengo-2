@@ -28,11 +28,11 @@ export const deleteClassSchema = z.object({
 export const getClassSchema = z
     .object({
         id: z.string().optional(),
-        className: z.string().email().optional(),
+        name: z.string().email().optional(),
     })
-    .refine(data => data.id !== undefined || data.className !== undefined, {
+    .refine(data => data.id !== undefined || data.name !== undefined, {
         message: "Either ID or email must be provided",
-        path: ["id", "className"],
+        path: ["id", "name"],
     });
 
 export const getUserClassesSchema = z.object({

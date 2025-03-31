@@ -1,56 +1,49 @@
-import { CreateMessage, CreateMessageParams } from '../../../../src/core/services/message/createMessage';
+import { CreateMessage, CreateMessageInput } from '../../../../src/core/services/message/createMessage';
 import { Message } from '../../../../src/core/entities/message';
 import { DatabaseError } from '../../../../src/config/error';
 
 // Mock repository
 const mockMessageRepository = {
-    createMessage: jest.fn(),
+    create: jest.fn(),
 };
 
 describe('CreateMessage', () => {
     let createMessage: CreateMessage;
+    let input: CreateMessageInput;
 
     beforeEach(() => {
         createMessage = new CreateMessage(mockMessageRepository as any);
         jest.clearAllMocks();
+        input = {
+            senderId: "sender-123",
+            createdAt: new Date(),
+            threadId: "thread-456",
+            content: "This is a test message",
+        }
     });
 
     test('Should create a message and return it with an ID', async () => {
-        const inputParams = new CreateMessageParams(
-            "sender-123",
-            new Date(),
-            "thread-456",
-            "This is a test message"
-        );
-
         const createdMessage = new Message(
-            inputParams.senderId,
-            inputParams.createdAt,
-            inputParams.threadId,
-            inputParams.content,
+            input.senderId,
+            input.createdAt,
+            input.threadId,
+            input.content,
             "message-999"
         );
 
-        mockMessageRepository.createMessage.mockResolvedValue({id: "message-999"});
+        mockMessageRepository.create.mockResolvedValue({id: "message-999"});
 
-        const result = await createMessage.execute(inputParams);
+        const result = await createMessage.execute(input);
 
         expect(result).toEqual({ id: "message-999" });
-        expect(mockMessageRepository.createMessage).toHaveBeenCalledWith(expect.any(Message));
+        expect(mockMessageRepository.create).toHaveBeenCalledWith(expect.any(Message));
 
     });
 
     test('Should throw a DatabaseError if creation fails', async () => {
-        const inputParams = new CreateMessageParams(
-            "sender-123",
-            new Date(),
-            "thread-456",
-            "This is a test message"
-        );
+        mockMessageRepository.create.mockRejectedValue(new DatabaseError('Creation failed'));
 
-        mockMessageRepository.createMessage.mockRejectedValue(new DatabaseError('Creation failed'));
-
-        await expect(createMessage.execute(inputParams)).rejects.toThrow(DatabaseError);
-        expect(mockMessageRepository.createMessage).toHaveBeenCalledWith(expect.any(Message));
+        await expect(createMessage.execute(input)).rejects.toThrow(DatabaseError);
+        expect(mockMessageRepository.create).toHaveBeenCalledWith(expect.any(Message));
     });
 });

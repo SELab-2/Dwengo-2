@@ -1,17 +1,12 @@
+import { z } from "zod";
 import { MessageService } from "./messageService";
-import { ServiceParams } from "../../../config/service";
+import { deleteMessageSchema } from "../../../application/schemas/messageSchemas";
 
-export class DeleteMessageParams implements ServiceParams {
-    constructor(private _id: string) {}
+export type DeleteMessageInput = z.infer<typeof deleteMessageSchema>;
 
-    get id(): string {
-        return this._id;
-    }
-}
-
-export class DeleteMessage extends MessageService<DeleteMessageParams> {
-    async execute(input: DeleteMessageParams): Promise<object> {
-        await this.messageRepository.deleteMessageById(input.id);
+export class DeleteMessage extends MessageService<DeleteMessageInput> {
+    async execute(input: DeleteMessageInput): Promise<object> {
+        await this.messageRepository.delete(input.id);
         return {};
     }
 }
