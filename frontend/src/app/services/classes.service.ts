@@ -21,7 +21,7 @@ import { environment } from "../../environments/environment";
         // TODO: user service (bram does this)
         this.userCreds = {
             "userId": "219c1e2f-488a-4f94-a9d8-38b7c9bede1f",
-            "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxOWMxZTJmLTQ4OGEtNGY5NC1hOWQ4LTM4YjdjOWJlZGUxZiIsImlhdCI6MTc0MzUxNDMzOSwiZXhwIjoxNzQzNTE3OTM5fQ.vNwE-3gXwaWP_GPDXVAmD8IxZb4WuJ_uIrHMhc6qYEw"
+            "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxOWMxZTJmLTQ4OGEtNGY5NC1hOWQ4LTM4YjdjOWJlZGUxZiIsImlhdCI6MTc0MzUxODEyMSwiZXhwIjoxNzQzNTIxNzIxfQ.o07AMLb287T6WdDZrfwTodcD317gdpfRfONm_kPa39M"
         };
 
         this.standardHeaders = {
@@ -29,7 +29,7 @@ import { environment } from "../../environments/environment";
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${this.userCreds.userToken}`
             }
-        }
+        };
     }
   
     public classesOfUser(): Observable<Class[]> {
