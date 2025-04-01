@@ -5,11 +5,11 @@ import { Class } from "../interfaces/classes/class";
 import { NewClass } from "../interfaces/classes/newClass";
 
 // TODO: move these to /interfaces
-interface ClassesReponse {
+export interface ClassesReponse {
     classes: string[]
 }
 
-interface NewClassResponse {
+export interface NewClassResponse {
     id: string
 }
 
@@ -33,7 +33,7 @@ interface UpdatedClass {
         // TODO: user service (bram does this)
         this.userCreds = {
             "userId": "219c1e2f-488a-4f94-a9d8-38b7c9bede1f",
-            "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxOWMxZTJmLTQ4OGEtNGY5NC1hOWQ4LTM4YjdjOWJlZGUxZiIsImlhdCI6MTc0MzQ5MTI1NiwiZXhwIjoxNzQzNDk0ODU2fQ.L3fLoyBsXlg0S54-DwAQmGQy3YQnhpoI-qa3ztyymz4"
+            "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxOWMxZTJmLTQ4OGEtNGY5NC1hOWQ4LTM4YjdjOWJlZGUxZiIsImlhdCI6MTc0MzUxNDMzOSwiZXhwIjoxNzQzNTE3OTM5fQ.vNwE-3gXwaWP_GPDXVAmD8IxZb4WuJ_uIrHMhc6qYEw"
         };
 
         this.standardHeaders = {
@@ -76,7 +76,7 @@ interface UpdatedClass {
             this.standardHeaders
         ).pipe(
             switchMap(
-                response => response.id
+                response => of(response.id)
             )
         );
     }

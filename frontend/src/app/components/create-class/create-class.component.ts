@@ -58,6 +58,7 @@ export class CreateClassComponent {
 
     idObservable.pipe().subscribe((response) => {
       if(response) {
+        window.alert(response);
         this.openSnackBar(this.createSuccesMessage);
       } else {
         this.openSnackBar(this.errorMessage);
