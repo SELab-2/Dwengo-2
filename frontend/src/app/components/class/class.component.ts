@@ -96,19 +96,19 @@ export class ClassComponent implements OnInit {
 
     const delClassObservable = this.classesService.deleteClass(this._class.id);
 
-    delClassObservable.pipe().subscribe(
-      (response) => {
+    delClassObservable.subscribe({
+      next: (response) => {
         if(response) {
           this.openSnackBar(this.deleteSuccesMessage);
-          
-          // TODO: use register service to see if we're a student or teacher
+
           const teacher_or_student = true ? 'teacher' : 'student';
-          this.router.navigate([`/${teacher_or_student}/classes`]);
+          this.router.navigate([`/${teacher_or_student}/classes`])
         } else {
           this.openSnackBar(this.errorMessage);
         }
-      }
-    );
+      },
+      error: (err) => this.openSnackBar("catch error")
+    })
   }
 
   public startEdit() {
@@ -129,18 +129,22 @@ export class ClassComponent implements OnInit {
     const newClass = this.extractUpdateFormValues();
     const updateClassObservable = this.classesService.updateClass(newClass);
 
-    updateClassObservable.pipe().subscribe(
-      (response) => {
+    updateClassObservable.pipe().subscribe({
+      next: (response) => {
         if(response) {
-          this._class = response;
+          this._class!.name = newClass.name;
+          this._class!.description = newClass.description;
+          this._class!.targetAudience = newClass.targetAudience;
+
           this.openSnackBar(this.updateSuccesMessage);
           this.editing = false;
         } else {
           this.openSnackBar(this.errorMessage);
           this.cancelEdit();
         }
-      }
-    );
+      },
+      error: (err) => this.openSnackBar(this.errorMessage)
+    });
   }
 
   /**
