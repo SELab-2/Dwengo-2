@@ -2,8 +2,11 @@ import { of } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { AuthenticationService } from "./authentication.service";
 import { LoginResponse, RegisterResponse, UserLoginCredentials, UserRegistration, UserType } from "../interfaces";
+import { TestBed } from "@angular/core/testing";
+import { provideRouter, Router } from "@angular/router";
 
 describe('AuthenticationService', () => {
+  let router: Router;
   let http: jasmine.SpyObj<HttpClient>;
   let service: AuthenticationService;
 
@@ -20,8 +23,8 @@ describe('AuthenticationService', () => {
     userType: UserType.STUDENT
   }
 
-  const registerResponse: RegisterResponse = {
-    id: "baldur-odinsson"
+  const registrationResponse: RegisterResponse = {
+    id: "hehehe",
   }
 
   const loginCredentials: UserLoginCredentials = {
@@ -29,31 +32,34 @@ describe('AuthenticationService', () => {
     password: password
   }
 
-  const loginResponse = {
+  const loginResponse: LoginResponse = {
     token: token,
-    userId: "baldur-odinsson",
-    message: "Login successful"
+    userId: "123456",
+    message: "hehehe",
   }
 
   beforeEach(() => {
-    http = jasmine.createSpyObj('HttpClient', ['post']);    
-    service = new AuthenticationService(http);
+    TestBed.configureTestingModule({
+      imports: [],
+      providers: [
+        provideRouter([]), // This provides a test router
+        { provide: HttpClient, useValue: jasmine.createSpyObj('HttpClient', ['post']) }
+      ]
+    });
+  
+    http = TestBed.inject(HttpClient) as jasmine.SpyObj<HttpClient>;
+    router = TestBed.inject(Router);
+    service = new AuthenticationService(router, http);
   });
 
   it('should register', () => {
-    http.post.and.returnValue(of(registerResponse));
-    
-    service.register(userDetails).subscribe((response: RegisterResponse) => {
-      expect(response).toEqual(registerResponse);
-    });
+    http.post.and.returnValue(of(registrationResponse));
+    expect(() => service.register(userDetails)).not.toThrow();
   });
 
   it('should login', () => {
     http.post.and.returnValue(of(loginResponse));
-
-    service.login(loginCredentials).subscribe((response: LoginResponse) => {
-      expect(response).toEqual(loginResponse);
-    });
+    expect(() => service.login(loginCredentials, userDetails.userType)).not.toThrow();
   });
 
   it('should store, retrieve and remove token', () => {

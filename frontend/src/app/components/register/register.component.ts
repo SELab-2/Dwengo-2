@@ -17,7 +17,6 @@ export class RegisterComponent {
   registrationForm: FormGroup;
 
   constructor(
-    private router: Router,
     private formBuilder: FormBuilder, 
     private authenticationService: AuthenticationService,
   ) {
@@ -38,35 +37,7 @@ export class RegisterComponent {
   }
 
   private sendRegisterData(registrationData: UserRegistration) {
-    const observable = this.authenticationService.register(registrationData);
-    this.pipeRegisterResponse(observable, registrationData);
-  }
-
-  private pipeRegisterResponse(observable: Observable<RegisterResponse>, registrationData: UserRegistration) {
-    observable.pipe(
-      catchError((error) => {
-        window.alert(`Registration failed: ${error.message}`);
-        return of(null);
-      }))
-      .subscribe((response) => {
-        let url: string;
-
-        if (registrationData.userType === UserType.STUDENT) {
-          url = '/student-login';
-        } else if (registrationData.userType === UserType.TEACHER) {
-          url = '/teacher-login';
-        } else {
-          window.alert('Huh? Weird. This is not supposed to happen.');
-          url = 'placeholder';
-        }
-
-        if (response) {
-          this.router.navigateByUrl(url);
-        } else {
-          window.alert('Registration failed. Please try again.');
-        }
-        
-      });
+    this.authenticationService.register(registrationData);
   }
 
   private extractRegistrationFormValues(): UserRegistration {
