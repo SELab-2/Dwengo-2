@@ -8,6 +8,10 @@ interface ClassesReponse {
     classes: string[]
 }
 
+interface NewClassResponse {
+    id: string
+}
+
 @Injectable({
     providedIn: 'root'
   })
@@ -21,7 +25,7 @@ interface ClassesReponse {
     public constructor(private http: HttpClient) {
         this.userCreds = {
             "userId": "219c1e2f-488a-4f94-a9d8-38b7c9bede1f",
-            "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxOWMxZTJmLTQ4OGEtNGY5NC1hOWQ4LTM4YjdjOWJlZGUxZiIsImlhdCI6MTc0MzQ0ODgyNywiZXhwIjoxNzQzNDUyNDI3fQ.IGY_mzLrSW6WQW-GFJ8upgLbYEvjiwAxL9a1DK4MeCs"
+            "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxOWMxZTJmLTQ4OGEtNGY5NC1hOWQ4LTM4YjdjOWJlZGUxZiIsImlhdCI6MTc0MzQ5MTI1NiwiZXhwIjoxNzQzNDk0ODU2fQ.L3fLoyBsXlg0S54-DwAQmGQy3YQnhpoI-qa3ztyymz4"
         };
 
         this.standardHeaders = {
@@ -57,19 +61,16 @@ interface ClassesReponse {
         );
     }
 
-    // TODO: wachten op bugfix API
     public createClass(newClass: NewClass): Observable<string> {
-        this.http.post<string>(
+        return this.http.post<NewClassResponse>(
             `http://localhost:3001/classes`,
             newClass,
             this.standardHeaders
-        ).subscribe({
-            next: (id) => {
-                return of(id);
-            }
-        });
-
-        return of("");
+        ).pipe(
+            switchMap(
+                (response) => response.id
+            )
+        );
     }
 
     // TODO

@@ -59,7 +59,7 @@ export class ClassesPageComponent implements OnInit {
       .classesOfUser()
       .subscribe({
         next: (classes) => this._classes = classes,
-        error: (err) => window.alert(err)
+        // error: (err) => window.alert(err) // TODO
       });
   }
 
@@ -88,14 +88,6 @@ export class ClassesPageComponent implements OnInit {
    * Applies the currently installed filter.
    */
   public get classes(): Class[] {
-
-    // window.alert("Fetching classes...");
-
-    // this.classesService.classesOfUSer()
-    //   .pipe()
-    //   .subscribe((classesReponse) => {
-    //     if(classesReponse) classes = classesReponse;
-    //   });
     return this._classes.filter(this.classFilter);
   }
 
