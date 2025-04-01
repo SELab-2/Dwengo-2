@@ -6,3 +6,4 @@ export * from "./messageSchemas";
 export * from "./questionThreadSchemas";
 export * from "./submissionSchemas";
 export * from "./userSchemas";
+export * from "./dwengoSchemas"

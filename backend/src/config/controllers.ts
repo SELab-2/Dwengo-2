@@ -58,6 +58,9 @@ export const controllers = {
         services.submission.create,
         services.submission.getUserSubmissions,
     ),
+    dwengo: new Resources.DwengoController(
+        services.dwengo.get
+    ),
     user: new Resources.UserController(
         services.user.get,
         services.user.update,

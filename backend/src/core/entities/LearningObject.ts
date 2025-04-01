@@ -13,6 +13,11 @@ enum LearningObjectContentType {
     BLOCKLY = "blockly",
 }
 
+export enum HTMLType {
+    WRAPPED = "wrapped",
+    RAW = "raw",
+}
+
 /**
  * Typescript class that represents a learning object.
  * The specification for these objects can be found at:
@@ -29,6 +34,7 @@ export class LearningObject {
         private readonly _language: string,
         private readonly _title: string,
         private readonly _description: string,
+        private _htmlContent: string = "",
         private readonly _contentType: LearningObjectContentType,
     ) {}
 
@@ -53,7 +59,30 @@ export class LearningObject {
     public get description(): string {
         return this._description;
     }
+    public get htmlContent(): string {
+        return this._htmlContent;
+    }
+    public set htmlContent(htmlContent: string) {
+        this._htmlContent = htmlContent;
+    }
     public get contentType(): LearningObjectContentType {
         return this._contentType;
+    }
+    
+
+    public toObject(includeHtmlContent: boolean = true) {
+        return {
+            metadata: {
+                hruid: this._hruid,
+                uuid: this._uuid,
+                id: this._id,
+                version: this._version,
+                language: this._language,
+                title: this._title,
+                description: this._description,
+                contentType: this._contentType,
+            },
+            ...(includeHtmlContent && { htmlContent: this._htmlContent })
+        };
     }
 }

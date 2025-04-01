@@ -794,26 +794,58 @@ paths:
 #          $ref: '#/components/responses/Unauthorized'
 #        '404':
 #          $ref: '#/components/responses/NotFound'
-#  /objects:
-#    post:
-#      tags:
-#        - objects
-#      summary: Create new learning object
-#      description: Create a new learning object with the specified properties.
-#      operationId: createObject
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/LearningObjectCreate'
-#      responses:
-#        '201':
-#          $ref: '#/components/responses/EntityCreated'
-#        '400':
-#          $ref: '#/components/responses/BadRequest'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
+  /objects/id:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The hruid of the learningobject
+          schema:
+            type: string 
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum: [wrapped, raw]       
+        - in: query
+          name: language
+          schema:
+            type: string
+        - in: query
+          name: version 
+          schema:
+            type: number
+      tags:
+        - objects
+      responses:
+        '200':
+          $ref: '#/components/responses/LearningObjectOK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    # post:
+    #   tags:
+    #     - objects
+    #   summary: Create new learning object
+    #   description: Create a new learning object with the specified properties.
+    #   operationId: createObject
+    #   requestBody:
+    #     required: true
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: '#/components/schemas/LearningObjectCreate'
+    #   responses:
+    #     '201':
+    #       $ref: '#/components/responses/EntityCreated'
+    #     '400':
+    #       $ref: '#/components/responses/BadRequest'
+    #     '401':
+    #       $ref: '#/components/responses/Unauthorized'
 
 # TODO  '/paths/{id}':
 #    get:
@@ -1504,7 +1536,14 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/LearningObject'
+            $ref: '#components/schemas/LearningObject'
+            
+    MetadataOK:
+      description: Metadata request completed successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
     LearningPathOK:
       description: Learning path request completed successfully
       content:
@@ -1616,14 +1655,14 @@ components:
                   type: string
                   format: uuid
                 description: All groups of a specific user.
-    LearningObjectsOK:
+    MetadatasOK:
       description: Learning objects collection request completed successfully
       content:
         application/json:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/LearningObject'
+              $ref: '#/components/schemas/Metadata'
     LearningPathsOK:
       description: Learning paths collection request completed successfully
       content:
@@ -1789,8 +1828,6 @@ components:
           default: student
           description: User's type in the system.
 
-    LearningObject:
-      type: object
     LearningObjectUpdate:
       type: object
     LearningObjectCreate:
@@ -2469,3 +2506,100 @@ components:
           type: string
           minLength: 1
           description: The new content of the message.
+
+    LearningObject:
+      type: object
+      properties:
+        metadata:
+          type: object
+          $ref: '#/components/schemas/Metadata'
+          description: The metadata containing info about the learnign object
+        content:
+          type: string
+          description: The string containing the HTML of the learning object
+
+    Metadata:
+      type: object
+      properties:
+        hruid:
+          type: string
+          description: Human readable unique id
+        uuid:
+          type: string
+          description: Numerical equivalent of hruid
+        _id:
+          type: string
+          description: Unique id
+        version:
+          type: integer
+          description: The version of that specific learning object. Unique in combination with hruid (or uuid) and language.
+        language:
+          type: string
+          description: The language of the learning object.
+        title:
+          type: string
+          description: Short description of the learning object.
+        description:
+          type: string
+          description: Long description of the learning object.
+        content_type:
+          type: string
+          description: One of the following content types -> "text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly".
+        keywords:
+          type: array
+          items:
+            type: string
+          description: Descriptive keywords related to the learning object.
+        target_ages:
+          type: array
+          items:
+            type: integer
+          description: List of target ages for the learning object.
+        teacher_exclusive:
+          type: boolean
+          description: If the learning object is for teachers only.
+        skos_concepts:
+          type: array
+          items:
+            type: string
+          description: List of URI strings referring to SKOS metadata concepts.
+        educational_goals:
+          type: array
+          items:
+            type: object
+            properties:
+              source:
+                type: string
+                description: Source of the educational goal (e.g., a government website).
+              id:
+                type: string
+                description: Unique id for the educational goal in that context.
+          description: Combination of the source and unique id for the educational goals.
+        copyright:
+          type: string
+          description: Copyright information.
+        licence:
+          type: string
+          description: License information.
+        difficulty:
+          type: integer
+          description: Difficulty on a scale of one to five.
+        estimated_time:
+          type: integer
+          description: Estimated time in minutes.
+        return_value:
+          type: object
+          properties:
+            callback_url:
+              type: string
+              description: The URL to send the response of the learning object to.
+            callback_schema:
+              type: string
+              description: A JSON schema defining the format of the return value.
+          description: Used for defining a return value.
+        available:
+          type: boolean
+          description: If the object is available or not.
+        content_location:
+          type: string
+          description: Only contains relevant information if the content_type is "extern". "Extern" content types refer to a website hosted somewhere online.

@@ -2,6 +2,7 @@ import { AssignmentRepositoryTypeORM } from "../infrastructure/repositories/assi
 import { ClassRepositoryTypeORM } from "../infrastructure/repositories/classRepositoryTypeORM";
 import { GroupRepositoryTypeORM } from "../infrastructure/repositories/groupRepositoryTypeORM";
 import { JoinRequestRepositoryTypeORM } from "../infrastructure/repositories/joinRequestRepositoryTypeORM";
+import { LearningObjectRepository } from "../infrastructure/repositories/LearningObjectRepository";
 import { MessageRepositoryTypeORM } from "../infrastructure/repositories/messageRepositoryTypeORM";
 import { ThreadRepositoryTypeORM } from "../infrastructure/repositories/questionThreadRepositoryTypeORM";
 import { StudentRepositoryTypeORM } from "../infrastructure/repositories/studentRepositoryTypeORM";
@@ -21,4 +22,5 @@ export const repositories = {
     submission: new SubmissionRepositoryTypeORM(),
     student: new StudentRepositoryTypeORM(),
     teacher: new TeacherRepositoryTypeORM(),
+    dwengo: new LearningObjectRepository()
 };
