@@ -59,7 +59,7 @@ export class AuthenticationService {
         window.alert(`Login failed: ${error.message}`);
         return of(null);
       }))
-      .subscribe((response) => {
+      .subscribe((response: LoginResponse | null) => {
         let url: string;
 
         if (userType === UserType.STUDENT) {
@@ -73,7 +73,9 @@ export class AuthenticationService {
         if (response) {
           console.log(`Login successful: ${response.message}`);
           this.storeToken(response.token);
-          this.storeUserId(response.userId);
+          console.log(`Token stored: ${response.token}`);
+          this.storeUserId(response.id);
+          console.log(`User ID stored: ${response.id}`);
         }
         
         this.router.navigateByUrl(url);
