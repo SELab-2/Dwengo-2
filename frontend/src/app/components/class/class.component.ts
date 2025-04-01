@@ -101,13 +101,13 @@ export class ClassComponent implements OnInit {
         if(response) {
           this.openSnackBar(this.deleteSuccesMessage);
 
-          const teacher_or_student = true ? 'teacher' : 'student';
+          const teacher_or_student = 'teacher'; //true ? 'teacher' : 'student';
           this.router.navigate([`/${teacher_or_student}/classes`])
         } else {
           this.openSnackBar(this.errorMessage);
         }
       },
-      error: (err) => this.openSnackBar("catch error")
+      error: () => this.openSnackBar("catch error")
     })
   }
 
@@ -143,7 +143,7 @@ export class ClassComponent implements OnInit {
           this.cancelEdit();
         }
       },
-      error: (err) => this.openSnackBar(this.errorMessage)
+      error: () => this.openSnackBar(this.errorMessage)
     });
   }
 

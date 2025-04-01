@@ -1,14 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from "@angular/common/http";
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-
 import { ClassesPageComponent } from './classes-page.component';
 import { provideRouter } from '@angular/router';
 import { ClassesService } from '../../services/classes.service';
 import { By } from '@angular/platform-browser';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { environment } from '../../../environments/environment';
-import { Class } from '../../interfaces/classes/class';
+
 
 describe('ClassesPageComponent', () => {
   let component: ClassesPageComponent;

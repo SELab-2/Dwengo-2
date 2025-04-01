@@ -35,6 +35,7 @@ describe('ClassesService', () => {
     });
 
     it('should respond with classes', () => {
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
         http.get.and.callFake((url: string): Observable<any> => {
             if(url.includes('/users')) {
                 return of(_classesResponse);
