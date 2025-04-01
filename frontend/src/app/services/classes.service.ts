@@ -22,12 +22,6 @@ import { AuthenticationService } from "./authentication.service";
         private http: HttpClient,
         private authService: AuthenticationService
     ) {
-        // TODO: user service (bram does this)
-        // this.userCreds = {
-        //     userId: "219c1e2f-488a-4f94-a9d8-38b7c9bede1f",
-        //     "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxOWMxZTJmLTQ4OGEtNGY5NC1hOWQ4LTM4YjdjOWJlZGUxZiIsImlhdCI6MTc0MzUyMDU3NCwiZXhwIjoxNzQzNTI0MTc0fQ.pAe5kWa1ykaNS8J3GDWWIvyU1D79faUmcPXy7W0axx0"
-        // };
-
         this.userCreds = {
             userId: this.authService.retrieveUserId(),
             userToken: this.authService.retrieveToken()

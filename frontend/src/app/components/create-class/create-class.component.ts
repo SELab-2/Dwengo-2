@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent } from '@angular/material/card'
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthenticationService } from '../../services/authentication.service';
 
 
 @Component({
@@ -41,7 +42,8 @@ export class CreateClassComponent {
   
   public constructor(
     private formBuilder: FormBuilder,
-    private classesService: ClassesService
+    private classesService: ClassesService,
+    private authService: AuthenticationService
   ) {
     this.createForm = this.buildCreateForm();
   }
@@ -52,31 +54,41 @@ export class CreateClassComponent {
    * Notify the user of the result
    */
   public create() {
-    const idObservable: Observable<string> = this.classesService.createClass(
-      this.extractCreateFormValues()
-    );
+    const newClass: NewClass | null = this.extractCreateFormValues();
 
-    idObservable.pipe().subscribe((response) => {
-      if(response) {
-        window.alert(response);
-        this.openSnackBar(this.createSuccesMessage);
-      } else {
-        this.openSnackBar(this.errorMessage);
-      }
-    });
+    if(newClass) {
+      const idObservable: Observable<string> = this.classesService.createClass(
+        newClass
+      );
+  
+      idObservable.pipe().subscribe((response) => {
+        if(response) {
+          this.openSnackBar(this.createSuccesMessage);
+        } else {
+          this.openSnackBar(this.errorMessage);
+        }
+      });
+    } else {
+      this.openSnackBar(this.errorMessage);
+    }
   }
 
   /**
    * Get the values from the create form
    * @returns The values from the create form as a `NewClass`
    */
-  private extractCreateFormValues(): NewClass {
-    return {
-      name: this.createForm.value.name,
-      description: this.createForm.value.description,
-      targetAudience: this.createForm.value.targetAudience,
-      teacherId: "219c1e2f-488a-4f94-a9d8-38b7c9bede1f" // TODO
-    };
+  private extractCreateFormValues(): NewClass | null {
+    const teacherId: string | null = this.authService.retrieveUserId();
+
+    if(teacherId) {
+      return {
+        name: this.createForm.value.name,
+        description: this.createForm.value.description,
+        targetAudience: this.createForm.value.targetAudience,
+        teacherId: teacherId
+      };
+    }
+    return null;
   }
 
   /**
