@@ -69,4 +69,12 @@ describe('AuthenticationService', () => {
     service.removeToken();
     expect(service.retrieveToken()).toBeNull();
   });
+
+  it('should store, retrieve and remove userId', () => {
+    service.storeUserId(loginResponse.userId);
+    expect(service.retrieveUserId()).toEqual(loginResponse.userId);
+
+    service.removeUserId();
+    expect(service.retrieveUserId()).toBeNull();
+  });
 });

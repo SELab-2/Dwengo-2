@@ -83,4 +83,8 @@ export class AuthenticationService {
   retrieveToken = (): string | null => sessionStorage.getItem('AuthenticationToken');
   removeToken = (): void => sessionStorage.removeItem('AuthenticationToken');
 
+  storeUserId = (userId: string): void => sessionStorage.setItem('UserId', userId);
+  retrieveUserId = (): string | null => sessionStorage.getItem('UserId');
+  removeUserId = (): void => sessionStorage.removeItem('UserId');
+
 }
