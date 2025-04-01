@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
-import { RegisterResponse, UserRegistration } from '../../interfaces';
+import { UserRegistration } from '../../interfaces';
 import { UserType } from '../../interfaces/user/user';
-import { catchError, of, Observable } from 'rxjs';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
