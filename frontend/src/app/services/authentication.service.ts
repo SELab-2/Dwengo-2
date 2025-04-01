@@ -73,6 +73,7 @@ export class AuthenticationService {
         if (response) {
           console.log(`Login successful: ${response.message}`);
           this.storeToken(response.token);
+          this.storeUserId(response.userId);
         }
         
         this.router.navigateByUrl(url);
