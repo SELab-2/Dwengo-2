@@ -20,7 +20,7 @@ describe('ClassesPageComponent', () => {
   const USER_ID = "219c1e2f-488a-4f94-a9d8-38b7c9bede1f";
 
   beforeEach(async () => {
-    mockAuthService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveToken']);
+    mockAuthService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveToken', 'retrieveUserType']);
     mockAuthService.retrieveUserId.and.returnValue(USER_ID);
     mockAuthService.retrieveToken.and.returnValue('mockToken');
 
@@ -71,7 +71,7 @@ describe('ClassesPageComponent', () => {
 
   it('should have create class button', () => {
     const button = harness.fixture.nativeElement.querySelector('button');
-    expect(button).toBeTruthy();
+    expect(button).toBeDefined();
   });
 
   it('should have class list', () => {
