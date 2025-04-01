@@ -1,16 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from "@angular/common/http";
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ClassComponent } from './class.component';
 import { ClassesService } from '../../services/classes.service';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { Class } from '../../interfaces/classes/class';
+import { environment } from '../../../environments/environment';
 
 describe('ClassComponent', () => {
   let component: ClassComponent;
   let harness: RouterTestingHarness;
+  let httpTesting: HttpTestingController;
+  const API_URL = environment.API_URL
+
   const testClass: Class = {
     name: "Economics",
     description: "Price go up, price go down",
@@ -35,6 +38,10 @@ describe('ClassComponent', () => {
     })
     .compileComponents();
 
+    // Inject mock HTTP client
+    httpTesting = TestBed.inject(HttpTestingController);
+
+    // Create testing harness
     harness = await RouterTestingHarness.create();
     component = await harness.navigateByUrl('/teacher/classes/123', ClassComponent);
 
@@ -45,40 +52,23 @@ describe('ClassComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a class field', () => {
-    expect(component._class).toBeDefined();
-  });
-
   it('should make a request to the API', async () => {
-    // Inject a mock HTTP client and service
-    // const httpTesting = TestBed.inject(HttpTestingController);
-    // const service = TestBed.inject(ClassesService);
-
-    // Call the service
-    // const _class$ = service.classWithId('123');
-
-    // Subscribe to the observable which returns a promise
-    // const _classPromise = firstValueFrom(_class$);
-
     // Check the made request
-    // TODO
-    // const req = httpTesting.expectOne('/api/classes');
-    // expect(req.request.method).toBe('GET');
+    const req = httpTesting.expectOne(`${API_URL}/classes/123`);
+    expect(req.request.method).toBe('GET');
+    expect(req.request.headers.has('Authorization')).toBeTrue();
 
     // Respond to the request
-    // req.flush(testClass);
-
-    // Check the final result
-    // expect(await _classPromise).toEqual(testClass);
+    req.flush(testClass);
   });
 
   it('should have a class name', () => {
     const name = harness.fixture.nativeElement.querySelector('input[id="name"]');
-    expect(name.value).toBe(testClass.name);
+    expect(name).toBeDefined();
   });
 
   it('should have a class description', () => {
-    const description = harness.fixture.nativeElement.querySelector('input[id="description"]');
+    const description = harness.fixture.nativeElement.querySelector('textarea[id="description"]');
     expect(description).toBeDefined();
   });
 

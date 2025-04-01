@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { of, Observable, tap, forkJoin, switchMap } from 'rxjs';
+import { of, Observable, forkJoin, switchMap } from 'rxjs';
 import { Class } from "../interfaces/classes/class";
 import { NewClass } from "../interfaces/classes/newClass";
 
@@ -95,7 +95,7 @@ interface UpdatedClass {
         );
     }
     
-    // TODO
+    // TODO: wait for bugfix API
     public updateClass(_class: Class): Observable<boolean> {
         const updatedClass: UpdatedClass = {
             name: _class.name,
