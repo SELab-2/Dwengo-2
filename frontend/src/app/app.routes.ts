@@ -16,6 +16,8 @@ export const routes: Routes = [
     { path: 'register', component: RegisterPageComponent },
     { path: 'teacher/classes', component: ClassesPageComponent },
     { path: 'teacher/classes/:id', component: ClassComponent },
+    { path: 'student/classes', component: ClassesPageComponent },
+    { path: 'student/classes/:id', component: ClassComponent },
     { path: 'teacher-login', component: LoginPageComponent, title: 'Teacher Login', data: { isTeacher: true } },
     { path: 'student-login', component: LoginPageComponent, title: 'Student Login', data: { isTeacher: false } },
     { path: 'register', component: RegisterPageComponent, title: 'Register' },

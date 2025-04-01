@@ -10,6 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from '../../services/authentication.service';
+import { UserType } from '../../interfaces';
 
 
 // Type alias
@@ -44,13 +47,17 @@ export class ClassesPageComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
   private readonly errorMessage = $localize `An error occured, please try again.`;
 
+  // Whether the currently logged in user is a teacher or not
+  public isTeacher: boolean = false;
+
   // Classes of the currently logged in user
   private _classes: Class[] = [];
 
   // To show the create component or not
-  showCreate: boolean = false;
+  public showCreate: boolean = false;
 
   constructor(
+    private authService: AuthenticationService,
     private classesService: ClassesService
   ) {}
 
@@ -65,6 +72,8 @@ export class ClassesPageComponent implements OnInit {
         next: (classes) => this._classes = classes,
         error: () => this.openSnackBar(this.errorMessage)
       });
+
+    this.isTeacher = this.authService.retrieveUserType() === UserType.TEACHER;
   }
 
   /**

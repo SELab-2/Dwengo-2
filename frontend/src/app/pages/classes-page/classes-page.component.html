@@ -11,14 +11,15 @@
                 id="nameFilterInput" />
         </mat-form-field>
 
-        <button mat-fab extended (click)="createClass()">
-            <mat-icon>add</mat-icon>
-            <p i18n>Create</p>
-        </button>
+        @if (isTeacher) {
+            <button mat-fab extended (click)="createClass()">
+                <mat-icon>add</mat-icon>
+                <p i18n>Create</p>
+            </button>
+        }
     </div>
     
     @if (showCreate) {
-        
         <div id="center-container">
             <span>
                 <h2 i18n>Create a class</h2>    

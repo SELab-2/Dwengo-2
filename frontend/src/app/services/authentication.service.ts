@@ -76,6 +76,8 @@ export class AuthenticationService {
           console.log(`Token stored: ${response.token}`);
           this.storeUserId(response.id);
           console.log(`User ID stored: ${response.id}`);
+          this.storeUserType(userType);
+          console.log(`User type stored: ${userType}`);
         }
         
         this.router.navigateByUrl(url);
@@ -89,5 +91,9 @@ export class AuthenticationService {
   storeUserId = (userId: string): void => sessionStorage.setItem('UserId', userId);
   retrieveUserId = (): string | null => sessionStorage.getItem('UserId');
   removeUserId = (): void => sessionStorage.removeItem('UserId');
+
+  storeUserType = (userType: UserType): void => sessionStorage.setItem('UserType', userType);
+  retrieveUserType = (): UserType | null => sessionStorage.getItem('UserType') as UserType;
+  removeUserType = (): void => sessionStorage.removeItem('UserType');
 
 }
