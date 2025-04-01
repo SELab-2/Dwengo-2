@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { of, Observable, forkJoin, switchMap } from 'rxjs';
+import { of, Observable, forkJoin, switchMap, delay } from 'rxjs';
 import { Class } from "../interfaces/classes/class";
 import { NewClass } from "../interfaces/classes/newClass";
 import { UpdatedClass } from "../interfaces/classes/updatedClass";
 import { NewClassResponse } from "../interfaces/classes/newClassResponse";
 import { ClassesReponse } from "../interfaces/classes/classesResponse";
 import { environment } from "../../environments/environment";
+import { AuthenticationService } from "./authentication.service";
 
 @Injectable({
     providedIn: 'root'
@@ -17,11 +18,19 @@ import { environment } from "../../environments/environment";
     private userCreds;
     private standardHeaders;
   
-    public constructor(private http: HttpClient) {
+    public constructor(
+        private http: HttpClient,
+        private authService: AuthenticationService
+    ) {
         // TODO: user service (bram does this)
+        // this.userCreds = {
+        //     userId: "219c1e2f-488a-4f94-a9d8-38b7c9bede1f",
+        //     "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxOWMxZTJmLTQ4OGEtNGY5NC1hOWQ4LTM4YjdjOWJlZGUxZiIsImlhdCI6MTc0MzUyMDU3NCwiZXhwIjoxNzQzNTI0MTc0fQ.pAe5kWa1ykaNS8J3GDWWIvyU1D79faUmcPXy7W0axx0"
+        // };
+
         this.userCreds = {
-            "userId": "219c1e2f-488a-4f94-a9d8-38b7c9bede1f",
-            "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxOWMxZTJmLTQ4OGEtNGY5NC1hOWQ4LTM4YjdjOWJlZGUxZiIsImlhdCI6MTc0MzUxODEyMSwiZXhwIjoxNzQzNTIxNzIxfQ.o07AMLb287T6WdDZrfwTodcD317gdpfRfONm_kPa39M"
+            userId: this.authService.retrieveUserId(),
+            userToken: this.authService.retrieveToken()
         };
 
         this.standardHeaders = {

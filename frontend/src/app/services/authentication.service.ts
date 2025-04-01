@@ -63,9 +63,9 @@ export class AuthenticationService {
         let url: string;
 
         if (userType === UserType.STUDENT) {
-          url = 'student/dashboard'
+          url = 'student/classes' // TODO: change to dashboard
         } else if (userType === UserType.TEACHER) {
-          url = 'teacher/dashboard'
+          url = 'teacher/classes' // TODO: change to dashboard
         } else {
           url = 'placeholder'
         }
