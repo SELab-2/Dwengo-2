@@ -18,6 +18,6 @@ export class CreateAssignment extends AssignmentService<CreateAssignmentInput> {
             input.extraInstructions,
         );
 
-        return { id: (await this.assignmentRepository.createAssignment(assignment, input.classId)).id };
+        return { id: (await this.assignmentRepository.create(assignment)).id };
     }
 }

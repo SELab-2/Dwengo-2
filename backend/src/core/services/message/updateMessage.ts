@@ -7,9 +7,9 @@ export type UpdateMessageInput = z.infer<typeof updateMessageSchema>;
 
 export class UpdateMessage extends MessageService<UpdateMessageInput> {
     async execute(input: UpdateMessageInput): Promise<object> {
-        const message: Message = await this.messageRepository.getMessageById(input.id);
+        const message: Message = await this.messageRepository.getById(input.id);
         message.content = input.content;
-        await this.messageRepository.updateMessage(message);
+        await this.messageRepository.update(message);
         return {};
     }
 }

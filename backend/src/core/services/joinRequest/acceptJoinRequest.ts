@@ -23,13 +23,13 @@ export class AcceptJoinRequest extends JoinRequestService<AcceptJoinRequestInput
 
     async execute(input: AcceptJoinRequestInput): Promise<object> {
         // Get the info of the join request
-        const joinRequest: JoinRequest = await this.joinRequestRepository.getJoinRequestById(input.id);
+        const joinRequest: JoinRequest = await this.joinRequestRepository.getById(input.id);
 
         // Add the user to the class
         await this._classRepository.addUserToClass(joinRequest.classId, joinRequest.requester, joinRequest.type);
 
         // Delete joinRequest after successfully adding user to class
-        await this.joinRequestRepository.deleteJoinRequestById(input.id);
+        await this.joinRequestRepository.delete(input.id);
         return {};
     }
 }

@@ -9,7 +9,7 @@ export type DeleteAssignmentInput = z.infer<typeof deleteAssignmentSchema>;
  */
 export class DeleteAssignment extends AssignmentService<DeleteAssignmentInput> {
     async execute(input: DeleteAssignmentInput): Promise<object> {
-        await this.assignmentRepository.deleteAssignmentById(input.id);
+        await this.assignmentRepository.delete(input.id);
         return {};
     }
 }

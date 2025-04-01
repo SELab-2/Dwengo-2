@@ -4,7 +4,11 @@
     </span>
 
     <span class="landing-page__buttons">
-        <button name="login-button" i18n routerLink="login" routerLinkActive="active" ariaCurrentWhenActive="page">Login</button>
+        <span class="landing-page__buttons__login">
+            <button name="teacher-login-button" i18n routerLink="teacher-login" routerLinkActive="active" ariaCurrentWhenActive="page">Teacher Login</button>
+            <button name="login-button" i18n routerLink="student-login" routerLinkActive="active" ariaCurrentWhenActive="page">Student Login</button>
+        </span>
+        
         <p i18n>No account yet?</p>
         <button name="register-button" i18n routerLink="register" routerLinkActive="active" ariaCurrentWhenActive="page">Register</button>
     </span>

@@ -13,8 +13,8 @@ export class GetAllUsers implements Service<GetAllUsersInput> {
     ) {}
 
     async execute(): Promise<object> {
-        const studentIds = (await this.studentRepository.getAllStudents()).map(student => student.id);
-        const teacherIds = (await this.teacherRepository.getAllTeachers()).map(teacher => teacher.id);
+        const studentIds = (await this.studentRepository.getAll()).map(student => student.id);
+        const teacherIds = (await this.teacherRepository.getAll()).map(teacher => teacher.id);
         return { students: studentIds, teachers: teacherIds };
     }
 }

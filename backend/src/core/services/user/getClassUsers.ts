@@ -14,8 +14,8 @@ export class GetClassUsers implements Service<GetClassUsersInput> {
     ) {}
 
     async execute(input: GetClassUsersInput): Promise<object> {
-        const studentIds = (await this.studentRepository.getClassStudents(input.idParent)).map(s => s.id);
-        const teacherIds = (await this.teacherRepository.getClassTeachers(input.idParent)).map(t => t.id);
+        const studentIds = (await this.studentRepository.getByClassId(input.idParent)).map(s => s.id);
+        const teacherIds = (await this.teacherRepository.getByClassId(input.idParent)).map(t => t.id);
         return { teachers: teacherIds, students: studentIds };
     }
 }

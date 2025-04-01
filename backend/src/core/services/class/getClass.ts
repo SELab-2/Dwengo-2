@@ -17,9 +17,9 @@ export class GetClass extends ClassBaseService<GetClassInput> {
         const { id, name } = input;
         try {
             if (id) {
-                return (await this.classRepository.getClassById(id)).toObject();
+                return (await this.classRepository.getById(id)).toObject();
             }
-            return (await this.classRepository.getClassByName(name!)).toObject();
+            return (await this.classRepository.getByName(name!)).toObject();
         } catch (error) {
             if (error instanceof EntityNotFoundError) {
                 throw {
@@ -43,7 +43,7 @@ export class GetUserClasses extends ClassBaseService<GetUserClassInput> {
      */
     async execute(input: GetUserClassInput): Promise<object> {
         try {
-            return { classes: (await this.classRepository.getUserClasses(input.idParent)).map(c => c.id) };
+            return { classes: (await this.classRepository.getByUserId(input.idParent)).map(c => c.id) };
         } catch (error) {
             if (error instanceof EntityNotFoundError) {
                 throw {
@@ -64,6 +64,6 @@ export class GetAllClasses extends ClassBaseService<GetAllClassesInput> {
      * @returns every class stored inside the database.
      */
     async execute(): Promise<object> {
-        return { classes: (await this.classRepository.getAllClasses()).forEach(c => c.toObject()) };
+        return { classes: (await this.classRepository.getAll()).forEach(c => c.toObject()) };
     }
 }

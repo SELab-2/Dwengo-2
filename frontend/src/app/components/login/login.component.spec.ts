@@ -1,6 +1,10 @@
 import { TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
+import { provideHttpClient } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { AuthenticationService } from "../../services/authentication.service";
+
 import { LoginComponent } from "./login.component";
 
 describe('LoginComponent', () => {
@@ -11,7 +15,10 @@ describe('LoginComponent', () => {
         TestBed.configureTestingModule({
             imports: [LoginComponent],
             providers: [
-                provideRouter([{ path: "**", component: LoginComponent }])
+                provideRouter([{ path: "**", component: LoginComponent }]),
+                provideHttpClient(),
+                provideHttpClientTesting(),
+                AuthenticationService,
             ]
         });
 

@@ -12,7 +12,7 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @param teacher The new teacher to insert.
      * @returns A promise that resolves to the inserted teacher.
      */
-    public abstract createTeacher(teacher: Teacher): Promise<Teacher>;
+    public abstract create(teacher: Teacher): Promise<Teacher>;
 
     /**
      * Get a teacher by its id.
@@ -20,14 +20,14 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @throws EntityNotFoundError when no teacher is found.
      * @returns A promise that resolves to the teacher with the given id or null if no results are found.
      */
-    public abstract getTeacherById(id: string): Promise<Teacher>;
+    public abstract getById(id: string): Promise<Teacher>;
 
     /**
      * Check if a teacher with this email exists.
      * @param email The email of the teacher
      * @returns A promise that resolves to a boolean, true if email is already in use false otherwise.
      */
-    public abstract checkTeacherByEmail(email: string): Promise<boolean>;
+    public abstract checkByEmail(email: string): Promise<boolean>;
 
     /**
      * Get a teacher by their email.
@@ -35,7 +35,7 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @throws EntityNotFoundError when no teacher is found.
      * @returns A promise that resolves to the teacher with the given email or null if no results are found.
      */
-    public abstract getTeacherByEmail(email: string): Promise<Teacher>;
+    public abstract getByEmail(email: string): Promise<Teacher>;
 
     /**
      * Get a teacher by their first name.
@@ -43,7 +43,7 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @throws EntityNotFoundError when no teacher is found.
      * @returns A promise that resolves to the teacher with the given first name.
      */
-    public abstract getTeacherByFirstName(first_name: string): Promise<Teacher>;
+    public abstract getByFirstName(first_name: string): Promise<Teacher>;
 
     /**
      * Get a teacher by their last name.
@@ -51,33 +51,33 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @throws EntityNotFoundError when no teacher is found.
      * @returns A promise that resolves to the teacher with the given last name.
      */
-    public abstract getTeacherByLastName(last_name: string): Promise<Teacher>;
+    public abstract getByLastName(last_name: string): Promise<Teacher>;
 
     /**
      * Get all teachers in the repository.
      * @returns A promise that resolves to an array of all teachers.
      */
-    public abstract getAllTeachers(): Promise<Teacher[]>;
+    public abstract getAll(): Promise<Teacher[]>;
 
     /**
      * Update an existing teacher in the repository.
      * @param teacher The teacher to update.
      * @returns A promise that resolves to the updated teacher.
      */
-    public abstract updateTeacher(teacher: Teacher): Promise<Teacher>;
+    public abstract update(teacher: Teacher): Promise<Teacher>;
 
     /**
      * Delete a teacher from the repository.
      * @param id The id of the teacher to delete.
      */
-    public abstract deleteTeacherWithId(id: string): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 
     /**
      * Delete a teacher from a class.
      * @param teacherId The id of the teacher to delete.
      * @param classId The class to delete the teacher from.
      */
-    public abstract deleteTeacherFromClass(teacherId: string, classId: string): Promise<void>;
+    public abstract removeFromClass(teacherId: string, classId: string): Promise<void>;
 
     /**
      * Get all teachers for a class.
@@ -85,5 +85,5 @@ export abstract class ITeacherRepository extends AbstractRepository {
      * @returns the ids of the teachers
      * @throws {EntityNotFoundError} when the class doesn't exist.
      */
-    public abstract getClassTeachers(classId: string): Promise<Teacher[]>;
+    public abstract getByClassId(classId: string): Promise<Teacher[]>;
 }

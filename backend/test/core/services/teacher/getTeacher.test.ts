@@ -13,10 +13,10 @@ describe('getTeacher service', () => {
 
   beforeEach(() => {
     mockTeacherRepository = {
-      getTeacherById: jest.fn(), // Mock DB function
+      getById: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<ITeacherRepository>;
     mockStudentRepository = {
-      getStudentById: jest.fn(), // Mock DB function
+      getById: jest.fn(), // Mock DB function
     } as unknown as jest.Mocked<IStudentRepository>;
 
     getTeacherService = new GetUser(
@@ -37,15 +37,15 @@ describe('getTeacher service', () => {
 
     const params = {id: '1', userType: UserType.TEACHER};
 
-    mockTeacherRepository.getTeacherById.mockResolvedValue(teacher);
+    mockTeacherRepository.getById.mockResolvedValue(teacher);
     const result = await getTeacherService.execute(params);
 
     expect(result).toEqual(teacher.toObject());
-    expect(mockTeacherRepository.getTeacherById).toHaveBeenCalledWith('1');
+    expect(mockTeacherRepository.getById).toHaveBeenCalledWith('1');
   });
 
   test('Should throw error', async () => {
-    mockTeacherRepository.getTeacherById.mockRejectedValue(
+    mockTeacherRepository.getById.mockRejectedValue(
       new EntityNotFoundError('Teacher not found'),
     );
 
@@ -55,6 +55,6 @@ describe('getTeacher service', () => {
           code: ErrorCode.NOT_FOUND,
           message:  `User ${UserType.TEACHER} with ID 999 not found`,
         } as ApiError);
-    expect(mockTeacherRepository.getTeacherById).toHaveBeenCalledWith('999');
+    expect(mockTeacherRepository.getById).toHaveBeenCalledWith('999');
   });
 });

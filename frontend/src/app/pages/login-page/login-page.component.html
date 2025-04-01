@@ -1,4 +1,5 @@
 <app-unauthenticated-header></app-unauthenticated-header>
 <div class="login">
-    <app-login></app-login>
+    <h1>{{ this.userType | titlecase }} Login</h1>
+    <app-login [userType]="this.userType"></app-login>
 </div>

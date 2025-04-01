@@ -13,23 +13,23 @@ describe('CreateJoinRequest', () => {
   
     beforeEach(() => {
       joinRequestRepository = {
-        createJoinRequest: jest.fn(),
-        getJoinRequestById: jest.fn(),
-        getJoinRequestByRequesterId: jest.fn(),
-        getJoinRequestByClassId: jest.fn(),
-        deleteJoinRequestById: jest.fn(),
+        create: jest.fn(),
+        getById: jest.fn(),
+        getByRequesterId: jest.fn(),
+        getByClassId: jest.fn(),
+        deleteById: jest.fn(),
       } as unknown as jest.Mocked<IJoinRequestRepository>;
   
       classRepository = {
-        createClass: jest.fn(),
-        updateClass: jest.fn(),
-        getClassById: jest.fn(),
-        getClassByName: jest.fn(),
-        getAllClasses: jest.fn(),
-        getUserClasses: jest.fn(),
-        getAllClassesByTeacherId: jest.fn(),
-        getAllClassesByStudentId: jest.fn(),
-        deleteClassById: jest.fn(),
+        create: jest.fn(),
+        update: jest.fn(),
+        getById: jest.fn(),
+        getByName: jest.fn(),
+        getAll: jest.fn(),
+        getByUserId: jest.fn(),
+        getByTeacherId: jest.fn(),
+        getByStudentId: jest.fn(),
+        deleteById: jest.fn(),
       } as unknown as jest.Mocked<IClassRepository>;
   
       service = new CreateJoinRequest(joinRequestRepository, classRepository);
@@ -41,7 +41,7 @@ describe('CreateJoinRequest', () => {
     });
   
     it('should throw an error if user already has a join request for the class', async () => {
-      joinRequestRepository.getJoinRequestByClassId.mockResolvedValue([
+      joinRequestRepository.getByClassId.mockResolvedValue([
         new JoinRequest('user1', 'class1', JoinRequestType.STUDENT),
       ]);
   
@@ -67,13 +67,13 @@ describe('CreateJoinRequest', () => {
     // });
   
     it('should create a join request successfully', async () => {
-      joinRequestRepository.getJoinRequestByClassId.mockResolvedValue([]);
-      classRepository.getAllClassesByStudentId.mockResolvedValue([]);
-      joinRequestRepository.createJoinRequest.mockResolvedValue(new JoinRequest('user1', 'class1', JoinRequestType.STUDENT));
+      joinRequestRepository.getByClassId.mockResolvedValue([]);
+      classRepository.getByStudentId.mockResolvedValue([]);
+      joinRequestRepository.create.mockResolvedValue(new JoinRequest('user1', 'class1', JoinRequestType.STUDENT));
   
       const result = await service.execute(input);
   
       expect(result).toEqual({ id: undefined });
-      expect(joinRequestRepository.createJoinRequest).toHaveBeenCalledTimes(1);
+      expect(joinRequestRepository.create).toHaveBeenCalledTimes(1);
     });
   });

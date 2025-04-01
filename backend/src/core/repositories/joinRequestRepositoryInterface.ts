@@ -14,7 +14,7 @@ export abstract class IJoinRequestRepository extends AbstractRepository {
      * @throws EntityNotFoundError when the requester id in `joinRequest` does not exist.
      * @returns A promise that resolves to the inserted join request.
      */
-    public abstract createJoinRequest(joinRequest: JoinRequest): Promise<JoinRequest>;
+    public abstract create(joinRequest: JoinRequest): Promise<JoinRequest>;
 
     /**
      * Get a join request by its id.
@@ -22,23 +22,23 @@ export abstract class IJoinRequestRepository extends AbstractRepository {
      * @throws EntityNotFoundError when no join request is found.
      * @returns A promise that resolves to the join request with the given id or null if no results are found.
      */
-    public abstract getJoinRequestById(id: string): Promise<JoinRequest>;
+    public abstract getById(id: string): Promise<JoinRequest>;
 
     /**
      * Get all join requests in the repository. Empty list if no join requests are found.
      * @returns A promise that resolves to an array of all join requests.
      */
-    public abstract getJoinRequestByRequesterId(requesterId: string): Promise<JoinRequest[]>;
+    public abstract getByRequesterId(requesterId: string): Promise<JoinRequest[]>;
 
     /**
      * Get all join requests in the repository. Empty list if no join requests are found.
      * @returns A promise that resolves to an array of all join requests
      */
-    public abstract getJoinRequestByClassId(classId: string): Promise<JoinRequest[]>;
+    public abstract getByClassId(classId: string): Promise<JoinRequest[]>;
 
     /**
      * Delete a join request from the repository.
      * @param id The id of the join request to delete.
      */
-    public abstract deleteJoinRequestById(id: string): Promise<void>;
+    public abstract delete(id: string): Promise<void>;
 }

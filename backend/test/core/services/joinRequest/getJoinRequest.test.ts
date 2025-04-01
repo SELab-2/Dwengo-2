@@ -10,7 +10,7 @@ describe('GetUserJoinRequests Service', () => {
 
   beforeEach(() => {
     mockJoinRequestRepository = {
-      getJoinRequestByRequesterId: jest.fn(),
+      getByRequesterId: jest.fn(),
     } as unknown as jest.Mocked<IJoinRequestRepository>;
 
     getJoinRequestsService = new GetUserJoinRequests(mockJoinRequestRepository);
@@ -26,12 +26,12 @@ describe('GetUserJoinRequests Service', () => {
       new JoinRequest('user1', 'class2', JoinRequestType.TEACHER, "2"),
     ];
 
-    mockJoinRequestRepository.getJoinRequestByRequesterId.mockResolvedValue(joinRequests);
+    mockJoinRequestRepository.getByRequesterId.mockResolvedValue(joinRequests);
 
     await expect(getJoinRequestsService.execute(input)).resolves.toEqual({
       requests: joinRequests.map(request => request.id),
     });
-    expect(mockJoinRequestRepository.getJoinRequestByRequesterId).toHaveBeenCalledWith(input.idParent);
+    expect(mockJoinRequestRepository.getByRequesterId).toHaveBeenCalledWith(input.idParent);
   });
 });
 
@@ -42,7 +42,8 @@ describe('GetJoinRequest Service', () => {
 
   beforeEach(() => {
     mockJoinRequestRepository = {
-      getJoinRequestById: jest.fn(),
+      getById: jest.fn(),
+      getByRequesterId: jest.fn(),
     } as unknown as jest.Mocked<IJoinRequestRepository>;
 
     getJoinRequestService = new GetJoinRequest(mockJoinRequestRepository);
@@ -58,9 +59,9 @@ describe('GetJoinRequest Service', () => {
       new JoinRequest('user1', 'class2', JoinRequestType.STUDENT, "2"),
     ];
 
-    mockJoinRequestRepository.getJoinRequestById.mockResolvedValue(joinRequests[0]);
+    mockJoinRequestRepository.getById.mockResolvedValue(joinRequests[0]);
 
     await expect(getJoinRequestService.execute(input)).resolves.toEqual(joinRequests[0].toObject());
-    expect(mockJoinRequestRepository.getJoinRequestById).toHaveBeenCalledWith(input.id);
+    expect(mockJoinRequestRepository.getById).toHaveBeenCalledWith(input.id);
   });
 });
