@@ -3,29 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { of, Observable, forkJoin, switchMap } from 'rxjs';
 import { Class } from "../interfaces/classes/class";
 import { NewClass } from "../interfaces/classes/newClass";
-
-// TODO: move these to /interfaces
-export interface ClassesReponse {
-    classes: string[]
-}
-
-export interface NewClassResponse {
-    id: string
-}
-
-interface UpdatedClass {
-    name: string,
-    description: string,
-    targetAudience: string
-}
+import { UpdatedClass } from "../interfaces/classes/updatedClass";
+import { NewClassResponse } from "../interfaces/classes/newClassResponse";
+import { ClassesReponse } from "../interfaces/classes/classesResponse";
+import { environment } from "../../environments/environment";
 
 @Injectable({
     providedIn: 'root'
   })
   export class ClassesService {
 
-    // TODO: use API_URL from /environments/environment.ts
-
+    private API_URL = environment.API_URL;
     private userCreds;
     private standardHeaders;
   
@@ -46,14 +34,14 @@ interface UpdatedClass {
   
     public classesOfUser(): Observable<Class[]> {
         return this.http.get<ClassesReponse>(
-            `http://localhost:3001/users/${this.userCreds.userId}/classes`,
+            `${this.API_URL}/users/${this.userCreds.userId}/classes`,
             this.standardHeaders
         ).pipe(
             switchMap(response => 
                 forkJoin(
                     response.classes.map(id => 
                         this.http.get<Class>(
-                            `http://localhost:3001/classes/${id}`,
+                            `${this.API_URL}/classes/${id}`,
                             this.standardHeaders
                         )
                     )
@@ -64,14 +52,14 @@ interface UpdatedClass {
 
     public classWithId(id: string): Observable<Class> {
         return this.http.get<Class>(
-            `http://localhost:3001/classes/${id}`,
+            `${this.API_URL}/classes/${id}`,
             this.standardHeaders
         );
     }
 
     public createClass(newClass: NewClass): Observable<string> {
         return this.http.post<NewClassResponse>(
-            `http://localhost:3001/classes`,
+            `${this.API_URL}/classes`,
             newClass,
             this.standardHeaders
         ).pipe(
@@ -84,7 +72,7 @@ interface UpdatedClass {
     // TODO: wait for bugfix API
     public deleteClass(id: string): Observable<boolean> {
         return this.http.delete(
-            `http://localhost:3001/classes/${id}`, {
+            `${this.API_URL}/classes/${id}`, {
                 ...this.standardHeaders,
                 observe: 'response'
             }
@@ -104,7 +92,7 @@ interface UpdatedClass {
         };
 
         return this.http.patch(
-            `http://localhost:3001/classes/${_class.id}`,
+            `${this.API_URL}/classes/${_class.id}`,
             updatedClass, {
                 ...this.standardHeaders,
                 observe: 'response'

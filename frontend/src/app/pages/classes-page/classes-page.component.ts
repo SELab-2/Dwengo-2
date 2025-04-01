@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Class } from '../../interfaces/classes/class';
 import { CommonModule } from "@angular/common";
 import { ClassesService } from '../../services/classes.service';
 import { CreateClassComponent } from '../../components/create-class/create-class.component';
 import { MiniClassComponent } from '../../components/mini-class/mini-class.component';
-
 import { MatList } from '@angular/material/list'
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 // Type alias
@@ -40,6 +40,10 @@ export class ClassesPageComponent implements OnInit {
   // You can specify this function all you want as long as it returns a boolean
   private classFilter: classFilterType = () => true;
 
+  // Snackbar
+  private snackBar = inject(MatSnackBar);
+  private readonly errorMessage = $localize `An error occured, please try again.`;
+
   // Classes of the currently logged in user
   private _classes: Class[] = [];
 
@@ -59,7 +63,7 @@ export class ClassesPageComponent implements OnInit {
       .classesOfUser()
       .subscribe({
         next: (classes) => this._classes = classes,
-        // error: (err) => window.alert(err) // TODO
+        error: () => this.openSnackBar(this.errorMessage)
       });
   }
 
@@ -89,6 +93,12 @@ export class ClassesPageComponent implements OnInit {
    */
   public get classes(): Class[] {
     return this._classes.filter(this.classFilter);
+  }
+
+  private openSnackBar(message: string, action: string="Ok") {
+    this.snackBar.open(message, action, {
+        duration: 2500
+    });
   }
 
 }
