@@ -34,7 +34,7 @@ describe('AuthenticationService', () => {
 
   const loginResponse: LoginResponse = {
     token: token,
-    userId: "123456",
+    id: "123456",
     message: "hehehe",
   }
 
@@ -70,9 +70,9 @@ describe('AuthenticationService', () => {
     expect(service.retrieveToken()).toBeNull();
   });
 
-  it('should store, retrieve and remove userId', () => {
-    service.storeUserId(loginResponse.userId);
-    expect(service.retrieveUserId()).toEqual(loginResponse.userId);
+  it('should store, retrieve and remove id', () => {
+    service.storeUserId(loginResponse.id);
+    expect(service.retrieveUserId()).toEqual(loginResponse.id);
 
     service.removeUserId();
     expect(service.retrieveUserId()).toBeNull();
