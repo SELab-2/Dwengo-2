@@ -7,11 +7,11 @@ export class TeacherOfClassTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @ManyToOne(() => TeacherTypeORM)
+    @ManyToOne(() => TeacherTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "teacher_id" })
     teacher!: TeacherTypeORM;
 
-    @ManyToOne(() => ClassTypeORM)
+    @ManyToOne(() => ClassTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "class_id" })
     class!: ClassTypeORM;
 
