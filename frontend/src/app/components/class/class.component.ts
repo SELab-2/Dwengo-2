@@ -107,7 +107,7 @@ export class ClassComponent implements OnInit {
           this.openSnackBar(this.errorMessage);
         }
       },
-      error: () => this.openSnackBar("catch error")
+      error: () => this.openSnackBar(this.errorMessage)
     })
   }
 

@@ -1,7 +1,9 @@
 import { Observable, of } from "rxjs";
 import { Class } from "../interfaces/classes/class";
-import { ClassesReponse, ClassesService, NewClassResponse } from "./classes.service";
+import { ClassesService } from "./classes.service";
 import { HttpClient } from "@angular/common/http";
+import { NewClassResponse } from "../interfaces/classes/newClassResponse";
+import { ClassesReponse } from "../interfaces/classes/classesResponse";
 
 describe('ClassesService', () => {
     let http: jasmine.SpyObj<HttpClient>;

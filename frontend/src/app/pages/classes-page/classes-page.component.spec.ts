@@ -14,7 +14,7 @@ describe('ClassesPageComponent', () => {
   let harness: RouterTestingHarness;
   let httpTesting: HttpTestingController;
   const API_URL = environment.API_URL
-  const USER_ID = "219c1e2f-488a-4f94-a9d8-38b7c9bede1f"; // TODO
+  const USER_ID = "219c1e2f-488a-4f94-a9d8-38b7c9bede1f";
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
