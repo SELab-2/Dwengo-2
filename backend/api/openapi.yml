@@ -31,7 +31,7 @@ tags:
     description: Handle Q&A interactions between students and teachers, including asking and answering questions
   - name: paths
     description: Manage learning paths that organize educational content into structured sequences
-  - name: objects
+  - name: learningObject
     description: Handle learning objects like lessons, exercises and interactive content
 security:
   - apiKeyAuth: []
@@ -794,8 +794,13 @@ paths:
 #          $ref: '#/components/responses/Unauthorized'
 #        '404':
 #          $ref: '#/components/responses/NotFound'
-  '/objects/{id}':
+  '/learningObject/{id}':
     get:
+      description: |
+        Get a learningObject by it's hruid, the learningObject is made of the metadata + the html in raw or wrapped format.
+        When no version is given or the requested version is unavailable, the latest version will be returned.
+        When no language is given or the requested version is unavailable, it will default to english.
+        If English is also unavailable it will fall back to the first language that is available from the Dwengo API.
       parameters:
         - in: path
           name: id
@@ -2545,61 +2550,3 @@ components:
         content_type:
           type: string
           description: One of the following content types -> "text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly".
-        keywords:
-          type: array
-          items:
-            type: string
-          description: Descriptive keywords related to the learning object.
-        target_ages:
-          type: array
-          items:
-            type: integer
-          description: List of target ages for the learning object.
-        teacher_exclusive:
-          type: boolean
-          description: If the learning object is for teachers only.
-        skos_concepts:
-          type: array
-          items:
-            type: string
-          description: List of URI strings referring to SKOS metadata concepts.
-        educational_goals:
-          type: array
-          items:
-            type: object
-            properties:
-              source:
-                type: string
-                description: Source of the educational goal (e.g., a government website).
-              id:
-                type: string
-                description: Unique id for the educational goal in that context.
-          description: Combination of the source and unique id for the educational goals.
-        copyright:
-          type: string
-          description: Copyright information.
-        licence:
-          type: string
-          description: License information.
-        difficulty:
-          type: integer
-          description: Difficulty on a scale of one to five.
-        estimated_time:
-          type: integer
-          description: Estimated time in minutes.
-        return_value:
-          type: object
-          properties:
-            callback_url:
-              type: string
-              description: The URL to send the response of the learning object to.
-            callback_schema:
-              type: string
-              description: A JSON schema defining the format of the return value.
-          description: Used for defining a return value.
-        available:
-          type: boolean
-          description: If the object is available or not.
-        content_location:
-          type: string
-          description: Only contains relevant information if the content_type is "extern". "Extern" content types refer to a website hosted somewhere online.

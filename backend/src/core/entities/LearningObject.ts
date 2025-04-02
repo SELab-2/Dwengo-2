@@ -2,7 +2,7 @@
  * Enum to represent the different types of content
  * that a learning object can have.
  */
-enum LearningObjectContentType {
+export enum LearningObjectContentType {
     PLAIN_TEXT = "plain/text",
     MARKDOWN_TEXT = "text/markdown",
     IMAGE_BLOCK = "image/image-block",

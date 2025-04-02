@@ -1,6 +1,6 @@
 import * as deps from "./dependencies";
-import * as DwengoServices from "../../core/services/dwengo";
-import * as DwengoSchemas from "../schemas/dwengoSchemas";
+import * as DwengoServices from "../../core/services/learningObject";
+import * as DwengoSchemas from "../schemas/learningObjectSchemas";
 
 /**
  * RESTful routing configuration for dwengo-related endpoints.
@@ -14,13 +14,13 @@ import * as DwengoSchemas from "../schemas/dwengoSchemas";
 /* ************* Extractors ************* */
 
 const extractors = {
-    getObject: deps.createZodParamsExtractor(DwengoSchemas.getObjectSchema),
+    getObject: deps.createZodParamsExtractor(DwengoSchemas.getLearningObjectSchema),
 };
 
 /* ************* Controller ************* */
 
 export class DwengoController extends deps.Controller {
-    constructor(getObject: DwengoServices.GetObject) {
+    constructor(getObject: DwengoServices.GetLearningObject) {
         super({ get: getObject });
     }
 }

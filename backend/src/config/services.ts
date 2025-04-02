@@ -7,7 +7,7 @@ import * as MessageServices from "../core/services/message";
 import * as QuestionThreadServices from "../core/services/questionThread";
 import * as Submission from "../core/services/submission";
 import * as UserServices from "../core/services/user";
-import * as DwengoServices from "../core/services/dwengo"
+import * as DwengoServices from "../core/services/learningObject"
 /**
  * The services needed for the Dwengo-2 backend application.
  */
@@ -77,6 +77,6 @@ export const services = {
         getAll: new UserServices.GetAllUsers(repos.student, repos.teacher),
     },
     dwengo: {
-        get: new DwengoServices.GetObject(repos.dwengo)
+        get: new DwengoServices.GetLearningObject(repos.dwengo)
     }
 };
