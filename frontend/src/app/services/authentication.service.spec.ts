@@ -36,6 +36,7 @@ describe('AuthenticationService', () => {
     token: token,
     id: "123456",
     message: "hehehe",
+    refreshToken: token,
   }
 
   beforeEach(() => {
