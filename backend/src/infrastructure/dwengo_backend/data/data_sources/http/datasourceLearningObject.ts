@@ -1,6 +1,10 @@
 import { ApiError, ErrorCode } from "../../../../../application/types";
 import { logger } from "../../../../../config/logger";
-import { LearningObject, LearningObjectContentType, LearningObjectData } from "../../../../../core/entities/learningObject";
+import {
+    LearningObject,
+    LearningObjectContentType,
+    LearningObjectData,
+} from "../../../../../core/entities/learningObject";
 
 export class DatasourceLearningObject {
     public constructor(private readonly _host: string = "https://dwengo.org/backend") {}
@@ -11,7 +15,7 @@ export class DatasourceLearningObject {
 
     /**
      * Function to get all the available versions of a learningObject
-     * 
+     *
      * @param hruid of the learningObject.
      * @returns a promise that resolves to an array of the available version.
      */
@@ -36,7 +40,7 @@ export class DatasourceLearningObject {
 
     /**
      * Function to get all the available languages of a learningObject
-     * 
+     *
      * @param hruid of the learningObject.
      * @returns a promise that resolves to an array of the available languages.
      */
@@ -62,7 +66,7 @@ export class DatasourceLearningObject {
 
     /**
      * Function that retrieves the metadata of a given learningObject.
-     * 
+     *
      * @param hruid of the learningObject.
      * @param language of the learningObject.
      * @param version of the learningObject.
@@ -80,12 +84,12 @@ export class DatasourceLearningObject {
         }
 
         const data: LearningObjectData = await response.json();
-        return LearningObject.fromObject(data)
+        return LearningObject.fromObject(data);
     }
 
     /**
      * Helper function that gets the metadata for a learningObject + wrapped/raw html-content from the dwengo API
-     * 
+     *
      * @param type of the html-content (raw/wrapped).
      * @param hruid of the learningObject.
      * @param language of the learningObject.
@@ -119,7 +123,7 @@ export class DatasourceLearningObject {
 
     /**
      * Function that gets a learningObject from the Dwengo API with raw html-content.
-     * 
+     *
      * @param hruid of the learningObject.
      * @param language of the learningObject.
      * @param version of the learningObject.
@@ -131,7 +135,7 @@ export class DatasourceLearningObject {
 
     /**
      * Function that gets a learningObject from the Dwengo API with wrapped html-content.
-     * 
+     *
      * @param hruid of the learningObject.
      * @param language of the learningObject.
      * @param version of the learningObject.
@@ -143,15 +147,13 @@ export class DatasourceLearningObject {
 
     /**
      * Function that gets all the learningObjects from the Dwengo API
-     * 
+     *
      * @returns a promise that resolves to an array of all learningObjects from the Dwengo API.
      */
     public async getLearningObjects(): Promise<LearningObject[]> {
         const response = await fetch(`${this.host}/api/learningObject/search`);
-        
+
         // Map all objects to LearningObjects
-        return (await response.json()).map((o: LearningObjectData) => {
-            LearningObject.fromObject(o)
-        });
+        return (await response.json()).map((o: LearningObjectData) => LearningObject.fromObject(o));
     }
 }

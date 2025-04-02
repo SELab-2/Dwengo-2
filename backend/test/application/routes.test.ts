@@ -38,6 +38,7 @@ jest.mock("../../src/config/controllers", () => ({
         questionThread: {},
         submission: {},
         user: {},
+        learningObject: {}
     },
 }));
 
@@ -96,6 +97,7 @@ const routeFunctions = {
     questionThreadRoutes: Resources.questionThreadRoutes,
     submissionRoutes: Resources.submissionRoutes,
     userRoutes: Resources.userRoutes,
+    learningObjectRoutes: Resources.learningObjectRoutes
 };
 
 const routeConfigs: Record<
@@ -558,6 +560,17 @@ const routeConfigs: Record<
             request: {},
         },
     ],
+    learningObjectRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/learningObject/:id",
+            hasController: true,
+            request: {
+                pathParams: {id: "ct08_05"},
+                queryParams: { type: "raw" },
+            },
+        },
+    ]
 };
 
 const testRoutes = (

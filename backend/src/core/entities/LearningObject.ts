@@ -19,14 +19,14 @@ export enum HTMLType {
 }
 
 export interface LearningObjectData {
-    hruid: string,
-    uuid: string,
-    id: string,
-    version: number,
-    language: string,
-    title: string,
-    description: string,
-    contentType: LearningObjectContentType
+    hruid: string;
+    uuid: string;
+    id: string;
+    version: number;
+    language: string;
+    title: string;
+    description: string;
+    contentType: LearningObjectContentType;
 }
 
 /**

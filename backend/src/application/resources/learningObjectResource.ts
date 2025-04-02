@@ -37,7 +37,7 @@ export function learningObjectRoutes(
             {
                 app,
                 method: deps.HttpMethod.GET,
-                urlPattern: "/objects/:id",
+                urlPattern: "/learningObject/:id",
                 controller,
                 extractor: extractors.getObject,
                 handler: (req, data) => controller.getOne(req, data),

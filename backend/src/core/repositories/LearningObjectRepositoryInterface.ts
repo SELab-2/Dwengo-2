@@ -20,29 +20,29 @@ export abstract class ILearningObjectRepository {
 
     /**
      * Function to get a learningObject given the hruid, language and version.
-     * 
+     *
      * @param hruid of the learningObject.
      * @param language of the learningObject.
      * @param version of the learningObject.
-     * 
+     *
      * @returns a promise that resolves to a LearningObject containing the raw HTML-content + metadata
      */
     public abstract getrawLearningObject(hruid: string, language: string, version: number): Promise<LearningObject>;
 
     /**
      * Function to get a learningObject given the hruid, language and version.
-     * 
+     *
      * @param hruid of the learningObject.
      * @param language of the learningObject.
      * @param version of the learningObject.
-     * 
+     *
      * @returns a promise that resolves to a LearningObject containing the wrapped HTML-content + metadata
      */
     public abstract getwrappedLearningObject(hruid: string, language: string, version: number): Promise<LearningObject>;
 
     /**
      * Function to get all available learningObjects metadata
-     * 
+     *
      * @returns a promise that resolves to a list of all LearningObjects
      */
     public abstract getLearningObjects(): Promise<LearningObject[]>;

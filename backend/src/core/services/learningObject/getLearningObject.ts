@@ -14,7 +14,7 @@ export class GetLearningObject implements Service<GetObjectInput> {
 
     /**
      * Function that gets a learningObject from the Dwengo API
-     * 
+     *
      * @param input containing the input following the defined zod schema.
      * @returns an object containing the metadata + raw/wrapped html-content
      */
