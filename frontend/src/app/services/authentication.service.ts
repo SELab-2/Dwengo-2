@@ -69,7 +69,7 @@ export class AuthenticationService {
         } else {
           url = 'placeholder'
         }
-
+        
         if (response) {
           console.log(`Login successful: ${response.message}`);
           this.storeToken(response.token);
@@ -78,9 +78,9 @@ export class AuthenticationService {
           console.log(`User ID stored: ${response.id}`);
           this.storeUserType(userType);
           console.log(`User type stored: ${userType}`);
+          this.router.navigateByUrl(url);
         }
-        
-        this.router.navigateByUrl(url);
+
       });
   }
 
