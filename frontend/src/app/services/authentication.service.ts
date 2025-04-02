@@ -36,9 +36,9 @@ export class AuthenticationService {
         let url: string;
 
         if (user.userType === UserType.STUDENT) {
-          url = '/student-login';
+          url = '/student/login';
         } else if (user.userType === UserType.TEACHER) {
-          url = '/teacher-login';
+          url = '/teacher/login';
         } else {
           window.alert('Huh? Weird. This is not supposed to happen.');
           url = 'placeholder';
@@ -87,6 +87,10 @@ export class AuthenticationService {
   storeToken = (token: string): void => sessionStorage.setItem('AuthenticationToken', token);
   retrieveToken = (): string | null => sessionStorage.getItem('AuthenticationToken');
   removeToken = (): void => sessionStorage.removeItem('AuthenticationToken');
+
+  storeRefreshToken = (refreshToken: string): void => sessionStorage.setItem('RefreshToken', refreshToken);
+  retrieveRefreshToken = (): string | null => sessionStorage.getItem('RefreshToken');
+  removeRefreshToken = (): void => sessionStorage.removeItem('RefreshToken');
 
   storeUserId = (userId: string): void => sessionStorage.setItem('UserId', userId);
   retrieveUserId = (): string | null => sessionStorage.getItem('UserId');
