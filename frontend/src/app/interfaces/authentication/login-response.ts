@@ -4,6 +4,6 @@
  */
 export interface LoginResponse {
     token: string,
-    userId: string,
+    id: string,
     message: string,
 }
