@@ -11,13 +11,13 @@ import { AuthenticationService } from "./authentication.service";
 
 @Injectable({
     providedIn: 'root'
-  })
-  export class ClassesService {
+})
+export class ClassesService {
 
     private API_URL = environment.API_URL;
     private userCreds;
     private standardHeaders;
-  
+
     public constructor(
         private http: HttpClient,
         private authService: AuthenticationService
@@ -34,15 +34,15 @@ import { AuthenticationService } from "./authentication.service";
             }
         };
     }
-  
+
     public classesOfUser(): Observable<Class[]> {
         return this.http.get<ClassesReponse>(
             `${this.API_URL}/users/${this.userCreds.userId}/classes`,
             this.standardHeaders
         ).pipe(
-            switchMap(response => 
+            switchMap(response =>
                 forkJoin(
-                    response.classes.map(id => 
+                    response.classes.map(id =>
                         this.http.get<Class>(
                             `${this.API_URL}/classes/${id}`,
                             this.standardHeaders
@@ -76,9 +76,9 @@ import { AuthenticationService } from "./authentication.service";
     public deleteClass(id: string): Observable<boolean> {
         return this.http.delete(
             `${this.API_URL}/classes/${id}`, {
-                ...this.standardHeaders,
-                observe: 'response'
-            }
+            ...this.standardHeaders,
+            observe: 'response'
+        }
         ).pipe(
             switchMap(
                 response => of(response.status === 204) // 204: success & no content
@@ -97,9 +97,9 @@ import { AuthenticationService } from "./authentication.service";
         return this.http.patch(
             `${this.API_URL}/classes/${_class.id}`,
             updatedClass, {
-                ...this.standardHeaders,
-                observe: 'response'
-            }
+            ...this.standardHeaders,
+            observe: 'response'
+        }
         ).pipe(
             switchMap(
                 response => of(response.status === 204)
@@ -107,4 +107,4 @@ import { AuthenticationService } from "./authentication.service";
         );
     }
 
-  }
+}

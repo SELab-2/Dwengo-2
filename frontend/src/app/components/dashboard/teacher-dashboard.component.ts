@@ -10,6 +10,8 @@ import {
 import { ClassChartComponent, ClassChartData } from '../small-components/graphs/class-graph/class-graph.component';
 import { ActivityChartComponent, ActivityChartData } from '../small-components/graphs/activity-graph/activity-graph.component';
 import { MenuCardComponent } from '../small-components/menu-card/menu-card.component';
+import { ClassesService } from '../../services/classes.service';
+import { Class } from '../../interfaces/classes/class';
 
 
 
@@ -36,6 +38,21 @@ export class TeacherDashboardComponent implements OnInit {
   questionsTitle: string = $localize`:@@answerQuestions:Answer Questions`;
   notificationsTitle: string = $localize`:@@notifications:Notifications`;
 
+  constructor(private classesService: ClassesService) { }
+
+  private loadClasses(): void {
+    this.classesService.classesOfUser().subscribe(classes => {
+      this.classChartData = classes.map(c => new ClassChartData(c.name, /*TODO: progress*/2, /*TODO: finished students*/1));
+      this.activityChartData = classes.map(c => new ActivityChartData(c.name, /*TODO: activity*/[4, 10, 41, 35, 51, 49, 62, 69, 73, 86]));
+      console.log(this.classChartData, this.activityChartData);
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadClasses();
+  }
+
+
   classes = ["Class 1", "Class 2", "Class 3"];
   deadlines = ["Math Exam - Jan 17th", "History Essay - Feb 7th", "Science Report - May 26th"];
   questions = [
@@ -48,25 +65,6 @@ export class TeacherDashboardComponent implements OnInit {
   ]
   public classChartData!: ClassChartData[];
   public activityChartData!: ActivityChartData[];
-
-
-  ngOnInit(): void {
-    // verander zodat je api callt
-    this.classChartData = [
-      new ClassChartData("Maths", 76, 44),
-      new ClassChartData("Physics", 82, 47),
-      new ClassChartData("Biology", 99, 59),
-      new ClassChartData("STEM", 72, 34),
-      new ClassChartData("Literature", 79, 39),
-    ]
-    //new ClassChartData([40, 36, 57, 82, 65], [13, 15, 10, 43, 61]);
-    this.activityChartData = [
-      new ActivityChartData("Maths", [4, 10, 41, 35, 51, 49, 62, 69, 73, 86]),
-      new ActivityChartData("Physics", [5, 8, 12, 16, 28, 35, 43, 48, 54]),
-      new ActivityChartData("STEM", [3, 5, 7, 10, 15, 35, 42, 51, 58, 64, 72, 81, 95])
-    ]
-  }
-
 
   setView(view: string) {
     this.selectedView = this.selectedView === view ? null : view;
