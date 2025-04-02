@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { AssignmentTypeORM } from "./assignmentTypeorm";
 import { StudentTypeORM } from "./studentTypeorm";
 import { Group } from "../../../../core/entities/group";
@@ -8,7 +8,7 @@ export class GroupTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @OneToOne(() => AssignmentTypeORM)
+    @ManyToOne(() => AssignmentTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "assignment" })
     assignment!: AssignmentTypeORM;
 

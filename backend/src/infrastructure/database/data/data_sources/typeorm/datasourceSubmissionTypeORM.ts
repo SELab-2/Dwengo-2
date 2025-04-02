@@ -80,4 +80,55 @@ export class DatasourceSubmissionTypeORM extends IDatasourceSubmission {
     public async delete(submission: string): Promise<void> {
         await this.datasource.getRepository(SubmissionTypeORM).delete(submission);
     }
+
+    public async getAllForStudentInAssignmentStep(
+        studentId: string,
+        assignmentId: string,
+        learningObjectId: string,
+    ): Promise<Submission[]> {
+        const studentRepository = this.datasource.getRepository(StudentTypeORM);
+        const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
+        const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
+
+        // First get the student
+        const studentModel: StudentTypeORM | null = await studentRepository.findOne({
+            where: { id: studentId },
+        });
+        if (!studentModel) {
+            throw new EntityNotFoundError(`Student with id ${studentId} not found`);
+        }
+        // Then get the assignment
+        const assignmentModel: AssignmentTypeORM | null = await assignmentRepository.findOne({
+            where: { id: assignmentId },
+        });
+        if (!assignmentModel) {
+            throw new EntityNotFoundError(`Assignment with id ${assignmentId} not found`);
+        }
+        // Now get all the student's submissions for the step of the assignment
+        const submissionModels: SubmissionTypeORM[] = await submissionRepository.find({
+            where: { assignment: assignmentModel, student: studentModel, learning_object_id: learningObjectId },
+            relations: ["student", "assignment"],
+        });
+        // Return the submissions as entities
+        return submissionModels.map(model => model.toEntity());
+    }
+
+    public async getByStudentId(studentId: string): Promise<Submission[]> {
+        const studentRepository = this.datasource.getRepository(StudentTypeORM);
+        const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
+        // First get the student
+        const studentModel: StudentTypeORM | null = await studentRepository.findOne({
+            where: { id: studentId },
+        });
+        if (!studentModel) {
+            throw new EntityNotFoundError(`Student with id ${studentId} not found`);
+        }
+        // Now get all the student's submissions for any assignment and step
+        const submissionModels: SubmissionTypeORM[] = await submissionRepository.find({
+            where: { student: studentModel },
+            relations: ["student"],
+        });
+        // Return the submissions as entities
+        return submissionModels.map(model => model.toEntity());
+    }
 }
