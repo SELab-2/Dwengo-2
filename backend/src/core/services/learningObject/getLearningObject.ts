@@ -1,23 +1,30 @@
 import { z } from "zod";
 import { getLearningObjectSchema } from "../../../application/schemas";
 import { Service } from "../../../config/service";
-import { ILearningObjectRepository } from "../../repositories/learningObjectRepositoryInterface";
 import { HTMLType, LearningObject } from "../../entities/learningObject";
+import { ILearningObjectRepository } from "../../repositories/learningObjectRepositoryInterface";
 
 export type GetObjectInput = z.infer<typeof getLearningObjectSchema>;
 
+/**
+ * Class that implements the service to get a learningObject from the Dwengo API
+ */
 export class GetLearningObject implements Service<GetObjectInput> {
-    constructor(
-        private _learningObjectRepository: ILearningObjectRepository
-    ) {}
+    constructor(private _learningObjectRepository: ILearningObjectRepository) {}
 
+    /**
+     * Function that gets a learningObject from the Dwengo API
+     * 
+     * @param input containing the input following the defined zod schema.
+     * @returns an object containing the metadata + raw/wrapped html-content
+     */
     async execute(input: GetObjectInput): Promise<object> {
         // Get the versions and available languages of this object
         const versions: string[] = await this._learningObjectRepository.getVersions(input.id);
         const languages: string[] = await this._learningObjectRepository.getLanguages(input.id);
 
         // Get latest version
-        let version: number = Math.max(...(versions.map(v => parseInt(v, 10)))) 
+        let version: number = Math.max(...versions.map(v => parseInt(v, 10)));
         if (input.version && versions.find((v: string) => v === input.version)) {
             // If specific version is requested and exists use this one
             version = parseInt(input.version);
@@ -42,6 +49,8 @@ export class GetLearningObject implements Service<GetObjectInput> {
             // Get the raw learningObject + metadata
             learningObject = await this._learningObjectRepository.getrawLearningObject(input.id, language, version);
         }
-        return learningObject.toObject(true)
+
+        // Return the learningObject with html-content included
+        return learningObject.toObject(true);
     }
 }

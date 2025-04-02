@@ -18,5 +18,5 @@ export const setupRoutes = (app: Express) => {
     Resources.questionThreadRoutes(app, controllers.questionThread, [middleware.auth]);
     Resources.submissionRoutes(app, controllers.submission, [middleware.auth]);
     Resources.userRoutes(app, controllers.user, [middleware.auth]);
-    Resources.dwengoRoutes(app, controllers.dwengo)
+    Resources.learningObjectRoutes(app, controllers.learningObject);
 };

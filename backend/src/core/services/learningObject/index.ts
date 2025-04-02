@@ -1,1 +1,1 @@
-export * from "./getLearningObject"
+export * from "./getLearningObject";

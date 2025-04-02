@@ -18,6 +18,17 @@ export enum HTMLType {
     RAW = "raw",
 }
 
+export interface LearningObjectData {
+    hruid: string,
+    uuid: string,
+    id: string,
+    version: number,
+    language: string,
+    title: string,
+    description: string,
+    contentType: LearningObjectContentType
+}
+
 /**
  * Typescript class that represents a learning object.
  * The specification for these objects can be found at:
@@ -68,7 +79,20 @@ export class LearningObject {
     public get contentType(): LearningObjectContentType {
         return this._contentType;
     }
-    
+
+    public static fromObject(object: LearningObjectData) {
+        return new LearningObject(
+            object.hruid,
+            object.uuid,
+            object.id,
+            object.version,
+            object.language,
+            object.title,
+            object.description,
+            "",
+            object.contentType,
+        );
+    }
 
     public toObject(includeHtmlContent: boolean = true) {
         return {
@@ -82,7 +106,7 @@ export class LearningObject {
                 description: this._description,
                 contentType: this._contentType,
             },
-            ...(includeHtmlContent && { htmlContent: this._htmlContent })
+            ...(includeHtmlContent && { htmlContent: this._htmlContent }),
         };
     }
 }

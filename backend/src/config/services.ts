@@ -3,11 +3,11 @@ import * as AssignmentServices from "../core/services/assignment";
 import * as ClassServices from "../core/services/class";
 import * as GroupServices from "../core/services/group";
 import * as JoinRequestServices from "../core/services/joinRequest";
+import * as LearningObjectServices from "../core/services/learningObject";
 import * as MessageServices from "../core/services/message";
 import * as QuestionThreadServices from "../core/services/questionThread";
 import * as Submission from "../core/services/submission";
 import * as UserServices from "../core/services/user";
-import * as DwengoServices from "../core/services/learningObject"
 /**
  * The services needed for the Dwengo-2 backend application.
  */
@@ -76,7 +76,7 @@ export const services = {
         getAssignmentUsers: new UserServices.GetAssignmentUsers(repos.student),
         getAll: new UserServices.GetAllUsers(repos.student, repos.teacher),
     },
-    dwengo: {
-        get: new DwengoServices.GetLearningObject(repos.dwengo)
-    }
+    learningObject: {
+        get: new LearningObjectServices.GetLearningObject(repos.learningObject),
+    },
 };

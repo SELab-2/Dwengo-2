@@ -1,9 +1,9 @@
 import * as deps from "./dependencies";
-import * as DwengoServices from "../../core/services/learningObject";
-import * as DwengoSchemas from "../schemas/learningObjectSchemas";
+import * as LearningObjectServices from "../../core/services/learningObject";
+import * as LearningObjectSchemas from "../schemas/learningObjectSchemas";
 
 /**
- * RESTful routing configuration for dwengo-related endpoints.
+ * RESTful routing configuration for learningObject-related endpoints.
  * Maps HTTP requests to the LearningObjectControllers's handle method after
  * converting Express request/response objects to our internal format.
  *
@@ -14,22 +14,22 @@ import * as DwengoSchemas from "../schemas/learningObjectSchemas";
 /* ************* Extractors ************* */
 
 const extractors = {
-    getObject: deps.createZodParamsExtractor(DwengoSchemas.getLearningObjectSchema),
+    getObject: deps.createZodParamsExtractor(LearningObjectSchemas.getLearningObjectSchema),
 };
 
 /* ************* Controller ************* */
 
-export class DwengoController extends deps.Controller {
-    constructor(getObject: DwengoServices.GetLearningObject) {
+export class LearningObjectController extends deps.Controller {
+    constructor(getObject: LearningObjectServices.GetLearningObject) {
         super({ get: getObject });
     }
 }
 
 /* ************* Routes ************* */
 
-export function dwengoRoutes(
+export function learningObjectRoutes(
     app: deps.Express,
-    controller: DwengoController,
+    controller: LearningObjectController,
     middleware: deps.RequestHandler[] = [],
 ): void {
     deps.configureRoutes(
@@ -42,7 +42,6 @@ export function dwengoRoutes(
                 extractor: extractors.getObject,
                 handler: (req, data) => controller.getOne(req, data),
             },
-
         ],
         deps.DEFAULT_METHOD_MAP,
     );
