@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserRegistration } from '../../interfaces';
 import { UserType } from '../../interfaces/user/user';
-import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -26,24 +25,17 @@ export class RegisterComponent {
     if (this.registrationForm.valid) {
       if (this.registrationForm.value.password === this.registrationForm.value.confirmPassword) {
         const registrationData = this.extractRegistrationFormValues();
-        
-        this.authenticationService.register(registrationData).pipe(
-          catchError((error) => {
-            window.alert(`Registration failed: ${error.message}`);
-            return of(null);
-          }))
-          .subscribe((response) => {
-            if (response) {
-              window.alert(`Registration successful: ${response.id}`);
-            }
-          });
-  
+        this.sendRegisterData(registrationData);
       } else {
         window.alert("Passwords don't match!");
       }
     } else {
       window.alert("Invalid registration");
     }
+  }
+
+  private sendRegisterData(registrationData: UserRegistration) {
+    this.authenticationService.register(registrationData);
   }
 
   private extractRegistrationFormValues(): UserRegistration {
