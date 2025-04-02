@@ -26,7 +26,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "localize": [
-              "en-US"
+              "en-US",
+              "nl"
             ],
             "outputPath": "dist/frontend",
             "index": "src/index.html",
