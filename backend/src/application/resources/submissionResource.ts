@@ -30,7 +30,7 @@ export class SubmissionController extends deps.Controller {
         get: SubmissionServices.GetSubmission,
         remove: SubmissionServices.DeleteSubmission,
         create: SubmissionServices.CreateSubmission,
-        getUserSubmissions: undefined, // TODO
+        getUserSubmissions: SubmissionServices.GetUserSubmissions,
     ) {
         super({ get, remove, create, getUserSubmissions });
     }
