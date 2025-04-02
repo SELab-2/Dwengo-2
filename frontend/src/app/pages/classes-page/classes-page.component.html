@@ -1,0 +1,45 @@
+<div class="classes">
+    <div id="tool-container">
+        <mat-form-field>
+            <mat-label i18n>Name</mat-label>
+            <input
+                matInput
+                #nameFilter
+                placeholder="..."
+                (keyup)="classNameFilter(nameFilter.value)"
+                class="lg-text-input"
+                id="nameFilterInput" />
+        </mat-form-field>
+
+        @if (isTeacher) {
+            <button mat-fab extended (click)="createClass()">
+                <mat-icon>add</mat-icon>
+                <p i18n>Create</p>
+            </button>
+        }
+    </div>
+    
+    @if (showCreate) {
+        <div id="center-container">
+            <span>
+                <h2 i18n>Create a class</h2>    
+                <app-create-class></app-create-class>
+            </span>            
+        </div>
+    }
+
+    <div id="center-container">
+        <h2 i18n>Your classes</h2>
+    </div>
+    <div id="center-container">
+        <mat-list id="class-list">
+            @for (class of classes; track class.id) {
+                <li>
+                    <app-mini-class [_class]="class"></app-mini-class>
+                </li>
+            } @empty {
+                <p i18n>No classes found</p>
+            }
+        </mat-list>
+    </div>
+</div>
