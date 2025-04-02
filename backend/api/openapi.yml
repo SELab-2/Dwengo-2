@@ -794,7 +794,7 @@ paths:
 #          $ref: '#/components/responses/Unauthorized'
 #        '404':
 #          $ref: '#/components/responses/NotFound'
-  /objects/id:
+  '/objects/{id}':
     get:
       parameters:
         - in: path

@@ -1,4 +1,4 @@
-import { IDatasourceLearningObject } from "./IDatasourceLearningObject";
+import { DatasourceLearningObject } from "./http/datasourceLearningObject";
 
 /**
  * Interface for representing a data source of the Dwengo-2 learning object backend.
@@ -6,7 +6,7 @@ import { IDatasourceLearningObject } from "./IDatasourceLearningObject";
 export interface IDatasource {
     /**
      * Retrieves the data source for learning objects.
-     * @returns A promise that resolves to an instance of `IDatasourceLearningObject`.
+     * @returns A promise that resolves to an instance of `DatasourceLearningObject`.
      */
-    getDatasourceLearningObject(): Promise<IDatasourceLearningObject>;
+    getDatasourceLearningObject(): Promise<DatasourceLearningObject>;
 }

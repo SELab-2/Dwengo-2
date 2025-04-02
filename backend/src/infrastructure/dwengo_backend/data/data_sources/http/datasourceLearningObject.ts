@@ -1,13 +1,9 @@
-import { statusMap } from "../../../../../application/helpersExpress";
 import { ApiError, ErrorCode } from "../../../../../application/types";
 import { logger } from "../../../../../config/logger";
 import { LearningObject } from "../../../../../core/entities/LearningObject";
-import { IDatasourceLearningObject } from "../IDatasourceLearningObject";
 
-export class DatasourceLearningObject extends IDatasourceLearningObject {
-    public constructor(private readonly _host: string = "https://dwengo.org/backend") {
-        super();
-    }
+export class DatasourceLearningObject {
+    public constructor(private readonly _host: string = "https://dwengo.org/backend") {}
 
     public get host(): string {
         return this._host;
