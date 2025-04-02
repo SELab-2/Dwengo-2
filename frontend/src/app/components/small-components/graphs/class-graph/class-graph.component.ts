@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
@@ -57,7 +56,7 @@ export class ClassChartData {
 @Component({
   selector: 'app-class-chart',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatIconModule, NgApexchartsModule, MatTooltipModule],
+  imports: [CommonModule, MatIconModule, NgApexchartsModule, MatTooltipModule],
   templateUrl: './class-graph.component.html',
   styleUrls: ['./class-graph.component.less']
 })

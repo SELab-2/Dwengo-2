@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import {
   ApexAxisChartSeries,
@@ -50,7 +49,7 @@ export class ActivityChartData {
 @Component({
   selector: 'app-activity-chart',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatIconModule, NgApexchartsModule],
+  imports: [CommonModule, MatIconModule, NgApexchartsModule],
   templateUrl: './activity-graph.component.html',
   styleUrls: ['./activity-graph.component.less']
 })
