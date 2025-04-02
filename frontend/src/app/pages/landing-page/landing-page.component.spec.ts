@@ -29,8 +29,13 @@ describe('LandingPageComponent', () => {
 		expect(logo).toBeTruthy();
 	});
 
-	it('should contain the login button', () => {
-		const loginButton = harness.fixture.nativeElement.querySelector('button[name="login-button"]');
+	it('should contain the teacher login button', () => {
+		const loginButton = harness.fixture.nativeElement.querySelector('button[name="teacher-login-button"]');
+		expect(loginButton).toBeTruthy();
+	});
+
+	it('should contain the student login button', () => {
+		const loginButton = harness.fixture.nativeElement.querySelector('button[name="student-login-button"]');
 		expect(loginButton).toBeTruthy();
 	});
 

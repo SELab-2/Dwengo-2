@@ -34,6 +34,7 @@ describe('AuthenticationService', () => {
 
   const loginResponse: LoginResponse = {
     token: token,
+    refreshToken: "654321",
     id: "123456",
     message: "hehehe",
   }
