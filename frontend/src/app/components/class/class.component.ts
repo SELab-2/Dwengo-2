@@ -40,6 +40,8 @@ export class ClassComponent implements OnInit {
   private readonly errorMessage = $localize `An error occured, please try again.`;
   private readonly updateSuccesMessage = $localize `Class updated succesfully!`;
   private readonly deleteSuccesMessage = $localize `Class deleted succesfully!`;
+  private readonly invalidURLMessage = $localize `Invalid URL`;
+  private readonly closeMessage = $localize `Close`;
 
   // The current class represented by this component
   public _class?: Class;
@@ -80,7 +82,7 @@ export class ClassComponent implements OnInit {
         }
       );
     } else {
-      this.openSnackBar('Invalid URL', 'Close');
+      this.openSnackBar(this.invalidURLMessage, this.closeMessage);
     }
   }
 
