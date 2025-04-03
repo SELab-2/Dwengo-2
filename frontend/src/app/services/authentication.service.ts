@@ -30,10 +30,7 @@ export class AuthenticationService {
 
   register(user: UserRegistration): void {
     this.http.post<RegisterResponse>(this.registerUrl, user).pipe(
-      catchError((error) => {
-        window.alert(`Registration failed: ${error.message}`);
-        return of(null);
-      })
+      this.errorService.pipeHandler("Registration failed")
     ).subscribe((response) => {
       let url: string;
 
@@ -57,11 +54,7 @@ export class AuthenticationService {
   
   login(credentials: UserLoginCredentials, userType: UserType): void { 
     this.http.post<LoginResponse>(this.loginUrl, credentials).pipe(
-      // catchError((error) => {
-      //   window.alert(`Login failed: ${error.message}`);
-      //   return of(null);
-      // })
-      this.errorService.pipeHandler()
+      this.errorService.pipeHandler("Login failed")
     ).subscribe((response: LoginResponse | null) => {
       let url: string;
 

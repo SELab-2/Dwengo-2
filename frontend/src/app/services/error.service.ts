@@ -23,7 +23,10 @@ export class ErrorService {
      * Handles HTTP errors in an RXJS pipe stream.
      * When using `pipe()` on an observable, you should use this method to handle errors.
      * 
-     * It should be used like this:
+     * It returns `null` if an error occurs, so whenever you call a certain service from a component
+     * you only need to handle the visuals of the error. A snackbar to notify the user is already provided.
+     * 
+     * Example usage:
      * ```ts
      * this.http.get("url")
      *   .pipe(
@@ -34,13 +37,14 @@ export class ErrorService {
      * 
      * In essence this function is a wrapper of `catchError`
      * 
-     * @returns The observable if no errors occured otherwise null.
+     * @param errorMessage The error message to show in the snackbar
+     * @returns The observable if no errors occured otherwise null
      */
-    public pipeHandler<T>(): OperatorFunction<T, T | null> {
+    public pipeHandler<T>(errorMessage: string): OperatorFunction<T, T | null> {
         return (source) => {
             return source.pipe(
                 catchError((error: HttpErrorResponse) => {
-                    this.handleHttpError(error);
+                    this.handleHttpError(error, errorMessage);
                     return of(null);
                 })
             );
@@ -52,7 +56,9 @@ export class ErrorService {
      * When using `subscribe()` on an observable, you should use this method to handle errors.
      * It serves as a wrapper of the usual function you would pass to `subscribe()` but handles errors for you.
      * 
-     * It should be used like this:
+     * It does so by showing an appriopriate snackbar message to the user.
+     * 
+     * Example usage:
      * ```ts
      * this.http.get("url")
      *   .subscribe(
@@ -64,13 +70,14 @@ export class ErrorService {
      *   )
      * ```
      * 
-     * @param next The function to call when the observable emits a value.
-     * @returns An observer (the object you would pass to `subscribe()`) that handles errors for you.
+     * @param errorMessage The error message to show in the snackbar
+     * @param next The function to call when the observable emits a value
+     * @returns An observer (the object you would pass to `subscribe()`) that handles errors for you
      */
-    public subscribeHandler<T>(next: (value: T) => void): Observer<T> {
+    public subscribeHandler<T>(errorMessage: string, next: (value: T) => void): Observer<T> {
         return {
             next: next,
-            error: this.handleHttpError.bind(this),
+            error: (error) => this.handleHttpError(error, errorMessage),
             complete: () => {}
         };
     }
@@ -79,35 +86,36 @@ export class ErrorService {
      * Handle the HTTP error by calling the appropriate handler defined in `handleCode`.
      * 
      * @param error The HTTP error
+     * @param errorMessage The error message to show in the snackbar
      */
-    private handleHttpError(error: HttpErrorResponse): void {
+    private handleHttpError(error: HttpErrorResponse, errorMessage: string): void {
         const status = error.status as keyof typeof this.handleCode;
 
         if(this.handleCode.hasOwnProperty(status)) {
-            this.handleCode[status]();
+            this.handleCode[status](errorMessage.toLocaleLowerCase());
         } else {
             this.openSnackBar("Unknown error");
         }
     }
 
     // Authentication required
-    private handle401() {
-        this.openSnackBar("401");
+    private handle401(errorMessage: string) {
+        this.openSnackBar(`Authentication required ${errorMessage}`);
     }
 
     // Not found
-    private handle404() {
-        this.openSnackBar("404");
+    private handle404(errorMessage: string) {
+        this.openSnackBar(`Not found ${errorMessage}`);
     }
 
     // Conflict (resource already exists)
-    private handle409() {
-        this.openSnackBar("409");
+    private handle409(errorMessage: string) {
+        this.openSnackBar(`Conflict ${errorMessage}`);
     }
 
     // Internal server error
-    private handle500() {
-        this.openSnackBar("500");
+    private handle500(errorMessage: string) {
+        this.openSnackBar(`Internal server error ${errorMessage}`);
     }
 
     private openSnackBar(message: string, action: string="Ok") {
