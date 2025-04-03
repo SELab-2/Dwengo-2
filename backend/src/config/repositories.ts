@@ -3,6 +3,7 @@ import { ClassRepositoryTypeORM } from "../infrastructure/repositories/classRepo
 import { GroupRepositoryTypeORM } from "../infrastructure/repositories/groupRepositoryTypeORM";
 import { JoinRequestRepositoryTypeORM } from "../infrastructure/repositories/joinRequestRepositoryTypeORM";
 import { LearningObjectRepository } from "../infrastructure/repositories/learningObjectRepository";
+import { LearningPathRepository } from "../infrastructure/repositories/learningPathRepository";
 import { MessageRepositoryTypeORM } from "../infrastructure/repositories/messageRepositoryTypeORM";
 import { ThreadRepositoryTypeORM } from "../infrastructure/repositories/questionThreadRepositoryTypeORM";
 import { StudentRepositoryTypeORM } from "../infrastructure/repositories/studentRepositoryTypeORM";
@@ -23,4 +24,5 @@ export const repositories = {
     student: new StudentRepositoryTypeORM(),
     teacher: new TeacherRepositoryTypeORM(),
     learningObject: new LearningObjectRepository(),
+    learningPath: new LearningPathRepository(),
 };

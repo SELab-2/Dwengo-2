@@ -8,20 +8,20 @@ import * as LearningObjectSchemas from "../schemas/learningObjectSchemas";
  * converting Express request/response objects to our internal format.
  *
  * Supported endpoints:
- * - GET /objects/id - Get a learningobject
+ * - GET /learningObject/:id - Get a learningobject
  */
 
 /* ************* Extractors ************* */
 
 const extractors = {
-    getObject: deps.createZodParamsExtractor(LearningObjectSchemas.getLearningObjectSchema),
+    getLearningObject: deps.createZodParamsExtractor(LearningObjectSchemas.getLearningObjectSchema),
 };
 
 /* ************* Controller ************* */
 
 export class LearningObjectController extends deps.Controller {
-    constructor(getObject: LearningObjectServices.GetLearningObject) {
-        super({ get: getObject });
+    constructor(getLearningObject: LearningObjectServices.GetLearningObject) {
+        super({ get: getLearningObject });
     }
 }
 
@@ -39,7 +39,7 @@ export function learningObjectRoutes(
                 method: deps.HttpMethod.GET,
                 urlPattern: "/learningObject/:id",
                 controller,
-                extractor: extractors.getObject,
+                extractor: extractors.getLearningObject,
                 handler: (req, data) => controller.getOne(req, data),
             },
         ],

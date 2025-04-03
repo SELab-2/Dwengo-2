@@ -2,7 +2,7 @@ import { z } from "zod";
 import { HTMLType } from "../../core/entities/learningObject";
 
 /**
- * Schemas for user services
+ * Schemas for learningObject services
  */
 
 export const getLearningObjectSchema = z.object({

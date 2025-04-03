@@ -8,6 +8,7 @@ import * as MessageServices from "../core/services/message";
 import * as QuestionThreadServices from "../core/services/questionThread";
 import * as Submission from "../core/services/submission";
 import * as UserServices from "../core/services/user";
+import * as LearningPathServices from "../core/services/learningPath";
 /**
  * The services needed for the Dwengo-2 backend application.
  */
@@ -79,4 +80,7 @@ export const services = {
     learningObject: {
         get: new LearningObjectServices.GetLearningObject(repos.learningObject),
     },
+    learningPath: {
+        get: new LearningPathServices.GetLearningPath(repos.learningPath)
+    }
 };

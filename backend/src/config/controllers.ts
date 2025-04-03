@@ -56,6 +56,7 @@ export const controllers = {
         services.submission.getUserSubmissions,
     ),
     learningObject: new Resources.LearningObjectController(services.learningObject.get),
+    learningPath: new Resources.LearningPathController(services.learningPath.get),
     user: new Resources.UserController(
         services.user.get,
         services.user.update,

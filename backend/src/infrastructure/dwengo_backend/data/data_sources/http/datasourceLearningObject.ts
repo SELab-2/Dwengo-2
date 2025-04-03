@@ -2,16 +2,12 @@ import { ApiError, ErrorCode } from "../../../../../application/types";
 import { logger } from "../../../../../config/logger";
 import {
     LearningObject,
-    LearningObjectContentType,
     LearningObjectData,
 } from "../../../../../core/entities/learningObject";
+import { DatasourceDwengo } from "./datasourceDwengo";
 
-export class DatasourceLearningObject {
-    public constructor(private readonly _host: string = "https://dwengo.org/backend") {}
-
-    public get host(): string {
-        return this._host;
-    }
+export class DatasourceLearningObject extends DatasourceDwengo{
+    public constructor(host?: string) {super(host, "learningObject")}
 
     /**
      * Function to get all the available versions of a learningObject
@@ -21,7 +17,7 @@ export class DatasourceLearningObject {
      */
     public async getVersions(hruid: string): Promise<string[]> {
         // Fetch from Dwengo
-        const response = await fetch(`${this._host}/api/learningObject/search?hruid=${hruid}`);
+        const response = await fetch(`${this.host}/api/${this.learningType}/search?hruid=${hruid}`);
         if (!response.ok) {
             throw {
                 code: ErrorCode.BAD_REQUEST,
@@ -39,32 +35,6 @@ export class DatasourceLearningObject {
     }
 
     /**
-     * Function to get all the available languages of a learningObject
-     *
-     * @param hruid of the learningObject.
-     * @returns a promise that resolves to an array of the available languages.
-     */
-    public async getLanguages(hruid: string): Promise<string[]> {
-        // Fetch from Dwengo
-        const response = await fetch(`${this._host}/api/learningObject/search?hruid=${hruid}`);
-        if (!response.ok) {
-            throw {
-                code: ErrorCode.BAD_REQUEST,
-                message: `Error fetching from dwengo api: ${response.status}, ${response.statusText}`,
-            } as ApiError;
-        }
-
-        const data = await response.json();
-
-        if (data.length === 0) {
-            throw { code: ErrorCode.NOT_FOUND, message: `No objects exists with this hruid.` } as ApiError;
-        }
-
-        // Map each object to it's versionNumber
-        return data.map((d: { language: string }) => d.language);
-    }
-
-    /**
      * Function that retrieves the metadata of a given learningObject.
      *
      * @param hruid of the learningObject.
@@ -75,7 +45,7 @@ export class DatasourceLearningObject {
     public async getMetaData(hruid: string, language: string, version: number): Promise<LearningObject> {
         // Fetch from dwengo
         const params = `hruid=${hruid}&language=${language}&version=${version}`;
-        const response = await fetch(`${this._host}/api/learningObject/getMetaData?${params}`);
+        const response = await fetch(`${this.host}/api/${this.learningType}/getMetaData?${params}`);
         if (!response.ok) {
             throw {
                 code: ErrorCode.BAD_REQUEST,
@@ -107,7 +77,7 @@ export class DatasourceLearningObject {
 
         // Fetch from dwengo
         const params: string = `hruid=${hruid}&language=${language}&version=${version}`;
-        const response = await fetch(`${this._host}/api/learningObject/${type}?${params}`);
+        const response = await fetch(`${this.host}/api/${this.learningType}/${type}?${params}`);
         if (!response.ok) {
             throw {
                 code: ErrorCode.BAD_REQUEST,
@@ -151,7 +121,7 @@ export class DatasourceLearningObject {
      * @returns a promise that resolves to an array of all learningObjects from the Dwengo API.
      */
     public async getLearningObjects(): Promise<LearningObject[]> {
-        const response = await fetch(`${this.host}/api/learningObject/search`);
+        const response = await fetch(`${this.host}/api/${this.learningType}/search`);
 
         // Map all objects to LearningObjects
         return (await response.json()).map((o: LearningObjectData) => LearningObject.fromObject(o));

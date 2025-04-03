@@ -29,7 +29,7 @@ tags:
     description: Create and manage assignments, including deadlines, instructions and submissions
   - name: questions
     description: Handle Q&A interactions between students and teachers, including asking and answering questions
-  - name: paths
+  - name: learningPath
     description: Manage learning paths that organize educational content into structured sequences
   - name: learningObject
     description: Handle learning objects like lessons, exercises and interactive content
@@ -699,6 +699,31 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  '/learningPath/{id}':
+    get:
+      tags:
+        - learningPath
+      description: Get a learningPath given it's hruid and preffered language.
+      parameters:
+        - in: path
+          name: id
+          required: true 
+          schema:
+            type: string
+          description: The hruid of the learningPath
+        - in: query
+          name: language
+          schema:
+            type: string
+          description: The language of the learningPath
+      responses:
+        '200':
+          $ref: '#/components/responses/LearningPathOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
 # TODO  '/paths/{idParent}/objects/{id}':
 #    get:
 #      tags:
@@ -823,7 +848,7 @@ paths:
           schema:
             type: number
       tags:
-        - objects
+        - learningObject
       responses:
         '200':
           $ref: '#/components/responses/LearningObjectOK'
@@ -1840,6 +1865,72 @@ components:
 
     LearningPath:
       type: object
+      properties:
+        hruid:
+          type: string
+        id:
+          type: string
+        language:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        image:
+          type: string # Base64String
+          description: image with Base64String format
+        numNodes:
+          type: number
+        keywords:
+          type: array
+          items:
+            type: string
+        targetAges:
+          type: array
+          items:
+            type: number
+        minAge:
+          type: number
+        maxAge:
+          type: number
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LearningPathObject'
+        
+        
+    LearningPathObject:
+      type: object
+      properties:
+        hruid:
+          type: string
+        id:
+          type: string
+        version:
+          type: number
+        language:
+          type: string
+        startNode:
+          type: boolean
+        transitions:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/BaseLearningObject'
+        
+    BaseLearningObject:
+      type: object
+      properties:
+        hruid:
+          type: string
+        id:
+          type: string
+        version:
+          type: number
+        language:
+          type: string
+
+        
     LearningPathUpdate:
       type: object
     LearningPathCreate:

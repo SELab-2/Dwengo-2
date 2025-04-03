@@ -7,3 +7,4 @@ export * from "./questionThreadSchemas";
 export * from "./submissionSchemas";
 export * from "./userSchemas";
 export * from "./learningObjectSchemas";
+export * from "./learningPathSchemas"
