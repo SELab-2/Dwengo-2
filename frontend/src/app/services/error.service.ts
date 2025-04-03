@@ -1,4 +1,4 @@
-import { catchError, Observer, of, OperatorFunction } from "rxjs";
+import { catchError, filter, Observer, of, OperatorFunction } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -40,13 +40,14 @@ export class ErrorService {
      * @param errorMessage The error message to show in the snackbar
      * @returns The observable if no errors occured otherwise null
      */
-    public pipeHandler<T>(errorMessage: string): OperatorFunction<T, T | null> {
+    public pipeHandler<T>(errorMessage: string): OperatorFunction<T, T> {
         return (source) => {
             return source.pipe(
                 catchError((error: HttpErrorResponse) => {
                     this.handleHttpError(error, errorMessage);
                     return of(null);
-                })
+                }),
+                filter(value => value !== null) // Filter out null values
             );
         };
     }
@@ -91,7 +92,7 @@ export class ErrorService {
     private handleHttpError(error: HttpErrorResponse, errorMessage: string): void {
         const status = error.status as keyof typeof this.handleCode;
 
-        if(this.handleCode.hasOwnProperty(status)) {
+        if(this.handleCode[status]) {
             this.handleCode[status](errorMessage.toLocaleLowerCase());
         } else {
             this.openSnackBar("Unknown error");

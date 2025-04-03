@@ -42,6 +42,7 @@ import { ErrorService } from "./error.service";
             `${this.API_URL}/users/${this.userCreds.userId}/classes`,
             this.standardHeaders
         ).pipe(
+            this.errorService.pipeHandler("An error occured, please try again"),
             switchMap(response => 
                 forkJoin(
                     response.classes.map(id => 
@@ -59,6 +60,8 @@ import { ErrorService } from "./error.service";
         return this.http.get<Class>(
             `${this.API_URL}/classes/${id}`,
             this.standardHeaders
+        ).pipe(
+            this.errorService.pipeHandler("An error occured whilst retrieving the class"),
         );
     }
 
@@ -68,13 +71,13 @@ import { ErrorService } from "./error.service";
             newClass,
             this.standardHeaders
         ).pipe(
+            this.errorService.pipeHandler("An error occured, please try again"),
             switchMap(
                 response => of(response.id)
             )
         );
     }
 
-    // TODO: wait for bugfix API
     public deleteClass(id: string): Observable<boolean> {
         return this.http.delete(
             `${this.API_URL}/classes/${id}`, {
@@ -82,6 +85,7 @@ import { ErrorService } from "./error.service";
                 observe: 'response'
             }
         ).pipe(
+            this.errorService.pipeHandler("An error occured, please try again"),
             switchMap(
                 response => of(response.status === 204) // 204: success & no content
             )
@@ -103,10 +107,12 @@ import { ErrorService } from "./error.service";
                 observe: 'response'
             }
         ).pipe(
+            this.errorService.pipeHandler("An error occured, please try again"),
             switchMap(
                 response => of(response.status === 204)
-            )
+            ) // TODO: does this still work (can't know before API bugfix)
         );
     }
 
   }
+ 
