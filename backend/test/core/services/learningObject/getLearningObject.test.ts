@@ -23,7 +23,7 @@ describe("GetLearningObject Service", () => {
         mockLearningObjectRepository.getVersions.mockResolvedValue(["1", "2", "3"]);
         mockLearningObjectRepository.getLanguages.mockResolvedValue(["en", "nl"]);
         mockLearningObjectRepository.getrawLearningObject.mockResolvedValue(new LearningObject(
-            "hruid", "uuid", "id", 3, "en", "title", "desc", "", LearningObjectContentType.PLAIN_TEXT
+            "hruid", "id", 3, "en", "uuid", "title", "desc", "", LearningObjectContentType.PLAIN_TEXT
         ));
 
         const input = { id: "123", type: HTMLType.RAW };
@@ -39,7 +39,7 @@ describe("GetLearningObject Service", () => {
         mockLearningObjectRepository.getVersions.mockResolvedValue(["1", "2", "3"]);
         mockLearningObjectRepository.getLanguages.mockResolvedValue(["en", "nl"]);
         mockLearningObjectRepository.getrawLearningObject.mockResolvedValue(new LearningObject(
-            "hruid", "uuid", "id", 2, "en", "title", "desc", "", LearningObjectContentType.PLAIN_TEXT
+            "hruid", "id", 2, "en", "uuid","title", "desc", "", LearningObjectContentType.PLAIN_TEXT
         ));
 
         const input = { id: "123", type: HTMLType.RAW, version: "2" };
@@ -53,7 +53,7 @@ describe("GetLearningObject Service", () => {
         mockLearningObjectRepository.getVersions.mockResolvedValue(["1"]);
         mockLearningObjectRepository.getLanguages.mockResolvedValue(["nl", "fr"]);
         mockLearningObjectRepository.getwrappedLearningObject.mockResolvedValue(new LearningObject(
-            "hruid", "uuid", "id", 1, "nl", "title", "desc", "", LearningObjectContentType.PLAIN_TEXT
+            "hruid", "id", 1, "nl", "uuid", "title", "desc", "", LearningObjectContentType.PLAIN_TEXT
         ));
 
         const input = { id: "123", type: HTMLType.WRAPPED, language: "de" };
@@ -67,7 +67,7 @@ describe("GetLearningObject Service", () => {
         mockLearningObjectRepository.getVersions.mockResolvedValue(["1"]);
         mockLearningObjectRepository.getLanguages.mockResolvedValue(["en"]);
         mockLearningObjectRepository.getwrappedLearningObject.mockResolvedValue(new LearningObject(
-            "hruid", "uuid", "id", 1, "en", "title", "desc", "<div>content</div>", LearningObjectContentType.PLAIN_TEXT
+            "hruid", "id", 1, "en", "uuid", "title", "desc", "<div>content</div>", LearningObjectContentType.PLAIN_TEXT
         ));
 
         const input = { id: "123", type: HTMLType.WRAPPED };
@@ -81,7 +81,7 @@ describe("GetLearningObject Service", () => {
         mockLearningObjectRepository.getVersions.mockResolvedValue(["1"]);
         mockLearningObjectRepository.getLanguages.mockResolvedValue(["en"]);
         mockLearningObjectRepository.getrawLearningObject.mockResolvedValue(new LearningObject(
-            "hruid", "uuid", "id", 1, "en", "title", "desc", "Raw content", LearningObjectContentType.PLAIN_TEXT
+            "hruid", "id", 1, "en", "uuid", "title", "desc", "Raw content", LearningObjectContentType.PLAIN_TEXT
         ));
 
         const input = { id: "123", type: HTMLType.RAW };

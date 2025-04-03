@@ -97,7 +97,8 @@ const routeFunctions = {
     questionThreadRoutes: Resources.questionThreadRoutes,
     submissionRoutes: Resources.submissionRoutes,
     userRoutes: Resources.userRoutes,
-    learningObjectRoutes: Resources.learningObjectRoutes
+    learningObjectRoutes: Resources.learningObjectRoutes,
+    learningPathRoutes: Resources.learningPathRoutes,
 };
 
 const routeConfigs: Record<
@@ -568,6 +569,17 @@ const routeConfigs: Record<
             request: {
                 pathParams: {id: "ct08_05"},
                 queryParams: { type: "raw" },
+            },
+        },
+    ],
+    learningPathRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/learningPath/:id",
+            hasController: true,
+            request: {
+                pathParams: {id: "anm3"},
+                queryParams: { type: "nl" },
             },
         },
     ]
