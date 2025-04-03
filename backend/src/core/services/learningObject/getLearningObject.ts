@@ -51,6 +51,6 @@ export class GetLearningObject implements Service<GetObjectInput> {
         }
 
         // Return the learningObject with html-content included
-        return learningObject.toObject(true);
+        return learningObject.toObject();
     }
 }

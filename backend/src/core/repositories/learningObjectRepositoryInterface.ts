@@ -43,7 +43,8 @@ export abstract class ILearningObjectRepository {
     /**
      * Function to get all available learningObjects metadata
      *
+     * @param param a param string including all the filters to add to the search
      * @returns a promise that resolves to a list of all LearningObjects
      */
-    public abstract getLearningObjects(): Promise<LearningObject[]>;
+    public abstract getLearningObjects(params: string): Promise<LearningObject[]>;
 }

@@ -21,7 +21,7 @@ export class LearningObjectRepository implements ILearningObjectRepository {
         return this.datasource.getRawLearningObject(hruid, language, version);
     }
 
-    public async getLearningObjects(): Promise<LearningObject[]> {
-        return this.datasource.getLearningObjects();
+    public async getLearningObjects(params: string): Promise<LearningObject[]> {
+        return this.datasource.getLearningObjects(params);
     }
 }

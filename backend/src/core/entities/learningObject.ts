@@ -153,7 +153,7 @@ export interface LearningObjectData extends BaseLearningObjectData {
     hruid: string;
     title: string;
     description: string;
-    contentType: LearningObjectContentType;
+    content_type: LearningObjectContentType;
 }
 
 /**
@@ -197,17 +197,23 @@ export class LearningObject extends BaseLearningObject {
         return this._contentType;
     }
 
-    public toObject(includeHtmlContent: boolean = true) {
+    public toObject() {
         return {
             metadata: {
-                ...this.baseToObject(),
-                uuid: this._uuid,
-                title: this._title,
-                description: this._description,
-                contentType: this._contentType,
+                ...this.toMetaData()
             },
-            ...(includeHtmlContent && { htmlContent: this._htmlContent }),
+            htmlContent: this._htmlContent,
         };
+    }
+
+    public toMetaData(): object {
+        return {
+            ...this.baseToObject(),
+            uuid: this._uuid,
+            title: this._title,
+            description: this._description,
+            contentType: this._contentType,
+        }
     }
 
     /**
@@ -226,7 +232,7 @@ export class LearningObject extends BaseLearningObject {
             object.title,
             object.description,
             "",
-            object.contentType,
+            object.content_type,
         );
     }
 }

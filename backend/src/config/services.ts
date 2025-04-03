@@ -79,6 +79,7 @@ export const services = {
     },
     learningObject: {
         get: new LearningObjectServices.GetLearningObject(repos.learningObject),
+        getAll: new LearningObjectServices.GetAllLearningObjects(repos.learningObject),
     },
     learningPath: {
         get: new LearningPathServices.GetLearningPath(repos.learningPath),
