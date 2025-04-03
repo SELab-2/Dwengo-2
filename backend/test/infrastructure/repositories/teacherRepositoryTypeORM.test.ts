@@ -1,7 +1,7 @@
 import { Teacher } from "../../../src/core/entities/teacher";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
-import { IDatasourceTeacher } from "../../../src/infrastructure/database/data/data_sources/datasourceTeacherInterface";
+import { DatasourceTeacherTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTeacherTypeORM";
 
 describe("TeacherRepositoryTypeORM", () => {
 
@@ -9,7 +9,7 @@ describe("TeacherRepositoryTypeORM", () => {
     let datasourceFactoryMock: IDatasourceFactory;
     let teacher: Teacher;
 
-    let datasourceTeacher: IDatasourceTeacher;
+    let datasourceTeacher: DatasourceTeacherTypeORM;
 
     beforeEach(() => {
         datasourceMock = {

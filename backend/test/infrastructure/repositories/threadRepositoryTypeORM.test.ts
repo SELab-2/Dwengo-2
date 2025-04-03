@@ -2,7 +2,7 @@ import { EntityNotFoundError } from "../../../src/config/error";
 import { QuestionThread, VisibilityType } from "../../../src/core/entities/questionThread";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
-import { IDatasourceThread } from "../../../src/infrastructure/database/data/data_sources/datasourceThreadInterface";
+import { DatasourceThreadTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceThreadTypeORM";
 
 describe("ThreadRepositoryTypeORM", () => {
 
@@ -11,7 +11,7 @@ describe("ThreadRepositoryTypeORM", () => {
     let thread: QuestionThread;
     let date: Date;
 
-    let datasourceThread: IDatasourceThread;
+    let datasourceThread: DatasourceThreadTypeORM;
 
     beforeEach(() => {
         datasourceMock = {

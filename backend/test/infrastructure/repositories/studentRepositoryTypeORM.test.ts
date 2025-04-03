@@ -1,7 +1,7 @@
 import { Student } from "../../../src/core/entities/student";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
-import { IDatasourceStudent } from "../../../src/infrastructure/database/data/data_sources/datasourceStudentInterface";
+import { DatasourceStudentTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceStudentTypeORM";
 
 describe("StudentRepositoryTypeORM", () => {
 
@@ -9,7 +9,7 @@ describe("StudentRepositoryTypeORM", () => {
     let datasourceFactoryMock: IDatasourceFactory;
     let student: Student;
 
-    let datasourceStudent: IDatasourceStudent;
+    let datasourceStudent: DatasourceStudentTypeORM;
 
     beforeEach(() => {
         datasourceMock = {

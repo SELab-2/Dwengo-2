@@ -1,7 +1,7 @@
 import { Group } from "../../../src/core/entities/group";
-import { IDatasourceGroup } from "../../../src/infrastructure/database/data/data_sources/datasourceGroupInterface";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
+import { DatasourceGroupTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceGroupTypeORM";
 
 describe("GroupRepositoryTypeORM", () => {
 
@@ -11,7 +11,7 @@ describe("GroupRepositoryTypeORM", () => {
     let idGroup: Group;
     let memberIds: string[];
 
-    let datasourceGroup: IDatasourceGroup;
+    let datasourceGroup: DatasourceGroupTypeORM;
 
     let returnGroup: Group|null;
 

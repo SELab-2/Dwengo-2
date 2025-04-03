@@ -1,7 +1,7 @@
 import { Assignment } from "../../../src/core/entities/assignment";
-import { IDatasourceAssignment } from "../../../src/infrastructure/database/data/data_sources/datasourceAssignmentInterface";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
+import { DatasourceAssignmentTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceAssignmentTypeORM";
 
 describe("ClassRepositoryTypeORM", () => {
 
@@ -9,7 +9,7 @@ describe("ClassRepositoryTypeORM", () => {
     let datasourceFactoryMock: IDatasourceFactory;
     let assignment: Assignment;
 
-    let datasourceAssignment: IDatasourceAssignment;
+    let datasourceAssignment: DatasourceAssignmentTypeORM;
 
     beforeEach(() => {
         datasourceMock = {

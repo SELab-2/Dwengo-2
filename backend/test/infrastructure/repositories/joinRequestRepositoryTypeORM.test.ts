@@ -1,7 +1,7 @@
 import { JoinRequest, JoinRequestType } from "../../../src/core/entities/joinRequest";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
-import { IDatasourceJoinRequest } from "../../../src/infrastructure/database/data/data_sources/datasourceJoinRequestInterface";
+import { DatasourceJoinRequestTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceJoinRequestTypeORM";
 
 describe("JoinRequestRepositoryTypeORM", () => {
 
@@ -9,7 +9,7 @@ describe("JoinRequestRepositoryTypeORM", () => {
     let datasourceFactoryMock: IDatasourceFactory;
     let joinRequest: JoinRequest = new JoinRequest("teacherId", "classId", JoinRequestType.TEACHER, "id");
 
-    let datasourceJoinRequest: IDatasourceJoinRequest;
+    let datasourceJoinRequest: DatasourceJoinRequestTypeORM;
 
     beforeEach(() => {
         datasourceMock = {

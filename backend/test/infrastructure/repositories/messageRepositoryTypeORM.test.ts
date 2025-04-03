@@ -2,7 +2,7 @@ import { EntityNotFoundError } from "../../../src/config/error";
 import { Message } from "../../../src/core/entities/message";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
-import { IDatasourceMessage } from "../../../src/infrastructure/database/data/data_sources/datasourceMessageInterface";
+import { DatasourceMessageTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceMessageTypeORM";
 
 describe("MessageRepositoryTypeORM", () => {
 
@@ -11,7 +11,7 @@ describe("MessageRepositoryTypeORM", () => {
     let message: Message;
     let date: Date;
 
-    let datasourceMessage: IDatasourceMessage;
+    let datasourceMessage: DatasourceMessageTypeORM;
 
     beforeEach(() => {
         datasourceMock = {
