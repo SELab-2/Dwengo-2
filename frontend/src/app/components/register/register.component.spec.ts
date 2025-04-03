@@ -62,12 +62,12 @@ describe('RegisterComponent', () => {
   });
 
   it('should have a password input', () => {
-    const passwordInput = harness.fixture.nativeElement.querySelector('input[name="password"]');
+    const passwordInput = harness.fixture.nativeElement.querySelector('input[id="password"]');
     expect(passwordInput).toBeTruthy();
   });
 
   it('should have a confirm password input', () => {
-    const confirmPasswordInput = harness.fixture.nativeElement.querySelector('input[name="confirm-password"]');
+    const confirmPasswordInput = harness.fixture.nativeElement.querySelector('input[id="confirmPassword"]');
     expect(confirmPasswordInput).toBeTruthy();
   });
 
