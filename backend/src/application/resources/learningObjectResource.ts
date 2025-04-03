@@ -27,11 +27,7 @@ export class LearningObjectController extends deps.Controller {
 
 /* ************* Routes ************* */
 
-export function learningObjectRoutes(
-    app: deps.Express,
-    controller: LearningObjectController,
-    middleware: deps.RequestHandler[] = [],
-): void {
+export function learningObjectRoutes(app: deps.Express, controller: LearningObjectController): void {
     deps.configureRoutes(
         [
             {

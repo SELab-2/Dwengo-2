@@ -14,5 +14,4 @@ export class LearningPathRepository implements ILearningPathRepository {
     public getLearningPaths(): Promise<LearningPath[]> {
         return this.datasource.getLearningPaths();
     }
-    
 }

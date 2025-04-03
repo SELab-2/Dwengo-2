@@ -1,7 +1,7 @@
 import { PathLearningObject, PathLearningObjectData } from "./learningObject";
 
 /**
- * TypeAlias for a Base64String image representation 
+ * TypeAlias for a Base64String image representation
  */
 type Base64String = string;
 
@@ -37,16 +37,16 @@ export class LearningPath {
         private readonly _description: string,
         private readonly _image: Base64String,
         private readonly _numNodes: number,
-        private readonly _keywords: string [],
-        private readonly _targetAges: number [],
+        private readonly _keywords: string[],
+        private readonly _targetAges: number[],
         private readonly _minAge: number,
         private readonly _maxAge: number,
-        private readonly _nodes: PathLearningObject []
-    ) {};
+        private readonly _nodes: PathLearningObject[],
+    ) {}
 
     /**
      * Function to convert a learningPath entity to object format.
-     * 
+     *
      * @returns the learningPath object
      */
     public toObject(): object {
@@ -68,7 +68,7 @@ export class LearningPath {
 
     /**
      * Static function that maps a dwengo object for a learningPath to our entity type.
-     * 
+     *
      * @param object interface that defines the fields on the object data
      * @returns a LearningPath object
      */
@@ -81,11 +81,11 @@ export class LearningPath {
             object.description,
             object.image, // Base64 string
             object.num_nodes,
-            object.keywords.trim().replace(/["\\]/g,"").split(" "), // Split the single string into array of keywords and remove excess " and \.
+            object.keywords.trim().replace(/["\\]/g, "").split(" "), // Split the single string into array of keywords and remove excess " and \.
             object.target_ages,
             object.min_age,
             object.max_age,
-            object.nodes.map((node: PathLearningObjectData) => PathLearningObject.fromObject(node))
+            object.nodes.map((node: PathLearningObjectData) => PathLearningObject.fromObject(node)),
         );
     }
 }

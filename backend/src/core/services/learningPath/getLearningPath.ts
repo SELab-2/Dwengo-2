@@ -1,9 +1,8 @@
 import { z } from "zod";
 import { getLearningPathSchema } from "../../../application/schemas";
 import { Service } from "../../../config/service";
-import { ILearningObjectRepository } from "../../repositories/learningObjectRepositoryInterface";
-import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
 import { LearningPath } from "../../entities/learningPath";
+import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
 
 export type GetLearningPathInput = z.infer<typeof getLearningPathSchema>;
 

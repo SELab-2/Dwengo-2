@@ -4,11 +4,11 @@ import * as ClassServices from "../core/services/class";
 import * as GroupServices from "../core/services/group";
 import * as JoinRequestServices from "../core/services/joinRequest";
 import * as LearningObjectServices from "../core/services/learningObject";
+import * as LearningPathServices from "../core/services/learningPath";
 import * as MessageServices from "../core/services/message";
 import * as QuestionThreadServices from "../core/services/questionThread";
 import * as Submission from "../core/services/submission";
 import * as UserServices from "../core/services/user";
-import * as LearningPathServices from "../core/services/learningPath";
 /**
  * The services needed for the Dwengo-2 backend application.
  */
@@ -81,6 +81,6 @@ export const services = {
         get: new LearningObjectServices.GetLearningObject(repos.learningObject),
     },
     learningPath: {
-        get: new LearningPathServices.GetLearningPath(repos.learningPath)
-    }
+        get: new LearningPathServices.GetLearningPath(repos.learningPath),
+    },
 };

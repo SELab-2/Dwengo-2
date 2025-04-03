@@ -1,11 +1,13 @@
+import { DatasourceDwengo } from "./datasourceDwengo";
 import { ApiError, ErrorCode } from "../../../../../application/types";
 import { LearningPath, LearningPathData } from "../../../../../core/entities/learningPath";
-import { DatasourceDwengo } from "./datasourceDwengo";
 
-export class DatasourceLearningPath extends DatasourceDwengo{
-    public constructor(host?: string) {super(host, "learningPath")}
+export class DatasourceLearningPath extends DatasourceDwengo {
+    public constructor(host?: string) {
+        super(host, "learningPath");
+    }
 
-    public async getLearningPath(hruid: string, language: string,): Promise<LearningPath> {
+    public async getLearningPath(hruid: string, language: string): Promise<LearningPath> {
         // Fetch from dwengo
         const response = await fetch(`${this.host}/api/${this.learningType}/search?hruid=${hruid}`);
         if (!response.ok) {
@@ -20,17 +22,16 @@ export class DatasourceLearningPath extends DatasourceDwengo{
         if (data.length === 0) {
             throw { code: ErrorCode.NOT_FOUND, message: `No learningPath exists with this hruid.` } as ApiError;
         }
-        
+
         // Extract the right language from all the available paths
         // (Dwengo API for some reason can't do this with &language=${language} in the query)
-        let learningPathObject: LearningPathData = data.find((path: LearningPathData) => path.language === language); 
+        const learningPathObject: LearningPathData = data.find((path: LearningPathData) => path.language === language);
         if (!learningPathObject) {
             // Should not happen because language is checked beforehand, but just to be sure.
             throw { code: ErrorCode.NOT_FOUND, message: `No learningPath exists with this hruid.` } as ApiError;
         }
         return LearningPath.fromObject(learningPathObject);
     }
-
 
     /**
      * Function that gets all the learningPaths from the Dwengo API

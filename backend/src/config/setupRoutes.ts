@@ -19,5 +19,5 @@ export const setupRoutes = (app: Express) => {
     Resources.submissionRoutes(app, controllers.submission, [middleware.auth]);
     Resources.userRoutes(app, controllers.user, [middleware.auth]);
     Resources.learningObjectRoutes(app, controllers.learningObject);
-    Resources.learningPathRoutes(app, controllers.learningPath)
+    Resources.learningPathRoutes(app, controllers.learningPath);
 };
