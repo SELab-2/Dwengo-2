@@ -11,10 +11,6 @@ import { ClassChartComponent, ClassChartData } from '../small-components/graphs/
 import { ActivityChartComponent, ActivityChartData } from '../small-components/graphs/activity-graph/activity-graph.component';
 import { MenuCardComponent } from '../small-components/menu-card/menu-card.component';
 import { ClassesService } from '../../services/classes.service';
-import { Class } from '../../interfaces/classes/class';
-
-
-
 
 @Component({
   selector: 'app-teacher-dashboard',
