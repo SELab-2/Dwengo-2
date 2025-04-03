@@ -53,10 +53,12 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         }
 
         // Fetch all students in that group
-        const studentOfGroups: StudentOfGroupTypeORM[] = await this.datasource.getRepository(StudentOfGroupTypeORM).find({
-            where: { group: groupModel },
-            relations: ["student", "student.student"], // student.student fetches UserTypeORM
-        });
+        const studentOfGroups: StudentOfGroupTypeORM[] = await this.datasource
+            .getRepository(StudentOfGroupTypeORM)
+            .find({
+                where: { group: groupModel },
+                relations: ["student", "student.student"], // student.student fetches UserTypeORM
+            });
 
         // Extract StudentTypeORM models
         const studentModels: StudentTypeORM[] = studentOfGroups.map(entry => entry.student);

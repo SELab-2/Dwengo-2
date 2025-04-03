@@ -8,7 +8,6 @@ import { StudentTypeORM } from "../../data_models/studentTypeorm";
 
 export class DatasourceThreadTypeORM extends DatasourceTypeORM {
     public async create(thread: QuestionThread): Promise<QuestionThread> {
-
         const userRepository = this.datasource.getRepository(StudentTypeORM);
         const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
         const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
@@ -36,7 +35,6 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
     }
 
     public async getById(id: string): Promise<QuestionThread | null> {
-
         const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
         const messageRepository = this.datasource.getRepository(MessageTypeORM);
 
@@ -53,7 +51,6 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
     }
 
     public async update(thread: QuestionThread): Promise<QuestionThread> {
-
         const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
         const messageRepository = this.datasource.getRepository(MessageTypeORM);
 
@@ -82,7 +79,6 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
     }
 
     public async delete(thread: QuestionThread): Promise<void> {
-
         const messageRepository = this.datasource.getRepository(MessageTypeORM);
         const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
 
@@ -100,7 +96,6 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
     }
 
     public async updateQuestionThread(id: string, updatedThread: Partial<QuestionThread>): Promise<QuestionThread> {
-
         await this.datasource
             .getRepository(QuestionThreadTypeORM)
             .update(id, QuestionThreadTypeORM.toPartial(updatedThread));
@@ -114,17 +109,17 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
     }
 
     public async deleteQuestionThread(id: string): Promise<void> {
-
         // TODO: should throw error when it doesn't exist
         await this.datasource.getRepository(QuestionThreadTypeORM).delete(id);
     }
 
     public async getQuestionThreadsByAssignmentId(assignmentId: string): Promise<QuestionThread[]> {
-
-        const questionThreads: QuestionThreadTypeORM[] = await this.datasource.getRepository(QuestionThreadTypeORM).find({
-            where: { assignment: { id: assignmentId } },
-            relations: ["student", "assignment"],
-        });
+        const questionThreads: QuestionThreadTypeORM[] = await this.datasource
+            .getRepository(QuestionThreadTypeORM)
+            .find({
+                where: { assignment: { id: assignmentId } },
+                relations: ["student", "assignment"],
+            });
 
         if (!questionThreads) {
             throw new EntityNotFoundError(`No threads found for assignment with id: ${assignmentId}`);
@@ -144,11 +139,12 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
     }
 
     public async getQuestionThreadsByCreatorId(createrId: string): Promise<QuestionThread[]> {
-
-        const questionThreads: QuestionThreadTypeORM[] = await this.datasource.getRepository(QuestionThreadTypeORM).find({
-            where: { student: { id: createrId } },
-            relations: ["student", "assignment"],
-        });
+        const questionThreads: QuestionThreadTypeORM[] = await this.datasource
+            .getRepository(QuestionThreadTypeORM)
+            .find({
+                where: { student: { id: createrId } },
+                relations: ["student", "assignment"],
+            });
 
         const threads = await Promise.all(
             questionThreads.map(async questionThread => {

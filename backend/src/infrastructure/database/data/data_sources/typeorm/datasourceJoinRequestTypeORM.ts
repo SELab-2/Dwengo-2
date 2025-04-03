@@ -44,7 +44,6 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
     }
 
     public async getJoinRequestById(id: string): Promise<JoinRequest | null> {
-
         const joinRequest: JoinRequestTypeORM | null = await this.datasource.getRepository(JoinRequestTypeORM).findOne({
             where: { id: id },
             relations: ["requester", "class"],
@@ -54,7 +53,6 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
     }
 
     public async getJoinRequestByRequesterId(requesterId: string): Promise<JoinRequest[]> {
-
         const joinRequests: JoinRequestTypeORM[] = await this.datasource.getRepository(JoinRequestTypeORM).find({
             where: { requester: { id: requesterId } },
             relations: ["requester", "class"],
@@ -64,7 +62,6 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
     }
 
     public async getJoinRequestByClassId(classId: string): Promise<JoinRequest[]> {
-
         const joinRequests: JoinRequestTypeORM[] = await this.datasource.getRepository(JoinRequestTypeORM).find({
             where: { class: { id: classId } },
             relations: ["requester", "class"],

@@ -31,10 +31,12 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     }
 
     public async getAssignmentById(id: string): Promise<Assignment | null> {
-        const assignmentModel: AssignmentTypeORM | null = await this.datasource.getRepository(AssignmentTypeORM).findOne({
-            where: { id: id },
-            relations: ["class"],
-        });
+        const assignmentModel: AssignmentTypeORM | null = await this.datasource
+            .getRepository(AssignmentTypeORM)
+            .findOne({
+                where: { id: id },
+                relations: ["class"],
+            });
 
         if (assignmentModel !== null) {
             return assignmentModel.toAssignmentEntity();

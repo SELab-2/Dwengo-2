@@ -7,7 +7,6 @@ import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
 
 export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     public async create(submission: Submission): Promise<string> {
-
         const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
         const studentRepository = this.datasource.getRepository(StudentTypeORM);
         const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
@@ -42,10 +41,11 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     }
 
     public async getById(id: string): Promise<Submission | null> {
-
-        const submissionModel: SubmissionTypeORM | null = await this.datasource.getRepository(SubmissionTypeORM).findOne({
-            where: { id: id },
-        });
+        const submissionModel: SubmissionTypeORM | null = await this.datasource
+            .getRepository(SubmissionTypeORM)
+            .findOne({
+                where: { id: id },
+            });
 
         if (submissionModel) {
             return submissionModel.toEntity();
@@ -54,7 +54,6 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     }
 
     public async update(submission: Submission): Promise<Submission> {
-
         const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
         const submissionModel: SubmissionTypeORM | null = await submissionRepository.findOne({
             where: { id: submission.id },
@@ -87,7 +86,6 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         assignmentId: string,
         learningObjectId: string,
     ): Promise<Submission[]> {
-
         const studentRepository = this.datasource.getRepository(StudentTypeORM);
         const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
         const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
@@ -116,7 +114,6 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     }
 
     public async getByStudentId(studentId: string): Promise<Submission[]> {
-
         const studentRepository = this.datasource.getRepository(StudentTypeORM);
         const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
         // First get the student

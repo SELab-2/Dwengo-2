@@ -24,7 +24,7 @@ export class DatasourceTypeORM implements IDatasource {
     );
 
     private static _datasource: DataSource | null = null; // Use a single DataSource for all instances of this class and its children
-  
+
     private static async initialize() {
         // sets the _datasource field if it's not set yet
         if (!this._datasource) {
@@ -32,14 +32,13 @@ export class DatasourceTypeORM implements IDatasource {
             this._datasource = await this._datasourcePromise;
         }
     }
-  
+
     protected get datasource(): DataSource {
         // gets the static _datasource field. If it's not initialized yet, it waits for the initialization
-        DatasourceTypeORM.initialize()
-        while(!DatasourceTypeORM._datasource){
+        DatasourceTypeORM.initialize();
+        while (!DatasourceTypeORM._datasource) {
             // Wait until the async initialize function has finished
         }
         return DatasourceTypeORM._datasource;
     }
-
 }

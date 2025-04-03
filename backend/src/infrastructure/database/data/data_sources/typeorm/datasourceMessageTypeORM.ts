@@ -7,7 +7,6 @@ import { UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceMessageTypeORM extends DatasourceTypeORM {
     public async createMessage(message: Message): Promise<Message> {
-
         const userRepository = this.datasource.getRepository(UserTypeORM);
         const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
         const messageRepository = this.datasource.getRepository(MessageTypeORM);
@@ -35,7 +34,6 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
     }
 
     public async getMessageById(id: string): Promise<Message | null> {
-
         const messageModel: MessageTypeORM | null = await this.datasource
             .getRepository(MessageTypeORM)
             .findOne({ where: { id: id } });
@@ -49,7 +47,6 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
     }
 
     public async updateMessage(message: Message): Promise<Message> {
-
         if (!message.id) {
             throw new Error("Message id is required to update a message");
         }
