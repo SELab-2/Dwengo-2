@@ -7,11 +7,10 @@ import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
 
 export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     public async create(submission: Submission): Promise<string> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
-        const studentRepository = datasource.getRepository(StudentTypeORM);
-        const submissionRepository = datasource.getRepository(SubmissionTypeORM);
+        const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
+        const studentRepository = this.datasource.getRepository(StudentTypeORM);
+        const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
 
         // Check if the assignment exists
         const assignmentModel: AssignmentTypeORM | null = await assignmentRepository.findOne({
@@ -43,9 +42,8 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     }
 
     public async getById(id: string): Promise<Submission | null> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const submissionModel: SubmissionTypeORM | null = await datasource.getRepository(SubmissionTypeORM).findOne({
+        const submissionModel: SubmissionTypeORM | null = await this.datasource.getRepository(SubmissionTypeORM).findOne({
             where: { id: id },
         });
 
@@ -56,9 +54,8 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     }
 
     public async update(submission: Submission): Promise<Submission> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const submissionRepository = datasource.getRepository(SubmissionTypeORM);
+        const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
         const submissionModel: SubmissionTypeORM | null = await submissionRepository.findOne({
             where: { id: submission.id },
         });
@@ -82,8 +79,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     }
 
     public async delete(submission: string): Promise<void> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-        await datasource.getRepository(SubmissionTypeORM).delete(submission);
+        await this.datasource.getRepository(SubmissionTypeORM).delete(submission);
     }
 
     public async getAllForStudentInAssignmentStep(
@@ -91,11 +87,10 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         assignmentId: string,
         learningObjectId: string,
     ): Promise<Submission[]> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const studentRepository = datasource.getRepository(StudentTypeORM);
-        const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
-        const submissionRepository = datasource.getRepository(SubmissionTypeORM);
+        const studentRepository = this.datasource.getRepository(StudentTypeORM);
+        const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
+        const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
 
         // First get the student
         const studentModel: StudentTypeORM | null = await studentRepository.findOne({
@@ -121,10 +116,9 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     }
 
     public async getByStudentId(studentId: string): Promise<Submission[]> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const studentRepository = datasource.getRepository(StudentTypeORM);
-        const submissionRepository = datasource.getRepository(SubmissionTypeORM);
+        const studentRepository = this.datasource.getRepository(StudentTypeORM);
+        const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
         // First get the student
         const studentModel: StudentTypeORM | null = await studentRepository.findOne({
             where: { id: studentId },

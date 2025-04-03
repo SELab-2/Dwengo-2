@@ -7,10 +7,8 @@ import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 
 export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     public async createAssignment(newAssignment: Assignment, classId: string): Promise<Assignment> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-
         // Check if the class exists
-        const classModel: ClassTypeORM | null = await datasource
+        const classModel: ClassTypeORM | null = await this.datasource
             .getRepository(ClassTypeORM)
             .findOne({ where: { id: newAssignment.classId } });
 
@@ -19,7 +17,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
         }
 
         // Class exists and teacher exist: insert assignment into the database
-        const assignmentModel: AssignmentTypeORM = datasource.getRepository(AssignmentTypeORM).create({
+        const assignmentModel: AssignmentTypeORM = this.datasource.getRepository(AssignmentTypeORM).create({
             class: { id: newAssignment.classId },
             learning_path_id: newAssignment.learningPathId,
             start: newAssignment.startDate,
@@ -27,15 +25,13 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
             extra_instructions: newAssignment.extraInstructions,
         });
 
-        await datasource.getRepository(AssignmentTypeORM).save(assignmentModel);
+        await this.datasource.getRepository(AssignmentTypeORM).save(assignmentModel);
 
         return assignmentModel.toAssignmentEntity();
     }
 
     public async getAssignmentById(id: string): Promise<Assignment | null> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-
-        const assignmentModel: AssignmentTypeORM | null = await datasource.getRepository(AssignmentTypeORM).findOne({
+        const assignmentModel: AssignmentTypeORM | null = await this.datasource.getRepository(AssignmentTypeORM).findOne({
             where: { id: id },
             relations: ["class"],
         });
@@ -47,9 +43,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     }
 
     public async getAssignmentsByClassId(classId: string): Promise<Assignment[]> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-
-        const assignmentModels: AssignmentTypeORM[] = await datasource.getRepository(AssignmentTypeORM).find({
+        const assignmentModels: AssignmentTypeORM[] = await this.datasource.getRepository(AssignmentTypeORM).find({
             where: { class: { id: classId } },
             relations: ["class"],
         });
@@ -58,9 +52,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     }
 
     public async getAssignmentsByUserId(userId: string): Promise<Assignment[]> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-
-        const assignmentsJoinResult = await datasource
+        const assignmentsJoinResult = await this.datasource
             .getRepository(StudentOfGroupTypeORM)
             .createQueryBuilder()
             .where("StudentOfGroupTypeORM.student = :id", { id: userId })
@@ -78,9 +70,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     }
 
     public async getAssignmentsByLearningPathId(learningPathId: string): Promise<Assignment[]> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-
-        const assignmentModels: AssignmentTypeORM[] = await datasource.getRepository(AssignmentTypeORM).find({
+        const assignmentModels: AssignmentTypeORM[] = await this.datasource.getRepository(AssignmentTypeORM).find({
             where: { learning_path_id: learningPathId },
             relations: ["class"],
         });
@@ -89,14 +79,11 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     }
 
     public async deleteAssignmentById(id: string): Promise<void> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-        await datasource.getRepository(AssignmentTypeORM).delete(id);
+        await this.datasource.getRepository(AssignmentTypeORM).delete(id);
     }
 
     public async updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment | null> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-
-        const assignmentModel: AssignmentTypeORM | null = await datasource
+        const assignmentModel: AssignmentTypeORM | null = await this.datasource
             .getRepository(AssignmentTypeORM)
             .findOne({ where: { id: id } });
         let updateResult;
@@ -104,7 +91,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError("Assignment not found");
         }
         if (updatedFields.classId) {
-            const classModel: ClassTypeORM | null = await datasource
+            const classModel: ClassTypeORM | null = await this.datasource
                 .getRepository(ClassTypeORM)
                 .findOne({ where: { id: id } });
 
@@ -112,11 +99,11 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
                 throw new EntityNotFoundError("Class not found");
             }
 
-            updateResult = await datasource
+            updateResult = await this.datasource
                 .getRepository(AssignmentTypeORM)
                 .update(id, assignmentModel.fromPartialAssignmentEntity(updatedFields, classModel));
         } else {
-            updateResult = await datasource
+            updateResult = await this.datasource
                 .getRepository(AssignmentTypeORM)
                 .update(id, assignmentModel.fromPartialAssignmentEntity(updatedFields, undefined));
         }

@@ -10,34 +10,31 @@ import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 
 export class DatasourceClassTypeORM extends DatasourceTypeORM {
     public async createClass(newClass: Class): Promise<Class> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-
-        let classModel: ClassTypeORM = await datasource.getRepository(ClassTypeORM).create({
+        let classModel: ClassTypeORM = await this.datasource.getRepository(ClassTypeORM).create({
             name: newClass.name,
             description: newClass.description,
             targetAudience: newClass.targetAudience,
         });
 
-        classModel = await datasource.getRepository(ClassTypeORM).save(classModel);
+        classModel = await this.datasource.getRepository(ClassTypeORM).save(classModel);
 
-        let teacherOfClassModel: TeacherOfClassTypeORM = await datasource.getRepository(TeacherOfClassTypeORM).create({
+        let teacherOfClassModel: TeacherOfClassTypeORM = await this.datasource.getRepository(TeacherOfClassTypeORM).create({
             teacher: { id: newClass.teacherId },
             class: { id: classModel.id },
         });
 
-        teacherOfClassModel = await datasource.getRepository(TeacherOfClassTypeORM).save(teacherOfClassModel);
+        teacherOfClassModel = await this.datasource.getRepository(TeacherOfClassTypeORM).save(teacherOfClassModel);
 
         return classModel.toClassEntity(teacherOfClassModel.id);
     }
 
     public async getClassById(id: string): Promise<Class | null> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-        const classModel: ClassTypeORM | null = await datasource
+        const classModel: ClassTypeORM | null = await this.datasource
             .getRepository(ClassTypeORM)
             .findOne({ where: { id: id } });
 
         if (classModel !== null) {
-            const classTeacherModel: TeacherOfClassTypeORM | null = await datasource
+            const classTeacherModel: TeacherOfClassTypeORM | null = await this.datasource
                 .getRepository(TeacherOfClassTypeORM)
                 .findOne({ where: { class: { id: id } }, relations: ["teacher"] });
 
@@ -47,14 +44,13 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
     }
 
     public async getClassByName(name: string): Promise<Class | null> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const classModel: ClassTypeORM | null = await datasource
+        const classModel: ClassTypeORM | null = await this.datasource
             .getRepository(ClassTypeORM)
             .findOne({ where: { name: name } });
 
         if (classModel !== null) {
-            const classTeacherModel: TeacherOfClassTypeORM | null = await datasource
+            const classTeacherModel: TeacherOfClassTypeORM | null = await this.datasource
                 .getRepository(TeacherOfClassTypeORM)
                 .findOne({ where: { class: { id: classModel.id } } });
 
@@ -64,13 +60,12 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
     }
 
     public async getAllClasses(): Promise<Class[]> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const classModels: ClassTypeORM[] = await datasource.getRepository(ClassTypeORM).find();
+        const classModels: ClassTypeORM[] = await this.datasource.getRepository(ClassTypeORM).find();
 
         return Promise.all(
             classModels.map(async (classModel: ClassTypeORM) => {
-                const classTeacherModel: TeacherOfClassTypeORM | null = await datasource
+                const classTeacherModel: TeacherOfClassTypeORM | null = await this.datasource
                     .getRepository(TeacherOfClassTypeORM)
                     .findOne({ where: { class: { id: classModel.id } } });
 
@@ -80,19 +75,17 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
     }
 
     public async deleteClassById(id: string): Promise<void> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        await datasource.getRepository(ClassTypeORM).delete(id);
+        await this.datasource.getRepository(ClassTypeORM).delete(id);
     }
 
     public async getUserClasses(id: string): Promise<Class[]> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
         // Check if the user actually exists
-        const teacher: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
+        const teacher: TeacherTypeORM | null = await this.datasource.getRepository(TeacherTypeORM).findOne({
             where: { id: id },
             relations: ["teacher"],
         });
-        const student: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
+        const student: StudentTypeORM | null = await this.datasource.getRepository(StudentTypeORM).findOne({
             where: { id: id },
             relations: ["student"],
         });
@@ -103,13 +96,13 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
 
         if (student) {
             // Get the student's classes
-            const studentClasses: StudentOfClassTypeORM[] = await datasource.getRepository(StudentOfClassTypeORM).find({
+            const studentClasses: StudentOfClassTypeORM[] = await this.datasource.getRepository(StudentOfClassTypeORM).find({
                 where: { student: { id: id } },
                 relations: ["class", "student"],
             });
             return Promise.all(
                 studentClasses.map(async studentOfClass => {
-                    const teacherOfClass = await datasource.getRepository(TeacherOfClassTypeORM).findOne({
+                    const teacherOfClass = await this.datasource.getRepository(TeacherOfClassTypeORM).findOne({
                         where: { class: { id: studentOfClass.class.id } },
                     });
                     return studentOfClass.class.toClassEntity(teacherOfClass!.id);
@@ -117,7 +110,7 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
             );
         } else {
             // Get the teacher's classes
-            const teacherClasses: TeacherOfClassTypeORM[] = await datasource.getRepository(TeacherOfClassTypeORM).find({
+            const teacherClasses: TeacherOfClassTypeORM[] = await this.datasource.getRepository(TeacherOfClassTypeORM).find({
                 where: { teacher: { id: id } },
                 relations: ["class", "teacher"],
             });
@@ -130,14 +123,13 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
     }
 
     public async addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
         if (userType === JoinRequestType.TEACHER) {
-            await datasource.getRepository(TeacherOfClassTypeORM).save({
+            await this.datasource.getRepository(TeacherOfClassTypeORM).save({
                 teacher: { id: userId },
                 class: { id: classId },
             });
         } else {
-            await datasource.getRepository(StudentOfClassTypeORM).save({
+            await this.datasource.getRepository(StudentOfClassTypeORM).save({
                 student: { id: userId },
                 class: { id: classId },
             });
