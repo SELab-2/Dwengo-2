@@ -8,6 +8,7 @@ import { NewClassResponse } from "../interfaces/classes/newClassResponse";
 import { ClassesReponse } from "../interfaces/classes/classesResponse";
 import { environment } from "../../environments/environment";
 import { AuthenticationService } from "./authentication.service";
+import { ErrorService } from "./error.service";
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +21,8 @@ import { AuthenticationService } from "./authentication.service";
   
     public constructor(
         private http: HttpClient,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private errorService: ErrorService
     ) {
         this.userCreds = {
             userId: this.authService.retrieveUserId(),
