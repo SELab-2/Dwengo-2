@@ -1,36 +1,36 @@
-import { DeleteQuestionThread, DeleteQuestionThreadParams } from '../../../../src/core/services/questionThread/deleteQuestionThread';
+import { DeleteQuestionThread, DeleteQuestionThreadInput } from '../../../../src/core/services/questionThread/deleteQuestionThread';
 import { DatabaseError } from '../../../../src/config/error';
 
 // Mock repository
 const mockQuestionThreadRepository = {
-    deleteQuestionThread: jest.fn(),
+    delete: jest.fn(),
 };
 
 describe('DeleteQuestionThread', () => {
     let deleteQuestionThread: DeleteQuestionThread;
+    let input: DeleteQuestionThreadInput;
 
     beforeEach(() => {
         deleteQuestionThread = new DeleteQuestionThread(mockQuestionThreadRepository as any);
         jest.clearAllMocks();
+        input = {
+            id: "thread-123"
+        };
     });
 
     test('Should delete a question thread and return an empty object', async () => {
-        const inputParams = new DeleteQuestionThreadParams("thread-123");
+        mockQuestionThreadRepository.delete.mockResolvedValue(undefined);
 
-        mockQuestionThreadRepository.deleteQuestionThread.mockResolvedValue(undefined);
-
-        const result = await deleteQuestionThread.execute(inputParams);
+        const result = await deleteQuestionThread.execute(input);
 
         expect(result).toEqual({});
-        expect(mockQuestionThreadRepository.deleteQuestionThread).toHaveBeenCalledWith("thread-123");
+        expect(mockQuestionThreadRepository.delete).toHaveBeenCalledWith("thread-123");
     });
 
     test('Should throw a DatabaseError if deletion fails', async () => {
-        const inputParams = new DeleteQuestionThreadParams("thread-123");
+        mockQuestionThreadRepository.delete.mockRejectedValue(new DatabaseError('Deletion failed'));
 
-        mockQuestionThreadRepository.deleteQuestionThread.mockRejectedValue(new DatabaseError('Deletion failed'));
-
-        await expect(deleteQuestionThread.execute(inputParams)).rejects.toThrow(DatabaseError);
-        expect(mockQuestionThreadRepository.deleteQuestionThread).toHaveBeenCalledWith("thread-123");
+        await expect(deleteQuestionThread.execute(input)).rejects.toThrow(DatabaseError);
+        expect(mockQuestionThreadRepository.delete).toHaveBeenCalledWith("thread-123");
     });
 });

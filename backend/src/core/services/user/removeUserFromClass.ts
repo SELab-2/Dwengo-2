@@ -26,9 +26,9 @@ export class RemoveUserFromClass extends RemoveUserFrom {
      */
     public async removeUser(id: string, idParent: string, userType: UserType): Promise<void> {
         if (userType == UserType.STUDENT) {
-            await this.studentRepository.removeStudentFromClass(id, idParent);
+            await this.studentRepository.removeFromClass(id, idParent);
         } else {
-            await this.teacherRepository.deleteTeacherFromClass(id, idParent);
+            await this.teacherRepository.removeFromClass(id, idParent);
         }
     }
 }

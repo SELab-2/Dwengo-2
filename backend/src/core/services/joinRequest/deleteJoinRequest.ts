@@ -1,19 +1,12 @@
-import { Service, ServiceParams } from "../../../config/service";
-import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
+import { z } from "zod";
+import { JoinRequestService } from "./joinRequestService";
+import { deleteJoinRequestSchema } from "../../../application/schemas";
 
-export class DeleteJoinRequestParams implements ServiceParams {
-    constructor(private _id: string) {}
+export type DeleteJoinRequestInput = z.infer<typeof deleteJoinRequestSchema>;
 
-    get id(): string {
-        return this._id;
-    }
-}
-
-export class DeleteJoinRequest implements Service<DeleteJoinRequestParams> {
-    constructor(private joinRequestRepository: IJoinRequestRepository) {}
-
-    async execute(input: DeleteJoinRequestParams): Promise<object> {
-        await this.joinRequestRepository.deleteJoinRequestById(input.id);
+export class DeleteJoinRequest extends JoinRequestService<DeleteJoinRequestInput> {
+    async execute(input: DeleteJoinRequestInput): Promise<object> {
+        await this.joinRequestRepository.delete(input.id);
         return {};
     }
 }

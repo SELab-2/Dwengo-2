@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Class } from '../../interfaces/classes/class';
 import { CommonModule } from "@angular/common";
 import { ClassesService } from '../../services/classes.service';
 import { CreateClassComponent } from '../../components/create-class/create-class.component';
-
 import { MiniClassComponent } from '../../components/mini-class/mini-class.component';
 import { MatList } from '@angular/material/list'
-import { MatToolbar } from '@angular/material/toolbar'
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthenticationService } from '../../services/authentication.service';
+import { UserType } from '../../interfaces';
 
 
 // Type alias
@@ -24,9 +25,8 @@ type classFilterType = (c: Class) => boolean;
     MiniClassComponent,
     CreateClassComponent,
 
-    // Material design
+    // Angular material
     MatList,
-    MatToolbar,
     MatIconModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -35,19 +35,45 @@ type classFilterType = (c: Class) => boolean;
   templateUrl: './classes-page.component.html',
   styleUrl: './classes-page.component.less'
 })
-export class ClassesPageComponent {
+export class ClassesPageComponent implements OnInit {
 
   // Class filter used in the `classes` getter
   // By default we don't filter any classes (return true)
   // You can specify this function all you want as long as it returns a boolean
   private classFilter: classFilterType = () => true;
 
+  // Snackbar
+  private snackBar = inject(MatSnackBar);
+  private readonly errorMessage = $localize `An error occured, please try again.`;
+
+  // Whether the currently logged in user is a teacher or not
+  public isTeacher: boolean = false;
+
+  // Classes of the currently logged in user
+  private _classes: Class[] = [];
+
   // To show the create component or not
-  showCreate: boolean = false;
+  public showCreate: boolean = false;
 
   constructor(
+    private authService: AuthenticationService,
     private classesService: ClassesService
   ) {}
+
+  /**
+   * We fetch the classes here since Angular getters shouldn't be async.
+   * If we do we get the equivalent of a forkbomb.
+   */
+  public ngOnInit(): void {
+    this.classesService
+      .classesOfUser()
+      .subscribe({
+        next: (classes) => this._classes = classes,
+        error: () => this.openSnackBar(this.errorMessage)
+      });
+
+    this.isTeacher = this.authService.retrieveUserType() === UserType.TEACHER;
+  }
 
   /**
    * Create a class by letting the user fill in a form and send it to the API
@@ -74,15 +100,13 @@ export class ClassesPageComponent {
    * Applies the currently installed filter.
    */
   public get classes(): Class[] {
-    let classes: Class[] = [];
+    return this._classes.filter(this.classFilter);
+  }
 
-    this.classesService.classesOfUSer()
-      .pipe()
-      .subscribe((classesReponse) => {
-        if(classesReponse) classes = classesReponse;
-      });
-
-    return classes.filter(this.classFilter);
+  private openSnackBar(message: string, action: string="Ok") {
+    this.snackBar.open(message, action, {
+        duration: 2500
+    });
   }
 
 }

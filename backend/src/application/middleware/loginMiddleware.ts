@@ -21,19 +21,19 @@ export function loginMiddleware(
             return;
         }
 
-        const { email, password } = req.body || {};
-        if (!email || !password) {
+        const { email, password, refreshToken } = req.body || {};
+        if (!((email && password) || (!email && !password && refreshToken))) {
             const response = defaultErrorHandler({
                 code: ErrorCode.BAD_REQUEST,
-                message: "Email and password are required",
+                message: "Email and password or refresh token are required",
             });
             responseToExpress(response, res);
             return;
         }
 
         try {
-            const token = await authManager.authenticate(email, password);
-            if (!token) {
+            const tokens = await authManager.authenticate(email || "", password || "", refreshToken);
+            if (!tokens) {
                 const response = defaultErrorHandler({
                     code: ErrorCode.UNAUTHORIZED,
                     message: "Invalid credentials",
@@ -42,7 +42,7 @@ export function loginMiddleware(
                 return;
             }
 
-            const payload = authManager.verifyToken(token);
+            const payload = authManager.verifyToken(tokens.accessToken);
             if (!payload || !payload.id) {
                 const response = defaultErrorHandler(undefined);
                 responseToExpress(response, res);
@@ -51,8 +51,10 @@ export function loginMiddleware(
 
             req.body.authenticatedUserId = payload.id;
             const response = defaultResponder(200, {
-                token,
-                userId: payload.id,
+                token: tokens.accessToken,
+                refreshToken: tokens.refreshToken,
+                id: payload.id,
+                userType: payload.userType,
                 message: "Authentication successful",
             });
             responseToExpress(response, res);

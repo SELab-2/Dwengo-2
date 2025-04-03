@@ -1,65 +1,110 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { of, Observable } from 'rxjs';
+import { of, Observable, forkJoin, switchMap } from 'rxjs';
 import { Class } from "../interfaces/classes/class";
 import { NewClass } from "../interfaces/classes/newClass";
+import { UpdatedClass } from "../interfaces/classes/updatedClass";
+import { NewClassResponse } from "../interfaces/classes/newClassResponse";
+import { ClassesReponse } from "../interfaces/classes/classesResponse";
+import { environment } from "../../environments/environment";
+import { AuthenticationService } from "./authentication.service";
 
 @Injectable({
     providedIn: 'root'
   })
   export class ClassesService {
-  
-    public constructor(private http: HttpClient) {}
-  
-    // TODO
-    // Also needs headers
-    public classesOfUSer(): Observable<Class[]> {
-        // const id = "123";
-        // const classId= "321";
-        // return this.http.get<Class>(`http://localhost:3001/teacher/${id}/classes/${classId}`);
 
-        return of([
-            {
-                name: "Math",
-                description: "Mathematics",
-                targetAudience: "Students",
-                teacherId: "123",
-                classId: "321"
-            },
-            {
-                name: "Economics",
-                description: "Price go up, price go down",
-                targetAudience: "Students",
-                teacherId: "123",
-                classId: "4321"
+    private API_URL = environment.API_URL;
+    private userCreds;
+    private standardHeaders;
+  
+    public constructor(
+        private http: HttpClient,
+        private authService: AuthenticationService
+    ) {
+        this.userCreds = {
+            userId: this.authService.retrieveUserId(),
+            userToken: this.authService.retrieveToken()
+        };
+
+        this.standardHeaders = {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${this.userCreds.userToken}`
             }
-        ]);
+        };
+    }
+  
+    public classesOfUser(): Observable<Class[]> {
+        return this.http.get<ClassesReponse>(
+            `${this.API_URL}/users/${this.userCreds.userId}/classes`,
+            this.standardHeaders
+        ).pipe(
+            switchMap(response => 
+                forkJoin(
+                    response.classes.map(id => 
+                        this.http.get<Class>(
+                            `${this.API_URL}/classes/${id}`,
+                            this.standardHeaders
+                        )
+                    )
+                )
+            )
+        );
     }
 
     public classWithId(id: string): Observable<Class> {
-        // TODO
-        if(id === "321") {
-            return of({
-                name: "Math",
-                description: "Mathematics",
-                targetAudience: "Students",
-                teacherId: "123",
-                classId: "321"
-            });
-        } else {
-            return of({
-                name: "Economics",
-                description: "Price go up, price go down",
-                targetAudience: "Students",
-                teacherId: "123",
-                classId: "4321"
-            });
-        }
+        return this.http.get<Class>(
+            `${this.API_URL}/classes/${id}`,
+            this.standardHeaders
+        );
     }
 
-    // TODO: vergadering 10 => de creates geven enkel id's
     public createClass(newClass: NewClass): Observable<string> {
-        return of(newClass.name + "123");
+        return this.http.post<NewClassResponse>(
+            `${this.API_URL}/classes`,
+            newClass,
+            this.standardHeaders
+        ).pipe(
+            switchMap(
+                response => of(response.id)
+            )
+        );
     }
-    
+
+    // TODO: wait for bugfix API
+    public deleteClass(id: string): Observable<boolean> {
+        return this.http.delete(
+            `${this.API_URL}/classes/${id}`, {
+                ...this.standardHeaders,
+                observe: 'response'
+            }
+        ).pipe(
+            switchMap(
+                response => of(response.status === 204) // 204: success & no content
+            )
+        );
+    }
+
+    // TODO: wait for bugfix API
+    public updateClass(_class: Class): Observable<boolean> {
+        const updatedClass: UpdatedClass = {
+            name: _class.name,
+            description: _class.description,
+            targetAudience: _class.targetAudience
+        };
+
+        return this.http.patch(
+            `${this.API_URL}/classes/${_class.id}`,
+            updatedClass, {
+                ...this.standardHeaders,
+                observe: 'response'
+            }
+        ).pipe(
+            switchMap(
+                response => of(response.status === 204)
+            )
+        );
+    }
+
   }

@@ -26,13 +26,15 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "localize": [
-              "en-US"
+              "en-US",
+              "nl-BE"
             ],
             "outputPath": "dist/frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "less",
@@ -99,7 +101,8 @@
             "karmaConfig": "karma.conf.js",
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "less",

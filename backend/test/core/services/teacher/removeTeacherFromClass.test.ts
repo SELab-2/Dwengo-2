@@ -12,7 +12,7 @@ describe('RemoveTeacherFromClass service', () => {
 
   beforeEach(() => {
     teacherRepository = {
-      deleteTeacherFromClass: jest.fn(),
+      removeFromClass: jest.fn(),
     } as unknown as ITeacherRepository;
     studentRepository = {} as unknown as IStudentRepository;
     removeTeacherFromClass = new RemoveUserFromClass(
@@ -33,7 +33,7 @@ describe('RemoveTeacherFromClass service', () => {
 
     await removeTeacherFromClass.execute(params);
 
-    expect(teacherRepository.deleteTeacherFromClass).toHaveBeenCalledWith(
+    expect(teacherRepository.removeFromClass).toHaveBeenCalledWith(
       id,
       idParent,
     );

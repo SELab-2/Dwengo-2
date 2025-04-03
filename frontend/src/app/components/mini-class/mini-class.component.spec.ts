@@ -28,7 +28,7 @@ describe('MiniClassComponent', () => {
         description: "This is a test class",
         targetAudience: "Testers",
         teacherId: "123",
-        classId: "123"
+        id: "123"
     }
     component._class = testClass;
     

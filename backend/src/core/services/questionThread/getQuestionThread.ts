@@ -1,15 +1,11 @@
-import { QuestionThreadBaseService } from "./questionThreadBaseService";
-import { ServiceParams } from "../../../config/service";
+import { z } from "zod";
+import { QuestionThreadService } from "./questionThreadService";
+import { getQuestionThreadSchema } from "../../../application/schemas/questionThreadSchemas";
 
-export class GetQuestionThreadParams implements ServiceParams {
-    constructor(private _id: string) {}
-    public get id(): string {
-        return this._id;
-    }
-}
+export type GetQuestionThreadInput = z.infer<typeof getQuestionThreadSchema>;
 
-export class GetQuestionThread extends QuestionThreadBaseService<GetQuestionThreadParams> {
-    async execute(input: GetQuestionThreadParams): Promise<object> {
-        return (await this.questionThreadRepository.getQuestionThreadById(input.id)).toObject();
+export class GetQuestionThread extends QuestionThreadService<GetQuestionThreadInput> {
+    async execute(input: GetQuestionThreadInput): Promise<object> {
+        return (await this.questionThreadRepository.getById(input.id)).toObject();
     }
 }

@@ -41,7 +41,7 @@ def login_teacher():
 
     if response.status_code == 200:
         token = response.json().get("token")
-        user_id = response.json().get("userId")
+        user_id = response.json().get("id")
         print(f"Login successful. Token: {token}, User ID: {user_id}")
         return token, user_id
     else:

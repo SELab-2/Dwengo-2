@@ -14,11 +14,11 @@ export class ThreadRepositoryTypeORM extends IQuestionThreadRepository {
         this.datasourceThread = this.datasource.getDatasourceThread();
     }
 
-    public async createQuestionThread(thread: QuestionThread): Promise<QuestionThread> {
+    public async create(thread: QuestionThread): Promise<QuestionThread> {
         return await (await this.datasourceThread).create(thread);
     }
 
-    public async getQuestionThreadById(id: string): Promise<QuestionThread> {
+    public async getById(id: string): Promise<QuestionThread> {
         const thread: QuestionThread | null = await (await this.datasourceThread).getById(id);
 
         if (thread) {
@@ -28,19 +28,19 @@ export class ThreadRepositoryTypeORM extends IQuestionThreadRepository {
         }
     }
 
-    public async updateQuestionThread(id: string, updatedThread: Partial<QuestionThread>): Promise<QuestionThread> {
+    public async update(id: string, updatedThread: Partial<QuestionThread>): Promise<QuestionThread> {
         return await (await this.datasourceThread).updateQuestionThread(id, updatedThread);
     }
 
-    public async deleteQuestionThread(id: string): Promise<void> {
+    public async delete(id: string): Promise<void> {
         await (await this.datasourceThread).deleteQuestionThread(id);
     }
 
-    public async getQuestionThreadsByAssignmentId(assignmentId: string): Promise<QuestionThread[]> {
+    public async getByAssignmentId(assignmentId: string): Promise<QuestionThread[]> {
         return await (await this.datasourceThread).getQuestionThreadsByAssignmentId(assignmentId);
     }
 
-    public async getQuestionThreadsByCreatorId(createrId: string): Promise<QuestionThread[]> {
+    public async getByCreatorId(createrId: string): Promise<QuestionThread[]> {
         return await (await this.datasourceThread).getQuestionThreadsByCreatorId(createrId);
     }
 }

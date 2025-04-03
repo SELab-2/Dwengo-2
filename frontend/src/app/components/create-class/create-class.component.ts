@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ClassesService } from '../../services/classes.service';
 import { NewClass } from '../../interfaces/classes/newClass';
@@ -7,7 +7,9 @@ import { Observable } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card'
+import { MatCard, MatCardContent } from '@angular/material/card'
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthenticationService } from '../../services/authentication.service';
 
 
 @Component({
@@ -16,12 +18,11 @@ import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card'
   imports: [
     ReactiveFormsModule,
 
-    // Material design
+    // Angular material
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCard, 
-    MatCardTitle,
+    MatCard,
     MatCardContent
   ],
   templateUrl: './create-class.component.html',
@@ -29,40 +30,82 @@ import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card'
 })
 export class CreateClassComponent {
 
-  createForm: FormGroup;
+  // Snackbar
+  private readonly snackBar = inject(MatSnackBar);
+
+  // Snackbar messages
+  private readonly errorMessage = $localize `An error occured, please try again.`;
+  private readonly createSuccesMessage = $localize `Class created succesfully!`;
+
+  // The form used to create a class
+  public createForm: FormGroup;
   
   public constructor(
     private formBuilder: FormBuilder,
-    private classesService: ClassesService
+    private classesService: ClassesService,
+    private authService: AuthenticationService
   ) {
     this.createForm = this.buildCreateForm();
   }
 
+  /**
+   * Create a class with the values from the create form
+   * Make a request to the API to create a class
+   * Notify the user of the result
+   */
   public create() {
-    const idObservable: Observable<string> = this.classesService.createClass(
-      this.extractCreateFormValues()
-    );
+    const newClass: NewClass | null = this.extractCreateFormValues();
 
-    idObservable.pipe().subscribe((response) => {
-      if(response) {
-        window.alert("Succes!");
-      }
-    });
-  }
-
-  private extractCreateFormValues(): NewClass {
-    return {
-      name: this.createForm.value.name,
-      description: this.createForm.value.description,
-      targetAudience: this.createForm.value.targetAudience
+    if(newClass) {
+      const idObservable: Observable<string> = this.classesService.createClass(
+        newClass
+      );
+  
+      idObservable.pipe().subscribe((response) => {
+        if(response) {
+          this.openSnackBar(this.createSuccesMessage);
+        } else {
+          this.openSnackBar(this.errorMessage);
+        }
+      });
+    } else {
+      this.openSnackBar(this.errorMessage);
     }
   }
 
+  /**
+   * Get the values from the create form
+   * @returns The values from the create form as a `NewClass`
+   */
+  private extractCreateFormValues(): NewClass | null {
+    const teacherId: string | null = this.authService.retrieveUserId();
+
+    if(teacherId) {
+      return {
+        name: this.createForm.value.name,
+        description: this.createForm.value.description,
+        targetAudience: this.createForm.value.targetAudience,
+        teacherId: teacherId
+      };
+    }
+    return null;
+  }
+
+  /**
+   * Build a form to create a class
+   * @returns FormGroup to create a class
+   */
   private buildCreateForm(): FormGroup {
     return this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
       targetAudience: ['', Validators.required]
+    });
+  }
+
+  private openSnackBar(message: string, action: string="Ok") {
+    this.snackBar.open(message, action, {
+        duration: 2500
     });
   }
 
