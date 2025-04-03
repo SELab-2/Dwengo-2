@@ -8,8 +8,10 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class ErrorService {
 
+    // Snackbar
     private readonly snackBar = inject(MatSnackBar);
 
+    // Mapping from HTTP code to handler
     private readonly handleCode = {
         401: this.handle401.bind(this),
         404: this.handle404.bind(this),
@@ -17,7 +19,23 @@ export class ErrorService {
         500: this.handle500.bind(this)
     };
 
-    // Wrapper of catchError
+    /**
+     * Handles HTTP errors in an RXJS pipe stream.
+     * When using `pipe()` on an observable, you should use this method to handle errors.
+     * 
+     * It should be used like this:
+     * ```ts
+     * this.http.get("url")
+     *   .pipe(
+     *     errorService.pipeHandler(),
+     *     ... // The rest of your pipeline
+     *   )
+     * ```
+     * 
+     * In essence this function is a wrapper of `catchError`
+     * 
+     * @returns The observable if no errors occured otherwise null.
+     */
     public pipeHandler<T>(): OperatorFunction<T, T | null> {
         return (source) => {
             return source.pipe(
@@ -29,6 +47,26 @@ export class ErrorService {
         };
     }
 
+    /**
+     * Handles HTTP errors in an RXJS subscription.
+     * When using `subscribe()` on an observable, you should use this method to handle errors.
+     * It serves as a wrapper of the usual function you would pass to `subscribe()` but handles errors for you.
+     * 
+     * It should be used like this:
+     * ```ts
+     * this.http.get("url")
+     *   .subscribe(
+     *     errorService.subscribeHandler({
+     *       next: (value) => {
+     *         // Do something with the value
+     *       }
+     *     })
+     *   )
+     * ```
+     * 
+     * @param next The function to call when the observable emits a value.
+     * @returns An observer (the object you would pass to `subscribe()`) that handles errors for you.
+     */
     public subscribeHandler<T>(next: (value: T) => void): Observer<T> {
         return {
             next: next,
@@ -37,9 +75,19 @@ export class ErrorService {
         };
     }
 
+    /**
+     * Handle the HTTP error by calling the appropriate handler defined in `handleCode`.
+     * 
+     * @param error The HTTP error
+     */
     private handleHttpError(error: HttpErrorResponse): void {
         const status = error.status as keyof typeof this.handleCode;
-        this.handleCode[status]();
+
+        if(this.handleCode.hasOwnProperty(status)) {
+            this.handleCode[status]();
+        } else {
+            this.openSnackBar("Unknown error");
+        }
     }
 
     // Authentication required
