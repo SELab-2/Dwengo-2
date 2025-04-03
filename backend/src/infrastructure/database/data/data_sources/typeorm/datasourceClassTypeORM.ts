@@ -7,8 +7,6 @@ import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
-import { UserTypeORM } from "../../data_models/userTypeorm";
-import { IDatasourceClass } from "../datasourceClassInterface";
 
 export class DatasourceClassTypeORM extends DatasourceTypeORM {
     public async createClass(newClass: Class): Promise<Class> {
