@@ -26,15 +26,11 @@ export class RegisterComponent {
   }
 
   register() {
-    if (this.registrationForm.valid) {
-      if (this.registrationForm.value.password === this.registrationForm.value.confirmPassword) {
-        const registrationData = this.extractRegistrationFormValues();
-        this.sendRegisterData(registrationData);
-      } else {
-        window.alert("Passwords don't match!");
-      }
-    } else {
-      window.alert("Invalid registration");
+    const valid = this.registrationForm.valid;
+    const validPassword = this.registrationForm.value.password === this.registrationForm.value.confirmPassword;
+    if (valid && validPassword) {
+      const registrationData = this.extractRegistrationFormValues();
+      this.sendRegisterData(registrationData);
     }
   }
 

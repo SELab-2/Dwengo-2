@@ -28,8 +28,6 @@ export class LoginComponent {
     if(this.loginForm.valid) {
       const loginData = this.extractLoginFormValues();
       this.sendLoginData(loginData);
-    } else {
-      window.alert('Please fill in all required fields correctly.');
     }
   }
 
