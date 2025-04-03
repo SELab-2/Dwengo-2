@@ -91,9 +91,11 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         assignmentId: string,
         learningObjectId: string,
     ): Promise<Submission[]> {
-        const studentRepository = this.datasource.getRepository(StudentTypeORM);
-        const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
-        const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const studentRepository = datasource.getRepository(StudentTypeORM);
+        const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
+        const submissionRepository = datasource.getRepository(SubmissionTypeORM);
 
         // First get the student
         const studentModel: StudentTypeORM | null = await studentRepository.findOne({
@@ -119,8 +121,10 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     }
 
     public async getByStudentId(studentId: string): Promise<Submission[]> {
-        const studentRepository = this.datasource.getRepository(StudentTypeORM);
-        const submissionRepository = this.datasource.getRepository(SubmissionTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const studentRepository = datasource.getRepository(StudentTypeORM);
+        const submissionRepository = datasource.getRepository(SubmissionTypeORM);
         // First get the student
         const studentModel: StudentTypeORM | null = await studentRepository.findOne({
             where: { id: studentId },
