@@ -89,7 +89,7 @@ export class ErrorService {
      * @param error The HTTP error
      * @param errorMessage The error message to show in the snackbar
      */
-    private handleHttpError(error: HttpErrorResponse, errorMessage: string): void {
+    public handleHttpError(error: HttpErrorResponse, errorMessage: string): void {
         const status = error.status as keyof typeof this.handleCode;
 
         if(this.handleCode[status]) {
