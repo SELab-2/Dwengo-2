@@ -7,7 +7,8 @@ import * as LearningPathSchemas from "../schemas/learningPathSchemas";
  * Maps HTTP requests to the LearningPathControllers's handle method after
  * converting Express request/response objects to our internal format.
  *
- * Supported endpoints:
+ * Supported endpoints
+ * - GET /learningPath - Search for all available learningPaths with optional filtering
  * - GET /learningPath/:id - Get a learningPath
  */
 
@@ -15,13 +16,17 @@ import * as LearningPathSchemas from "../schemas/learningPathSchemas";
 
 const extractors = {
     getLearningPath: deps.createZodParamsExtractor(LearningPathSchemas.getLearningPathSchema),
+    getAllLearningPaths: deps.createZodParamsExtractor(LearningPathSchemas.getAlllLearningPathsSchema),
 };
 
 /* ************* Controller ************* */
 
 export class LearningPathController extends deps.Controller {
-    constructor(getLearningPath: LearningPathServices.GetLearningPath) {
-        super({ get: getLearningPath });
+    constructor(
+        getLearningPath: LearningPathServices.GetLearningPath,
+        getAllLearningPaths: LearningPathServices.GetAllLearningPaths,
+    ) {
+        super({ get: getLearningPath, getAll: getAllLearningPaths });
     }
 }
 
@@ -30,6 +35,14 @@ export class LearningPathController extends deps.Controller {
 export function learningPathRoutes(app: deps.Express, controller: LearningPathController): void {
     deps.configureRoutes(
         [
+            {
+                app,
+                method: deps.HttpMethod.GET,
+                urlPattern: "/learningPath",
+                controller,
+                extractor: extractors.getAllLearningPaths,
+                handler: (req, data) => controller.getAll(req, data),
+            },
             {
                 app,
                 method: deps.HttpMethod.GET,

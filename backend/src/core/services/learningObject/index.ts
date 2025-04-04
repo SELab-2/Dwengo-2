@@ -1,2 +1,2 @@
 export * from "./getLearningObject";
-export * from "./getAllLearningObjects"
+export * from "./getAllLearningObjects";

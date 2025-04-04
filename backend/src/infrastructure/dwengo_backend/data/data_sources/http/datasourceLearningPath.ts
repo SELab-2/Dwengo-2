@@ -9,6 +9,7 @@ export class DatasourceLearningPath extends DatasourceDwengo {
 
     public async getLearningPath(hruid: string, language: string): Promise<LearningPath> {
         // Fetch from dwengo
+        console.log(`${this.host}/api/${this.learningType}/search?hruid=${hruid}`);
         const response = await fetch(`${this.host}/api/${this.learningType}/search?hruid=${hruid}`);
         if (!response.ok) {
             throw {
@@ -17,7 +18,6 @@ export class DatasourceLearningPath extends DatasourceDwengo {
             } as ApiError;
         }
 
-        // Update html-content
         const data = await response.json();
         if (data.length === 0) {
             throw { code: ErrorCode.NOT_FOUND, message: `No learningPath exists with this hruid.` } as ApiError;
@@ -38,10 +38,15 @@ export class DatasourceLearningPath extends DatasourceDwengo {
      *
      * @returns a promise that resolves to an array of all learningPaths from the Dwengo API.
      */
-    public async getLearningPaths(): Promise<LearningPath[]> {
-        const response = await fetch(`${this.host}/api/${this.learningType}/search`);
-
-        // Map all objects to LearningPath
+    public async getLearningPaths(params: string): Promise<LearningPath[]> {
+        const response = await fetch(`${this.host}/api/${this.learningType}/search${params}`);
+        if (!response.ok) {
+            throw {
+                code: ErrorCode.BAD_REQUEST,
+                message: `Error fetching from dwengo api: ${response.status}, ${response.statusText}`,
+            } as ApiError;
+        }
+        // Map all objects to a LearningPath
         return (await response.json()).map((o: LearningPathData) => LearningPath.fromObject(o));
     }
 }

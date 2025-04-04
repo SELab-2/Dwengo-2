@@ -16,7 +16,7 @@ import * as LearningObjectSchemas from "../schemas/learningObjectSchemas";
 
 const extractors = {
     getLearningObject: deps.createZodParamsExtractor(LearningObjectSchemas.getLearningObjectSchema),
-    getAllLearningObjects: deps.createZodParamsExtractor(LearningObjectSchemas.getAllLearningObjectsSchema)
+    getAllLearningObjects: deps.createZodParamsExtractor(LearningObjectSchemas.getAllLearningObjectsSchema),
 };
 
 /* ************* Controller ************* */
@@ -26,7 +26,7 @@ export class LearningObjectController extends deps.Controller {
         getLearningObject: LearningObjectServices.GetLearningObject,
         getAllLearningObjects: LearningObjectServices.GetAllLearningObjects,
     ) {
-        super({ get: getLearningObject , getAll: getAllLearningObjects});
+        super({ get: getLearningObject, getAll: getAllLearningObjects });
     }
 }
 

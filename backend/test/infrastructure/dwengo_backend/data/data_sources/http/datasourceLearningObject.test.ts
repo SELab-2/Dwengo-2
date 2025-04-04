@@ -92,7 +92,7 @@ describe("DatasourceLearningObject", () => {
             })
         );
 
-        const results = await datasource.getLearningObjects();
+        const results = await datasource.getLearningObjects("?language=nl");
         expect(results).toHaveLength(1);
         expect(results[0]).toEqual(expect.objectContaining(mockData[0]));
     });

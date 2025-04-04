@@ -83,5 +83,6 @@ export const services = {
     },
     learningPath: {
         get: new LearningPathServices.GetLearningPath(repos.learningPath),
+        getAll: new LearningPathServices.GetAllLearningPaths(repos.learningPath),
     },
 };

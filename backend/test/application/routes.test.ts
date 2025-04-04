@@ -564,6 +564,12 @@ const routeConfigs: Record<
     learningObjectRoutes: [
         {
             method: HttpMethod.GET,
+            path: "/learningObject",
+            hasController: true,
+            request: {},
+        },
+        {
+            method: HttpMethod.GET,
             path: "/learningObject/:id",
             hasController: true,
             request: {
@@ -573,6 +579,12 @@ const routeConfigs: Record<
         },
     ],
     learningPathRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/learningPath",
+            hasController: true,
+            request: {},
+        },
         {
             method: HttpMethod.GET,
             path: "/learningPath/:id",

@@ -30,13 +30,26 @@ export const getAllLearningObjectsSchema = z.object({
     minDifficulty: z.number().int().optional(),
     maxDifficulty: z.number().int().optional(),
     minTime: z.number().int().optional(),
-    maxTime: z.number().int().optional()
+    maxTime: z.number().int().optional(),
 });
 
 export const learningObjectSearchParams = [
-    "searchTerm","uuid","hruid","version","language",
-    "contentType","available","teacherExclusive",
-    "difficulty","title","description","targetAges",
-    "keywords","skosConcepts","minDifficulty",
-    "maxDifficulty","minTime","maxTime"
-]
+    "searchTerm",
+    "uuid",
+    "hruid",
+    "version",
+    "language",
+    "contentType",
+    "available",
+    "teacherExclusive",
+    "difficulty",
+    "title",
+    "description",
+    "targetAges",
+    "keywords",
+    "skosConcepts",
+    "minDifficulty",
+    "maxDifficulty",
+    "minTime",
+    "maxTime",
+];

@@ -160,9 +160,9 @@ describe("DatasourceLearningPath", () => {
                 json: jest.fn().mockResolvedValue(mockData),
             });
 
-            const result = await datasource.getLearningPaths();
+            const result = await datasource.getLearningPaths("?language=nl");
 
-            expect(fetch).toHaveBeenCalledWith("https://dwengo.api/api/learningPath/search");
+            expect(fetch).toHaveBeenCalledWith("https://dwengo.api/api/learningPath/search?language=nl");
             expect(result).toHaveLength(2);
             expect(result[0]).toBeInstanceOf(LearningPath);
             expect(result[0].toObject()).toEqual({
@@ -201,7 +201,7 @@ describe("DatasourceLearningPath", () => {
                 json: jest.fn().mockResolvedValue([]),
             });
 
-            const result = await datasource.getLearningPaths();
+            const result = await datasource.getLearningPaths("?language=nl");
 
             expect(result).toEqual([]);
         });

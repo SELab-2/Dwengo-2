@@ -9,10 +9,12 @@ export const getLearningPathSchema = z.object({
     language: z.string().optional(),
 });
 
-const getlLearningPathsSchema = z.object({
+export const getAlllLearningPathsSchema = z.object({
     all: z.string().optional(),
     language: z.string().optional(),
     hruid: z.string().optional(),
     title: z.string().optional(),
     description: z.string().optional(),
-  });
+});
+
+export const learningPathSearchParams = ["all", "language", "hruid", "title", "description"];

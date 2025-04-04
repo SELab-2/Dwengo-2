@@ -22,9 +22,10 @@ export abstract class ILearningPathRepository {
     public abstract getLearningPath(hruid: string, language: string): Promise<LearningPath>;
 
     /**
-     * Function to get all available learningPath metadata
+     * Function to get all available learningPath metadata with optional params
      *
+     * @param params string including the params for the query
      * @returns a promise that resolves to a list of all LearningPaths
      */
-    public abstract getLearningPaths(): Promise<LearningPath[]>;
+    public abstract getLearningPaths(params: string): Promise<LearningPath[]>;
 }

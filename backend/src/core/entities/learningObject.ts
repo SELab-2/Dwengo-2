@@ -200,7 +200,7 @@ export class LearningObject extends BaseLearningObject {
     public toObject() {
         return {
             metadata: {
-                ...this.toMetaData()
+                ...this.toMetaData(),
             },
             htmlContent: this._htmlContent,
         };
@@ -213,7 +213,7 @@ export class LearningObject extends BaseLearningObject {
             title: this._title,
             description: this._description,
             contentType: this._contentType,
-        }
+        };
     }
 
     /**
