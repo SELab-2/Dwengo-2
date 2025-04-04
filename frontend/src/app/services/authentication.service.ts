@@ -69,7 +69,7 @@ export class AuthenticationService {
         } else {
           url = 'placeholder'
         }
-
+        
         if (response) {
           console.log(`Login successful: ${response.message}`);
           this.storeToken(response.token);
@@ -78,26 +78,26 @@ export class AuthenticationService {
           console.log(`User ID stored: ${response.id}`);
           this.storeUserType(userType);
           console.log(`User type stored: ${userType}`);
+          this.router.navigateByUrl(url);
         }
-        
-        this.router.navigateByUrl(url);
+
       });
   }
 
-  storeToken = (token: string): void => sessionStorage.setItem('AuthenticationToken', token);
-  retrieveToken = (): string | null => sessionStorage.getItem('AuthenticationToken');
-  removeToken = (): void => sessionStorage.removeItem('AuthenticationToken');
+  storeToken = (token: string): void => localStorage.setItem('AuthenticationToken', token);
+  retrieveToken = (): string | null => localStorage.getItem('AuthenticationToken');
+  removeToken = (): void => localStorage.removeItem('AuthenticationToken');
 
-  storeRefreshToken = (refreshToken: string): void => sessionStorage.setItem('RefreshToken', refreshToken);
-  retrieveRefreshToken = (): string | null => sessionStorage.getItem('RefreshToken');
-  removeRefreshToken = (): void => sessionStorage.removeItem('RefreshToken');
+  storeRefreshToken = (refreshToken: string): void => localStorage.setItem('RefreshToken', refreshToken);
+  retrieveRefreshToken = (): string | null => localStorage.getItem('RefreshToken');
+  removeRefreshToken = (): void => localStorage.removeItem('RefreshToken');
 
-  storeUserId = (userId: string): void => sessionStorage.setItem('UserId', userId);
-  retrieveUserId = (): string | null => sessionStorage.getItem('UserId');
-  removeUserId = (): void => sessionStorage.removeItem('UserId');
+  storeUserId = (userId: string): void => localStorage.setItem('UserId', userId);
+  retrieveUserId = (): string | null => localStorage.getItem('UserId');
+  removeUserId = (): void => localStorage.removeItem('UserId');
 
-  storeUserType = (userType: UserType): void => sessionStorage.setItem('UserType', userType);
-  retrieveUserType = (): UserType | null => sessionStorage.getItem('UserType') as UserType;
-  removeUserType = (): void => sessionStorage.removeItem('UserType');
+  storeUserType = (userType: UserType): void => localStorage.setItem('UserType', userType);
+  retrieveUserType = (): UserType | null => localStorage.getItem('UserType') as UserType;
+  removeUserType = (): void => localStorage.removeItem('UserType');
 
 }

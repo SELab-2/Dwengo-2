@@ -31,5 +31,5 @@ export const routes: Routes = [
     { path: 'student/login', component: LoginPageComponent, title: 'Student Login', data: { isTeacher: false } },
     { path: 'register', component: RegisterPageComponent, title: 'Register' },
     { path: 'placeholder', component: UnknownRouteComponent, title: 'Aur Naur!' },
-    { path: '**', redirectTo: '/placeholder' },
+    { path: '**', redirectTo: 'placeholder' },
 ];
