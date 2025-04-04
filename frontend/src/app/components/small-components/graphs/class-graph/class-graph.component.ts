@@ -107,11 +107,13 @@ export class ClassChartComponent implements OnInit {
         colors: ["transparent"]
       },
       xaxis: {
-        categories: classChartData.map(data => data.name)
+        categories: classChartData.map(data => data.name),
+        max: 100,
+        min: 0,
       },
       yaxis: {
         max: 100,
-        min: 100,
+        forceNiceScale: true
       },
       fill: {
         opacity: 1

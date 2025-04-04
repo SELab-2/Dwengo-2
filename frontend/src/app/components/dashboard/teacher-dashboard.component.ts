@@ -11,7 +11,8 @@ import { ClassChartComponent, ClassChartData } from '../small-components/graphs/
 import { ActivityChartComponent, ActivityChartData } from '../small-components/graphs/activity-graph/activity-graph.component';
 import { MenuCardComponent } from '../small-components/menu-card/menu-card.component';
 import { ClassesService } from '../../services/classes.service';
-import { Class } from '../../interfaces/classes/class';
+import { AssignmentsService } from '../../services/assignments.service';
+import { NewAssignment } from '../../interfaces/assignments/newAssignment';
 
 
 
@@ -38,20 +39,31 @@ export class TeacherDashboardComponent implements OnInit {
   questionsTitle: string = $localize`:@@answerQuestions:Answer Questions`;
   notificationsTitle: string = $localize`:@@notifications:Notifications`;
 
-  constructor(private classesService: ClassesService) { }
+  constructor(private classesService: ClassesService, private assignmentsService: AssignmentsService) { }
 
-  private loadClasses(): void {
+  private loadData(): void {
     this.classesService.classesOfUser().subscribe(classes => {
       this.classChartData = classes.map(c => new ClassChartData(c.name, /*TODO: progress*/2, /*TODO: finished students*/1));
       this.activityChartData = classes.map(c => new ActivityChartData(c.name, /*TODO: activity*/[4, 10, 41, 35, 51, 49, 62, 69, 73, 86]));
       console.log(this.classChartData, this.activityChartData);
     });
+    this.assignmentsService.assignmentsOfUser().subscribe(assignments => {
+      console.log(assignments);
+    });
   }
 
   ngOnInit(): void {
-    this.loadClasses();
+    this.loadData();
   }
 
+  makeAssignment = () => {
+    this.assignmentsService.createAssignment({
+      startDate: new Date(),
+      deadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      extraInstructions: "Please do this assignment"
+    }).subscribe(response => 
+      console.log(response));
+  }
 
   classes = ["Class 1", "Class 2", "Class 3"];
   deadlines = ["Math Exam - Jan 17th", "History Essay - Feb 7th", "Science Report - May 26th"];
