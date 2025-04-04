@@ -1,7 +1,7 @@
 import { Assignment } from "../../../src/core/entities/assignment";
-import { IDatasourceAssignment } from "../../../src/infrastructure/database/data/data_sources/datasourceAssignmentInterface";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
+import { DatasourceAssignmentTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceAssignmentTypeORM";
 
 describe("ClassRepositoryTypeORM", () => {
 
@@ -9,19 +9,10 @@ describe("ClassRepositoryTypeORM", () => {
     let datasourceFactoryMock: IDatasourceFactory;
     let assignment: Assignment;
 
-    let datasourceAssignment: IDatasourceAssignment;
+    let datasourceAssignment: DatasourceAssignmentTypeORM;
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceTeacher: jest.fn(),
-            getDatasourceClass: jest.fn(),
-            getDatasourceGroup: jest.fn(),
-            getDatasourceJoinRequest: jest.fn(),
-            getDatasourceAssignment: jest.fn(),
-            getDatasourceSubmission: jest.fn(),
-            getDatasourceMessage: jest.fn(),
-            getDatasourceThread: jest.fn(),
-            getDatasourceStudent: jest.fn()
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),
