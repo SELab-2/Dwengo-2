@@ -1,26 +1,36 @@
+<app-authenticated-header></app-authenticated-header>
 <div class="classes">
-    <div id="tool-container">
-        <mat-form-field>
-            <mat-label i18n>Name</mat-label>
-            <input
-                matInput
-                #nameFilter
-                placeholder="..."
-                (keyup)="classNameFilter(nameFilter.value)"
-                class="lg-text-input"
-                id="nameFilterInput" />
-        </mat-form-field>
-
-        @if (isTeacher) {
+    <div class="tool-container">
+        @if (isTeacher && !showCreate) {
             <button mat-fab extended (click)="createClass()">
                 <mat-icon>add</mat-icon>
                 <p i18n>Create</p>
             </button>
         }
+
+        @if (showCreate) {
+            <button mat-fab extended (click)="cancelCreate()">
+                <mat-icon>close</mat-icon>
+                <p i18n>Cancel</p>
+            </button>
+        }
+
+        @if (!showCreate) {
+            <mat-form-field>
+                <mat-label i18n>Name</mat-label>
+                <input
+                    matInput
+                    #nameFilter
+                    placeholder="..."
+                    (keyup)="classNameFilter(nameFilter.value)"
+                    class="lg-text-input"
+                    id="nameFilterInput" />
+            </mat-form-field>
+        }
     </div>
     
     @if (showCreate) {
-        <div id="center-container">
+        <div class="center-container">
             <span>
                 <h2 i18n>Create a class</h2>    
                 <app-create-class></app-create-class>
@@ -28,10 +38,11 @@
         </div>
     }
 
-    <div id="center-container">
+    <div class="center-container">
         <h2 i18n>Your classes</h2>
     </div>
-    <div id="center-container">
+
+    <div class="center-container">
         <mat-list id="class-list">
             @for (class of classes; track class.id) {
                 <li>
