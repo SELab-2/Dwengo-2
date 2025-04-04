@@ -4,3 +4,22 @@
         <p class="font-weight-bold" i18n>DASHBOARD</p>
     </div>
 </main>
+
+<div class="assignments">
+
+    <div class="center-container">
+        <h2 i18n>Your assignments</h2>
+    </div>
+
+    <div class="center-container">
+        <mat-list id="assignments-list">
+            @for (assignment of assignments; track assignment.id) {
+                <li>
+                    <app-mini-assignment [_assignment]="assignment"></app-mini-assignment>
+                </li>
+            } @empty {
+                <p i18n>No assignments found</p>
+            }
+        </mat-list>
+    </div>
+</div>
