@@ -5,10 +5,12 @@ import { HttpClient } from "@angular/common/http";
 import { NewClassResponse } from "../interfaces/classes/newClassResponse";
 import { ClassesReponse } from "../interfaces/classes/classesResponse";
 import { AuthenticationService } from "./authentication.service";
+import { ErrorService } from "./error.service";
 
 describe('ClassesService', () => {
     let http: jasmine.SpyObj<HttpClient>;
     let authService: jasmine.SpyObj<AuthenticationService>;
+    let errorService: jasmine.SpyObj<ErrorService>;
     let service: ClassesService;
 
     const id: string = "123";
@@ -37,12 +39,14 @@ describe('ClassesService', () => {
     beforeEach(() => {
         http = jasmine.createSpyObj('HttpClient', ['get', 'post', 'delete', 'patch']);
         authService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveToken', 'retrieveUserType']);
+        errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler', 'subscribeHandler']);
 
         // Mock the return values of the AuthenticationService methods
         authService.retrieveUserId.and.returnValue(teacherId);
         authService.retrieveToken.and.returnValue(teacherToken);
+        errorService.pipeHandler.and.callFake(() => (source) => source);
 
-        service = new ClassesService(http, authService);
+        service = new ClassesService(http, authService, errorService);
     });
 
     it('should respond with classes', () => {

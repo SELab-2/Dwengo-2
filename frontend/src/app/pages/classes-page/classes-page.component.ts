@@ -71,7 +71,6 @@ export class ClassesPageComponent implements OnInit {
       .classesOfUser()
       .subscribe({
         next: (classes) => this._classes = classes,
-        error: () => this.openSnackBar(this.errorMessage)
       });
 
     this.isTeacher = this.authService.retrieveUserType() === UserType.TEACHER;
