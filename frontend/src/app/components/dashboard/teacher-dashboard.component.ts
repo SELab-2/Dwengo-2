@@ -58,10 +58,12 @@ export class TeacherDashboardComponent implements OnInit {
 
   makeAssignment = () => {
     this.assignmentsService.createAssignment({
+      classId: "36f11a76-76a3-4477-9022-72ddab83cbd1",
       startDate: new Date(),
       deadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      learningPathId: "1234",
       extraInstructions: "Please do this assignment"
-    }).subscribe(response => 
+    }).subscribe(response =>
       console.log(response));
   }
 

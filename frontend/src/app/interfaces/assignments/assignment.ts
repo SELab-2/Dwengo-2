@@ -1,7 +1,8 @@
 export interface Assignment {
-    teacherId: string;
+    id: string;
     classId: string;
     startDate: Date;
     deadline: Date;
     extraInstructions: string;
+    learningPathId: string;
 }
