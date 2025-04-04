@@ -13,14 +13,12 @@ import { UnknownRouteComponent } from './components/unknown-route/unknown-route.
  */
 export const routes: Routes = [
     { path: '', component: LandingPageComponent, title: 'Landing Page' },
-    { path: 'login', component: LoginPageComponent },
-    { path: 'register', component: RegisterPageComponent },
-    { path: 'teacher/classes', component: ClassesPageComponent },
-    { path: 'teacher/classes/:id', component: ClassComponent },
-    { path: 'student/classes', component: ClassesPageComponent },
-    { path: 'student/classes/:id', component: ClassComponent },
-    { path: 'teacher-login', component: LoginPageComponent, title: 'Teacher Login', data: { isTeacher: true } },
-    { path: 'student-login', component: LoginPageComponent, title: 'Student Login', data: { isTeacher: false } },
+    { path: 'teacher/classes', component: ClassesPageComponent, title: "My Classes" },
+    { path: 'teacher/classes/:id', component: ClassComponent, title: "Class" },
+    { path: 'student/classes', component: ClassesPageComponent, title: "My Classes" },
+    { path: 'student/classes/:id', component: ClassComponent, title: "Class" },
+    { path: 'teacher/login', component: LoginPageComponent, title: 'Teacher Login', data: { isTeacher: true } },
+    { path: 'student/login', component: LoginPageComponent, title: 'Student Login', data: { isTeacher: false } },
     { path: 'register', component: RegisterPageComponent, title: 'Register' },
     { path: 'placeholder', component: UnknownRouteComponent, title: 'Aur Naur!' },
     {
@@ -30,5 +28,5 @@ export const routes: Routes = [
             // Add future teacher routes here
         ]
     },
-    { path: '**', redirectTo: '/placeholder' },
+    { path: '**', redirectTo: 'placeholder' },
 ];

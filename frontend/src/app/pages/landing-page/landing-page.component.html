@@ -1,15 +1,24 @@
-<div class="landing-page">
-    <span class="landing-page__logo">
-        <img i18n-alt src="assets/dwengo-groen-zwart.svg" alt="Dwengo logo" />
-    </span>
+<mat-card class="landing-page">
+    <mat-card-content class="landing-page__logo">
+        <img mat-card-image src="assets/dwengo-groen-zwart.svg" alt="Dwengo logo" />
+    </mat-card-content>
 
-    <span class="landing-page__buttons">
-        <span class="landing-page__buttons__login">
-            <button name="teacher-login-button" i18n routerLink="teacher-login" routerLinkActive="active" ariaCurrentWhenActive="page">Teacher Login</button>
-            <button name="login-button" i18n routerLink="student-login" routerLinkActive="active" ariaCurrentWhenActive="page">Student Login</button>
-        </span>
+    <mat-card-actions class="landing-page__buttons">
+        <div class="landing-page__mat-raised-buttons__login">
+            <button mat-raised-button color="primary" name="teacher-login-button" i18n 
+                    routerLink="teacher/login" routerLinkActive="active" ariaCurrentWhenActive="page">
+                Teacher Login
+            </button>
+            <button mat-raised-button color="primary" name="student-login-button" i18n 
+                    routerLink="student/login" routerLinkActive="active" ariaCurrentWhenActive="page">
+                Student Login
+            </button>
+        </div>
         
         <p i18n>No account yet?</p>
-        <button name="register-button" i18n routerLink="register" routerLinkActive="active" ariaCurrentWhenActive="page">Register</button>
-    </span>
-</div>
+        <button mat-raised-button color="primary" name="register-button" i18n 
+                routerLink="register" routerLinkActive="active" ariaCurrentWhenActive="page">
+            Register
+        </button>
+    </mat-card-actions>
+</mat-card>
