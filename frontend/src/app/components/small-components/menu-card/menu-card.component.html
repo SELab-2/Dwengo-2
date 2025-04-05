@@ -1,7 +1,9 @@
-<div class="card" (click)="onClick()" [ngClass]="getColor()" [class.selected-card]="selected">
-    <div class=" card-inner">
+<mat-card class="menu-card" (click)="onClick()" matRipple
+    [ngClass]="[getColorClass(), selected ? 'selected-card' : '']">
+
+    <div class="card-inner">
         <p class="text-primary">{{ title }}</p>
-        <mat-icon fontIcon="{{ icon }}"></mat-icon>
+        <mat-icon>{{ icon }}</mat-icon>
     </div>
     <span class="text-primary font-weight-bold">{{ count }}</span>
-</div>
+</mat-card>
