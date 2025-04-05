@@ -1,15 +1,23 @@
-<div class="charts-card">
-    <div class="chart-header">
-        <p class="chart-title" i18n>
-            Progress
-        </p>
-        <mat-icon class="info-icon">info</mat-icon>
-        <p class="info-text" i18n>This chart shows you the percentage of completed assignments for each class, together
-            with the percentage of students that finished every assignment within that
-            class.</p>
-    </div>
-    <apx-chart class="chart" [series]="barChartOptions.series!" [chart]="barChartOptions.chart!"
-        [dataLabels]="barChartOptions.dataLabels!" [xaxis]="barChartOptions.xaxis!" [legend]="barChartOptions.legend!"
-        [fill]="barChartOptions.fill!" [tooltip]="barChartOptions.tooltip!">
-    </apx-chart>
-</div>
+<mat-card class="charts-card">
+    <mat-card-header class="chart-header">
+        <mat-card-title i18n>Progress</mat-card-title>
+        <span i18n-matTooltip
+            matTooltip="This chart shows you how many assignments have been completed in each class, together with the amount of students that finished every assignment.">
+            <mat-icon class="info-icon">info</mat-icon>
+        </span>
+    </mat-card-header>
+    <mat-card-content>
+        <ng-container *ngIf="barChartOptions.series?.length; else loading">
+            <apx-chart class="chart" [series]="barChartOptions.series!" [chart]="barChartOptions.chart!"
+                [dataLabels]="barChartOptions.dataLabels!" [xaxis]="barChartOptions.xaxis!"
+                [legend]="barChartOptions.legend!" [fill]="barChartOptions.fill!" [tooltip]="barChartOptions.tooltip!">
+            </apx-chart>
+        </ng-container>
+
+        <ng-template #loading>
+            <div class="loading-container">
+                <mat-spinner></mat-spinner>
+            </div>
+        </ng-template>
+    </mat-card-content>
+</mat-card>

@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -49,7 +52,7 @@ export class ActivityChartData {
 @Component({
   selector: 'app-activity-chart',
   standalone: true,
-  imports: [CommonModule, MatIconModule, NgApexchartsModule],
+  imports: [CommonModule, MatIconModule, NgApexchartsModule, MatCardModule, MatTooltipModule, MatProgressSpinnerModule],
   templateUrl: './activity-graph.component.html',
   styleUrls: ['./activity-graph.component.less']
 })

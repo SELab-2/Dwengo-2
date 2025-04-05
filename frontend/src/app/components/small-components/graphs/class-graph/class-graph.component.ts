@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -56,7 +59,7 @@ export class ClassChartData {
 @Component({
   selector: 'app-class-chart',
   standalone: true,
-  imports: [CommonModule, MatIconModule, NgApexchartsModule, MatTooltipModule],
+  imports: [CommonModule, MatIconModule, NgApexchartsModule, MatTooltipModule, MatCardModule, MatProgressSpinnerModule],
   templateUrl: './class-graph.component.html',
   styleUrls: ['./class-graph.component.less']
 })
