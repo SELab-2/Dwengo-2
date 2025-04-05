@@ -6,7 +6,7 @@ import { z } from "zod";
 
 export const createMessageSchema = z.object({
     senderId: z.string(),
-    createdAt: z.date(),
+    createdAt: z.string().transform((val: string) => new Date(val)),
     threadId: z.string(),
     content: z.string(),
 });

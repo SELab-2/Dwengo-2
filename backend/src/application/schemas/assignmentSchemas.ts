@@ -7,8 +7,8 @@ import { z } from "zod";
 export const createAssignmentSchema = z.object({
     classId: z.string(),
     learningPathId: z.string(),
-    startDate: z.date(),
-    deadline: z.date(),
+    startDate: z.string().transform((val: string) => new Date(val)),
+    deadline: z.string().transform((val: string) => new Date(val)),
     extraInstructions: z.string(),
 });
 
@@ -28,7 +28,13 @@ export const updateAssignmentSchema = z.object({
     id: z.string(),
     classId: z.string().optional(),
     learningPathId: z.string().optional(),
-    startDate: z.date().optional(),
-    deadline: z.date().optional(),
+    startDate: z
+        .string()
+        .transform((val: string) => new Date(val))
+        .optional(),
+    deadline: z
+        .string()
+        .transform((val: string) => new Date(val))
+        .optional(),
     extraInstructions: z.string().optional(),
 });
