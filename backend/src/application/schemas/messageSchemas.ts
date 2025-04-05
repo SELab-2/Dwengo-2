@@ -8,7 +8,7 @@ export const createMessageSchema = z.object({
     senderId: z.string(),
     createdAt: z
         .string()
-        .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for startDate" })
+        .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for createdAt" })
         .transform((val: string) => new Date(val)),
     threadId: z.string(),
     content: z.string(),
