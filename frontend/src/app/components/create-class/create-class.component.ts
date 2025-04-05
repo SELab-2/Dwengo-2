@@ -61,13 +61,9 @@ export class CreateClassComponent {
         newClass
       );
   
-      idObservable.pipe().subscribe((response) => {
-        if(response) {
-          this.openSnackBar(this.createSuccesMessage);
-        } else {
-          this.openSnackBar(this.errorMessage);
-        }
-      });
+      idObservable.pipe().subscribe(() => 
+        this.openSnackBar(this.createSuccesMessage)
+      );
     } else {
       this.openSnackBar(this.errorMessage);
     }

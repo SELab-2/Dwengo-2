@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthenticationService } from '../../services/authentication.service';
 
 
 @Component({
@@ -55,7 +56,8 @@ export class ClassComponent implements OnInit {
   public constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    private classesService: ClassesService
+    private classesService: ClassesService,
+    private authService: AuthenticationService
   ) {
     this.updateForm = this.buildUpdateForm();
   }
@@ -75,10 +77,8 @@ export class ClassComponent implements OnInit {
 
       classObservable.pipe().subscribe(
         (response) => {
-          if(response) {
-            this._class = response;
-            this.fillUpdateForm(response);
-          };
+          this._class = response;
+          this.fillUpdateForm(response);
         }
       );
     } else {
@@ -98,19 +98,14 @@ export class ClassComponent implements OnInit {
 
     const delClassObservable = this.classesService.deleteClass(this._class.id);
 
-    delClassObservable.subscribe({
-      next: (response) => {
-        if(response) {
-          this.openSnackBar(this.deleteSuccesMessage);
+    delClassObservable.subscribe(
+      () => {
+        this.openSnackBar(this.deleteSuccesMessage);
 
-          const teacher_or_student = 'teacher'; //true ? 'teacher' : 'student';
-          this.router.navigate([`/${teacher_or_student}/classes`])
-        } else {
-          this.openSnackBar(this.errorMessage);
-        }
-      },
-      error: () => this.openSnackBar(this.errorMessage)
-    })
+        const teacher_or_student = this.authService.retrieveUserType()!.toString();
+        this.router.navigate([`/${teacher_or_student}/classes`])
+      }
+    );
   }
 
   public startEdit() {
@@ -131,22 +126,16 @@ export class ClassComponent implements OnInit {
     const newClass = this.extractUpdateFormValues();
     const updateClassObservable = this.classesService.updateClass(newClass);
 
-    updateClassObservable.pipe().subscribe({
-      next: (response) => {
-        if(response) {
-          this._class!.name = newClass.name;
-          this._class!.description = newClass.description;
-          this._class!.targetAudience = newClass.targetAudience;
+    updateClassObservable.pipe().subscribe(
+      () => {
+        this._class!.name = newClass.name;
+        this._class!.description = newClass.description;
+        this._class!.targetAudience = newClass.targetAudience;
 
-          this.openSnackBar(this.updateSuccesMessage);
-          this.editing = false;
-        } else {
-          this.openSnackBar(this.errorMessage);
-          this.cancelEdit();
-        }
-      },
-      error: () => this.openSnackBar(this.errorMessage)
-    });
+        this.openSnackBar(this.updateSuccesMessage);
+        this.cancelEdit(); 
+      }
+    );
   }
 
   /**
