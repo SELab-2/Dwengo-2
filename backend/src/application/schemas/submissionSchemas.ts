@@ -19,7 +19,7 @@ export const createSubmissionSchema = z.object({
     learningObjectId: z.string(),
     time: z
         .string()
-        .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for startDate" })
+        .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for time" })
         .transform((val: string) => new Date(val)),
     contents: z.string(),
     status: z.nativeEnum(StatusType).default(StatusType.NOT_ACCEPTED),
