@@ -42,7 +42,7 @@ import { ErrorService } from "./error.service";
             `${this.API_URL}/users/${this.userCreds.userId}/classes`,
             this.standardHeaders
         ).pipe(
-            this.errorService.pipeHandler("An error occured, please try again"),
+            this.errorService.pipeHandler(),
             switchMap(response => 
                 forkJoin(
                     response.classes.map(id => 
@@ -61,7 +61,9 @@ import { ErrorService } from "./error.service";
             `${this.API_URL}/classes/${id}`,
             this.standardHeaders
         ).pipe(
-            this.errorService.pipeHandler("An error occured whilst retrieving the class"),
+            this.errorService.pipeHandler(
+                this.errorService.retrieveError($localize `class`)
+            ),
         );
     }
 
@@ -71,7 +73,7 @@ import { ErrorService } from "./error.service";
             newClass,
             this.standardHeaders
         ).pipe(
-            this.errorService.pipeHandler("An error occured, please try again"),
+            this.errorService.pipeHandler(),
             switchMap(
                 response => of(response.id)
             )
@@ -85,7 +87,7 @@ import { ErrorService } from "./error.service";
                 observe: 'response'
             }
         ).pipe(
-            this.errorService.pipeHandler("An error occured, please try again"),
+            this.errorService.pipeHandler(),
             switchMap(
                 response => of(response.status === 204) // 204: success & no content
             )
@@ -107,7 +109,7 @@ import { ErrorService } from "./error.service";
                 observe: 'response'
             }
         ).pipe(
-            this.errorService.pipeHandler("An error occured, please try again"),
+            this.errorService.pipeHandler(),
             switchMap(
                 response => of(response.status === 204)
             ) // TODO: does this still work (can't know before API bugfix)
