@@ -30,7 +30,7 @@ export class ErrorService {
      * ```ts
      * this.http.get("url")
      *   .pipe(
-     *     errorService.pipeHandler(),
+     *     errorService.pipeHandler("Error message"),
      *     ... // The rest of your pipeline
      *   )
      * ```
@@ -40,7 +40,7 @@ export class ErrorService {
      * @param errorMessage The error message to show in the snackbar
      * @returns The observable if no errors occured otherwise null
      */
-    public pipeHandler<T>(errorMessage: string): OperatorFunction<T, T> {
+    public pipeHandler<T>(errorMessage?: string): OperatorFunction<T, T> {
         return (source) => {
             return source.pipe(
                 catchError((error: HttpErrorResponse) => {
@@ -63,19 +63,20 @@ export class ErrorService {
      * ```ts
      * this.http.get("url")
      *   .subscribe(
-     *     errorService.subscribeHandler({
+     *     errorService.subscribeHandler(
+     *       errorMessage: "Error message", 
      *       next: (value) => {
      *         // Do something with the value
      *       }
-     *     })
+     *     )
      *   )
      * ```
      * 
-     * @param errorMessage The error message to show in the snackbar
      * @param next The function to call when the observable emits a value
+     * @param errorMessage The error message to show in the snackbar
      * @returns An observer (the object you would pass to `subscribe()`) that handles errors for you
      */
-    public subscribeHandler<T>(errorMessage: string, next: (value: T) => void): Observer<T> {
+    public subscribeHandler<T>(next: (value: T) => void, errorMessage?: string): Observer<T> {
         return {
             next: next,
             error: (error) => this.handleHttpError(error, errorMessage),
@@ -89,40 +90,69 @@ export class ErrorService {
      * @param error The HTTP error
      * @param errorMessage The error message to show in the snackbar
      */
-    public handleHttpError(error: HttpErrorResponse, errorMessage: string): void {
+    public handleHttpError(error: HttpErrorResponse, errorMessage?: string): void {
         const status = error.status as keyof typeof this.handleCode;
 
         if(this.handleCode[status]) {
-            this.handleCode[status](errorMessage.toLocaleLowerCase());
+            if(errorMessage) errorMessage = errorMessage.toLocaleLowerCase();
+            this.handleCode[status](errorMessage);
         } else {
-            this.openSnackBar("Unknown error");
+            this.openSnackBar($localize `Unknown error`);
         }
     }
 
     // Authentication required
-    private handle401(errorMessage: string) {
-        this.openSnackBar(`Authentication required ${errorMessage}`);
+    private handle401(errorMessage?: string) {
+        this.openSnackBar(
+            `${errorMessage ? errorMessage + '. ' : ''}`
+            + $localize `Authentication required.`
+        );
     }
 
     // Not found
-    private handle404(errorMessage: string) {
-        this.openSnackBar(`Not found ${errorMessage}`);
+    private handle404(errorMessage?: string) {
+        this.openSnackBar(
+           `${errorMessage ? errorMessage + '. ' : ''}`
+            + $localize `Not found.`
+        );
     }
 
     // Conflict (resource already exists)
-    private handle409(errorMessage: string) {
-        this.openSnackBar(`Conflict ${errorMessage}`);
+    private handle409(errorMessage?: string) {
+        this.openSnackBar(
+            `${errorMessage ? errorMessage + '. ' : ''}`
+            + $localize `Conflict.`
+        );
     }
 
     // Internal server error
-    private handle500(errorMessage: string) {
-        this.openSnackBar(`Internal server error ${errorMessage}`);
+    private handle500(errorMessage?: string) {
+        this.openSnackBar(
+            `${errorMessage ? errorMessage + '. ' : ''}`
+            + $localize `Internal server error.`
+        );
     }
 
-    private openSnackBar(message: string, action: string="Ok") {
+    private openSnackBar(message: string, action: string=$localize `Ok`) {
         this.snackBar.open(message, action, {
             duration: 2500
         });
     }
+
+    public retrieveError(retrieval: string): string {
+        return $localize `An error occured whilst retrieving` + ` ${retrieval}`;
+    }
+
+    public updateError(update: string): string {
+        return $localize `An error occured whilst updating` + ` ${update}`;
+    }
+
+    public createError(create: string): string {
+        return $localize `An error occured whilst creating` + ` ${create}`;
+    }
+
+    public deleteError(deleteItem: string): string {
+        return $localize `An error occured whilst deleting` + ` ${deleteItem}`;
+    }   
 
 }
