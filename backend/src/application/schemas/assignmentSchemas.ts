@@ -13,7 +13,7 @@ export const createAssignmentSchema = z.object({
         .transform((val: string) => new Date(val)),
     deadline: z
         .string()
-        .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for startDate" })
+        .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for deadline" })
         .transform((val: string) => new Date(val)),
     extraInstructions: z.string(),
 });
