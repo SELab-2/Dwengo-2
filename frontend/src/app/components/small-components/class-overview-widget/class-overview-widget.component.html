@@ -1,0 +1,12 @@
+<mat-card class="overview-widget">
+    <mat-card-title i18n>Class Overview</mat-card-title>
+    <div class="widget-container">
+        <app-class-info-card *ngFor="let classData of classes" [className]="classData.name"
+            [studentCount]="classData.studentCount ? classData.studentCount : 0"
+            [assignmentCount]="classData.assignments ? classData.assignments.length : 0"
+            [targetGroup]="classData.targetAudience"
+            [completionPercentage]="classData.completionPercentage ? classData.completionPercentage : 0"
+            [classId]="classData.id">
+        </app-class-info-card>
+    </div>
+</mat-card>

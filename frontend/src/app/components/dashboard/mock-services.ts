@@ -1,0 +1,141 @@
+import { Assignment } from "../../interfaces/assignments/assignment";
+import { Class } from "../../interfaces/classes/class";
+
+export class MockServices {
+    public static getData = () => {
+        const classes: Class[] = [
+            {
+                id: "201",
+                name: "Biologie 101",
+                description: "Een introductie tot de biologie.",
+                targetAudience: "Eerstejaars studenten",
+                teacherId: "T1001",
+                assignments: [],
+                studentCount: 29,
+                completionPercentage: 100,
+            },
+            {
+                id: "202",
+                name: "Wiskunde 201",
+                description: "Gevorderde algebra en calculus.",
+                targetAudience: "Tweedejaars studenten",
+                teacherId: "T1002",
+                studentCount: 12,
+                completionPercentage: 29,
+                assignments: [
+                    {
+                        id: "1",
+                        classId: "202",
+                        startDate: new Date("2025-04-01"),
+                        deadline: new Date("2025-04-10"),
+                        extraInstructions: "Lees hoofdstuk 1 en maak de oefeningen.",
+                        learningPathId: "LP2001",
+                    }
+                ],
+            },
+            {
+                id: "203",
+                name: "Geschiedenis 301",
+                description: "Europese geschiedenis, 1400-1800.",
+                targetAudience: "Derdejaars studenten",
+                teacherId: "T1003",
+                studentCount: 134,
+                completionPercentage: 34,
+                assignments: [
+                    {
+                        id: "2",
+                        classId: "203",
+                        startDate: new Date("2025-04-05"),
+                        deadline: new Date("2025-04-15"),
+                        extraInstructions: "Bekijk de video over natuurkunde.",
+                        learningPathId: "LP2002",
+                    },
+                    {
+                        id: "3",
+                        classId: "203",
+                        startDate: new Date("2025-04-07"),
+                        deadline: new Date("2025-04-17"),
+                        extraInstructions: "Doe onderzoek naar het onderwerp en presenteer het.",
+                        learningPathId: "LP2003",
+                    },
+                    {
+                        id: "4",
+                        classId: "203",
+                        startDate: new Date("2025-04-08"),
+                        deadline: new Date("2025-04-18"),
+                        extraInstructions: "Lees het artikel en beantwoord de vragen.",
+                        learningPathId: "LP2003",
+                    },
+                    {
+                        id: "5",
+                        classId: "203",
+                        startDate: new Date("2025-04-09"),
+                        deadline: new Date("2025-04-19"),
+                        extraInstructions: "Maak een samenvatting van hoofdstuk 5.",
+                        learningPathId: "LP2003",
+                    },
+                ],
+            },
+            {
+                id: "204",
+                name: "Chemie Basis",
+                description: "Een overzicht van de fundamentele principes van chemie.",
+                targetAudience: "Eerstejaars studenten",
+                teacherId: "T1004",
+                assignments: [],
+            },
+            {
+                id: "204",
+                name: "Chemie Basis",
+                description: "Een overzicht van de fundamentele principes van chemie.",
+                targetAudience: "Eerstejaars studenten",
+                teacherId: "T1004",
+                assignments: [],
+            },
+            {
+                id: "205",
+                name: "Informatica 101",
+                description: "Introductie tot programmeren en algoritmen.",
+                targetAudience: "Tweedejaars studenten",
+                teacherId: "T1005",
+                studentCount: 17,
+                completionPercentage: 69,
+                assignments: [
+                    {
+                        id: "6",
+                        classId: "205",
+                        startDate: new Date("2025-05-01"),
+                        deadline: new Date("2025-05-10"),
+                        extraInstructions: "Schrijf een programma om cijfers te analyseren.",
+                        learningPathId: "LP2004",
+                    },
+                    {
+                        id: "7",
+                        classId: "205",
+                        startDate: new Date("2025-05-11"),
+                        deadline: new Date("2025-05-20"),
+                        extraInstructions: "Maak een algoritme voor zoekproblemen.",
+                        learningPathId: "LP2005",
+                    },
+                    {
+                        id: "8",
+                        classId: "205",
+                        startDate: new Date("2025-05-21"),
+                        deadline: new Date("2025-05-30"),
+                        extraInstructions: "Ontwerp een database voor een boekenbibliotheek.",
+                        learningPathId: "LP2006",
+                    },
+                    {
+                        id: "9",
+                        classId: "205",
+                        startDate: new Date("2025-06-01"),
+                        deadline: new Date("2025-06-10"),
+                        extraInstructions: "Onderzoek de principes van kunstmatige intelligentie.",
+                        learningPathId: "LP2007",
+                    },
+                ],
+            },
+        ];
+        return classes;
+    }
+}
