@@ -64,17 +64,23 @@ export class AuthenticationService {
         }
         
         if (response) {
-          console.log(`Login successful: ${response.message}`);
           this.storeToken(response.token);
-          console.log(`Token stored: ${response.token}`);
           this.storeUserId(response.id);
-          console.log(`User ID stored: ${response.id}`);
           this.storeUserType(userType);
-          console.log(`User type stored: ${userType}`);
           this.router.navigateByUrl(url);
         }
 
       });
+  }
+
+  logout(): void {
+    this.removeToken();
+    this.removeUserId();
+    this.removeUserType();
+    
+    console.log('Logged out');
+
+    this.router.navigateByUrl('/');
   }
 
   storeToken = (token: string): void => localStorage.setItem('AuthenticationToken', token);
