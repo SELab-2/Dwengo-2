@@ -75,6 +75,13 @@
     "2808988107267540994": "An error occured whilst retrieving",
     "5004392158154254503": "An error occured whilst updating",
     "8814872164878364408": "An error occured whilst creating",
-    "8220653272735341032": "An error occured whilst deleting"
+    "8220653272735341032": "An error occured whilst deleting",
+    "1190716408793054975": "Registration failed",
+    "3697023714793897031": "Registration failed. Please try again.",
+    "8053477814844632887": "Login failed",
+    "1047475949969466940": "class",
+    "5335257718173626417": "Explore Paths",
+    "3797778920049399855": "Logout",
+    "2159130950882492111": "Cancel"
   }
 }
