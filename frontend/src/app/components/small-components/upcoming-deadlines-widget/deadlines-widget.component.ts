@@ -18,6 +18,7 @@ export class DeadlinesWidgetComponent {
             .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()); // Sorteer op datum
     }
 
+    // TODO: i18n
     formatDate(date: Date): string {
         return new Intl.DateTimeFormat('nl-NL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(date));
     }
