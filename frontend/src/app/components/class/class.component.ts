@@ -11,7 +11,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
-import { UserService } from '../../services/user.service';
 
 
 @Component({
@@ -57,8 +56,7 @@ export class ClassComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private classesService: ClassesService,
-    private authService: AuthenticationService,
-    private userService: UserService
+    private authService: AuthenticationService
   ) {
     this.updateForm = this.buildUpdateForm();
   }
