@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
+import { UserService } from '../../services/user.service';
 
 
 @Component({
@@ -30,7 +31,6 @@ import { AuthenticationService } from '../../services/authentication.service';
   styleUrl: './class.component.less'
 })
 export class ClassComponent implements OnInit {
-
   // The current activated route
   private readonly route = inject(ActivatedRoute);
 
@@ -57,7 +57,8 @@ export class ClassComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private classesService: ClassesService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private userService: UserService
   ) {
     this.updateForm = this.buildUpdateForm();
   }
