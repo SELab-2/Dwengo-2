@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserType } from '../../interfaces';
+import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
 
 
 // Type alias
@@ -24,6 +25,7 @@ type classFilterType = (c: Class) => boolean;
     CommonModule,
     MiniClassComponent,
     CreateClassComponent,
+    AuthenticatedHeaderComponent,
 
     // Angular material
     MatList,
@@ -69,7 +71,6 @@ export class ClassesPageComponent implements OnInit {
       .classesOfUser()
       .subscribe({
         next: (classes) => this._classes = classes,
-        error: () => this.openSnackBar(this.errorMessage)
       });
 
     this.isTeacher = this.authService.retrieveUserType() === UserType.TEACHER;
@@ -79,7 +80,14 @@ export class ClassesPageComponent implements OnInit {
    * Create a class by letting the user fill in a form and send it to the API
    */
   public createClass(): void {
-    this.showCreate = !this.showCreate;
+    this.showCreate = true;
+  }
+
+  /**
+   * Close the create class component
+   */
+  public cancelCreate(): void {
+    this.showCreate = false;
   }
 
   /**

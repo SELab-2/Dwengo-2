@@ -13,6 +13,8 @@
     "7252289026942422657": "Class deleted succesfully!",
     "5763031177401499381": "Invalid URL",
     "7819314041543176992": "Close",
+    "5763031177401499381": "Invalid URL",
+    "7819314041543176992": "Close",
     "7941428823403788384": " Create ",
     "6945000366880130016": "Class created succesfully!",
     "2285606829417982694": "DASHBOARD",
@@ -23,6 +25,9 @@
     "incomingDeadlines": "Current Deadlines",
     "answerQuestions": "Answer Questions",
     "3894950702316166331": "Loading...",
+    "6028371114637047813": "First Name",
+    "4407559560004943843": "Last Name",
+    "3453981119077816522": "Your School",
     "6028371114637047813": "First Name",
     "4407559560004943843": "Last Name",
     "3453981119077816522": "Your School",
@@ -65,6 +70,16 @@
     "8292965595360161791": " Teacher Login ",
     "3941829170724290233": " Student Login ",
     "5849573010227956913": "No account yet?",
-    "2907733796351584017": " Register "
+    "2907733796351584017": " Register ",
+    "2657043015926552641": "Unknown error",
+    "860053371818914463": "Authentication required.",
+    "4288887368676845936": "Not found.",
+    "7495757974680268525": "Conflict.",
+    "3225944221562337113": "Internal server error.",
+    "8720977247725652816": "Ok",
+    "2808988107267540994": "An error occured whilst retrieving",
+    "5004392158154254503": "An error occured whilst updating",
+    "8814872164878364408": "An error occured whilst creating",
+    "8220653272735341032": "An error occured whilst deleting"
   }
 }
