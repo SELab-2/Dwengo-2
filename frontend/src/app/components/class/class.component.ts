@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
+import { ClassMembersListComponent } from '../class-members-list/class-members-list.component';
 
 
 @Component({
@@ -20,6 +21,7 @@ import { AuthenticationService } from '../../services/authentication.service';
     CommonModule,
     LoadingComponent,
     ReactiveFormsModule,
+    ClassMembersListComponent,
 
     // Angular material
     MatFormFieldModule,

@@ -9,6 +9,9 @@ import { ClassesReponse } from "../interfaces/classes/classesResponse";
 import { environment } from "../../environments/environment";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
+import { User, UserType } from "../interfaces";
+import { UserService } from "./user.service";
+import { ClassMembersInterface } from "../interfaces/classes/classMembersResponse";
 
 @Injectable({
     providedIn: 'root'
@@ -22,7 +25,8 @@ import { ErrorService } from "./error.service";
     public constructor(
         private http: HttpClient,
         private authService: AuthenticationService,
-        private errorService: ErrorService
+        private errorService: ErrorService,
+        private userService: UserService
     ) {
         this.userCreds = {
             userId: this.authService.retrieveUserId(),
@@ -94,7 +98,6 @@ import { ErrorService } from "./error.service";
         );
     }
 
-    // TODO: wait for bugfix API
     public updateClass(_class: Class): Observable<boolean> {
         const updatedClass: UpdatedClass = {
             name: _class.name,
@@ -112,8 +115,43 @@ import { ErrorService } from "./error.service";
             this.errorService.pipeHandler(),
             switchMap(
                 response => of(response.status === 204)
-            ) // TODO: does this still work (can't know before API bugfix)
+            )
         );
+    }
+
+    public classStudents(id: string): Observable<User[]> {
+        // return this.http.get<ClassMembersInterface>(
+        //     `${this.API_URL}/classes/${id}/users`,
+        //     this.standardHeaders
+        // ).pipe(
+        //     this.errorService.pipeHandler(),
+        //     switchMap(response => 
+        //         forkJoin(
+        //             response.students.map(studentId => 
+        //                 this.userService.userWithIdAndType(studentId, UserType.STUDENT)
+        //             )
+        //         )
+        //     )
+        // );
+
+        return of([
+            {
+                id: "123",
+                email: "dries@mail.com",
+                firstName: "Dries",
+                familyName: "De Vries",
+                schoolName: "De School",
+                passwordHash: "123456789"
+            },
+            {
+                id: "321",
+                email: "zot@mail.com",
+                firstName: "Gerdy",
+                familyName: "Den Zot",
+                schoolName: "De School",
+                passwordHash: "1234567890"
+            }
+        ]);
     }
 
   }

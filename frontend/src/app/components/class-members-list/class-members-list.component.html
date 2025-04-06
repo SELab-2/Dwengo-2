@@ -1,1 +1,51 @@
-<p>class-members-list works!</p>
+<div class="class-members-list">
+    <div id="center-container">
+
+        @if(_class) {
+            <span>
+                <h2 i18n>Students</h2>
+            
+                <table mat-table [dataSource]="members">
+
+                    <ng-container matColumnDef="name">
+                        @for(member of members; track member.id) {
+                            <th mat-header-cell *matHeaderCellDef i18n>
+                                Name
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.firstName}} {{element.familyName}}
+                            </td>    
+                        }
+                    </ng-container>
+
+                    <ng-container matColumnDef="email">
+                        @for(member of members; track member.id) {
+                            <th mat-header-cell *matHeaderCellDef i18n>
+                                Email
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.email}}
+                            </td>    
+                        }
+                    </ng-container>
+
+                    <ng-container matColumnDef="schoolName">
+                        @for(member of members; track member.id) {
+                            <th mat-header-cell *matHeaderCellDef i18n>
+                                School
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.schoolName}}
+                            </td>    
+                        }
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </span>
+        } @else {
+            <app-loading></app-loading>
+        }
+    </div>
+</div>

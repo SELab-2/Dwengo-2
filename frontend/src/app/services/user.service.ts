@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment";
 import { Observable } from "rxjs";
-import { User } from "../interfaces";
+import { User, UserType } from "../interfaces";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
 
@@ -33,13 +33,13 @@ export class UserService {
         };
     }
 
-    public userWithId(id: string): Observable<User> {
+    public userWithIdAndType(id: string, userType: UserType): Observable<User> {
         return this.http.get<User>(
             `${this.API_URL}/users/${id}`, {
                 ...this.standardHeaders,
                 params: {
                     'id': this.userCreds.userId || '',
-                    'userType': this.authService.retrieveUserType()?.toString() || ''
+                    'userType': userType.toString()
                 }
             }
         ).pipe(
