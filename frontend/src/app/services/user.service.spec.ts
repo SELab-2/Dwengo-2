@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
 import { of } from "rxjs";
-import { User } from "../interfaces";
+import { User, UserType } from "../interfaces";
 import { UserService } from "./user.service";
 
 describe('UserService', () => {
@@ -22,6 +22,7 @@ describe('UserService', () => {
         // Mock the return values of the AuthenticationService methods
         authService.retrieveUserId.and.returnValue("mockUserId");
         authService.retrieveToken.and.returnValue("mockToken");
+        authService.retrieveUserType.and.returnValue(UserType.TEACHER);
         errorService.pipeHandler.and.callFake(() => (source) => source);
 
         // Mock user

@@ -30,6 +30,7 @@ import { AuthenticationService } from '../../services/authentication.service';
   styleUrl: './class.component.less'
 })
 export class ClassComponent implements OnInit {
+
   // The current activated route
   private readonly route = inject(ActivatedRoute);
 
