@@ -61,8 +61,8 @@ describe('DeadlinesWidgetComponent', () => {
 
     it('should display the correct due dates', () => {
         const deadlineContents = fixture.debugElement.queryAll(By.css('.deadline-item mat-card-content p:first-child'));
-        expect(deadlineContents[0].nativeElement.textContent.trim()).toBe('Deadline: 10 apr 2025');
-        expect(deadlineContents[1].nativeElement.textContent.trim()).toBe('Deadline: 15 apr 2025');
+        expect(deadlineContents[0].nativeElement.textContent.trim()).toBe('Deadline: 10 Apr 2025');
+        expect(deadlineContents[1].nativeElement.textContent.trim()).toBe('Deadline: 15 Apr 2025');
     });
 
     it('should display the correct class names', () => {
