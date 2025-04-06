@@ -29,7 +29,7 @@ export class AuthenticationService {
 
   register(user: UserRegistration): void {
     this.http.post<RegisterResponse>(this.registerUrl, user).pipe(
-      this.errorService.pipeHandler("Registration failed")
+      this.errorService.pipeHandler($localize `Registration failed`)
     ).subscribe((response) => {
       let url: string;
 
@@ -38,14 +38,13 @@ export class AuthenticationService {
       } else if (user.userType === UserType.TEACHER) {
         url = '/teacher/login';
       } else {
-        window.alert('Huh? Weird. This is not supposed to happen.');
         url = 'placeholder';
       }
 
       if (response) {
         this.router.navigateByUrl(url);
       } else {
-        window.alert('Registration failed. Please try again.');
+        window.alert($localize `Registration failed. Please try again.`);
       }
       
     });
@@ -53,7 +52,7 @@ export class AuthenticationService {
   
   login(credentials: UserLoginCredentials, userType: UserType): void { 
     this.http.post<LoginResponse>(this.loginUrl, credentials).pipe(
-      this.errorService.pipeHandler("Login failed")
+      this.errorService.pipeHandler($localize `Login failed`),
     ).subscribe((response: LoginResponse | null) => {
       let url: string;
         if (userType === UserType.STUDENT) {

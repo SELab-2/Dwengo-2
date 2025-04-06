@@ -63,4 +63,6 @@ export abstract class IDatasourceClass {
      * @param userType The type of the user (teacher or student)
      */
     public abstract addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void>;
+
+    public abstract updateClass(classId: string, updatedClass: Partial<Class>): Promise<Class>;
 }

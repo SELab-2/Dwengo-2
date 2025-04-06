@@ -31,6 +31,28 @@ export class DatasourceClassTypeORM extends IDatasourceClass {
         return classModel.toClassEntity(teacherOfClassModel.id);
     }
 
+    public async updateClass(classId: string, updatedClass: Partial<Class>): Promise<Class> {
+        // find the class model with classId
+        const classModel: ClassTypeORM | null = await this.datasource
+            .getRepository(ClassTypeORM)
+            .findOne({ where: { id: classId } });
+
+        // if not found, error
+        if (!classModel) {
+            throw new EntityNotFoundError("Class not found");
+        }
+
+        // Get the partial updated class model
+        const partialUpdatedClassModel: Partial<ClassTypeORM> = classModel.fromPartialClassEntity(updatedClass);
+
+        // update the database
+        await this.datasource.getRepository(ClassTypeORM).update(classId, partialUpdatedClassModel);
+
+        const _class: Class | null = await this.getClassById(classId);
+        // The class is present definitely, because we fetched it earlier
+        return _class!;
+    }
+
     public async getClassById(id: string): Promise<Class | null> {
         const classModel: ClassTypeORM | null = await this.datasource
             .getRepository(ClassTypeORM)

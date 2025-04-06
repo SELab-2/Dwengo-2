@@ -39,12 +39,13 @@ describe('ClassesService', () => {
     beforeEach(() => {
         http = jasmine.createSpyObj('HttpClient', ['get', 'post', 'delete', 'patch']);
         authService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveToken', 'retrieveUserType']);
-        errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler', 'subscribeHandler']);
+        errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler', 'subscribeHandler', 'retrieveError']);
 
         // Mock the return values of the AuthenticationService methods
         authService.retrieveUserId.and.returnValue(teacherId);
         authService.retrieveToken.and.returnValue(teacherToken);
         errorService.pipeHandler.and.callFake(() => (source) => source);
+        errorService.retrieveError.and.returnValue("mockError");
 
         service = new ClassesService(http, authService, errorService);
     });

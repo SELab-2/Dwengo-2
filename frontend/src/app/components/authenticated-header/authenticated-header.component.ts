@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthenticationService } from '../../services/authentication.service';
+import { UserType } from '../../interfaces';
 
 @Component({
   selector: 'app-authenticated-header',
@@ -17,7 +18,7 @@ export class AuthenticatedHeaderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.isStudent = localStorage.getItem('userType') === 'student';
+    this.isStudent = this.authenticationService.retrieveUserType() === UserType.STUDENT;
   }
 
   logout() {
