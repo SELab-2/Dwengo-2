@@ -16,7 +16,7 @@ describe('UserService', () => {
 
     beforeEach(() => {
         http = jasmine.createSpyObj('HttpClient', ['get']);
-        authService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveToken']);
+        authService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveToken', 'retrieveUserType']);
         errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler']);
 
         // Mock the return values of the AuthenticationService methods
