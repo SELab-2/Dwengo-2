@@ -90,7 +90,7 @@ describe("AuthenticationManager", () => {
     it("refreshes token", async () => {
         const oldTokens = await authManager.authenticate("t@example.com", "pass");
         await new Promise(resolve => setTimeout(resolve, 1100));
-        const newTokens = await authManager.refreshAccessToken(oldTokens!.refreshToken);
+        const newTokens = authManager.refreshAccessToken(oldTokens!.refreshToken);
         expect(newTokens).not.toBeNull();
         expect(newTokens!.accessToken).not.toBe(oldTokens!.accessToken);
         const payload = authManager.verifyToken(newTokens!.accessToken);
@@ -98,8 +98,8 @@ describe("AuthenticationManager", () => {
     });
     it("blocks used refresh token", async () => {
         const tokens = await authManager.authenticate("t@example.com", "pass");
-        await authManager.refreshAccessToken(tokens!.refreshToken);
-        const retry = await authManager.refreshAccessToken(tokens!.refreshToken);
+        authManager.refreshAccessToken(tokens!.refreshToken);
+        const retry = authManager.refreshAccessToken(tokens!.refreshToken);
         expect(retry).toBeNull();
     });
     it("cleans up used tokens after expiry", async () => {
@@ -111,7 +111,7 @@ describe("AuthenticationManager", () => {
             "1s",
         );
         const tokens = await authShort.authenticate("s@example.com", "pass");
-        await authShort.refreshAccessToken(tokens!.refreshToken);
+        authShort.refreshAccessToken(tokens!.refreshToken);
         await new Promise(resolve => setTimeout(resolve, 1100));
         expect((authShort as any).usedRefreshTokens.size).toBe(0);
     });
