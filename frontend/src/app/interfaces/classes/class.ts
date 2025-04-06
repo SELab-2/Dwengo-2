@@ -12,4 +12,6 @@ export interface Class {
     assignments?: Assignment[],
     studentCount?: number,
     completionPercentage?: number,
+    submissionActivity?: number[],
+    averageScore?: number,
 }

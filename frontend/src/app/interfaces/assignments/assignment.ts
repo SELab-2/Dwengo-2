@@ -5,4 +5,6 @@ export interface Assignment {
     deadline: Date;
     extraInstructions: string;
     learningPathId: string;
+    name?: string;
+    className?: string;
 }

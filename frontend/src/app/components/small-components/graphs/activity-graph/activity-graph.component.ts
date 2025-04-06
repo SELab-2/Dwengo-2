@@ -124,7 +124,7 @@ export class ActivityChartComponent implements OnInit {
       tooltip: {
         y: {
           formatter: function (val) {
-            return val + " submissions (in total)";
+            return val + " submissions";
           }
         }
       }

@@ -12,11 +12,11 @@ import { ActivityChartComponent, ActivityChartData } from '../small-components/g
 import { MenuCardComponent } from '../small-components/menu-card/menu-card.component';
 import { ClassesService } from '../../services/classes.service';
 import { AssignmentsService } from '../../services/assignments.service';
-import { NewAssignment } from '../../interfaces/assignments/newAssignment';
 import { Class } from '../../interfaces/classes/class';
 import { MockServices } from './mock-services';
 import { Assignment } from '../../interfaces/assignments/assignment';
 import { ClassOverviewWidgetComponent } from '../small-components/class-overview-widget/class-overview-widget.component';
+import { DeadlinesWidgetComponent } from '../small-components/upcoming-deadlines-widget/upcoming-deadline-widget.component';
 
 
 
@@ -24,7 +24,7 @@ import { ClassOverviewWidgetComponent } from '../small-components/class-overview
 @Component({
   selector: 'app-teacher-dashboard',
   standalone: true,
-  imports: [RouterLink, CommonModule, HttpClientModule, MatIconModule, NgApexchartsModule, ClassChartComponent, ActivityChartComponent, MenuCardComponent, ClassOverviewWidgetComponent],
+  imports: [RouterLink, CommonModule, HttpClientModule, MatIconModule, NgApexchartsModule, ClassChartComponent, ActivityChartComponent, MenuCardComponent, ClassOverviewWidgetComponent, DeadlinesWidgetComponent],
   templateUrl: './teacher-dashboard.component.html',
   styleUrls: ['./teacher-dashboard.component.less']
 })
@@ -37,7 +37,7 @@ export class TeacherDashboardComponent implements OnInit {
 
   selectedView: string | null = "classes";
   classes!: Class[];
-  assignments!: Assignment[];
+  assignments!: { deadline: Date, name: string, id: string, className: string }[];
 
   // This is all mock data, awaiting some API functionality after refactor
   classesTitle: string = $localize`:@@viewClasses:View Classes`;
@@ -47,18 +47,20 @@ export class TeacherDashboardComponent implements OnInit {
   constructor(private classesService: ClassesService, private assignmentsService: AssignmentsService) { }
 
   private retrieveData(): void {
-    // this.classesService.classesOfUser().subscribe(classes => {
-    //   this.classes = classes;
-    //   this.classChartData = classes.map(c => new ClassChartData(c.name, /*TODO: progress*/2, /*TODO: finished students*/1));
-    //   this.activityChartData = classes.map(c => new ActivityChartData(c.name, /*TODO: activity*/[4, 10, 41, 35, 51, 49, 62, 69, 73, 86]));
-    //   console.log(this.classChartData, this.activityChartData);
-    // });
-    // this.assignmentsService.assignmentsOfUser().subscribe(assignments => {
-    //   console.log(assignments);
-    // });
     this.classes = MockServices.getData()
-    this.classChartData = this.classes.map(c => new ClassChartData(c.name, /*TODO: progress*/2, /*TODO: finished students*/1));
-    this.activityChartData = this.classes.map(c => new ActivityChartData(c.name, /*TODO: activity*/[4, 10, 41, 35, 51, 49, 62, 69, 73, 86]));
+    this.assignments = this.classes.map(c => {
+      if (c.assignments) return c.assignments.map(a => {
+        return {
+          name: a.name!,
+          deadline: a.deadline,
+          className: c.name,
+          id: a.id,
+        };
+      });
+      return [];
+    }).flat();
+    this.classChartData = this.classes.map(c => new ClassChartData(c.name, /*TODO: progress*/c.averageScore!));
+    this.activityChartData = this.classes.map(c => new ActivityChartData(c.name, /*TODO: activity*/c.submissionActivity!));
   }
 
   ngOnInit(): void {
@@ -76,15 +78,6 @@ export class TeacherDashboardComponent implements OnInit {
       console.log(response));
   }
 
-  deadlines = ["Math Exam - Jan 17th", "History Essay - Feb 7th", "Science Report - May 26th"];
-  questions = [
-    { assignment: "Math Homework", question: "What is Pythagoras' theorem?" },
-    { assignment: "Science Project", question: "How do you calculate force?" }
-  ];
-  notifications = [
-    { name: "Dirk", data: "Wants to join 'Physics'" },
-    { name: "Kevin", data: "Asked you a question" },
-  ]
   public classChartData!: ClassChartData[];
   public activityChartData!: ActivityChartData[];
 

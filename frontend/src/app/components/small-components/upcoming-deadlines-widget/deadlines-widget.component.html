@@ -1,0 +1,14 @@
+<mat-card class="deadlines-card">
+    <mat-card-title i18n>Upcoming Deadlines</mat-card-title>
+
+    <div class="deadline-list">
+        <mat-card *ngFor="let assignment of getSortedAssignments()" class="deadline-item"
+            routerLink="/teacher/assignments/{{assignment.id}}">
+            <mat-card-title>{{ assignment.name ?? "Unnamed" }}</mat-card-title>
+            <mat-card-content>
+                <p><strong i18n>Deadline:</strong> {{ formatDate(assignment.deadline) }}</p>
+                <p><strong i18n>Class:</strong> {{ assignment.className ?? "unknown" }}</p>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</mat-card>

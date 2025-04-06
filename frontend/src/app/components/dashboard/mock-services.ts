@@ -13,6 +13,9 @@ export class MockServices {
                 assignments: [],
                 studentCount: 29,
                 completionPercentage: 100,
+                submissionActivity: [3, 5, 8, 7, 6, 9, 1],
+                averageScore: 48,
+
             },
             {
                 id: "202",
@@ -22,9 +25,12 @@ export class MockServices {
                 teacherId: "T1002",
                 studentCount: 12,
                 completionPercentage: 29,
+                submissionActivity: [1, 2, 5, 7, 3, 5, 4, 3, 2, 1, 1, 2, 3, 4],
+                averageScore: 25,
                 assignments: [
                     {
                         id: "1",
+                        name: "Hoofdstuk 1 Oefeningen",
                         classId: "202",
                         startDate: new Date("2025-04-01"),
                         deadline: new Date("2025-04-10"),
@@ -41,9 +47,12 @@ export class MockServices {
                 teacherId: "T1003",
                 studentCount: 134,
                 completionPercentage: 34,
+                submissionActivity: [12, 15, 18, 10, 8, 5, 2, 7],
+                averageScore: 81,
                 assignments: [
                     {
                         id: "2",
+                        name: "Video over Natuurkunde",
                         classId: "203",
                         startDate: new Date("2025-04-05"),
                         deadline: new Date("2025-04-15"),
@@ -52,6 +61,7 @@ export class MockServices {
                     },
                     {
                         id: "3",
+                        name: "Onderzoekspresentatie",
                         classId: "203",
                         startDate: new Date("2025-04-07"),
                         deadline: new Date("2025-04-17"),
@@ -60,6 +70,7 @@ export class MockServices {
                     },
                     {
                         id: "4",
+                        name: "Artikel en Vragen",
                         classId: "203",
                         startDate: new Date("2025-04-08"),
                         deadline: new Date("2025-04-18"),
@@ -68,6 +79,7 @@ export class MockServices {
                     },
                     {
                         id: "5",
+                        name: "Samenvatting Hoofdstuk 5",
                         classId: "203",
                         startDate: new Date("2025-04-09"),
                         deadline: new Date("2025-04-19"),
@@ -83,14 +95,10 @@ export class MockServices {
                 targetAudience: "Eerstejaars studenten",
                 teacherId: "T1004",
                 assignments: [],
-            },
-            {
-                id: "204",
-                name: "Chemie Basis",
-                description: "Een overzicht van de fundamentele principes van chemie.",
-                targetAudience: "Eerstejaars studenten",
-                teacherId: "T1004",
-                assignments: [],
+                studentCount: 30,
+                completionPercentage: 80,
+                submissionActivity: [8, 6, 7, 5, 1, 3],
+                averageScore: 41,
             },
             {
                 id: "205",
@@ -100,9 +108,12 @@ export class MockServices {
                 teacherId: "T1005",
                 studentCount: 17,
                 completionPercentage: 69,
+                submissionActivity: [5, 3, 12, 8, 9, 6, 7],
+                averageScore: 63,
                 assignments: [
                     {
                         id: "6",
+                        name: "Cijferanalyse Programma",
                         classId: "205",
                         startDate: new Date("2025-05-01"),
                         deadline: new Date("2025-05-10"),
@@ -111,6 +122,7 @@ export class MockServices {
                     },
                     {
                         id: "7",
+                        name: "Zoekproblemen Algoritme",
                         classId: "205",
                         startDate: new Date("2025-05-11"),
                         deadline: new Date("2025-05-20"),
@@ -119,6 +131,7 @@ export class MockServices {
                     },
                     {
                         id: "8",
+                        name: "Boekenbibliotheek Database",
                         classId: "205",
                         startDate: new Date("2025-05-21"),
                         deadline: new Date("2025-05-30"),
@@ -127,6 +140,7 @@ export class MockServices {
                     },
                     {
                         id: "9",
+                        name: "Principes van AI",
                         classId: "205",
                         startDate: new Date("2025-06-01"),
                         deadline: new Date("2025-06-10"),
