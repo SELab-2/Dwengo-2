@@ -7,7 +7,7 @@ import {
   NgApexchartsModule,
   ChartComponent
 } from "ng-apexcharts";
-import { ClassChartComponent, ClassChartData } from '../small-components/graphs/class-graph/class-graph.component';
+import { ClassChartComponent, ClassGraphComponent } from '../small-components/graphs/class-graph/class-graph.component';
 import { ActivityChartComponent, ActivityChartData } from '../small-components/graphs/activity-graph/activity-graph.component';
 import { MenuCardComponent } from '../small-components/menu-card/menu-card.component';
 import { ClassesService } from '../../services/classes.service';
@@ -60,7 +60,7 @@ export class TeacherDashboardComponent implements OnInit {
       });
       return [];
     }).flat();
-    this.classChartData = this.classes.map(c => new ClassChartData(c.name, c.averageScore!));
+    this.classChartData = this.classes.map(c => new ClassGraphComponent(c.name, c.averageScore!));
     this.activityChartData = this.classes.map(c => new ActivityChartData(c.name, c.submissionActivity!));
   }
 
@@ -68,7 +68,7 @@ export class TeacherDashboardComponent implements OnInit {
     this.retrieveData();
   }
 
-  public classChartData!: ClassChartData[];
+  public classChartData!: ClassGraphComponent[];
   public activityChartData!: ActivityChartData[];
 
   setView(view: string) {

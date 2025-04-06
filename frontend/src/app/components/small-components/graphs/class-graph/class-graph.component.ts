@@ -32,7 +32,7 @@ export type BarChartOptions = {
   legend: ApexLegend;
 };
 
-export class ClassChartData {
+export class ClassGraphComponent {
   /**
    * Class to represent the chart data for ONE class:
    * @param _name the classname
@@ -60,7 +60,7 @@ export class ClassChartData {
 })
 export class ClassChartComponent implements OnInit {
 
-  @Input() classChartData!: ClassChartData[];
+  @Input() classChartData!: ClassGraphComponent[];
 
   selectedView: string | null = null;
 
@@ -69,7 +69,7 @@ export class ClassChartComponent implements OnInit {
     this.initializeBarChart(this.classChartData);
   }
 
-  private initializeBarChart(classChartData: ClassChartData[]) {
+  private initializeBarChart(classChartData: ClassGraphComponent[]) {
     // Again, this is mock data. 
     this.barChartOptions = {
       series: [
