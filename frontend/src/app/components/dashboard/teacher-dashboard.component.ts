@@ -14,7 +14,6 @@ import { ClassesService } from '../../services/classes.service';
 import { AssignmentsService } from '../../services/assignments.service';
 import { Class } from '../../interfaces/classes/class';
 import { MockServices } from './mock-services';
-import { Assignment } from '../../interfaces/assignments/assignment';
 import { ClassOverviewWidgetComponent } from '../small-components/class-overview-widget/class-overview-widget.component';
 import { DeadlinesWidgetComponent } from '../small-components/upcoming-deadlines-widget/deadlines-widget.component';
 

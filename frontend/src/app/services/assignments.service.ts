@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, of, switchMap } from 'rxjs';
-import { Class } from "../interfaces/classes/class";
 import { environment } from "../../environments/environment";
 import { AuthenticationService } from "./authentication.service";
 import { AssignmentsResponse } from "../interfaces/assignments/assignmentsResponse";

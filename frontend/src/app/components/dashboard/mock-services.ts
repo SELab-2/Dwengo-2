@@ -1,4 +1,3 @@
-import { Assignment } from "../../interfaces/assignments/assignment";
 import { Class } from "../../interfaces/classes/class";
 
 export class MockServices {
