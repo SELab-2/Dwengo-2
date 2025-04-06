@@ -47,6 +47,7 @@ export class TeacherDashboardComponent implements OnInit {
   constructor(private classesService: ClassesService, private assignmentsService: AssignmentsService) { }
 
   private retrieveData(): void {
+    // TODO: use services
     this.classes = MockServices.getData()
     this.assignments = this.classes.map(c => {
       if (c.assignments) return c.assignments.map(a => {
@@ -59,23 +60,12 @@ export class TeacherDashboardComponent implements OnInit {
       });
       return [];
     }).flat();
-    this.classChartData = this.classes.map(c => new ClassChartData(c.name, /*TODO: progress*/c.averageScore!));
-    this.activityChartData = this.classes.map(c => new ActivityChartData(c.name, /*TODO: activity*/c.submissionActivity!));
+    this.classChartData = this.classes.map(c => new ClassChartData(c.name, c.averageScore!));
+    this.activityChartData = this.classes.map(c => new ActivityChartData(c.name, c.submissionActivity!));
   }
 
   ngOnInit(): void {
     this.retrieveData();
-  }
-
-  makeAssignment = () => {
-    this.assignmentsService.createAssignment({
-      classId: "36f11a76-76a3-4477-9022-72ddab83cbd1",
-      startDate: new Date(),
-      deadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      learningPathId: "1234",
-      extraInstructions: "Test"
-    }).subscribe(response =>
-      console.log(response));
   }
 
   public classChartData!: ClassChartData[];
