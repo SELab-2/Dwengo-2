@@ -1,6 +1,6 @@
 import { app } from "../src/app"
 import request from "supertest"
-import log4js from "log4js";
+import bcript from "bcryptjs"
 import { MockTypeORM } from "mock-typeorm"
 import { UserTypeORM } from "../src/infrastructure/database/data/data_models/userTypeorm";
 import { Student } from "../src/core/entities/student";
@@ -9,7 +9,7 @@ import { Server } from "http";
 import { logger } from "../src/config/logger";
 import { DataSource } from "typeorm";
 
-describe("Test users API endpoints", () => {
+describe("Test authentication API endpoints", () => {
     let typeorm: MockTypeORM;
     let mockUser: object;
     let userModel: UserTypeORM;
@@ -26,12 +26,12 @@ describe("Test users API endpoints", () => {
         server.close();        
     });
 
-    beforeEach(() => {
+    beforeEach(async () => {
         mockUser = {
             "email": "jan12@gmail.com",
             "firstName": "Jan",
             "familyName": "De nul",
-            "password": "12345678",
+            "password": await bcript.hash("12345678", 10),
             "schoolName": "Yale",
             "userType": "student"
         }
@@ -39,7 +39,7 @@ describe("Test users API endpoints", () => {
             "jan12@gmail.com",
             "Jan",
             "De nul",
-            "12345678",
+            await bcript.hash("12345678", 10),
             "Yale"
         )
         userModel = UserTypeORM.createUserTypeORM(student);
@@ -52,8 +52,8 @@ describe("Test users API endpoints", () => {
         typeorm.resetAll();
     })
 
-    describe("POST user", () => {
-        beforeEach(() => {
+    describe("POST /register", () => {
+        beforeEach(async () => {
             typeorm.onMock('UserTypeORM').toReturn(userModel, 'save');
             typeorm.onMock('StudentTypeORM').toReturn(studentModel, 'save');
         });
@@ -68,6 +68,33 @@ describe("Test users API endpoints", () => {
             expect(response.status).toBe(201);
             expect(response.body).toHaveProperty("id");
             expect(response.body.id).toEqual("student-123");
+        });
+    });
+
+    describe("POST /login", () => {
+        beforeEach(() => {
+            typeorm.onMock('UserTypeORM').toReturn(userModel, 'findOne');
+            typeorm.onMock('StudentTypeORM').toReturn(studentModel, 'findOne');
+        })
+
+        it("should login a user and return 200 status", async () => {
+            const response = await request(app)
+                .post('/login')
+                .send({
+                    "email": "jan12@gmail.com",
+                    "password": "12345678"
+                })
+                .set("Content-Type", "application/json");
+
+            expect(response.status).toBe(200);
+            expect(response.body).toHaveProperty("id");
+            expect(response.body).toHaveProperty("message")
+            expect(response.body).toHaveProperty("refreshToken");
+            expect(response.body).toHaveProperty("token");
+            expect(response.body).toHaveProperty("userType")
+            expect(response.body.id).toEqual("student-123");
+            expect(response.body.message).toEqual("Authentication successful");
+            expect(response.body.userType).toEqual("student");
         });
     });
 })

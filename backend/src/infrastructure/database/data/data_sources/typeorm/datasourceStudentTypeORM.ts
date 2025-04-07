@@ -26,7 +26,6 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
 
     public async getStudentById(id: string): Promise<Student | null> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-
         const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
             where: { id: id },
             relations: ["student"],
@@ -34,7 +33,6 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
 
         if (studentModel !== null) {
             const t: Student = studentModel.toStudentEntity(studentModel.student);
-            console.log(t);
             return t;
         } else {
             throw new EntityNotFoundError("Student not found");
@@ -44,11 +42,10 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
 
     public async getStudentByEmail(email: string): Promise<Student | null> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-
+        
         const userModel: UserTypeORM | null = await datasource
             .getRepository(UserTypeORM)
             .findOne({ where: { email: email } });
-
         if (userModel !== null) {
             const studentModel: StudentTypeORM | null = await datasource
                 .getRepository(StudentTypeORM)
@@ -231,7 +228,6 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .where("studentOfClass.class.id = :classId", { classId: classId })
             .getMany();
 
-        console.log(classJoinResult);
 
         return classJoinResult.map(classJoinResult => {
             return classJoinResult.student.toStudentEntity(classJoinResult.student.student);
@@ -245,8 +241,6 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             where: { id: assignmentId },
             relations: ["class"],
         });
-
-        console.log(assignmentModel);
 
         if (!assignmentModel) throw new EntityNotFoundError("Assignment not Found");
         else return await this.getClassStudents(assignmentModel.class.id);
