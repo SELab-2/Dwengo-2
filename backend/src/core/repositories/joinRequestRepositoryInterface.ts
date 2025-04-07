@@ -1,5 +1,5 @@
 import { AbstractRepository } from "./abstractRepository";
-import { JoinRequest } from "../entities/joinRequest";
+import { JoinRequest, JoinRequestType } from "../entities/joinRequest";
 
 /**
  * Interface for join request repositories.
@@ -15,6 +15,16 @@ export abstract class IJoinRequestRepository extends AbstractRepository {
      * @returns A promise that resolves to the inserted join request.
      */
     public abstract create(joinRequest: JoinRequest): Promise<JoinRequest>;
+    
+
+    /**
+     * Marks a join code as expired.
+     * No students will be able to use this join code after the code is expired.
+     * @param code The actual alphanumerical code as a string.
+     * @param userId The id of the user that wants to join.
+     * @param type The type of the user. The role that the user will get in the class (student or teacher)
+     */
+    public abstract createUsingCode(code: string, userId: string, type: JoinRequestType): Promise<JoinRequest>;
 
     /**
      * Get a join request by its id.
