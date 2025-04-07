@@ -16,17 +16,19 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
                 where: { id: joinRequest.requester },
                 relations: ["teacher"],
             });
-            id = teacher?.teacher.id || "";
+            if (!teacher) {
+                throw new DatabaseEntryNotFoundError(`Teacher with id ${joinRequest.requester} not found`);
+            }
+            id = teacher.teacher.id;
         } else {
             const student: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
-                where: { id: joinRequest.requester },
+                where: { id: joinRequest.requester }, // requester is the id of the user. Match the user in the student table
                 relations: ["student"],
             });
-            id = student?.student.id || "";
-        }
-
-        if (id === "") {
-            throw new DatabaseEntryNotFoundError(`Student or teacher with id ${joinRequest.requester} not found`);
+            if (!student) {
+                throw new DatabaseEntryNotFoundError(`Student with id ${joinRequest.requester} not found`);
+            }
+            id = student.student.id;
         }
 
         // Create partial object
@@ -51,8 +53,11 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
             where: { id: id },
             relations: ["requester", "class"],
         });
+        if (!joinRequest) {
+            return null;
+        }
 
-        return joinRequest?.toJoinRequestEntity() || null;
+        return joinRequest.toJoinRequestEntity();
     }
 
     public async getJoinRequestByRequesterId(requesterId: string): Promise<JoinRequest[]> {
