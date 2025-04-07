@@ -2,9 +2,13 @@
     <h2 i18n>Pending requests</h2>
     
     @for (joinRequest of joinRequests; track joinRequest.id) {
-        <p>
-            {{joinRequest.id}}
-        </p>
+        <p>{{joinRequest.id}}</p>
+        <button mat-mini-fab aria-label="accept">
+            <mat-icon>check</mat-icon>
+        </button>
+        <button mat-mini-fab color="warn" aria-label="reject">
+            <mat-icon>close</mat-icon>
+        </button>
     } @empty {
         <p i18n>No requests yet</p>
     }
