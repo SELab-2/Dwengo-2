@@ -1,20 +1,19 @@
+import { Assignment } from "../../interfaces/assignments/assignment";
 import { Class } from "../../interfaces/classes/class";
 
 export class MockServices {
-    public static getData = () => {
-        const classes: Class[] = [
+    public static getClasses = () => {
+        return [
             {
                 id: "201",
                 name: "Biologie 101",
                 description: "Een introductie tot de biologie.",
                 targetAudience: "Eerstejaars studenten",
                 teacherId: "T1001",
-                assignments: [],
                 studentCount: 29,
                 completionPercentage: 100,
                 submissionActivity: [3, 5, 8, 7, 6, 9, 1],
                 averageScore: 48,
-
             },
             {
                 id: "202",
@@ -26,17 +25,6 @@ export class MockServices {
                 completionPercentage: 29,
                 submissionActivity: [1, 2, 5, 7, 3, 5, 4, 3, 2, 1, 1, 2, 3, 4],
                 averageScore: 25,
-                assignments: [
-                    {
-                        id: "1",
-                        name: "Hoofdstuk 1 Oefeningen",
-                        classId: "202",
-                        startDate: new Date("2025-04-01"),
-                        deadline: new Date("2025-04-10"),
-                        extraInstructions: "Lees hoofdstuk 1 en maak de oefeningen.",
-                        learningPathId: "LP2001",
-                    }
-                ],
             },
             {
                 id: "203",
@@ -48,44 +36,6 @@ export class MockServices {
                 completionPercentage: 34,
                 submissionActivity: [12, 15, 18, 10, 8, 5, 2, 7],
                 averageScore: 81,
-                assignments: [
-                    {
-                        id: "2",
-                        name: "Video over Natuurkunde",
-                        classId: "203",
-                        startDate: new Date("2025-04-05"),
-                        deadline: new Date("2025-04-15"),
-                        extraInstructions: "Bekijk de video over natuurkunde.",
-                        learningPathId: "LP2002",
-                    },
-                    {
-                        id: "3",
-                        name: "Onderzoekspresentatie",
-                        classId: "203",
-                        startDate: new Date("2025-04-07"),
-                        deadline: new Date("2025-04-17"),
-                        extraInstructions: "Doe onderzoek naar het onderwerp en presenteer het.",
-                        learningPathId: "LP2003",
-                    },
-                    {
-                        id: "4",
-                        name: "Artikel en Vragen",
-                        classId: "203",
-                        startDate: new Date("2025-04-08"),
-                        deadline: new Date("2025-04-18"),
-                        extraInstructions: "Lees het artikel en beantwoord de vragen.",
-                        learningPathId: "LP2003",
-                    },
-                    {
-                        id: "5",
-                        name: "Samenvatting Hoofdstuk 5",
-                        classId: "203",
-                        startDate: new Date("2025-04-09"),
-                        deadline: new Date("2025-04-19"),
-                        extraInstructions: "Maak een samenvatting van hoofdstuk 5.",
-                        learningPathId: "LP2003",
-                    },
-                ],
             },
             {
                 id: "204",
@@ -93,7 +43,6 @@ export class MockServices {
                 description: "Een overzicht van de fundamentele principes van chemie.",
                 targetAudience: "Eerstejaars studenten",
                 teacherId: "T1004",
-                assignments: [],
                 studentCount: 30,
                 completionPercentage: 80,
                 submissionActivity: [8, 6, 7, 5, 1, 3],
@@ -109,46 +58,93 @@ export class MockServices {
                 completionPercentage: 69,
                 submissionActivity: [5, 3, 12, 8, 9, 6, 7],
                 averageScore: 63,
-                assignments: [
-                    {
-                        id: "6",
-                        name: "Cijferanalyse Programma",
-                        classId: "205",
-                        startDate: new Date("2025-05-01"),
-                        deadline: new Date("2025-05-10"),
-                        extraInstructions: "Schrijf een programma om cijfers te analyseren.",
-                        learningPathId: "LP2004",
-                    },
-                    {
-                        id: "7",
-                        name: "Zoekproblemen Algoritme",
-                        classId: "205",
-                        startDate: new Date("2025-05-11"),
-                        deadline: new Date("2025-05-20"),
-                        extraInstructions: "Maak een algoritme voor zoekproblemen.",
-                        learningPathId: "LP2005",
-                    },
-                    {
-                        id: "8",
-                        name: "Boekenbibliotheek Database",
-                        classId: "205",
-                        startDate: new Date("2025-05-21"),
-                        deadline: new Date("2025-05-30"),
-                        extraInstructions: "Ontwerp een database voor een boekenbibliotheek.",
-                        learningPathId: "LP2006",
-                    },
-                    {
-                        id: "9",
-                        name: "Principes van AI",
-                        classId: "205",
-                        startDate: new Date("2025-06-01"),
-                        deadline: new Date("2025-06-10"),
-                        extraInstructions: "Onderzoek de principes van kunstmatige intelligentie.",
-                        learningPathId: "LP2007",
-                    },
-                ],
             },
-        ];
-        return classes;
+        ] as Class[];
+    }
+    public static getAssignments = () => {
+        return [
+            {
+                id: "1",
+                name: "Hoofdstuk 1 Oefeningen",
+                classId: "202",
+                startDate: new Date("2025-04-01"),
+                deadline: new Date("2025-04-10"),
+                extraInstructions: "Lees hoofdstuk 1 en maak de oefeningen.",
+                learningPathId: "LP2001",
+            },
+            {
+                id: "2",
+                name: "Video over Natuurkunde",
+                classId: "203",
+                startDate: new Date("2025-04-05"),
+                deadline: new Date("2025-04-15"),
+                extraInstructions: "Bekijk de video over natuurkunde.",
+                learningPathId: "LP2002",
+            },
+            {
+                id: "3",
+                name: "Onderzoekspresentatie",
+                classId: "203",
+                startDate: new Date("2025-04-07"),
+                deadline: new Date("2025-04-17"),
+                extraInstructions: "Doe onderzoek naar het onderwerp en presenteer het.",
+                learningPathId: "LP2003",
+            },
+            {
+                id: "4",
+                name: "Artikel en Vragen",
+                classId: "203",
+                startDate: new Date("2025-04-08"),
+                deadline: new Date("2025-04-18"),
+                extraInstructions: "Lees het artikel en beantwoord de vragen.",
+                learningPathId: "LP2003",
+            },
+            {
+                id: "5",
+                name: "Samenvatting Hoofdstuk 5",
+                classId: "203",
+                startDate: new Date("2025-04-09"),
+                deadline: new Date("2025-04-19"),
+                extraInstructions: "Maak een samenvatting van hoofdstuk 5.",
+                learningPathId: "LP2003",
+            },
+            {
+                id: "6",
+                name: "Cijferanalyse Programma",
+                classId: "205",
+                startDate: new Date("2025-05-01"),
+                deadline: new Date("2025-05-10"),
+                extraInstructions: "Schrijf een programma om cijfers te analyseren.",
+                learningPathId: "LP2004",
+            },
+            {
+                id: "7",
+                name: "Zoekproblemen Algoritme",
+                classId: "205",
+                startDate: new Date("2025-05-11"),
+                deadline: new Date("2025-05-20"),
+                extraInstructions: "Maak een algoritme voor zoekproblemen.",
+                learningPathId: "LP2005",
+            },
+            {
+                id: "8",
+                name: "Boekenbibliotheek Database",
+                classId: "205",
+                startDate: new Date("2025-05-21"),
+                deadline: new Date("2025-05-30"),
+                extraInstructions: "Ontwerp een database voor een boekenbibliotheek.",
+                learningPathId: "LP2006",
+            },
+            {
+                id: "9",
+                name: "Principes van AI",
+                classId: "205",
+                startDate: new Date("2025-06-01"),
+                deadline: new Date("2025-06-10"),
+                extraInstructions: "Onderzoek de principes van kunstmatige intelligentie.",
+                learningPathId: "LP2007",
+            },
+        ] as Assignment[];
+
     }
 }

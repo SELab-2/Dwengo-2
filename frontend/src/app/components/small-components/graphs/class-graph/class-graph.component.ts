@@ -61,6 +61,7 @@ export class ClassGraphComponent {
 export class ClassChartComponent implements OnInit {
 
   @Input() classChartData!: ClassGraphComponent[];
+  @Input() displayContent!: boolean;
 
   selectedView: string | null = null;
 

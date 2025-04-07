@@ -59,6 +59,7 @@ export class ActivityChartData {
 export class ActivityChartComponent implements OnInit {
 
   @Input() activityChartData!: ActivityChartData[];
+  @Input() displayContent!: boolean;
 
   selectedView: string | null = null;
 

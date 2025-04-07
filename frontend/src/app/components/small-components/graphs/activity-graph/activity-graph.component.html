@@ -8,17 +8,25 @@
     </mat-card-header>
 
     <mat-card-content>
-        <ng-container *ngIf="lineChartOptions.series?.length; else loading">
-            <apx-chart class="chart" [series]="lineChartOptions.series!" [chart]="lineChartOptions.chart!"
-                [xaxis]="lineChartOptions.xaxis!" [dataLabels]="lineChartOptions.dataLabels!"
-                [grid]="lineChartOptions.grid!" [stroke]="lineChartOptions.stroke!"
-                [tooltip]="lineChartOptions.tooltip!">
-            </apx-chart>
+        <ng-container *ngIf="displayContent; else noData">
+            <ng-container *ngIf="lineChartOptions.series?.length; else loading">
+                <apx-chart class="chart" [series]="lineChartOptions.series!" [chart]="lineChartOptions.chart!"
+                    [xaxis]="lineChartOptions.xaxis!" [dataLabels]="lineChartOptions.dataLabels!"
+                    [grid]="lineChartOptions.grid!" [stroke]="lineChartOptions.stroke!"
+                    [tooltip]="lineChartOptions.tooltip!">
+                </apx-chart>
+            </ng-container>
         </ng-container>
+
 
         <ng-template #loading>
             <div class="loading-container">
                 <mat-spinner></mat-spinner>
+            </div>
+        </ng-template>
+        <ng-template #noData>
+            <div class="no-data-container">
+                <p i18n>No data available</p>
             </div>
         </ng-template>
     </mat-card-content>

@@ -16,6 +16,7 @@ import { Class } from '../../interfaces/classes/class';
 import { MockServices } from './mock-services';
 import { ClassOverviewWidgetComponent } from '../small-components/class-overview-widget/class-overview-widget.component';
 import { DeadlinesWidgetComponent } from '../small-components/upcoming-deadlines-widget/deadlines-widget.component';
+import { Assignment } from '../../interfaces/assignments/assignment';
 
 
 
@@ -35,8 +36,10 @@ export class TeacherDashboardComponent implements OnInit {
   createClassLink: string = '/teacher/classes/new/select';
 
   selectedView: string | null = "classes";
+  displayClassChart: boolean = false;
+  displayActivityChart: boolean = false;
   classes!: Class[];
-  assignments!: { deadline: Date, name: string, id: string, className: string }[];
+  assignments!: Assignment[];
 
   // This is all mock data, awaiting some API functionality after refactor
   classesTitle: string = $localize`:@@viewClasses:View Classes`;
@@ -47,30 +50,56 @@ export class TeacherDashboardComponent implements OnInit {
 
   private retrieveData(): void {
     // TODO: use services
-    this.classes = MockServices.getData()
-    this.assignments = this.classes.map(c => {
-      if (c.assignments) return c.assignments.map(a => {
+    this.classes = MockServices.getClasses();
+    const receivedAssignments = MockServices.getAssignments();
+
+    // Make one object where every class has its Assignment objects.
+    this.classes = this.classes.map(cls => ({
+      ...cls,
+      assignments: receivedAssignments.filter(assignment => assignment.classId === cls.id).map(a => {
         return {
-          name: a.name!,
-          deadline: a.deadline,
-          className: c.name,
+          ...a,
+          name: a.name ?? $localize`:@@unnamed:Unnamed`,
+          deadline: a.deadline ?? $localize`:@@noDeadline:No deadline found`,
+          className: cls.name ?? $localize`:@@unnamed:Unnamed`,
           id: a.id,
-        };
-      });
-      return [];
-    }).flat();
-    this.classChartData = this.classes.map(c => new ClassGraphComponent(c.name, c.averageScore!));
-    this.activityChartData = this.classes.map(c => new ActivityChartData(c.name, c.submissionActivity!));
+        } as Assignment;
+      })
+    }));
+
+    // Assignment array is needed in components like "upcoming-deadlines-widget"
+    this.assignments = this.classes.map(cls => cls.assignments!).flat();
+
+    // Use this data to fill the charts
+    this.fillCharts();
+  }
+
+  fillCharts(): void {
+    this.classChartData = this.classes.filter(c => c.averageScore).map(c => new ClassGraphComponent(c.name, c.averageScore!));
+    this.activityChartData = this.classes.filter(c => c.submissionActivity).map(c => new ActivityChartData(c.name, c.submissionActivity!));
+    if (this.classChartData.length > 0) this.displayClassChart = true;
+    if (this.activityChartData.length > 0) this.displayActivityChart = true;
   }
 
   ngOnInit(): void {
     this.retrieveData();
   }
 
-  public classChartData!: ClassGraphComponent[];
-  public activityChartData!: ActivityChartData[];
+  public classChartData: ClassGraphComponent[] = [];
+  public activityChartData: ActivityChartData[] = [];
 
   setView(view: string) {
     this.selectedView = view;
+  }
+
+  makeAssignment = () => {
+    this.assignmentsService.createAssignment({
+      classId: "36f11a76-76a3-4477-9022-72ddab83cbd1",
+      startDate: new Date(),
+      deadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      learningPathId: "1234",
+      extraInstructions: "Test"
+    }).subscribe(response =>
+      console.log(response));
   }
 }

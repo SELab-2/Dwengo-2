@@ -39,10 +39,9 @@
 
 
     <div class="charts">
-        <app-class-chart *ngIf="classChartData && classChartData.length > 0"
-            [classChartData]="classChartData"></app-class-chart>
+        <app-class-chart [classChartData]="classChartData" [displayContent]="displayClassChart"></app-class-chart>
 
-        <app-activity-chart *ngIf="activityChartData && activityChartData.length > 0"
-            [activityChartData]="activityChartData"></app-activity-chart>
+        <app-activity-chart [activityChartData]="activityChartData"
+            [displayContent]="displayActivityChart"></app-activity-chart>
     </div>
 </main>
