@@ -1,12 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Class } from '../../interfaces/classes/class';
-import { JoinRequest } from '../../interfaces/join-requests/joinRequest';
 import { JoinRequestService } from '../../services/join-request.service';
 import { AuthenticationService } from '../../services/authentication.service';
-import { User } from '../../interfaces';
-import { UserService } from '../../services/user.service';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { JoinRequestWithUser } from '../../interfaces/join-requests/joinRequestWithUser';
 
 @Component({
   selector: 'app-pending-requests',
@@ -22,12 +20,11 @@ export class PendingRequestsComponent implements OnInit {
 
   @Input() _class?: Class;
 
-  public joinRequests: JoinRequest[] = [];
+  public joinRequests: JoinRequestWithUser[] = [];
 
   public constructor(
     private authService: AuthenticationService,
-    private joinRequestService: JoinRequestService,
-    private userService: UserService
+    private joinRequestService: JoinRequestService
   ) {}
 
   public ngOnInit() {
@@ -35,17 +32,33 @@ export class PendingRequestsComponent implements OnInit {
     const classId: string | null = this._class?.id || null;
 
     if(classId && userId) {
+      // Get all join requests
       const joinRequests$ = this.joinRequestService.getJoinRequestsFromUserForClass(
         userId,
         classId
       );
 
-      joinRequests$.subscribe(response => 
-        this.joinRequests = response
-      );
+      joinRequests$.subscribe(response => {
+
+        // Fill users of those join requests
+        const joinRequestWithUser$ = this.joinRequestService.fillUsers(response);
+        joinRequestWithUser$.subscribe(joinRequests => {
+          this.joinRequests = joinRequests;
+        });
+
+      });
+
     } else {
       window.alert("Error occured with ids"); // TODO
     }
+  }
+
+  public acceptRequest(requestId: string) {
+
+  }
+
+  public rejectRequest(requestId: string) {
+
   }
 
 }

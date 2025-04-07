@@ -1,8 +1,8 @@
 import { UserType } from "../user";
 
-export interface JoinRequest {
+export interface JoinRequestResponse {
     id: string,
     requester: string,  // id
     class: string,      // id
-    userType: UserType    // 
+    userType: string
 }

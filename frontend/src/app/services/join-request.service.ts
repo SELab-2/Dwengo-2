@@ -8,6 +8,7 @@ import { JoinRequest } from "../interfaces/join-requests/joinRequest";
 import { UserJoinRequestsResponse } from "../interfaces/join-requests/userJoinRequestsResponse";
 import { User, UserType } from "../interfaces";
 import { JoinRequestWithUser } from "../interfaces/join-requests/joinRequestWithUser";
+import { JoinRequestResponse } from "../interfaces/join-requests/joinRequestResponse";
 
 @Injectable({
     providedIn: 'root'
@@ -37,24 +38,26 @@ export class JoinRequestService {
     }
 
     public getJoinRequestsFromUser(id: string): Observable<JoinRequest[]> {
-        return this.http.get<UserJoinRequestsResponse>(
-            `${this.API_URL}/users/${id}/requests`,
-            this.standardHeaders
-        ).pipe(
-            this.errorService.pipeHandler(),
-            switchMap(response => 
-                forkJoin(
-                    response.requests.map(requestId => 
-                        this.http.get<JoinRequest>( // TODO: will probably conflict with UserType enum
-                            `${this.API_URL}/requests/${requestId}`,
-                            this.standardHeaders
-                        ).pipe(
-                            this.errorService.pipeHandler()
-                        )
-                    )
-                )
-            )
-        );
+        // return this.http.get<UserJoinRequestsResponse>(
+        //     `${this.API_URL}/users/${id}/requests`,
+        //     this.standardHeaders
+        // ).pipe(
+        //     this.errorService.pipeHandler(),
+        //     switchMap(response => 
+        //         forkJoin(
+        //             response.requests.map(requestId => 
+        //                 this.http.get<JoinRequest>( // TODO: will probably conflict with UserType enum
+        //                     `${this.API_URL}/requests/${requestId}`,
+        //                     this.standardHeaders
+        //                 ).pipe(
+        //                     this.errorService.pipeHandler()
+        //                 )
+        //             )
+        //         )
+        //     )
+        // );
+
+        return of([])
     }
 
     public getJoinRequestsFromUserForClass(userId: string, classId: string): Observable<JoinRequest[]> {
@@ -70,8 +73,8 @@ export class JoinRequestService {
         // );
         return of([
             {
-                id: "b1fe24f1-4a55-400b-9ff0-95ee18e605ac",
-                requester: "123",
+                id: "1",
+                requester: "b1fe24f1-4a55-400b-9ff0-95ee18e605ac",
                 class: classId,
                 userType: UserType.STUDENT
             }
@@ -79,23 +82,28 @@ export class JoinRequestService {
     }
 
     public fillUsers(requests: JoinRequest[]): Observable<JoinRequestWithUser[]> {
+        // return forkJoin(
+        //     requests.map(request =>
+        //         this.http.get<User>(
+        //             `${this.API_URL}/users/${request.requester}`, {
+        //                 ...this.standardHeaders,
+        //                 params: {
+        //                     userType: request.userType.toString()
+        //                 }
+        //             }
+        //         ).pipe(
+        //             this.errorService.pipeHandler(),
+        //             map(user => {return {
+        //                 id: request.id,
+        //                 requester: user,
+        //                 class: request.class,
+        //                 userType: request.userType
+        //             }})
+        //         )
+        //     )
+        // );
 
-        return forkJoin(
-            requests.map(request =>
-                this.http.get<User>(
-                    `${this.API_URL}/users/${request.requester}`,
-                    this.standardHeaders
-                ).pipe(
-                    this.errorService.pipeHandler(),
-                    map(user => {return {
-                        id: request.id,
-                        requester: user,
-                        class: request.class,
-                        userType: request.userType
-                    }})
-                )
-            )
-        );
+        return of([])
     }
 
 }
