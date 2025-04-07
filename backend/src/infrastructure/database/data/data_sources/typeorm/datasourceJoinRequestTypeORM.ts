@@ -53,8 +53,11 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
             where: { id: id },
             relations: ["requester", "class"],
         });
+        if (!joinRequest) {
+            return null;
+        }
 
-        return joinRequest?.toJoinRequestEntity() || null;
+        return joinRequest.toJoinRequestEntity();
     }
 
     public async getJoinRequestByRequesterId(requesterId: string): Promise<JoinRequest[]> {
