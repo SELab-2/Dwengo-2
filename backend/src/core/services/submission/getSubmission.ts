@@ -11,10 +11,10 @@ export class GetSubmission extends SubmissionBaseService<GetSubmissionInput> {
     }
 }
 
-export type GetUsertSubmissionsInput = z.infer<typeof getUserSubmissionsSchema>;
+export type GetUserSubmissionsInput = z.infer<typeof getUserSubmissionsSchema>;
 
-export class GetUserSubmissions extends SubmissionBaseService<GetUsertSubmissionsInput> {
-    async execute(input: GetUsertSubmissionsInput): Promise<object> {
+export class GetUserSubmissions extends SubmissionBaseService<GetUserSubmissionsInput> {
+    async execute(input: GetUserSubmissionsInput): Promise<object> {
         const submissions: string[] = (
             input.assignmentId && input.learningObjectId
                 ? await this.submissionRepository.getAllForStudentInAssignmentStep(
