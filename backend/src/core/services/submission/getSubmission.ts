@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { SubmissionBaseService } from "./submissionBaseService";
-import { getSubmissionSchema } from "../../../application/schemas/submissionSchemas";
+import { getSubmissionSchema, getUserSubmissionsSchema } from "../../../application/schemas/submissionSchemas";
 
 export type GetSubmissionInput = z.infer<typeof getSubmissionSchema>;
 
@@ -11,15 +11,19 @@ export class GetSubmission extends SubmissionBaseService<GetSubmissionInput> {
     }
 }
 
-// TODO export type GetUsertSubmissionsInput = z.infer<typeof getUserSubmissionsSchema>;
-//
-// TODO export class GetUserSubmissions extends SubmissionBaseService<GetUsertSubmissionsInput> {
-//          TODO
-//          async execute(input: GetUsertSubmissionsInput): Promise<object> {
-//              const students: object[] = (await this.submissionRepository.getAssignmentStudents(input.assignmentId)).map(s =>
-//                  s.toObject(),
-//              );
-//              return { students: students };
-//          }
-//      }
-//
+export type GetUserSubmissionsInput = z.infer<typeof getUserSubmissionsSchema>;
+
+export class GetUserSubmissions extends SubmissionBaseService<GetUserSubmissionsInput> {
+    async execute(input: GetUserSubmissionsInput): Promise<object> {
+        const submissions: string[] = (
+            input.assignmentId && input.learningObjectId
+                ? await this.submissionRepository.getAllForStudentInAssignmentStep(
+                      input.idParent,
+                      input.assignmentId,
+                      input.learningObjectId,
+                  )
+                : await this.submissionRepository.getByStudentId(input.idParent)
+        ).map(submission => submission.id!);
+        return { submisisons: submissions };
+    }
+}
