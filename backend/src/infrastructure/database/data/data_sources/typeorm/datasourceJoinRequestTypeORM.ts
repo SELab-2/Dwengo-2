@@ -12,13 +12,13 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
         let id: string;
 
         if (joinRequest.type === JoinRequestType.TEACHER) {
-            const teacher: TeacherTypeORM | null = await this.datasource.getRepository(TeacherTypeORM).findOne({
+            const teacher: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
                 where: { teacher: { id: joinRequest.requester } }, // requester is the id of the user. Match the user in the teacher table
                 relations: ["teacher"],
             });
             id = teacher?.teacher.id || "";
         } else {
-            const student: StudentTypeORM | null = await this.datasource.getRepository(StudentTypeORM).findOne({
+            const student: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
                 where: { student: { id: joinRequest.requester } }, // requester is the id of the user. Match the user in the student table
                 relations: ["student"],
             });
