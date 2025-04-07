@@ -40,14 +40,14 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
         const userModel: UserTypeORM | null = await datasource
             .getRepository(UserTypeORM)
             .findOne({ where: { email: email } });
-        
+
         if (!userModel) {
             return null;
         }
         const teacherModel: TeacherTypeORM | null = await datasource
-                .getRepository(TeacherTypeORM)
-                .findOne({ where: { teacher: userModel } });
-        
+            .getRepository(TeacherTypeORM)
+            .findOne({ where: { teacher: userModel } });
+
         if (!teacherModel) {
             return null;
         }
@@ -65,9 +65,9 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
             return null;
         }
         const teacherModel: TeacherTypeORM | null = await datasource
-                .getRepository(TeacherTypeORM)
-                .findOne({ where: { teacher: userModel } });
-        
+            .getRepository(TeacherTypeORM)
+            .findOne({ where: { teacher: userModel } });
+
         if (!teacherModel) {
             return null;
         }
@@ -85,9 +85,9 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
             return null;
         }
         const teacherModel: TeacherTypeORM | null = await datasource
-                .getRepository(TeacherTypeORM)
-                .findOne({ where: { teacher: userModel } });
-        
+            .getRepository(TeacherTypeORM)
+            .findOne({ where: { teacher: userModel } });
+
         if (!teacherModel) {
             return null;
         }
