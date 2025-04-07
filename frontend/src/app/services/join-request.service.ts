@@ -80,22 +80,22 @@ export class JoinRequestService {
 
     public fillUsers(requests: JoinRequest[]): Observable<JoinRequestWithUser[]> {
 
-        return requests.map(request =>
-            this.http.get<User>(
-                `${this.API_URL}/users/${request.requester}`,
-                this.standardHeaders
-            ).pipe(
-                this.errorService.pipeHandler(),
-                map(user => {return {
-                    id: request.id,
-                    requester: user,
-                    class: request.class,
-                    UserType: request.userType
-                }})
+        return forkJoin(
+            requests.map(request =>
+                this.http.get<User>(
+                    `${this.API_URL}/users/${request.requester}`,
+                    this.standardHeaders
+                ).pipe(
+                    this.errorService.pipeHandler(),
+                    map(user => {return {
+                        id: request.id,
+                        requester: user,
+                        class: request.class,
+                        userType: request.userType
+                    }})
+                )
             )
         );
-
-        return of([]);
     }
 
 }
