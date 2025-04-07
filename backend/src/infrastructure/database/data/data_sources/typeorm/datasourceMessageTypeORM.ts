@@ -1,15 +1,17 @@
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Message } from "../../../../../core/entities/message";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
-import { IDatasourceMessage } from "../datasourceMessageInterface";
 
-export class DatasourceMessageTypeORM extends IDatasourceMessage {
+export class DatasourceMessageTypeORM extends DatasourceTypeORM {
     public async createMessage(message: Message): Promise<Message> {
-        const userRepository = this.datasource.getRepository(UserTypeORM);
-        const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
-        const messageRepository = this.datasource.getRepository(MessageTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const userRepository = datasource.getRepository(UserTypeORM);
+        const threadRepository = datasource.getRepository(QuestionThreadTypeORM);
+        const messageRepository = datasource.getRepository(MessageTypeORM);
 
         // We find the corresponding user.
         const userModel = await userRepository.findOne({ where: { id: message.senderId } });
@@ -34,7 +36,9 @@ export class DatasourceMessageTypeORM extends IDatasourceMessage {
     }
 
     public async getMessageById(id: string): Promise<Message | null> {
-        const messageModel: MessageTypeORM | null = await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const messageModel: MessageTypeORM | null = await datasource
             .getRepository(MessageTypeORM)
             .findOne({ where: { id: id } });
 
@@ -47,10 +51,12 @@ export class DatasourceMessageTypeORM extends IDatasourceMessage {
     }
 
     public async updateMessage(message: Message): Promise<Message> {
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
         if (!message.id) {
             throw new Error("Message id is required to update a message");
         }
-        const messageModel: MessageTypeORM | null = await this.datasource
+        const messageModel: MessageTypeORM | null = await datasource
             .getRepository(MessageTypeORM)
             .findOne({ where: { id: message.id } });
         if (!messageModel) {
@@ -62,7 +68,8 @@ export class DatasourceMessageTypeORM extends IDatasourceMessage {
     }
 
     public async deleteMessageById(id: string): Promise<void> {
-        const messageRepository = this.datasource.getRepository(MessageTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+        const messageRepository = datasource.getRepository(MessageTypeORM);
 
         const messageModel: MessageTypeORM | null = await messageRepository.findOne({ where: { id: id } });
 
