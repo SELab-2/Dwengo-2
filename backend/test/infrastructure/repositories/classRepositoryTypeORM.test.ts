@@ -1,17 +1,18 @@
 import { Class } from "../../../src/core/entities/class";
-import { IDatasourceClass } from "../../../src/infrastructure/database/data/data_sources/datasourceClassInterface";
+import { DatasourceClassTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceClassTypeORM";
 
 describe("ClassRepositoryTypeORM", () => {
 
     let newClass: Class;
 
-    let datasourceClass: IDatasourceClass;
+    let datasourceClass: DatasourceClassTypeORM;
 
     let returnClass: Class|null;
 
     beforeEach(() => {
         datasourceClass = {
             createClass: jest.fn(() => Promise.resolve(newClass)),
+            updateClass: jest.fn(() => Promise.resolve(newClass)),
             getClassById: jest.fn(() => Promise.resolve(newClass)),
             getClassByName: jest.fn(() => Promise.resolve(newClass)),
             getAllClasses: jest.fn(() => Promise.resolve([newClass, newClass])),
@@ -19,7 +20,7 @@ describe("ClassRepositoryTypeORM", () => {
         } as any;
 
         // Mock class
-        newClass = new Class("Programmeren", "Voor mensen die niet kunnen programmeren", "Beginners", "test_teacher_id");
+        newClass = new Class("Programmeren", "Voor mensen die niet kunnen programmeren", "Beginners", "test_teacher_id", "class_id");
     });
 
     test("createClass", async () => {
@@ -28,6 +29,16 @@ describe("ClassRepositoryTypeORM", () => {
         
         expect(datasourceClass.createClass).toHaveBeenCalledTimes(1);
         expect(datasourceClass.createClass).toHaveBeenCalledWith(newClass);
+        expect(returnClass).toEqual(newClass);
+    });
+
+    test("updateClass", async () => {
+        // Call function from repository
+        newClass.name = "UpdatedName";
+        returnClass = await datasourceClass.updateClass(newClass.id!, newClass);
+        
+        expect(datasourceClass.updateClass).toHaveBeenCalledTimes(1);
+        expect(datasourceClass.updateClass).toHaveBeenCalledWith(newClass.id!, newClass);
         expect(returnClass).toEqual(newClass);
     });
 

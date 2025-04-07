@@ -1,8 +1,7 @@
 import { StatusType, Submission } from "../../../src/core/entities/submission";
-import { IDatasourceSubmission } from "../../../src/infrastructure/database/data/data_sources/datasourceSubmissionInterface";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
-import { EntityNotFoundError } from "../../../src/config/error";
+import { DatasourceSubmissionTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceSubmissionTypeORM";
 
 describe("SubmissionRepositoryTypeORM", () => {
 
@@ -10,19 +9,10 @@ describe("SubmissionRepositoryTypeORM", () => {
     let datasourceFactoryMock: IDatasourceFactory;
     let submission: Submission;
 
-    let datasourceSubmission: IDatasourceSubmission;
+    let datasourceSubmission: DatasourceSubmissionTypeORM;
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceTeacher: jest.fn(),
-            getDatasourceClass: jest.fn(),
-            getDatasourceJoinRequest: jest.fn(),
-            getDatasourceAssignment: jest.fn(),
-            getDatasourceMessage: jest.fn(),
-            getDatasourceStudent: jest.fn(),
-            getDatasourceGroup: jest.fn(),
-            getDatasourceSubmission: jest.fn(),
-            getDatasourceThread: jest.fn(),
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),
@@ -34,7 +24,9 @@ describe("SubmissionRepositoryTypeORM", () => {
             update: jest.fn(() => Promise.resolve(submission)),
             getSubmissionsByClassId: jest.fn(() => Promise.resolve(submission)),
             getSubmissionsByLearningPathId: jest.fn(() => Promise.resolve([submission, submission])),
-            delete: jest.fn()
+            delete: jest.fn(),
+            getAllForStudentInAssignmentStep: jest.fn(() => Promise.resolve(submission)),
+            getByStudentId: jest.fn(() => Promise.resolve(submission)),
         } as any;
 
         // Mock submission
@@ -83,6 +75,34 @@ describe("SubmissionRepositoryTypeORM", () => {
     
             expect(datasourceSubmission.delete).toHaveBeenCalledTimes(1);
             expect(datasourceSubmission.delete).toHaveBeenCalledWith(createdSubmissionId);
+    });
+
+    test("getAllForStudentInAssignmentStep", async () => {
+
+        const id: string = await datasourceSubmission.create(submission);
+
+        const result: Submission[] = await datasourceSubmission.getAllForStudentInAssignmentStep(
+            submission.studentId,
+            submission.assignmentId,
+            submission.learningObjectId
+        );
+
+        expect(datasourceSubmission.getAllForStudentInAssignmentStep).toHaveBeenCalledTimes(1);
+        expect(datasourceSubmission.getAllForStudentInAssignmentStep).toHaveBeenCalledWith(
+            submission.studentId,
+            submission.assignmentId,
+            submission.learningObjectId
+        )
+    });
+
+    test("getByStudentId", async () => {
+
+        await datasourceSubmission.create(submission);
+
+        const result: Submission[] = await datasourceSubmission.getByStudentId(submission.studentId);
+
+        expect(datasourceSubmission.getByStudentId).toHaveBeenCalledTimes(1);
+        expect(datasourceSubmission.getByStudentId).toHaveBeenCalledWith(submission.studentId)
     });
 
 });

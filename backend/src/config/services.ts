@@ -62,7 +62,7 @@ export const services = {
         get: new Submission.GetSubmission(repos.submission),
         remove: new Submission.DeleteSubmission(repos.submission),
         create: new Submission.CreateSubmission(repos.submission),
-        getUserSubmissions: undefined, // TODO
+        getUserSubmissions: new Submission.GetUserSubmissions(repos.submission),
     },
     user: {
         get: new UserServices.GetUser(repos.student, repos.teacher),

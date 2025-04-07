@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
-import { TeacherOfClassTypeORM } from "./teacherOfClassTypeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { Class } from "../../../../core/entities/class";
 
 @Entity()
@@ -26,5 +25,15 @@ export class ClassTypeORM {
 
     public toClassEntity(teacherId: string): Class {
         return new Class(this.name, this.description, this.targetAudience, teacherId, this.id);
+    }
+
+    public fromPartialClassEntity(partialClass: Partial<Class>): Partial<ClassTypeORM> {
+        const updatedFields: Partial<ClassTypeORM> = {};
+
+        if (partialClass.name) updatedFields.name = partialClass.name;
+        if (partialClass.description) updatedFields.description = partialClass.description;
+        if (partialClass.targetAudience) updatedFields.targetAudience = partialClass.targetAudience;
+
+        return updatedFields;
     }
 }

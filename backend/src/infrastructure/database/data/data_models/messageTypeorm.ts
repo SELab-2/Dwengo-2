@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, Column, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, JoinColumn, ManyToOne, Column, CreateDateColumn } from "typeorm";
 import { QuestionThreadTypeORM } from "./questionThreadTypeorm";
 import { UserTypeORM } from "./userTypeorm";
 import { Message } from "../../../../core/entities/message";
@@ -8,11 +8,11 @@ export class MessageTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @OneToOne(() => QuestionThreadTypeORM)
+    @ManyToOne(() => QuestionThreadTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "thread_id" })
     thread!: QuestionThreadTypeORM;
 
-    @OneToOne(() => UserTypeORM)
+    @ManyToOne(() => UserTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "user_id" })
     sent_by!: UserTypeORM;
 

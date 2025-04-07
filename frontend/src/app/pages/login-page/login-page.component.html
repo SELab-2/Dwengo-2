@@ -1,5 +1,9 @@
 <app-unauthenticated-header></app-unauthenticated-header>
-<div class="login">
-    <h1>{{ this.userType | titlecase }} Login</h1>
-    <app-login [userType]="this.userType"></app-login>
-</div>
+
+<mat-card class="login">
+    <mat-card-title>{{ userType | titlecase }} Login</mat-card-title>
+    <mat-card-content>
+        <app-login [userType]="userType"></app-login>
+    </mat-card-content>
+</mat-card>
+
