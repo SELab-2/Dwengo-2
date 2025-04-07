@@ -25,12 +25,22 @@ export class GetUserSubmissions extends SubmissionBaseService<GetUserSubmissions
     async execute(input: GetUserSubmissionsInput): Promise<object> {
         const submissions: string[] = (
             input.assignmentId && input.learningObjectId
-                ? await this.submissionRepository.getAllForStudentInAssignmentStep(
-                      input.idParent,
-                      input.assignmentId,
-                      input.learningObjectId,
+                ? await tryRepoEntityOperation(
+                      this.submissionRepository.getAllForStudentInAssignmentStep(
+                          input.idParent,
+                          input.assignmentId,
+                          input.learningObjectId,
+                      ),
+                      "User | Assignment | LearningObject",
+                      `${input.idParent} | ${input.assignmentId} | ${input.learningObjectId}`,
+                      true,
                   )
-                : await this.submissionRepository.getByStudentId(input.idParent)
+                : await tryRepoEntityOperation(
+                      this.submissionRepository.getByStudentId(input.idParent),
+                      "User",
+                      input.idParent,
+                      true,
+                  )
         ).map(submission => submission.id!);
         return { submisisons: submissions };
     }
