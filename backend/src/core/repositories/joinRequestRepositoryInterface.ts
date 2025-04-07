@@ -15,7 +15,6 @@ export abstract class IJoinRequestRepository extends AbstractRepository {
      * @returns A promise that resolves to the inserted join request.
      */
     public abstract create(joinRequest: JoinRequest): Promise<JoinRequest>;
-    
 
     /**
      * Marks a join code as expired.
