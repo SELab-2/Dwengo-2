@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, Column, ManyToOne, CreateDateColumn } from "typeorm";
-import { BeforeInsert } from "typeorm/decorator/listeners/BeforeInsert" // Important to specify the exact path here
+import { BeforeInsert } from "typeorm/decorator/listeners/BeforeInsert"; // Important to specify the exact path here
 import { ClassTypeORM } from "./classTypeorm";
 
 @Entity()
