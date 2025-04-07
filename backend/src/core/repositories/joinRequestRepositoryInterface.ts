@@ -17,8 +17,7 @@ export abstract class IJoinRequestRepository extends AbstractRepository {
     public abstract create(joinRequest: JoinRequest): Promise<JoinRequest>;
 
     /**
-     * Marks a join code as expired.
-     * No students will be able to use this join code after the code is expired.
+     * Creates a join request for a user using a class code.
      * @param code The actual alphanumerical code as a string.
      * @param userId The id of the user that wants to join.
      * @param type The type of the user. The role that the user will get in the class (student or teacher)
