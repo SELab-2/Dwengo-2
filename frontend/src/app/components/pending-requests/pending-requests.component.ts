@@ -54,11 +54,27 @@ export class PendingRequestsComponent implements OnInit {
   }
 
   public acceptRequest(requestId: string) {
+    const accepted$ = this.joinRequestService.acceptRequest(requestId);
 
+    accepted$.subscribe(response => {
+      if(response) {
+        window.alert("Accepted!");
+      } else {
+        window.alert("ERROR, RUN!");
+      }
+    });
   }
 
   public rejectRequest(requestId: string) {
+    const rejected$ = this.joinRequestService.rejectRequest(requestId);
 
+    rejected$.subscribe(response => {
+      if(response) {
+        window.alert("Rejected!");
+      } else {
+        window.alert("ERROR, RUN!");
+      }
+    });
   }
 
 }

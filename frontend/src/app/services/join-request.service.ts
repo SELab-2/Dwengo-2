@@ -106,4 +106,33 @@ export class JoinRequestService {
         return of([])
     }
 
+    public acceptRequest(requestId: string): Observable<boolean> {
+        return this.http.patch(
+            `${this.API_URL}/requests/${requestId}`,
+            null,{
+                ...this.standardHeaders,
+                observe: 'response'
+            }
+        ).pipe(
+            this.errorService.pipeHandler(),
+            map(response => {
+                return response.status === 204; // 204 No Content
+            })
+        );
+    }
+
+    public rejectRequest(requestId: string): Observable<boolean> {
+        return this.http.delete(
+            `${this.API_URL}/requests/${requestId}`, {
+                ...this.standardHeaders,
+                observe: 'response'
+            }
+        ).pipe(
+            this.errorService.pipeHandler(),
+            map(response => {
+                return response.status === 204; // 204 No Content
+            })
+        );
+    }
+
 }
