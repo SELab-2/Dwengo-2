@@ -38,12 +38,13 @@ export class ClassesService {
     }
 
     public classesOfUser(): Observable<Class[]> {
+        console.log("called")
         return this.http.get<ClassesReponse>(
             `${this.API_URL}/users/${this.userCreds.userId}/classes`,
             this.standardHeaders
         ).pipe(
             this.errorService.pipeHandler(),
-            switchMap(response => 
+            switchMap(response =>
                 forkJoin(
                     response.classes.map(id =>
                         this.http.get<Class>(
@@ -62,7 +63,7 @@ export class ClassesService {
             this.standardHeaders
         ).pipe(
             this.errorService.pipeHandler(
-                this.errorService.retrieveError($localize `class`)
+                this.errorService.retrieveError($localize`class`)
             ),
         );
     }

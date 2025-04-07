@@ -17,6 +17,7 @@ import { MockServices } from './mock-services';
 import { ClassOverviewWidgetComponent } from '../small-components/class-overview-widget/class-overview-widget.component';
 import { DeadlinesWidgetComponent } from '../small-components/upcoming-deadlines-widget/deadlines-widget.component';
 import { Assignment } from '../../interfaces/assignments/assignment';
+import { catchError, defaultIfEmpty, forkJoin, of } from 'rxjs';
 
 
 
@@ -38,8 +39,8 @@ export class TeacherDashboardComponent implements OnInit {
   selectedView: string | null = "classes";
   displayClassChart: boolean = false;
   displayActivityChart: boolean = false;
-  classes!: Class[];
-  assignments!: Assignment[];
+  classes: Class[] = [];
+  assignments: Assignment[] = [];
 
   // This is all mock data, awaiting some API functionality after refactor
   classesTitle: string = $localize`:@@viewClasses:View Classes`;
@@ -49,6 +50,37 @@ export class TeacherDashboardComponent implements OnInit {
   constructor(private classesService: ClassesService, private assignmentsService: AssignmentsService) { }
 
   private retrieveData(): void {
+    forkJoin({
+      classes: this.classesService.classesOfUser().pipe(
+        catchError(() => of([])), // Empty array when error occured
+        defaultIfEmpty([]) // Also empty error when there's no reaction
+      ),
+      assignments: this.assignmentsService.assignmentsOfUser().pipe(
+        catchError(() => of([])),
+        defaultIfEmpty([])
+      )
+    }).subscribe(({ classes, assignments }) => {
+      console.log("classes", classes)
+      this.classes = classes.map(cls => ({
+        ...cls,
+        assignments: assignments
+          .filter(a => a.classId === cls.id)
+          .map(a => ({
+            ...a,
+            name: a.name ?? $localize`:@@unnamed:Unnamed`,
+            deadline: a.deadline ?? $localize`:@@noDeadline:No deadline found`,
+            className: cls.name ?? $localize`:@@unnamed:Unnamed`,
+          }))
+      }));
+      // Assignment array is needed in components like "upcoming-deadlines-widget"
+      this.assignments = this.classes.map(cls => cls.assignments!).flat();
+
+      // Use this data to fill the charts
+      this.fillCharts();
+    });
+  }
+
+  private retrieveMockData(): void {
     // TODO: use services
     this.classes = MockServices.getClasses();
     const receivedAssignments = MockServices.getAssignments();
@@ -82,7 +114,7 @@ export class TeacherDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.retrieveData();
+    this.retrieveMockData();
   }
 
   public classChartData: ClassGraphComponent[] = [];
@@ -94,7 +126,7 @@ export class TeacherDashboardComponent implements OnInit {
 
   makeAssignment = () => {
     this.assignmentsService.createAssignment({
-      classId: "36f11a76-76a3-4477-9022-72ddab83cbd1",
+      classId: "818d8d20-1ccf-4a87-8c0a-380e66c4f747",
       startDate: new Date(),
       deadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
       learningPathId: "1234",

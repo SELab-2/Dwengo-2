@@ -7,6 +7,7 @@ import { AssignmentsResponse } from "../interfaces/assignments/assignmentsRespon
 import { Assignment } from "../interfaces/assignments/assignment";
 import { NewAssignment } from "../interfaces/assignments/newAssignment";
 import { NewAssignmentResponse } from "../interfaces/assignments/newAssignmentResponse";
+import { ErrorService } from "./error.service";
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,8 @@ export class AssignmentsService {
 
     public constructor(
         private http: HttpClient,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private errorService: ErrorService,
     ) {
         this.userCreds = {
             userId: this.authService.retrieveUserId(),
@@ -39,6 +41,7 @@ export class AssignmentsService {
             `${this.API_URL}/users/${this.userCreds.userId}/assignments`,
             this.standardHeaders
         ).pipe(
+            this.errorService.pipeHandler(),
             switchMap(response =>
                 forkJoin(
                     response.assignments.map(id =>
@@ -59,6 +62,7 @@ export class AssignmentsService {
             newAssignment,
             this.standardHeaders
         ).pipe(
+            this.errorService.pipeHandler(),
             switchMap(
                 response => of(response.id)
             )
