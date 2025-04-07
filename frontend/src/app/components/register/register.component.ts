@@ -3,11 +3,15 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserRegistration } from '../../interfaces';
 import { UserType } from '../../interfaces/user/user';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatCheckboxModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.less'
 })
@@ -22,15 +26,11 @@ export class RegisterComponent {
   }
 
   register() {
-    if (this.registrationForm.valid) {
-      if (this.registrationForm.value.password === this.registrationForm.value.confirmPassword) {
-        const registrationData = this.extractRegistrationFormValues();
-        this.sendRegisterData(registrationData);
-      } else {
-        window.alert("Passwords don't match!");
-      }
-    } else {
-      window.alert("Invalid registration");
+    const valid = this.registrationForm.valid;
+    const validPassword = this.registrationForm.value.password === this.registrationForm.value.confirmPassword;
+    if (valid && validPassword) {
+      const registrationData = this.extractRegistrationFormValues();
+      this.sendRegisterData(registrationData);
     }
   }
 

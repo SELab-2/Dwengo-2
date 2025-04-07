@@ -17,7 +17,7 @@ export class ClassRepositoryTypeORM extends IClassRepository {
     }
 
     public async update(classId: string, updatedClass: Partial<Class>): Promise<Class> {
-        throw new Error("Not implemented yet");
+        return await this.datasourceClass.updateClass(classId, updatedClass);
     }
 
     public async getById(id: string): Promise<Class> {

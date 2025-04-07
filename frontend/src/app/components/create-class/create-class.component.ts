@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent } from '@angular/material/card'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class CreateClassComponent {
   public createForm: FormGroup;
   
   public constructor(
+    private router: Router,
     private formBuilder: FormBuilder,
     private classesService: ClassesService,
     private authService: AuthenticationService
@@ -61,13 +63,12 @@ export class CreateClassComponent {
         newClass
       );
   
-      idObservable.pipe().subscribe((response) => {
-        if(response) {
-          this.openSnackBar(this.createSuccesMessage);
-        } else {
-          this.openSnackBar(this.errorMessage);
-        }
-      });
+      idObservable.pipe().subscribe(() => 
+        this.openSnackBar(this.createSuccesMessage)
+      );
+
+      // force a refresh of the page to show the updated list of classes
+      location.reload();
     } else {
       this.openSnackBar(this.errorMessage);
     }

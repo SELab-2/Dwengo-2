@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, of } from 'rxjs';
 import {
   RegisterResponse,
   UserRegistration,
@@ -11,6 +10,7 @@ import {
 
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
+import { ErrorService } from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,45 +23,38 @@ export class AuthenticationService {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private errorService: ErrorService
   ) {}
 
   register(user: UserRegistration): void {
     this.http.post<RegisterResponse>(this.registerUrl, user).pipe(
-      catchError((error) => {
-        window.alert(`Registration failed: ${error.message}`);
-        return of(null);
-      }))
-      .subscribe((response) => {
-        let url: string;
+      this.errorService.pipeHandler($localize `Registration failed`)
+    ).subscribe((response) => {
+      let url: string;
 
-        if (user.userType === UserType.STUDENT) {
-          url = '/student-login';
-        } else if (user.userType === UserType.TEACHER) {
-          url = '/teacher-login';
-        } else {
-          window.alert('Huh? Weird. This is not supposed to happen.');
-          url = 'placeholder';
-        }
+      if (user.userType === UserType.STUDENT) {
+        url = '/student/login';
+      } else if (user.userType === UserType.TEACHER) {
+        url = '/teacher/login';
+      } else {
+        url = 'placeholder';
+      }
 
-        if (response) {
-          this.router.navigateByUrl(url);
-        } else {
-          window.alert('Registration failed. Please try again.');
-        }
-        
-      });
+      if (response) {
+        this.router.navigateByUrl(url);
+      } else {
+        window.alert($localize `Registration failed. Please try again.`);
+      }
+      
+    });
   }
   
   login(credentials: UserLoginCredentials, userType: UserType): void { 
     this.http.post<LoginResponse>(this.loginUrl, credentials).pipe(
-      catchError((error) => {
-        window.alert(`Login failed: ${error.message}`);
-        return of(null);
-      }))
-      .subscribe((response: LoginResponse | null) => {
-        let url: string;
-
+      this.errorService.pipeHandler($localize `Login failed`),
+    ).subscribe((response: LoginResponse | null) => {
+      let url: string;
         if (userType === UserType.STUDENT) {
           url = 'student/classes' // TODO: change to dashboard
         } else if (userType === UserType.TEACHER) {
@@ -69,31 +62,41 @@ export class AuthenticationService {
         } else {
           url = 'placeholder'
         }
-
-        if (response) {
-          console.log(`Login successful: ${response.message}`);
-          this.storeToken(response.token);
-          console.log(`Token stored: ${response.token}`);
-          this.storeUserId(response.id);
-          console.log(`User ID stored: ${response.id}`);
-          this.storeUserType(userType);
-          console.log(`User type stored: ${userType}`);
-        }
         
-        this.router.navigateByUrl(url);
+        if (response) {
+          this.storeToken(response.token);
+          this.storeUserId(response.id);
+          this.storeUserType(userType);
+          this.router.navigateByUrl(url);
+        }
+
       });
   }
 
-  storeToken = (token: string): void => sessionStorage.setItem('AuthenticationToken', token);
-  retrieveToken = (): string | null => sessionStorage.getItem('AuthenticationToken');
-  removeToken = (): void => sessionStorage.removeItem('AuthenticationToken');
+  logout(): void {
+    this.removeToken();
+    this.removeUserId();
+    this.removeUserType();
+    
+    console.log('Logged out');
 
-  storeUserId = (userId: string): void => sessionStorage.setItem('UserId', userId);
-  retrieveUserId = (): string | null => sessionStorage.getItem('UserId');
-  removeUserId = (): void => sessionStorage.removeItem('UserId');
+    this.router.navigateByUrl('/');
+  }
 
-  storeUserType = (userType: UserType): void => sessionStorage.setItem('UserType', userType);
-  retrieveUserType = (): UserType | null => sessionStorage.getItem('UserType') as UserType;
-  removeUserType = (): void => sessionStorage.removeItem('UserType');
+  storeToken = (token: string): void => localStorage.setItem('AuthenticationToken', token);
+  retrieveToken = (): string | null => localStorage.getItem('AuthenticationToken');
+  removeToken = (): void => localStorage.removeItem('AuthenticationToken');
+
+  storeRefreshToken = (refreshToken: string): void => localStorage.setItem('RefreshToken', refreshToken);
+  retrieveRefreshToken = (): string | null => localStorage.getItem('RefreshToken');
+  removeRefreshToken = (): void => localStorage.removeItem('RefreshToken');
+
+  storeUserId = (userId: string): void => localStorage.setItem('UserId', userId);
+  retrieveUserId = (): string | null => localStorage.getItem('UserId');
+  removeUserId = (): void => localStorage.removeItem('UserId');
+
+  storeUserType = (userType: UserType): void => localStorage.setItem('UserType', userType);
+  retrieveUserType = (): UserType | null => localStorage.getItem('UserType') as UserType;
+  removeUserType = (): void => localStorage.removeItem('UserType');
 
 }

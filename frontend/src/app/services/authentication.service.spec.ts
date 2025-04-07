@@ -4,11 +4,13 @@ import { AuthenticationService } from "./authentication.service";
 import { LoginResponse, RegisterResponse, UserLoginCredentials, UserRegistration, UserType } from "../interfaces";
 import { TestBed } from "@angular/core/testing";
 import { provideRouter, Router } from "@angular/router";
+import { ErrorService } from "./error.service";
 
 describe('AuthenticationService', () => {
   let router: Router;
   let http: jasmine.SpyObj<HttpClient>;
   let service: AuthenticationService;
+  let errorService: jasmine.SpyObj<ErrorService>;
 
   const email: string = "baldur@asgard.no";
   const password: string = "Thor sucks";
@@ -36,6 +38,7 @@ describe('AuthenticationService', () => {
     token: token,
     id: "123456",
     message: "hehehe",
+    refreshToken: token,
   }
 
   beforeEach(() => {
@@ -46,10 +49,15 @@ describe('AuthenticationService', () => {
         { provide: HttpClient, useValue: jasmine.createSpyObj('HttpClient', ['post']) }
       ]
     });
+
+    errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler', 'subscribeHandler']);
+
+    // Mock return values
+    errorService.pipeHandler.and.callFake(() => (source) => source);
   
     http = TestBed.inject(HttpClient) as jasmine.SpyObj<HttpClient>;
     router = TestBed.inject(Router);
-    service = new AuthenticationService(router, http);
+    service = new AuthenticationService(router, http, errorService);
   });
 
   it('should register', () => {
