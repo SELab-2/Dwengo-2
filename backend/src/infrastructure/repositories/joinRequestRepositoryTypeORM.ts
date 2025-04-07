@@ -1,5 +1,5 @@
 import { DatabaseEntryNotFoundError, EntityNotFoundError } from "../../config/error";
-import { JoinRequest } from "../../core/entities/joinRequest";
+import { JoinRequest, JoinRequestType } from "../../core/entities/joinRequest";
 import { IJoinRequestRepository } from "../../core/repositories/joinRequestRepositoryInterface";
 import { DatasourceJoinRequestTypeORM } from "../database/data/data_sources/typeorm/datasourceJoinRequestTypeORM";
 
@@ -21,6 +21,10 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
                 throw error;
             }
         }
+    }
+
+    public createUsingCode(code: string, userId: string, type: JoinRequestType): Promise<JoinRequest> {
+        throw new Error("Method not implemented.");
     }
 
     public async getById(id: string): Promise<JoinRequest> {
