@@ -8,6 +8,7 @@ import { NewClassResponse } from "../interfaces/classes/newClassResponse";
 import { ClassesReponse } from "../interfaces/classes/classesResponse";
 import { environment } from "../../environments/environment";
 import { AuthenticationService } from "./authentication.service";
+import { ErrorService } from "./error.service";
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +21,8 @@ import { AuthenticationService } from "./authentication.service";
   
     public constructor(
         private http: HttpClient,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private errorService: ErrorService
     ) {
         this.userCreds = {
             userId: this.authService.retrieveUserId(),
@@ -40,6 +42,7 @@ import { AuthenticationService } from "./authentication.service";
             `${this.API_URL}/users/${this.userCreds.userId}/classes`,
             this.standardHeaders
         ).pipe(
+            this.errorService.pipeHandler(),
             switchMap(response => 
                 forkJoin(
                     response.classes.map(id => 
@@ -57,6 +60,10 @@ import { AuthenticationService } from "./authentication.service";
         return this.http.get<Class>(
             `${this.API_URL}/classes/${id}`,
             this.standardHeaders
+        ).pipe(
+            this.errorService.pipeHandler(
+                this.errorService.retrieveError($localize `class`)
+            ),
         );
     }
 
@@ -66,13 +73,13 @@ import { AuthenticationService } from "./authentication.service";
             newClass,
             this.standardHeaders
         ).pipe(
+            this.errorService.pipeHandler(),
             switchMap(
                 response => of(response.id)
             )
         );
     }
 
-    // TODO: wait for bugfix API
     public deleteClass(id: string): Observable<boolean> {
         return this.http.delete(
             `${this.API_URL}/classes/${id}`, {
@@ -80,6 +87,7 @@ import { AuthenticationService } from "./authentication.service";
                 observe: 'response'
             }
         ).pipe(
+            this.errorService.pipeHandler(),
             switchMap(
                 response => of(response.status === 204) // 204: success & no content
             )
@@ -101,10 +109,12 @@ import { AuthenticationService } from "./authentication.service";
                 observe: 'response'
             }
         ).pipe(
+            this.errorService.pipeHandler(),
             switchMap(
                 response => of(response.status === 204)
-            )
+            ) // TODO: does this still work (can't know before API bugfix)
         );
     }
 
   }
+ 
