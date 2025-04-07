@@ -1,4 +1,4 @@
-import { IJoinCodeRepository } from "../../core/repositories/joinCodeRepository";
+import { IJoinCodeRepository } from "../../core/repositories/joinCodeRepositoryInterface";
 import { DatasourceJoinCodeTypeORM } from "../database/data/data_sources/typeorm/datasourceJoinCodeTypeORM";
 
 export class JoinCodeRepositoryTypeORM extends IJoinCodeRepository {
