@@ -12,6 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ClassMembersListComponent } from '../class-members-list/class-members-list.component';
+import { PendingRequestsComponent } from '../pending-requests/pending-requests.component';
+import { UserType } from '../../interfaces';
 
 
 @Component({
@@ -22,6 +24,7 @@ import { ClassMembersListComponent } from '../class-members-list/class-members-l
     LoadingComponent,
     ReactiveFormsModule,
     ClassMembersListComponent,
+    PendingRequestsComponent,
 
     // Angular material
     MatFormFieldModule,
@@ -182,6 +185,14 @@ export class ClassComponent implements OnInit {
     this.snackBar.open(message, action, {
         duration: 2500
     });
+  }
+
+  /**
+   * Checks whether the currently logged in user is a teacher or not.
+   * @returns Whether the logged in user is a teacher or not
+   */
+  public isTeacher(): boolean {
+    return this.authService.retrieveUserType() === UserType.TEACHER;
   }
 
 }

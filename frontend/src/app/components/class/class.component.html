@@ -66,6 +66,11 @@
         <div id="center-container">
             <app-class-members-list [_class]="_class"></app-class-members-list>
         </div>
+        @if(isTeacher()) {
+            <div id="center-container">
+                <app-pending-requests [_class]="_class"></app-pending-requests>
+            </div>
+        }
     } @else {
         <app-loading></app-loading>
     }

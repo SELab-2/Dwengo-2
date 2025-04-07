@@ -1,0 +1,12 @@
+<div class="pending-requests">
+    <h2 i18n>Pending requests</h2>
+    
+    @for (joinRequest of joinRequests; track joinRequest.id) {
+        <p>
+            {{joinRequest.id}}
+        </p>
+    } @empty {
+        <p i18n>No requests yet</p>
+    }
+
+</div>
