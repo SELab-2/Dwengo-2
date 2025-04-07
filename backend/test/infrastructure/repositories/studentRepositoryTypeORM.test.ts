@@ -1,7 +1,7 @@
 import { Student } from "../../../src/core/entities/student";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
-import { IDatasourceStudent } from "../../../src/infrastructure/database/data/data_sources/datasourceStudentInterface";
+import { DatasourceStudentTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceStudentTypeORM";
 
 describe("StudentRepositoryTypeORM", () => {
 
@@ -9,19 +9,10 @@ describe("StudentRepositoryTypeORM", () => {
     let datasourceFactoryMock: IDatasourceFactory;
     let student: Student;
 
-    let datasourceStudent: IDatasourceStudent;
+    let datasourceStudent: DatasourceStudentTypeORM;
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceAssignment: jest.fn(),
-            getDatasourceJoinRequest: jest.fn(),
-            getDatasourceTeacher: jest.fn(), // TODO: should work?
-            getDatasourceGroup: jest.fn(),
-            getDatasourceClass: jest.fn(),
-            getDatasourceStudent: jest.fn(),
-            getDatasourceMessage: jest.fn(),
-            getDatasourceThread: jest.fn(),
-            getDatasourceSubmission: jest.fn()
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),

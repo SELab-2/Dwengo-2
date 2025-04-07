@@ -1,25 +1,22 @@
 import { EntityNotFoundError } from "../../config/error";
 import { QuestionThread } from "../../core/entities/questionThread";
 import { IQuestionThreadRepository } from "../../core/repositories/questionThreadRepositoryInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
-import { IDatasourceThread } from "../database/data/data_sources/datasourceThreadInterface";
+import { DatasourceThreadTypeORM } from "../database/data/data_sources/typeorm/datasourceThreadTypeORM";
 
 export class ThreadRepositoryTypeORM extends IQuestionThreadRepository {
-    private datasource: IDatasource;
-    private datasourceThread: Promise<IDatasourceThread>;
+    private datasourceThread: DatasourceThreadTypeORM;
 
     public constructor() {
         super();
-        this.datasource = this.datasourceFactory.createDatasource();
-        this.datasourceThread = this.datasource.getDatasourceThread();
+        this.datasourceThread = new DatasourceThreadTypeORM();
     }
 
     public async create(thread: QuestionThread): Promise<QuestionThread> {
-        return await (await this.datasourceThread).create(thread);
+        return await this.datasourceThread.create(thread);
     }
 
     public async getById(id: string): Promise<QuestionThread> {
-        const thread: QuestionThread | null = await (await this.datasourceThread).getById(id);
+        const thread: QuestionThread | null = await this.datasourceThread.getById(id);
 
         if (thread) {
             return thread;
@@ -29,18 +26,18 @@ export class ThreadRepositoryTypeORM extends IQuestionThreadRepository {
     }
 
     public async update(id: string, updatedThread: Partial<QuestionThread>): Promise<QuestionThread> {
-        return await (await this.datasourceThread).updateQuestionThread(id, updatedThread);
+        return await this.datasourceThread.updateQuestionThread(id, updatedThread);
     }
 
     public async delete(id: string): Promise<void> {
-        await (await this.datasourceThread).deleteQuestionThread(id);
+        await this.datasourceThread.deleteQuestionThread(id);
     }
 
     public async getByAssignmentId(assignmentId: string): Promise<QuestionThread[]> {
-        return await (await this.datasourceThread).getQuestionThreadsByAssignmentId(assignmentId);
+        return await this.datasourceThread.getQuestionThreadsByAssignmentId(assignmentId);
     }
 
     public async getByCreatorId(createrId: string): Promise<QuestionThread[]> {
-        return await (await this.datasourceThread).getQuestionThreadsByCreatorId(createrId);
+        return await this.datasourceThread.getQuestionThreadsByCreatorId(createrId);
     }
 }
