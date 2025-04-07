@@ -10,7 +10,8 @@
     "lint": "eslint src",
     "test": "jest",
     "test-coverage": "jest --coverage",
-    "clear:db": "ts-node extra/clear-db.ts"
+    "clear:db": "ts-node extra/runClearDb.ts",
+    "seed:db": "ts-node extra/runSeedDb.ts"
   },
   "repository": {
     "type": "git",
@@ -37,6 +38,7 @@
     "typeorm": "^0.3.17"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.6.0",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^5.0.0",
