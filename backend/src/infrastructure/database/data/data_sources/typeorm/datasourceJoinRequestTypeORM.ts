@@ -16,7 +16,7 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
                 where: { id: joinRequest.requester },
                 relations: ["teacher"],
             });
-            if (!teacher){
+            if (!teacher) {
                 throw new DatabaseEntryNotFoundError(`Teacher with id ${joinRequest.requester} not found`);
             }
             id = teacher.teacher.id;
@@ -25,7 +25,7 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
                 where: { id: joinRequest.requester }, // requester is the id of the user. Match the user in the student table
                 relations: ["student"],
             });
-            if (!student){
+            if (!student) {
                 throw new DatabaseEntryNotFoundError(`Student with id ${joinRequest.requester} not found`);
             }
             id = student.student.id;
