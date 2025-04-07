@@ -28,12 +28,10 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
             relations: ["teacher"],
         });
 
-        if (teacherModel !== null) {
-            const t: Teacher = teacherModel.toTeacherEntity(teacherModel.teacher);
-            console.log(t);
-            return t;
+        if (!teacherModel) {
+            return null;
         }
-        return null; // No result
+        return teacherModel.toTeacherEntity(teacherModel.teacher);
     }
 
     public async getTeacherByEmail(email: string): Promise<Teacher | null> {
@@ -42,17 +40,18 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
         const userModel: UserTypeORM | null = await datasource
             .getRepository(UserTypeORM)
             .findOne({ where: { email: email } });
-
-        if (userModel !== null) {
-            const teacherModel: TeacherTypeORM | null = await datasource
+        
+        if (!userModel) {
+            return null;
+        }
+        const teacherModel: TeacherTypeORM | null = await datasource
                 .getRepository(TeacherTypeORM)
                 .findOne({ where: { teacher: userModel } });
-
-            if (teacherModel !== null) {
-                return teacherModel.toTeacherEntity(userModel);
-            }
+        
+        if (!teacherModel) {
+            return null;
         }
-        return null; // No result
+        return teacherModel.toTeacherEntity(userModel);
     }
 
     public async getTeacherByFirstName(first_name: string): Promise<Teacher | null> {
@@ -62,16 +61,17 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
             .getRepository(UserTypeORM)
             .findOne({ where: { first_name: first_name } });
 
-        if (userModel !== null) {
-            const teacherModel: TeacherTypeORM | null = await datasource
+        if (!userModel) {
+            return null;
+        }
+        const teacherModel: TeacherTypeORM | null = await datasource
                 .getRepository(TeacherTypeORM)
                 .findOne({ where: { teacher: userModel } });
-
-            if (teacherModel !== null) {
-                return teacherModel.toTeacherEntity(userModel);
-            }
+        
+        if (!teacherModel) {
+            return null;
         }
-        return null; // No result
+        return teacherModel.toTeacherEntity(userModel);
     }
 
     public async getTeacherByLastName(last_name: string): Promise<Teacher | null> {
@@ -81,16 +81,17 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
             .getRepository(UserTypeORM)
             .findOne({ where: { last_name: last_name } });
 
-        if (userModel !== null) {
-            const teacherModel: TeacherTypeORM | null = await datasource
+        if (!userModel) {
+            return null;
+        }
+        const teacherModel: TeacherTypeORM | null = await datasource
                 .getRepository(TeacherTypeORM)
                 .findOne({ where: { teacher: userModel } });
-
-            if (teacherModel !== null) {
-                return teacherModel.toTeacherEntity(userModel);
-            }
+        
+        if (!teacherModel) {
+            return null;
         }
-        return null; // No result
+        return teacherModel.toTeacherEntity(userModel);
     }
 
     public async getAllTeachers(): Promise<Teacher[]> {
@@ -162,10 +163,10 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
                         .getRepository(UserTypeORM)
                         .findOne({ where: { id: teacherOfClassModel.teacher.id } }); // So we use their id
 
-                    if (teacherUserModel !== null) {
-                        return teacherOfClassModel.teacher.toTeacherEntity(teacherUserModel); // End result is a list of teachers
+                    if (!teacherUserModel) {
+                        return undefined;
                     }
-                    return undefined;
+                    return teacherOfClassModel.teacher.toTeacherEntity(teacherUserModel); // End result is a list of teachers
                 },
             ),
         );
