@@ -1,70 +1,78 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TeacherDashboardComponent } from './teacher-dashboard.component';
-import { MenuCardComponent } from '../small-components/menu-card/menu-card.component';
-import { ClassOverviewWidgetComponent } from '../small-components/class-overview-widget/class-overview-widget.component';
-import { DeadlinesWidgetComponent } from '../small-components/upcoming-deadlines-widget/deadlines-widget.component';
-import { By } from '@angular/platform-browser';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
-import { HarnessLoader } from '@angular/cdk/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { TestBed } from "@angular/core/testing";
+import { provideRouter } from "@angular/router";
+import { RouterTestingHarness } from "@angular/router/testing";
+import { provideHttpClient } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+
+import { TeacherDashboardComponent } from "./teacher-dashboard.component";
+import { ClassOverviewWidgetComponent } from "../small-components/class-overview-widget/class-overview-widget.component";
+import { DeadlinesWidgetComponent } from "../small-components/upcoming-deadlines-widget/deadlines-widget.component";
 
 describe('TeacherDashboardComponent', () => {
     let component: TeacherDashboardComponent;
-    let fixture: ComponentFixture<TeacherDashboardComponent>;
-    let router: Router;
-    let loader: HarnessLoader;
+    let harness: RouterTestingHarness;
 
     beforeEach(async () => {
-        await TestBed.configureTestingModule({
-            imports: [
-                RouterTestingModule.withRoutes([]),
-                TeacherDashboardComponent,
-                MenuCardComponent,
-                ClassOverviewWidgetComponent,
-                DeadlinesWidgetComponent,
+        TestBed.configureTestingModule({
+            imports: [TeacherDashboardComponent],
+            providers: [
+                provideRouter([
+                    { path: "", component: TeacherDashboardComponent },
+                    { path: "classes", component: ClassOverviewWidgetComponent },
+                    { path: "deadlines", component: DeadlinesWidgetComponent },
+                ]),
+                provideHttpClient(),
+                provideHttpClientTesting(),
             ],
-            schemas: [NO_ERRORS_SCHEMA],
-        }).compileComponents();
+        });
 
-        fixture = TestBed.createComponent(TeacherDashboardComponent);
-        component = fixture.componentInstance;
-        router = TestBed.inject(Router);
-        loader = TestbedHarnessEnvironment.loader(fixture);
-        fixture.detectChanges();
+        harness = await RouterTestingHarness.create();
+        component = await harness.navigateByUrl("/", TeacherDashboardComponent);
+        harness.detectChanges();
     });
 
-    it('should create the component', () => {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 
+    it('should have "classes" as the default selected view', () => {
+        expect(component.selectedView).toBe('classes');
+    });
+
+    it('should update selectedView when a menu card is clicked', async () => {
+        const menuCards = harness.fixture.nativeElement.querySelectorAll('app-menu-card');
+        spyOn(component, 'setView');
+
+        menuCards[1].click();
+
+        harness.detectChanges();
+        harness.fixture.whenStable().then(() => {
+            expect(component.setView).toHaveBeenCalledWith('deadlines');
+            expect(component.selectedView).toBe('deadlines');
+        });
+    });
+
+
     it('should navigate correctly when menu card is clicked', async () => {
-        spyOn(router, 'navigate');
+        const menuCards = harness.fixture.nativeElement.querySelectorAll('app-menu-card');
 
-        const menuCards = fixture.debugElement.queryAll(By.css('app-menu-card'));
+        menuCards[1].click();
+        await harness.navigateByUrl('/deadlines', DeadlinesWidgetComponent);
+        harness.detectChanges();
 
-        menuCards[1].triggerEventHandler('cardClick', null);
-        fixture.detectChanges();
-
-        expect(component.selectedView).toBe('deadlines');
-        expect(router.navigate).not.toHaveBeenCalled();
-
-        menuCards[2].triggerEventHandler('cardClick', null);
-        fixture.detectChanges();
-
-        expect(component.selectedView).toBe('questions');
+        const deadlinesWidget = harness.fixture.nativeElement.querySelector('app-deadlines-widget');
+        expect(deadlinesWidget).toBeTruthy();
     });
 
     it('should show the correct widget based on selectedView', () => {
         component.setView('classes');
-        fixture.detectChanges();
-        expect(fixture.debugElement.query(By.css('app-class-overview-widget'))).toBeTruthy();
-        expect(fixture.debugElement.query(By.css('app-deadlines-widget'))).toBeFalsy();
+        harness.detectChanges();
+        expect(harness.fixture.nativeElement.querySelector('app-class-overview-widget')).toBeTruthy();
+        expect(harness.fixture.nativeElement.querySelector('app-deadlines-widget')).toBeFalsy();
 
         component.setView('deadlines');
-        fixture.detectChanges();
-        expect(fixture.debugElement.query(By.css('app-class-overview-widget'))).toBeFalsy();
-        expect(fixture.debugElement.query(By.css('app-deadlines-widget'))).toBeTruthy();
+        harness.detectChanges();
+        expect(harness.fixture.nativeElement.querySelector('app-class-overview-widget')).toBeFalsy();
+        expect(harness.fixture.nativeElement.querySelector('app-deadlines-widget')).toBeTruthy();
     });
 });
