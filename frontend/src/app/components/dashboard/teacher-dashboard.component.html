@@ -1,8 +1,7 @@
 <!-- Main -->
 <main class="main-container">
-    <div class="main-title">
-        <p class="font-weight-bold" i18n>DASHBOARD</p>
-    </div>
+
+    <h1 class="main-title" i18n>Dashboard</h1>
 
     <div class="main-info">
 
@@ -31,8 +30,12 @@
                 [selected]="selectedView === 'questions'" color="green" (cardClick)="setView('questions')">
             </app-menu-card>
             <div class="button-widget">
-                <a [routerLink]="learningPathsLink" class="paths-link clickable" i18n>Explore Paths</a>
-                <a [routerLink]="createClassLink" class="paths-link clickable" i18n>Create a class</a>
+                <button mat-button [routerLink]="learningPathsLink" class="paths-link" i18n>
+                    Explore Paths
+                </button>
+                <button mat-button [routerLink]="createClassLink" class="paths-link" i18n>
+                    Create a class
+                </button>
             </div>
         </div>
     </div>

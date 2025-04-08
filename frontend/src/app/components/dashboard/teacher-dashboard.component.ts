@@ -18,6 +18,7 @@ import { ClassOverviewWidgetComponent } from '../small-components/class-overview
 import { DeadlinesWidgetComponent } from '../small-components/upcoming-deadlines-widget/deadlines-widget.component';
 import { Assignment } from '../../interfaces/assignments/assignment';
 import { catchError, defaultIfEmpty, forkJoin, of } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 
 
 
@@ -25,7 +26,17 @@ import { catchError, defaultIfEmpty, forkJoin, of } from 'rxjs';
 @Component({
   selector: 'app-teacher-dashboard',
   standalone: true,
-  imports: [RouterLink, CommonModule, HttpClientModule, MatIconModule, NgApexchartsModule, ClassChartComponent, ActivityChartComponent, MenuCardComponent, ClassOverviewWidgetComponent, DeadlinesWidgetComponent],
+  imports: [RouterLink,
+    CommonModule,
+    HttpClientModule,
+    MatIconModule,
+    NgApexchartsModule,
+    ClassChartComponent,
+    ActivityChartComponent,
+    MenuCardComponent,
+    ClassOverviewWidgetComponent,
+    DeadlinesWidgetComponent,
+    MatButtonModule],
   templateUrl: './teacher-dashboard.component.html',
   styleUrls: ['./teacher-dashboard.component.less']
 })
@@ -124,14 +135,4 @@ export class TeacherDashboardComponent implements OnInit {
     this.selectedView = view;
   }
 
-  makeAssignment = () => {
-    this.assignmentsService.createAssignment({
-      classId: "818d8d20-1ccf-4a87-8c0a-380e66c4f747",
-      startDate: new Date(),
-      deadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-      learningPathId: "1234",
-      extraInstructions: "Test"
-    }).subscribe(response =>
-      console.log(response));
-  }
 }
