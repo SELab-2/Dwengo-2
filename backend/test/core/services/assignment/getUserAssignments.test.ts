@@ -29,6 +29,7 @@ describe("GetUserAssignments Service", () => {
         i.toString(),
         startDate,
         deadline,
+        "Assignment 1",
         "Extra Instructions",
         i.toString()
       );

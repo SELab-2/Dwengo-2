@@ -21,7 +21,7 @@ describe("UpdateAssignment Service", () => {
         const teacherId = "1";
         const updatedExtraInstructions = "Updated Instructions";
 
-        const mockUpdatedAssignment = new Assignment("1", "1", startDate, deadline, updatedExtraInstructions, "1");
+        const mockUpdatedAssignment = new Assignment("1", "1", startDate, deadline, "Assignment 1", updatedExtraInstructions, "1");
         mockAssignmentRepository.update.mockResolvedValue(mockUpdatedAssignment);
         mockUpdatedAssignment.toObject = jest.fn(() => ({
             id: teacherId,

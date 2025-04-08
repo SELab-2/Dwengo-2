@@ -29,6 +29,7 @@ describe("getAssignment Service", () => {
       "1",
       date,
       date,
+      "assignment",
       "extra_instructions",
       "1"
     );
@@ -37,12 +38,13 @@ describe("getAssignment Service", () => {
     const result = await getAssignmentService.execute(getAssignmentParams);
 
     expect(result).toEqual({
-        id: "1",
+        learningPathId: "1",
         classId: "1",
         startDate: date,
         deadline: date,
+        name: "assignment",
         extraInstructions: "extra_instructions",
-        learningPathId: "1"
+        id: "1"
     });
     expect(mockAssignmentRepository.getById).toHaveBeenCalledWith("1");
   });

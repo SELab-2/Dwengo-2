@@ -13,7 +13,7 @@ let dataSource: DataSource;
 
 let teacher: Teacher = new Teacher("mail@mail.com", "John", "Doe", "password", "UGent", "1");
 let class_: Class = new Class("Math", "1+2=3", "Students", "2"); // _ because `class` is a keyword
-let assignment: Assignment = new Assignment(class_.id!, "123", new Date(), new Date(), "Assignment", "3");
+let assignment: Assignment = new Assignment(class_.id!, "123", new Date(), new Date(), "Assignment 1", "Assignment", "3");
 
 // Helper: Generic Repository Mock Factory
 function createMockRepository<T extends ObjectLiteral>() {

@@ -27,7 +27,7 @@ describe("ClassRepositoryTypeORM", () => {
         } as any;
 
         // Mock assignment
-        assignment = new Assignment("123", "123", new Date(), new Date(), "Assignment", "3");
+        assignment = new Assignment("123", "123", new Date(), new Date(), "Assignment 1", "Assignment", "3");
     });
 
     test("createAssignment", async () => {

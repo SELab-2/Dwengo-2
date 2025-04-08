@@ -16,6 +16,7 @@ export class UpdateAssignment extends AssignmentService<UpdateAssignmentInput> {
         if (input.learningPathId) updatedFields.learningPathId = input.learningPathId;
         if (input.startDate) updatedFields.startDate = input.startDate;
         if (input.deadline) updatedFields.deadline = input.deadline;
+        if (input.name) updatedFields.name = input.name;
         if (input.extraInstructions) updatedFields.extraInstructions = input.extraInstructions;
 
         await this.assignmentRepository.update(input.id, updatedFields);
