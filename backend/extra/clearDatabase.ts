@@ -25,6 +25,5 @@ export async function clearDatabase(): Promise<void> {
     throw err;
   } finally {
     await queryRunner.release();
-    await connection.destroy();
   }
 }
