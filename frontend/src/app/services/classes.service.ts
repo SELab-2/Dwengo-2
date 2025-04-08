@@ -38,7 +38,6 @@ export class ClassesService {
     }
 
     public classesOfUser(): Observable<Class[]> {
-        console.log("called")
         return this.http.get<ClassesReponse>(
             `${this.API_URL}/users/${this.userCreds.userId}/classes`,
             this.standardHeaders

@@ -56,7 +56,6 @@ export class AssignmentsService {
     }
 
     public createAssignment(newAssignment: NewAssignment): Observable<string> {
-        console.log(newAssignment);
         return this.http.post<NewAssignmentResponse>(
             `${this.API_URL}/assignments`,
             newAssignment,

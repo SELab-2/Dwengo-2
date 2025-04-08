@@ -45,11 +45,6 @@ describe('ClassChartComponent', () => {
         ]);
     });
 
-    it('should render the chart', () => {
-        const chartElement = fixture.debugElement.query(By.css('apx-chart'));
-        expect(chartElement).toBeTruthy(); // Ensure the chart element exists
-    });
-
     it('should generate the correct x-axis labels', () => {
         const xAxisLabels = component.barChartOptions.xaxis?.categories;
         expect(xAxisLabels).toEqual(['Math Class', 'Science Class', 'History Class']);

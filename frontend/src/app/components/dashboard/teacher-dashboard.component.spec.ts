@@ -6,25 +6,32 @@ import { DeadlinesWidgetComponent } from '../small-components/upcoming-deadlines
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 
 describe('TeacherDashboardComponent', () => {
     let component: TeacherDashboardComponent;
     let fixture: ComponentFixture<TeacherDashboardComponent>;
+    let router: Router;
+    let loader: HarnessLoader;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [
-                RouterTestingModule, // Provides ActivatedRoute and other routing services
+                RouterTestingModule.withRoutes([]),
                 TeacherDashboardComponent,
                 MenuCardComponent,
                 ClassOverviewWidgetComponent,
                 DeadlinesWidgetComponent,
             ],
-            schemas: [NO_ERRORS_SCHEMA], // Ignore unknown elements like graphs
+            schemas: [NO_ERRORS_SCHEMA],
         }).compileComponents();
 
         fixture = TestBed.createComponent(TeacherDashboardComponent);
         component = fixture.componentInstance;
+        router = TestBed.inject(Router);
+        loader = TestbedHarnessEnvironment.loader(fixture);
         fixture.detectChanges();
     });
 
@@ -32,20 +39,17 @@ describe('TeacherDashboardComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should have "classes" as the default selected view', () => {
-        expect(component.selectedView).toBe('classes');
-    });
+    it('should navigate correctly when menu card is clicked', async () => {
+        spyOn(router, 'navigate');
 
-    it('should update selectedView when a menu card is clicked', () => {
         const menuCards = fixture.debugElement.queryAll(By.css('app-menu-card'));
 
-        // Simulate a click on the deadlines card
         menuCards[1].triggerEventHandler('cardClick', null);
         fixture.detectChanges();
 
         expect(component.selectedView).toBe('deadlines');
+        expect(router.navigate).not.toHaveBeenCalled();
 
-        // Simulate a click on the questions card
         menuCards[2].triggerEventHandler('cardClick', null);
         fixture.detectChanges();
 

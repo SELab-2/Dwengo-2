@@ -18,7 +18,7 @@ describe('ClassOverviewWidgetComponent', () => {
                 MatListModule,
                 MatIconModule,
                 RouterTestingModule,
-                ClassOverviewWidgetComponent, // Assuming it's a standalone component
+                ClassOverviewWidgetComponent,
             ],
         }).compileComponents();
 

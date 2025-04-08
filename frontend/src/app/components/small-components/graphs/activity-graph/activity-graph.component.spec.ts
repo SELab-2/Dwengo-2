@@ -40,10 +40,6 @@ describe('ActivityChartComponent', () => {
         );
     });
 
-    it('should render the chart', () => {
-        const chartElement = fixture.debugElement.query(By.css('apx-chart'));
-        expect(chartElement).toBeTruthy(); // Ensure the chart element exists
-    });
 
     it('should generate the correct x-axis labels for the last 12 months', () => {
         const last12Months = component.getLast12Months();

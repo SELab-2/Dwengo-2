@@ -71,7 +71,6 @@ export class TeacherDashboardComponent implements OnInit {
         defaultIfEmpty([])
       )
     }).subscribe(({ classes, assignments }) => {
-      console.log("classes", classes)
       this.classes = classes.map(cls => ({
         ...cls,
         assignments: assignments
@@ -125,7 +124,7 @@ export class TeacherDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.retrieveMockData();
+    this.retrieveData();
   }
 
   public classChartData: ClassGraphComponent[] = [];

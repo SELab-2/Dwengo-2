@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Assignment } from '../../../interfaces/assignments/assignment';
 
 describe('DeadlinesWidgetComponent', () => {
     let fixture: ComponentFixture<DeadlinesWidgetComponent>;
@@ -31,13 +32,13 @@ describe('DeadlinesWidgetComponent', () => {
                 deadline: new Date('2025-04-10'),
                 id: '1',
                 className: 'Math Class',
-            },
+            } as Assignment,
             {
                 name: 'Science Project',
                 deadline: new Date('2025-04-15'),
                 id: '2',
                 className: 'Science Class',
-            },
+            } as Assignment,
         ];
 
         // Trigger change detection
@@ -86,6 +87,6 @@ describe('DeadlinesWidgetComponent', () => {
 
         const emptyMessage = fixture.debugElement.query(By.css('.deadline-list'));
         expect(emptyMessage).toBeTruthy();
-        expect(emptyMessage.nativeElement.textContent.trim()).toBe('');
+        expect(emptyMessage.nativeElement.textContent.trim()).toBe('There\'s not a lot of work in here!');
     });
 });
