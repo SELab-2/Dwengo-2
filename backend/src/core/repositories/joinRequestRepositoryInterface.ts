@@ -21,6 +21,9 @@ export abstract class IJoinRequestRepository extends AbstractRepository {
      * @param code The actual alphanumerical code as a string.
      * @param userId The id of the user that wants to join.
      * @param type The type of the user. The role that the user will get in the class (student or teacher)
+     * @throws EntityNotFoundError when the code is not found.
+     * @throws ExpiredError when the code is expired.
+     * @returns A promise that resolves to a new join request for the class the code is for.
      */
     public abstract createUsingCode(code: string, userId: string, type: JoinRequestType): Promise<JoinRequest>;
 
