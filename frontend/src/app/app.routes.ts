@@ -21,12 +21,6 @@ export const routes: Routes = [
     { path: 'student/login', component: LoginPageComponent, title: 'Student Login', data: { isTeacher: false } },
     { path: 'register', component: RegisterPageComponent, title: 'Register' },
     { path: 'placeholder', component: UnknownRouteComponent, title: 'Aur Naur!' },
-    {
-        path: 'teacher',
-        children: [
-            { path: 'dashboard', component: TeacherDashboardPageComponent },
-            // Add future teacher routes here
-        ]
-    },
+    { path: 'teacher', component: TeacherDashboardPageComponent },
     { path: '**', redirectTo: 'placeholder' },
 ];
