@@ -3,6 +3,8 @@ import { EntityNotFoundError } from "../../../../../config/error";
 import { Message } from "../../../../../core/entities/message";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
+import { StudentTypeORM } from "../../data_models/studentTypeorm";
+import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceMessageTypeORM extends DatasourceTypeORM {
@@ -10,14 +12,32 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const userRepository = datasource.getRepository(UserTypeORM);
+        const studentRepository = datasource.getRepository(StudentTypeORM);
+        const teacherRepository = datasource.getRepository(TeacherTypeORM);
         const threadRepository = datasource.getRepository(QuestionThreadTypeORM);
         const messageRepository = datasource.getRepository(MessageTypeORM);
 
         // We find the corresponding user.
-        const userModel = await userRepository.findOne({ where: { id: message.senderId } });
+        let userModel = await userRepository.findOne({ where: { id: message.senderId } });
 
         if (!userModel) {
-            throw new EntityNotFoundError(`User with id: ${message.senderId} not found`);
+            const studentModel = await studentRepository.findOne({
+                where: { id: message.senderId },
+                relations: ["user"], // eager-loading the user relation
+            });
+            if (!studentModel) {
+                const teacherModel = await teacherRepository.findOne({
+                    where: { id: message.senderId },
+                    relations: ["user"], // eager-loading the user relation
+                });
+                if (!teacherModel) {
+                    throw new EntityNotFoundError(`User with id: ${message.senderId} not found`);
+                } else {
+                    userModel = teacherModel.user;
+                }
+            } else {
+                userModel = studentModel.user;
+            }
         }
 
         // We find the thread.

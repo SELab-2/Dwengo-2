@@ -9,13 +9,13 @@ export class TeacherTypeORM {
 
     @OneToOne(() => UserTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "user_id" })
-    teacher!: UserTypeORM;
+    user!: UserTypeORM;
 
     // Since multiple constructors isn't supported by Typescript:
     // https://stackoverflow.com/questions/12702548/constructor-overload-in-typescript
     public static createTeacherTypeORM(teacher: Teacher, correspondingUser: UserTypeORM): TeacherTypeORM {
         const teacherTypeORM: TeacherTypeORM = new TeacherTypeORM();
-        teacherTypeORM.teacher = correspondingUser;
+        teacherTypeORM.user = correspondingUser;
         return teacherTypeORM;
     }
 

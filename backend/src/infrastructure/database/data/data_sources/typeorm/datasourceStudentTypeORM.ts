@@ -21,7 +21,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .getRepository(StudentTypeORM)
             .save(StudentTypeORM.createStudentTypeORM(student, userModel));
 
-        return studentModel.toStudentEntity(studentModel.student);
+        return studentModel.toStudentEntity(studentModel.user);
     }
 
     public async getStudentById(id: string): Promise<Student | null> {
@@ -33,7 +33,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         });
 
         if (studentModel !== null) {
-            const t: Student = studentModel.toStudentEntity(studentModel.student);
+            const t: Student = studentModel.toStudentEntity(studentModel.user);
             console.log(t);
             return t;
         } else {
@@ -52,7 +52,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         if (userModel !== null) {
             const studentModel: StudentTypeORM | null = await datasource
                 .getRepository(StudentTypeORM)
-                .findOne({ where: { student: userModel } });
+                .findOne({ where: { user: userModel } });
 
             if (studentModel !== null) {
                 return studentModel.toStudentEntity(userModel);
@@ -71,7 +71,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         if (userModel !== null) {
             const studentModel: StudentTypeORM | null = await datasource
                 .getRepository(StudentTypeORM)
-                .findOne({ where: { student: userModel } });
+                .findOne({ where: { user: userModel } });
 
             if (studentModel !== null) {
                 return studentModel.toStudentEntity(userModel);
@@ -90,7 +90,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         if (userModel !== null) {
             const studentModel: StudentTypeORM | null = await datasource
                 .getRepository(StudentTypeORM)
-                .findOne({ where: { student: userModel } });
+                .findOne({ where: { user: userModel } });
 
             if (studentModel !== null) {
                 return studentModel.toStudentEntity(userModel);
@@ -106,7 +106,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .getRepository(StudentTypeORM)
             .find({ relations: ["student"] });
 
-        return studentModels.map((studentModel: StudentTypeORM) => studentModel.toStudentEntity(studentModel.student));
+        return studentModels.map((studentModel: StudentTypeORM) => studentModel.toStudentEntity(studentModel.user));
     }
 
     public async updateStudent(student: Student): Promise<Student> {
@@ -123,7 +123,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
 
         await datasource
             .getRepository(UserTypeORM)
-            .update(studentModel.student.id!, UserTypeORM.createUserTypeORM(student));
+            .update(studentModel.user.id!, UserTypeORM.createUserTypeORM(student));
 
         return student;
     }
@@ -144,8 +144,8 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         await datasource.getRepository(StudentTypeORM).delete(studentModel.id);
 
         // Manually delete the associated user if needed
-        if (studentModel.student?.id) {
-            await datasource.getRepository(UserTypeORM).delete(studentModel.student.id);
+        if (studentModel.user?.id) {
+            await datasource.getRepository(UserTypeORM).delete(studentModel.user.id);
         }
     }
 
@@ -228,13 +228,14 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .getRepository(StudentOfClassTypeORM)
             .createQueryBuilder("studentOfClass")
             .leftJoinAndSelect("studentOfClass.student", "student")
+            .leftJoinAndSelect("student.user", "user") // This will load the user details
             .where("studentOfClass.class.id = :classId", { classId: classId })
             .getMany();
 
         console.log(classJoinResult);
 
         return classJoinResult.map(classJoinResult => {
-            return classJoinResult.student.toStudentEntity(classJoinResult.student.student);
+            return classJoinResult.student.toStudentEntity(classJoinResult.student.user);
         });
     }
 
@@ -262,7 +263,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .getMany();
 
         return groupJoinResult.map(groupJoinResult => {
-            return groupJoinResult.student.toStudentEntity(groupJoinResult.student.student);
+            return groupJoinResult.student.toStudentEntity(groupJoinResult.student.user);
         });
     }
 }
