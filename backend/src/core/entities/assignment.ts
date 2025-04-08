@@ -4,7 +4,7 @@ export class Assignment {
         private _learningPathId: string,
         private _startDate: Date,
         private _deadline: Date,
-        private _name:  string,
+        private _name: string,
         private _extraInstructions: string,
         private _id?: string,
     ) {}
