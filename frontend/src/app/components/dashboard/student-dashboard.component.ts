@@ -1,12 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatList } from '@angular/material/list'
 import { AssignmentsService } from '../../services/assignments.service';
-import { AuthenticationService } from '../../services/authentication.service';
 import { Assignment } from '../../interfaces/assignments/assignment';
-import { ErrorService } from '../../services/error.service';
 import { MiniAssignmentComponent } from '../mini-assignment/mini-assignment.component';
 
 
