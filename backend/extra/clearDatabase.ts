@@ -1,3 +1,12 @@
+/**
+ * This function clears the database by truncating all tables and resetting their identities.
+ * It is useful for development and testing purposes, especially when you want to start with a clean slate.
+ * It is also used in the `runSeedDb.ts` file to clear the database before seeding it with test data.
+ * You can manually run this as a script using the `runClearDb.ts` file as such:
+ * $ docker-compose exec backend npm run db:clear
+ */
+
+
 import { DataSource } from 'typeorm';
 import { DatasourceTypeORM } from '../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORM';
 

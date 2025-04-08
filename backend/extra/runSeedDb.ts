@@ -1,8 +1,12 @@
+/**
+ * This file is used to seed the database with test data. It is not used in the normal flow of the application,
+ * but can be run manually to clear and then seed the database with test data using the following command:
+ * $ docker-compose exec backend npm run db:seed
+ * More information can be found in the seedDatabase.ts file.
+ */
+
 import { seedDatabase } from './seedDatabase';
 import { clearDatabase } from './clearDatabase';
-
-// This file is not used in the normal flow of the application, but can be run manually to clear and then seed the database with test data using the following command:
-// docker-compose exec backend npm run seed:db
 
 async function seed() {
   try {

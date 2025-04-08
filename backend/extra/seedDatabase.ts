@@ -1,3 +1,20 @@
+/**
+ * 🌱 Seed function: Random Database Seeder
+ *
+ * This function populates most database tables with random test data,
+ * including users, students, teachers, assignments, threads, and messages.
+ *
+ * ➤ Usage:
+ * You can manually run this as a script using the `runSeedDb.ts` file.
+ * This function can be useful for development and testing purposes, like E2E tests.
+ *
+ * To run it in the terminal:
+ *   $ docker-compose exec backend npm run db:seed
+ *
+ * Note: Data generated is non-deterministic and meant for testing only.
+ */
+
+
 import bcrypt from "bcryptjs";
 import { faker } from '@faker-js/faker';
 import { Student } from '../src/core/entities/student'
@@ -64,7 +81,6 @@ export async function seedDatabase(): Promise<void> {
         classIds.push(createdClass.id);
       }
     }
-    console.log('Seeded teachers and classes.');
 
     // ── 3. Create Students ──
     for (let i = 0; i < 20; i++) {
@@ -119,7 +135,6 @@ export async function seedDatabase(): Promise<void> {
         assignments.push({ id: savedAssignment.id, classId });
       }
     }
-    console.log('Successfully seeded students and assignments as well!');
 
     // ── 6. Add Groups to Assignments ──
     for (const { id: assignmentId, classId } of assignments) {
@@ -155,35 +170,12 @@ export async function seedDatabase(): Promise<void> {
     for (const { id: assignmentId, classId } of assignments) {
       const students = await studentRep.getByClassId(classId);
       const teachers = await teacherRep.getByClassId(classId);
-      //check if students and teachers are not null
-      if (!teachers?.length) {
-        console.log('❌ Teachers list is empty for assignment:', assignmentId, teachers);
-      } else {
-        console.log('✓ Teachers list is not empty for assignment:', assignmentId, teachers);
-      }
-      if (!students?.length) {
-        console.log('❌ Students list is empty for assignment:', assignmentId, students);
-      } else {
-        console.log('✓ Students list is not empty for assignment:', assignmentId, students);
-      }
-      // Check if students and teachers have valid ids
-      students.forEach(s => {
-        if (!s || !s.email || !s.id) {
-          console.log('❌ Invalid student object found:', s);
-        }
-      });
-      teachers.forEach(t => {
-        if (!t || !t.email || !t.id) {
-          console.log('❌ Invalid teacher object found:', t);
-        }
-      });
       const teacherIds = teachers.map(t => t.id);
     
-      // Select 3–6 students for threads
-      const selectedStudents = faker.helpers.arrayElements(students, { min: 3, max: 6 });
+      // Select 5–6 students for threads
+      const selectedStudents = faker.helpers.arrayElements(students, { min: 5, max: 6 });
     
       for (const student of selectedStudents) {
-      // for (const student of students) {
         const usedSteps = new Set<string>();
         const availableSteps = Array.from({ length: 5 }, (_, i) => `step-${i + 1}`)
         .filter(stepId => !usedSteps.has(stepId));
@@ -251,7 +243,6 @@ export async function seedDatabase(): Promise<void> {
         await messageRep.create(msg);
       }
     }
-    console.log('Successfully seeded groups, threads and messages!');
   } catch (err) {
     console.error('Error during DB seeding:', err);
     throw err;
