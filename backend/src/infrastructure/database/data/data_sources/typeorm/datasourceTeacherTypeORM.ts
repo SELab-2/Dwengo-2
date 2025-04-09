@@ -17,7 +17,7 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
             .getRepository(TeacherTypeORM)
             .save(TeacherTypeORM.createTeacherTypeORM(teacher, userModel));
 
-        return teacherModel.toTeacherEntity(teacherModel.user);
+        return teacherModel.toTeacherEntity(teacherModel.teacher);
     }
 
     public async getTeacherById(id: string): Promise<Teacher | null> {
@@ -29,7 +29,7 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
         });
 
         if (teacherModel !== null) {
-            const t: Teacher = teacherModel.toTeacherEntity(teacherModel.user);
+            const t: Teacher = teacherModel.toTeacherEntity(teacherModel.teacher);
             console.log(t);
             return t;
         }
@@ -46,7 +46,7 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
         if (userModel !== null) {
             const teacherModel: TeacherTypeORM | null = await datasource
                 .getRepository(TeacherTypeORM)
-                .findOne({ where: { user: userModel } });
+                .findOne({ where: { teacher: userModel } });
 
             if (teacherModel !== null) {
                 return teacherModel.toTeacherEntity(userModel);
@@ -65,7 +65,7 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
         if (userModel !== null) {
             const teacherModel: TeacherTypeORM | null = await datasource
                 .getRepository(TeacherTypeORM)
-                .findOne({ where: { user: userModel } });
+                .findOne({ where: { teacher: userModel } });
 
             if (teacherModel !== null) {
                 return teacherModel.toTeacherEntity(userModel);
@@ -84,7 +84,7 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
         if (userModel !== null) {
             const teacherModel: TeacherTypeORM | null = await datasource
                 .getRepository(TeacherTypeORM)
-                .findOne({ where: { user: userModel } });
+                .findOne({ where: { teacher: userModel } });
 
             if (teacherModel !== null) {
                 return teacherModel.toTeacherEntity(userModel);
@@ -100,7 +100,7 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
             .getRepository(TeacherTypeORM)
             .find({ relations: ["teacher"] });
 
-        return teacherModels.map((teacherModel: TeacherTypeORM) => teacherModel.toTeacherEntity(teacherModel.user));
+        return teacherModels.map((teacherModel: TeacherTypeORM) => teacherModel.toTeacherEntity(teacherModel.teacher));
     }
 
     public async updateTeacher(teacher: Teacher): Promise<Teacher> {
@@ -123,8 +123,8 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
 
         // TODO: check if teacherModel!.teacher.id! is not null
 
-        if (teacherModel && teacherModel.user.id) {
-            await datasource.getRepository(UserTypeORM).delete(teacherModel!.user.id!);
+        if (teacherModel && teacherModel.teacher.id) {
+            await datasource.getRepository(UserTypeORM).delete(teacherModel!.teacher.id!);
             await datasource.getRepository(TeacherTypeORM).delete(id);
         }
     }
@@ -147,7 +147,7 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
             .getRepository(TeacherOfClassTypeORM)
             .find({
                 where: { class: { id: classId } },
-                relations: ["teacher", "teacher.user"],
+                relations: ["teacher", "teacher.teacher"],
             });
 
         if (teacherOfClassModels.length === 0) {
@@ -156,7 +156,7 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
 
         const teachers = await Promise.all(
             teacherOfClassModels.map(teacherOfClassModel => {
-                return teacherOfClassModel.teacher.toTeacherEntity(teacherOfClassModel.teacher.user);
+                return teacherOfClassModel.teacher.toTeacherEntity(teacherOfClassModel.teacher.teacher);
             }),
         );
 

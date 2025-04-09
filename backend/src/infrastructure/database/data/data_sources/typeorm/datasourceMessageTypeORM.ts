@@ -23,20 +23,20 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
         if (!userModel) {
             const studentModel = await studentRepository.findOne({
                 where: { id: message.senderId },
-                relations: ["user"], // eager-loading the user relation
+                relations: ["student"], // eager-loading the user relation
             });
             if (!studentModel) {
                 const teacherModel = await teacherRepository.findOne({
                     where: { id: message.senderId },
-                    relations: ["user"], // eager-loading the user relation
+                    relations: ["teacher"], // eager-loading the user relation
                 });
                 if (!teacherModel) {
                     throw new EntityNotFoundError(`User with id: ${message.senderId} not found`);
                 } else {
-                    userModel = teacherModel.user;
+                    userModel = teacherModel.teacher;
                 }
             } else {
-                userModel = studentModel.user;
+                userModel = studentModel.student;
             }
         }
 

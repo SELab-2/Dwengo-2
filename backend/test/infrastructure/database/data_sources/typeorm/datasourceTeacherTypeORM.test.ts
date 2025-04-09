@@ -86,7 +86,7 @@ describe("DatasourceTeacherTypeORM", () => {
         // Find teacher
         const teacherRepository: Repository<TeacherTypeORM> = dataSource.getRepository(TeacherTypeORM);
         const teacherModel: TeacherTypeORM = (await teacherRepository.findOne({
-            where: { user: userModel },
+            where: { teacher: userModel },
         }))!;
 
         expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
@@ -104,7 +104,7 @@ describe("DatasourceTeacherTypeORM", () => {
         // Find teacher
         const teacherRepository: Repository<TeacherTypeORM> = dataSource.getRepository(TeacherTypeORM);
         const teacherModel: TeacherTypeORM = (await teacherRepository.findOne({
-            where: { user: userModel },
+            where: { teacher: userModel },
         }))!;
 
         expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
@@ -122,7 +122,7 @@ describe("DatasourceTeacherTypeORM", () => {
         // Find teacher
         const teacherRepository: Repository<TeacherTypeORM> = dataSource.getRepository(TeacherTypeORM);
         const teacherModel: TeacherTypeORM = (await teacherRepository.findOne({
-            where: { user: userModel },
+            where: { teacher: userModel },
         }))!;
 
         expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);

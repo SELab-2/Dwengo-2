@@ -19,7 +19,7 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
             if (!teacher) {
                 throw new DatabaseEntryNotFoundError(`Teacher with id ${joinRequest.requester} not found`);
             }
-            id = teacher.user.id;
+            id = teacher.teacher.id;
         } else {
             const student: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
                 where: { id: joinRequest.requester }, // requester is the id of the user. Match the user in the student table
@@ -28,7 +28,7 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
             if (!student) {
                 throw new DatabaseEntryNotFoundError(`Student with id ${joinRequest.requester} not found`);
             }
-            id = student.user.id;
+            id = student.student.id;
         }
 
         // Create partial object
