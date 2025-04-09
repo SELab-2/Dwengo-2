@@ -222,27 +222,27 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
     }
 
     public async getClassStudents(classId: string): Promise<Student[]> {
-            const datasource = await DatasourceTypeORM.datasourcePromise;
-    
-            const studentOfClassModels: StudentOfClassTypeORM[] = await datasource
-                .getRepository(StudentOfClassTypeORM)
-                .find({
-                    where: { class: { id: classId } },
-                    relations: ["student", "student.student"],
-                });
-    
-            if (studentOfClassModels.length === 0) {
-                throw new EntityNotFoundError(`No students found for class with id: ${classId}`);
-            }
-    
-            const students = await Promise.all(
-                studentOfClassModels.map(studentOfClassModel => {
-                    return studentOfClassModel.student.toStudentEntity(studentOfClassModel.student.student);
-                }),
-            );
-    
-            return students.filter((student): student is Student => student !== undefined);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const studentOfClassModels: StudentOfClassTypeORM[] = await datasource
+            .getRepository(StudentOfClassTypeORM)
+            .find({
+                where: { class: { id: classId } },
+                relations: ["student", "student.student"],
+            });
+
+        if (studentOfClassModels.length === 0) {
+            throw new EntityNotFoundError(`No students found for class with id: ${classId}`);
         }
+
+        const students = await Promise.all(
+            studentOfClassModels.map(studentOfClassModel => {
+                return studentOfClassModel.student.toStudentEntity(studentOfClassModel.student.student);
+            }),
+        );
+
+        return students.filter((student): student is Student => student !== undefined);
+    }
 
     public async getAssignmentStudents(assignmentId: string): Promise<Student[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
