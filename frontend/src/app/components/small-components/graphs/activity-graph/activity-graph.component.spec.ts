@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivityChartComponent, ActivityChartData } from './activity-graph.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { By } from '@angular/platform-browser';
 
 describe('ActivityChartComponent', () => {
     let fixture: ComponentFixture<ActivityChartComponent>;

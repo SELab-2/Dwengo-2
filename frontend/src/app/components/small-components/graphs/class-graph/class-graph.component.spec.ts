@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ClassChartComponent, ClassGraphComponent } from './class-graph.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { By } from '@angular/platform-browser';
 
 describe('ClassChartComponent', () => {
     let fixture: ComponentFixture<ClassChartComponent>;
