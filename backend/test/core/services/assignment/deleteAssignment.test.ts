@@ -1,6 +1,7 @@
 import { DeleteAssignment } from "../../../../src/core/services/assignment";
 import { IAssignmentRepository } from "../../../../src/core/repositories/assignmentRepositoryInterface";
 import { EntityNotFoundError } from "../../../../src/config/error";
+import { ErrorCode } from "../../../../src/application/types";
 
 const mockAssignmentRepository: jest.Mocked<IAssignmentRepository> = {
     delete: jest.fn().mockResolvedValue(undefined), // Simuleert een succesvolle verwijdering
@@ -34,6 +35,8 @@ describe("DeleteAssignment service", () => {
     test("Should throw an error if assignment is not present in database", async () => {
         mockAssignmentRepository.delete.mockRejectedValue(new EntityNotFoundError("Assignment not found"));
 
-        await expect(deleteAssignment.execute({id: "Assignment-789"})).rejects.toThrow(EntityNotFoundError);
+        await expect(deleteAssignment.execute({ id: "Assignment-789" })).rejects.toMatchObject({
+            code: ErrorCode.NOT_FOUND,
+        });
     });
 });

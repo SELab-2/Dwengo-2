@@ -1,14 +1,14 @@
-import { CreateSubmission, CreateSubmissionInput } from '../../../../src/core/services/submission/createSubmission';
-import { Submission, StatusType } from '../../../../src/core/entities/submission';
-import { DatabaseError } from '../../../../src/config/error';
-import { z } from 'zod';
+import { z } from "zod";
+import { DatabaseError } from "../../../../src/config/error";
+import { Submission, StatusType } from "../../../../src/core/entities/submission";
+import { CreateSubmission, CreateSubmissionInput } from "../../../../src/core/services/submission/createSubmission";
 
 // Mock repository
 const mockSubmissionRepository = {
     create: jest.fn(),
 };
 
-describe('CreateSubmission', () => {
+describe("CreateSubmission", () => {
     let createSubmission: CreateSubmission;
     let input: CreateSubmissionInput;
 
@@ -25,7 +25,7 @@ describe('CreateSubmission', () => {
         };
     });
 
-    test('Should create a submission and return it with an ID', async () => {
+    test("Should create a submission and return it with an ID", async () => {
         const createdSubmission = new Submission(
             "student-123",
             "assignment-456",
@@ -33,7 +33,7 @@ describe('CreateSubmission', () => {
             input.time,
             Buffer.from(input.contents),
             input.status,
-            "submission-999"
+            "submission-999",
         );
 
         mockSubmissionRepository.create.mockResolvedValue("submission-999");
@@ -44,8 +44,8 @@ describe('CreateSubmission', () => {
         expect(mockSubmissionRepository.create).toHaveBeenCalledWith(expect.any(Submission));
     });
 
-    test('Should throw a DatabaseError if creation fails', async () => {
-        mockSubmissionRepository.create.mockRejectedValue(new DatabaseError('Creation failed'));
+    test("Should throw a DatabaseError if creation fails", async () => {
+        mockSubmissionRepository.create.mockRejectedValue(new DatabaseError("Creation failed"));
 
         await expect(createSubmission.execute(input)).rejects.toThrow(DatabaseError);
         expect(mockSubmissionRepository.create).toHaveBeenCalledWith(expect.any(Submission));

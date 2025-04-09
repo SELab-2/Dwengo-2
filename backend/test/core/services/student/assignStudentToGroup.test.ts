@@ -1,6 +1,7 @@
+import { ErrorCode } from "../../../../src/application/types";
+import { EntityNotFoundError } from "../../../../src/config/error";
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { AssignStudentToGroup } from "../../../../src/core/services/user";
-import { EntityNotFoundError } from "../../../../src/config/error";
 
 describe("AssignStudentToGroup Service", () => {
     let studentRepository: jest.Mocked<IStudentRepository>;
@@ -15,7 +16,7 @@ describe("AssignStudentToGroup Service", () => {
     it("should call assignStudentToGroup with correct parameters", async () => {
         const id = "student-123";
         const idParent = "group-456";
-        const params = {id, idParent};
+        const params = { id, idParent };
 
         await assignStudentToGroup.execute(params);
 
@@ -28,9 +29,11 @@ describe("AssignStudentToGroup Service", () => {
 
         const id = "nonexistent-student";
         const idParent = "group-456";
-        const params = {id, idParent};
+        const params = { id, idParent };
 
-        await expect(assignStudentToGroup.execute(params)).rejects.toThrow(EntityNotFoundError);
+        await expect(assignStudentToGroup.execute(params)).rejects.toMatchObject({
+            code: ErrorCode.NOT_FOUND,
+        });
         expect(studentRepository.assignToGroup).toHaveBeenCalledWith(id, idParent);
     });
 
@@ -39,7 +42,7 @@ describe("AssignStudentToGroup Service", () => {
 
         const id = "student-123";
         const idParent = "group-456";
-        const params = {id, idParent};
+        const params = { id, idParent };
 
         await expect(assignStudentToGroup.execute(params)).rejects.toThrow("Database error");
         expect(studentRepository.assignToGroup).toHaveBeenCalledWith(id, idParent);

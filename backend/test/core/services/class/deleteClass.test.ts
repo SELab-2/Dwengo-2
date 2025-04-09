@@ -1,5 +1,5 @@
-import { DeleteClass } from "../../../../src/core/services/class/deleteClass";
 import { IClassRepository } from "../../../../src/core/repositories/classRepositoryInterface";
+import { DeleteClass } from "../../../../src/core/services/class/deleteClass";
 
 const mockClassRepository: jest.Mocked<IClassRepository> = {
     delete: jest.fn().mockResolvedValue(undefined), // Simuleert een succesvolle verwijdering
@@ -24,7 +24,7 @@ describe("DeleteClass Use Case", () => {
 
     test("Should return an empty object after successful deletion", async () => {
         const id = "class-456";
-        const result = await deleteClass.execute({id});
+        const result = await deleteClass.execute({ id });
 
         expect(result).toEqual({});
     });
@@ -32,6 +32,6 @@ describe("DeleteClass Use Case", () => {
     test("Should throw an error if repository throws", async () => {
         mockClassRepository.delete.mockRejectedValue(new Error("Database error"));
 
-        await expect(deleteClass.execute({id: "class-789"})).rejects.toThrow("Database error");
+        await expect(deleteClass.execute({ id: "class-789" })).rejects.toThrow("Database error");
     });
 });

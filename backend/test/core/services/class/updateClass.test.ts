@@ -3,7 +3,7 @@ import { UpdateClass } from "../../../../src/core/services/class";
 
 // Mock repository
 const mockClassRepository = {
-    update: jest.fn()
+    update: jest.fn(),
 };
 
 describe("UpdateClass Service", () => {
@@ -24,14 +24,14 @@ describe("UpdateClass Service", () => {
             id: id,
             name: updatedName,
             description: updatedDescription,
-            targetAudience: "Target Audience"
+            targetAudience: "Target Audience",
         }));
 
         const params = {
             id: id,
             name: updatedName,
             description: updatedDescription,
-            targetAudience: "Target Audience"
+            targetAudience: "Target Audience",
         };
 
         const result = await updateClassService.execute(params);
@@ -39,7 +39,7 @@ describe("UpdateClass Service", () => {
         expect(mockClassRepository.update).toHaveBeenCalledWith(id, {
             name: updatedName,
             description: updatedDescription,
-            targetAudience: "Target Audience"
+            targetAudience: "Target Audience",
         });
 
         expect(result).toEqual({});
@@ -55,17 +55,17 @@ describe("UpdateClass Service", () => {
             id: id,
             name: "Original Name",
             description: "Original Description",
-            targetAudience: updatedTargetAudience
+            targetAudience: updatedTargetAudience,
         }));
         const params = {
             id: id,
-            targetAudience: updatedTargetAudience
+            targetAudience: updatedTargetAudience,
         };
-        
+
         const result = await updateClassService.execute(params);
 
         expect(mockClassRepository.update).toHaveBeenCalledWith(id, {
-            targetAudience: updatedTargetAudience
+            targetAudience: updatedTargetAudience,
         });
         expect(result).toEqual({});
     });
