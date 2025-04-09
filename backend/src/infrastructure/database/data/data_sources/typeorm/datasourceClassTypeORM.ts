@@ -1,8 +1,9 @@
 import { DatasourceTypeORM } from "./datasourceTypeORM";
-import { EntityNotFoundError } from "../../../../../config/error";
+import { EntityNotFoundError, ExpiredError } from "../../../../../config/error";
 import { Class } from "../../../../../core/entities/class";
 import { JoinRequestType } from "../../../../../core/entities/joinRequest";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
+import { JoinCodeTypeORM } from "../../data_models/joinCodeTypeorm";
 import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
@@ -85,6 +86,36 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
             return classModel.toClassEntity(classTeacherModel!.teacher.id);
         }
         return null; // No result
+    }
+
+    /**
+     * Get the class that an active join code belongs to.
+     * @param code The actual alphanumerical code.
+     * @throws EntityNotFoundError when the code is not found.
+     * @throws ExpiredError when the code is expired.
+     * @returns A promise that resolves to the class for the given code.
+     */
+    public async getClassByActiveCode(code: string): Promise<Class> {
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const joinCodeModel: JoinCodeTypeORM | null = await datasource
+            .getRepository(JoinCodeTypeORM)
+            .findOne({ where: { code: code } });
+
+        if (!joinCodeModel) {
+            throw new EntityNotFoundError(`Join code ${code} not found.`);
+        }
+
+        if (joinCodeModel.isExpired) {
+            throw new ExpiredError(`The join code ${code} is expired.`);
+        }
+
+        const classModel: ClassTypeORM = joinCodeModel.class;
+
+        const _class: Class | null = await this.getClassById(classModel.id);
+
+        // The class is definitely in the database, because the code for that class was found
+        return _class!;
     }
 
     public async getAllClasses(): Promise<Class[]> {

@@ -32,12 +32,12 @@ export class AuthenticationService {
       this.errorService.pipeHandler($localize `Registration failed`)
     ).subscribe((response) => {
       let url: string;
-
       if (user.userType === UserType.STUDENT) {
         url = '/student/login';
       } else if (user.userType === UserType.TEACHER) {
         url = '/teacher/login';
       } else {
+        window.alert('Huh? Weird. This is not supposed to happen.');
         url = 'placeholder';
       }
 
@@ -72,6 +72,7 @@ export class AuthenticationService {
 
       });
   }
+
 
   logout(): void {
     this.removeToken();

@@ -2,6 +2,7 @@ import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnecti
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
+import { JoinCodeTypeORM } from "../../data_models/joinCodeTypeorm";
 import { JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
@@ -50,6 +51,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             UserTypeORM,
             StudentTypeORM,
             TeacherTypeORM,
+            JoinCodeTypeORM,
             JoinRequestTypeORM,
             ClassTypeORM,
             TeacherOfClassTypeORM,

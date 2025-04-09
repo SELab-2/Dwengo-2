@@ -1,14 +1,18 @@
 import { DatabaseEntryNotFoundError, EntityNotFoundError } from "../../config/error";
-import { JoinRequest } from "../../core/entities/joinRequest";
+import { Class } from "../../core/entities/class";
+import { JoinRequest, JoinRequestType } from "../../core/entities/joinRequest";
 import { IJoinRequestRepository } from "../../core/repositories/joinRequestRepositoryInterface";
+import { DatasourceClassTypeORM } from "../database/data/data_sources/typeorm/datasourceClassTypeORM";
 import { DatasourceJoinRequestTypeORM } from "../database/data/data_sources/typeorm/datasourceJoinRequestTypeORM";
 
 export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
     private datasourceJoinRequest: DatasourceJoinRequestTypeORM;
+    private datasourceClass: DatasourceClassTypeORM;
 
     public constructor() {
         super();
         this.datasourceJoinRequest = new DatasourceJoinRequestTypeORM();
+        this.datasourceClass = new DatasourceClassTypeORM();
     }
 
     public async create(joinRequest: JoinRequest): Promise<JoinRequest> {
@@ -21,6 +25,14 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
                 throw error;
             }
         }
+    }
+
+    public async createUsingCode(code: string, userId: string, type: JoinRequestType): Promise<JoinRequest> {
+        const _class: Class = await this.datasourceClass.getClassByActiveCode(code);
+
+        const joinRequest = new JoinRequest(userId, _class.id!, type);
+
+        return this.create(joinRequest);
     }
 
     public async getById(id: string): Promise<JoinRequest> {
