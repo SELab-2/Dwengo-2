@@ -17,7 +17,7 @@ export class DatasourceTypeORM implements IDatasource {
             "dwengo-database",
             true,
             false,
-            host
+            host,
         );
 
     // Promise of the TypeORM DataSource object
