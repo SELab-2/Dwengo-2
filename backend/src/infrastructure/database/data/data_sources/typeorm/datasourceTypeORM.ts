@@ -4,9 +4,7 @@ import { DatasourceTypeORMConnectionSettingsFactory } from "./datasourceTypeORMC
 import { DatasourceTypeORMSingleton } from "./datasourceTypeORMSingleton";
 import { IDatasource } from "../datasourceInterface";
 
-const host = process.env.CI === "true"
-    ? "localhost"
-    : "database";
+const host = process.env.CI === "true" ? "localhost" : "database";
 
 export class DatasourceTypeORM implements IDatasource {
     // Connection for the TypeORM - postgres database
