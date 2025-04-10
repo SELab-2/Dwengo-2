@@ -120,8 +120,8 @@ describe("Tests for join requests API Endpoints", () => {
                 
                 expect(checkResponse.status).toBe(404);
                 expect(checkResponse.body).toEqual({
-                    "code": "404",
-                    "message": ""
+                    "code": "NOT_FOUND",
+                    "message": "JoinRequest with ID " + requestId +" not found",
                 });
         });
     });

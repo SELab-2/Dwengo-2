@@ -142,33 +142,16 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
     public async getClassTeachers(classId: string): Promise<Teacher[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const teacherOfClassModels: TeacherOfClassTypeORM[] = await datasource
+        const classJoinResults: TeacherOfClassTypeORM[] = await datasource
             .getRepository(TeacherOfClassTypeORM)
-            .find({
-                where: { class: { id: classId } },
-                relations: ["teacher"],
-            });
+            .createQueryBuilder("teacherOfClass")
+            .leftJoinAndSelect("teacherOfClass.teacher", "teacher")
+            .leftJoinAndSelect("teacher.teacher", "user")
+            .where("teacherOfClass.class.id = :classId", { classId: classId })
+            .getMany();
 
-        if (teacherOfClassModels.length === 0) {
-            throw new EntityNotFoundError(`No teachers found for class with id: ${classId}`);
-        }
-
-        const teachers = await Promise.all(
-            teacherOfClassModels.map(
-                // We have a list of teacherOfClass models
-                async (teacherOfClassModel: TeacherOfClassTypeORM) => {
-                    const teacherUserModel: UserTypeORM | null = await datasource // We need to find their corresponding teachers
-                        .getRepository(UserTypeORM)
-                        .findOne({ where: { id: teacherOfClassModel.teacher.id } }); // So we use their id
-
-                    if (teacherUserModel !== null) {
-                        return teacherOfClassModel.teacher.toTeacherEntity(teacherUserModel); // End result is a list of teachers
-                    }
-                    return undefined;
-                },
-            ),
-        );
-
-        return teachers.filter((teacher): teacher is Teacher => teacher !== undefined);
+        return classJoinResults.map(classJoinResult => {
+            return classJoinResult.teacher.toTeacherEntity(classJoinResult.teacher.teacher);
+        });
     }
 }
