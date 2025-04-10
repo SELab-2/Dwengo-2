@@ -31,13 +31,10 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             relations: ["student"],
         });
 
-        if (studentModel !== null) {
-            const t: Student = studentModel.toStudentEntity(studentModel.student);
-            return t; //TODO: unclear naming variable
-        } else {
-            throw new EntityNotFoundError("Student not found");
+        if (!studentModel) {
+            return null;
         }
-        return null; // No result
+        return studentModel.toStudentEntity(studentModel.student);
     }
 
     public async getStudentByEmail(email: string): Promise<Student | null> {
@@ -46,16 +43,18 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         const userModel: UserTypeORM | null = await datasource
             .getRepository(UserTypeORM)
             .findOne({ where: { email: email } });
-        if (userModel !== null) {
-            const studentModel: StudentTypeORM | null = await datasource
-                .getRepository(StudentTypeORM)
-                .findOne({ where: { student: userModel } });
 
-            if (studentModel !== null) {
-                return studentModel.toStudentEntity(userModel);
-            }
+        if (!userModel) {
+            return null;
         }
-        return null; // No result
+        const studentModel: StudentTypeORM | null = await datasource
+            .getRepository(StudentTypeORM)
+            .findOne({ where: { student: userModel } });
+
+        if (!studentModel) {
+            return null;
+        }
+        return studentModel.toStudentEntity(userModel);
     }
 
     public async getStudentByFirstName(first_name: string): Promise<Student | null> {
@@ -65,16 +64,17 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .getRepository(UserTypeORM)
             .findOne({ where: { first_name: first_name } });
 
-        if (userModel !== null) {
-            const studentModel: StudentTypeORM | null = await datasource
-                .getRepository(StudentTypeORM)
-                .findOne({ where: { student: userModel } });
-
-            if (studentModel !== null) {
-                return studentModel.toStudentEntity(userModel);
-            }
+        if (!userModel) {
+            return null;
         }
-        return null; // No result
+        const studentModel: StudentTypeORM | null = await datasource
+            .getRepository(StudentTypeORM)
+            .findOne({ where: { student: userModel } });
+
+        if (!studentModel) {
+            return null;
+        }
+        return studentModel.toStudentEntity(userModel);
     }
 
     public async getStudentByLastName(last_name: string): Promise<Student | null> {
@@ -84,16 +84,17 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .getRepository(UserTypeORM)
             .findOne({ where: { last_name: last_name } });
 
-        if (userModel !== null) {
-            const studentModel: StudentTypeORM | null = await datasource
-                .getRepository(StudentTypeORM)
-                .findOne({ where: { student: userModel } });
-
-            if (studentModel !== null) {
-                return studentModel.toStudentEntity(userModel);
-            }
+        if (!userModel) {
+            return null;
         }
-        return null; // No result
+        const studentModel: StudentTypeORM | null = await datasource
+            .getRepository(StudentTypeORM)
+            .findOne({ where: { student: userModel } });
+
+        if (!studentModel) {
+            return null;
+        }
+        return studentModel.toStudentEntity(userModel);
     }
 
     public async getAllStudents(): Promise<Student[]> {
@@ -211,6 +212,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .getRepository(GroupTypeORM)
             .findOne({ where: { id: groupId } });
 
+        if (!groupModel) {
         if (!groupModel) {
             throw new EntityNotFoundError("Group does not exist");
         }
