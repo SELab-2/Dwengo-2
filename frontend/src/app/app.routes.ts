@@ -12,21 +12,12 @@ import { UnknownRouteComponent } from './components/unknown-route/unknown-route.
  * Based on https://angular.dev/guide/routing/common-router-tasks
  */
 export const routes: Routes = [
-    { path: '', component: LandingPageComponent },
-    { path: 'login', component: LoginPageComponent },
-    { path: 'register', component: RegisterPageComponent },
-    { path: 'teacher/classes', component: ClassesPageComponent },
-    { path: 'teacher/classes/:id', component: ClassComponent },
-    { path: 'student', children: [
-        {path: 'dashboard', component: StudentDashboardPageComponent},
-        {path: 'classes', component: ClassesPageComponent, title: "My Classes" },
-    ]
-    },
     { path: '', component: LandingPageComponent, title: 'Landing Page' },
     { path: 'teacher/classes', component: ClassesPageComponent, title: "My Classes" },
     { path: 'teacher/classes/:id', component: ClassComponent, title: "Class" },
-    // { path: 'student/classes', component: ClassesPageComponent, title: "My Classes" },
+    { path: 'student/classes', component: ClassesPageComponent, title: "My Classes" },
     { path: 'student/classes/:id', component: ClassComponent, title: "Class" },
+    { path: 'student/dashboard', component: StudentDashboardPageComponent, title: "Dashboard" },
     { path: 'teacher/login', component: LoginPageComponent, title: 'Teacher Login', data: { isTeacher: true } },
     { path: 'student/login', component: LoginPageComponent, title: 'Student Login', data: { isTeacher: false } },
     { path: 'register', component: RegisterPageComponent, title: 'Register' },
