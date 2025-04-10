@@ -15,6 +15,15 @@ jobs:
         run: npm install
         working-directory: backend
 
+      - name: Start Postgres
+        run: |
+          docker run --name pgci \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=postgres \
+            -e POSTGRES_DB=dwengo-database \
+            -p 5432:5432 \
+            -d postgres:15
+
       - name: Lint backend
         run: npm run lint
         working-directory: backend
