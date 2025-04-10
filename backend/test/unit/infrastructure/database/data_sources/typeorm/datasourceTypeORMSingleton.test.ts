@@ -5,21 +5,25 @@ import { DatasourceTypeORMSingleton } from "../../../../../../src/infrastructure
 
 let connectionSettings: DatasourceTypeORMConnectionSettings;
 
-jest.mock("typeorm", () => ({
-    DataSource: jest.fn().mockImplementation(() => ({
-        initialize: jest.fn().mockReturnValue(Promise.resolve(DataSource)),
-    })),
+jest.mock("typeorm", () => {
+    const actualTypeORM = jest.requireActual("typeorm");
+    const mockInitialize = jest.fn();
 
-    Entity: jest.fn(() => () => {}),
-    Unique: jest.fn(() => () => {}),
-    PrimaryGeneratedColumn: jest.fn(() => () => {}),
-    PrimaryColumn: jest.fn(() => () => {}),
-    Column: jest.fn(() => () => {}),
-    OneToOne: jest.fn(() => () => {}),
-    ManyToOne: jest.fn(() => () => {}),
-    JoinColumn: jest.fn(() => () => {}),
-    CreateDateColumn: jest.fn(() => () => {}),
-}));
+    const mockDataSourceInstance = {
+        initialize: mockInitialize,
+        getRepository: jest.fn(),
+        destroy: jest.fn().mockResolvedValue(true),
+        isInitialized: true,
+    };
+
+    mockInitialize.mockResolvedValue(mockDataSourceInstance);
+
+    return {
+        ...actualTypeORM,
+        DataSource: jest.fn(() => mockDataSourceInstance),
+    };
+});
+
 
 describe("DatasourceTypeORMSingleton", () => {
 
@@ -38,7 +42,9 @@ describe("DatasourceTypeORMSingleton", () => {
 
         expect(datasource).toBeDefined();
     });
-
+    afterAll(async () => {
+        await DatasourceTypeORMSingleton.shutdownDatabase();
+    });
 });
 
 // TODO: test that calling getInstance multiple times returns the same instance

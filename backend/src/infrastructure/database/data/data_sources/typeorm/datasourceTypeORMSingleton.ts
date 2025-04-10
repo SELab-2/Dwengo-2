@@ -45,7 +45,7 @@ export class DatasourceTypeORMSingleton {
      * Gracefully shutdown the database connection.
      */
     public static async shutdownDatabase(): Promise<void> {
-        if (this.instance !== undefined) {
+        if (this.instance !== undefined && this.instance.isInitialized) {
             console.log("Shutting down database connection");
             this.instance.destroy();
         }

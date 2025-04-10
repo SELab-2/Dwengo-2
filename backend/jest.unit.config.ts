@@ -9,7 +9,8 @@ const config: Config = {
   moduleFileExtensions: ['ts', 'js'],
   collectCoverage: true, // Enable code coverage
   coverageDirectory: 'coverage',
-  testMatch: ['**/test/unit/**/*.test.ts'], // Only test files ending in .test.ts
+  testMatch: ['**/test/unit/**/*.test.ts'],
+  setupFilesAfterEnv: ['<rootDir>/jest.unit.setup.ts'], // Only test files ending in .test.ts
 };
 
 export default config;
