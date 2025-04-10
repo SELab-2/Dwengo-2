@@ -3,7 +3,7 @@ import { UpdateAssignment } from "../../../../src/core/services/assignment";
 
 // Mock repository
 const mockAssignmentRepository = {
-    update: jest.fn()
+    update: jest.fn(),
 };
 
 describe("UpdateAssignment Service", () => {
@@ -29,17 +29,17 @@ describe("UpdateAssignment Service", () => {
             learningPathId: "1",
             startDate: startDate,
             deadline: deadline,
-            extraInstructions: updatedExtraInstructions
+            extraInstructions: updatedExtraInstructions,
         }));
 
         const params = {
             id: teacherId,
-            extraInstructions: updatedExtraInstructions
-        }
+            extraInstructions: updatedExtraInstructions,
+        };
         const result = await updateAssignmentService.execute(params);
 
         expect(mockAssignmentRepository.update).toHaveBeenCalledWith(teacherId, {
-            extraInstructions: updatedExtraInstructions
+            extraInstructions: updatedExtraInstructions,
         });
         expect(result).toEqual({});
     });

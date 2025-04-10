@@ -1,56 +1,44 @@
-import { DeleteUser } from '../../../../src/core/services/user/deleteUser';
-import { IStudentRepository } from '../../../../src/core/repositories/studentRepositoryInterface';
-import { Student } from '../../../../src/core/entities/student';
-import { EntityNotFoundError } from '../../../../src/config/error';
-import { ITeacherRepository } from '../../../../src/core/repositories/teacherRepositoryInterface';
-import { User, UserType } from '../../../../src/core/entities/user';
+import { ErrorCode } from "../../../../src/application/types";
+import { EntityNotFoundError } from "../../../../src/config/error";
+import { Student } from "../../../../src/core/entities/student";
+import { User, UserType } from "../../../../src/core/entities/user";
+import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
+import { ITeacherRepository } from "../../../../src/core/repositories/teacherRepositoryInterface";
+import { DeleteUser } from "../../../../src/core/services/user/deleteUser";
 
-describe('deleteStudent Service', () => {
-  let deleteStudentService: DeleteUser;
-  let mockStudentRepository: jest.Mocked<IStudentRepository>;
-  let mockTeacherRepository: jest.Mocked<ITeacherRepository>;
-  let params: {id: string; userType: UserType};
-  
-  beforeEach(() => {
-    mockStudentRepository = {
-      getById: jest.fn(),
-      delete: jest.fn(),
-    } as unknown as jest.Mocked<IStudentRepository>;
-    mockTeacherRepository = {} as unknown as jest.Mocked<ITeacherRepository>;
+describe("deleteStudent Service", () => {
+    let deleteStudentService: DeleteUser;
+    let mockStudentRepository: jest.Mocked<IStudentRepository>;
+    let mockTeacherRepository: jest.Mocked<ITeacherRepository>;
+    let params: { id: string; userType: UserType };
 
-    deleteStudentService = new DeleteUser(
-      mockStudentRepository,
-      mockTeacherRepository,
-    );
+    beforeEach(() => {
+        mockStudentRepository = {
+            getById: jest.fn(),
+            delete: jest.fn(),
+        } as unknown as jest.Mocked<IStudentRepository>;
+        mockTeacherRepository = {} as unknown as jest.Mocked<ITeacherRepository>;
 
-    params = {id: '1', userType: UserType.STUDENT};
-  });
+        deleteStudentService = new DeleteUser(mockStudentRepository, mockTeacherRepository);
 
-  test('Should throw error if student not found in database', async () => {
-    mockStudentRepository.delete.mockRejectedValue(
-      new EntityNotFoundError('Student not found'),
-    );
+        params = { id: "1", userType: UserType.STUDENT };
+    });
 
-    await expect(deleteStudentService.execute(params)).rejects.toThrow(
-      'Student not found',
-    );
-  });
+    test("Should throw error if student not found in database", async () => {
+        mockStudentRepository.delete.mockRejectedValue(new EntityNotFoundError("Student not found"));
 
-  test('Should return empty object if student is deleted', async () => {
-    const student: Student = new Student(
-      'test@example.com',
-      '  John  ',
-      '  Doe  ',
-      'hashedpassword123',
-      '1',
-    );
+        await expect(deleteStudentService.execute(params)).rejects.toMatchObject({
+            code: ErrorCode.NOT_FOUND,
+        });
+    });
 
-    mockStudentRepository.getById.mockResolvedValue(student);
-    mockStudentRepository.delete.mockResolvedValue(undefined);
+    test("Should return empty object if student is deleted", async () => {
+        const student: Student = new Student("test@example.com", "  John  ", "  Doe  ", "hashedpassword123", "1");
 
-    await expect(deleteStudentService.execute(params)).resolves.toEqual({});
-    expect(mockStudentRepository.delete).toHaveBeenCalledWith(
-      params.id,
-    );
-  });
+        mockStudentRepository.getById.mockResolvedValue(student);
+        mockStudentRepository.delete.mockResolvedValue(undefined);
+
+        await expect(deleteStudentService.execute(params)).resolves.toEqual({});
+        expect(mockStudentRepository.delete).toHaveBeenCalledWith(params.id);
+    });
 });

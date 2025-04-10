@@ -3,6 +3,7 @@ import { JoinRequestService } from "./joinRequestService";
 import { createJoinRequestSchema } from "../../../application/schemas";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { JoinRequest } from "../../entities/joinRequest";
+import { tryRepoEntityOperation } from "../../helpers";
 import { IClassRepository } from "../../repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
 
@@ -16,8 +17,18 @@ export class CreateJoinRequest extends JoinRequestService<CreateJoinRequestInput
         super(_joinRequestRepository);
     }
 
+    /**
+     * Executes the join-request creation process.
+     * @param input - The input data for creating a join-request, validated by createJoinRequestSchema.
+     * @returns A promise resolving to an object containing the ID of the created join-request.
+     * @throws {ApiError} If the join-request with the given id is not found or if the creation fails.
+     */
     async execute(input: CreateJoinRequestInput): Promise<object> {
-        const joinRequest: JoinRequest = await this.joinRequestRepository.create(await this.fromObject(input));
+        const joinRequest: JoinRequest = await tryRepoEntityOperation(
+            this.joinRequestRepository.create(await this.fromObject(input)),
+            "Class | Requester",
+            `${input.class} | ${input.requester}`,
+        );
         return { id: joinRequest.id };
     }
 

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { removeUserFromSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
 import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation } from "../../helpers";
 
 export type RemoveUserFromInput = z.infer<typeof removeUserFromSchema>;
 
@@ -20,13 +21,17 @@ export abstract class RemoveUserFrom implements Service<RemoveUserFromInput> {
     abstract removeUser(id: string, idParent: string, userType: UserType): Promise<void>;
 
     /**
-     * Removes a user from a group/class.
-     *
-     * @param input the parameters to remove a user from a group or class.
-     * @returns empty object no extra info needed.
+     * Executes the remove use from process.
+     * @param input - The input data for deleting a collection user, validated by removeUserFromSchema.
+     * @returns An empty object.
+     * @throws {ApiError} If the collection or user with the given id is not found.
      */
     async execute(input: RemoveUserFromInput): Promise<object> {
-        await this.removeUser(input.id, input.idParent, input.userType);
+        await tryRepoEntityOperation(
+            this.removeUser(input.id, input.idParent, input.userType),
+            "User | Collection",
+            `${input.id} | ${input.idParent}`,
+        );
         return {};
     }
 }

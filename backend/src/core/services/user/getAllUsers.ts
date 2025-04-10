@@ -12,6 +12,12 @@ export class GetAllUsers implements Service<GetAllUsersInput> {
         private teacherRepository: ITeacherRepository,
     ) {}
 
+    /**
+     * Executes the all users get process.
+     * @param input - The input data for getting all users, validated by getAllUsersSchema.
+     * @returns A promise resolving to an object with a list of all users.
+     * @throws {Error} If something went wrong.
+     */
     async execute(): Promise<object> {
         const studentIds = (await this.studentRepository.getAll()).map(student => student.id);
         const teacherIds = (await this.teacherRepository.getAll()).map(teacher => teacher.id);
