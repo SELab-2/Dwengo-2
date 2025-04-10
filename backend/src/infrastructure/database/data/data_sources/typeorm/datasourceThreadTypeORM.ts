@@ -42,7 +42,11 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
         const threadRepository = datasource.getRepository(QuestionThreadTypeORM);
         const messageRepository = datasource.getRepository(MessageTypeORM);
 
-        const threadModel: QuestionThreadTypeORM | null = await threadRepository.findOne({ where: { id: id } });
+        const threadModel: QuestionThreadTypeORM | null = await threadRepository
+            .findOne({ 
+                where: { id: id },
+                relations: ["student", "assignment"] 
+            });
 
         if (!threadModel) {
             return null;

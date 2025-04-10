@@ -4,6 +4,8 @@ import { Message } from "../../../../../core/entities/message";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
+import { StudentTypeORM } from "../../data_models/studentTypeorm";
+import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 
 export class DatasourceMessageTypeORM extends DatasourceTypeORM {
     public async createMessage(message: Message): Promise<Message> {
@@ -12,12 +14,28 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
         const userRepository = datasource.getRepository(UserTypeORM);
         const threadRepository = datasource.getRepository(QuestionThreadTypeORM);
         const messageRepository = datasource.getRepository(MessageTypeORM);
+        const studentRepository = datasource.getRepository(StudentTypeORM);
+        const teacherRepository = datasource.getRepository(TeacherTypeORM);
+
+        const studentModel: StudentTypeORM | null = await studentRepository
+            .findOne({
+                where: { id: message.senderId },
+                relations: ["student"]
+            });
+            
+        const teacherModel: TeacherTypeORM | null = await teacherRepository
+            .findOne({
+                where: { id: message.senderId },
+                relations: ["teacher"]
+            });
+        
+        const userId: string = studentModel ? studentModel?.student.id! : teacherModel?.teacher.id!;
 
         // We find the corresponding user.
-        const userModel = await userRepository.findOne({ where: { id: message.senderId } });
+        const userModel = await userRepository.findOne({ where: { id: userId } });
 
         if (!userModel) {
-            throw new EntityNotFoundError(`User with id: ${message.senderId} not found`);
+            throw new EntityNotFoundError(`Student or teacher with id: ${message.senderId} not found`);
         }
 
         // We find the thread.
@@ -40,9 +58,37 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
 
         const messageModel: MessageTypeORM | null = await datasource
             .getRepository(MessageTypeORM)
-            .findOne({ where: { id: id } });
+            .findOne({ 
+                where: { id: id },
+                relations: ["sent_by", "thread"] 
+            });
 
         if (messageModel !== null) {
+            let id: string;
+
+            const userModel: UserTypeORM | null = await datasource
+                .getRepository(UserTypeORM)
+                .findOne({
+                    where: { id: messageModel.sent_by.id }
+                });
+            if(userModel) {
+                const studentModel: StudentTypeORM | null = await datasource
+                .getRepository(StudentTypeORM)
+                .findOne({
+                    where: { student: userModel }
+                });
+
+                const teacherModel: TeacherTypeORM | null = await datasource
+                    .getRepository(TeacherTypeORM)
+                    .findOne({
+                        where: { teacher: userModel }
+                    });
+                
+                messageModel.sent_by.id = studentModel ? studentModel?.id! : teacherModel?.id!;
+            } else {
+                return null;
+            }
+            
             const message: Message = messageModel.toEntity();
             return message;
         }

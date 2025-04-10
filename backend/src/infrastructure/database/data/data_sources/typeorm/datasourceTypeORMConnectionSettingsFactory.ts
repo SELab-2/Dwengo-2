@@ -40,7 +40,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
         password: string,
         database: string,
         synchronize: boolean = false,
-        logging: boolean = true,
+        logging: boolean = false,
         host: string = "database",
         dropschema: boolean = false, // Never set this to true in production
 

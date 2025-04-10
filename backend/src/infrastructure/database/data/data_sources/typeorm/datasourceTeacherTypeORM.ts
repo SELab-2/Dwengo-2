@@ -30,7 +30,6 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
 
         if (teacherModel !== null) {
             const t: Teacher = teacherModel.toTeacherEntity(teacherModel.teacher);
-            console.log(t);
             return t;
         }
         return null; // No result

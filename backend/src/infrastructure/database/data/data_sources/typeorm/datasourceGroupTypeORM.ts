@@ -50,6 +50,7 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         // Fetch the group model
         const groupModel: GroupTypeORM | null = await datasource.getRepository(GroupTypeORM).findOne({
             where: { id: id },
+            relations: ["assignment"]
         });
 
         if (!groupModel) {
