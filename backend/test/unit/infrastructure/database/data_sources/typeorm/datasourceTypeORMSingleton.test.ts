@@ -5,6 +5,22 @@ import { DatasourceTypeORMSingleton } from "../../../../../../src/infrastructure
 
 let connectionSettings: DatasourceTypeORMConnectionSettings;
 
+jest.mock("typeorm", () => ({
+    DataSource: jest.fn().mockImplementation(() => ({
+        initialize: jest.fn().mockReturnValue(Promise.resolve(DataSource)),
+    })),
+
+    Entity: jest.fn(() => () => {}),
+    Unique: jest.fn(() => () => {}),
+    PrimaryGeneratedColumn: jest.fn(() => () => {}),
+    PrimaryColumn: jest.fn(() => () => {}),
+    Column: jest.fn(() => () => {}),
+    OneToOne: jest.fn(() => () => {}),
+    ManyToOne: jest.fn(() => () => {}),
+    JoinColumn: jest.fn(() => () => {}),
+    CreateDateColumn: jest.fn(() => () => {}),
+}));
+
 describe("DatasourceTypeORMSingleton", () => {
 
     beforeAll(() => {
@@ -23,9 +39,6 @@ describe("DatasourceTypeORMSingleton", () => {
         expect(datasource).toBeDefined();
     });
 
-    afterAll(async () => {
-        await DatasourceTypeORMSingleton.shutdownDatabase();
-    });
 });
 
 // TODO: test that calling getInstance multiple times returns the same instance
