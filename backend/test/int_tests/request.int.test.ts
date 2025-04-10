@@ -125,4 +125,37 @@ describe("Tests for join requests API Endpoints", () => {
                 });
         });
     });
+
+    describe("DELETE /requests/{id}", () => {
+        let requestId: string;
+
+        beforeEach(async () => {
+            const response = await request(app)
+                .post("/requests")
+                .send(mockRequest)
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            requestId = response.body.id;
+        });
+
+        it("should delete a join request with status 204", async () => {
+            const response = await request(app)
+                .delete("/requests/" + requestId)
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+            
+            expect(response.status).toBe(204);
+
+            const checkResponse = await request(app)
+                    .get("/requests/" + requestId)
+                    .set("Accept", "application/json")
+                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
+                
+                expect(checkResponse.status).toBe(404);
+                expect(checkResponse.body).toEqual({
+                    "code": "NOT_FOUND",
+                    "message": "JoinRequest with ID " + requestId +" not found",
+                });
+        });
+    });
 });

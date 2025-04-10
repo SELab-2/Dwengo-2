@@ -103,5 +103,51 @@ describe("Test assignment API Endpoints", () => {
                 });
             });
         });
+    });
+
+    describe("PATCH /assignment/{id}", () => {
+        let updatedAssignment: object;
+        let newDate: string;
+        let assignmentId: string;
+
+        beforeEach(async () => {
+            const assignmentResponse = await request(app)
+                .post("/assignments")
+                .send(mockAssignment)
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            assignmentId = assignmentResponse.body.id;
+            newDate = new Date("2031-12-12").toISOString().split("T")[0];
+            updatedAssignment = {
+                "deadline": newDate
+            }
+        });
+
+        it("should update an assignment with status 204", async () => {
+            const response = await request(app)
+                .patch("/assignments/" + assignmentId)
+                .send(updatedAssignment)
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(response.status).toBe(204);
+            expect(response.body).toEqual({});
+
+            const checkResponse = await request(app)
+                .get("/assignments/" + assignmentId)
+                .set("Accept", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(checkResponse.status).toBe(200);
+            expect(checkResponse.body).toEqual({
+                "id": assignmentId,
+                "classId": classId,
+                "learningPathId": "string",
+                "startDate": "2025-04-10",
+                "deadline": newDate,
+                "extraInstructions": "extra_instructions"
+            });
+        });
     })
 });

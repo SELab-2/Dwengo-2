@@ -41,16 +41,11 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
         return await this.datasourceAssignment.deleteAssignmentById(id);
     }
 
-    public async update(id: string, updatedFields: Partial<Assignment>): Promise<Assignment> {
-        const updatedAssignment: Assignment | null = await this.datasourceAssignment.updateAssignmentById(
-            id,
-            updatedFields,
+    public async update(updatedFields: Assignment): Promise<Assignment> {
+        const updatedAssignment: Assignment = await this.datasourceAssignment.updateAssignmentById(
+            updatedFields
         );
 
-        if (updatedAssignment) {
-            return updatedAssignment;
-        } else {
-            throw new EntityNotFoundError(`Assignment with id ${id} not found`);
-        }
+        return updatedAssignment;
     }
 }

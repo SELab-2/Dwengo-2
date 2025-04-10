@@ -72,5 +72,78 @@ describe("Test class API endpoints", () => {
             });
         });
     });
+
+    describe("PATCH /classes/{id}", () => {
+        let updatedClass: object;
+
+        beforeEach(async () => {
+            const response = await request(app)
+                .post("/classes")
+                .send(mockClass)
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + authDetails.token);
+            
+            classId = response.body.id;
+
+            updatedClass = {
+                "name": "newName"
+            }
+        });
+
+        it("should update a class with status 204", async () => {
+            const response = await request(app)
+                .patch("/classes/" + classId)
+                .send(updatedClass)
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + authDetails.token);
+            
+            expect(response.status).toBe(204);
+
+            const checkResponse = await request(app)
+                .get("/classes/" + classId)
+                .set("Accept", "application/json")
+                .set("Authorization", "Bearer " + authDetails.token); 
+                
+            expect(checkResponse.status).toBe(200);
+            expect(checkResponse.body).toEqual({
+                "id": classId,
+                "name": "newName",
+                "description": "string",
+                "targetAudience": "string",
+                "teacherId": authDetails.id  
+            });
+        });
+    });
+
+    describe("DELETE /classes/{id}", () => {
+        beforeEach(async () => {
+            const response = await request(app)
+                .post("/classes")
+                .send(mockClass)
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + authDetails.token);
+            
+            classId = response.body.id;
+        });
+
+        it("should delete a class with status 204", async () => {
+            const response = await request(app)
+                .delete("/classes/" + classId)
+                .set("Authorization", "Bearer " + authDetails.token);
+            
+            expect(response.status).toBe(204);
+
+            const checkResponse = await request(app)
+                    .get("/classes/" + classId)
+                    .set("Accept", "application/json")
+                    .set("Authorization", "Bearer " + authDetails.token);
+                
+                expect(checkResponse.status).toBe(404);
+                expect(checkResponse.body).toEqual({
+                    "code": "NOT_FOUND",
+                    "message": "Class with ID " + classId +" not found",
+                });
+        });
+    });
 });
 

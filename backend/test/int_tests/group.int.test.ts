@@ -9,6 +9,8 @@ describe("Test group API Endpoints", () => {
     let teacherAuthDetails: AuthDetails;
     let assignmentId: string;
     let mockGroup: object;
+    let groupId: string;
+    let classId: string;
 
     beforeEach(async () => {
         student1AuthDetails = await initializeUser("student", app);
@@ -25,6 +27,8 @@ describe("Test group API Endpoints", () => {
             })
             .set("Content-Type", "application/json")
             .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+        classId = classReponse.body.id;
 
          const assignmentResponse = await request(app)
             .post("/assignments")
@@ -65,7 +69,6 @@ describe("Test group API Endpoints", () => {
     });
 
     describe("GET", () => {
-        let groupId: string;
         
         beforeEach(async () => {
             const response = await request(app)
@@ -131,4 +134,75 @@ describe("Test group API Endpoints", () => {
             });
         })
     });
+
+    describe("PATCH /groups/{id}", () => {
+            let updatedGroup: object;
+    
+            beforeEach(async () => {
+                const response = await request(app)
+                    .post("/groups")
+                    .send(mockGroup)
+                    .set("Content-Type", "application/json")
+                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
+                
+                groupId = response.body.id;
+                //TODO: implement logic to update members and assignment of group, not only use patch group to add or remove members (we already have an endpoint for this)
+                updatedGroup= {
+                    "members": [student1AuthDetails.id] //TODO: why are members required with group PATCH?
+                }
+            });
+    
+            it("should update a group with status 204", async () => {
+                const response = await request(app)
+                    .patch("/groups/" + groupId)
+                    .send(updatedGroup)
+                    .set("Content-Type", "application/json")
+                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
+                
+                expect(response.status).toBe(204);
+    
+                const checkResponse = await request(app)
+                    .get("/groups/" + groupId)
+                    .set("Accept", "application/json")
+                    .set("Authorization", "Bearer " + teacherAuthDetails.token); 
+                    
+                expect(checkResponse.status).toBe(200);
+                expect(checkResponse.body).toEqual({
+                    "id": groupId,
+                    "assignment": assignmentId,
+                    "members": [student1AuthDetails.id]
+                });
+            });
+        });
+    
+        describe("DELETE /groups/{id}", () => {
+            beforeEach(async () => {
+                const response = await request(app)
+                    .post("/groups")
+                    .send(mockGroup)
+                    .set("Content-Type", "application/json")
+                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
+                
+                groupId = response.body.id;
+            });
+    
+            it("should delete a group with status 204", async () => {
+                const response = await request(app)
+                    .delete("/groups/" + groupId)
+                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
+                
+                expect(response.status).toBe(204);
+    
+                const checkResponse = await request(app)
+                        .get("/groups/" + groupId)
+                        .set("Accept", "application/json")
+                        .set("Authorization", "Bearer " + teacherAuthDetails.token);
+                    
+                    expect(checkResponse.status).toBe(404);
+                    expect(checkResponse.body).toEqual({
+                        "code": "NOT_FOUND",
+                        "message": "Group with ID " + groupId +" not found",
+                    });
+            });
+        });
 });
