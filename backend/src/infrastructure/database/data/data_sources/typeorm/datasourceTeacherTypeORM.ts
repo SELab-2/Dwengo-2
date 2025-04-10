@@ -1,5 +1,4 @@
 import { DatasourceTypeORM } from "./datasourceTypeORM";
-import { EntityNotFoundError } from "../../../../../config/error";
 import { Teacher } from "../../../../../core/entities/teacher";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";

@@ -3,9 +3,9 @@ import { EntityNotFoundError } from "../../../../../config/error";
 import { Message } from "../../../../../core/entities/message";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
-import { UserTypeORM } from "../../data_models/userTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
+import { UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceMessageTypeORM extends DatasourceTypeORM {
     public async createMessage(message: Message): Promise<Message> {
@@ -17,19 +17,21 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
         const studentRepository = datasource.getRepository(StudentTypeORM);
         const teacherRepository = datasource.getRepository(TeacherTypeORM);
 
-        const studentModel: StudentTypeORM | null = await studentRepository
-            .findOne({
-                where: { id: message.senderId },
-                relations: ["student"]
-            });
-            
-        const teacherModel: TeacherTypeORM | null = await teacherRepository
-            .findOne({
-                where: { id: message.senderId },
-                relations: ["teacher"]
-            });
-        
-        const userId: string = studentModel ? studentModel?.student.id! : teacherModel?.teacher.id!;
+        const studentModel: StudentTypeORM | null = await studentRepository.findOne({
+            where: { id: message.senderId },
+            relations: ["student"],
+        });
+
+        const teacherModel: TeacherTypeORM | null = await teacherRepository.findOne({
+            where: { id: message.senderId },
+            relations: ["teacher"],
+        });
+
+        const userId: string | undefined = studentModel?.student.id || teacherModel?.teacher.id;
+
+        if (!userId) {
+            throw new EntityNotFoundError(`Student or teacher with id: ${message.senderId} not found`);
+        }
 
         // We find the corresponding user.
         const userModel = await userRepository.findOne({ where: { id: userId } });
@@ -56,39 +58,37 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
     public async getMessageById(id: string): Promise<Message | null> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const messageModel: MessageTypeORM | null = await datasource
-            .getRepository(MessageTypeORM)
-            .findOne({ 
-                where: { id: id },
-                relations: ["sent_by", "thread"] 
-            });
+        const messageModel: MessageTypeORM | null = await datasource.getRepository(MessageTypeORM).findOne({
+            where: { id: id },
+            relations: ["sent_by", "thread"],
+        });
 
         if (messageModel !== null) {
-            let id: string;
-
-            const userModel: UserTypeORM | null = await datasource
-                .getRepository(UserTypeORM)
-                .findOne({
-                    where: { id: messageModel.sent_by.id }
-                });
-            if(userModel) {
-                const studentModel: StudentTypeORM | null = await datasource
-                .getRepository(StudentTypeORM)
-                .findOne({
-                    where: { student: userModel }
+            const userModel: UserTypeORM | null = await datasource.getRepository(UserTypeORM).findOne({
+                where: { id: messageModel.sent_by.id },
+            });
+            if (userModel) {
+                const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
+                    where: { student: userModel },
                 });
 
-                const teacherModel: TeacherTypeORM | null = await datasource
-                    .getRepository(TeacherTypeORM)
-                    .findOne({
-                        where: { teacher: userModel }
-                    });
-                
-                messageModel.sent_by.id = studentModel ? studentModel?.id! : teacherModel?.id!;
+                const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
+                    where: { teacher: userModel },
+                });
+
+                if (studentModel?.id) {
+                    messageModel.sent_by.id = studentModel.id;
+                } else if (teacherModel?.id) {
+                    messageModel.sent_by.id = teacherModel.id;
+                } else {
+                    throw new EntityNotFoundError(
+                        `No valid student or teacher found for userModel with id: ${userModel?.id}`,
+                    );
+                }
             } else {
                 return null;
             }
-            
+
             const message: Message = messageModel.toEntity();
             return message;
         }

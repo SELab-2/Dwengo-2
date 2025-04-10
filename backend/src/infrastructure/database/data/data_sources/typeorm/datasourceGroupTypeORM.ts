@@ -50,7 +50,7 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         // Fetch the group model
         const groupModel: GroupTypeORM | null = await datasource.getRepository(GroupTypeORM).findOne({
             where: { id: id },
-            relations: ["assignment"]
+            relations: ["assignment"],
         });
 
         if (!groupModel) {
@@ -110,15 +110,13 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
 
         const groupModel: GroupTypeORM | null = await datasource
             .getRepository(GroupTypeORM)
-            .findOne({where: { id: id }});
+            .findOne({ where: { id: id } });
 
         if (!groupModel) {
             throw new EntityNotFoundError(`Group with id: ${id} not found`);
         }
 
-        await datasource
-            .getRepository(GroupTypeORM)
-            .delete(groupModel.id);
+        await datasource.getRepository(GroupTypeORM).delete(groupModel.id);
     }
 
     //SHOW: Before edit: this method was brainless copy pasting of chatGPT. Pain in the ass bug

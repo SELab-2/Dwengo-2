@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { AssignmentService } from "./assignmentService";
 import { updateAssignmentSchema } from "../../../application/schemas/assignmentSchemas";
-import { Assignment } from "../../entities/assignment";
 import { tryRepoEntityOperation } from "../../helpers";
 
 export type UpdateAssignmentInput = z.infer<typeof updateAssignmentSchema>;
@@ -25,12 +24,7 @@ export class UpdateAssignment extends AssignmentService<UpdateAssignmentInput> {
         if (input.deadline) assignment.deadline = input.deadline;
         if (input.extraInstructions) assignment.extraInstructions = input.extraInstructions;
 
-        await tryRepoEntityOperation(
-            this.assignmentRepository.update(assignment),
-            "Assignment",
-            input.id,
-            true,
-        );
+        await tryRepoEntityOperation(this.assignmentRepository.update(assignment), "Assignment", input.id, true);
         return {};
     }
 }

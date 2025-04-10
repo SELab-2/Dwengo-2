@@ -5,9 +5,6 @@ import { logger, setupLogger } from "./config/logger";
 import { setupDefaultMiddleware, setupErrorMiddleware } from "./config/setupMiddleware";
 import { setupRoutes } from "./config/setupRoutes";
 import { setupServer } from "./config/setupServer";
-import { DatasourceTypeORM } from "./infrastructure/database/data/data_sources/typeorm/datasourceTypeORM";
-import { DatasourceTypeORMConnectionSettingsFactory } from "./infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
-import { Server } from "http";
 
 dotenv.config();
 setupLogger();
@@ -28,6 +25,6 @@ process.on("SIGINT", () => {
             process.exit(0);
         });
     });
-}); 
+});
 
-export{ app, server }
+export { app, server };

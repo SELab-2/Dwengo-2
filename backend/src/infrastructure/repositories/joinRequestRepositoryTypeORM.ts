@@ -34,10 +34,11 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
     }
 
     public async getByRequesterId(requesterId: string): Promise<JoinRequest[]> {
-        const joinRequests: JoinRequest[] | null = await this.datasourceJoinRequest.getJoinRequestByRequesterId(requesterId);
+        const joinRequests: JoinRequest[] | null =
+            await this.datasourceJoinRequest.getJoinRequestByRequesterId(requesterId);
 
         if (joinRequests) {
-            return joinRequests
+            return joinRequests;
         } else {
             throw new EntityNotFoundError(`Join requests for student or teacher with id ${requesterId} not found`);
         }

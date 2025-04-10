@@ -155,28 +155,22 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
     public async addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const userModel = await datasource
-            .getRepository(UserTypeORM)
-            .findOne({
-                where: { id: userId }
-            });
+        const userModel = await datasource.getRepository(UserTypeORM).findOne({
+            where: { id: userId },
+        });
 
         if (userType === JoinRequestType.TEACHER) {
-            const teacher = await datasource
-                .getRepository(TeacherTypeORM)
-                .findOne({
-                    where: { teacher: userModel! }
-                });
+            const teacher = await datasource.getRepository(TeacherTypeORM).findOne({
+                where: { teacher: userModel! },
+            });
             const teacherOfClass = new TeacherOfClassTypeORM();
             teacherOfClass.teacher = { id: teacher?.id } as TeacherTypeORM;
             teacherOfClass.class = { id: classId } as ClassTypeORM;
             await datasource.getRepository(TeacherOfClassTypeORM).save(teacherOfClass);
         } else {
-            const student = await datasource
-                .getRepository(StudentTypeORM)
-                .findOne({
-                    where: { student: userModel! }
-                });
+            const student = await datasource.getRepository(StudentTypeORM).findOne({
+                where: { student: userModel! },
+            });
             const studentOfClass = new StudentOfClassTypeORM();
             studentOfClass.student = { id: student?.id } as StudentTypeORM;
             studentOfClass.class = { id: classId } as ClassTypeORM;

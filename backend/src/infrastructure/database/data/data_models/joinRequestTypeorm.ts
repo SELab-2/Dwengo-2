@@ -1,9 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, Unique, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, ManyToOne } from "typeorm";
 import { ClassTypeORM } from "./classTypeorm";
 import { UserTypeORM } from "./userTypeorm";
 import { JoinRequest, JoinRequestType } from "../../../../core/entities/joinRequest";
-import { StudentTypeORM } from "./studentTypeorm";
-import { TeacherTypeORM } from "./teacherTypeorm";
 
 //TODO: get rid of useless conversion
 export enum JoinAsType {

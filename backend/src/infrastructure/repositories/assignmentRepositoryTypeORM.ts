@@ -42,9 +42,7 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
     }
 
     public async update(updatedFields: Assignment): Promise<Assignment> {
-        const updatedAssignment: Assignment = await this.datasourceAssignment.updateAssignmentById(
-            updatedFields
-        );
+        const updatedAssignment: Assignment = await this.datasourceAssignment.updateAssignmentById(updatedFields);
 
         return updatedAssignment;
     }

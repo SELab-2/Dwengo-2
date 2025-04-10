@@ -4,8 +4,6 @@ import { JoinRequest, JoinRequestType } from "../../../../../core/entities/joinR
 import { JoinAsType, JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
-import { UserTypeORM } from "../../data_models/userTypeorm";
-import { EntityNotFoundError } from "../../../../../config/error";
 
 export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
     public async createJoinRequest(joinRequest: JoinRequest): Promise<JoinRequest> {
@@ -67,26 +65,22 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
 
         let userId: string;
 
-        const studentModel: StudentTypeORM | null = await datasource
-            .getRepository(StudentTypeORM)
-            .findOne({
-                where: { id: requesterId },
-                relations: ["student"],
-            });
+        const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
+            where: { id: requesterId },
+            relations: ["student"],
+        });
 
-        const teacherModel: TeacherTypeORM | null = await datasource
-        .getRepository(TeacherTypeORM)
-        .findOne({
+        const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
             where: { id: requesterId },
             relations: ["teacher"],
         });
 
-        if(studentModel) {
+        if (studentModel) {
             userId = studentModel?.student.id;
         } else if (teacherModel) {
             userId = teacherModel?.teacher.id;
         } else {
-            return null;   
+            return null;
         }
 
         const joinRequests: JoinRequestTypeORM[] = await datasource.getRepository(JoinRequestTypeORM).find({

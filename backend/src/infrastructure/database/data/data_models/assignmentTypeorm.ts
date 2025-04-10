@@ -25,7 +25,7 @@ export class AssignmentTypeORM {
 
     public static createTypeORM(assignment: Assignment, classEntity: ClassTypeORM): AssignmentTypeORM {
         const assignmentTypeORM = new AssignmentTypeORM();
-        if(assignment.id) assignmentTypeORM.id = assignment.id;
+        if (assignment.id) assignmentTypeORM.id = assignment.id;
         assignmentTypeORM.class = classEntity;
         assignmentTypeORM.learning_path_id = assignment.learningPathId;
         assignmentTypeORM.start = assignment.startDate;

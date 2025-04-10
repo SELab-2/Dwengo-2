@@ -6,6 +6,7 @@ import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 
 export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
+    //TODO: classId can be removed
     public async createAssignment(newAssignment: Assignment, classId: string): Promise<Assignment> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
@@ -15,7 +16,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
             .findOne({ where: { id: newAssignment.classId } });
 
         if (!classModel) {
-            throw new EntityNotFoundError(`Class with id ${newAssignment.classId} not found`);
+            throw new EntityNotFoundError(`Class with id ${classId} not found`);
         }
 
         // Class exists and teacher exist: insert assignment into the database
@@ -96,20 +97,18 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     public async updateAssignmentById(updatedFields: Assignment): Promise<Assignment> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const classModel: ClassTypeORM | null = await datasource
-            .getRepository(ClassTypeORM)
-            .findOne({
-                where: { id: updatedFields.classId }
-            });
+        const classModel: ClassTypeORM | null = await datasource.getRepository(ClassTypeORM).findOne({
+            where: { id: updatedFields.classId },
+        });
 
         if (!classModel) {
             throw new EntityNotFoundError("Class not found");
         }
-        
+
         await datasource
             .getRepository(AssignmentTypeORM)
             .save(AssignmentTypeORM.createTypeORM(updatedFields, classModel));
 
-        return updatedFields
+        return updatedFields;
     }
 }
