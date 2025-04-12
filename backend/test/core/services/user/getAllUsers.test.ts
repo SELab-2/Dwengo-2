@@ -1,7 +1,7 @@
+import { User } from "../../../../src/core/entities/user";
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../../../src/core/repositories/teacherRepositoryInterface";
 import { GetAllUsers } from "../../../../src/core/services/user";
-import { User } from "../../../../src/core/entities/user";
 
 describe("GetAllUsers Service", () => {
     let studentRepository: jest.Mocked<IStudentRepository>;
@@ -16,11 +16,37 @@ describe("GetAllUsers Service", () => {
     });
 
     it("should return all students and teachers as objects", async () => {
-        const mockStudent = { id: "s1", email: "student@example.com", firstName: "John", familyName: "Doe", schoolName: "School A", toObject: jest.fn() };
-        const mockTeacher = { id: "t1", email: "teacher@example.com", firstName: "Jane", familyName: "Smith", schoolName: "School B", toObject: jest.fn() };
+        const mockStudent = {
+            id: "s1",
+            email: "student@example.com",
+            firstName: "John",
+            familyName: "Doe",
+            schoolName: "School A",
+            toObject: jest.fn(),
+        };
+        const mockTeacher = {
+            id: "t1",
+            email: "teacher@example.com",
+            firstName: "Jane",
+            familyName: "Smith",
+            schoolName: "School B",
+            toObject: jest.fn(),
+        };
 
-        mockStudent.toObject.mockReturnValue({ id: "s1", email: "student@example.com", firstName: "John", familyName: "Doe", schoolName: "School A" });
-        mockTeacher.toObject.mockReturnValue({ id: "t1", email: "teacher@example.com", firstName: "Jane", familyName: "Smith", schoolName: "School B" });
+        mockStudent.toObject.mockReturnValue({
+            id: "s1",
+            email: "student@example.com",
+            firstName: "John",
+            familyName: "Doe",
+            schoolName: "School A",
+        });
+        mockTeacher.toObject.mockReturnValue({
+            id: "t1",
+            email: "teacher@example.com",
+            firstName: "Jane",
+            familyName: "Smith",
+            schoolName: "School B",
+        });
 
         studentRepository.getAll.mockResolvedValue([mockStudent as unknown as User]);
         teacherRepository.getAll.mockResolvedValue([mockTeacher as unknown as User]);

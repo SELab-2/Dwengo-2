@@ -5,6 +5,7 @@ import { Service } from "../../../config/service";
 import { Student } from "../../entities/student";
 import { Teacher } from "../../entities/teacher";
 import { User, UserType } from "../../entities/user";
+import { tryRepoEntityOperation } from "../../helpers";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
 
@@ -17,9 +18,10 @@ export class CreateUser implements Service<CreateUserInput> {
     ) {}
 
     /**
-     * @description Executes the service to create a user.
-     * @param input - The input parameters to create a user.
-     * @returns {Promise<object>} An object containing the ID of the created user.
+     * Executes the user creation process.
+     * @param input - The input data for creating a user, validated by createUserSchema.
+     * @returns A promise resolving to an object containing the ID of the created user.
+     * @throws {ApiError} If the creation fails.
      */
     async execute(input: CreateUserInput): Promise<object> {
         const emailInUse = await Promise.all([
@@ -35,10 +37,10 @@ export class CreateUser implements Service<CreateUserInput> {
 
         if (input.userType === UserType.STUDENT) {
             user = new Student(input.email, input.firstName, input.familyName, input.passwordHash, input.schoolName);
-            user = await this.studentRepository.create(user as Student);
+            user = await tryRepoEntityOperation(this.studentRepository.create(user as Student), "User", "", false);
         } else {
             user = new Teacher(input.email, input.firstName, input.familyName, input.passwordHash, input.schoolName);
-            user = await this.teacherRepository.create(user as Teacher);
+            user = await tryRepoEntityOperation(this.teacherRepository.create(user as Teacher), "User", "", false);
         }
 
         return { id: user.id! };

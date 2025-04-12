@@ -1,3 +1,4 @@
+import { ErrorCode } from "../../../../src/application/types";
 import { DatabaseError, EntityNotFoundError } from "../../../../src/config/error";
 import { QuestionThread, VisibilityType } from "../../../../src/core/entities/questionThread";
 import {
@@ -45,7 +46,9 @@ describe("GetQuestionThread", () => {
     test("Should throw an EntityNotFoundError if the question thread does not exist", async () => {
         mockQuestionThreadRepository.getById.mockRejectedValue(new EntityNotFoundError("Thread not found"));
 
-        await expect(getQuestionThread.execute(input)).rejects.toThrow(EntityNotFoundError);
+        await expect(getQuestionThread.execute(input)).rejects.toMatchObject({
+            code: ErrorCode.NOT_FOUND,
+        });
         expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-999");
     });
 

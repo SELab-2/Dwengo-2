@@ -2,7 +2,7 @@ import { EntityNotFoundError } from "../../../src/config/error";
 import { QuestionThread, VisibilityType } from "../../../src/core/entities/questionThread";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
-import { IDatasourceThread } from "../../../src/infrastructure/database/data/data_sources/datasourceThreadInterface";
+import { DatasourceThreadTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceThreadTypeORM";
 
 describe("ThreadRepositoryTypeORM", () => {
 
@@ -11,19 +11,10 @@ describe("ThreadRepositoryTypeORM", () => {
     let thread: QuestionThread;
     let date: Date;
 
-    let datasourceThread: IDatasourceThread;
+    let datasourceThread: DatasourceThreadTypeORM;
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceTeacher: jest.fn(),
-            getDatasourceClass: jest.fn(),
-            getDatasourceJoinRequest: jest.fn(),
-            getDatasourceAssignment: jest.fn(),
-            getDatasourceMessage: jest.fn(),
-            getDatasourceThread: jest.fn(),
-            getDatasourceStudent: jest.fn(),
-            getDatasourceGroup: jest.fn(),
-            getDatasourceSubmission: jest.fn()
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),

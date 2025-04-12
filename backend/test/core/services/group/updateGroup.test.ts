@@ -1,6 +1,6 @@
-import { UpdateGroup } from '../../../../src/core/services/group/updateGroup';
-import { Group } from '../../../../src/core/entities/group';
-import { DatabaseError } from '../../../../src/config/error';
+import { DatabaseError } from "../../../../src/config/error";
+import { Group } from "../../../../src/core/entities/group";
+import { UpdateGroup } from "../../../../src/core/services/group/updateGroup";
 
 // Mock repository
 const mockGroupRepository = {
@@ -8,7 +8,7 @@ const mockGroupRepository = {
     update: jest.fn(),
 };
 
-describe('UpdateGroup', () => {
+describe("UpdateGroup", () => {
     let updateGroup: UpdateGroup;
 
     beforeEach(() => {
@@ -16,11 +16,11 @@ describe('UpdateGroup', () => {
         jest.clearAllMocks();
     });
 
-    test('Should update group members successfully', async () => {
+    test("Should update group members successfully", async () => {
         const inputParams = {
             id: "group-123",
-            members: ["user-1", "user-2", "user-3"]
-        }
+            members: ["user-1", "user-2", "user-3"],
+        };
         const existingGroup = new Group(["user-1", "user-2"], "class-456", "group-123");
 
         mockGroupRepository.getById.mockResolvedValue(existingGroup);
@@ -33,12 +33,12 @@ describe('UpdateGroup', () => {
         expect(mockGroupRepository.update).toHaveBeenCalledWith(expect.any(Group));
     });
 
-    test('Should throw a DatabaseError if update fails', async () => {
+    test("Should throw a DatabaseError if update fails", async () => {
         const inputParams = {
             id: "group-123",
-            members: ["user-1", "user-2", "user-3"]
-        }
-        mockGroupRepository.getById.mockRejectedValue(new DatabaseError('Retrieval failed'));
+            members: ["user-1", "user-2", "user-3"],
+        };
+        mockGroupRepository.getById.mockRejectedValue(new DatabaseError("Retrieval failed"));
 
         await expect(updateGroup.execute(inputParams)).rejects.toThrow(DatabaseError);
         expect(mockGroupRepository.getById).toHaveBeenCalledWith("group-123");

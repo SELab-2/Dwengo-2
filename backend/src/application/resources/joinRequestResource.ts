@@ -90,7 +90,7 @@ export function joinRequestRoutes(
                 urlPattern: "/users/:idParent/requests",
                 controller,
                 extractor: extractors.getUserJoinRequests,
-                handler: (req, data) => controller.getOne(req, data),
+                handler: (req, data) => controller.getChildren(req, data, controller.services.getUserJoinRequests),
                 middleware,
             },
         ],

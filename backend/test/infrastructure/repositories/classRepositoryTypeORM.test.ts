@@ -1,11 +1,11 @@
 import { Class } from "../../../src/core/entities/class";
-import { IDatasourceClass } from "../../../src/infrastructure/database/data/data_sources/datasourceClassInterface";
+import { DatasourceClassTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceClassTypeORM";
 
 describe("ClassRepositoryTypeORM", () => {
 
     let newClass: Class;
 
-    let datasourceClass: IDatasourceClass;
+    let datasourceClass: DatasourceClassTypeORM;
 
     let returnClass: Class|null;
 
