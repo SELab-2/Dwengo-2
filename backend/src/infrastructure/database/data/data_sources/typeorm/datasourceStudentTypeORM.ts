@@ -163,7 +163,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
                 where: { student: studentModel },
                 relations: ["class"],
             });
-      
+
         if (!studentOfClass || studentOfClass.class.id !== classId) {
             throw new DatabaseEntryNotFoundError("Student not part of class");
         }
