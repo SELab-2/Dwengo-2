@@ -63,6 +63,12 @@
                 </span>
             </div>
         </form>
+        <br>
+        <div id="center-container">
+            <button mat-raised-button (click)="showClassCode()" i18n>
+                Show class code
+            </button>
+        </div>
         <div id="center-container">
             <app-class-members-list [_class]="_class"></app-class-members-list>
         </div>

@@ -7,6 +7,8 @@ import {
   MatDialogClose,
   MatDialogContent
 } from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+
 
 export interface ClassCodePopupData {
   classCode: string;
@@ -15,9 +17,11 @@ export interface ClassCodePopupData {
 @Component({
   selector: 'app-class-code-popup',
   imports: [
+    // Angular material
     MatDialogActions,
     MatDialogClose,
-    MatDialogContent
+    MatDialogContent,
+    MatButtonModule
   ],
   templateUrl: './class-code-popup.component.html',
   styleUrl: './class-code-popup.component.less'
@@ -27,7 +31,7 @@ export class ClassCodePopupComponent {
   readonly dialogRef = inject(MatDialogRef<ClassCodePopupComponent>);
   readonly data = inject<ClassCodePopupData>(MAT_DIALOG_DATA)
 
-  onNoClick(): void {
+  close(): void {
     this.dialogRef.close();
   }
 

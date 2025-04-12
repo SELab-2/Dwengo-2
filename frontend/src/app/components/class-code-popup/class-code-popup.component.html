@@ -1,8 +1,10 @@
 <div class="class-code-popup">
-    <mat-dialog-content>
-        {{ data.classCode }}
-    </mat-dialog-content>
-    <mat-dialog-actions>
-
-    </mat-dialog-actions>
+    <div id="center-container">
+        <mat-dialog-content>
+            <h1>{{ data.classCode }}</h1>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button mat-button (click)="close()" i18n>Close</button>
+        </mat-dialog-actions>
+    </div>
 </div>

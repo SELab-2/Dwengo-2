@@ -16,6 +16,16 @@ import { PendingRequestsComponent } from '../pending-requests/pending-requests.c
 import { UserType } from '../../interfaces';
 import { ClassCodePopupComponent } from '../class-code-popup/class-code-popup.component';
 
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-class',
@@ -59,6 +69,9 @@ export class ClassComponent implements OnInit {
 
   // The form used to update the class
   public updateForm: FormGroup;
+
+  // Class code popup
+  readonly classCodePopup = inject(MatDialog);
 
   public constructor(
     private router: Router,
@@ -186,6 +199,14 @@ export class ClassComponent implements OnInit {
   private openSnackBar(message: string, action: string="Ok") {
     this.snackBar.open(message, action, {
         duration: 2500
+    });
+  }
+
+  public showClassCode() {
+    this.classCodePopup.open(ClassCodePopupComponent, {
+      data: {
+        classCode: this._class!.id // TODO: class code from BACKEND
+      }
     });
   }
 
