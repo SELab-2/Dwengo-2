@@ -17,14 +17,9 @@ import { UserType } from '../../interfaces';
 import { ClassCodePopupComponent } from '../class-code-popup/class-code-popup.component';
 
 import {
-  MAT_DIALOG_DATA,
   MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
 } from '@angular/material/dialog';
+import { AuthenticatedHeaderComponent } from '../authenticated-header/authenticated-header.component';
 
 
 @Component({
@@ -37,6 +32,7 @@ import {
     ClassMembersListComponent,
     PendingRequestsComponent,
     ClassCodePopupComponent,
+    AuthenticatedHeaderComponent,
 
     // Angular material
     MatFormFieldModule,
