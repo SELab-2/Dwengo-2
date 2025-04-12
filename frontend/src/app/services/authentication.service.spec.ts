@@ -1,5 +1,5 @@
 import { of } from "rxjs";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { AuthenticationService } from "./authentication.service";
 import { LoginResponse, RegisterResponse, UserLoginCredentials, UserRegistration, UserType } from "../interfaces";
 import { TestBed } from "@angular/core/testing";
