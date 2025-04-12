@@ -14,6 +14,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { ClassMembersListComponent } from '../class-members-list/class-members-list.component';
 import { PendingRequestsComponent } from '../pending-requests/pending-requests.component';
 import { UserType } from '../../interfaces';
+import { ClassCodePopupComponent } from '../class-code-popup/class-code-popup.component';
 
 
 @Component({
@@ -25,6 +26,7 @@ import { UserType } from '../../interfaces';
     ReactiveFormsModule,
     ClassMembersListComponent,
     PendingRequestsComponent,
+    ClassCodePopupComponent,
 
     // Angular material
     MatFormFieldModule,
