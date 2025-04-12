@@ -1,7 +1,7 @@
+import { User } from "../../../../src/core/entities/user";
 import { IStudentRepository } from "../../../../src/core/repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../../../src/core/repositories/teacherRepositoryInterface";
 import { GetClassUsers } from "../../../../src/core/services/user";
-import { User } from "../../../../src/core/entities/user";
 
 describe("GetClassUsers Service", () => {
     let studentRepository: jest.Mocked<IStudentRepository>;
@@ -16,14 +16,22 @@ describe("GetClassUsers Service", () => {
     });
 
     it("should return students and teachers as objects", async () => {
-        const mockStudent = { id: "s1", email: "student@example.com", toObject: jest.fn().mockReturnValue({ id: "s1", email: "student@example.com" }) };
-        const mockTeacher = { id: "t1", email: "teacher@example.com", toObject: jest.fn().mockReturnValue({ id: "t1", email: "teacher@example.com" }) };
+        const mockStudent = {
+            id: "s1",
+            email: "student@example.com",
+            toObject: jest.fn().mockReturnValue({ id: "s1", email: "student@example.com" }),
+        };
+        const mockTeacher = {
+            id: "t1",
+            email: "teacher@example.com",
+            toObject: jest.fn().mockReturnValue({ id: "t1", email: "teacher@example.com" }),
+        };
 
         studentRepository.getByClassId.mockResolvedValue([mockStudent as unknown as User]);
         teacherRepository.getByClassId.mockResolvedValue([mockTeacher as unknown as User]);
 
         const idParent = "class-123";
-        const result = await getClassUsers.execute({idParent});
+        const result = await getClassUsers.execute({ idParent });
 
         expect(result).toEqual({
             teachers: ["t1"],
@@ -39,7 +47,7 @@ describe("GetClassUsers Service", () => {
         teacherRepository.getByClassId.mockResolvedValue([]);
 
         const idParent = "class-456";
-        const result = await getClassUsers.execute({idParent});
+        const result = await getClassUsers.execute({ idParent });
 
         expect(result).toEqual({ teachers: [], students: [] });
     });

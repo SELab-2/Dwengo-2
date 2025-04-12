@@ -1,6 +1,6 @@
-import { GetThreadMessages, GetThreadMessagesInput } from '../../../../src/core/services/message/getThreadMessages';
-import { Message } from '../../../../src/core/entities/message';
-import { DatabaseError } from '../../../../src/config/error';
+import { DatabaseError } from "../../../../src/config/error";
+import { Message } from "../../../../src/core/entities/message";
+import { GetThreadMessages, GetThreadMessagesInput } from "../../../../src/core/services/message/getThreadMessages";
 
 // Mock repositories
 const mockQuestionThreadRepository = {
@@ -11,7 +11,7 @@ const mockMessageRepository = {
     getById: jest.fn(),
 };
 
-describe('GetThreadMessages', () => {
+describe("GetThreadMessages", () => {
     let getThreadMessages: GetThreadMessages;
     let input: GetThreadMessagesInput;
 
@@ -19,11 +19,11 @@ describe('GetThreadMessages', () => {
         getThreadMessages = new GetThreadMessages(mockQuestionThreadRepository as any);
         jest.clearAllMocks();
         input = {
-            idParent: "thread-456"
-        }
+            idParent: "thread-456",
+        };
     });
 
-    test('Should retrieve messages for a thread successfully', async () => {
+    test("Should retrieve messages for a thread successfully", async () => {
         const threadData = { messageIds: ["message-123", "message-456"] };
         const retrievedMessages = [
             new Message("sender-123", new Date(), "thread-456", "Hello", "message-123"),
@@ -38,8 +38,8 @@ describe('GetThreadMessages', () => {
         expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-456");
     });
 
-    test('Should throw a DatabaseError if retrieval fails', async () => {
-        mockQuestionThreadRepository.getById.mockRejectedValue(new DatabaseError('Retrieval failed'));
+    test("Should throw a DatabaseError if retrieval fails", async () => {
+        mockQuestionThreadRepository.getById.mockRejectedValue(new DatabaseError("Retrieval failed"));
 
         await expect(getThreadMessages.execute(input)).rejects.toThrow(DatabaseError);
         expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-456");

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { deleteUserSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
 import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation } from "../../helpers";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
 
@@ -14,17 +15,16 @@ export class DeleteUser implements Service<DeleteUserInput> {
     ) {}
 
     /**
-     * Delete a user from the DB.
-     *
-     * @param input Parameters containing the ID of the user to delete.
-     * @returns empty object
-     * @throws Error if the user that will be deleted does not exist.
+     * Executes the user deletion process.
+     * @param input - The input data for deleting a user, validated by deleteUserSchema.
+     * @returns An empty object.
+     * @throws {ApiError} If the user with the given id is not found.
      */
     async execute(input: DeleteUserInput): Promise<object> {
         if (input.userType == UserType.STUDENT) {
-            await this.studentRepository.delete(input.id);
+            await tryRepoEntityOperation(this.studentRepository.delete(input.id), "Student", input.id, true);
         } else {
-            await this.teacherRepository.delete(input.id);
+            await tryRepoEntityOperation(this.teacherRepository.delete(input.id), "Teacher", input.id, true);
         }
         return {};
     }

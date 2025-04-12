@@ -1,12 +1,15 @@
-import { DeleteQuestionThread, DeleteQuestionThreadInput } from '../../../../src/core/services/questionThread/deleteQuestionThread';
-import { DatabaseError } from '../../../../src/config/error';
+import { DatabaseError } from "../../../../src/config/error";
+import {
+    DeleteQuestionThread,
+    DeleteQuestionThreadInput,
+} from "../../../../src/core/services/questionThread/deleteQuestionThread";
 
 // Mock repository
 const mockQuestionThreadRepository = {
     delete: jest.fn(),
 };
 
-describe('DeleteQuestionThread', () => {
+describe("DeleteQuestionThread", () => {
     let deleteQuestionThread: DeleteQuestionThread;
     let input: DeleteQuestionThreadInput;
 
@@ -14,11 +17,11 @@ describe('DeleteQuestionThread', () => {
         deleteQuestionThread = new DeleteQuestionThread(mockQuestionThreadRepository as any);
         jest.clearAllMocks();
         input = {
-            id: "thread-123"
+            id: "thread-123",
         };
     });
 
-    test('Should delete a question thread and return an empty object', async () => {
+    test("Should delete a question thread and return an empty object", async () => {
         mockQuestionThreadRepository.delete.mockResolvedValue(undefined);
 
         const result = await deleteQuestionThread.execute(input);
@@ -27,8 +30,8 @@ describe('DeleteQuestionThread', () => {
         expect(mockQuestionThreadRepository.delete).toHaveBeenCalledWith("thread-123");
     });
 
-    test('Should throw a DatabaseError if deletion fails', async () => {
-        mockQuestionThreadRepository.delete.mockRejectedValue(new DatabaseError('Deletion failed'));
+    test("Should throw a DatabaseError if deletion fails", async () => {
+        mockQuestionThreadRepository.delete.mockRejectedValue(new DatabaseError("Deletion failed"));
 
         await expect(deleteQuestionThread.execute(input)).rejects.toThrow(DatabaseError);
         expect(mockQuestionThreadRepository.delete).toHaveBeenCalledWith("thread-123");
