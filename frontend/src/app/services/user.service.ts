@@ -12,33 +12,22 @@ import { ErrorService } from "./error.service";
 export class UserService {
 
     private API_URL = environment.API_URL;
-    private userCreds;
-    private standardHeaders;
 
     public constructor(
         private http: HttpClient,
         private authService: AuthenticationService,
         private errorService: ErrorService
-    ) {
-        this.userCreds = {
-            userId: this.authService.retrieveUserId(),
-            userToken: this.authService.retrieveToken()
-        };
-
-        this.standardHeaders = {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${this.userCreds.userToken}`
-            }
-        };
-    }
+    ) {}
 
     public userWithId(id: string): Observable<User> {
+        const userId = this.authService.retrieveUserId();
+        const headers = this.authService.retrieveAuthenticationHeaders();
+        
         return this.http.get<User>(
             `${this.API_URL}/users/${id}`, {
-                ...this.standardHeaders,
+                ...headers,
                 params: {
-                    'id': this.userCreds.userId || '',
+                    'id': userId || '',
                     'userType': this.authService.retrieveUserType()?.toString() || ''
                 }
             }
