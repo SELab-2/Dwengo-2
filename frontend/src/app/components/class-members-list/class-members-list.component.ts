@@ -24,6 +24,7 @@ export class ClassMembersListComponent implements OnInit {
   // Class members
   public members: User[] = [];
 
+  // TODO: put "magic constant" field names in user interface
   displayedColumns: string[] = ['name', 'email', 'schoolName'];
 
   constructor(

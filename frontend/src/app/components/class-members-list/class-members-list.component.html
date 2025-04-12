@@ -6,40 +6,42 @@
                 <h2 i18n>Students</h2>
             
                 <table mat-table [dataSource]="members">
+                    <!--
+                        A bug i encountered here was that material table was reading 'template' from undefined.
+                        This was fixed by removing the @for directives since the material table does this internally.
+                    -->
 
+                    <!-- Name Column -->
                     <ng-container matColumnDef="name">
-                        @for(member of members; track member.id) {
-                            <th mat-header-cell *matHeaderCellDef i18n>
-                                Name
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{element.firstName}} {{element.familyName}}
-                            </td>    
-                        }
+                        <th mat-header-cell *matHeaderCellDef i18n>
+                            Name
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.firstName}} {{element.familyName}}
+                        </td>    
                     </ng-container>
 
+                    <!-- Email Column -->
                     <ng-container matColumnDef="email">
-                        @for(member of members; track member.id) {
-                            <th mat-header-cell *matHeaderCellDef i18n>
-                                Email
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{element.email}}
-                            </td>    
-                        }
+                        <th mat-header-cell *matHeaderCellDef i18n>
+                            Email
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.email}}
+                        </td>    
                     </ng-container>
 
+                    <!-- School Name Column -->
                     <ng-container matColumnDef="schoolName">
-                        @for(member of members; track member.id) {
-                            <th mat-header-cell *matHeaderCellDef i18n>
-                                School
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{element.schoolName}}
-                            </td>    
-                        }
+                        <th mat-header-cell *matHeaderCellDef i18n>
+                            School
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.schoolName}}
+                        </td>    
                     </ng-container>
 
+                    <!-- Header and Row Definitions -->
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>

@@ -80,7 +80,7 @@ export class ClassComponent implements OnInit {
     if(id) {
       const classObservable = this.classesService.classWithId(id);
 
-      classObservable.pipe().subscribe(
+      classObservable.subscribe(
         (response) => {
           this._class = response;
           this.fillUpdateForm(response);
