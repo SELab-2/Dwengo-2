@@ -5,6 +5,7 @@ import { RegisterPageComponent } from './pages/register-page/register-page.compo
 import { ClassesPageComponent } from './pages/classes-page/classes-page.component';
 import { ClassComponent } from './components/class/class.component';
 import { UnknownRouteComponent } from './components/unknown-route/unknown-route.component';
+import { StudentAssignmentComponent } from './pages/student-assignment/student-assignment.component';
 
 /**
  * Routing of our frontend.
@@ -16,6 +17,7 @@ export const routes: Routes = [
     { path: 'teacher/classes/:id', component: ClassComponent, title: "Class" },
     { path: 'student/classes', component: ClassesPageComponent, title: "My Classes" },
     { path: 'student/classes/:id', component: ClassComponent, title: "Class" },
+    { path: 'student/assignments', component: StudentAssignmentComponent, title: "My Assignments" }, // TODO: add route guard
     { path: 'teacher/login', component: LoginPageComponent, title: 'Teacher Login', data: { isTeacher: true } },
     { path: 'student/login', component: LoginPageComponent, title: 'Student Login', data: { isTeacher: false } },
     { path: 'register', component: RegisterPageComponent, title: 'Register' },
