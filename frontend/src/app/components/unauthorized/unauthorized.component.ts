@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-unauthorized',
@@ -11,4 +12,8 @@ import { RouterLink } from '@angular/router';
 })
 export class UnauthorizedComponent {
 
+  constructor(
+    public readonly authenticationService: AuthenticationService
+  ) {}
+  
 }

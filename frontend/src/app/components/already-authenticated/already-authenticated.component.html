@@ -1,0 +1,18 @@
+<mat-card class="already-authenticated">
+    <span class="already-authenticated__logo">
+        <img i18n-alt src="assets/dwengo-groen-zwart.svg" alt="Dwengo logo" />
+    </span>
+
+    <h1 mat-typography i18n>Welcome back!</h1>
+    <p mat-typography i18n>You are already logged in</p>
+
+    <span class="already-authenticated__buttons">
+        <button mat-raised-button color="primary" name="home-button" i18n routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="this.authenticationService.logout()">
+        Go back to login
+        </button>
+        <button mat-raised-button color="primary" name="dashboard-button" i18n (click)="goToDashboard()">
+            Go to my dashboard
+        </button>
+    </span>
+</mat-card>
+  
