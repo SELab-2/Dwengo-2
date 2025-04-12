@@ -16,31 +16,20 @@ import { ErrorService } from "./error.service";
   export class ClassesService {
 
     private API_URL = environment.API_URL;
-    private userCreds;
-    private standardHeaders;
   
     public constructor(
         private http: HttpClient,
         private authService: AuthenticationService,
         private errorService: ErrorService
-    ) {
-        this.userCreds = {
-            userId: this.authService.retrieveUserId(),
-            userToken: this.authService.retrieveToken()
-        };
-
-        this.standardHeaders = {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${this.userCreds.userToken}`
-            }
-        };
-    }
+    ) {}
   
     public classesOfUser(): Observable<Class[]> {
+        const userId = this.authService.retrieveUserId();
+        const headers = this.authService.retrieveAuthenticationHeaders();
+        
         return this.http.get<ClassesReponse>(
-            `${this.API_URL}/users/${this.userCreds.userId}/classes`,
-            this.standardHeaders
+            `${this.API_URL}/users/${userId}/classes`,
+            headers
         ).pipe(
             this.errorService.pipeHandler(),
             switchMap(response => 
@@ -48,7 +37,7 @@ import { ErrorService } from "./error.service";
                     response.classes.map(id => 
                         this.http.get<Class>(
                             `${this.API_URL}/classes/${id}`,
-                            this.standardHeaders
+                            headers
                         )
                     )
                 )
@@ -57,9 +46,11 @@ import { ErrorService } from "./error.service";
     }
 
     public classWithId(id: string): Observable<Class> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+        
         return this.http.get<Class>(
             `${this.API_URL}/classes/${id}`,
-            this.standardHeaders
+            headers
         ).pipe(
             this.errorService.pipeHandler(
                 this.errorService.retrieveError($localize `class`)
@@ -68,10 +59,12 @@ import { ErrorService } from "./error.service";
     }
 
     public createClass(newClass: NewClass): Observable<string> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+        
         return this.http.post<NewClassResponse>(
             `${this.API_URL}/classes`,
             newClass,
-            this.standardHeaders
+            headers,
         ).pipe(
             this.errorService.pipeHandler(),
             switchMap(
@@ -81,9 +74,11 @@ import { ErrorService } from "./error.service";
     }
 
     public deleteClass(id: string): Observable<boolean> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+        
         return this.http.delete(
             `${this.API_URL}/classes/${id}`, {
-                ...this.standardHeaders,
+                ...headers,
                 observe: 'response'
             }
         ).pipe(
@@ -102,10 +97,12 @@ import { ErrorService } from "./error.service";
             targetAudience: _class.targetAudience
         };
 
+        const headers = this.authService.retrieveAuthenticationHeaders();
+
         return this.http.patch(
             `${this.API_URL}/classes/${_class.id}`,
             updatedClass, {
-                ...this.standardHeaders,
+                ...headers,
                 observe: 'response'
             }
         ).pipe(
