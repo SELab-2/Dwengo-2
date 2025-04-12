@@ -1,8 +1,7 @@
 import { StatusType, Submission } from "../../../src/core/entities/submission";
-import { IDatasourceSubmission } from "../../../src/infrastructure/database/data/data_sources/datasourceSubmissionInterface";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
-import { EntityNotFoundError } from "../../../src/config/error";
+import { DatasourceSubmissionTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceSubmissionTypeORM";
 
 describe("SubmissionRepositoryTypeORM", () => {
 
@@ -10,19 +9,10 @@ describe("SubmissionRepositoryTypeORM", () => {
     let datasourceFactoryMock: IDatasourceFactory;
     let submission: Submission;
 
-    let datasourceSubmission: IDatasourceSubmission;
+    let datasourceSubmission: DatasourceSubmissionTypeORM;
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceTeacher: jest.fn(),
-            getDatasourceClass: jest.fn(),
-            getDatasourceJoinRequest: jest.fn(),
-            getDatasourceAssignment: jest.fn(),
-            getDatasourceMessage: jest.fn(),
-            getDatasourceStudent: jest.fn(),
-            getDatasourceGroup: jest.fn(),
-            getDatasourceSubmission: jest.fn(),
-            getDatasourceThread: jest.fn(),
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),

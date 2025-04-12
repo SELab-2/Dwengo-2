@@ -597,9 +597,6 @@ const testRoutes = (
                 [HttpMethod.DELETE]: 0,
             };
 
-            console.log(`Testing route function: ${routeFn.name}`);
-            console.log("Initial method counts:", methodCounts);
-
             for (const { method, path, hasController = true, request } of routes) {
                 const mockMethod = mockApp[methodMap[method]];
                 const calls = mockMethod.mock.calls;
@@ -615,12 +612,6 @@ const testRoutes = (
 
                 const routeHandler = handlers[handlers.length - 1];
                 expect(typeof routeHandler).toBe("function");
-
-                console.log(`Testing ${method} ${path}`);
-                console.log(`Has controller: ${hasController}`);
-                if (request) {
-                    console.log("Request data:", JSON.stringify(request, null, 2));
-                }
 
                 // Use route-specific request if provided, otherwise default
                 const req = request
@@ -662,14 +653,7 @@ const testRoutes = (
                 }
 
                 methodCounts[method]++;
-                console.log(`Updated count for ${method}: ${methodCounts[method]}`);
             }
-
-            console.log("Final method counts:", methodCounts);
-            console.log("Registered routes:");
-            routes.forEach(({ method, path }) => {
-                console.log(`${method} ${path}`);
-            });
 
             Object.entries(methodCounts).forEach(([method, count]) => {
                 const mockMethod = mockApp[methodMap[method as HttpMethod]];

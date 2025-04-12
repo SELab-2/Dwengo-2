@@ -1,7 +1,7 @@
 import { Group } from "../../../src/core/entities/group";
-import { IDatasourceGroup } from "../../../src/infrastructure/database/data/data_sources/datasourceGroupInterface";
 import { IDatasourceFactory } from "../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../src/infrastructure/database/data/data_sources/datasourceInterface";
+import { DatasourceGroupTypeORM } from "../../../src/infrastructure/database/data/data_sources/typeorm/datasourceGroupTypeORM";
 
 describe("GroupRepositoryTypeORM", () => {
 
@@ -11,21 +11,12 @@ describe("GroupRepositoryTypeORM", () => {
     let idGroup: Group;
     let memberIds: string[];
 
-    let datasourceGroup: IDatasourceGroup;
+    let datasourceGroup: DatasourceGroupTypeORM;
 
     let returnGroup: Group|null;
 
     beforeEach(() => {
         datasourceMock = {
-            getDatasourceTeacher: jest.fn(),
-            getDatasourceClass: jest.fn(),
-            getDatasourceJoinRequest: jest.fn(),
-            getDatasourceAssignment: jest.fn(),
-            getDatasourceMessage: jest.fn(),
-            getDatasourceThread: jest.fn(),
-            getDatasourceStudent: jest.fn(),
-            getDatasourceGroup: jest.fn(),
-            getDatasourceSubmission: jest.fn()
         };
         datasourceFactoryMock = {
             createDatasource: jest.fn(() => datasourceMock),

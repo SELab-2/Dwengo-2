@@ -1,25 +1,22 @@
 import { EntityNotFoundError } from "../../config/error";
 import { Student } from "../../core/entities/student";
 import { IStudentRepository } from "../../core/repositories/studentRepositoryInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
-import { IDatasourceStudent } from "../database/data/data_sources/datasourceStudentInterface";
+import { DatasourceStudentTypeORM } from "../database/data/data_sources/typeorm/datasourceStudentTypeORM";
 
 export class StudentRepositoryTypeORM extends IStudentRepository {
-    private datasource: IDatasource;
-    private datasourceStudent: Promise<IDatasourceStudent>;
+    private datasourceStudent: DatasourceStudentTypeORM;
 
     public constructor() {
         super();
-        this.datasource = this.datasourceFactory.createDatasource();
-        this.datasourceStudent = this.datasource.getDatasourceStudent();
+        this.datasourceStudent = new DatasourceStudentTypeORM();
     }
 
     public async create(student: Student): Promise<Student> {
-        return await (await this.datasourceStudent).createStudent(student);
+        return await this.datasourceStudent.createStudent(student);
     }
 
     public async getById(id: string): Promise<Student> {
-        const student: Student | null = await (await this.datasourceStudent).getStudentById(id);
+        const student: Student | null = await this.datasourceStudent.getStudentById(id);
 
         if (student) {
             return student;
@@ -29,7 +26,7 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     }
 
     public async getByEmail(email: string): Promise<Student> {
-        const student: Student | null = await (await this.datasourceStudent).getStudentByEmail(email);
+        const student: Student | null = await this.datasourceStudent.getStudentByEmail(email);
 
         if (student) {
             return student;
@@ -39,7 +36,7 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     }
 
     public async getByFirstName(first_name: string): Promise<Student> {
-        const student: Student | null = await (await this.datasourceStudent).getStudentByFirstName(first_name);
+        const student: Student | null = await this.datasourceStudent.getStudentByFirstName(first_name);
 
         if (student) {
             return student;
@@ -49,7 +46,7 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     }
 
     public async getByLastName(last_name: string): Promise<Student> {
-        const student: Student | null = await (await this.datasourceStudent).getStudentByLastName(last_name);
+        const student: Student | null = await this.datasourceStudent.getStudentByLastName(last_name);
 
         if (student) {
             return student;
@@ -59,23 +56,23 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     }
 
     public async getAll(): Promise<Student[]> {
-        return await (await this.datasourceStudent).getAllStudents();
+        return await this.datasourceStudent.getAllStudents();
     }
 
     public async update(student: Student): Promise<Student> {
-        return await (await this.datasourceStudent).updateStudent(student);
+        return await this.datasourceStudent.updateStudent(student);
     }
 
     public async delete(id: string): Promise<void> {
-        return await (await this.datasourceStudent).deleteStudentWithId(id);
+        return await this.datasourceStudent.deleteStudentWithId(id);
     }
 
     public async removeFromClass(studentId: string, classId: string): Promise<void> {
-        await (await this.datasourceStudent).removeStudentFromClass(studentId, classId);
+        await this.datasourceStudent.removeStudentFromClass(studentId, classId);
     }
 
     public async removeFromGroup(studentId: string, groupId: string): Promise<void> {
-        await (await this.datasourceStudent).removeStudentFromGroup(studentId, groupId);
+        await this.datasourceStudent.removeStudentFromGroup(studentId, groupId);
     }
 
     async checkByEmail(email: string): Promise<boolean> {
@@ -88,18 +85,18 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     }
 
     public async assignToGroup(studentId: string, groupId: string): Promise<void> {
-        await (await this.datasourceStudent).assignStudentToGroup(studentId, groupId);
+        await this.datasourceStudent.assignStudentToGroup(studentId, groupId);
     }
 
     public async getByClassId(classId: string): Promise<Student[]> {
-        return await (await this.datasourceStudent).getClassStudents(classId);
+        return await this.datasourceStudent.getClassStudents(classId);
     }
 
     public async getByAssignmentId(assignmentId: string): Promise<Student[]> {
-        return await (await this.datasourceStudent).getAssignmentStudents(assignmentId);
+        return await this.datasourceStudent.getAssignmentStudents(assignmentId);
     }
 
     public async getByGroupId(groupId: string): Promise<Student[]> {
-        return await (await this.datasourceStudent).getGroupStudents(groupId);
+        return await this.datasourceStudent.getGroupStudents(groupId);
     }
 }
