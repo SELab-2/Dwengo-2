@@ -126,34 +126,13 @@ import { ClassMembersInterface } from "../interfaces/classes/classMembersRespons
         ).pipe(
             this.errorService.pipeHandler(),
             switchMap(response => 
-            {
-                console.log(response);
-                return forkJoin<User[]>(
+                forkJoin<User[]>(
                     response.students.map(studentId => 
                         this.userService.userWithIdAndType(studentId, UserType.STUDENT)
                     )
                 )
-            }
             )
         );
-        // return of([
-        //     {
-        //         id: "123",
-        //         email: "dries@mail.com",
-        //         firstName: "Dries",
-        //         familyName: "De Vries",
-        //         schoolName: "De School",
-        //         passwordHash: "123456789"
-        //     },
-        //     {
-        //         id: "321",
-        //         email: "zot@mail.com",
-        //         firstName: "Gerdy",
-        //         familyName: "Den Zot",
-        //         schoolName: "De School",
-        //         passwordHash: "1234567890"
-        //     }
-        // ]);
     }
 
   }

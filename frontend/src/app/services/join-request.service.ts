@@ -9,6 +9,7 @@ import { UserJoinRequestsResponse } from "../interfaces/join-requests/userJoinRe
 import { User, UserType } from "../interfaces";
 import { JoinRequestWithUser } from "../interfaces/join-requests/joinRequestWithUser";
 import { JoinRequestResponse } from "../interfaces/join-requests/joinRequestResponse";
+import { NewJoinRequest } from "../interfaces/join-requests/newJoinRequest";
 
 @Injectable({
     providedIn: 'root'
@@ -61,49 +62,49 @@ export class JoinRequestService {
     }
 
     public getJoinRequestsFromUserForClass(userId: string, classId: string): Observable<JoinRequest[]> {
-        // const userJoinRequests$ = this.getJoinRequestsFromUser(userId);
+        const userJoinRequests$ = this.getJoinRequestsFromUser(userId);
 
-        // return userJoinRequests$.pipe(
-        //     this.errorService.pipeHandler(),
-        //     map(requests =>
-        //         requests.filter(request =>
-        //             request.class === classId
-        //         )
-        //     )
-        // );
-        return of([
-            {
-                id: "1",
-                requester: "b1fe24f1-4a55-400b-9ff0-95ee18e605ac",
-                class: classId,
-                userType: UserType.STUDENT
-            }
-        ]);
+        return userJoinRequests$.pipe(
+            this.errorService.pipeHandler(),
+            map(requests =>
+                requests.filter(request =>
+                    request.class === classId
+                )
+            )
+        );
+        // return of([
+        //     {
+        //         id: "1",
+        //         requester: "b1fe24f1-4a55-400b-9ff0-95ee18e605ac",
+        //         class: classId,
+        //         userType: UserType.STUDENT
+        //     }
+        // ]);
     }
 
     public fillUsers(requests: JoinRequest[]): Observable<JoinRequestWithUser[]> {
-        // return forkJoin(
-        //     requests.map(request =>
-        //         this.http.get<User>(
-        //             `${this.API_URL}/users/${request.requester}`, {
-        //                 ...this.standardHeaders,
-        //                 params: {
-        //                     userType: request.userType.toString()
-        //                 }
-        //             }
-        //         ).pipe(
-        //             this.errorService.pipeHandler(),
-        //             map(user => {return {
-        //                 id: request.id,
-        //                 requester: user,
-        //                 class: request.class,
-        //                 userType: request.userType
-        //             }})
-        //         )
-        //     )
-        // );
+        return forkJoin(
+            requests.map(request =>
+                this.http.get<User>(
+                    `${this.API_URL}/users/${request.requester}`, {
+                        ...this.standardHeaders,
+                        params: {
+                            userType: request.userType.toString()
+                        }
+                    }
+                ).pipe(
+                    this.errorService.pipeHandler(),
+                    map(user => {return {
+                        id: request.id,
+                        requester: user,
+                        class: request.class,
+                        userType: request.userType
+                    }})
+                )
+            )
+        );
 
-        return of([])
+        // return of([])
     }
 
     public acceptRequest(requestId: string): Observable<boolean> {
@@ -131,6 +132,22 @@ export class JoinRequestService {
             this.errorService.pipeHandler(),
             map(response => {
                 return response.status === 204; // 204 No Content
+            })
+        );
+    }
+
+    // TODO: wait for bugfix API: id not found 404
+    public createRequest(request: NewJoinRequest): Observable<boolean> {
+        return this.http.post(
+            `${this.API_URL}/requests`,
+            request, {
+                ...this.standardHeaders,
+                observe: 'response'
+            }
+        ).pipe(
+            this.errorService.pipeHandler(),
+            map(response => {
+                return response.status === 201; // 201 Created
             })
         );
     }

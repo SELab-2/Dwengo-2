@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Class } from '../../interfaces/classes/class';
 import { CommonModule } from "@angular/common";
 import { ClassesService } from '../../services/classes.service';
@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserType } from '../../interfaces';
 import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
+import { CreateRequestComponent } from '../../components/create-request/create-request.component';
 
 
 // Type alias
@@ -26,6 +27,7 @@ type classFilterType = (c: Class) => boolean;
     MiniClassComponent,
     CreateClassComponent,
     AuthenticatedHeaderComponent,
+    CreateRequestComponent,
 
     // Angular material
     MatList,
@@ -43,10 +45,6 @@ export class ClassesPageComponent implements OnInit {
   // By default we don't filter any classes (return true)
   // You can specify this function all you want as long as it returns a boolean
   private classFilter: classFilterType = () => true;
-
-  // Snackbar
-  private snackBar = inject(MatSnackBar);
-  private readonly errorMessage = $localize `An error occured, please try again.`;
 
   // Whether the currently logged in user is a teacher or not
   public isTeacher: boolean = false;
@@ -109,12 +107,6 @@ export class ClassesPageComponent implements OnInit {
    */
   public get classes(): Class[] {
     return this._classes.filter(this.classFilter);
-  }
-
-  private openSnackBar(message: string, action: string="Ok") {
-    this.snackBar.open(message, action, {
-        duration: 2500
-    });
   }
 
 }
