@@ -36,17 +36,8 @@ describe('AuthenticatedHeaderComponent', () => {
     expect(logo).toBeTruthy();
   });
 
-  it('should have the teacher home button if user is teacher', () => {
-    component.isStudent = false;
-    harness.detectChanges();
-    const homeButton = harness.fixture.debugElement.query(By.css('.teacher-home-button'));
-    expect(homeButton).toBeTruthy();
-  });
-
-  it('should have the student home button if user is student', () => {
-    component.isStudent = true;
-    harness.detectChanges();
-    const homeButton = harness.fixture.debugElement.query(By.css('.student-home-button'));
+  it('should have a home button', () => {
+    const homeButton = harness.fixture.debugElement.query(By.css('.home-button'));
     expect(homeButton).toBeTruthy();
   });
 
