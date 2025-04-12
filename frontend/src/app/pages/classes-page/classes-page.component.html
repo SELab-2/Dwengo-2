@@ -38,19 +38,21 @@
         </div>
     }
 
-    <div class="center-container">
-        <h2 i18n>Your classes</h2>
-    </div>
+    @if (!showCreate) {
+        <div class="center-container">
+            <h2 i18n>Your classes</h2>
+        </div>
 
-    <div class="center-container">
-        <mat-list id="class-list">
-            @for (class of classes; track class.id) {
-                <li>
-                    <app-mini-class [_class]="class"></app-mini-class>
-                </li>
-            } @empty {
-                <p i18n>No classes found</p>
-            }
-        </mat-list>
-    </div>
+        <div class="center-container">
+            <mat-list id="class-list">
+                @for (class of classes; track class.id) {
+                    <li>
+                        <app-mini-class [_class]="class"></app-mini-class>
+                    </li>
+                } @empty {
+                    <p i18n>No classes found</p>
+                }
+            </mat-list>
+        </div>
+    }
 </div>
