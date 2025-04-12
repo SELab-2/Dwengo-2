@@ -29,4 +29,24 @@ describe('UnauthorizedComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have the logo', () => {
+    const logo = harness.fixture.nativeElement.querySelector('img');
+    expect(logo).toBeTruthy();
+  });
+
+  it('should have a title', () => {
+    const title = harness.fixture.nativeElement.querySelector('h1');
+    expect(title).toBeTruthy();
+  });
+
+  it('should have a message', () => {
+    const message = harness.fixture.nativeElement.querySelector('p');
+    expect(message).toBeTruthy();
+  });
+
+  it('should have a button', () => {
+    const button = harness.fixture.nativeElement.querySelector('button');
+    expect(button).toBeTruthy();
+  });
 });
