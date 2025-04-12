@@ -13,11 +13,6 @@ export async function clearDatabase(dataSource: DataSource): Promise<void> {
     }
 }
 
-beforeAll(async () => {
-    const dataSource = await DatasourceTypeORM.getDataSource();
-    await clearDatabase(dataSource);
-});
-
 afterEach(async () => {
     const dataSource = await DatasourceTypeORM.getDataSource();
     await clearDatabase(dataSource);

@@ -11,7 +11,7 @@ export class DatasourceTypeORM implements IDatasource {
     private static datasourceConnectionSettings: DatasourceTypeORMConnectionSettings =
         DatasourceTypeORMConnectionSettingsFactory.createDatasourceTypeORMConnectionSettings(
             "postgres",
-            5433, // 5433 for development docker, 5432 for production docker (on server)
+            5432, // 5433 for development docker, 5432 for production docker (on server)
             "postgres",
             "postgres",
             "dwengo-database",

@@ -23,8 +23,9 @@ describe("Test authentication API endpoints", () => {
                 .set("Content-Type", "application/json");
 
             expect(response.status).toBe(201);
-            expect(response.body).toHaveProperty("id");
-            expect(response.body.id).toEqual(expect.any(String));
+            expect(response.body).toEqual({
+                "id": expect.any(String)
+            });
         });
     });
 
@@ -46,14 +47,13 @@ describe("Test authentication API endpoints", () => {
                 .set("Content-Type", "application/json");
 
             expect(response.status).toBe(200);
-            expect(response.body).toHaveProperty("id");
-            expect(response.body).toHaveProperty("message")
-            expect(response.body).toHaveProperty("refreshToken");
-            expect(response.body).toHaveProperty("token");
-            expect(response.body).toHaveProperty("userType")
-            expect(response.body.id).toEqual(expect.any(String));
-            expect(response.body.message).toEqual("Authentication successful");
-            expect(response.body.userType).toEqual("student");
+            expect(response.body).toEqual({
+                "id": expect.any(String),
+                "refreshToken": expect.any(String),
+                "token": expect.any(String),
+                "message": "Authentication successful",
+                "userType": "student"
+            })
         });
     });
 })
