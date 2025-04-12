@@ -57,5 +57,5 @@ export abstract class IAssignmentRepository extends AbstractRepository {
      * @returns A promise that resolves to the Assignment that is updated
      * @throws EntityNotFound error when the assignment that needs to be updated does not exist
      */
-    public abstract update(id: string, updatedFields: Partial<Assignment>): Promise<Assignment>;
+    public abstract update(updatedFields: Assignment): Promise<Assignment>;
 }
