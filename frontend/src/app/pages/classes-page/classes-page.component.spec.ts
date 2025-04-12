@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from "@angular/common/http";
+import { provideHttpClient, HttpHeaders } from "@angular/common/http";
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ClassesPageComponent } from './classes-page.component';
 import { provideRouter } from '@angular/router';
@@ -8,6 +8,7 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { environment } from '../../../environments/environment';
 import { AuthenticationService } from '../../services/authentication.service';
+import { UserType } from '../../interfaces';
 
 
 describe('ClassesPageComponent', () => {
@@ -20,9 +21,19 @@ describe('ClassesPageComponent', () => {
   const USER_ID = "219c1e2f-488a-4f94-a9d8-38b7c9bede1f";
 
   beforeEach(async () => {
-    mockAuthService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveToken', 'retrieveUserType']);
+    mockAuthService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveToken', 'retrieveUserType', 'retrieveAuthenticationHeaders', 'retrieveUserCredentials']);
+
     mockAuthService.retrieveUserId.and.returnValue(USER_ID);
     mockAuthService.retrieveToken.and.returnValue('mockToken');
+    mockAuthService.retrieveUserType.and.returnValue(UserType.TEACHER);
+    mockAuthService.retrieveAuthenticationHeaders.and.returnValue({
+      headers: new HttpHeaders().append('Authorization', `Bearer mockToken`).append('Content-Type', 'application/json'),
+    });
+
+    mockAuthService.retrieveUserCredentials.and.returnValue({
+      userId: USER_ID,
+      token: 'mockToken',
+    });
 
     await TestBed.configureTestingModule({
       imports: [ClassesPageComponent],

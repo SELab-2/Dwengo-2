@@ -43,6 +43,8 @@ export class CreateRequestComponent {
         userType: userType
       };
 
+      console.log(newRequest);
+
       this.joinRequestService
         .createRequest(newRequest)
         .subscribe(response => {

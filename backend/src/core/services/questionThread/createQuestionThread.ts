@@ -20,7 +20,7 @@ export class CreateQuestionThread extends QuestionThreadService<CreateQuestionTh
             input.learningObjectId,
             input.isClosed,
             input.visibility,
-            input.messageIds,
+            [],
             undefined,
         );
 

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
 import { environment } from "../../environments/environment";
-import { forkJoin, map, Observable, of, switchMap } from "rxjs";
+import { forkJoin, map, Observable, of, switchMap, tap } from "rxjs";
 import { JoinRequest } from "../interfaces/join-requests/joinRequest";
 import { UserJoinRequestsResponse } from "../interfaces/join-requests/userJoinRequestsResponse";
 import { User, UserType } from "../interfaces";
@@ -39,26 +39,27 @@ export class JoinRequestService {
     }
 
     public getJoinRequestsFromUser(id: string): Observable<JoinRequest[]> {
-        // return this.http.get<UserJoinRequestsResponse>(
-        //     `${this.API_URL}/users/${id}/requests`,
-        //     this.standardHeaders
-        // ).pipe(
-        //     this.errorService.pipeHandler(),
-        //     switchMap(response => 
-        //         forkJoin(
-        //             response.requests.map(requestId => 
-        //                 this.http.get<JoinRequest>( // TODO: will probably conflict with UserType enum
-        //                     `${this.API_URL}/requests/${requestId}`,
-        //                     this.standardHeaders
-        //                 ).pipe(
-        //                     this.errorService.pipeHandler()
-        //                 )
-        //             )
-        //         )
-        //     )
-        // );
+        return this.http.get<UserJoinRequestsResponse>(
+            `${this.API_URL}/users/${id}/requests`,
+            this.standardHeaders
+        ).pipe(
+            this.errorService.pipeHandler(),
+            tap(response => console.log(response)), // TODO
+            switchMap(response => 
+                forkJoin(
+                    response.requests.map(requestId => 
+                        this.http.get<JoinRequest>( // TODO: will probably conflict with UserType enum
+                            `${this.API_URL}/requests/${requestId}`,
+                            this.standardHeaders
+                        ).pipe(
+                            this.errorService.pipeHandler()
+                        )
+                    )
+                )
+            )
+        );
 
-        return of([])
+        // return of([])
     }
 
     public getJoinRequestsFromUserForClass(userId: string, classId: string): Observable<JoinRequest[]> {
@@ -66,10 +67,12 @@ export class JoinRequestService {
 
         return userJoinRequests$.pipe(
             this.errorService.pipeHandler(),
-            map(requests =>
-                requests.filter(request =>
+            map(requests => {
+                console.log(requests); // TODO
+                return requests.filter(request =>
                     request.class === classId
                 )
+            }
             )
         );
         // return of([

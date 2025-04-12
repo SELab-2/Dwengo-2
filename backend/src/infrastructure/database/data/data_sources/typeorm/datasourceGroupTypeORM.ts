@@ -50,6 +50,7 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         // Fetch the group model
         const groupModel: GroupTypeORM | null = await datasource.getRepository(GroupTypeORM).findOne({
             where: { id: id },
+            relations: ["assignment"],
         });
 
         if (!groupModel) {
@@ -107,6 +108,21 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
     public async delete(id: string): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
+        const groupModel: GroupTypeORM | null = await datasource
+            .getRepository(GroupTypeORM)
+            .findOne({ where: { id: id } });
+
+        if (!groupModel) {
+            throw new EntityNotFoundError(`Group with id: ${id} not found`);
+        }
+
+        await datasource.getRepository(GroupTypeORM).delete(groupModel.id);
+    }
+
+    //SHOW: Before edit: this method was brainless copy pasting of chatGPT. Pain in the ass bug
+    /**public async delete(id: string): Promise<void> {
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
         const groupRepository = datasource.getRepository(GroupTypeORM);
         const studentOfGroupRepository = datasource.getRepository(StudentOfGroupTypeORM);
 
@@ -127,7 +143,7 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
 
         // Then, delete the group itself
         await studentOfGroupRepository.delete({ group: groupModel });
-    }
+    }*/
 
     public async getByUserId(userId: string): Promise<Group[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;

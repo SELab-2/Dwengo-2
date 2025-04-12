@@ -4,6 +4,20 @@ on:
 jobs:
   backend:
     runs-on: self-hosted
+    services:
+      postgres:
+        image: postgres:alpine
+        ports:
+          - 5433:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: dwengo-database
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     steps:
       - name: Fix permissions
         run: sudo chown -R $USER:$USER /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2 || true
@@ -22,6 +36,8 @@ jobs:
       - name: Test backend
         run: npm test
         working-directory: backend
+        env:
+          CI: "true"
 
   frontend:
     runs-on: self-hosted

@@ -6,6 +6,7 @@ import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 
 export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
+    //TODO: classId can be removed
     public async createAssignment(newAssignment: Assignment, classId: string): Promise<Assignment> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
@@ -15,7 +16,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
             .findOne({ where: { id: newAssignment.classId } });
 
         if (!classModel) {
-            throw new EntityNotFoundError(`Class with id ${newAssignment.classId} not found`);
+            throw new EntityNotFoundError(`Class with id ${classId} not found`);
         }
 
         // Class exists and teacher exist: insert assignment into the database
@@ -93,42 +94,21 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
         await datasource.getRepository(AssignmentTypeORM).delete(id);
     }
 
-    public async updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment | null> {
+    public async updateAssignmentById(updatedFields: Assignment): Promise<Assignment> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const assignmentModel: AssignmentTypeORM | null = await datasource
+        const classModel: ClassTypeORM | null = await datasource.getRepository(ClassTypeORM).findOne({
+            where: { id: updatedFields.classId },
+        });
+
+        if (!classModel) {
+            throw new EntityNotFoundError("Class not found");
+        }
+
+        await datasource
             .getRepository(AssignmentTypeORM)
-            .findOne({ where: { id: id } });
-        let updateResult;
-        if (!assignmentModel) {
-            throw new EntityNotFoundError("Assignment not found");
-        }
-        if (updatedFields.classId) {
-            const classModel: ClassTypeORM | null = await datasource
-                .getRepository(ClassTypeORM)
-                .findOne({ where: { id: id } });
+            .save(AssignmentTypeORM.createTypeORM(updatedFields, classModel));
 
-            if (!classModel) {
-                throw new EntityNotFoundError("Class not found");
-            }
-
-            updateResult = await datasource
-                .getRepository(AssignmentTypeORM)
-                .update(id, assignmentModel.fromPartialAssignmentEntity(updatedFields, classModel));
-        } else {
-            updateResult = await datasource
-                .getRepository(AssignmentTypeORM)
-                .update(id, assignmentModel.fromPartialAssignmentEntity(updatedFields, undefined));
-        }
-
-        /* Some notes: I did not found any documentation on the return value of update.
-         * So i asked ChatGPT: https://chatgpt.com/share/67d1c206-18f4-8004-a760-b40d3d2ef2d0
-         * Postgresql has affected >= 1 even if it finds an entry that doesn't need to be updated.
-         * So it only has affected == 0 if it doesn't find any entry to update.
-         */
-        if (updateResult.affected || 0 > 0) {
-            return await this.getAssignmentById(id);
-        }
-        return null;
+        return updatedFields;
     }
 }
