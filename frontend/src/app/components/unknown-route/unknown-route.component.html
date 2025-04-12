@@ -7,7 +7,7 @@
     <p mat-typography i18n>Maybe try turning it off and on again?</p>
 
     <span class="unknown-route__buttons">
-        <button mat-raised-button color="primary" name="home-button" i18n routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="this.authenticationService.logout()">
+        <button mat-raised-button color="primary" name="home-button" i18n routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="authenticationService.logout()">
         Go back to login
         </button>
     </span>

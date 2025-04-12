@@ -7,7 +7,7 @@
     <p mat-typography i18n>YOU ARE IN VIOLATION OF THIS SITE'S ROUTING PROTOCOLS</p>
 
     <span class="unauthorized__buttons">
-        <button mat-raised-button color="primary" name="home-button" i18n routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="this.authenticationService.logout()">
+        <button mat-raised-button color="primary" name="home-button" i18n routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="authenticationService.logout()">
         Go back to login
         </button>
     </span>
