@@ -30,4 +30,24 @@ describe('AlreadyAuthenticatedComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have a title', () => {
+    const title = harness.fixture.nativeElement.querySelector('h1');
+    expect(title).toBeTruthy();
+  });
+
+  it('should have a message', () => {
+    const message = harness.fixture.nativeElement.querySelector('p');
+    expect(message).toBeTruthy();
+  });
+
+  it('should have a button to return to login', () => {
+    const button = harness.fixture.nativeElement.querySelector('button[name="home-button"]');
+    expect(button).toBeTruthy();
+  });
+
+  it('should have a button to return to the dashboard if authenticated', () => {
+    const button = harness.fixture.nativeElement.querySelector('button[name="dashboard-button"]');
+    expect(button).toBeTruthy();
+  });
 });
