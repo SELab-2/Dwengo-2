@@ -35,8 +35,19 @@ describe('UnauthenticatedHeaderComponent', () => {
     expect(homeButton).toBeTruthy();
   });
 
-  it('should have a register button', () => {
+  it('should have a register button if not on register route', async () => {
+    await harness.navigateByUrl('/not-register');
+    harness.detectChanges();
+
     const registerButton = harness.fixture.debugElement.query(By.css('.register-button'));
     expect(registerButton).toBeTruthy();
+  });
+
+  it('should not have a register button if on register page', async () => {
+    await harness.navigateByUrl('/register');
+    harness.detectChanges();
+
+    const registerButton = harness.fixture.debugElement.query(By.css('.register-button'));
+    expect(registerButton).toBeFalsy();
   });
 });
