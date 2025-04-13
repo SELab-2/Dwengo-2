@@ -1,0 +1,51 @@
+<!-- Main -->
+<main class="main-container">
+
+    <h1 class="main-title" i18n>Dashboard</h1>
+
+    <div class="main-info">
+
+        @if (selectedView === 'classes'){
+        <app-class-overview-widget class="dynamic-section overview" [classes]="classes"></app-class-overview-widget>
+        }
+        @if (selectedView === 'deadlines'){
+        <app-deadlines-widget [assignments]="assignments" class="dynamic-section overview"></app-deadlines-widget>
+        }
+
+        @if (selectedView === 'questions'){
+        <div class="dynamic-section overview">
+            <h3 i18n>Student Questions</h3>
+            <h1>PLACEHOLDER</h1>
+        </div>
+        }
+        <div class="main-cards">
+            <app-menu-card [title]="classesTitle" [count]="classes.length" icon="school"
+                [selected]="selectedView === 'classes'" color="blue" (cardClick)="setView('classes')">
+            </app-menu-card>
+
+            <app-menu-card [title]="deadlinesTitle" [count]="assignments.length" icon="timer"
+                [selected]="selectedView === 'deadlines'" color="yellow" (cardClick)="setView('deadlines')">
+            </app-menu-card>
+
+            <app-menu-card [title]="questionsTitle" [count]="0" icon="contact_support"
+                [selected]="selectedView === 'questions'" color="green" (cardClick)="setView('questions')">
+            </app-menu-card>
+            <div class="button-widget">
+                <button mat-raised-button color="primary" [routerLink]="learningPathsLink" class="paths-link" i18n>
+                    Explore Paths
+                </button>
+                <button mat-raised-button color="primary" [routerLink]="createClassLink" class="paths-link" i18n>
+                    Create a class
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="charts">
+        <app-class-chart [classChartData]="classChartData" [displayContent]="displayClassChart"></app-class-chart>
+
+        <app-activity-chart [activityChartData]="activityChartData"
+            [displayContent]="displayActivityChart"></app-activity-chart>
+    </div>
+</main>

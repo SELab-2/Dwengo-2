@@ -7,6 +7,12 @@ export interface Assignment {
     startDate: Date,
     deadline: Date,
     extraInstructions: string,
+    learningPathId: string,
+    // name of the assignment
+    name?: string;
+
+    // name of parent class
+    className?: string;
 }
 
 /**
@@ -17,4 +23,5 @@ export interface NewAssignment {
     startDate: Date,
     deadline: Date,
     extraInstructions: string,
+    learningPathId: string,
 }

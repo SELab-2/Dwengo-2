@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
+import { TeacherDashboardPageComponent } from './pages/teacher-dashboard-page/teacher-dashboard-page.component';
 import { ClassesPageComponent } from './pages/classes-page/classes-page.component';
 import { ClassComponent } from './components/class/class.component';
 import { UnknownRouteComponent } from './components/unknown-route/unknown-route.component';
@@ -17,6 +18,7 @@ import { AlreadyAuthenticatedComponent } from './components/already-authenticate
  */
 export const routes: Routes = [
     { path: '', component: LandingPageComponent, title: 'Landing Page', canActivate: [UnauthorizedGuard] },
+    { path: 'teacher/dashboard', component: TeacherDashboardPageComponent, canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'teacher/classes', component: ClassesPageComponent, title: "My Classes", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'teacher/classes/:id', component: ClassComponent, title: "Class", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'student/classes', component: ClassesPageComponent, title: "My Classes", canActivate: [UserTypeGuard], data: { userType: 'student' } },

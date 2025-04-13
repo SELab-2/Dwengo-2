@@ -1,0 +1,24 @@
+<mat-card class="charts-card">
+    <mat-card-header>
+        <mat-card-title i18n>Timeline</mat-card-title>
+        <span i18n-matTooltip
+            matTooltip="This chart shows you the amount of submissions each class made in the past 12 months.">
+            <mat-icon class="info-icon">info</mat-icon>
+        </span>
+    </mat-card-header>
+
+    <mat-card-content>
+        @if(displayContent){
+        <apx-chart class="chart" [series]="lineChartOptions.series!" [chart]="lineChartOptions.chart!"
+            [xaxis]="lineChartOptions.xaxis!" [dataLabels]="lineChartOptions.dataLabels!"
+            [grid]="lineChartOptions.grid!" [stroke]="lineChartOptions.stroke!" [tooltip]="lineChartOptions.tooltip!">
+        </apx-chart>
+
+        } @else {
+        <div class="no-data-container">
+            <p i18n>No data available</p>
+        </div>
+        }
+
+    </mat-card-content>
+</mat-card>
