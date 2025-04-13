@@ -2,6 +2,7 @@ import { repositories as repos } from "./repositories";
 import * as AssignmentServices from "../core/services/assignment";
 import * as ClassServices from "../core/services/class";
 import * as GroupServices from "../core/services/group";
+import * as JoinCodeServices from "../core/services/joinCode";
 import * as JoinRequestServices from "../core/services/joinRequest";
 import * as MessageServices from "../core/services/message";
 import * as QuestionThreadServices from "../core/services/questionThread";
@@ -36,6 +37,13 @@ export const services = {
         create: new GroupServices.CreateGroup(repos.group),
         getUserGroups: new GroupServices.GetUserGroups(repos.group),
         getAssignmentGroups: new GroupServices.GetAssignmentGroups(repos.group),
+    },
+    joinCode: {
+        get: new JoinCodeServices.GetJoinCode(repos.joinCode),
+        update: new JoinCodeServices.UpdateJoinCode(repos.joinCode),
+        remove: new JoinCodeServices.DeleteJoinCode(repos.joinCode),
+        create: new JoinCodeServices.CreateJoinCode(repos.joinCode),
+        getClassJoinCodes: new JoinCodeServices.GetClassJoinCodes(repos.joinCode),
     },
     joinRequest: {
         get: new JoinRequestServices.GetJoinRequest(repos.joinRequest),
