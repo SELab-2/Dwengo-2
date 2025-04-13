@@ -1,0 +1,30 @@
+.overview-widget {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: none;
+    border-radius: 15px;
+    border: 1px solid #d2d2d3;
+}
+
+.widget-container {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px; // optioneel, voor consistentie met mat-card padding
+}
+
+@media screen and (max-width: 768px) {
+    .overview-widget {
+        max-width: 590px;
+    }
+
+}
