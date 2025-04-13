@@ -1,8 +1,7 @@
 import { RouterTestingHarness } from "@angular/router/testing";
-import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { StudentAssignmentComponent } from "./student-assignment.component";
 import { AuthenticationService } from "../../services/authentication.service";
-import { environment } from "../../../environments/environment";
 import { HttpHeaders, provideHttpClient } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
