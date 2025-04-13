@@ -30,6 +30,10 @@ export class ClassRepositoryTypeORM extends IClassRepository {
         }
     }
 
+    public async getByCode(code: string): Promise<Class> {
+        return await this.datasourceClass.getClassByActiveCode(code);
+    }
+
     public async getByName(name: string): Promise<Class> {
         const _class: Class | null = await this.datasourceClass.getClassByName(name);
 
