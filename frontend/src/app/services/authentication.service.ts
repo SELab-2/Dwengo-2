@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
   RegisterResponse,
   UserRegistration,
@@ -11,6 +11,7 @@ import {
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { ErrorService } from './error.service';
+import { UserCredentials } from '../interfaces/authentication/user-credentials';
 
 @Injectable({
   providedIn: 'root'
@@ -82,6 +83,23 @@ export class AuthenticationService {
     console.log('Logged out');
 
     this.router.navigateByUrl('/');
+  }
+
+  retrieveUserCredentials(): UserCredentials {
+    return {
+      userId: this.retrieveUserId(),
+      token: this.retrieveToken(),
+    }
+  }
+
+  retrieveAuthenticationHeaders(): { headers: HttpHeaders } {
+    const token = this.retrieveToken();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', `Bearer ${token}`);
+
+    return { headers: headers };   
   }
 
   storeToken = (token: string): void => localStorage.setItem('AuthenticationToken', token);

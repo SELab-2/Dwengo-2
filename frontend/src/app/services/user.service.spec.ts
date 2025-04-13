@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
 import { of } from "rxjs";
@@ -16,12 +16,17 @@ describe('UserService', () => {
 
     beforeEach(() => {
         http = jasmine.createSpyObj('HttpClient', ['get']);
-        authService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveToken', 'retrieveUserType']);
+        authService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveToken', 'retrieveUserType', 'retrieveAuthenticationHeaders']);
         errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler']);
 
         // Mock the return values of the AuthenticationService methods
         authService.retrieveUserId.and.returnValue("mockUserId");
         authService.retrieveToken.and.returnValue("mockToken");
+
+        authService.retrieveAuthenticationHeaders.and.returnValue({
+            headers: new HttpHeaders().append('Content-Type', 'application/json').append('Authorization', 'Bearer mockToken')
+        });
+        
         authService.retrieveUserType.and.returnValue(UserType.TEACHER);
         errorService.pipeHandler.and.callFake(() => (source) => source);
 

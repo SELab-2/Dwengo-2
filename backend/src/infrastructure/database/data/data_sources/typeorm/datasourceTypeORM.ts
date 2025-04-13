@@ -4,6 +4,8 @@ import { DatasourceTypeORMConnectionSettingsFactory } from "./datasourceTypeORMC
 import { DatasourceTypeORMSingleton } from "./datasourceTypeORMSingleton";
 import { IDatasource } from "../datasourceInterface";
 
+const host = process.env.CI === "true" ? "localhost" : "database";
+
 export class DatasourceTypeORM implements IDatasource {
     // Connection for the TypeORM - postgres database
     private static datasourceConnectionSettings: DatasourceTypeORMConnectionSettings =
@@ -14,7 +16,8 @@ export class DatasourceTypeORM implements IDatasource {
             "postgres",
             "dwengo-database",
             true,
-            true,
+            false,
+            host,
         );
 
     // Promise of the TypeORM DataSource object
@@ -22,4 +25,8 @@ export class DatasourceTypeORM implements IDatasource {
     protected static datasourcePromise: Promise<DataSource> = DatasourceTypeORMSingleton.getInstance(
         this.datasourceConnectionSettings,
     );
+
+    public static getDataSource(): Promise<DataSource> {
+        return this.datasourcePromise;
+    }
 }

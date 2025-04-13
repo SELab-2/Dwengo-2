@@ -5,6 +5,7 @@ import { StudentTypeORM } from "./studentTypeorm";
 import { QuestionThread } from "../../../../core/entities/questionThread";
 import { VisibilityType } from "../../../../core/entities/questionThread";
 
+//TODO: no public visibility support + why enum conversion?
 export enum ThreadVisibility {
     GROUP = "group",
     STUDENT = "student",

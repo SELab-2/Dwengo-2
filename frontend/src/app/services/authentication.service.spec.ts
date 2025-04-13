@@ -85,4 +85,28 @@ describe('AuthenticationService', () => {
     service.removeUserId();
     expect(service.retrieveUserId()).toBeNull();
   });
+
+  it('should retrieve the correct user credentials', () => {
+    service.storeUserId(loginResponse.id);
+    service.storeToken(token);
+    service.storeUserType(userDetails.userType);
+
+    expect(service.retrieveUserId()).toEqual(loginResponse.id);
+    expect(service.retrieveToken()).toEqual(token);
+    expect(service.retrieveUserType()).toEqual(userDetails.userType);
+
+    expect(service.retrieveUserCredentials()).toEqual({
+      userId: loginResponse.id,
+      token: token
+    });
+  });
+
+  it('should retrieve the correct authentication headers', () => {
+    service.storeToken(token);
+
+    const headers = service.retrieveAuthenticationHeaders();
+
+    expect(headers.headers.get('Authorization')).toEqual(`Bearer ${token}`);
+    expect(headers.headers.get('Content-Type')).toEqual('application/json');
+  });
 });
