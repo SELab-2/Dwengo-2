@@ -1,0 +1,19 @@
+<app-authenticated-header></app-authenticated-header>
+<div class="assignments">
+    <div class="center-container">
+        <h2 i18n>Your assignments</h2>
+    </div>
+
+    <div class="center-container">
+        <mat-list id="assignments-list">
+            @for (assignment of assignments; track assignment.id) {
+                <li>
+                    <h3>{{ assignment.id }}</h3>
+                    <p>{{ assignment.extraInstructions }}</p>
+                </li>
+            } @empty {
+                <p i18n>No assignments found</p>
+            }
+        </mat-list>
+    </div>
+</div>
