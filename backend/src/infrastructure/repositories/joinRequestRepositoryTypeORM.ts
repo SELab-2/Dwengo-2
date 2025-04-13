@@ -57,7 +57,13 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
     }
 
     public async getByClassId(classId: string): Promise<JoinRequest[]> {
-        return await this.datasourceJoinRequest.getJoinRequestByClassId(classId);
+        const joinRequests: JoinRequest[] | null = await this.datasourceJoinRequest.getJoinRequestByClassId(classId);
+
+        if (joinRequests) {
+            return joinRequests;
+        } else {
+            throw new EntityNotFoundError(`Join requests for class with id ${classId} not found`);
+        }
     }
 
     public async delete(id: string): Promise<void> {

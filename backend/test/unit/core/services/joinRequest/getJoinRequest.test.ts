@@ -1,12 +1,45 @@
-import { ApiError, ErrorCode } from "../../../../../src/application/types";
 import { JoinRequest, JoinRequestType } from "../../../../../src/core/entities/joinRequest";
 import { IJoinRequestRepository } from "../../../../../src/core/repositories/joinRequestRepositoryInterface";
 import {
+    GetClassJoinRequests,
     GetUserJoinRequests,
     GetJoinRequest,
+    GetClassJoinRequestsInput,
     GetUserJoinRequestsInput,
     GetJoinRequestInput,
 } from "../../../../../src/core/services/joinRequest/getJoinRequest";
+
+describe("GetClassJoinRequests Service", () => {
+    let getJoinRequestsService: GetClassJoinRequests;
+    let mockJoinRequestRepository: jest.Mocked<IJoinRequestRepository>;
+    let input: GetClassJoinRequestsInput;
+
+    beforeEach(() => {
+        mockJoinRequestRepository = {
+            getByClassId: jest.fn(),
+        } as unknown as jest.Mocked<IJoinRequestRepository>;
+
+        getJoinRequestsService = new GetClassJoinRequests(mockJoinRequestRepository);
+
+        input = {
+            idParent: "class1",
+        };
+    });
+
+    test("Should return all join requests for a class", async () => {
+        const joinRequests: JoinRequest[] = [
+            new JoinRequest("user1", "class1", JoinRequestType.STUDENT, "1"),
+            new JoinRequest("user2", "class1", JoinRequestType.TEACHER, "2"),
+        ];
+
+        mockJoinRequestRepository.getByClassId.mockResolvedValue(joinRequests);
+
+        await expect(getJoinRequestsService.execute(input)).resolves.toEqual({
+            requests: joinRequests.map(request => request.id),
+        });
+        expect(mockJoinRequestRepository.getByClassId).toHaveBeenCalledWith(input.idParent);
+    });
+});
 
 describe("GetUserJoinRequests Service", () => {
     let getJoinRequestsService: GetUserJoinRequests;
