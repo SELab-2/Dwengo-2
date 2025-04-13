@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserType } from '../../interfaces';
+import { AuthenticatedMenuComponent } from '../authenticated-menu/authenticated-menu.component';
 
 @Component({
   selector: 'app-authenticated-header',
-  imports: [MatButtonModule],
+  imports: [RouterLink, MatButtonModule, AuthenticatedMenuComponent],
   templateUrl: './authenticated-header.component.html',
   styleUrl: './authenticated-header.component.less'
 })

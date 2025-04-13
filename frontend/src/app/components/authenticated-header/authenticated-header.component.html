@@ -4,7 +4,13 @@
     </span>
 
     <span class="links">
-        <button mat-raised-button color="primary" i18n class="home-button" (click)="goToDashboard()">Home</button>
+        @if(isStudent) {
+            <button mat-raised-button color="primary" i18n class="student-home-button" routerLink="/student/dashboard">Home</button>
+        } @else {
+            <button mat-raised-button color="primary" i18n class="teacher-home-button" routerLink="/teacher/dashboard">Home</button>
+        }
+        
+        <app-authenticated-menu [isStudent]="isStudent"></app-authenticated-menu>
         <button mat-raised-button color="primary" i18n class="logout-button" (click)="logout()">Logout</button>
     </span>
 </header>
