@@ -7,16 +7,17 @@ import { MatIcon } from '@angular/material/icon';
 import { JoinRequestWithUser } from '../../interfaces/join-requests/joinRequestWithUser';
 
 @Component({
-  selector: 'app-pending-requests',
+  selector: 'app-class-pending-requests',
+  standalone: true,
   imports: [
     // Angular material
     MatMiniFabButton,
     MatIcon
   ],
-  templateUrl: './pending-requests.component.html',
-  styleUrl: './pending-requests.component.less'
+  templateUrl: './class-pending-requests.component.html',
+  styleUrl: './class-pending-requests.component.less'
 })
-export class PendingRequestsComponent implements OnInit {
+export class ClassPendingRequestsComponent implements OnInit {
 
   @Input() _class?: Class;
 
@@ -28,21 +29,19 @@ export class PendingRequestsComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    const userId: string | null = this.authService.retrieveUserId();
     const classId: string | null = this._class?.id || null;
 
-    if(classId && userId) {
+    if(classId) {
       // Get all join requests
-      const joinRequests$ = this.joinRequestService.getJoinRequestsFromUserForClass(
-        userId,
-        classId
-      );
+      const joinRequests$ = this.joinRequestService.getJoinRequestsForClass(classId);
 
       joinRequests$.subscribe(response => {
+        console.log(response);
 
         // Fill users of those join requests
         const joinRequestWithUser$ = this.joinRequestService.fillUsers(response);
         joinRequestWithUser$.subscribe(joinRequests => {
+          console.log(joinRequests);
           this.joinRequests = joinRequests;
         });
 

@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ClassMembersListComponent } from '../class-members-list/class-members-list.component';
-import { PendingRequestsComponent } from '../pending-requests/pending-requests.component';
+import { ClassPendingRequestsComponent } from '../class-pending-requests/class-pending-requests.component';
 import { UserType } from '../../interfaces';
 import { ClassCodePopupComponent } from '../class-code-popup/class-code-popup.component';
 
@@ -30,7 +30,7 @@ import { AuthenticatedHeaderComponent } from '../authenticated-header/authentica
     LoadingComponent,
     ReactiveFormsModule,
     ClassMembersListComponent,
-    PendingRequestsComponent,
+    ClassPendingRequestsComponent,
     ClassCodePopupComponent,
     AuthenticatedHeaderComponent,
 

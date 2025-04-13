@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PendingRequestsComponent } from './pending-requests.component';
+import { PendingRequestsComponent } from './class-pending-requests.component';
 
 describe('PendingRequestsComponent', () => {
   // let component: PendingRequestsComponent;

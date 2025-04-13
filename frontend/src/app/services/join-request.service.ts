@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
 import { environment } from "../../environments/environment";
-import { forkJoin, map, Observable, of, switchMap, tap } from "rxjs";
-import { JoinRequest } from "../interfaces/join-requests/joinRequest";
+import { filter, forkJoin, map, Observable, of, switchMap, tap } from "rxjs";
 import { UserJoinRequestsResponse } from "../interfaces/join-requests/userJoinRequestsResponse";
 import { User, UserType } from "../interfaces";
 import { JoinRequestWithUser } from "../interfaces/join-requests/joinRequestWithUser";
 import { JoinRequestResponse } from "../interfaces/join-requests/joinRequestResponse";
 import { NewJoinRequest } from "../interfaces/join-requests/newJoinRequest";
+import { Users } from "../interfaces/user/users";
 
 @Injectable({
     providedIn: 'root'
@@ -38,61 +38,61 @@ export class JoinRequestService {
         };
     }
 
-    public getJoinRequestsFromUser(id: string): Observable<JoinRequest[]> {
-        return this.http.get<UserJoinRequestsResponse>(
-            `${this.API_URL}/users/${id}/requests`,
-            this.standardHeaders
-        ).pipe(
-            this.errorService.pipeHandler(),
-            tap(response => console.log(response)), // TODO
-            switchMap(response => 
-                forkJoin(
-                    response.requests.map(requestId => 
-                        this.http.get<JoinRequest>( // TODO: will probably conflict with UserType enum
-                            `${this.API_URL}/requests/${requestId}`,
-                            this.standardHeaders
-                        ).pipe(
-                            this.errorService.pipeHandler()
-                        )
-                    )
-                )
-            )
-        );
+    // public getJoinRequestsFromUser(id: string): Observable<JoinRequest[]> {
+    //     return this.http.get<UserJoinRequestsResponse>(
+    //         `${this.API_URL}/users/${id}/requests`,
+    //         this.standardHeaders
+    //     ).pipe(
+    //         this.errorService.pipeHandler(),
+    //         tap(response => console.log(response)), // TODO
+    //         switchMap(response => 
+    //             forkJoin(
+    //                 response.requests.map(requestId => 
+    //                     this.http.get<JoinRequest>( // TODO: will probably conflict with UserType enum
+    //                         `${this.API_URL}/requests/${requestId}`,
+    //                         this.standardHeaders
+    //                     ).pipe(
+    //                         this.errorService.pipeHandler()
+    //                     )
+    //                 )
+    //             )
+    //         )
+    //     );
 
-        // return of([])
-    }
+    //     // return of([])
+    // }
 
-    public getJoinRequestsFromUserForClass(userId: string, classId: string): Observable<JoinRequest[]> {
-        const userJoinRequests$ = this.getJoinRequestsFromUser(userId);
+    // public getJoinRequestsFromUserForClass(userId: string, classId: string): Observable<JoinRequest[]> {
+    //     const userJoinRequests$ = this.getJoinRequestsFromUser(userId);
 
-        return userJoinRequests$.pipe(
-            this.errorService.pipeHandler(),
-            map(requests => {
-                console.log(requests); // TODO
-                return requests.filter(request =>
-                    request.class === classId
-                )
-            }
-            )
-        );
-        // return of([
-        //     {
-        //         id: "1",
-        //         requester: "b1fe24f1-4a55-400b-9ff0-95ee18e605ac",
-        //         class: classId,
-        //         userType: UserType.STUDENT
-        //     }
-        // ]);
-    }
+    //     return userJoinRequests$.pipe(
+    //         this.errorService.pipeHandler(),
+    //         map(requests => {
+    //             console.log(requests); // TODO
+    //             return requests.filter(request =>
+    //                 request.class === classId
+    //             )
+    //         }
+    //         )
+    //     );
+    //     // return of([
+    //     //     {
+    //     //         id: "1",
+    //     //         requester: "b1fe24f1-4a55-400b-9ff0-95ee18e605ac",
+    //     //         class: classId,
+    //     //         userType: UserType.STUDENT
+    //     //     }
+    //     // ]);
+    // }
 
-    public fillUsers(requests: JoinRequest[]): Observable<JoinRequestWithUser[]> {
+    public fillUsers(requests: JoinRequestResponse[]): Observable<JoinRequestWithUser[]> {
         return forkJoin(
             requests.map(request =>
                 this.http.get<User>(
                     `${this.API_URL}/users/${request.requester}`, {
                         ...this.standardHeaders,
                         params: {
-                            userType: request.userType.toString()
+                            userType: request.type
                         }
                     }
                 ).pipe(
@@ -100,14 +100,59 @@ export class JoinRequestService {
                     map(user => {return {
                         id: request.id,
                         requester: user,
-                        class: request.class,
-                        userType: request.userType
+                        classId: request.classId,
+                        userType: request.type
                     }})
                 )
             )
         );
 
         // return of([])
+    }
+
+    public getJoinRequestsForClass(classId: string): Observable<JoinRequestResponse[]> {
+        return this.http.get<Users>(
+            `${this.API_URL}/users`,
+            this.standardHeaders // TODO use headers fix from PR
+        ).pipe(
+            this.errorService.pipeHandler(),
+            switchMap(response => {
+                const userIds: string[] = response.students;
+                console.log(`got users: ${userIds}`);
+
+                return forkJoin(
+                    userIds.map(userId => 
+                        this.http.get<UserJoinRequestsResponse>(
+                            `${this.API_URL}/users/${userId}/requests`,
+                            this.standardHeaders // TODO use headers fix from PR
+                        ).pipe(
+                            this.errorService.pipeHandler(),
+                            switchMap(response => {
+                                console.log(`got requests: ${response.requests}`);
+
+                                const requests: string[] = response.requests;
+
+                                return forkJoin(
+                                    requests.map(requestId => 
+                                        this.http.get<JoinRequestResponse>(
+                                            `${this.API_URL}/requests/${requestId}`,
+                                            this.standardHeaders // TODO use headers fix from PR
+                                        ).pipe(
+                                            this.errorService.pipeHandler(),
+                                            tap(response => console.log(response)), // TODO
+                                            filter(request => request.classId === classId),
+                                            tap(response => console.log(response)) // TODO
+                                        )
+                                    )
+                                );
+                            })
+                        )
+                    )
+                ).pipe(
+                    map(nestedResponses => nestedResponses.flat())
+                );
+            })
+        );
     }
 
     public acceptRequest(requestId: string): Observable<boolean> {
@@ -139,7 +184,6 @@ export class JoinRequestService {
         );
     }
 
-    // TODO: wait for bugfix API: id not found 404
     public createRequest(request: NewJoinRequest): Observable<boolean> {
         return this.http.post(
             `${this.API_URL}/requests`,
