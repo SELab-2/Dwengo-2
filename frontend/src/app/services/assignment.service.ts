@@ -32,7 +32,9 @@ export class AssignmentService {
       `${this.API_URL}/users/${userId}/assignments`,
       headers
     ).pipe(
-      this.errorService.pipeHandler(),
+      this.errorService.pipeHandler(
+        this.errorService.retrieveError($localize `assignments`)
+      ),
       switchMap(response => 
         forkJoin(
           response.assignments.map(id => 
@@ -46,8 +48,6 @@ export class AssignmentService {
     );
   }
 
-  private errorMessageById = $localize `There was an error while retrieving the assignment`;
-
   /**
    * Retrieve a single assignment by its ID
    */
@@ -58,11 +58,11 @@ export class AssignmentService {
       `${this.API_URL}/assignments/${id}`,
       headers
     ).pipe(
-      this.errorService.pipeHandler(this.errorMessageById)
+      this.errorService.pipeHandler(
+        this.errorService.retrieveError($localize `assignment`)
+      )
     ); 
   }
-
-  private createAssignmentErrorMessage = $localize `There was an error while creating the assignment`;
   
   /**
    * Create a new assignment
@@ -77,17 +77,16 @@ export class AssignmentService {
       assignment,
       headers
     ).pipe(
-      this.errorService.pipeHandler(this.createAssignmentErrorMessage),
-      switchMap(response => {
-        return of({
+      this.errorService.pipeHandler(
+        this.errorService.createError($localize `assignment`)
+      ),
+      switchMap(response => of({
           ...assignment,
           id: response.id
-        });
-      }) // return the created assignment
+        })
+      )
     );
   }
-
-  private updateAssignmentErrorMessage = $localize `There was an error while updating the assignment`;
 
   /**
    * Update an assignment
@@ -97,17 +96,17 @@ export class AssignmentService {
   updateAssignment(assignment: Assignment): Observable<Assignment> {
     const headers = this.authenticationService.retrieveAuthenticationHeaders();
 
-    return this.http.put<void>(
+    return this.http.patch<void>(
       `${this.API_URL}/assignments/${assignment.id}`,
       assignment,
       headers
     ).pipe(
-      this.errorService.pipeHandler(this.updateAssignmentErrorMessage),
+      this.errorService.pipeHandler(
+        this.errorService.updateError($localize `assignment`)
+      ),
       switchMap(() => of(assignment)) // return the updated assignment
     );
   }
-
-  private deleteAssignmentErrorMessage = $localize `There was an error while deleting the assignment`;
 
   /**
    * Delete an assignment
@@ -121,7 +120,9 @@ export class AssignmentService {
       `${this.API_URL}/assignments/${assignment.id}`,
       headers
     ).pipe(
-      this.errorService.pipeHandler(this.deleteAssignmentErrorMessage),
+      this.errorService.pipeHandler(
+        this.errorService.deleteError($localize `assignment`)
+      ),
       switchMap(() => of(true)) // return true if the assignment was deleted
     );
   }

@@ -10,13 +10,13 @@ import { provideRouter } from "@angular/router";
 describe('StudentAssignmentComponent', () => {
   let component: StudentAssignmentComponent;
   let harness: RouterTestingHarness;
-  let httpTesting: HttpTestingController;
+  // let httpTesting: HttpTestingController;
 
   let authenticationService: jasmine.SpyObj<AuthenticationService>;
   const USER_ID = 'user';
   const TOKEN = 'token';
 
-  const API_URL = environment.API_URL;
+  // const API_URL = environment.API_URL;
 
   beforeEach(async () => {
     authenticationService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveAuthenticationHeaders']);
@@ -34,7 +34,7 @@ describe('StudentAssignmentComponent', () => {
       ]
     });
 
-    httpTesting = TestBed.inject(HttpTestingController);
+    // httpTesting = TestBed.inject(HttpTestingController);
     harness = await RouterTestingHarness.create();
     component = await harness.navigateByUrl('/', StudentAssignmentComponent);
 
