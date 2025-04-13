@@ -1,5 +1,13 @@
 <mat-card class="overview-widget">
-    <mat-card-title i18n>Class Overview</mat-card-title>
+    <div class="header-row">
+        <mat-card-title i18n>Class Overview</mat-card-title>
+
+        <button mat-fab extended color="primary" routerLink="/teacher/classes">
+            <mat-icon>lists</mat-icon>
+            View Classes
+        </button>
+    </div>
+
     <div class="widget-container">
         @for(classData of classes; track classData){
         <app-class-info-card [className]="classData.name"

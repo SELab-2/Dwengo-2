@@ -31,10 +31,10 @@
                 [selected]="selectedView === 'questions'" color="green" (cardClick)="setView('questions')">
             </app-menu-card>
             <div class="button-widget">
-                <button mat-button [routerLink]="learningPathsLink" class="paths-link" i18n>
+                <button mat-raised-button color="primary" [routerLink]="learningPathsLink" class="paths-link" i18n>
                     Explore Paths
                 </button>
-                <button mat-button [routerLink]="createClassLink" class="paths-link" i18n>
+                <button mat-raised-button color="primary" [routerLink]="createClassLink" class="paths-link" i18n>
                     Create a class
                 </button>
             </div>

@@ -11,12 +11,12 @@ import { ClassChartComponent, ClassGraphComponent } from '../small-components/gr
 import { ActivityChartComponent, ActivityChartData } from '../small-components/graphs/activity-graph/activity-graph.component';
 import { MenuCardComponent } from '../small-components/menu-card/menu-card.component';
 import { ClassesService } from '../../services/classes.service';
-import { AssignmentsService } from '../../services/assignments.service';
+import { AssignmentService } from '../../services/assignment.service';
 import { Class } from '../../interfaces/classes/class';
 import { MockServices } from './mock-services';
 import { ClassOverviewWidgetComponent } from '../small-components/class-overview-widget/class-overview-widget.component';
 import { DeadlinesWidgetComponent } from '../small-components/upcoming-deadlines-widget/deadlines-widget.component';
-import { Assignment } from '../../interfaces/assignments/assignment';
+import { Assignment } from '../../interfaces/assignment';
 import { catchError, defaultIfEmpty, forkJoin, of } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -58,7 +58,7 @@ export class TeacherDashboardComponent implements OnInit {
   deadlinesTitle: string = $localize`:@@incomingDeadlines:Current Deadlines`;
   questionsTitle: string = $localize`:@@answerQuestions:Answer Questions`;
 
-  constructor(private classesService: ClassesService, private assignmentsService: AssignmentsService) { }
+  constructor(private classesService: ClassesService, private assignmentsService: AssignmentService) { }
 
   private retrieveData(): void {
     forkJoin({
@@ -66,7 +66,7 @@ export class TeacherDashboardComponent implements OnInit {
         catchError(() => of([])), // Empty array when error occured
         defaultIfEmpty([]) // Also empty error when there's no reaction
       ),
-      assignments: this.assignmentsService.assignmentsOfUser().pipe(
+      assignments: this.assignmentsService.retrieveAssignments().pipe(
         catchError(() => of([])),
         defaultIfEmpty([])
       )
@@ -90,8 +90,8 @@ export class TeacherDashboardComponent implements OnInit {
     });
   }
 
+  // This function serves as a mock data provider to showcase the charts and widgets
   private retrieveMockData(): void {
-    // TODO: use services
     this.classes = MockServices.getClasses();
     const receivedAssignments = MockServices.getAssignments();
 

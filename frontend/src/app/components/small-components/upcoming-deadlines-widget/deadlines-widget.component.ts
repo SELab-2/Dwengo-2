@@ -2,7 +2,7 @@ import { Component, Input, Inject, LOCALE_ID } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
-import { Assignment } from '../../../interfaces/assignments/assignment';
+import { Assignment } from '../../../interfaces/assignment';
 
 @Component({
     selector: 'app-deadlines-widget',

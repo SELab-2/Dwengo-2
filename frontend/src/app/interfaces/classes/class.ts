@@ -1,4 +1,4 @@
-import { Assignment } from "../assignments/assignment";
+import { Assignment } from "../assignment";
 
 /**
  * A class object
