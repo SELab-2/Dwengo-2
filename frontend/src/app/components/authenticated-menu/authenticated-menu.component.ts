@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -11,4 +11,11 @@ import { RouterLink } from '@angular/router';
 })
 export class AuthenticatedMenuComponent {
   @Input() isStudent: boolean = false;
+
+  @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
+
+  openMenu() {
+    this.trigger.openMenu();
+  }
+  
 }
