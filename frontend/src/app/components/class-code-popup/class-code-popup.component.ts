@@ -2,7 +2,6 @@ import { Component, inject, Input } from '@angular/core';
 import { 
   MAT_DIALOG_DATA,
   MatDialogRef, 
-  MatDialog, 
   MatDialogActions,
   MatDialogClose,
   MatDialogContent

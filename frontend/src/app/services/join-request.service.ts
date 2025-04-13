@@ -17,80 +17,21 @@ import { Users } from "../interfaces/user/users";
 export class JoinRequestService {
 
     private API_URL = environment.API_URL;
-    private userCreds;
-    private standardHeaders;
 
     public constructor(
         private http: HttpClient,
         private authService: AuthenticationService,
         private errorService: ErrorService,
-    ) {
-        this.userCreds = {
-            userId: this.authService.retrieveUserId(),
-            userToken: this.authService.retrieveToken()
-        };
-
-        this.standardHeaders = {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${this.userCreds.userToken}`
-            }
-        };
-    }
-
-    // public getJoinRequestsFromUser(id: string): Observable<JoinRequest[]> {
-    //     return this.http.get<UserJoinRequestsResponse>(
-    //         `${this.API_URL}/users/${id}/requests`,
-    //         this.standardHeaders
-    //     ).pipe(
-    //         this.errorService.pipeHandler(),
-    //         tap(response => console.log(response)), // TODO
-    //         switchMap(response => 
-    //             forkJoin(
-    //                 response.requests.map(requestId => 
-    //                     this.http.get<JoinRequest>( // TODO: will probably conflict with UserType enum
-    //                         `${this.API_URL}/requests/${requestId}`,
-    //                         this.standardHeaders
-    //                     ).pipe(
-    //                         this.errorService.pipeHandler()
-    //                     )
-    //                 )
-    //             )
-    //         )
-    //     );
-
-    //     // return of([])
-    // }
-
-    // public getJoinRequestsFromUserForClass(userId: string, classId: string): Observable<JoinRequest[]> {
-    //     const userJoinRequests$ = this.getJoinRequestsFromUser(userId);
-
-    //     return userJoinRequests$.pipe(
-    //         this.errorService.pipeHandler(),
-    //         map(requests => {
-    //             console.log(requests); // TODO
-    //             return requests.filter(request =>
-    //                 request.class === classId
-    //             )
-    //         }
-    //         )
-    //     );
-    //     // return of([
-    //     //     {
-    //     //         id: "1",
-    //     //         requester: "b1fe24f1-4a55-400b-9ff0-95ee18e605ac",
-    //     //         class: classId,
-    //     //         userType: UserType.STUDENT
-    //     //     }
-    //     // ]);
-    // }
+    ) {}
 
     public fillUsers(requests: JoinRequestResponse[]): Observable<JoinRequestWithUser[]> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+
         return forkJoin(
             requests.map(request =>
                 this.http.get<User>(
                     `${this.API_URL}/users/${request.requester}`, {
-                        ...this.standardHeaders,
+                        ...headers,
                         params: {
                             userType: request.type
                         }
@@ -111,9 +52,11 @@ export class JoinRequestService {
     }
 
     public getJoinRequestsForClass(classId: string): Observable<JoinRequestResponse[]> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+
         return this.http.get<Users>(
             `${this.API_URL}/users`,
-            this.standardHeaders // TODO use headers fix from PR
+            headers
         ).pipe(
             this.errorService.pipeHandler(),
             switchMap(response => {
@@ -124,8 +67,9 @@ export class JoinRequestService {
                     userIds.map(userId => 
                         this.http.get<UserJoinRequestsResponse>(
                             `${this.API_URL}/users/${userId}/requests`,
-                            this.standardHeaders // TODO use headers fix from PR
+                            headers
                         ).pipe(
+                            tap(response => console.log(response)), // TODO
                             this.errorService.pipeHandler(),
                             switchMap(response => {
                                 console.log(`got requests: ${response.requests}`);
@@ -136,7 +80,7 @@ export class JoinRequestService {
                                     requests.map(requestId => 
                                         this.http.get<JoinRequestResponse>(
                                             `${this.API_URL}/requests/${requestId}`,
-                                            this.standardHeaders // TODO use headers fix from PR
+                                            headers
                                         ).pipe(
                                             this.errorService.pipeHandler(),
                                             tap(response => console.log(response)), // TODO
@@ -156,10 +100,12 @@ export class JoinRequestService {
     }
 
     public acceptRequest(requestId: string): Observable<boolean> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+
         return this.http.patch(
             `${this.API_URL}/requests/${requestId}`,
-            null,{
-                ...this.standardHeaders,
+            null, {
+                ...headers,
                 observe: 'response'
             }
         ).pipe(
@@ -171,9 +117,11 @@ export class JoinRequestService {
     }
 
     public rejectRequest(requestId: string): Observable<boolean> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+
         return this.http.delete(
             `${this.API_URL}/requests/${requestId}`, {
-                ...this.standardHeaders,
+                ...headers,
                 observe: 'response'
             }
         ).pipe(
@@ -185,10 +133,12 @@ export class JoinRequestService {
     }
 
     public createRequest(request: NewJoinRequest): Observable<boolean> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+
         return this.http.post(
             `${this.API_URL}/requests`,
             request, {
-                ...this.standardHeaders,
+                ...headers,
                 observe: 'response'
             }
         ).pipe(

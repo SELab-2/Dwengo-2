@@ -15,11 +15,10 @@ import { ClassMembersInterface } from "../interfaces/classes/classMembersRespons
 
 @Injectable({
     providedIn: 'root'
-  })
-  export class ClassesService {
+})
+export class ClassesService {
 
     private API_URL = environment.API_URL;
-  
     public constructor(
         private http: HttpClient,
         private authService: AuthenticationService,
@@ -36,9 +35,9 @@ import { ClassMembersInterface } from "../interfaces/classes/classMembersRespons
             headers
         ).pipe(
             this.errorService.pipeHandler(),
-            switchMap(response => 
+            switchMap(response =>
                 forkJoin(
-                    response.classes.map(id => 
+                    response.classes.map(id =>
                         this.http.get<Class>(
                             `${this.API_URL}/classes/${id}`,
                             headers
@@ -57,7 +56,7 @@ import { ClassMembersInterface } from "../interfaces/classes/classMembersRespons
             headers
         ).pipe(
             this.errorService.pipeHandler(
-                this.errorService.retrieveError($localize `class`)
+                this.errorService.retrieveError($localize`class`)
             ),
         );
     }
@@ -134,5 +133,4 @@ import { ClassMembersInterface } from "../interfaces/classes/classMembersRespons
         );
     }
 
-  }
- 
+}

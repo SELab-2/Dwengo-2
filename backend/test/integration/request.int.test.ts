@@ -71,7 +71,7 @@ describe("Tests for join requests API Endpoints", () => {
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
                     "id": requestId,
-                    "requester": expect.any(String), //TODO: Integrate check if userId matches corresponding studentId.
+                    "requester": studentAuthDetails.id,
                     "classId": classId,
                     "type": "student"
                 });

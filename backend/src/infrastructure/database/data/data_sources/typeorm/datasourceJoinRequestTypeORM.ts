@@ -57,6 +57,28 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
             return null;
         }
 
+        let userId: string;
+
+        if (joinRequest.type === JoinAsType.STUDENT) {
+            const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
+                where: { student: joinRequest.requester },
+            });
+
+            userId = studentModel!.id;
+        } else {
+            const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
+                where: { teacher: joinRequest.requester },
+            });
+
+            userId = teacherModel!.id;
+        }
+
+        if (!userId) {
+            return null;
+        }
+
+        joinRequest.requester.id = userId;
+
         return joinRequest.toJoinRequestEntity();
     }
 

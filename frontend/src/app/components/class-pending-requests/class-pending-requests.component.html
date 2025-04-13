@@ -2,15 +2,16 @@
     <h2 i18n>Pending requests</h2>
     
     @for (joinRequest of joinRequests; track joinRequest.id) {
-        <p>{{joinRequest.id}}</p>
-        <button mat-mini-fab aria-label="accept" (click)="acceptRequest(joinRequest.id)">
-            <mat-icon>check</mat-icon>
-        </button>
-        <button mat-mini-fab color="warn" aria-label="reject" (click)="acceptRequest(joinRequest.id)">
-            <mat-icon>close</mat-icon>
-        </button>
+        <div class="request-item">
+            <p>{{joinRequest.requester.firstName}} {{joinRequest.requester.familyName}}</p>
+            <button mat-mini-fab aria-label="accept" (click)="acceptRequest(joinRequest.id)">
+                <mat-icon>check</mat-icon>
+            </button>
+            <button mat-mini-fab color="warn" aria-label="reject" (click)="acceptRequest(joinRequest.id)">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
     } @empty {
         <p i18n>No requests yet</p>
     }
-
 </div>
