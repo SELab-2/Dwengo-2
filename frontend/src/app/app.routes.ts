@@ -17,6 +17,8 @@ import { AlreadyAuthenticatedComponent } from './components/already-authenticate
  */
 export const routes: Routes = [
     { path: '', component: LandingPageComponent, title: 'Landing Page', canActivate: [UnauthorizedGuard] },
+    { path: 'teacher/dashboard', redirectTo: 'teacher/classes' },
+    { path: 'student/dashboard', redirectTo: 'student/classes' },
     { path: 'teacher/classes', component: ClassesPageComponent, title: "My Classes", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'teacher/classes/:id', component: ClassComponent, title: "Class", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'student/classes', component: ClassesPageComponent, title: "My Classes", canActivate: [UserTypeGuard], data: { userType: 'student' } },
