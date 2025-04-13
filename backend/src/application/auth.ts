@@ -46,7 +46,6 @@ export class AuthenticationManager {
             const input: GetUserInput = { email: email, userType: userType as UserType };
             try {
                 const user = (await this.getUserService.execute(input)) as User;
-
                 if (user && (await bcrypt.compare(password, user.passwordHash))) {
                     return this.generateTokens(user.id!, userType);
                 }

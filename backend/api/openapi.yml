@@ -2369,7 +2369,6 @@ components:
         - learningObjectId
         - isClosed
         - visibility
-        - messageIds
       properties:
         creatorId:
           type: string
@@ -2389,11 +2388,6 @@ components:
         visibility:
           type: string
           enum: [public, group, private]
-        messageIds:
-          type: array
-          items:
-            type: string
-            format: uuid
     QuestionUpdate:
       type: object
       minProperties: 1

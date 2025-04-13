@@ -12,6 +12,7 @@ const app = express();
 setupDefaultMiddleware(app);
 setupRoutes(app);
 setupErrorMiddleware(app);
+
 const server = setupServer(app);
 
 // Handle graceful shutdown
@@ -25,3 +26,5 @@ process.on("SIGINT", () => {
         });
     });
 });
+
+export { app, server };

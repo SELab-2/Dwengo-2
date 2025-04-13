@@ -1,23 +1,30 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
+import { RouterTestingHarness } from '@angular/router/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { UnknownRouteComponent } from './unknown-route.component';
 import { provideRouter } from '@angular/router';
 
+import { AuthenticationService } from '../../services/authentication.service';
+
 describe('UnknownRouteComponent', () => {
   let component: UnknownRouteComponent;
-  let fixture: ComponentFixture<UnknownRouteComponent>;
+  let harness: RouterTestingHarness;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [UnknownRouteComponent],
       providers: [
         provideRouter([{ path: '**', component: UnknownRouteComponent }]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        AuthenticationService,
       ]
     });
 
-    fixture = TestBed.createComponent(UnknownRouteComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    harness = await RouterTestingHarness.create();
+    component = await harness.navigateByUrl('/', UnknownRouteComponent);
+    harness.detectChanges();
   });
 
   it('should create', () => {
@@ -25,22 +32,22 @@ describe('UnknownRouteComponent', () => {
   });
 
   it('should have the logo', () => {
-    const logo = fixture.nativeElement.querySelector('img');
+    const logo = harness.fixture.nativeElement.querySelector('img');
     expect(logo).toBeTruthy();
   });
 
   it('should have the header', () => {
-    const header = fixture.nativeElement.querySelector('h1');
+    const header = harness.fixture.nativeElement.querySelector('h1');
     expect(header).toBeTruthy();
   });
 
   it('should have the text', () => {
-    const text = fixture.nativeElement.querySelector('p');
+    const text = harness.fixture.nativeElement.querySelector('p');
     expect(text).toBeTruthy();
   });
 
   it('should have the button', () => {
-    const button = fixture.nativeElement.querySelector('button');
+    const button = harness.fixture.nativeElement.querySelector('button');
     expect(button).toBeTruthy();
   });
 });
