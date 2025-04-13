@@ -1,22 +1,19 @@
 import { DatabaseEntryNotFoundError, EntityNotFoundError } from "../../config/error";
 import { JoinRequest } from "../../core/entities/joinRequest";
 import { IJoinRequestRepository } from "../../core/repositories/joinRequestRepositoryInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
-import { IDatasourceJoinRequest } from "../database/data/data_sources/datasourceJoinRequestInterface";
+import { DatasourceJoinRequestTypeORM } from "../database/data/data_sources/typeorm/datasourceJoinRequestTypeORM";
 
 export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
-    private datasource: IDatasource;
-    private datasourceJoinRequest: Promise<IDatasourceJoinRequest>;
+    private datasourceJoinRequest: DatasourceJoinRequestTypeORM;
 
     public constructor() {
         super();
-        this.datasource = this.datasourceFactory.createDatasource();
-        this.datasourceJoinRequest = this.datasource.getDatasourceJoinRequest();
+        this.datasourceJoinRequest = new DatasourceJoinRequestTypeORM();
     }
 
     public async create(joinRequest: JoinRequest): Promise<JoinRequest> {
         try {
-            return await (await this.datasourceJoinRequest).createJoinRequest(joinRequest);
+            return await this.datasourceJoinRequest.createJoinRequest(joinRequest);
         } catch (error: unknown) {
             if (error instanceof DatabaseEntryNotFoundError) {
                 throw new EntityNotFoundError(error.message);
@@ -27,7 +24,7 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
     }
 
     public async getById(id: string): Promise<JoinRequest> {
-        const joinRequest: JoinRequest | null = await (await this.datasourceJoinRequest).getJoinRequestById(id);
+        const joinRequest: JoinRequest | null = await this.datasourceJoinRequest.getJoinRequestById(id);
 
         if (joinRequest) {
             return joinRequest;
@@ -37,14 +34,21 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
     }
 
     public async getByRequesterId(requesterId: string): Promise<JoinRequest[]> {
-        return await (await this.datasourceJoinRequest).getJoinRequestByRequesterId(requesterId);
+        const joinRequests: JoinRequest[] | null =
+            await this.datasourceJoinRequest.getJoinRequestByRequesterId(requesterId);
+
+        if (joinRequests) {
+            return joinRequests;
+        } else {
+            throw new EntityNotFoundError(`Join requests for student or teacher with id ${requesterId} not found`);
+        }
     }
 
     public async getByClassId(classId: string): Promise<JoinRequest[]> {
-        return await (await this.datasourceJoinRequest).getJoinRequestByClassId(classId);
+        return await this.datasourceJoinRequest.getJoinRequestByClassId(classId);
     }
 
     public async delete(id: string): Promise<void> {
-        await (await this.datasourceJoinRequest).deleteJoinRequestById(id);
+        await this.datasourceJoinRequest.deleteJoinRequestById(id);
     }
 }

@@ -11,7 +11,6 @@ export const createQuestionThreadSchema = z.object({
     learningObjectId: z.string(),
     isClosed: z.boolean().default(false),
     visibility: z.nativeEnum(VisibilityType),
-    messageIds: z.array(z.string()),
     id: z.string().optional(),
 });
 

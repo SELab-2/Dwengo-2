@@ -1,16 +1,18 @@
+import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { QuestionThread } from "../../../../../core/entities/questionThread";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
-import { IDatasourceThread } from "../datasourceThreadInterface";
 
-export class DatasourceThreadTypeORM extends IDatasourceThread {
+export class DatasourceThreadTypeORM extends DatasourceTypeORM {
     public async create(thread: QuestionThread): Promise<QuestionThread> {
-        const userRepository = this.datasource.getRepository(StudentTypeORM);
-        const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
-        const assignmentRepository = this.datasource.getRepository(AssignmentTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const userRepository = datasource.getRepository(StudentTypeORM);
+        const threadRepository = datasource.getRepository(QuestionThreadTypeORM);
+        const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
 
         // We find the corresponding user.
         const studentModel = await userRepository.findOne({ where: { id: thread.creatorId } });
@@ -35,10 +37,15 @@ export class DatasourceThreadTypeORM extends IDatasourceThread {
     }
 
     public async getById(id: string): Promise<QuestionThread | null> {
-        const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
-        const messageRepository = this.datasource.getRepository(MessageTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const threadModel: QuestionThreadTypeORM | null = await threadRepository.findOne({ where: { id: id } });
+        const threadRepository = datasource.getRepository(QuestionThreadTypeORM);
+        const messageRepository = datasource.getRepository(MessageTypeORM);
+
+        const threadModel: QuestionThreadTypeORM | null = await threadRepository.findOne({
+            where: { id: id },
+            relations: ["student", "assignment"],
+        });
 
         if (!threadModel) {
             return null;
@@ -51,8 +58,10 @@ export class DatasourceThreadTypeORM extends IDatasourceThread {
     }
 
     public async update(thread: QuestionThread): Promise<QuestionThread> {
-        const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
-        const messageRepository = this.datasource.getRepository(MessageTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const threadRepository = datasource.getRepository(QuestionThreadTypeORM);
+        const messageRepository = datasource.getRepository(MessageTypeORM);
 
         if (!thread.id) {
             throw new Error("Cannot delete a thread without an ID");
@@ -79,8 +88,10 @@ export class DatasourceThreadTypeORM extends IDatasourceThread {
     }
 
     public async delete(thread: QuestionThread): Promise<void> {
-        const messageRepository = this.datasource.getRepository(MessageTypeORM);
-        const threadRepository = this.datasource.getRepository(QuestionThreadTypeORM);
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const messageRepository = datasource.getRepository(MessageTypeORM);
+        const threadRepository = datasource.getRepository(QuestionThreadTypeORM);
 
         if (!thread.id) {
             throw new Error("Cannot delete a thread without an ID");
@@ -96,7 +107,9 @@ export class DatasourceThreadTypeORM extends IDatasourceThread {
     }
 
     public async updateQuestionThread(id: string, updatedThread: Partial<QuestionThread>): Promise<QuestionThread> {
-        await this.datasource
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        await datasource
             .getRepository(QuestionThreadTypeORM)
             .update(id, QuestionThreadTypeORM.toPartial(updatedThread));
         const questionThread: QuestionThread | null = await this.getById(id);
@@ -109,17 +122,19 @@ export class DatasourceThreadTypeORM extends IDatasourceThread {
     }
 
     public async deleteQuestionThread(id: string): Promise<void> {
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
         // TODO: should throw error when it doesn't exist
-        await this.datasource.getRepository(QuestionThreadTypeORM).delete(id);
+        await datasource.getRepository(QuestionThreadTypeORM).delete(id);
     }
 
     public async getQuestionThreadsByAssignmentId(assignmentId: string): Promise<QuestionThread[]> {
-        const questionThreads: QuestionThreadTypeORM[] = await this.datasource
-            .getRepository(QuestionThreadTypeORM)
-            .find({
-                where: { assignment: { id: assignmentId } },
-                relations: ["student", "assignment"],
-            });
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const questionThreads: QuestionThreadTypeORM[] = await datasource.getRepository(QuestionThreadTypeORM).find({
+            where: { assignment: { id: assignmentId } },
+            relations: ["student", "assignment"],
+        });
 
         if (!questionThreads) {
             throw new EntityNotFoundError(`No threads found for assignment with id: ${assignmentId}`);
@@ -127,7 +142,7 @@ export class DatasourceThreadTypeORM extends IDatasourceThread {
 
         const threads = await Promise.all(
             questionThreads.map(async questionThread => {
-                const messages: MessageTypeORM[] = await this.datasource.getRepository(MessageTypeORM).find({
+                const messages: MessageTypeORM[] = await datasource.getRepository(MessageTypeORM).find({
                     where: { thread: questionThread },
                 });
 
@@ -139,16 +154,16 @@ export class DatasourceThreadTypeORM extends IDatasourceThread {
     }
 
     public async getQuestionThreadsByCreatorId(createrId: string): Promise<QuestionThread[]> {
-        const questionThreads: QuestionThreadTypeORM[] = await this.datasource
-            .getRepository(QuestionThreadTypeORM)
-            .find({
-                where: { student: { id: createrId } },
-                relations: ["student", "assignment"],
-            });
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const questionThreads: QuestionThreadTypeORM[] = await datasource.getRepository(QuestionThreadTypeORM).find({
+            where: { student: { id: createrId } },
+            relations: ["student", "assignment"],
+        });
 
         const threads = await Promise.all(
             questionThreads.map(async questionThread => {
-                const messages: MessageTypeORM[] = await this.datasource.getRepository(MessageTypeORM).find({
+                const messages: MessageTypeORM[] = await datasource.getRepository(MessageTypeORM).find({
                     where: { thread: questionThread },
                 });
 

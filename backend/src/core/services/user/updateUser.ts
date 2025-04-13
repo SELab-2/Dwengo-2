@@ -5,6 +5,7 @@ import { Service } from "../../../config/service";
 import { Student } from "../../entities/student";
 import { Teacher } from "../../entities/teacher";
 import { User, UserType } from "../../entities/user";
+import { tryRepoEntityOperation } from "../../helpers";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
 
@@ -22,18 +23,18 @@ export class UpdateUser implements Service<UpdateUserInput> {
     ) {}
 
     /**
-     * Executes the update operation.
-     *
-     * @param input - Parameters containing the updated user info.
-     * @returns An empty object.
+     * Executes the user update process.
+     * @param input - The input data for updating a user, validated by updateUserSchema.
+     * @returns A promise resolving to an empty object.
+     * @throws {ApiError} If the user with the given id is not found or when a bad request is given.
      */
     async execute(input: UpdateUserInput): Promise<object> {
         // Get the old info of the user
         let oldUser: User;
         if (input.userType == UserType.STUDENT) {
-            oldUser = await this.studentRepository.getById(input.id);
+            oldUser = await tryRepoEntityOperation(this.studentRepository.getById(input.id), "User", input.id, true);
         } else {
-            oldUser = await this.teacherRepository.getById(input.id);
+            oldUser = await tryRepoEntityOperation(this.teacherRepository.getById(input.id), "User", input.id, true);
         }
 
         // Check if email is not same when being updated
@@ -75,7 +76,7 @@ export class UpdateUser implements Service<UpdateUserInput> {
                 input.schoolName ?? oldUser.schoolName,
                 input.id,
             );
-            await this.studentRepository.update(updatedUser as Student);
+            await tryRepoEntityOperation(this.studentRepository.update(updatedUser as Student), "User", "", false);
         } else {
             updatedUser = new Teacher(
                 input.email ?? oldUser.email,
@@ -85,7 +86,7 @@ export class UpdateUser implements Service<UpdateUserInput> {
                 input.schoolName ?? oldUser.schoolName,
                 input.id,
             );
-            await this.teacherRepository.update(updatedUser as Teacher);
+            await tryRepoEntityOperation(this.teacherRepository.update(updatedUser as Teacher), "User", "", false);
         }
 
         return {};
