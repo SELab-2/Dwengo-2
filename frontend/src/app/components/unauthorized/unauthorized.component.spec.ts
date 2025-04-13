@@ -1,21 +1,20 @@
 import { TestBed } from '@angular/core/testing';
+import { UnauthorizedComponent } from './unauthorized.component';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { UnknownRouteComponent } from './unknown-route.component';
 import { provideRouter } from '@angular/router';
-
 import { AuthenticationService } from '../../services/authentication.service';
 
-describe('UnknownRouteComponent', () => {
-  let component: UnknownRouteComponent;
+describe('UnauthorizedComponent', () => {
+  let component: UnauthorizedComponent;
   let harness: RouterTestingHarness;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      imports: [UnknownRouteComponent],
+      imports: [UnauthorizedComponent],
       providers: [
-        provideRouter([{ path: '**', component: UnknownRouteComponent }]),
+        provideRouter([{ path: '**', component: UnauthorizedComponent }]),
         provideHttpClient(),
         provideHttpClientTesting(),
         AuthenticationService,
@@ -23,7 +22,7 @@ describe('UnknownRouteComponent', () => {
     });
 
     harness = await RouterTestingHarness.create();
-    component = await harness.navigateByUrl('/', UnknownRouteComponent);
+    component = await harness.navigateByUrl('/', UnauthorizedComponent);
     harness.detectChanges();
   });
 
@@ -36,17 +35,17 @@ describe('UnknownRouteComponent', () => {
     expect(logo).toBeTruthy();
   });
 
-  it('should have the header', () => {
-    const header = harness.fixture.nativeElement.querySelector('h1');
-    expect(header).toBeTruthy();
+  it('should have a title', () => {
+    const title = harness.fixture.nativeElement.querySelector('h1');
+    expect(title).toBeTruthy();
   });
 
-  it('should have the text', () => {
-    const text = harness.fixture.nativeElement.querySelector('p');
-    expect(text).toBeTruthy();
+  it('should have a message', () => {
+    const message = harness.fixture.nativeElement.querySelector('p');
+    expect(message).toBeTruthy();
   });
 
-  it('should have the button', () => {
+  it('should have a button', () => {
     const button = harness.fixture.nativeElement.querySelector('button');
     expect(button).toBeTruthy();
   });

@@ -5,12 +5,12 @@ import { RouterLink } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
-  selector: 'app-unknown-route',
+  selector: 'app-unauthorized',
   imports: [RouterLink, MatCardModule, MatButtonModule],
-  templateUrl: './unknown-route.component.html',
-  styleUrl: './unknown-route.component.less'
+  templateUrl: './unauthorized.component.html',
+  styleUrl: './unauthorized.component.less'
 })
-export class UnknownRouteComponent {
+export class UnauthorizedComponent {
 
   constructor(
     public readonly authenticationService: AuthenticationService
