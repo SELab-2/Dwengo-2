@@ -13,6 +13,7 @@ describe('AssignmentService', () => {
     startDate: new Date(2001, 9, 11),
     deadline: new Date(2025, 3, 14),
     extraInstructions: "extra instructions",
+    learningPathId: "learning-path-id",
   };
 
   const newThisAssignment: NewAssignment = {
@@ -20,6 +21,7 @@ describe('AssignmentService', () => {
     startDate: new Date(2001, 9, 11),
     deadline: new Date(2025, 3, 14),
     extraInstructions: "extra instructions",
+    learningPathId: "learning-path-id",
   };
 
   const otherAssignment: Assignment = {
@@ -27,6 +29,7 @@ describe('AssignmentService', () => {
     classId: "class-id",
     startDate: new Date(2001, 9, 11),
     deadline: new Date(2025, 3, 14),
+    learningPathId: "learning-path-id",
     extraInstructions: "extra instructions",
   };
 
@@ -46,16 +49,16 @@ describe('AssignmentService', () => {
 
   beforeEach(() => {
     http = jasmine.createSpyObj('HttpClient', ['get', 'post', 'delete', 'patch']);
-    
+
     errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler', 'retrieveError', 'createError', 'deleteError', 'updateError']);
     errorService.pipeHandler.and.callFake(() => (source) => source);
     errorService.retrieveError.and.returnValue("retrieveError");
     errorService.createError.and.returnValue("createError");
     errorService.deleteError.and.returnValue("deleteError");
     errorService.updateError.and.returnValue("updateError");
-    
+
     authenticationService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveAuthenticationHeaders', 'retrieveToken']);
-    
+
     authenticationService.retrieveUserId.and.returnValue("user-id");
     authenticationService.retrieveToken.and.returnValue("token");
 
@@ -104,7 +107,7 @@ describe('AssignmentService', () => {
   });
 
   it('should update an assignment', () => {
-    http.patch.and.returnValue(of(thisAssignment));    
+    http.patch.and.returnValue(of(thisAssignment));
     service.updateAssignment(thisAssignment).subscribe(assignment => {
       expect(assignment).toEqual(thisAssignment);
     });
@@ -116,5 +119,5 @@ describe('AssignmentService', () => {
       expect(response).toBeTrue();
     });
   });
-  
+
 });

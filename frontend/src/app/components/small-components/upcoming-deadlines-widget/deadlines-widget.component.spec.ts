@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Assignment } from '../../../interfaces/assignments/assignment';
+import { Assignment } from '../../../interfaces/assignment';
 
 describe('DeadlinesWidgetComponent', () => {
     let fixture: ComponentFixture<DeadlinesWidgetComponent>;

@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { Class } from '../../../interfaces/classes/class';
 import { ClassInfoCardComponent } from '../class-info-card/class-info-card.component';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 
 @Component({
