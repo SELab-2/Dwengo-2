@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
-import { forkJoin, Observable, switchMap } from 'rxjs';
-import { Assignment } from '../interfaces/assignment';
-import { AssignmentResponse } from '../interfaces/assignment/assignmentResponse';
+import { forkJoin, Observable, of, switchMap } from 'rxjs';
+import { Assignment, NewAssignment } from '../interfaces/assignment';
+import { AssignmentResponse, AssignmentResponseSingle } from '../interfaces/assignment/assignmentResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -45,5 +45,84 @@ export class AssignmentService {
       )
     );
   }
+
+  private errorMessageById = $localize `There was an error while retrieving the assignment`;
+
+  /**
+   * Retrieve a single assignment by its ID
+   */
+  retrieveAssignmentById(id: string): Observable<Assignment> {
+    const headers = this.authenticationService.retrieveAuthenticationHeaders();
+
+    return this.http.get<Assignment>(
+      `${this.API_URL}/assignments/${id}`,
+      headers
+    ).pipe(
+      this.errorService.pipeHandler(this.errorMessageById)
+    ); 
+  }
+
+  private createAssignmentErrorMessage = $localize `There was an error while creating the assignment`;
   
+  /**
+   * Create a new assignment
+   * @param assignment The assignment to create
+   * @returns An observable of the created assignment
+   */
+  createAssignment(assignment: NewAssignment): Observable<Assignment> {
+    const headers = this.authenticationService.retrieveAuthenticationHeaders();
+
+    return this.http.post<AssignmentResponseSingle>(
+      `${this.API_URL}/assignments`,
+      assignment,
+      headers
+    ).pipe(
+      this.errorService.pipeHandler(this.createAssignmentErrorMessage),
+      switchMap(response => {
+        return of({
+          ...assignment,
+          id: response.id
+        });
+      }) // return the created assignment
+    );
+  }
+
+  private updateAssignmentErrorMessage = $localize `There was an error while updating the assignment`;
+
+  /**
+   * Update an assignment
+   * @param assignment The assignment to update
+   * @returns An observable of the updated assignment
+   */
+  updateAssignment(assignment: Assignment): Observable<Assignment> {
+    const headers = this.authenticationService.retrieveAuthenticationHeaders();
+
+    return this.http.put<void>(
+      `${this.API_URL}/assignments/${assignment.id}`,
+      assignment,
+      headers
+    ).pipe(
+      this.errorService.pipeHandler(this.updateAssignmentErrorMessage),
+      switchMap(() => of(assignment)) // return the updated assignment
+    );
+  }
+
+  private deleteAssignmentErrorMessage = $localize `There was an error while deleting the assignment`;
+
+  /**
+   * Delete an assignment
+   * @param assignment The assignment to delete
+   * @returns An observable that is true if the assignment was deleted
+   */
+  deleteAssignment(assignment: Assignment): Observable<boolean> {
+    const headers = this.authenticationService.retrieveAuthenticationHeaders();
+
+    return this.http.delete<void>(
+      `${this.API_URL}/assignments/${assignment.id}`,
+      headers
+    ).pipe(
+      this.errorService.pipeHandler(this.deleteAssignmentErrorMessage),
+      switchMap(() => of(true)) // return true if the assignment was deleted
+    );
+  }
 }
