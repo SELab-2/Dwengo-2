@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { JoinRequestService } from "./joinRequestService";
-import { getJoinRequestSchema, getUserJoinRequestsSchema, getClassJoinCodesSchema } from "../../../application/schemas";
+import {
+    getJoinRequestSchema,
+    getUserJoinRequestsSchema,
+    getClassJoinRequestsSchema,
+} from "../../../application/schemas";
 import { JoinRequest } from "../../entities/joinRequest";
 import { tryRepoEntityOperation } from "../../helpers";
 
@@ -9,7 +13,7 @@ import { tryRepoEntityOperation } from "../../helpers";
  *
  * @param _classId The id of the class.
  */
-export type GetClassJoinRequestsInput = z.infer<typeof getClassJoinCodesSchema>;
+export type GetClassJoinRequestsInput = z.infer<typeof getClassJoinRequestsSchema>;
 
 /**
  * @description paramaters to get all joinRequests of a user
