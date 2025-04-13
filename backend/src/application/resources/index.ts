@@ -2,6 +2,7 @@ export * from "./assignmentResource";
 export * from "./authenticationResource";
 export * from "./classResource";
 export * from "./groupResource";
+export * from "./joinCodeResource";
 export * from "./joinRequestResource";
 export * from "./messageResource";
 export * from "./questionThreadResource";
