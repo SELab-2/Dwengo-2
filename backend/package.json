@@ -8,6 +8,8 @@
     "start": "node dist/src/app.js",
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/app.ts",
     "lint": "eslint src",
+    "db:clear": "ts-node extra/runClearDb.ts",
+    "db:seed": "ts-node extra/runSeedDb.ts",
     "test:unit": "jest --config=jest.unit.config.ts --forceExit",
     "test:integration": "PORT=4000 jest --config=jest.integration.config.ts --runInBand",
     "test": "npm run test:unit && npm run test:integration",
@@ -39,6 +41,7 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.6.0",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^5.0.0",
