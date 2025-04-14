@@ -29,9 +29,9 @@ tags:
     description: Create and manage assignments, including deadlines, instructions and submissions
   - name: questions
     description: Handle Q&A interactions between students and teachers, including asking and answering questions
-  - name: paths
+  - name: learningPath
     description: Manage learning paths that organize educational content into structured sequences
-  - name: objects
+  - name: learningObject
     description: Handle learning objects like lessons, exercises and interactive content
 security:
   - apiKeyAuth: []
@@ -699,6 +699,75 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  '/learningPath':
+    get:
+      tags:
+        - learningPath
+      description: |
+        Get all learningPaths available from the Dwengo API filtered with params.
+      parameters:
+        - name: all
+          in: query
+          description: | 
+            This parameter takes a string as a value and searches all learning paths
+            for which the value occurs in the title, description, or hruid.
+            (This can have an empty string as a parameter which matches all descriptions and titles)
+          schema:
+            type: string
+        - name: language
+          in: query
+          description: Language of the learning path
+          schema:
+            type: string
+        - name: hruid
+          in: query
+          description: Search for learning paths with this human-readable unique identifier
+          schema:
+            type: string
+        - name: title
+          in: query
+          description: Search for titles containing a specific search term
+          schema:
+            type: string
+        - name: description
+          in: query
+          description: Search for descriptions containing a specific search term
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/PathSearchOK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        
+
+  '/learningPath/{id}':
+    get:
+      tags:
+        - learningPath
+      description: Get a learningPath given it's hruid and preffered language.
+      parameters:
+        - in: path
+          name: id
+          required: true 
+          schema:
+            type: string
+          description: The hruid of the learningPath
+        - in: query
+          name: language
+          schema:
+            type: string
+          description: The language of the learningPath
+      responses:
+        '200':
+          $ref: '#/components/responses/LearningPathOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
 # TODO  '/paths/{idParent}/objects/{id}':
 #    get:
 #      tags:
@@ -794,26 +863,175 @@ paths:
 #          $ref: '#/components/responses/Unauthorized'
 #        '404':
 #          $ref: '#/components/responses/NotFound'
-#  /objects:
-#    post:
-#      tags:
-#        - objects
-#      summary: Create new learning object
-#      description: Create a new learning object with the specified properties.
-#      operationId: createObject
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/LearningObjectCreate'
-#      responses:
-#        '201':
-#          $ref: '#/components/responses/EntityCreated'
-#        '400':
-#          $ref: '#/components/responses/BadRequest'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
+  '/learningObject':
+    get:
+      tags:
+        - learningObject
+      description: |
+        Get all learningObjects available from the Dwengo API filtered with params.
+      parameters:
+        - name: searchTerm
+          in: query
+          description: A generic search term used to match words in the title, description, and keywords.
+          schema:
+            type: string
+        - name: uuid
+          in: query
+          description: Search for learning objects with uuid
+          schema:
+            type: string
+        - name: hruid
+          in: query
+          description: Search for learning objects with hruid
+          schema:
+            type: string
+        - name: version
+          in: query
+          description: Search for specific version
+          schema:
+            type: number
+        - name: language
+          in: query
+          description: Search for a specific language
+          schema:
+            type: string
+        - name: contentType
+          in: query
+          description: Search for a specific dwengo content type
+          schema:
+            type: string
+            enum: ["text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly"]
+        - name: available
+          in: query
+          description: Filter search on (un)available learning objects
+          schema:
+            type: boolean
+        - name: teacherExclusive
+          in: query
+          description: Filter search on learning content for teachers and not students
+          schema:
+            type: boolean
+        - name: difficulty
+          in: query
+          description: Search specific difficulty
+          schema:
+            type: integer
+        - name: title
+          in: query
+          description: Search matches if title contains searchTerm
+          schema:
+            type: string
+        - name: description
+          in: query
+          description: Search matches if description contains searchTerm
+          schema:
+            type: string
+        - name: targetAges
+          in: query
+          description: JSON array with ages to match
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: keywords
+          in: query
+          description: JSON array with keywords to match
+          schema:
+            type: array
+            items:
+              type: string
+        - name: skosConcepts
+          in: query
+          description: JSON array with skos concepts to match
+          schema:
+            type: array
+            items:
+              type: string
+        - name: minDifficulty
+          in: query
+          description: Search for learning objects with a difficulty higher than min difficulty
+          schema:
+            type: integer
+        - name: maxDifficulty
+          in: query
+          description: Search for learning objects with a difficulty lower than max difficulty
+          schema:
+            type: integer
+        - name: minTime
+          in: query
+          description: Search for learning objects with a duration longer than min time
+          schema:
+            type: integer
+        - name: maxTime
+          in: query
+          description: Search for learning objects with a duration shorter than max time
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/ObjectSearchOK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        
+  '/learningObject/{id}':
+    get:
+      description: |
+        Get a learningObject by it's hruid, the learningObject is made of the metadata + the html in raw or wrapped format.
+        When no version is given or the requested version is unavailable, the latest version will be returned.
+        When no language is given or the requested version is unavailable, it will default to english.
+        If English is also unavailable it will fall back to the first language that is available from the Dwengo API.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The hruid of the learningobject
+          schema:
+            type: string 
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum: [wrapped, raw]       
+        - in: query
+          name: language
+          schema:
+            type: string
+        - in: query
+          name: version 
+          schema:
+            type: number
+      tags:
+        - learningObject
+      responses:
+        '200':
+          $ref: '#/components/responses/LearningObjectOK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    # post:
+    #   tags:
+    #     - objects
+    #   summary: Create new learning object
+    #   description: Create a new learning object with the specified properties.
+    #   operationId: createObject
+    #   requestBody:
+    #     required: true
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: '#/components/schemas/LearningObjectCreate'
+    #   responses:
+    #     '201':
+    #       $ref: '#/components/responses/EntityCreated'
+    #     '400':
+    #       $ref: '#/components/responses/BadRequest'
+    #     '401':
+    #       $ref: '#/components/responses/Unauthorized'
 
 # TODO  '/paths/{id}':
 #    get:
@@ -1504,7 +1722,35 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/LearningObject'
+            $ref: '#components/schemas/LearningObject'
+    ObjectSearchOK:
+      description: Learning object search request completed sucessfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              learningObjects:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Metadata"
+    MetadataOK:
+      description: Metadata request completed successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
+    PathSearchOK:
+      description: Learning path search request completed sucessfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              learningPaths:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LearningPath"
     LearningPathOK:
       description: Learning path request completed successfully
       content:
@@ -1616,14 +1862,14 @@ components:
                   type: string
                   format: uuid
                 description: All groups of a specific user.
-    LearningObjectsOK:
+    MetadatasOK:
       description: Learning objects collection request completed successfully
       content:
         application/json:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/LearningObject'
+              $ref: '#/components/schemas/Metadata'
     LearningPathsOK:
       description: Learning paths collection request completed successfully
       content:
@@ -1789,8 +2035,6 @@ components:
           default: student
           description: User's type in the system.
 
-    LearningObject:
-      type: object
     LearningObjectUpdate:
       type: object
     LearningObjectCreate:
@@ -1798,6 +2042,72 @@ components:
 
     LearningPath:
       type: object
+      properties:
+        hruid:
+          type: string
+        id:
+          type: string
+        language:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        image:
+          type: string # Base64String
+          description: image with Base64String format
+        numNodes:
+          type: number
+        keywords:
+          type: array
+          items:
+            type: string
+        targetAges:
+          type: array
+          items:
+            type: number
+        minAge:
+          type: number
+        maxAge:
+          type: number
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LearningPathObject'
+        
+        
+    LearningPathObject:
+      type: object
+      properties:
+        hruid:
+          type: string
+        id:
+          type: string
+        version:
+          type: number
+        language:
+          type: string
+        startNode:
+          type: boolean
+        transitions:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/BaseLearningObject'
+        
+    BaseLearningObject:
+      type: object
+      properties:
+        hruid:
+          type: string
+        id:
+          type: string
+        version:
+          type: number
+        language:
+          type: string
+
+        
     LearningPathUpdate:
       type: object
     LearningPathCreate:
@@ -2463,3 +2773,43 @@ components:
           type: string
           minLength: 1
           description: The new content of the message.
+
+    LearningObject:
+      type: object
+      properties:
+        metadata:
+          type: object
+          $ref: '#/components/schemas/Metadata'
+          description: The metadata containing info about the learnign object
+        content:
+          type: string
+          description: The string containing the HTML of the learning object
+
+    Metadata:
+      type: object
+      properties:
+        hruid:
+          type: string
+          description: Human readable unique id
+        uuid:
+          type: string
+          description: Numerical equivalent of hruid
+        id:
+          type: string
+          description: Unique id
+        version:
+          type: integer
+          description: The version of that specific learning object. Unique in combination with hruid (or uuid) and language.
+        language:
+          type: string
+          description: The language of the learning object.
+        title:
+          type: string
+          description: Short description of the learning object.
+        description:
+          type: string
+          description: Long description of the learning object.
+        contentType:
+          type: string
+          enum: ["text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly"]
+          description: One of the following content types -> "text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly".
