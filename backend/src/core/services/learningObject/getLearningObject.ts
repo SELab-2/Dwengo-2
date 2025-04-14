@@ -44,10 +44,10 @@ export class GetLearningObject implements Service<GetObjectInput> {
         let learningObject: LearningObject;
         if (input.type === HTMLType.WRAPPED) {
             // Get the wrapped learningObject + metadata
-            learningObject = await this._learningObjectRepository.getwrappedLearningObject(input.id, language, version);
+            learningObject = await this._learningObjectRepository.getWrappedLearningObject(input.id, language, version);
         } else {
             // Get the raw learningObject + metadata
-            learningObject = await this._learningObjectRepository.getrawLearningObject(input.id, language, version);
+            learningObject = await this._learningObjectRepository.getRawLearningObject(input.id, language, version);
         }
 
         // Return the learningObject with html-content included

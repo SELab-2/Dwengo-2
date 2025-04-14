@@ -1,6 +1,5 @@
 import { DatasourceDwengo } from "./datasourceDwengo";
 import { ApiError, ErrorCode } from "../../../../../application/types";
-import { logger } from "../../../../../config/logger";
 import { LearningObject, LearningObjectData } from "../../../../../core/entities/learningObject";
 
 export class DatasourceLearningObject extends DatasourceDwengo {
