@@ -1,24 +1,24 @@
-import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, Unique, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, ManyToOne } from "typeorm";
 import { ClassTypeORM } from "./classTypeorm";
 import { UserTypeORM } from "./userTypeorm";
 import { JoinRequest, JoinRequestType } from "../../../../core/entities/joinRequest";
 
+//TODO: get rid of useless conversion
 export enum JoinAsType {
     TEACHER = "teacher",
     STUDENT = "student",
 }
 
 @Entity()
-@Unique(["requester", "class"])
 export class JoinRequestTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @ManyToOne(() => UserTypeORM)
+    @ManyToOne(() => UserTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "requester_id" })
     requester!: UserTypeORM;
 
-    @ManyToOne(() => ClassTypeORM)
+    @ManyToOne(() => ClassTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "class_id" })
     class!: ClassTypeORM;
 

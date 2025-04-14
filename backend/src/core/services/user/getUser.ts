@@ -1,9 +1,8 @@
 import { z } from "zod";
 import { getUserSchema } from "../../../application/schemas/userSchemas";
-import { ApiError, ErrorCode } from "../../../application/types";
-import { EntityNotFoundError } from "../../../config/error";
 import { Service } from "../../../config/service";
 import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation } from "../../helpers";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
 
@@ -21,12 +20,10 @@ export class GetUser implements Service<GetUserInput> {
     ) {}
 
     /**
-     * Gets a user from the DB by either ID or email.
-     *
-     * @param input Parameters containing either ID or email and the user type
-     * @returns the user with the given id or email.
-     *
-     * @throws Error if the user is not present.
+     * Executes the user get process.
+     * @param input - The input data for getting a user, validated by getUserSchema.
+     * @returns A promise resolving to a user transformed into an object.
+     * @throws {ApiError} If the user with the given id was not found.
      */
     async execute(input: GetUserInput): Promise<object> {
         const { getById, getByEmail } =
@@ -40,17 +37,13 @@ export class GetUser implements Service<GetUserInput> {
                       getByEmail: (email: string) => this.teacherRepository.getByEmail(email),
                   };
 
-        try {
-            const user = await (input.id ? getById(input.id) : getByEmail(input.email as string));
-            return user.toObject();
-        } catch (error) {
-            if (error instanceof EntityNotFoundError) {
-                throw {
-                    code: ErrorCode.NOT_FOUND,
-                    message: `User ${input.userType} with ${input.id ? `ID ${input.id}` : `email ${input.email}`} not found`,
-                } as ApiError;
-            }
-            throw error;
-        }
+        return (
+            await tryRepoEntityOperation(
+                input.id ? getById(input.id) : getByEmail(input.email as string),
+                "User",
+                `${input.id ? input.id : input.email}`,
+                true,
+            )
+        ).toObject();
     }
 }

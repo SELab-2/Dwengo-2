@@ -57,16 +57,62 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
             return null;
         }
 
+        let userId: string;
+
+        if (joinRequest.type === JoinAsType.STUDENT) {
+            const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
+                where: { student: joinRequest.requester },
+            });
+
+            userId = studentModel!.id;
+        } else {
+            const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
+                where: { teacher: joinRequest.requester },
+            });
+
+            userId = teacherModel!.id;
+        }
+
+        if (!userId) {
+            return null;
+        }
+
+        joinRequest.requester.id = userId;
+
         return joinRequest.toJoinRequestEntity();
     }
 
-    public async getJoinRequestByRequesterId(requesterId: string): Promise<JoinRequest[]> {
+    public async getJoinRequestByRequesterId(requesterId: string): Promise<JoinRequest[] | null> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
+        let userId: string;
+
+        const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
+            where: { id: requesterId },
+            relations: ["student"],
+        });
+
+        const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
+            where: { id: requesterId },
+            relations: ["teacher"],
+        });
+
+        if (studentModel) {
+            userId = studentModel?.student.id;
+        } else if (teacherModel) {
+            userId = teacherModel?.teacher.id;
+        } else {
+            return null;
+        }
+
         const joinRequests: JoinRequestTypeORM[] = await datasource.getRepository(JoinRequestTypeORM).find({
-            where: { requester: { id: requesterId } },
+            where: { requester: { id: userId } },
             relations: ["requester", "class"],
         });
+
+        for (const joinRequest of joinRequests) {
+            joinRequest.requester.id = requesterId;
+        }
 
         return joinRequests.map(joinRequest => joinRequest.toJoinRequestEntity());
     }

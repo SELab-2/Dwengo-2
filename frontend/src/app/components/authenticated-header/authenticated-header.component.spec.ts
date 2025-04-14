@@ -36,19 +36,15 @@ describe('AuthenticatedHeaderComponent', () => {
     expect(logo).toBeTruthy();
   });
 
-  it('should have the teacher home button if user is teacher', () => {
-    component.isStudent = false;
-    harness.detectChanges();
-    const homeButton = harness.fixture.debugElement.query(By.css('.teacher-home-button'));
+  it('should have a home button', () => {
+    const homeButton = harness.fixture.debugElement.query(By.css('.home-button'));
     expect(homeButton).toBeTruthy();
   });
 
-  it('should have the student home button if user is student', () => {
-    component.isStudent = true;
-    harness.detectChanges();
-    const homeButton = harness.fixture.debugElement.query(By.css('.student-home-button'));
-    expect(homeButton).toBeTruthy();
-  });
+  it('should have a menu', () => {
+    const menu = harness.fixture.nativeElement.querySelector('app-authenticated-menu');
+    expect(menu).toBeTruthy();
+  })
 
   it('should have a logout button', () => {
     const logoutButton = harness.fixture.debugElement.query(By.css('.logout-button'));

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -11,4 +11,13 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class UnauthenticatedHeaderComponent {
 
+  constructor(
+    private router: Router,
+  ) {}
+  
+
+  isOnRegisterRoute(): boolean {
+    return this.router.url.endsWith('/register');
+  }
+  
 }

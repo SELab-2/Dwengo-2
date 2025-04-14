@@ -13,6 +13,7 @@ import * as JoinRequestSchemas from "../schemas/joinRequestSchemas";
  * - DELETE /requests/:id - Delete invite
  * - POST /requests - Create new invite
  * - GET /users/:idParent/requests - Get all pending invites for a user
+ * - GET /classes/:idParent/requests - Get all pending invites for a class
  */
 
 /* ************* Extractors ************* */
@@ -23,6 +24,7 @@ const extractors = {
     deleteJoinRequest: deps.createZodParamsExtractor(JoinRequestSchemas.deleteJoinRequestSchema),
     createJoinRequest: deps.createZodParamsExtractor(JoinRequestSchemas.createJoinRequestSchema),
     getUserJoinRequests: deps.createZodParamsExtractor(JoinRequestSchemas.getUserJoinRequestsSchema),
+    getClassJoinRequests: deps.createZodParamsExtractor(JoinRequestSchemas.getClassJoinRequestsSchema),
 };
 
 /* ************* Controller ************* */
@@ -34,8 +36,9 @@ export class JoinRequestController extends deps.Controller {
         remove: JoinRequestServices.DeleteJoinRequest,
         create: JoinRequestServices.CreateJoinRequest,
         getUserJoinRequests: JoinRequestServices.GetUserJoinRequests,
+        getClassJoinRequests: JoinRequestServices.GetClassJoinRequests,
     ) {
-        super({ get, update, remove, create, getUserJoinRequests });
+        super({ get, update, remove, create, getUserJoinRequests, getClassJoinRequests });
     }
 }
 
@@ -90,7 +93,16 @@ export function joinRequestRoutes(
                 urlPattern: "/users/:idParent/requests",
                 controller,
                 extractor: extractors.getUserJoinRequests,
-                handler: (req, data) => controller.getOne(req, data),
+                handler: (req, data) => controller.getChildren(req, data, controller.services.getUserJoinRequests),
+                middleware,
+            },
+            {
+                app,
+                method: deps.HttpMethod.GET,
+                urlPattern: "/classes/:idParent/requests",
+                controller,
+                extractor: extractors.getClassJoinRequests,
+                handler: (req, data) => controller.getChildren(req, data, controller.services.getClassJoinRequests),
                 middleware,
             },
         ],
