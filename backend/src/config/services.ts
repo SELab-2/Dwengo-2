@@ -43,6 +43,7 @@ export const services = {
         remove: new JoinRequestServices.DeleteJoinRequest(repos.joinRequest),
         create: new JoinRequestServices.CreateJoinRequest(repos.joinRequest, repos.class),
         getUserJoinRequests: new JoinRequestServices.GetUserJoinRequests(repos.joinRequest),
+        getClassJoinRequests: new JoinRequestServices.GetClassJoinRequests(repos.joinRequest),
     },
     message: {
         get: new MessageServices.GetMessage(repos.message),

@@ -1,22 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserType } from '../../interfaces';
+import { AuthenticatedMenuComponent } from '../authenticated-menu/authenticated-menu.component';
 
 @Component({
   selector: 'app-authenticated-header',
-  imports: [MatButtonModule],
+  imports: [RouterLink, MatButtonModule, AuthenticatedMenuComponent],
   templateUrl: './authenticated-header.component.html',
   styleUrl: './authenticated-header.component.less'
 })
 export class AuthenticatedHeaderComponent implements OnInit {
   isStudent: boolean = false;
-
-  // TODO: redirect to dasboard instead of classes
   
-  private readonly STUDENT_DASHBOARD_URL = '/student/classes';
-  private readonly TEACHER_DASHBOARD_URL = '/teacher/classes';
+  private readonly STUDENT_DASHBOARD_URL = '/student/dashboard';
+  private readonly TEACHER_DASHBOARD_URL = '/teacher/dashboard';
   
   constructor(
     private router: Router,

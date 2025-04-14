@@ -1,8 +1,19 @@
 import { z } from "zod";
 import { JoinRequestService } from "./joinRequestService";
-import { getJoinRequestSchema, getUserJoinRequestsSchema } from "../../../application/schemas";
+import {
+    getJoinRequestSchema,
+    getUserJoinRequestsSchema,
+    getClassJoinRequestsSchema,
+} from "../../../application/schemas";
 import { JoinRequest } from "../../entities/joinRequest";
 import { tryRepoEntityOperation } from "../../helpers";
+
+/**
+ * @description paramaters to get all joinRequests of a class
+ *
+ * @param _classId The id of the class.
+ */
+export type GetClassJoinRequestsInput = z.infer<typeof getClassJoinRequestsSchema>;
 
 /**
  * @description paramaters to get all joinRequests of a user
@@ -16,6 +27,29 @@ export type GetUserJoinRequestsInput = z.infer<typeof getUserJoinRequestsSchema>
  * @param id The id of the joinRequest.
  */
 export type GetJoinRequestInput = z.infer<typeof getJoinRequestSchema>;
+
+/**
+ * @description class representing service to get all joinRequests of a class
+ *
+ */
+export class GetClassJoinRequests extends JoinRequestService<GetClassJoinRequestsInput> {
+    /**
+     * Executes the class join-request get process.
+     * @param input - The input data for getting class join-request, validated by getClassJoinCodesSchema.
+     * @returns A promise resolving to an object with a list of join-request.
+     * @throws {ApiError} If the class with the given id is not found.
+     */
+    async execute(input: GetClassJoinRequestsInput): Promise<object> {
+        // Get all requests for user
+        const requests: JoinRequest[] = await tryRepoEntityOperation(
+            this.joinRequestRepository.getByClassId(input.idParent),
+            "Class",
+            input.idParent,
+            true,
+        );
+        return { requests: requests.map(request => request.id) };
+    }
+}
 
 /**
  * @description class representing service to get all joinRequests of a user

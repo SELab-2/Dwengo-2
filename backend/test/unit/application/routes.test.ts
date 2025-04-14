@@ -330,6 +330,14 @@ const routeConfigs: Record<
                 pathParams: { idParent: "user-1" },
             },
         },
+        {
+            method: HttpMethod.GET,
+            path: "/classes/:idParent/requests",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "class-1" },
+            },
+        },
     ],
     messageRoutes: [
         {

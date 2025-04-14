@@ -12,11 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './already-authenticated.component.less'
 })
 export class AlreadyAuthenticatedComponent {
-
-  // TODO: redirect to dasboard instead of classes
   
-  private readonly STUDENT_DASHBOARD_URL = '/student/classes';
-  private readonly TEACHER_DASHBOARD_URL = '/teacher/classes';
+  private readonly STUDENT_DASHBOARD_URL = '/student/dashboard';
+  private readonly TEACHER_DASHBOARD_URL = '/teacher/dashboard';
 
   constructor(
     private readonly router: Router,

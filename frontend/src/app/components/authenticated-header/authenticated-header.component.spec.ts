@@ -41,6 +41,11 @@ describe('AuthenticatedHeaderComponent', () => {
     expect(homeButton).toBeTruthy();
   });
 
+  it('should have a menu', () => {
+    const menu = harness.fixture.nativeElement.querySelector('app-authenticated-menu');
+    expect(menu).toBeTruthy();
+  })
+
   it('should have a logout button', () => {
     const logoutButton = harness.fixture.debugElement.query(By.css('.logout-button'));
     expect(logoutButton).toBeTruthy();
