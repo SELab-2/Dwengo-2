@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { getAlllLearningPathsSchema, learningPathSearchParams } from "../../../application/schemas";
+import { getAllLearningPathsSchema, learningPathSearchParams } from "../../../application/schemas";
 import { Service } from "../../../config/service";
 import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
 
-export type GetAllLearningPathsInput = z.infer<typeof getAlllLearningPathsSchema>;
+export type GetAllLearningPathsInput = z.infer<typeof getAllLearningPathsSchema>;
 
 /**
  * Class that implements the service to get all learningPaths from the Dwengo API

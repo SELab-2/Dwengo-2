@@ -9,7 +9,7 @@ export const getLearningPathSchema = z.object({
     language: z.string().optional(),
 });
 
-export const getAlllLearningPathsSchema = z.object({
+export const getAllLearningPathsSchema = z.object({
     all: z.string().optional(),
     language: z.string().optional(),
     hruid: z.string().optional(),

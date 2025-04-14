@@ -16,7 +16,7 @@ import * as LearningPathSchemas from "../schemas/learningPathSchemas";
 
 const extractors = {
     getLearningPath: deps.createZodParamsExtractor(LearningPathSchemas.getLearningPathSchema),
-    getAllLearningPaths: deps.createZodParamsExtractor(LearningPathSchemas.getAlllLearningPathsSchema),
+    getAllLearningPaths: deps.createZodParamsExtractor(LearningPathSchemas.getAllLearningPathsSchema),
 };
 
 /* ************* Controller ************* */

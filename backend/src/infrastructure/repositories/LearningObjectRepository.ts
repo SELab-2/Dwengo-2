@@ -13,11 +13,11 @@ export class LearningObjectRepository implements ILearningObjectRepository {
         return this.datasource.getLanguages(hruid);
     }
 
-    public async getwrappedLearningObject(hruid: string, language: string, version: number): Promise<LearningObject> {
+    public async getWrappedLearningObject(hruid: string, language: string, version: number): Promise<LearningObject> {
         return this.datasource.getWrappedLearningObject(hruid, language, version);
     }
 
-    public async getrawLearningObject(hruid: string, language: string, version: number): Promise<LearningObject> {
+    public async getRawLearningObject(hruid: string, language: string, version: number): Promise<LearningObject> {
         return this.datasource.getRawLearningObject(hruid, language, version);
     }
 
