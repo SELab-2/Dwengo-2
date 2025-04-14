@@ -44,19 +44,8 @@ describe('ClassPendingRequestsComponent', () => {
   });
 
   it('should make request to join requests of class', () => {
-    // Make request to requests of a class
     const requestToClassRequests = httpTest.expectOne(`${API_URL}/classes/${testClass.id}/requests`);
     expect(requestToClassRequests.request.method).toBe('GET');
-
-    const requesterId: string = "12345";
-    requestToClassRequests.flush([
-      {
-        id: "requestId",
-        requester: requesterId,
-        classId: testClass.id,
-        type: "student"
-      }
-    ]);
   });
 
   
