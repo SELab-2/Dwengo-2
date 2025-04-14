@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { Class } from '../../interfaces/classes/class';
 import { JoinRequestService } from '../../services/join-request.service';
-import { AuthenticationService } from '../../services/authentication.service';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { JoinRequestWithUser } from '../../interfaces/join-requests/joinRequestWithUser';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-class-pending-requests',
@@ -23,8 +24,13 @@ export class ClassPendingRequestsComponent implements OnInit {
 
   public joinRequests: JoinRequestWithUser[] = [];
 
+  private readonly acceptedMessage: string = $localize `Accepted!`;
+  private readonly rejectedMessage: string = $localize `Rejected!`;
+
+  // Snackbar
+  private readonly snackBar = inject(MatSnackBar);
+
   public constructor(
-    private authService: AuthenticationService,
     private joinRequestService: JoinRequestService
   ) {}
 
@@ -36,7 +42,6 @@ export class ClassPendingRequestsComponent implements OnInit {
       const joinRequests$ = this.joinRequestService.getJoinRequestsForClass(classId);
 
       joinRequests$.subscribe(response => {
-        console.log(response);
 
         // Fill users of those join requests
         const joinRequestWithUser$ = this.joinRequestService.fillUsers(response);
@@ -46,33 +51,30 @@ export class ClassPendingRequestsComponent implements OnInit {
         });
 
       });
-
-    } else {
-      window.alert("Error occured with ids"); // TODO
     }
   }
 
   public acceptRequest(requestId: string) {
     const accepted$ = this.joinRequestService.acceptRequest(requestId);
 
-    accepted$.subscribe(response => {
-      if(response) {
-        window.alert("Accepted!");
-      } else {
-        window.alert("ERROR, RUN!");
-      }
+    accepted$.subscribe((response) => {
+      if(response) this.openSnackBar(this.acceptedMessage);
+      window.location.reload();
     });
   }
 
   public rejectRequest(requestId: string) {
     const rejected$ = this.joinRequestService.rejectRequest(requestId);
 
-    rejected$.subscribe(response => {
-      if(response) {
-        window.alert("Rejected!");
-      } else {
-        window.alert("ERROR, RUN!");
-      }
+      rejected$.subscribe((response) => {
+        if(response) this.openSnackBar(this.rejectedMessage);
+        window.location.reload();
+      });
+  }
+
+  private openSnackBar(message: string, action: string="Ok") {
+    this.snackBar.open(message, action, {
+        duration: 2500
     });
   }
 

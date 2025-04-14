@@ -201,7 +201,8 @@ export class ClassComponent implements OnInit {
   public showClassCode() {
     this.classCodePopup.open(ClassCodePopupComponent, {
       data: {
-        classCode: this._class!.id // TODO: class code from BACKEND
+        // TODO: class code from BACKEND (https://github.com/SELab-2/Dwengo-2/pull/436)
+        classCode: this._class!.id
       }
     });
   }

@@ -5,6 +5,7 @@ import { User } from '../../interfaces';
 import { ClassesService } from '../../services/classes.service';
 import { MatTableModule } from '@angular/material/table';
 
+
 @Component({
   selector: 'app-class-members-list',
   imports: [
@@ -24,8 +25,7 @@ export class ClassMembersListComponent implements OnInit {
   // Class members
   public members: User[] = [];
 
-  // TODO: put "magic constant" field names in user interface
-  displayedColumns: string[] = ['name', 'email', 'schoolName'];
+  displayedColumns: string[] = ['name', 'email', 'schoolName']; // TODO magic constant
 
   constructor(
     private classesService: ClassesService,
@@ -35,7 +35,7 @@ export class ClassMembersListComponent implements OnInit {
     if(this._class) {
       this.classesService
         .classStudents(this._class.id)
-        .subscribe(response => this.members = response)
+        .subscribe(response => this.members = response);
     }
   }
 

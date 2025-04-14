@@ -3,13 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
 import { environment } from "../../environments/environment";
-import { filter, forkJoin, map, Observable, of, switchMap, tap } from "rxjs";
-import { UserJoinRequestsResponse } from "../interfaces/join-requests/userJoinRequestsResponse";
-import { User, UserType } from "../interfaces";
+import { forkJoin, map, Observable, switchMap } from "rxjs";
+import { User } from "../interfaces";
 import { JoinRequestWithUser } from "../interfaces/join-requests/joinRequestWithUser";
 import { JoinRequestResponse } from "../interfaces/join-requests/joinRequestResponse";
 import { NewJoinRequest } from "../interfaces/join-requests/newJoinRequest";
-import { Users } from "../interfaces/user/users";
+import { JoinRequestList } from "../interfaces/join-requests/joinRequestList";
 
 @Injectable({
     providedIn: 'root'
@@ -47,55 +46,26 @@ export class JoinRequestService {
                 )
             )
         );
-
-        // return of([])
     }
 
     public getJoinRequestsForClass(classId: string): Observable<JoinRequestResponse[]> {
         const headers = this.authService.retrieveAuthenticationHeaders();
 
-        return this.http.get<Users>(
-            `${this.API_URL}/users`,
+        return this.http.get<JoinRequestList>(
+            `${this.API_URL}/classes/${classId}/requests`,
             headers
         ).pipe(
             this.errorService.pipeHandler(),
-            switchMap(response => {
-                const userIds: string[] = response.students;
-                console.log(`got users: ${userIds}`);
-
-                return forkJoin(
-                    userIds.map(userId => 
-                        this.http.get<UserJoinRequestsResponse>(
-                            `${this.API_URL}/users/${userId}/requests`,
+            switchMap(requestIds => 
+                forkJoin(
+                    requestIds.requests.map(requestId =>
+                        this.http.get<JoinRequestResponse>(
+                            `${this.API_URL}/requests/${requestId}`,
                             headers
-                        ).pipe(
-                            tap(response => console.log(response)), // TODO
-                            this.errorService.pipeHandler(),
-                            switchMap(response => {
-                                console.log(`got requests: ${response.requests}`);
-
-                                const requests: string[] = response.requests;
-
-                                return forkJoin(
-                                    requests.map(requestId => 
-                                        this.http.get<JoinRequestResponse>(
-                                            `${this.API_URL}/requests/${requestId}`,
-                                            headers
-                                        ).pipe(
-                                            this.errorService.pipeHandler(),
-                                            tap(response => console.log(response)), // TODO
-                                            filter(request => request.classId === classId),
-                                            tap(response => console.log(response)) // TODO
-                                        )
-                                    )
-                                );
-                            })
                         )
                     )
-                ).pipe(
-                    map(nestedResponses => nestedResponses.flat())
-                );
-            })
+                )
+            )
         );
     }
 
