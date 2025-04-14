@@ -1,5 +1,6 @@
-import { UserType } from "../user";
-
+/**
+ * A join request from a GET to the endpoint /requests/id
+ */
 export interface JoinRequestResponse {
     id: string,
     requester: string,  // id

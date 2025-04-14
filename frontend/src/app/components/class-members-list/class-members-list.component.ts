@@ -25,7 +25,7 @@ export class ClassMembersListComponent implements OnInit {
   // Class members
   public members: User[] = [];
 
-  displayedColumns: string[] = ['name', 'email', 'schoolName']; // TODO magic constant
+  displayedColumns: string[] = ['name', 'email', 'schoolName'];
 
   constructor(
     private classesService: ClassesService,

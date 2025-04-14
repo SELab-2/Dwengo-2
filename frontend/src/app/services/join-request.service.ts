@@ -8,7 +8,7 @@ import { User } from "../interfaces";
 import { JoinRequestWithUser } from "../interfaces/join-requests/joinRequestWithUser";
 import { JoinRequestResponse } from "../interfaces/join-requests/joinRequestResponse";
 import { NewJoinRequest } from "../interfaces/join-requests/newJoinRequest";
-import { JoinRequestList } from "../interfaces/join-requests/joinRequestList";
+import { JoinRequestsResponse } from "../interfaces/join-requests/joinRequestsResponse";
 
 @Injectable({
     providedIn: 'root'
@@ -51,7 +51,7 @@ export class JoinRequestService {
     public getJoinRequestsForClass(classId: string): Observable<JoinRequestResponse[]> {
         const headers = this.authService.retrieveAuthenticationHeaders();
 
-        return this.http.get<JoinRequestList>(
+        return this.http.get<JoinRequestsResponse>(
             `${this.API_URL}/classes/${classId}/requests`,
             headers
         ).pipe(
