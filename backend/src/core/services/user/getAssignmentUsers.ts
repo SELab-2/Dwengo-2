@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { getAssignmentUsersSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
+import { Student } from "../../entities/student";
+import { tryRepoEntityOperation } from "../../helpers";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 
 export type GetAssignmentUsersInput = z.infer<typeof getAssignmentUsersSchema>;
@@ -8,8 +10,19 @@ export type GetAssignmentUsersInput = z.infer<typeof getAssignmentUsersSchema>;
 export class GetAssignmentUsers implements Service<GetAssignmentUsersInput> {
     constructor(private studentRepository: IStudentRepository) {}
 
+    /**
+     * Executes the assignment users get process.
+     * @param input - The input data for getting assignment users, validated by getAssignmentUsersSchema.
+     * @returns A promise resolving to an object with a list of users.
+     * @throws {ApiError} If the assignment with the given id is not found.
+     */
     async execute(input: GetAssignmentUsersInput): Promise<object> {
-        const studentIds = (await this.studentRepository.getByAssignmentId(input.idParent)).map(s => s.id);
-        return { students: studentIds };
+        const students: Student[] = await tryRepoEntityOperation(
+            this.studentRepository.getByAssignmentId(input.idParent),
+            "Assignment",
+            input.idParent,
+            true,
+        );
+        return { students: students.map(s => s.id) };
     }
 }

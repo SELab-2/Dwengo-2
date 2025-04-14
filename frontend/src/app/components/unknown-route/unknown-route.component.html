@@ -1,13 +1,15 @@
-<div class="page-not-found">
+<mat-card class="page-not-found">
     <span class="unknown-route__logo">
         <img i18n-alt src="assets/dwengo-groen-zwart.svg" alt="Dwengo logo" />
     </span>
 
-        
-    <h1 i18n>404: Page Not Found (Probably Stolen by AI)</h1>
-    <p i18n>Maybe try turning it off and on again?</p>
+    <h1 mat-typography i18n>404: Page Not Found (Probably Stolen by AI)</h1>
+    <p mat-typography i18n>Maybe try turning it off and on again?</p>
 
     <span class="unknown-route__buttons">
-        <button name="home-button" i18n routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Home</button>
+        <button mat-raised-button color="primary" name="home-button" i18n routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">
+        Go back to login
+        </button>
     </span>
-</div>
+</mat-card>
+  

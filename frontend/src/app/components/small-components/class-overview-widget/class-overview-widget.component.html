@@ -1,0 +1,24 @@
+<mat-card class="overview-widget">
+    <div class="header-row">
+        <mat-card-title i18n>Class Overview</mat-card-title>
+
+        <button mat-fab extended color="primary" routerLink="/teacher/classes">
+            <mat-icon>lists</mat-icon>
+            View Classes
+        </button>
+    </div>
+
+    <div class="widget-container">
+        @for(classData of classes; track classData){
+        <app-class-info-card [className]="classData.name"
+            [studentCount]="classData.studentCount ? classData.studentCount : 0"
+            [assignmentCount]="classData.assignments ? classData.assignments.length : 0"
+            [targetGroup]="classData.targetAudience"
+            [completionPercentage]="classData.completionPercentage ? classData.completionPercentage : 0"
+            [classId]="classData.id">
+        </app-class-info-card>
+        } @empty {
+        <p i18n="@@noClasses">You might want to make some classes, teacher</p>
+        }
+    </div>
+</mat-card>

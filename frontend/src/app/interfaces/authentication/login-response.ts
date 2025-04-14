@@ -4,6 +4,7 @@
  */
 export interface LoginResponse {
     token: string,
-    userId: string,
+    refreshToken: string,
+    id: string,
     message: string,
 }

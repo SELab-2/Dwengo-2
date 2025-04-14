@@ -1,22 +1,23 @@
 import { DatabaseEntryNotFoundError, EntityNotFoundError } from "../../config/error";
-import { JoinRequest } from "../../core/entities/joinRequest";
+import { Class } from "../../core/entities/class";
+import { JoinRequest, JoinRequestType } from "../../core/entities/joinRequest";
 import { IJoinRequestRepository } from "../../core/repositories/joinRequestRepositoryInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
-import { IDatasourceJoinRequest } from "../database/data/data_sources/datasourceJoinRequestInterface";
+import { DatasourceClassTypeORM } from "../database/data/data_sources/typeorm/datasourceClassTypeORM";
+import { DatasourceJoinRequestTypeORM } from "../database/data/data_sources/typeorm/datasourceJoinRequestTypeORM";
 
 export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
-    private datasource: IDatasource;
-    private datasourceJoinRequest: Promise<IDatasourceJoinRequest>;
+    private datasourceJoinRequest: DatasourceJoinRequestTypeORM;
+    private datasourceClass: DatasourceClassTypeORM;
 
     public constructor() {
         super();
-        this.datasource = this.datasourceFactory.createDatasource();
-        this.datasourceJoinRequest = this.datasource.getDatasourceJoinRequest();
+        this.datasourceJoinRequest = new DatasourceJoinRequestTypeORM();
+        this.datasourceClass = new DatasourceClassTypeORM();
     }
 
     public async create(joinRequest: JoinRequest): Promise<JoinRequest> {
         try {
-            return await (await this.datasourceJoinRequest).createJoinRequest(joinRequest);
+            return await this.datasourceJoinRequest.createJoinRequest(joinRequest);
         } catch (error: unknown) {
             if (error instanceof DatabaseEntryNotFoundError) {
                 throw new EntityNotFoundError(error.message);
@@ -26,8 +27,16 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
         }
     }
 
+    public async createUsingCode(code: string, userId: string, type: JoinRequestType): Promise<JoinRequest> {
+        const _class: Class = await this.datasourceClass.getClassByActiveCode(code);
+
+        const joinRequest = new JoinRequest(userId, _class.id!, type);
+
+        return this.create(joinRequest);
+    }
+
     public async getById(id: string): Promise<JoinRequest> {
-        const joinRequest: JoinRequest | null = await (await this.datasourceJoinRequest).getJoinRequestById(id);
+        const joinRequest: JoinRequest | null = await this.datasourceJoinRequest.getJoinRequestById(id);
 
         if (joinRequest) {
             return joinRequest;
@@ -37,14 +46,27 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
     }
 
     public async getByRequesterId(requesterId: string): Promise<JoinRequest[]> {
-        return await (await this.datasourceJoinRequest).getJoinRequestByRequesterId(requesterId);
+        const joinRequests: JoinRequest[] | null =
+            await this.datasourceJoinRequest.getJoinRequestByRequesterId(requesterId);
+
+        if (joinRequests) {
+            return joinRequests;
+        } else {
+            throw new EntityNotFoundError(`Join requests for student or teacher with id ${requesterId} not found`);
+        }
     }
 
     public async getByClassId(classId: string): Promise<JoinRequest[]> {
-        return await (await this.datasourceJoinRequest).getJoinRequestByClassId(classId);
+        const joinRequests: JoinRequest[] | null = await this.datasourceJoinRequest.getJoinRequestByClassId(classId);
+
+        if (joinRequests) {
+            return joinRequests;
+        } else {
+            throw new EntityNotFoundError(`Join requests for class with id ${classId} not found`);
+        }
     }
 
     public async delete(id: string): Promise<void> {
-        await (await this.datasourceJoinRequest).deleteJoinRequestById(id);
+        await this.datasourceJoinRequest.deleteJoinRequestById(id);
     }
 }

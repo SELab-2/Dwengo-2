@@ -34,6 +34,7 @@ export const controllers = {
         services.joinRequest.remove,
         services.joinRequest.create,
         services.joinRequest.getUserJoinRequests,
+        services.joinRequest.getClassJoinRequests,
     ),
     message: new Resources.MessageController(
         services.message.get,

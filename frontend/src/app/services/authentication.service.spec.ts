@@ -2,10 +2,15 @@ import { of } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { AuthenticationService } from "./authentication.service";
 import { LoginResponse, RegisterResponse, UserLoginCredentials, UserRegistration, UserType } from "../interfaces";
+import { TestBed } from "@angular/core/testing";
+import { provideRouter, Router } from "@angular/router";
+import { ErrorService } from "./error.service";
 
 describe('AuthenticationService', () => {
+  let router: Router;
   let http: jasmine.SpyObj<HttpClient>;
   let service: AuthenticationService;
+  let errorService: jasmine.SpyObj<ErrorService>;
 
   const email: string = "baldur@asgard.no";
   const password: string = "Thor sucks";
@@ -20,8 +25,8 @@ describe('AuthenticationService', () => {
     userType: UserType.STUDENT
   }
 
-  const registerResponse: RegisterResponse = {
-    id: "baldur-odinsson"
+  const registrationResponse: RegisterResponse = {
+    id: "hehehe",
   }
 
   const loginCredentials: UserLoginCredentials = {
@@ -29,31 +34,40 @@ describe('AuthenticationService', () => {
     password: password
   }
 
-  const loginResponse = {
+  const loginResponse: LoginResponse = {
     token: token,
-    userId: "baldur-odinsson",
-    message: "Login successful"
+    id: "123456",
+    message: "hehehe",
+    refreshToken: token,
   }
 
   beforeEach(() => {
-    http = jasmine.createSpyObj('HttpClient', ['post']);    
-    service = new AuthenticationService(http);
+    TestBed.configureTestingModule({
+      imports: [],
+      providers: [
+        provideRouter([]), // This provides a test router
+        { provide: HttpClient, useValue: jasmine.createSpyObj('HttpClient', ['post']) }
+      ]
+    });
+
+    errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler', 'subscribeHandler']);
+
+    // Mock return values
+    errorService.pipeHandler.and.callFake(() => (source) => source);
+  
+    http = TestBed.inject(HttpClient) as jasmine.SpyObj<HttpClient>;
+    router = TestBed.inject(Router);
+    service = new AuthenticationService(router, http, errorService);
   });
 
   it('should register', () => {
-    http.post.and.returnValue(of(registerResponse));
-    
-    service.register(userDetails).subscribe((response: RegisterResponse) => {
-      expect(response).toEqual(registerResponse);
-    });
+    http.post.and.returnValue(of(registrationResponse));
+    expect(() => service.register(userDetails)).not.toThrow();
   });
 
   it('should login', () => {
     http.post.and.returnValue(of(loginResponse));
-
-    service.login(loginCredentials).subscribe((response: LoginResponse) => {
-      expect(response).toEqual(loginResponse);
-    });
+    expect(() => service.login(loginCredentials, userDetails.userType)).not.toThrow();
   });
 
   it('should store, retrieve and remove token', () => {
@@ -62,5 +76,37 @@ describe('AuthenticationService', () => {
 
     service.removeToken();
     expect(service.retrieveToken()).toBeNull();
+  });
+
+  it('should store, retrieve and remove id', () => {
+    service.storeUserId(loginResponse.id);
+    expect(service.retrieveUserId()).toEqual(loginResponse.id);
+
+    service.removeUserId();
+    expect(service.retrieveUserId()).toBeNull();
+  });
+
+  it('should retrieve the correct user credentials', () => {
+    service.storeUserId(loginResponse.id);
+    service.storeToken(token);
+    service.storeUserType(userDetails.userType);
+
+    expect(service.retrieveUserId()).toEqual(loginResponse.id);
+    expect(service.retrieveToken()).toEqual(token);
+    expect(service.retrieveUserType()).toEqual(userDetails.userType);
+
+    expect(service.retrieveUserCredentials()).toEqual({
+      userId: loginResponse.id,
+      token: token
+    });
+  });
+
+  it('should retrieve the correct authentication headers', () => {
+    service.storeToken(token);
+
+    const headers = service.retrieveAuthenticationHeaders();
+
+    expect(headers.headers.get('Authorization')).toEqual(`Bearer ${token}`);
+    expect(headers.headers.get('Content-Type')).toEqual('application/json');
   });
 });
