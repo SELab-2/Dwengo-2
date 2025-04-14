@@ -31,7 +31,6 @@ import { AuthenticatedHeaderComponent } from '../authenticated-header/authentica
     ReactiveFormsModule,
     ClassMembersListComponent,
     ClassPendingRequestsComponent,
-    ClassCodePopupComponent,
     AuthenticatedHeaderComponent,
 
     // Angular material
@@ -85,7 +84,7 @@ export class ClassComponent implements OnInit {
    * 
    * Also see: https://stackoverflow.com/questions/35763730/difference-between-constructor-and-ngoninit
    */
-  public ngOnInit() {
+  public ngOnInit(): void {
     const id: string | null = this.route.snapshot.paramMap.get('id');
 
     if(id) {
@@ -106,7 +105,7 @@ export class ClassComponent implements OnInit {
    * Delete this class based on it's id.
    * Notifies the user if this fails or succeeds.
    */
-  public delete() {
+  public delete(): void {
     if(!this._class) {
       this.openSnackBar(this.errorMessage);
       return;
@@ -124,11 +123,11 @@ export class ClassComponent implements OnInit {
     );
   }
 
-  public startEdit() {
+  public startEdit(): void {
     this.editing = true;
   }
 
-  public cancelEdit() {
+  public cancelEdit(): void {
     this.editing = false;
     this.fillUpdateForm(this._class!);
   }
@@ -138,7 +137,7 @@ export class ClassComponent implements OnInit {
    * Done by extracting the values from the form and sending them to the API.
    * Notifies the user if this fails or succeeds.
    */
-  public saveEdit() {
+  public saveEdit(): void {
     const newClass = this.extractUpdateFormValues();
     const updateClassObservable = this.classesService.updateClass(newClass);
 
@@ -198,7 +197,10 @@ export class ClassComponent implements OnInit {
     });
   }
 
-  public showClassCode() {
+  /**
+   * Displays a popup with the class code (uses ClassCodePopupComponent).
+   */
+  public showClassCode(): void {
     this.classCodePopup.open(ClassCodePopupComponent, {
       data: {
         // TODO: class code from BACKEND (https://github.com/SELab-2/Dwengo-2/pull/436)

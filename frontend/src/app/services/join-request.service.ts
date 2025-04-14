@@ -23,10 +23,16 @@ export class JoinRequestService {
         private errorService: ErrorService,
     ) {}
 
+    /**
+     * Given a list of join request responses, this method will fill the user information for each request.
+     * @param requests List of join requests
+     * @returns Observable of join requests with user information filled in
+     */
     public fillUsers(requests: JoinRequestResponse[]): Observable<JoinRequestWithUser[]> {
         const headers = this.authService.retrieveAuthenticationHeaders();
 
         return forkJoin(
+            // Per join request: GET the user with it's id
             requests.map(request =>
                 this.http.get<User>(
                     `${this.API_URL}/users/${request.requester}`, {
@@ -37,6 +43,7 @@ export class JoinRequestService {
                     }
                 ).pipe(
                     this.errorService.pipeHandler(),
+                    // Then map the user to the request
                     map(user => {return {
                         id: request.id,
                         requester: user,
@@ -48,14 +55,21 @@ export class JoinRequestService {
         );
     }
 
+    /**
+     * Get a list of join requests for a given class
+     * @param classId The class id
+     * @returns Observable of join requests meant for the given class
+     */
     public getJoinRequestsForClass(classId: string): Observable<JoinRequestResponse[]> {
         const headers = this.authService.retrieveAuthenticationHeaders();
 
+        // Get list of request ids
         return this.http.get<JoinRequestsResponse>(
             `${this.API_URL}/classes/${classId}/requests`,
             headers
         ).pipe(
             this.errorService.pipeHandler(),
+            // Map the request ids to the requests
             switchMap(requestIds => 
                 forkJoin(
                     requestIds.requests.map(requestId =>
@@ -69,6 +83,11 @@ export class JoinRequestService {
         );
     }
 
+    /**
+     * Accepts a request
+     * @param requestId The id of the request to accept
+     * @returns Observable of whether the acceptance was successful
+     */
     public acceptRequest(requestId: string): Observable<boolean> {
         const headers = this.authService.retrieveAuthenticationHeaders();
 
@@ -86,6 +105,11 @@ export class JoinRequestService {
         );
     }
 
+    /**
+     * Rejects a request
+     * @param requestId The id of the request to reject
+     * @returns Observable of whether the rejection was successful
+     */
     public rejectRequest(requestId: string): Observable<boolean> {
         const headers = this.authService.retrieveAuthenticationHeaders();
 
@@ -102,6 +126,11 @@ export class JoinRequestService {
         );
     }
 
+    /**
+     * Create a new join request for a class from a user
+     * @param request The new join request
+     * @returns Observable of whether the request was created successfully
+     */
     public createRequest(request: NewJoinRequest): Observable<boolean> {
         const headers = this.authService.retrieveAuthenticationHeaders();
 

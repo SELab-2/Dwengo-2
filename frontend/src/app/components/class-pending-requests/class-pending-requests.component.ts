@@ -20,10 +20,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ClassPendingRequestsComponent implements OnInit {
 
+  // Input class
   @Input() _class?: Class;
 
+  // Join requests for this class
   public joinRequests: JoinRequestWithUser[] = [];
 
+  // Messages for the snackbar
   private readonly acceptedMessage: string = $localize `Accepted!`;
   private readonly rejectedMessage: string = $localize `Rejected!`;
 
@@ -34,7 +37,11 @@ export class ClassPendingRequestsComponent implements OnInit {
     private joinRequestService: JoinRequestService
   ) {}
 
-  public ngOnInit() {
+  /**
+   * Requests the join requests for this class 
+   * and fills it with the data of the users making the requesting
+   */
+  public ngOnInit(): void {
     const classId: string | null = this._class?.id || null;
 
     if(classId) {
@@ -49,12 +56,15 @@ export class ClassPendingRequestsComponent implements OnInit {
           console.log(joinRequests);
           this.joinRequests = joinRequests;
         });
-
       });
     }
   }
 
-  public acceptRequest(requestId: string) {
+  /**
+   * Accept a join request with a certain id
+   * @param requestId The id of the join request to accept
+   */
+  public acceptRequest(requestId: string): void {
     const accepted$ = this.joinRequestService.acceptRequest(requestId);
 
     accepted$.subscribe((response) => {
@@ -63,7 +73,11 @@ export class ClassPendingRequestsComponent implements OnInit {
     });
   }
 
-  public rejectRequest(requestId: string) {
+  /**
+   * Reject a join request with a certain id
+   * @param requestId The id of the join request to reject
+   */
+  public rejectRequest(requestId: string): void {
     const rejected$ = this.joinRequestService.rejectRequest(requestId);
 
       rejected$.subscribe((response) => {

@@ -1,14 +1,16 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { 
   MAT_DIALOG_DATA,
   MatDialogRef, 
   MatDialogActions,
-  MatDialogClose,
   MatDialogContent
 } from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 
 
+/**
+ * Data used in the ClassCodePopupComponent HTML
+ */
 export interface ClassCodePopupData {
   classCode: string;
 }
@@ -18,7 +20,6 @@ export interface ClassCodePopupData {
   imports: [
     // Angular material
     MatDialogActions,
-    MatDialogClose,
     MatDialogContent,
     MatButtonModule
   ],
@@ -27,9 +28,15 @@ export interface ClassCodePopupData {
 })
 export class ClassCodePopupComponent {
 
+  // Reference to the dialog
   readonly dialogRef = inject(MatDialogRef<ClassCodePopupComponent>);
+
+  // Data that is used in the ClassCodePopupComponent HTML
   readonly data = inject<ClassCodePopupData>(MAT_DIALOG_DATA)
 
+  /**
+   * Close this popup
+   */
   close(): void {
     this.dialogRef.close();
   }

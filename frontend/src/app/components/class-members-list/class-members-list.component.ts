@@ -25,12 +25,16 @@ export class ClassMembersListComponent implements OnInit {
   // Class members
   public members: User[] = [];
 
-  displayedColumns: string[] = ['name', 'email', 'schoolName'];
+  // Table columns, is used by MatTableModule
+  public displayedColumns: string[] = ['name', 'email', 'schoolName'];
 
   constructor(
     private classesService: ClassesService,
   ) {}
 
+  /**
+   * Retrieves the members for this class from the services.
+   */
   public ngOnInit(): void {
     if(this._class) {
       this.classesService
