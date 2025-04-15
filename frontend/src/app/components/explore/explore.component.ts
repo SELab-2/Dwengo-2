@@ -3,16 +3,18 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { LearningPath, LearningPathRequest } from '../../interfaces/learning-path';
 import { LearningPathListComponent } from '../small-components/learning-path-list/learning-path-list.component';
 import { LearningPathService } from '../../services/learningPath.service';
+import { LoadingComponent } from '../loading/loading.component';
 
 @Component({
     selector: 'app-explore',
     standalone: true,
-    imports: [LearningPathListComponent],
+    imports: [LearningPathListComponent, LoadingComponent],
     templateUrl: './explore.component.html',
     styleUrl: './explore.component.less'
 })
 export class ExploreComponent implements OnInit {
     @Input() isTeacher: boolean = false;
+    loading: boolean = true;
     constructor(private authService: AuthenticationService, private learningPathService: LearningPathService) { }
 
     ngOnInit(): void {
@@ -24,6 +26,7 @@ export class ExploreComponent implements OnInit {
         learningPathObservable.pipe().subscribe(
             (response) => {
                 this.learningPaths = response.learningPaths
+                this.loading = false;
             }
         );
     }

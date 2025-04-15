@@ -1,5 +1,9 @@
 <div class="main">
+    @if(loading){
+    <app-loading></app-loading>
+    } @else {
     <h1 class="main-title" i18n>Explore</h1>
     <app-learning-path-list [learningPaths]="learningPaths!" [isTeacher]="isTeacher"
         title="TEST"></app-learning-path-list>
+    }
 </div>
