@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { LearningPath, LearningPathRequest } from '../../interfaces/learning-path';
-import { LearningPathList } from '../small-components/learning-path-list/learning-path-list.component';
+import { LearningPathListComponent } from '../small-components/learning-path-list/learning-path-list.component';
 import { LearningPathService } from '../../services/learningPath.service';
 
 @Component({
     selector: 'app-explore',
     standalone: true,
-    imports: [LearningPathList],
+    imports: [LearningPathListComponent],
     templateUrl: './explore.component.html',
     styleUrl: './explore.component.less'
 })

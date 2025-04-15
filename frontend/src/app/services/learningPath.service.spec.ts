@@ -49,7 +49,7 @@ describe('LearningPathService', () => {
         httpMock = TestBed.inject(HttpTestingController);
 
         authServiceSpy.retrieveAuthenticationHeaders.and.returnValue(mockHeaders);
-        errorServiceSpy.pipeHandler.and.callFake((fn: any) => (source$) => source$); // Passthrough for testing
+        errorServiceSpy.pipeHandler.and.callFake(() => (source$) => source$);
     });
 
     afterEach(() => {

@@ -11,7 +11,7 @@ import { LearningPathInfoCardComponent } from '../learning-path-info-card/learni
     templateUrl: './learning-path-list.component.html',
     styleUrls: ['./learning-path-list.component.less']
 })
-export class LearningPathList {
+export class LearningPathListComponent {
     @Input() learningPaths: LearningPath[] = [];
     @Input() isTeacher: boolean = false;
     @Input() title: string = 'Learning Paths';

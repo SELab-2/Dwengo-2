@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
-import { forkJoin, Observable, of, switchMap } from 'rxjs';
-import { LearningPath, LearningPathRequest } from '../interfaces/learning-path';
+import { Observable } from 'rxjs';
+import { LearningPathRequest } from '../interfaces/learning-path';
 import { LearningPathResponse } from '../interfaces/learning-path/learningPathResponse';
 
 @Injectable({

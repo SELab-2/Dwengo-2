@@ -4,7 +4,6 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
 import { RouterLink } from "@angular/router";
-import { AuthenticationService } from "../../../services/authentication.service";
 
 @Component({
     selector: "app-learning-path-info-card",
