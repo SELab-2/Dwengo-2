@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
@@ -27,9 +27,16 @@ export class LearningPathService {
     retrieveLearningPathsByQuery(query: LearningPathRequest): Observable<LearningPathResponse> {
         const headers = this.authenticationService.retrieveAuthenticationHeaders();
 
+        let params = new HttpParams();
+        if (query.all !== undefined) params = params.set('all', query.all.toString());
+        if (query.title) params = params.set('title', query.title);
+        if (query.hruid) params = params.set('hruid', query.hruid);
+        if (query.language) params = params.set('language', query.language);
+        if (query.description) params = params.set('description', query.description);
+
         return this.http.get<LearningPathResponse>(
-            `${this.API_URL}/learningPath?${query.all ? `all=${query.all}` : ''}${query.title ? `&title=${query.title}` : ''}${query.hruid ? `&hruid=${query.hruid}` : ''}${query.language ? `&language=${query.language}` : ''}${query.description ? `&description=${query.description}` : ''}`,
-            headers
+            `${this.API_URL}/learningPath`,
+            { ...headers, params }
         ).pipe(
             this.errorService.pipeHandler(
                 this.errorService.retrieveError($localize`learning paths`)
