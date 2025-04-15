@@ -74,6 +74,7 @@ export class Assignment {
             learningPathId: this._learningPathId,
             startDate: this._startDate,
             deadline: this._deadline,
+            name: this._name,
             extraInstructions: this._extraInstructions,
         };
     }
