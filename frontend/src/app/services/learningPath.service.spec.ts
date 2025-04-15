@@ -27,7 +27,8 @@ describe('LearningPathService', () => {
                 numNodes: 5,
                 minAge: 12,
                 maxAge: 18,
-                learningPathId: 'lp-123'
+                learningPathId: 'lp-123',
+                language: 'en'
             }
         ]
     };

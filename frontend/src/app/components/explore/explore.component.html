@@ -3,7 +3,30 @@
     <app-loading></app-loading>
     } @else {
     <h1 class="main-title" i18n>Explore</h1>
-    <app-learning-path-list [learningPaths]="learningPaths!" [isTeacher]="isTeacher"
-        title="TEST"></app-learning-path-list>
-    }
+    <div class="filters">
+        <label>
+            Min Age:
+            <input type="number" [(ngModel)]="minAge" (ngModelChange)="filterData()" />
+        </label>
+
+        <label>
+            Max Age:
+            <input type="number" [(ngModel)]="maxAge" (ngModelChange)="filterData()" />
+        </label>
+
+        <label>
+            Language:
+            <select [(ngModel)]="language" (ngModelChange)="filterData()">
+                <option value="">-- All --</option>
+                <option value="nl">NL</option>
+                <option value="en">EN</option>
+                <!-- we'll add languages later on -->
+            </select>
+        </label>
+    </div>
+
+    @for (category of categories; track category; let idx = $index) {
+    <app-learning-path-list [learningPaths]="getLearningPathsByCategory(category)" [isTeacher]="isTeacher"
+        [title]="titles[idx]"></app-learning-path-list>
+    }}
 </div>
