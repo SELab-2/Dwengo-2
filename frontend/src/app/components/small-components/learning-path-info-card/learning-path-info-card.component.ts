@@ -13,7 +13,7 @@ import { AuthenticationService } from "../../../services/authentication.service"
     templateUrl: "./learning-path-info-card.component.html",
     styleUrls: ["./learning-path-info-card.component.less"],
 })
-export class LearningPathInfoCardComponent {
+export class LearningPathInfoCardComponent implements OnInit {
     @Input() title!: string;
     @Input() description!: string;
     @Input() steps!: number;
@@ -22,4 +22,7 @@ export class LearningPathInfoCardComponent {
     @Input() learningPathId!: string;
     @Input() isTeacher: boolean = false;
 
+    ngOnInit(): void {
+        this.description = this.description.length > 100 ? this.description.substring(0, 100) + "..." : this.description;
+    }
 }

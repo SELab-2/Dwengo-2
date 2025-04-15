@@ -5,7 +5,7 @@
 
     <div class="widget-container">
         @for(data of learningPaths; track data){
-        <app-learning-path-info-card [title]="data.title" [description]="data.description" [steps]="data.steps"
+        <app-learning-path-info-card [title]="data.title" [description]="data.description" [steps]="data.numNodes"
             [minAge]="data.minAge" [maxAge]="data.maxAge" [learningPathId]="data.learningPathId"
             [isTeacher]="isTeacher">
         </app-learning-path-info-card>

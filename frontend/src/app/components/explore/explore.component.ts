@@ -24,8 +24,6 @@ export class ExploreComponent implements OnInit {
         learningPathObservable.pipe().subscribe(
             (response) => {
                 this.learningPaths = response.learningPaths
-                console.log('Learning Paths:', this.learningPaths);
-                console.log("test", this.learningPaths);
             }
         );
     }
@@ -34,7 +32,7 @@ export class ExploreComponent implements OnInit {
     learningPath: LearningPath = {
         title: 'Learning Path 1',
         description: 'Description for Learning Path 1',
-        steps: 5,
+        numNodes: 5,
         minAge: 10,
         maxAge: 15,
         learningPathId: '1'
@@ -43,7 +41,7 @@ export class ExploreComponent implements OnInit {
         {
             title: 'Learning Path 1',
             description: 'Description for Learning Path 1',
-            steps: 5,
+            numNodes: 5,
             minAge: 10,
             maxAge: 15,
             learningPathId: '1'
@@ -51,7 +49,7 @@ export class ExploreComponent implements OnInit {
         {
             title: 'Learning Path 2',
             description: 'Description for Learning Path 2',
-            steps: 3,
+            numNodes: 3,
             minAge: 8,
             maxAge: 12,
             learningPathId: '2'
@@ -59,7 +57,7 @@ export class ExploreComponent implements OnInit {
         {
             title: 'Learning Path 3',
             description: 'Description for Learning Path 3',
-            steps: 4,
+            numNodes: 4,
             minAge: 12,
             maxAge: 16,
             learningPathId: '3'
