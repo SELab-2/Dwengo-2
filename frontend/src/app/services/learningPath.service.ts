@@ -4,8 +4,7 @@ import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { LearningPathRequest } from '../interfaces/learning-path';
-import { LearningPathResponse } from '../interfaces/learning-path/learningPathResponse';
+import { LearningPathRequest, LearningPathResponse } from '../interfaces/learning-path';
 
 @Injectable({
     providedIn: 'root'
