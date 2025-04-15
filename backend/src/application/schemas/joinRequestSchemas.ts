@@ -23,6 +23,10 @@ export const getUserJoinRequestsSchema = z.object({
     idParent: z.string(),
 });
 
+export const getClassJoinRequestsSchema = z.object({
+    idParent: z.string(),
+});
+
 export const getJoinRequestSchema = z.object({
     id: z.string(),
 });

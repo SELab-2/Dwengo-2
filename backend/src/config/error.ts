@@ -44,3 +44,15 @@ export class DatabaseError extends Error {
         this.message = message;
     }
 }
+
+/**
+ * An error that is thrown when trying to use an expired join code.
+ */
+export class ExpiredError extends Error {
+    message: string;
+
+    constructor(message: string) {
+        super(message);
+        this.message = message;
+    }
+}

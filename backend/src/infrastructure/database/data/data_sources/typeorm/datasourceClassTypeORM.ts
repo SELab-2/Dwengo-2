@@ -1,12 +1,14 @@
 import { DatasourceTypeORM } from "./datasourceTypeORM";
-import { EntityNotFoundError } from "../../../../../config/error";
+import { EntityNotFoundError, ExpiredError } from "../../../../../config/error";
 import { Class } from "../../../../../core/entities/class";
 import { JoinRequestType } from "../../../../../core/entities/joinRequest";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
+import { JoinCodeTypeORM } from "../../data_models/joinCodeTypeorm";
 import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
+import { UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceClassTypeORM extends DatasourceTypeORM {
     public async createClass(newClass: Class): Promise<Class> {
@@ -20,14 +22,12 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
 
         classModel = await datasource.getRepository(ClassTypeORM).save(classModel);
 
-        let teacherOfClassModel: TeacherOfClassTypeORM = await datasource.getRepository(TeacherOfClassTypeORM).create({
-            teacher: { id: newClass.teacherId },
-            class: { id: classModel.id },
-        });
+        const teacherOfClass = new TeacherOfClassTypeORM();
+        teacherOfClass.teacher = { id: newClass.teacherId } as TeacherTypeORM;
+        teacherOfClass.class = { id: classModel.id } as ClassTypeORM;
+        await datasource.getRepository(TeacherOfClassTypeORM).save(teacherOfClass);
 
-        teacherOfClassModel = await datasource.getRepository(TeacherOfClassTypeORM).save(teacherOfClassModel);
-
-        return classModel.toClassEntity(teacherOfClassModel.id);
+        return classModel.toClassEntity(newClass.teacherId);
     }
 
     public async updateClass(classId: string, updatedClass: Partial<Class>): Promise<Class> {
@@ -85,6 +85,36 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
             return classModel.toClassEntity(classTeacherModel!.teacher.id);
         }
         return null; // No result
+    }
+
+    /**
+     * Get the class that an active join code belongs to.
+     * @param code The actual alphanumerical code.
+     * @throws EntityNotFoundError when the code is not found.
+     * @throws ExpiredError when the code is expired.
+     * @returns A promise that resolves to the class for the given code.
+     */
+    public async getClassByActiveCode(code: string): Promise<Class> {
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const joinCodeModel: JoinCodeTypeORM | null = await datasource
+            .getRepository(JoinCodeTypeORM)
+            .findOne({ where: { code: code } });
+
+        if (!joinCodeModel) {
+            throw new EntityNotFoundError(`Join code ${code} not found.`);
+        }
+
+        if (joinCodeModel.isExpired) {
+            throw new ExpiredError(`The join code ${code} is expired.`);
+        }
+
+        const classModel: ClassTypeORM = joinCodeModel.class;
+
+        const _class: Class | null = await this.getClassById(classModel.id);
+
+        // The class is definitely in the database, because the code for that class was found
+        return _class!;
     }
 
     public async getAllClasses(): Promise<Class[]> {
@@ -155,16 +185,27 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
 
     public async addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const userModel = await datasource.getRepository(UserTypeORM).findOne({
+            where: { id: userId },
+        });
+
         if (userType === JoinRequestType.TEACHER) {
-            await datasource.getRepository(TeacherOfClassTypeORM).save({
-                teacher: { id: userId },
-                class: { id: classId },
+            const teacher = await datasource.getRepository(TeacherTypeORM).findOne({
+                where: { teacher: userModel! },
             });
+            const teacherOfClass = new TeacherOfClassTypeORM();
+            teacherOfClass.teacher = { id: teacher?.id } as TeacherTypeORM;
+            teacherOfClass.class = { id: classId } as ClassTypeORM;
+            await datasource.getRepository(TeacherOfClassTypeORM).save(teacherOfClass);
         } else {
-            await datasource.getRepository(StudentOfClassTypeORM).save({
-                student: { id: userId },
-                class: { id: classId },
+            const student = await datasource.getRepository(StudentTypeORM).findOne({
+                where: { student: userModel! },
             });
+            const studentOfClass = new StudentOfClassTypeORM();
+            studentOfClass.student = { id: student?.id } as StudentTypeORM;
+            studentOfClass.class = { id: classId } as ClassTypeORM;
+            await datasource.getRepository(StudentOfClassTypeORM).save(studentOfClass);
         }
     }
 }
