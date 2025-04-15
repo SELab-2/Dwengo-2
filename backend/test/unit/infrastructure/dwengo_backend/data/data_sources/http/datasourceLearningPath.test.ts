@@ -1,6 +1,6 @@
-import { ApiError, ErrorCode } from "../../../../../../src/application/types";
-import { LearningPath, LearningPathData } from "../../../../../../src/core/entities/learningPath";
-import { DatasourceLearningPath } from "../../../../../../src/infrastructure/dwengo_backend/data/data_sources/http/datasourceLearningPath";
+import { ApiError, ErrorCode } from "../../../../../../../src/application/types";
+import { LearningPath, LearningPathData } from "../../../../../../../src/core/entities/learningPath";
+import { DatasourceLearningPath } from "../../../../../../../src/infrastructure/dwengo_backend/data/data_sources/http/datasourceLearningPath";
 
 global.fetch = jest.fn();
 

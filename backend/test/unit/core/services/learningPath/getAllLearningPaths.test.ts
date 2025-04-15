@@ -1,6 +1,6 @@
-import { LearningPath } from "../../../../src/core/entities/learningPath";
-import { ILearningPathRepository } from "../../../../src/core/repositories/learningPathRepositoryInterface";
-import { GetAllLearningPaths } from "../../../../src/core/services/learningPath";
+import { LearningPath } from "../../../../../src/core/entities/learningPath";
+import { ILearningPathRepository } from "../../../../../src/core/repositories/learningPathRepositoryInterface";
+import { GetAllLearningPaths } from "../../../../../src/core/services/learningPath";
 
 
 describe("GetAllLearningPaths", () => {

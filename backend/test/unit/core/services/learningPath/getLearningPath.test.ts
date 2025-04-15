@@ -1,9 +1,9 @@
 
 import { z } from "zod";
-import { ILearningPathRepository } from "../../../../src/core/repositories/learningPathRepositoryInterface";
-import { getLearningPathSchema } from "../../../../src/application/schemas";
-import { GetLearningPath } from "../../../../src/core/services/learningPath";
-import { LearningPath } from "../../../../src/core/entities/learningPath";
+import { ILearningPathRepository } from "../../../../../src/core/repositories/learningPathRepositoryInterface";
+import { getLearningPathSchema } from "../../../../../src/application/schemas";
+import { GetLearningPath } from "../../../../../src/core/services/learningPath";
+import { LearningPath } from "../../../../../src/core/entities/learningPath";
 
 // Mock repository
 const mockLearningPathRepository: jest.Mocked<ILearningPathRepository> = {
