@@ -25,7 +25,7 @@ describe("getAssignment Service", () => {
     });
 
     test("Should return assignment if found", async () => {
-        const assignment = new Assignment("1", "1", date, date, "extra_instructions", "1");
+        const assignment = new Assignment("1", "1", date, date, "Assignment 1", "extra_instructions", "1");
 
         mockAssignmentRepository.getById.mockResolvedValue(assignment);
         const result = await getAssignmentService.execute(getAssignmentParams);
@@ -35,6 +35,7 @@ describe("getAssignment Service", () => {
             classId: "1",
             startDate: date,
             deadline: date,
+            name: "Assignment 1",
             extraInstructions: "extra_instructions",
             learningPathId: "1",
         });
