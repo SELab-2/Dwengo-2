@@ -5,16 +5,16 @@ import { ISubmissionRepository } from "../../repositories/submissionRepositoryIn
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
 import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
 
-export type GetUserProgressInput = z.infer<typeof getProgressSchema>;
+export type GetGroupProgressInput = z.infer<typeof getProgressSchema>;
 
-export class GetUserProgress extends ProgressBaseService<GetUserProgressInput> {
+export class GetGroupProgress extends ProgressBaseService<GetGroupProgressInput> {
     constructor(
             submissionRepository: ISubmissionRepository,
             assignmentRepository: IAssignmentRepository,
             learningPathRepository: ILearningPathRepository,
         ) {super(submissionRepository, assignmentRepository, learningPathRepository)}  
-    async execute(input: GetUserProgressInput): Promise<object> {
-        throw new Error("GetUserProgress is not implemented yet.");
+    async execute(input: GetGroupProgressInput): Promise<object> {
+        throw new Error("GetGroupProgress is not implemented yet.");
         return {};
     }
 }

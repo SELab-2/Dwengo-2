@@ -57,6 +57,9 @@ export const controllers = {
         services.submission.getUserSubmissions,
     ),
     progress: new Resources.ProgressController(
+        services.progress.getUserProgress,
+        services.progress.getAssignmentProgress,
+        services.progress.getGroupProgress,
         services.progress.get,
     ),
     learningObject: new Resources.LearningObjectController(services.learningObject.get, services.learningObject.getAll),

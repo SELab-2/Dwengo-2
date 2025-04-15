@@ -69,7 +69,10 @@ export const services = {
         getUserSubmissions: new SubmissionServices.GetUserSubmissions(repos.submission),
     },
     progress: {
-        get: new ProgressServices.GetUserProgress(repos.submission, repos.assignment, repos.learningPath),
+        getUserProgress: new ProgressServices.GetUserProgress(repos.submission, repos.assignment, repos.learningPath),
+        getAssignmentProgress: new ProgressServices.GetAssignmentProgress(repos.submission, repos.assignment, repos.learningPath),
+        getGroupProgress: new ProgressServices.GetGroupProgress(repos.submission, repos.assignment, repos.learningPath),
+        get: new ProgressServices.GetUserAssignmentProgress(repos.submission, repos.assignment, repos.learningPath),
     },
     user: {
         get: new UserServices.GetUser(repos.student, repos.teacher),
