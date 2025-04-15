@@ -118,6 +118,15 @@ export class PathLearningObject extends BaseLearningObject {
         super(hruid, id, version, language);
     }
 
+    // Getters
+    public get startNode(): boolean {
+        return this._startNode;
+    }
+
+    public get transitions(): BaseLearningObject[] {
+        return this._transitions;
+    }
+
     public toObject(): object {
         return {
             ...this.baseToObject(),

@@ -88,4 +88,42 @@ export class LearningPath {
             object.nodes.map((node: PathLearningObjectData) => PathLearningObject.fromObject(node)),
         );
     }
+
+    // Getters
+    public get id(): string {
+        return this._id;
+    }
+    public get language(): string {
+        return this._language;
+    }
+    public get hruid(): string {
+        return this._hruid;
+    }
+    public get title(): string {
+        return this._title;
+    }
+    public get description(): string {
+        return this._description;
+    }
+    public get image(): Base64String {
+        return this._image;
+    }
+    public get numNodes(): number {
+        return this._numNodes;
+    }
+    public get keywords(): string[] {
+        return this._keywords;
+    }
+    public get targetAges(): number[] {
+        return this._targetAges;
+    }
+    public get minAge(): number {
+        return this._minAge;
+    }
+    public get maxAge(): number {
+        return this._maxAge;
+    }
+    public get nodes(): PathLearningObject[] {
+        return this._nodes;
+    }
 }

@@ -7,8 +7,10 @@ import * as LearningObjectServices from "../core/services/learningObject";
 import * as LearningPathServices from "../core/services/learningPath";
 import * as MessageServices from "../core/services/message";
 import * as QuestionThreadServices from "../core/services/questionThread";
-import * as Submission from "../core/services/submission";
+import * as SubmissionServices from "../core/services/submission";
+import * as ProgressServices from "../core/services/progress"
 import * as UserServices from "../core/services/user";
+
 /**
  * The services needed for the Dwengo-2 backend application.
  */
@@ -61,10 +63,13 @@ export const services = {
         getAssignmentQuestionThreads: new QuestionThreadServices.GetAssignmentQuestionThreads(repos.questionThread),
     },
     submission: {
-        get: new Submission.GetSubmission(repos.submission),
-        remove: new Submission.DeleteSubmission(repos.submission),
-        create: new Submission.CreateSubmission(repos.submission),
-        getUserSubmissions: new Submission.GetUserSubmissions(repos.submission),
+        get: new SubmissionServices.GetSubmission(repos.submission),
+        remove: new SubmissionServices.DeleteSubmission(repos.submission),
+        create: new SubmissionServices.CreateSubmission(repos.submission),
+        getUserSubmissions: new SubmissionServices.GetUserSubmissions(repos.submission),
+    },
+    progress: {
+        get: new ProgressServices.GetUserProgress(repos.submission, repos.assignment, repos.learningPath),
     },
     user: {
         get: new UserServices.GetUser(repos.student, repos.teacher),

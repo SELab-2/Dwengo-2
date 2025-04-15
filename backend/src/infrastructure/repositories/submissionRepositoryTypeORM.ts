@@ -33,6 +33,13 @@ export class SubmissionRepositoryTypeORM extends ISubmissionRepository {
         return await this.datasourceSubmission.delete(submissionId);
     }
 
+    public async getAllForStudentInAssignment(studentId: string, assignmentId: string): Promise<Submission[]> {
+        return await (
+            await this.datasourceSubmission
+        ).getAllForStudentInAssignment(studentId, assignmentId);
+        
+    }
+
     public async getAllForStudentInAssignmentStep(
         studentId: string,
         assignmentId: string,
