@@ -1,3 +1,5 @@
-<app-learning-path-info-card [learningPathId]="learningPath.learningPathId" [title]="learningPath.title"
-    [description]="learningPath.description" [steps]="learningPath.steps" [minAge]="learningPath.minAge"
-    [maxAge]="learningPath.maxAge"></app-learning-path-info-card>
+<div class="main">
+    <h1 class="main-title" i18n>Dashboard</h1>
+    <app-learning-path-list [learningPaths]="learningPaths" [isTeacher]="isTeacher"
+        title="TEST"></app-learning-path-list>
+</div>

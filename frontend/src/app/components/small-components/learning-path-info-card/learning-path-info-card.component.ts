@@ -13,8 +13,7 @@ import { AuthenticationService } from "../../../services/authentication.service"
     templateUrl: "./learning-path-info-card.component.html",
     styleUrls: ["./learning-path-info-card.component.less"],
 })
-export class LearningPathInfoCardComponent implements OnInit {
-    //CommonModule, MatCardModule, MatListModule, MatIconModule, MatProgressSpinnerModule, RouterLink
+export class LearningPathInfoCardComponent {
     @Input() title!: string;
     @Input() description!: string;
     @Input() steps!: number;
@@ -23,8 +22,4 @@ export class LearningPathInfoCardComponent implements OnInit {
     @Input() learningPathId!: string;
     @Input() isTeacher: boolean = false;
 
-    constructor(public authService: AuthenticationService) { }
-    ngOnInit(): void {
-        this.isTeacher = this.authService.retrieveUserType() === "teacher";
-    }
 }

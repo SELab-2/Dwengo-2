@@ -1,15 +1,25 @@
-import { Component } from '@angular/core';
-import { LearningPathInfoCardComponent } from '../small-components/learning-path-info-card/learning-path-info-card.component';
+import { Component, Input, OnInit } from '@angular/core';
+import { AuthenticationService } from '../../services/authentication.service';
+import { LearningPath } from '../../interfaces/learning-path';
+import { LearningPathList } from '../small-components/learning-path-list/learning-path-list.component';
 
 @Component({
     selector: 'app-explore',
     standalone: true,
-    imports: [LearningPathInfoCardComponent],
+    imports: [LearningPathList],
     templateUrl: './explore.component.html',
     styleUrl: './explore.component.less'
 })
-export class ExploreComponent {
-    learningPath: { title: string, description: string, steps: number, minAge: number, maxAge: number, learningPathId: string } = {
+export class ExploreComponent implements OnInit {
+    @Input() isTeacher: boolean = false;
+    constructor(public authService: AuthenticationService) { }
+
+    ngOnInit(): void {
+        this.isTeacher = this.authService.retrieveUserType() === "teacher";
+    }
+
+
+    learningPath: LearningPath = {
         title: 'Learning Path 1',
         description: 'Description for Learning Path 1',
         steps: 5,
@@ -17,7 +27,7 @@ export class ExploreComponent {
         maxAge: 15,
         learningPathId: '1'
     };
-    learningPaths = [
+    learningPaths: LearningPath[] = [
         {
             title: 'Learning Path 1',
             description: 'Description for Learning Path 1',
