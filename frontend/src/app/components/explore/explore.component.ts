@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
-import { LearningPath } from '../../interfaces/learning-path';
+import { LearningPath, LearningPathRequest } from '../../interfaces/learning-path';
 import { LearningPathList } from '../small-components/learning-path-list/learning-path-list.component';
+import { LearningPathService } from '../../services/learningPath.service';
 
 @Component({
     selector: 'app-explore',
@@ -12,10 +13,21 @@ import { LearningPathList } from '../small-components/learning-path-list/learnin
 })
 export class ExploreComponent implements OnInit {
     @Input() isTeacher: boolean = false;
-    constructor(public authService: AuthenticationService) { }
+    constructor(private authService: AuthenticationService, private learningPathService: LearningPathService) { }
 
     ngOnInit(): void {
         this.isTeacher = this.authService.retrieveUserType() === "teacher";
+
+        const query: LearningPathRequest = { all: "robot" };
+        const learningPathObservable = this.learningPathService.retrieveLearningPathsByQuery(query);
+
+        learningPathObservable.pipe().subscribe(
+            (response) => {
+                this.learningPaths = response.learningPaths
+                console.log('Learning Paths:', this.learningPaths);
+                console.log("test", this.learningPaths);
+            }
+        );
     }
 
 
@@ -27,7 +39,7 @@ export class ExploreComponent implements OnInit {
         maxAge: 15,
         learningPathId: '1'
     };
-    learningPaths: LearningPath[] = [
+    learningPaths?: LearningPath[] = [
         {
             title: 'Learning Path 1',
             description: 'Description for Learning Path 1',

@@ -8,5 +8,9 @@ export interface LearningPath {
 }
 
 export interface LearningPathRequest {
-
+    all?: string;
+    hruid?: string;
+    title?: string;
+    description?: string;
+    language?: string;
 }
