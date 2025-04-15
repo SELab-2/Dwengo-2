@@ -19,6 +19,7 @@ import { ExplorePageComponent } from './pages/explore-page/explore-page.componen
  */
 export const routes: Routes = [
     { path: '', component: LandingPageComponent, title: 'Landing Page', canActivate: [UnauthorizedGuard] },
+    { path: 'student/dashboard', redirectTo: 'student/classes' },
     { path: 'teacher/dashboard', component: TeacherDashboardPageComponent, canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'teacher/classes', component: ClassesPageComponent, title: "My Classes", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'teacher/classes/:id', component: ClassComponent, title: "Class", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },

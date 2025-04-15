@@ -38,6 +38,7 @@ jest.mock("../../../src/config/controllers", () => ({
         questionThread: {},
         submission: {},
         user: {},
+        learningObject: {}
     },
 }));
 
@@ -96,6 +97,8 @@ const routeFunctions = {
     questionThreadRoutes: Resources.questionThreadRoutes,
     submissionRoutes: Resources.submissionRoutes,
     userRoutes: Resources.userRoutes,
+    learningObjectRoutes: Resources.learningObjectRoutes,
+    learningPathRoutes: Resources.learningPathRoutes,
 };
 
 const routeConfigs: Record<
@@ -330,6 +333,14 @@ const routeConfigs: Record<
                 pathParams: { idParent: "user-1" },
             },
         },
+        {
+            method: HttpMethod.GET,
+            path: "/classes/:idParent/requests",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "class-1" },
+            },
+        },
     ],
     messageRoutes: [
         {
@@ -558,6 +569,40 @@ const routeConfigs: Record<
             request: {},
         },
     ],
+    learningObjectRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/learningObject",
+            hasController: true,
+            request: {},
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/learningObject/:id",
+            hasController: true,
+            request: {
+                pathParams: {id: "ct08_05"},
+                queryParams: { type: "raw" },
+            },
+        },
+    ],
+    learningPathRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/learningPath",
+            hasController: true,
+            request: {},
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/learningPath/:id",
+            hasController: true,
+            request: {
+                pathParams: {id: "anm3"},
+                queryParams: { type: "nl" },
+            },
+        },
+    ]
 };
 
 const testRoutes = (

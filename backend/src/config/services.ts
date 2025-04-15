@@ -3,11 +3,12 @@ import * as AssignmentServices from "../core/services/assignment";
 import * as ClassServices from "../core/services/class";
 import * as GroupServices from "../core/services/group";
 import * as JoinRequestServices from "../core/services/joinRequest";
+import * as LearningObjectServices from "../core/services/learningObject";
+import * as LearningPathServices from "../core/services/learningPath";
 import * as MessageServices from "../core/services/message";
 import * as QuestionThreadServices from "../core/services/questionThread";
 import * as Submission from "../core/services/submission";
 import * as UserServices from "../core/services/user";
-
 /**
  * The services needed for the Dwengo-2 backend application.
  */
@@ -43,6 +44,7 @@ export const services = {
         remove: new JoinRequestServices.DeleteJoinRequest(repos.joinRequest),
         create: new JoinRequestServices.CreateJoinRequest(repos.joinRequest, repos.class),
         getUserJoinRequests: new JoinRequestServices.GetUserJoinRequests(repos.joinRequest),
+        getClassJoinRequests: new JoinRequestServices.GetClassJoinRequests(repos.joinRequest),
     },
     message: {
         get: new MessageServices.GetMessage(repos.message),
@@ -75,5 +77,13 @@ export const services = {
         removeUserFromGroup: new UserServices.RemoveUserFromGroup(repos.student),
         getAssignmentUsers: new UserServices.GetAssignmentUsers(repos.student),
         getAll: new UserServices.GetAllUsers(repos.student, repos.teacher),
+    },
+    learningObject: {
+        get: new LearningObjectServices.GetLearningObject(repos.learningObject),
+        getAll: new LearningObjectServices.GetAllLearningObjects(repos.learningObject),
+    },
+    learningPath: {
+        get: new LearningPathServices.GetLearningPath(repos.learningPath),
+        getAll: new LearningPathServices.GetAllLearningPaths(repos.learningPath),
     },
 };

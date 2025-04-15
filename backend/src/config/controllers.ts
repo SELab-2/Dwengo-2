@@ -12,10 +12,7 @@ export const controllers = {
         services.assignment.create,
         services.assignment.getUserAssignments,
     ),
-    // eslint-disable-next-line prettier/prettier
-    authentication: new Resources.AuthenticationController(
-        services.authentication.register
-    ),
+    authentication: new Resources.AuthenticationController(services.authentication.register),
     class: new Resources.ClassController(
         services.class.get,
         services.class.update,
@@ -37,6 +34,7 @@ export const controllers = {
         services.joinRequest.remove,
         services.joinRequest.create,
         services.joinRequest.getUserJoinRequests,
+        services.joinRequest.getClassJoinRequests,
     ),
     message: new Resources.MessageController(
         services.message.get,
@@ -58,6 +56,8 @@ export const controllers = {
         services.submission.create,
         services.submission.getUserSubmissions,
     ),
+    learningObject: new Resources.LearningObjectController(services.learningObject.get, services.learningObject.getAll),
+    learningPath: new Resources.LearningPathController(services.learningPath.get, services.learningPath.getAll),
     user: new Resources.UserController(
         services.user.get,
         services.user.update,
