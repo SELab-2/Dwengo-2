@@ -6,9 +6,9 @@ import * as JoinRequestServices from "../core/services/joinRequest";
 import * as LearningObjectServices from "../core/services/learningObject";
 import * as LearningPathServices from "../core/services/learningPath";
 import * as MessageServices from "../core/services/message";
+import * as ProgressServices from "../core/services/progress";
 import * as QuestionThreadServices from "../core/services/questionThread";
 import * as SubmissionServices from "../core/services/submission";
-import * as ProgressServices from "../core/services/progress"
 import * as UserServices from "../core/services/user";
 
 /**
@@ -70,8 +70,18 @@ export const services = {
     },
     progress: {
         getUserProgress: new ProgressServices.GetUserProgress(repos.submission, repos.assignment, repos.learningPath),
-        getAssignmentProgress: new ProgressServices.GetAssignmentProgress(repos.student, repos.submission, repos.assignment, repos.learningPath),
-        getGroupProgress: new ProgressServices.GetGroupProgress(repos.student, repos.submission, repos.assignment, repos.learningPath),
+        getAssignmentProgress: new ProgressServices.GetAssignmentProgress(
+            repos.student,
+            repos.submission,
+            repos.assignment,
+            repos.learningPath,
+        ),
+        getGroupProgress: new ProgressServices.GetGroupProgress(
+            repos.student,
+            repos.submission,
+            repos.assignment,
+            repos.learningPath,
+        ),
         get: new ProgressServices.GetUserAssignmentProgress(repos.submission, repos.assignment, repos.learningPath),
     },
     user: {

@@ -5,9 +5,9 @@ import { ISubmissionRepository } from "../../repositories/submissionRepositoryIn
 
 export abstract class ProgressBaseService<T> implements Service<T> {
     constructor(
-            protected submissionRepository: ISubmissionRepository,
-            protected assignmentRepository: IAssignmentRepository,
-            protected learningPathRepository: ILearningPathRepository,
-        ) {}
+        protected submissionRepository: ISubmissionRepository,
+        protected assignmentRepository: IAssignmentRepository,
+        protected learningPathRepository: ILearningPathRepository,
+    ) {}
     abstract execute(input: T): Promise<object>;
 }

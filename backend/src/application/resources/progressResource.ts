@@ -1,6 +1,6 @@
 import * as deps from "./dependencies";
-import * as ProgressSchemas from "../schemas/progressSchemas";
 import * as SubmissionServices from "../../core/services/progress";
+import * as ProgressSchemas from "../schemas/progressSchemas";
 
 /**
  * RESTful routing configuration for progress-related endpoints.
@@ -11,7 +11,7 @@ import * as SubmissionServices from "../../core/services/progress";
  * - GET /users/:idParent/progress - Get the progress of all assignments of a user.
  * - GET /assignments/:idParent/progress - Get the progress of all users in an assignment
  * - GET /groups/:idParent/progress - Get the progress of all users in a group
- * - GET /users/:userId/assignment/:assignmentId/progress - Get the progress of a user for a specific assignment 
+ * - GET /users/:userId/assignment/:assignmentId/progress - Get the progress of a user for a specific assignment
  *   idParent := {userId-assignmentId}
  */
 
@@ -33,7 +33,7 @@ export class ProgressController extends deps.Controller {
         getGroupProgress: SubmissionServices.GetGroupProgress,
         get: SubmissionServices.GetUserAssignmentProgress,
     ) {
-        super({getUserProgress, getAssignmentProgress, getGroupProgress, get });
+        super({ getUserProgress, getAssignmentProgress, getGroupProgress, get });
     }
 }
 

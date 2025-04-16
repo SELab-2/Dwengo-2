@@ -1,24 +1,25 @@
 import { z } from "zod";
+import { ProgressBaseService } from "./progressBaseService";
 import { getProgressSchema } from "../../../application/schemas";
-import { Submission } from "../../entities/submission";
-import { GetProgress } from "./getProgress";
 import { Assignment } from "../../entities/assignment";
 import { LearningPath } from "../../entities/learningPath";
-import { ProgressBaseService } from "./progressBaseService";
+import { Submission } from "../../entities/submission";
 import { tryRepoEntityOperation } from "../../helpers";
 
 export type GetUserProgressInput = z.infer<typeof getProgressSchema>;
 
 export class GetUserProgress extends ProgressBaseService<GetUserProgressInput> {
-    public async execute(input: GetUserProgressInput): Promise<object>{
+    public async execute(input: GetUserProgressInput): Promise<object> {
         // Get the users assignments and corresponding learning paths
         const assignments: Assignment[] = await this.assignmentRepository.getByUserId(input.idParent);
-        const learningPaths: LearningPath[] = await Promise.all(assignments.map(
-            async (assignment) => await this.learningPathRepository.getLearningPath(assignment.learningPathId, "nl")
-        ));
+        const learningPaths: LearningPath[] = await Promise.all(
+            assignments.map(
+                async assignment => await this.learningPathRepository.getLearningPath(assignment.learningPathId, "nl"),
+            ),
+        );
 
         const stepIndexes: number[] = Array(learningPaths.length).fill(-1);
-        const submissions: Submission[] = Array(learningPaths.length).fill(null); 
+        const submissions: Submission[] = Array(learningPaths.length).fill(null);
         for (let i = 0; i < assignments.length; i++) {
             // Get the learningObjectIds of the submissions for the user in the assignment
             const submissionsForAssignment: Submission[] = await tryRepoEntityOperation(
@@ -32,13 +33,13 @@ export class GetUserProgress extends ProgressBaseService<GetUserProgressInput> {
             for (let j = 0; j < learningPaths[i].numNodes; j++) {
                 // Get the furthest node that has been submitted to
                 const furthest: Submission[] = submissionsForAssignment.filter(
-                    (sub) => sub.learningObjectId === learningPaths[i].nodes[j].hruid
-                )
+                    sub => sub.learningObjectId === learningPaths[i].nodes[j].hruid,
+                );
                 if (furthest.length > 0) {
                     stepIndexes[i] = j;
                     // Get the latest submission for the furthest node
-                    const latestSubmission: Submission = furthest.reduce(
-                        (prev, current) => (prev.time > current.time) ? prev : current
+                    const latestSubmission: Submission = furthest.reduce((prev, current) =>
+                        prev.time > current.time ? prev : current,
                     );
                     submissions[i] = latestSubmission;
                 }
@@ -56,10 +57,10 @@ export class GetUserProgress extends ProgressBaseService<GetUserProgressInput> {
                         learningObjectId: learningPaths[i].nodes[stepIndex].hruid,
                         time: submissions[i]?.time,
                         step: stepIndex + 1,
-                        maxStep: learningPaths[i].numNodes
-                    }
-                })
-            ]
-        }
+                        maxStep: learningPaths[i].numNodes,
+                    };
+                }),
+            ],
+        };
     }
 }

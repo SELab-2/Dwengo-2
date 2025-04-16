@@ -39,7 +39,6 @@ export function createZodParamsExtractor<T extends z.ZodType, R = z.infer<T>>(
 ): <U = R>(req: Request) => U {
     return (req: Request): z.infer<T> => {
         const rawData = { ...(req.body || {}), ...(req.queryParams || {}), ...(req.pathParams || {}) };
-        console.log("rawData", rawData);
         const result = schema.safeParse(rawData);
 
         if (!result.success) {

@@ -34,10 +34,7 @@ export class SubmissionRepositoryTypeORM extends ISubmissionRepository {
     }
 
     public async getAllForStudentInAssignment(studentId: string, assignmentId: string): Promise<Submission[]> {
-        return await (
-            await this.datasourceSubmission
-        ).getAllForStudentInAssignment(studentId, assignmentId);
-        
+        return await (await this.datasourceSubmission).getAllForStudentInAssignment(studentId, assignmentId);
     }
 
     public async getAllForStudentInAssignmentStep(

@@ -252,10 +252,10 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
 
     public async getGroupStudents(groupId: string): Promise<Student[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-        
+
         // Check if group exists
         const groupRepo = await datasource.getRepository(GroupTypeORM);
-        if (! await groupRepo.findOneBy({ id: groupId })) {
+        if (!(await groupRepo.findOneBy({ id: groupId }))) {
             throw new EntityNotFoundError("Group not Found");
         }
 
@@ -266,7 +266,6 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .leftJoinAndSelect("student.student", "user")
             .where("studentOfGroup.group.id = :groupId", { groupId: groupId })
             .getMany();
-        console.log(groupJoinResult)
         return groupJoinResult.map(groupJoinResult => {
             return groupJoinResult.student.toStudentEntity(groupJoinResult.student.student);
         });
