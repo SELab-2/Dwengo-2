@@ -2,7 +2,7 @@
  * This function clears the database by truncating all tables and resetting their identities.
  * It is useful for development and testing purposes, especially when you want to start with a clean slate.
  * It is also used in the `runSeedDb.ts` file to clear the database before seeding it with test data.
- * You can manually run this as a script using the `runClearDb.ts` file as such:
+ * You can manually run this as a script using the following command:
  * $ docker-compose exec backend npm run db:clear
  */
 
@@ -18,15 +18,11 @@ export async function clearDatabase(): Promise<void> {
   await queryRunner.startTransaction();
 
   try {
-    await queryRunner.query('SET session_replication_role = replica;');
-
-    const tables = connection.entityMetadatas.map((meta) => `"${meta.tableName}"`);
-    for (const table of tables) {
-      await queryRunner.query(`TRUNCATE TABLE ${table} RESTART IDENTITY CASCADE;`);
+    const entities = connection.entityMetadatas;
+    for (const entity of entities) {
+        await connection.query(`TRUNCATE TABLE "${entity.tableName}" CASCADE`);
     }
 
-    await queryRunner.query('SET session_replication_role = DEFAULT;');
-    await queryRunner.commitTransaction();
   } catch (err) {
     await queryRunner.rollbackTransaction();
     console.error('Error during DB clear:', err);
@@ -34,4 +30,14 @@ export async function clearDatabase(): Promise<void> {
   } finally {
     await queryRunner.release();
   }
+}
+
+// Run configuration (only executed when this file is run directly)
+if (require.main === module) {
+  clearDatabase().catch((err) => {
+    console.error('Failed to clear database:', err);
+    process.exit(1);
+  });
+  console.log('Database cleared successfully');
+  process.exit(0);
 }
