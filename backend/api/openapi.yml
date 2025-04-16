@@ -1244,7 +1244,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  '/users/{idParent}/assignments/{id}/progress':
+  '/users/{userId}/assignment/{assignmentId}/progress':
     get:
       tags:
         - progress
@@ -1253,15 +1253,15 @@ paths:
       operationId: getUserProgressById
       parameters:
         - in: path
-          name: id
-          description: id of the assignment to get the progress
+          name: userId
+          description: id of the user to get the progress of
           required: true
           schema:
             type: string
             format: uuid
         - in: path
-          name: idParent
-          description: id of the student to get the progress of
+          name: assignmentId
+          description: id of the assignment to get the progress of
           required: true
           schema:
             type: string
@@ -1269,6 +1269,69 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ProgressOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/users/{idParent}/progress':
+    get:
+      tags:
+        - progress
+      summary: Get the progress of a user in all their assignments
+      description: Retrieve detailed information about a specific progress entry for a user in an assignment using their unique identifiers.
+      parameters:
+        - in: path
+          name: idParent
+          description: id of the user to get the progress from
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressesOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/assignments/{idParent}/progress':
+    get:
+      tags:
+        - progress
+      summary: Get the progress of all users in an assignment
+      description: Retrieve detailed information about a specific progress entry for a user in an assignment using their unique identifiers.
+      parameters:
+        - in: path
+          name: idParent
+          description: id of the assignment to get the progress from
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressesOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/groups/{idParent}/progress':
+    get:
+      tags:
+        - progress
+      summary: Get the progress of all users in a group of an assignment
+      description: Retrieve detailed information about a specific progress entry for a user in an assignment using their unique identifiers.
+      parameters:
+        - in: path
+          name: idParent
+          description: id of the group to get the progress from
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressesOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1771,6 +1834,17 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Progress'
+    ProgressesOK:
+      description: Progress request completed successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              progresses:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Progress'
     QuestionOK:
       description: Question request completed successfully
       content:
@@ -1892,14 +1966,6 @@ components:
                 items:
                   type: string
                   format: uuid
-    ProgressesOK:
-      description: Progresses collection request completed successfully
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Progress'
     QuestionsOK:
       description: Questions collection request completed successfully
       content:
@@ -2542,7 +2608,9 @@ components:
           type: string
           format: uuid
           readOnly: true
-          description: Unique identifier for the progress.
+          description: |
+            Unique identifier for the latest submissions for this progress.
+            Can be undefined if the user hasn't started yet.
         studentId:
           type: string
           format: uuid
@@ -2569,7 +2637,9 @@ components:
         time:
           type: string
           format: time
-          description: The time this step was completed.
+          description: |
+            The time this step was completed.
+            Can be undefined if the user hasn't started yet.
         
     ProgressCreate:
       type: object

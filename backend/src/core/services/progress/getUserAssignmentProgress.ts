@@ -8,62 +8,50 @@ import { IAssignmentRepository } from "../../repositories/assignmentRepositoryIn
 import { LearningPath } from "../../entities/learningPath";
 import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
 import { ProgressBaseService } from "./progressBaseService";
+import { tryRepoEntityOperation } from "../../helpers";
 
 export type GetUserAssignmentProgressInput = z.infer<typeof getUserAssignmentProgressSchema>;
 
 export class GetUserAssignmentProgress extends ProgressBaseService<GetUserAssignmentProgressInput> implements Service<GetUserAssignmentProgressInput> {
-    constructor(
-        submissionRepository: ISubmissionRepository,
-        assignmentRepository: IAssignmentRepository,
-        learningPathRepository: ILearningPathRepository,
-    ) {super(submissionRepository, assignmentRepository, learningPathRepository)}  
     async execute(input: GetUserAssignmentProgressInput): Promise<object> {
-        const assignment: Assignment = await this.assignmentRepository.getById(input.id);
-        const submissions: Submission[] = await this.submissionRepository.getAllForStudentInAssignment(input.idParent, input.id);
-        if (submissions.length === 0) {
-            
-        }
+        const assignment: Assignment = await tryRepoEntityOperation(
+            this.assignmentRepository.getById(input.assignmentId),
+            "Assignment",
+            input.assignmentId,
+            true,
+        );
         const learningPath: LearningPath = await this.learningPathRepository.getLearningPath(assignment.learningPathId, "nl");
+        const submissions: Submission[] = await tryRepoEntityOperation(
+            this.submissionRepository.getAllForStudentInAssignment(input.userId, assignment.id!),
+            "Assignment or User",
+            assignment.id! + " - " + input.userId,
+            true,
+        );
 
-        // Get the index of the furthest node (in the learningPath) that has been submitted to
-        let stepIndex: number = 0;
-        for (let i = 0; i < learningPath.numNodes; i++) {
-            if (submissions.map((sub) => sub.learningObjectId).includes(learningPath.nodes[i].hruid)) {
-                stepIndex = Math.max(stepIndex, i);
+        let stepIndex: number = -1; 
+        let submission: Submission | null = null;
+        // Get the furthest node that has been submitted to
+        for (let i = 0 ; i < learningPath.numNodes; i++) {
+            for (let j = 0; j < submissions.length; j++) {
+                if (submissions[j].learningObjectId === learningPath.nodes[i].hruid) {
+                    stepIndex = i;
+                    // Get the latest submission for the furthest node
+                    if (!submission || submissions[j].time > submission.time) {
+                        submission = submissions[j];
+                    }
+                }
             }
         }
         
-        // Get all submissions for furthest step
-        const learningObjectId: string = learningPath.nodes[stepIndex].hruid;
-        const furthestSubmissions: Submission[] = submissions.filter((sub) => {
-            return sub.learningObjectId === learningObjectId;
-        });
-
-        // Get the time of the latest submission
-        const latestTime: Date = furthestSubmissions.map(
-            (s) => s.time
-        ).reduce(
-            (latest, current) => current > latest ? current : latest
-        );
-
-        // Get the latest submission for the learning object id
-        const latestSubmission: Submission | undefined = furthestSubmissions.find((sub) => {
-            return sub.time === latestTime
-        })
-
-        if (!latestSubmission) {
-            throw new Error("No submission found for the given learning object id.");
-        }
-
         return {
-            id: latestSubmission.id,
-            studentId: latestSubmission.studentId,
-            assignmentId: latestSubmission.assignmentId,
-            learningObjectId: learningObjectId,
-            time: latestSubmission.time,
+            id: submission?.id!,
+            studentId: input.userId,
+            assignmentId: assignment.id!,
+            learningObjectId: submission?.learningObjectId,
             step: stepIndex + 1,
-            lastStep: learningPath.numNodes,
-        }
+            maxStep: learningPath.numNodes,
+            time: submission?.time,
+        };
     }
 
 }

@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const getUserAssignmentProgressSchema = z.object({
-    idParent: z.string(),
-    id: z.string(),
+    userId: z.string(),
+    assignmentId: z.string(),
 });
 
 export const getProgressSchema = z.object({

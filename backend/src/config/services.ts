@@ -70,8 +70,8 @@ export const services = {
     },
     progress: {
         getUserProgress: new ProgressServices.GetUserProgress(repos.submission, repos.assignment, repos.learningPath),
-        getAssignmentProgress: new ProgressServices.GetAssignmentProgress(repos.submission, repos.assignment, repos.learningPath),
-        getGroupProgress: new ProgressServices.GetGroupProgress(repos.submission, repos.assignment, repos.learningPath),
+        getAssignmentProgress: new ProgressServices.GetAssignmentProgress(repos.student, repos.submission, repos.assignment, repos.learningPath),
+        getGroupProgress: new ProgressServices.GetGroupProgress(repos.student, repos.submission, repos.assignment, repos.learningPath),
         get: new ProgressServices.GetUserAssignmentProgress(repos.submission, repos.assignment, repos.learningPath),
     },
     user: {

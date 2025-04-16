@@ -1,20 +1,17 @@
-import { z } from "zod";
 import { getProgressSchema } from "../../../application/schemas";
-import { ProgressBaseService } from "./progressBaseService";
-import { ISubmissionRepository } from "../../repositories/submissionRepositoryInterface";
-import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
-import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
+import { GetProgress } from "./getProgress";
+import { User } from "../../entities/user";
+import { tryRepoEntityOperation } from "../../helpers";
 
-export type GetAssignmentProgressInput = z.infer<typeof getProgressSchema>;
-
-export class GetAssignmentProgress extends ProgressBaseService<GetAssignmentProgressInput> {
-    constructor(
-            submissionRepository: ISubmissionRepository,
-            assignmentRepository: IAssignmentRepository,
-            learningPathRepository: ILearningPathRepository,
-        ) {super(submissionRepository, assignmentRepository, learningPathRepository)}  
-    async execute(input: GetAssignmentProgressInput): Promise<object> {
-        throw new Error("GetAssignmentProgress is not implemented yet.");
-        return {};
+export class GetAssignmentProgress extends GetProgress {
+    public async getUsers(id: string): Promise<User[]> {
+        return await tryRepoEntityOperation(
+            this.studentRepository.getByAssignmentId(id),
+            "Assignment",
+            id,
+            true
+        )
     }
+    
+
 }

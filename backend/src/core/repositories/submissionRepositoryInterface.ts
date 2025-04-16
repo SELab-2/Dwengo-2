@@ -26,7 +26,6 @@ export abstract class ISubmissionRepository extends AbstractRepository {
      */
     public abstract delete(id: string): Promise<void>;
 
-
     /**
      * Get all submissions  of an assignment for a specific student.
      * @param studentId The id of the student.
@@ -38,7 +37,6 @@ export abstract class ISubmissionRepository extends AbstractRepository {
         studentId: string,
         assignmentId: string,
     ): Promise<Submission[]>;
-
 
     /**
      * Get all submissions for a specific student in a specific step of an assignment.

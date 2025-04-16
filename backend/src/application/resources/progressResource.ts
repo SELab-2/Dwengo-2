@@ -8,10 +8,11 @@ import * as SubmissionServices from "../../core/services/progress";
  * converting Express request/response objects to our internal format.
  *
  * Supported endpoints:
- * - GET /users/:idParent/progress
- * - GET /assignments/:idParent/progress
- * - GET /groups/:idParent/progress
- * - GET /users/:idParent/assignments/:id/progress - Get the progress of a user for a specific assignment 
+ * - GET /users/:idParent/progress - Get the progress of all assignments of a user.
+ * - GET /assignments/:idParent/progress - Get the progress of all users in an assignment
+ * - GET /groups/:idParent/progress - Get the progress of all users in a group
+ * - GET /users/:userId/assignment/:assignmentId/progress - Get the progress of a user for a specific assignment 
+ *   idParent := {userId-assignmentId}
  */
 
 /* ************* Extractors ************* */
@@ -30,9 +31,9 @@ export class ProgressController extends deps.Controller {
         getUserProgress: SubmissionServices.GetUserProgress,
         getAssignmentProgress: SubmissionServices.GetAssignmentProgress,
         getGroupProgress: SubmissionServices.GetGroupProgress,
-        getUserAssignmentProgress: SubmissionServices.GetUserAssignmentProgress,
+        get: SubmissionServices.GetUserAssignmentProgress,
     ) {
-        super({ getUserAssignmentProgress });
+        super({getUserProgress, getAssignmentProgress, getGroupProgress, get });
     }
 }
 
@@ -57,7 +58,25 @@ export function progressRoutes(
             {
                 app,
                 method: deps.HttpMethod.GET,
-                urlPattern: "/users/:idParent/assignments/:id/progress",
+                urlPattern: "/assignments/:idParent/progress",
+                controller,
+                extractor: extractors.getAssignmentProgress,
+                handler: (req, data) => controller.getChildren(req, data, controller.services.getAssignmentProgress),
+                middleware,
+            },
+            {
+                app,
+                method: deps.HttpMethod.GET,
+                urlPattern: "/groups/:idParent/progress",
+                controller,
+                extractor: extractors.getGroupProgress,
+                handler: (req, data) => controller.getChildren(req, data, controller.services.getGroupProgress),
+                middleware,
+            },
+            {
+                app,
+                method: deps.HttpMethod.GET,
+                urlPattern: "/users/:userId/assignments/:assignmentId/progress",
                 controller,
                 extractor: extractors.getUserAssignmentProgress,
                 handler: (req, data) => controller.getOne(req, data),
