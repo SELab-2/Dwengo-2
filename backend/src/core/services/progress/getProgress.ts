@@ -66,12 +66,13 @@ export abstract class GetProgress extends ProgressBaseService<GetProgressInput> 
             progresses: [
                 ...students.map((student: User, i) => {
                     const stepIndex: number = stepIndexes[i];
+                    const latestSubmission: Submission | null = latestSubmissions[i];
                     return {
-                        id: latestSubmissions[i]?.id,
-                        studentId: student.id,
-                        assignmentId: assignment.id,
-                        learningObjectId: learningPath.nodes[stepIndex].hruid,
-                        time: latestSubmissions[i]?.time,
+                        id: latestSubmission ? latestSubmission.id! : null,
+                        studentId: student.id!,
+                        assignmentId: assignment.id!,
+                        learningObjectId: stepIndex === -1 ? null : learningPath.nodes[stepIndex].hruid,
+                        time: latestSubmission ? latestSubmission.time : null,
                         step: stepIndex + 1,
                         maxStep: learningPath.numNodes,
                     };

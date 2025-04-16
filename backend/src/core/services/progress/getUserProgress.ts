@@ -50,12 +50,13 @@ export class GetUserProgress extends ProgressBaseService<GetUserProgressInput> {
             progresses: [
                 ...assignments.map((assignment: Assignment, i) => {
                     const stepIndex: number = stepIndexes[i];
+                    const submission: Submission | null = submissions[i];
                     return {
-                        id: submissions[i]?.id,
+                        id: submission ? submission.id! : null,
                         studentId: input.idParent,
-                        assignmentId: assignment.id,
-                        learningObjectId: learningPaths[i].nodes[stepIndex].hruid,
-                        time: submissions[i]?.time,
+                        assignmentId: assignment.id!,
+                        learningObjectId: stepIndex === -1 ? null : learningPaths[i].nodes[stepIndex].hruid,
+                        time: submission ? submission.time : null,
                         step: stepIndex + 1,
                         maxStep: learningPaths[i].numNodes,
                     };

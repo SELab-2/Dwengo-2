@@ -77,6 +77,7 @@ export const services = {
             repos.learningPath,
         ),
         getGroupProgress: new ProgressServices.GetGroupProgress(
+            repos.group,
             repos.student,
             repos.submission,
             repos.assignment,
