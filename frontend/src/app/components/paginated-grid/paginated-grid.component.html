@@ -1,0 +1,16 @@
+<div class="paginated-grid">
+    <div class="grid">
+        @for (item of pagedItems; track item.id) {
+            <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: item }"></ng-container>
+        } @empty {
+            <p i18n>No items found.</p>
+        }
+    </div>
+  
+    <mat-paginator
+        [length]="items.length"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)">
+    </mat-paginator>
+</div>

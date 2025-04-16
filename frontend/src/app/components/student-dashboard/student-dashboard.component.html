@@ -1,0 +1,52 @@
+<!-- Main -->
+<main class="main-container">
+    <div class="main-title centered-title">
+        <h1 i18n>DASHBOARD</h1>
+    </div>
+</main>
+
+<div class="assignments">
+
+    <div class="center-container">
+        <h2 i18n>Your assignments</h2>
+    </div>
+    <!-- <div class="assignments-grid">
+        @for (assignment of pagedAssignments; track assignment.id) {
+            <app-mini-assignment [_assignment]="assignment"></app-mini-assignment>
+        } @empty {
+            <p i18n>No assignments found</p>
+        }
+    </div>
+      
+    <mat-paginator
+        [length]="totalAssignments"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[4, 6, 8, 10, 12]"
+        (page)="onPageChange($event)">
+    </mat-paginator> -->
+
+    <app-paginated-grid
+        [items]="assignments"
+        [itemTemplate]="assignmentCard">
+    </app-paginated-grid>
+
+    <ng-template #assignmentCard let-assignment>
+        <app-mini-assignment [_assignment]="assignment"></app-mini-assignment>
+    </ng-template>
+</div>
+
+<div class="classes">
+    <div class="center-container">
+        <h2 i18n>Your classes</h2>
+    </div>
+  
+    <app-paginated-grid
+        [items]="classes"
+        [pageSize]="6"
+        [itemTemplate]="classCard">
+    </app-paginated-grid>
+  
+    <ng-template #classCard let-class>
+        <app-mini-class [_class]="class"></app-mini-class>
+    </ng-template>
+</div>
