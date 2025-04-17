@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, TemplateRef, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatPaginatorIntl } from '@angular/material/paginator';
@@ -22,12 +22,12 @@ export class PaginatedGridComponent<T extends { id: string | number }> implement
   @Input() pageSizeOptions: number[] = [6, 8, 10, 12, 15, 20];
   @Input() showPageSizeOptions: boolean = true; // Show page size options in the paginator
   @Input() pageSize: number = 12;
-  @Input() itemTemplate!: TemplateRef<any>; // Template for projecting item cards
+  @Input() itemTemplate!: TemplateRef<unknown>; // Template for projecting item cards
 
   pagedItems: T[] = [];
   pageIndex = 0;
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.updatePagedItems();
   }
 

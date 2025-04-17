@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { MatList } from '@angular/material/list'
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { AssignmentsService } from '../../services/assignments.service';
-import { Assignment } from '../../interfaces/assignments/assignment';
+import { AssignmentService } from '../../services/assignment.service';
+import { Assignment } from '../../interfaces/assignment/assignment';
 import { ClassesService } from '../../services/classes.service';
 import { Class } from '../../interfaces/classes/class';
 import { MiniAssignmentComponent } from '../mini-assignment/mini-assignment.component';
@@ -19,10 +17,8 @@ import { MiniClassComponent } from '../mini-class/mini-class.component';
   selector: 'app-student-dashboard',
   standalone: true,
   imports: [
-    RouterLink,
     CommonModule,
     MatIconModule,
-    MatList,
     MiniAssignmentComponent,
     MiniClassComponent,
     MatPaginatorModule,
@@ -44,7 +40,7 @@ export class StudentDashboardComponent implements OnInit {
 
   constructor(
     private classesService: ClassesService,
-    private assignmentsService: AssignmentsService,
+    private assignmentService: AssignmentService,
   ) {}
   
   ngOnInit() {
@@ -53,8 +49,8 @@ export class StudentDashboardComponent implements OnInit {
     if (storedPageSize) this.pageSize = +storedPageSize;
     if (storedPageIndex) this.currentPageIndex = +storedPageIndex;
 
-    this.assignmentsService
-      .assignmentsOfUser()
+    this.assignmentService
+      .retrieveAssignments()
       .subscribe({
         next: (assignments: Assignment[]) => {
           this._assignments = assignments;

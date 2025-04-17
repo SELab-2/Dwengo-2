@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Assignment } from '../../interfaces/assignments/assignment';
+import { Assignment } from '../../interfaces/assignment/assignment';
 import { CommonModule } from '@angular/common'
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card'
 import { RouterLink } from '@angular/router';
