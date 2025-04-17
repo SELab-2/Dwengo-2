@@ -193,17 +193,17 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         if (userType === JoinRequestType.TEACHER) {
-            const teacherModel: TeacherTypeORM | null= await datasource.getRepository(TeacherTypeORM).findOne({
-                where: { teacher: { id: userId } }
-            })
+            const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
+                where: { teacher: { id: userId } },
+            });
             if (!teacherModel) {
                 throw new EntityNotFoundError(`No user found with id ${userId} that has a teacher account`);
             }
             return await this.addTeacherToClass(classId, teacherModel.id);
         } else {
-            const studentModel: StudentTypeORM | null= await datasource.getRepository(StudentTypeORM).findOne({
-                where: { student: { id: userId } }
-            })
+            const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
+                where: { student: { id: userId } },
+            });
             if (!studentModel) {
                 throw new EntityNotFoundError(`No user found with id ${userId} that has a student account`);
             }
