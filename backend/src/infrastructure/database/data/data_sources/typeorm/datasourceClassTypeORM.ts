@@ -183,29 +183,71 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
         }
     }
 
+    /**
+     * Adds a user with user id to a class.
+     * @param classId The identifier of the class to join.
+     * @param userId The user id of the teacher or student that will join the class. (Not student or teacher id)
+     * @param userType Teacher or student enum.
+     */
     public async addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const userModel = await datasource.getRepository(UserTypeORM).findOne({
-            where: { id: userId },
-        });
-
         if (userType === JoinRequestType.TEACHER) {
-            const teacher = await datasource.getRepository(TeacherTypeORM).findOne({
-                where: { teacher: userModel! },
-            });
-            const teacherOfClass = new TeacherOfClassTypeORM();
-            teacherOfClass.teacher = { id: teacher?.id } as TeacherTypeORM;
-            teacherOfClass.class = { id: classId } as ClassTypeORM;
-            await datasource.getRepository(TeacherOfClassTypeORM).save(teacherOfClass);
+            const teacherModel: TeacherTypeORM | null= await datasource.getRepository(TeacherTypeORM).findOne({
+                where: { teacher: { id: userId } }
+            })
+            if (!teacherModel) {
+                throw new EntityNotFoundError(`No user found with id ${userId} that has a teacher account`);
+            }
+            return await this.addTeacherToClass(classId, teacherModel.id);
         } else {
-            const student = await datasource.getRepository(StudentTypeORM).findOne({
-                where: { student: userModel! },
-            });
-            const studentOfClass = new StudentOfClassTypeORM();
-            studentOfClass.student = { id: student?.id } as StudentTypeORM;
-            studentOfClass.class = { id: classId } as ClassTypeORM;
-            await datasource.getRepository(StudentOfClassTypeORM).save(studentOfClass);
+            const studentModel: StudentTypeORM | null= await datasource.getRepository(StudentTypeORM).findOne({
+                where: { student: { id: userId } }
+            })
+            if (!studentModel) {
+                throw new EntityNotFoundError(`No user found with id ${userId} that has a student account`);
+            }
+            return await this.addStudentToClass(classId, studentModel.id);
         }
+    }
+
+    /**
+     * Adds a teacher with teacher id to a class.
+     * @param classId The identifier of the class to join.
+     * @param teacherId The id of the teacher (not user) that will join the class.
+     */
+    public async addTeacherToClass(classId: string, teacherId: string): Promise<void> {
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const teacher = await datasource.getRepository(TeacherTypeORM).findOne({
+            where: { id: teacherId },
+        });
+        if (!teacher) {
+            throw new EntityNotFoundError(`Teacher with id ${teacherId} not found.`);
+        }
+        const teacherOfClass = new TeacherOfClassTypeORM();
+        teacherOfClass.teacher = { id: teacher?.id } as TeacherTypeORM;
+        teacherOfClass.class = { id: classId } as ClassTypeORM;
+        await datasource.getRepository(TeacherOfClassTypeORM).save(teacherOfClass);
+    }
+
+    /**
+     * Adds a student with student id to a class.
+     * @param classId The identifier of the class to join.
+     * @param teacherId The id of the student (not user) that will join the class.
+     */
+    public async addStudentToClass(classId: string, studentId: string): Promise<void> {
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const student = await datasource.getRepository(StudentTypeORM).findOne({
+            where: { id: studentId! },
+        });
+        if (!student) {
+            throw new EntityNotFoundError(`Student with id ${studentId} not found.`);
+        }
+        const studentOfClass = new StudentOfClassTypeORM();
+        studentOfClass.student = { id: student?.id } as StudentTypeORM;
+        studentOfClass.class = { id: classId } as ClassTypeORM;
+        await datasource.getRepository(StudentOfClassTypeORM).save(studentOfClass);
     }
 }
