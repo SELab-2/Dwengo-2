@@ -19,6 +19,8 @@ export class GetLearningPath implements Service<GetLearningPathInput> {
      * @returns an object containing the path.
      */
     async execute(input: GetLearningPathInput): Promise<object> {
+        // When inclusion of nodes is not specified, default to false
+        const includeNodes = input.includeNodes ?? false;
         // Get the available languages of this path
         const languages: string[] = await this._learningPathRepository.getLanguages(input.id);
 
@@ -33,7 +35,7 @@ export class GetLearningPath implements Service<GetLearningPathInput> {
             }
         }
 
-        const path: LearningPath = await this._learningPathRepository.getLearningPath(input.id, language);
-        return path.toObject();
+        const path: LearningPath = await this._learningPathRepository.getLearningPath(input.id, language, includeNodes);
+        return path.toObject(includeNodes);
     }
 }
