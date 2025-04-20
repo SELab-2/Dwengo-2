@@ -7,10 +7,12 @@
         }
     </div>
   
-    <mat-paginator
-        [length]="items.length"
-        [pageSize]="pageSize"
-        [pageSizeOptions]="pageSizeOptions"
-        (page)="onPageChange($event)">
-    </mat-paginator>
+    @if (showPagination) {
+        <mat-paginator
+            [length]="items.length"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="onPageChange($event)">
+        </mat-paginator>
+    }
 </div>

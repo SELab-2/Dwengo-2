@@ -11,12 +11,14 @@ import { Class } from '../../interfaces/classes/class';
 import { MiniAssignmentComponent } from '../mini-assignment/mini-assignment.component';
 import { PaginatedGridComponent } from '../paginated-grid/paginated-grid.component';
 import { MiniClassComponent } from '../mini-class/mini-class.component';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
   imports: [
+    RouterLink,
     CommonModule,
     MatIconModule,
     MiniAssignmentComponent,
@@ -86,7 +88,7 @@ export class StudentDashboardComponent implements OnInit {
     this.updatePagedAssignments();
   }
 
-  private updatePagedAssignments(): void {
+  public updatePagedAssignments(): void {
     const start = this.currentPageIndex * this.pageSize;
     const end = start + this.pageSize;
     this.pagedAssignments = this._assignments.slice(start, end);

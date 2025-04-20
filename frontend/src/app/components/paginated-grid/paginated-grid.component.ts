@@ -21,6 +21,7 @@ export class PaginatedGridComponent<T extends { id: string | number }> implement
   @Input() items: T[] = [];
   @Input() pageSizeOptions: number[] = [6, 8, 10, 12, 15, 20];
   @Input() showPageSizeOptions: boolean = true; // Show page size options in the paginator
+  @Input() showPagination: boolean = true; // Show pagination controls
   @Input() pageSize: number = 12;
   @Input() itemTemplate!: TemplateRef<unknown>; // Template for projecting item cards
 

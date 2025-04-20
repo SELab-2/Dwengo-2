@@ -21,14 +21,16 @@
 </div>
 
 <div class="classes">
-    <div class="center-container">
+    <div class="header-container">
         <h2 i18n>Your classes</h2>
+        <a routerLink="/student/classes" i18n>See all</a>
     </div>
   
     <app-paginated-grid
         [items]="classes"
         [pageSize]="6"
-        [itemTemplate]="classCard">
+        [itemTemplate]="classCard"
+        [showPagination]="false">
     </app-paginated-grid>
   
     <ng-template #classCard let-class>

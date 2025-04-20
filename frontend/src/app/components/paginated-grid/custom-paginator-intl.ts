@@ -1,3 +1,5 @@
+// Adds i18n support to the existing material paginator component, which is used in the paginated grid component to navigate the pages of the grid.
+
 import { MatPaginatorIntl } from '@angular/material/paginator';
 
 export function getCustomPaginatorIntl(): MatPaginatorIntl {
