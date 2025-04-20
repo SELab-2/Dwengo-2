@@ -21,6 +21,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './mini-assignment.component.less'
 })
 export class MiniAssignmentComponent {
+  @Input() _type: string = "student"; // or teacher
 
   // We get our assignment from somewhere else
   @Input() _assignment!: Assignment;
