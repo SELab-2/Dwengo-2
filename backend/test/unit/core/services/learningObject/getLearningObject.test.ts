@@ -1,6 +1,6 @@
-import { HTMLType, LearningObject, LearningObjectContentType } from "../../../../src/core/entities/learningObject";
-import { ILearningObjectRepository } from "../../../../src/core/repositories/learningObjectRepositoryInterface";
-import { GetLearningObject } from "../../../../src/core/services/learningObject";
+import { HTMLType, LearningObject, LearningObjectContentType } from "../../../../../src/core/entities/learningObject";
+import { ILearningObjectRepository } from "../../../../../src/core/repositories/learningObjectRepositoryInterface";
+import { GetLearningObject } from "../../../../../src/core/services/learningObject";
 
 const mockLearningObjectRepository: jest.Mocked<ILearningObjectRepository> = {
     getVersions: jest.fn(),
