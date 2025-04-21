@@ -9,6 +9,9 @@ import { ClassesReponse } from "../interfaces/classes/classesResponse";
 import { environment } from "../../environments/environment";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
+import { User, UserType } from "../interfaces";
+import { UserService } from "./user.service";
+import { ClassMembersInterface } from "../interfaces/classes/classMembersResponse";
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +22,8 @@ export class ClassesService {
     public constructor(
         private http: HttpClient,
         private authService: AuthenticationService,
-        private errorService: ErrorService
+        private errorService: ErrorService,
+        private userService: UserService
     ) {}
   
     public classesOfUser(): Observable<Class[]> {
@@ -88,7 +92,6 @@ export class ClassesService {
         );
     }
 
-    // TODO: wait for bugfix API
     public updateClass(_class: Class): Observable<boolean> {
         const updatedClass: UpdatedClass = {
             name: _class.name,
@@ -108,7 +111,25 @@ export class ClassesService {
             this.errorService.pipeHandler(),
             switchMap(
                 response => of(response.status === 204)
-            ) // TODO: does this still work (can't know before API bugfix)
+            )
+        );
+    }
+
+    public classStudents(id: string): Observable<User[]> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+
+        return this.http.get<ClassMembersInterface>(
+            `${this.API_URL}/classes/${id}/users`,
+            headers
+        ).pipe(
+            this.errorService.pipeHandler(),
+            switchMap(response => 
+                forkJoin<User[]>(
+                    response.students.map(studentId => 
+                        this.userService.userWithIdAndType(studentId, UserType.STUDENT)
+                    )
+                )
+            )
         );
     }
 

@@ -6,11 +6,13 @@ import { NewClassResponse } from "../interfaces/classes/newClassResponse";
 import { ClassesReponse } from "../interfaces/classes/classesResponse";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
+import { UserService } from "./user.service";
 
 describe('ClassesService', () => {
     let http: jasmine.SpyObj<HttpClient>;
     let authService: jasmine.SpyObj<AuthenticationService>;
     let errorService: jasmine.SpyObj<ErrorService>;
+    let userService: jasmine.SpyObj<UserService>;
     let service: ClassesService;
 
     const id: string = "123";
@@ -40,24 +42,27 @@ describe('ClassesService', () => {
         http = jasmine.createSpyObj('HttpClient', ['get', 'post', 'delete', 'patch']);
         authService = jasmine.createSpyObj('AuthenticationService', ['retrieveUserId', 'retrieveToken', 'retrieveUserType', 'retrieveAuthenticationHeaders', 'retrieveUserCredentials']);
         errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler', 'subscribeHandler', 'retrieveError']);
+        userService = jasmine.createSpyObj('UserService', ['userWithId', 'userWithIdAndType']);
 
         // Mock the return values of the AuthenticationService methods
         authService.retrieveUserId.and.returnValue(teacherId);
         authService.retrieveToken.and.returnValue(teacherToken);
-
         authService.retrieveAuthenticationHeaders.and.returnValue({
             headers: new HttpHeaders().append('Authorization', `Bearer ${teacherToken}`).append('Content-Type', 'application/json'),
         });
-
         authService.retrieveUserCredentials.and.returnValue({
             userId: teacherId,
             token: teacherToken,
         });
         
+        // Mock the return values of the ErrorService methods
         errorService.pipeHandler.and.callFake(() => (source) => source);
         errorService.retrieveError.and.returnValue("mockError");
 
-        service = new ClassesService(http, authService, errorService);
+        // Mock the return values of the UserService methods
+
+
+        service = new ClassesService(http, authService, errorService, userService);
     });
 
     it('should respond with classes', () => {
