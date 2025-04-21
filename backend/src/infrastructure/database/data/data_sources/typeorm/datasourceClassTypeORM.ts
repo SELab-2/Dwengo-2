@@ -193,7 +193,7 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
         if (userType === JoinRequestType.TEACHER) {
             return await this.addTeacherToClass(classId, studentOrTeacherId);
         } else {
-            return await this.addStudentToClass(classId, studentOrTeacherId);   
+            return await this.addStudentToClass(classId, studentOrTeacherId);
         }
     }
 
