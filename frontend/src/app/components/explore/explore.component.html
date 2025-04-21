@@ -13,13 +13,13 @@
                 </p>
             </mat-card-content>
             <mat-card-actions>
-                <button mat-raised-button color="primary" (click)="setVisual('BASIC')" i18n>Explore our
+                <button mat-raised-button color="primary" (click)="setBasic()" i18n>Explore our
                     Learning Paths</button>
             </mat-card-actions>
         </mat-card>
 
         <mat-card class="filter-card">
-            <app-learning-path-filter (filtersApplied)="onFiltersApplied($event)"></app-learning-path-filter>
+            <app-learning-path-filter (filtersApplied)="setCustom($event)"></app-learning-path-filter>
         </mat-card>
     </div>
     @if (visualize === "BASIC"){

@@ -15,7 +15,11 @@ interface CategorizedLearningPath extends LearningPath {
 }
 
 
-
+/**
+ * The Explore Component
+ * 
+ * A way for people to interact and discover Learning Paths. Use the suggested selection or search your own paths.
+ */
 @Component({
     selector: 'app-explore',
     standalone: true,
@@ -27,9 +31,13 @@ export class ExploreComponent implements OnInit {
     @Input() isTeacher: boolean = false;
     learningPaths: LearningPath[] = [];
     loading: boolean = true;
+
+    // This will display the selected visualization. It could be done by an enum, but this does the job.
+    // Use "SELECT" when nothing is decided yet, "BASIC" for our suggested categories, "CUSTOM" to apply your own filters
     visualize: string = "SELECT";
 
-    // The only thing you need to change to add a new category is to add it to the categories array and the title array.
+    // The only thing you need to change to add a new "BASIC" category is to add it to the categories array and the title array.
+    // I know this is a bit weird, but these custom themes have to be hard coded.
     categories: string[] = ["maths", "climate", "robot", "AI", "elek"];
     titles: string[] = [$localize`Maths`, $localize`Climate`, $localize`Robotics`, $localize`AI & Machine Learning`, $localize`Electronics`, $localize`Other Paths`];
 
@@ -40,25 +48,32 @@ export class ExploreComponent implements OnInit {
     constructor(private authService: AuthenticationService, private learningPathService: LearningPathService) { }
 
     ngOnInit(): void {
+        // We'll need this to display the *plus* sign on the learning path cards
         this.isTeacher = this.authService.retrieveUserType() === "teacher";
-
     }
 
-    setVisual(state: string): void {
-        if (this.visualize === state) return;
+    /**
+     * Function to apply our suggested categories
+     */
+    setBasic(): void {
+        if (this.visualize === "BASIC") return;
 
-        if (state === 'BASIC') {
-            this.loading = true;
-            this.getRegularSelection();
-            this.visualize = state;
-        }
+        this.loading = true;
+        this.getRegularSelection();
+        this.visualize = "BASIC";
     }
 
+    /**
+     * Helpfunction to filter each category
+     * @param category the category to be filtered
+     */
     getLearningPathsByCategory(category: string): CategorizedLearningPath[] {
         return this.data.filter(lp => lp.category === category);
     }
 
-
+    /**
+     * Help function to collect the learning paths for each main category.
+     */
     getRegularSelection(): void {
         const observables = this.categories.map(category => {
             const query: LearningPathRequest = { all: category };
@@ -82,7 +97,11 @@ export class ExploreComponent implements OnInit {
         });
     }
 
-    onFiltersApplied(filters: { minAge: number | null, maxAge: number | null, language: string, searchTerm: string }) {
+    /**
+     * Function to handle the set filters in the LearningPathFilterComponent.
+     * @param filters the possible filters to take into account.
+     */
+    setCustom(filters: { minAge: number | null, maxAge: number | null, language: string, searchTerm: string }) {
         this.visualize = "CUSTOM";
         this.loading = true;
         const query = {
