@@ -20,6 +20,8 @@ export abstract class User {
                 message: "Email invalid.",
             } as ApiError;
         }
+        // Convert email to lowercase
+        this._email = _email.toLowerCase();
     }
 
     // Getters
