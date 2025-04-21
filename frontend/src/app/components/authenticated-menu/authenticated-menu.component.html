@@ -1,12 +1,13 @@
 <button mat-raised-button color="primary" i18n [matMenuTriggerFor]="menu">Menu</button>
 <mat-menu #menu="matMenu">
     @if (isStudent) {
-        <button mat-menu-item routerLink="/student/dashboard" i18n>Dashboard</button>
-        <button mat-menu-item routerLink="/student/classes" i18n>Classes</button>
-        <button mat-menu-item routerLink="/student/assignments" i18n>Assignments</button>
+    <button mat-menu-item routerLink="/student/dashboard" i18n>Dashboard</button>
+    <button mat-menu-item routerLink="/student/classes" i18n>Classes</button>
+    <button mat-menu-item routerLink="/student/assignments" i18n>Assignments</button>
     } @else {
-        <button mat-menu-item routerLink="/teacher/dashboard" i18n>Dashboard</button>
-        <button mat-menu-item routerLink="/teacher/classes" i18n>Classes</button>
-        <button mat-menu-item routerLink="/teacher/assignments" i18n>Assignments</button>
+    <button mat-menu-item routerLink="/teacher/dashboard" i18n>Dashboard</button>
+    <button mat-menu-item routerLink="/teacher/classes" i18n>Classes</button>
+    <button mat-menu-item routerLink="/teacher/assignments" i18n>Assignments</button>
     }
+    <button mat-menu-item routerLink="/explore" i18n>Explore</button>
 </mat-menu>
