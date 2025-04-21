@@ -77,7 +77,7 @@ export class MessageService {
       switchMap(response => of({
         ...message,
         id: response.id,
-        createdAt: new Date().toISOString()
+        createdAt: new Date()
       }))
     );
   }

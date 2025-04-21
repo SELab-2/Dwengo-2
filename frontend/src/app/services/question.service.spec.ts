@@ -1,24 +1,24 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { QuestionService } from './question.service';
+import { QuestionThreadService } from './questionThread.service';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { of } from 'rxjs';
-import { Question, NewQuestion, VisibilityType } from '../interfaces/question';
-import { QuestionUpdate } from '../interfaces/question/questionUpdate';
-import { QuestionResponse, QuestionResponseSingle } from '../interfaces/question/questionResponse';
+import { QuestionThread, NewQuestionThread, VisibilityType } from '../interfaces/questionThread';
+import { QuestionThreadUpdate } from '../interfaces/questionThread/questionThreadUpdate';
+import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
 
-describe('QuestionService', () => {
-  const question: Question = {
+describe('QuestionThreadService', () => {
+  const questionThread: QuestionThread = {
     id: 'question-id',
     creatorId: 'creator-id',
     assignmentId: 'assignment-id',
-    learningObjectId: undefined, // <- fixed
+    learningObjectId: undefined,
     isClosed: false,
     visibility: VisibilityType.PUBLIC,
     messageIds: [],
   };
 
-  const newQuestion: NewQuestion = {
+  const newQuestionThread: NewQuestionThread = {
     creatorId: 'creator-id',
     assignmentId: 'assignment-id',
     learningObjectId: 'learning-object-id',
@@ -26,23 +26,23 @@ describe('QuestionService', () => {
     visibility: VisibilityType.PUBLIC,
   };
 
-  const updatedQuestion: QuestionUpdate = {
+  const updatedQuestionThread: QuestionThreadUpdate = {
     isClosed: true,
     visibility: VisibilityType.PRIVATE,
   };
 
-  const questionResponse: QuestionResponse = {
-    questions: [question.id],
+  const questionThreadResponse: QuestionThreadResponse = {
+    questionThreads: [questionThread.id],
   };
 
-  const questionResponseSingle: QuestionResponseSingle = {
-    id: question.id,
+  const questionThreadResponseSingle: QuestionThreadResponseSingle = {
+    id: questionThread.id,
   };
 
   let http: jasmine.SpyObj<HttpClient>;
   let authenticationService: jasmine.SpyObj<AuthenticationService>;
   let errorService: jasmine.SpyObj<ErrorService>;
-  let service: QuestionService;
+  let service: QuestionThreadService;
 
   beforeEach(() => {
     http = jasmine.createSpyObj('HttpClient', ['get', 'post', 'patch', 'delete']);
@@ -54,19 +54,19 @@ describe('QuestionService', () => {
       headers: new HttpHeaders().append('Authorization', `Bearer token`).append('Content-Type', 'application/json'),
     });
 
-    service = new QuestionService(http, authenticationService, errorService);
+    service = new QuestionThreadService(http, authenticationService, errorService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should retrieve questions by assignment', () => {
-    http.get.and.returnValue(of(questionResponse));
-    spyOn(service, 'retrieveQuestionById').and.returnValue(of(question));
+  it('should retrieve question threads by assignment', () => {
+    http.get.and.returnValue(of(questionThreadResponse));
+    spyOn(service, 'retrieveQuestionThreadById').and.returnValue(of(questionThread));
   
-    service.retrieveQuestionsByAssignment('assignment-id').subscribe(result => {
-      expect(result).toEqual([question]);
+    service.retrieveQuestionThreadsByAssignment('assignment-id').subscribe(result => {
+      expect(result).toEqual([questionThread]);
     });
   
     expect(http.get).toHaveBeenCalledWith(
@@ -75,33 +75,33 @@ describe('QuestionService', () => {
     );
   });
 
-  it('should retrieve a single question', () => {
-    http.get.and.returnValue(of(question));
-    service.retrieveQuestionById(question.id).subscribe(result => {
-      expect(result).toEqual(question);
+  it('should retrieve a single question thread', () => {
+    http.get.and.returnValue(of(questionThread));
+    service.retrieveQuestionThreadById(questionThread.id).subscribe(result => {
+      expect(result).toEqual(questionThread);
     });
   });
 
-  it('should create a question', () => {
-    http.post.and.returnValue(of(questionResponseSingle));
-    service.createQuestion(newQuestion).subscribe(result => {
+  it('should create a question thread', () => {
+    http.post.and.returnValue(of(questionThreadResponseSingle));
+    service.createQuestionThread(newQuestionThread).subscribe(result => {
       expect(result).toEqual(jasmine.objectContaining({
-        ...newQuestion,
-        id: question.id,
+        ...newQuestionThread,
+        id: questionThread.id,
       }));
     });
   });
 
-  it('should update a question', () => {
+  it('should update a question thread', () => {
     http.patch.and.returnValue(of({}));
-    service.updateQuestion(question.id, updatedQuestion).subscribe(result => {
-      expect(result).toEqual(updatedQuestion);
+    service.updateQuestion(questionThread.id, updatedQuestionThread).subscribe(result => {
+      expect(result).toEqual(updatedQuestionThread);
     });
   });
 
-  it('should delete a question', () => {
+  it('should delete a question thread', () => {
     http.delete.and.returnValue(of({}));
-    service.deleteQuestion(question.id).subscribe(result => {
+    service.deleteQuestion(questionThread.id).subscribe(result => {
       expect(result).toBeTrue();
     });
   });

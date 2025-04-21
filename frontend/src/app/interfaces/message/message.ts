@@ -5,7 +5,7 @@ export interface Message {
     id: string;
     creatorId: string;
     questionId: string;
-    createdAt: string; // ISO string date
+    createdAt: Date;
     content: string;
     isInstructor: boolean;
   }

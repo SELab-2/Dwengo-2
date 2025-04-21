@@ -13,7 +13,7 @@ describe('MessageService', () => {
     creatorId: 'user-id',
     questionId: 'question-id',
     content: 'Test message content',
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(),
     isInstructor: false
   };
 
@@ -68,7 +68,7 @@ describe('MessageService', () => {
       creatorId: 'user-id',
       questionId: 'question-id',
       content: 'Test message content',
-      createdAt: '2025-04-20T06:10:57.409Z',
+      createdAt: new Date(),
       isInstructor: false,
     };
   

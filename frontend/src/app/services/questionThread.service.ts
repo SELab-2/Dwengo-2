@@ -4,13 +4,13 @@ import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
 import { forkJoin, Observable, of, switchMap } from 'rxjs';
-import { Question, NewQuestion, QuestionUpdate } from '../interfaces/question';
-import { QuestionResponse, QuestionResponseSingle } from '../interfaces/question/questionResponse';
+import { QuestionThread, NewQuestionThread, QuestionThreadUpdate } from '../interfaces/questionThread';
+import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
 
 @Injectable({
   providedIn: 'root'
 })
-export class QuestionService {
+export class QuestionThreadService {
 
   private API_URL = environment.API_URL;
 
@@ -21,38 +21,38 @@ export class QuestionService {
   ) {}
 
   /**
-   * Retrieve a single question by ID
+   * Retrieve a single question thread by ID
    */
-  retrieveQuestionById(id: string): Observable<Question> {
+  retrieveQuestionThreadById(id: string): Observable<QuestionThread> {
     const headers = this.authService.retrieveAuthenticationHeaders();
 
-    return this.http.get<Question>(
+    return this.http.get<QuestionThread>(
       `${this.API_URL}/questions/${id}`,
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize `question`)
+        this.errorService.retrieveError($localize `question thread`)
       )
     );
   }
 
   /**
-   * Retrieve all questions associated with an assignment
+   * Retrieve all question threads associated with an assignment
    */
-  retrieveQuestionsByAssignment(idParent: string): Observable<Question[]> {
+  retrieveQuestionThreadsByAssignment(idParent: string): Observable<QuestionThread[]> {
     const headers = this.authService.retrieveAuthenticationHeaders();
 
-    return this.http.get<QuestionResponse>(
+    return this.http.get<QuestionThreadResponse>(
       `${this.API_URL}/assignments/${idParent}/questions`,
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize `questions`)
+        this.errorService.retrieveError($localize `question threads`)
       ),
       switchMap(response => 
         forkJoin(
-            response.questions.map(id => 
-                this.retrieveQuestionById(id)
+            response.questionThreads.map(id => 
+                this.retrieveQuestionThreadById(id)
             )
         )
       )
@@ -60,21 +60,21 @@ export class QuestionService {
   }
 
   /**
-   * Create a new question
+   * Create a new question thread
    */
-  createQuestion(question: NewQuestion): Observable<Question> {
+  createQuestionThread(questionThread: NewQuestionThread): Observable<QuestionThread> {
     const headers = this.authService.retrieveAuthenticationHeaders();
 
-    return this.http.post<QuestionResponseSingle>(
+    return this.http.post<QuestionThreadResponseSingle>(
       `${this.API_URL}/questions`,
-      question,
+      questionThread,
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.createError($localize `question`)
+        this.errorService.createError($localize `question thread`)
       ),
       switchMap(response => of({
-        ...question,
+        ...questionThread,
         id: response.id
       }))
     );
@@ -83,7 +83,7 @@ export class QuestionService {
   /**
    * Update an existing question
    */
-  updateQuestion(id: string, question: QuestionUpdate): Observable<QuestionUpdate> {
+  updateQuestion(id: string, question: QuestionThreadUpdate): Observable<QuestionThreadUpdate> {
     const headers = this.authService.retrieveAuthenticationHeaders();
 
     return this.http.patch<void>(

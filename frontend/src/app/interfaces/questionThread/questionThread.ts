@@ -8,7 +8,7 @@ export enum VisibilityType {
 /**
  * Interface for representing a question thread.
  */
-export interface Question {
+export interface QuestionThread {
     id: string,
     creatorId: string,
     assignmentId: string,
@@ -21,7 +21,7 @@ export interface Question {
 /**
  * Interface for representing a new question which has no id yet
  */
-export interface NewQuestion {
+export interface NewQuestionThread {
     creatorId: string,
     assignmentId: string,
     learningObjectId: string,
