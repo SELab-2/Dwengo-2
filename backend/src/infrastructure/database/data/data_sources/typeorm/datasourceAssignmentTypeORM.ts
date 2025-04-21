@@ -25,6 +25,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
             learning_path_id: newAssignment.learningPathId,
             start: newAssignment.startDate,
             deadline: newAssignment.deadline,
+            name: newAssignment.name,
             extra_instructions: newAssignment.extraInstructions,
         });
 
