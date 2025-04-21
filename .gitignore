@@ -6,4 +6,3 @@ settings.json
 *.env/
 *.log
 .env
-.gitignore

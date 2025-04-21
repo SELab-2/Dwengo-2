@@ -27,16 +27,3 @@ ENV CHROME_BIN=/usr/bin/chromium
 
 EXPOSE 4201
 CMD ["npm", "start"]
-
-# Database set-up
-FROM postgres:alpine AS database
-WORKDIR /workspace/database
-#Moved database to infrastructure in backend
-COPY ./backend/src/infrastructure/database/ ./
-
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=postgres
-ENV POSTGRES_DB=dwengo-database
-
-EXPOSE 5433
-CMD ["postgres"]

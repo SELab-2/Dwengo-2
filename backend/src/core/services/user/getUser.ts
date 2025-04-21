@@ -39,9 +39,9 @@ export class GetUser implements Service<GetUserInput> {
 
         return (
             await tryRepoEntityOperation(
-                input.id ? getById(input.id) : getByEmail(input.email as string),
+                input.id ? getById(input.id) : getByEmail(input.email?.toLowerCase() as string),
                 "User",
-                `${input.id ? input.id : input.email}`,
+                `${input.id ? input.id : input.email?.toLowerCase()}`,
                 true,
             )
         ).toObject();
