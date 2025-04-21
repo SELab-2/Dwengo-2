@@ -86,20 +86,19 @@ export class ExploreComponent implements OnInit {
         this.visualize = "CUSTOM";
         this.loading = true;
         const query = {
-            minAge: filters.minAge,
-            maxAge: filters.maxAge,
             language: filters.language,
             all: filters.searchTerm,
         } as LearningPathRequest
 
         const obs = this.learningPathService.retrieveLearningPathsByQuery(query)
         obs.subscribe((response) => {
-            this.data = response.learningPaths.map(path => {
-                return {
-                    ...path,
-                    category: "query",
-                };
-            });
+            this.data = response.learningPaths.filter(
+                path => (filters.minAge && filters.minAge <= path.minAge) && (filters.maxAge && path.maxAge >= filters.maxAge)).map(path => {
+                    return {
+                        ...path,
+                        category: "query",
+                    };
+                });
             this.loading = false;
         });
 
