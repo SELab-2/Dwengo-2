@@ -33,12 +33,8 @@ jobs:
         run: npm run lint
         working-directory: backend
 
-      - name: Test backend and add env variables
-        run: |
-          set -a
-          source ../.env
-          set +a
-          npm test
+      - name: Test backend
+        run: npm test
         working-directory: backend
         env:
           CI: "true"
