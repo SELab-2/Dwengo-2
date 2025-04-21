@@ -36,7 +36,7 @@ jobs:
       - name: Load env vars and test backend
         run: |
           set -a
-          source ~/home/selab2/Dwengo-2/.env
+          source /home/selab2/Dwengo-2/.env
           set +a
           npm test
         working-directory: backend
