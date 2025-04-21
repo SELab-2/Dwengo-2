@@ -186,28 +186,14 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
     /**
      * Adds a user with user id to a class.
      * @param classId The identifier of the class to join.
-     * @param userId The user id of the teacher or student that will join the class. (Not student or teacher id)
+     * @param studentOrTeacherId The user id of the teacher or student that will join the class. (not user id.)
      * @param userType Teacher or student enum.
      */
-    public async addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void> {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-
+    public async addUserToClass(classId: string, studentOrTeacherId: string, userType: JoinRequestType): Promise<void> {
         if (userType === JoinRequestType.TEACHER) {
-            const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
-                where: { teacher: { id: userId } },
-            });
-            if (!teacherModel) {
-                throw new EntityNotFoundError(`No user found with id ${userId} that has a teacher account`);
-            }
-            return await this.addTeacherToClass(classId, teacherModel.id);
+            return await this.addTeacherToClass(classId, studentOrTeacherId);
         } else {
-            const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
-                where: { student: { id: userId } },
-            });
-            if (!studentModel) {
-                throw new EntityNotFoundError(`No user found with id ${userId} that has a student account`);
-            }
-            return await this.addStudentToClass(classId, studentModel.id);
+            return await this.addStudentToClass(classId, studentOrTeacherId);   
         }
     }
 
