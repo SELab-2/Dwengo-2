@@ -92,7 +92,6 @@ export class ExploreComponent implements OnInit {
 
         const obs = this.learningPathService.retrieveLearningPathsByQuery(query);
         obs.subscribe((response) => {
-            console.log(response)
             this.data = response.learningPaths
                 .filter(path => (!filters.minAge || filters.minAge <= path.minAge) && (!filters.maxAge || path.maxAge <= filters.maxAge))
                 .map(path => {

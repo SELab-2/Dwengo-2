@@ -26,11 +26,11 @@ export class AuthenticationService {
     private router: Router,
     private http: HttpClient,
     private errorService: ErrorService
-  ) {}
+  ) { }
 
   register(user: UserRegistration): void {
     this.http.post<RegisterResponse>(this.registerUrl, user).pipe(
-      this.errorService.pipeHandler($localize `Registration failed`)
+      this.errorService.pipeHandler($localize`Registration failed`)
     ).subscribe((response) => {
       let url: string;
       if (user.userType === UserType.STUDENT) {
@@ -45,33 +45,33 @@ export class AuthenticationService {
       if (response) {
         this.router.navigateByUrl(url);
       } else {
-        window.alert($localize `Registration failed. Please try again.`);
+        window.alert($localize`Registration failed. Please try again.`);
       }
-      
+
     });
   }
-  
-  login(credentials: UserLoginCredentials, userType: UserType): void { 
+
+  login(credentials: UserLoginCredentials, userType: UserType): void {
     this.http.post<LoginResponse>(this.loginUrl, credentials).pipe(
-      this.errorService.pipeHandler($localize `Login failed`),
+      this.errorService.pipeHandler($localize`Login failed`),
     ).subscribe((response: LoginResponse | null) => {
       let url: string;
-        if (userType === UserType.STUDENT) {
-          url = 'student/dashboard'
-        } else if (userType === UserType.TEACHER) {
-          url = 'teacher/dashboard'
-        } else {
-          url = 'placeholder'
-        }
-        
-        if (response) {
-          this.storeToken(response.token);
-          this.storeUserId(response.id);
-          this.storeUserType(userType);
-          this.router.navigateByUrl(url);
-        }
+      if (userType === UserType.STUDENT) {
+        url = 'student/dashboard'
+      } else if (userType === UserType.TEACHER) {
+        url = 'teacher/dashboard'
+      } else {
+        url = 'placeholder'
+      }
 
-      });
+      if (response) {
+        this.storeToken(response.token);
+        this.storeUserId(response.id);
+        this.storeUserType(userType);
+        this.router.navigateByUrl(url);
+      }
+
+    });
   }
 
 
@@ -79,7 +79,7 @@ export class AuthenticationService {
     this.removeToken();
     this.removeUserId();
     this.removeUserType();
-    
+
     console.log('Logged out');
 
     this.router.navigateByUrl('/');
@@ -99,7 +99,7 @@ export class AuthenticationService {
       .append('Content-Type', 'application/json')
       .append('Authorization', `Bearer ${token}`);
 
-    return { headers: headers };   
+    return { headers: headers };
   }
 
   storeToken = (token: string): void => localStorage.setItem('AuthenticationToken', token);
