@@ -59,7 +59,7 @@ describe('ExploreComponent', () => {
       learningPaths: [{ learningPathId: '1', title: 'Path 1', minAge: 10, maxAge: 16, language: "en", description: "test", numNodes: 5 } as LearningPath]
     } as LearningPathResponse;
     pathServiceSpy.retrieveLearningPathsByQuery.and.returnValue(of(mockResponse));
-    component.setVisual('BASIC');
+    component.setBasic();
 
     expect(component.visualize).toBe('BASIC');
     expect(pathServiceSpy.retrieveLearningPathsByQuery).toHaveBeenCalledTimes(component.categories.length);
@@ -68,7 +68,7 @@ describe('ExploreComponent', () => {
   it('should handle error during data fetch', () => {
     spyOn(console, 'error');
     pathServiceSpy.retrieveLearningPathsByQuery.and.returnValue(throwError(() => new Error('Failed')));
-    component.setVisual('BASIC');
+    component.setBasic();
     expect(console.error).toHaveBeenCalled();
     expect(component.loading).toBeFalse();
   });
@@ -79,7 +79,7 @@ describe('ExploreComponent', () => {
     ];
 
     pathServiceSpy.retrieveLearningPathsByQuery.and.returnValue(of({ learningPaths: mockPaths }));
-    component.onFiltersApplied({ minAge: 10, maxAge: 18, language: 'en', searchTerm: '' });
+    component.setCustom({ minAge: 10, maxAge: 18, language: 'en', searchTerm: '' });
 
     expect(component.visualize).toBe('CUSTOM');
     expect(component.data.length).toBe(1);
