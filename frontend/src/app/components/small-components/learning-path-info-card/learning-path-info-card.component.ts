@@ -14,7 +14,7 @@ import { RouterLink } from "@angular/router";
 })
 export class LearningPathInfoCardComponent implements OnInit {
     @Input() title!: string;
-    @Input() description!: string;
+    @Input() description: string = "";
     @Input() steps!: number;
     @Input() minAge!: number;
     @Input() maxAge!: number;
@@ -22,6 +22,10 @@ export class LearningPathInfoCardComponent implements OnInit {
     @Input() isTeacher: boolean = false;
 
     ngOnInit(): void {
+        this.checkDescriptionLength()
+    }
+
+    checkDescriptionLength = (): void => {
         this.description = this.description.length > 100 ? this.description.substring(0, 100) + "..." : this.description;
     }
 }
