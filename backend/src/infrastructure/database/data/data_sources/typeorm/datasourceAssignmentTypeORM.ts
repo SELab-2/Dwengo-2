@@ -21,9 +21,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
 
         // Class exists and teacher exist: insert assignment into the database
         let assignmentModel = AssignmentTypeORM.createTypeORM(newAssignment, classModel);
-        assignmentModel = datasource.getRepository(AssignmentTypeORM).create(
-            assignmentModel
-        );
+        assignmentModel = datasource.getRepository(AssignmentTypeORM).create(assignmentModel);
 
         await datasource.getRepository(AssignmentTypeORM).save(assignmentModel);
 
