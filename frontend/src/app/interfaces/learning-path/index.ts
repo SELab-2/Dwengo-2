@@ -1,2 +1,2 @@
-export * from "./learningPath";
-export * from "./learningPathResponse";
+export * from './learningPath';
+export * from './learningPathResponse';
