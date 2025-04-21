@@ -15,7 +15,7 @@ describe('LearningPathInfoCardComponent', () => {
                 {
                     provide: ActivatedRoute,
                     useValue: {
-                        paramMap: of({ get: (key: string) => 'explore' }),
+                        paramMap: of({ get: () => 'explore' }),
                         snapshot: {
                             paramMap: {
                                 get: () => 'some-id'

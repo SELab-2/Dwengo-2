@@ -3,7 +3,6 @@ import { LearningPathListComponent } from './learning-path-list.component';
 import { LearningPathInfoCardComponent } from '../learning-path-info-card/learning-path-info-card.component';
 import { By } from '@angular/platform-browser';
 import { MatCardModule } from '@angular/material/card';
-import { Component } from '@angular/core';
 import { LearningPath } from '../../../interfaces/learning-path/learningPath';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';

@@ -2,12 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ExplorePageComponent } from './explore-page.component';
 import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
 import { ExploreComponent } from '../../components/explore/explore.component';
-import { HttpClientModule } from '@angular/common/http';  // Import HttpClientModule
-import { ActivatedRoute } from '@angular/router';  // Import ActivatedRoute
-import { of } from 'rxjs';  // To mock ActivatedRoute
+import { HttpClientModule } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 describe('ExplorePageComponent', () => {
-    let component: ExplorePageComponent;
     let fixture: ComponentFixture<ExplorePageComponent>;
 
     beforeEach(async () => {
@@ -24,7 +22,6 @@ describe('ExplorePageComponent', () => {
 
     beforeEach(() => {
         fixture = TestBed.createComponent(ExplorePageComponent);
-        component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
