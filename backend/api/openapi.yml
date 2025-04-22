@@ -1772,12 +1772,12 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  '/subbmission/:idParent':
+  '/users/:idParent/submissions':
     get:
       tags:
         - submissions
-      summary: Get all assignment submissions
-      description: Retrieve a list of all submissions associated with a specific assignment.
+      summary: Get all submission of a user, can be filtered with assignment and step. 
+      description: Retrieve a list of all submissions associated with a specific user.
       operationId: getAssignmentSubmissions
       parameters:
         - in: path
@@ -1796,6 +1796,9 @@ paths:
             format: uuid
         - in: query
           name: learningObjectId
+          description: |
+            Optional param to get the user's submission for a certain step in an assignment.
+            assignmentId is required otherwise this will not work.
           schema:
             type: string
             format: uuid
