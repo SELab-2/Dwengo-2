@@ -16,7 +16,7 @@ export interface LearningPath {
 }
 
 /**
- * How to get EVERY learning path: simply don't fill in anything.
+ * How to get EVERY learning path: set 'all' as an empty string, and leave the others untouched.
  * How to get one specific learning path: specify hruid and language.
  */
 export interface LearningPathRequest {

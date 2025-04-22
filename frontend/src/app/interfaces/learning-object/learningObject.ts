@@ -1,3 +1,4 @@
+// This is the learning object as it is fetched from the database
 export interface LearningObject {
     metadata: {
         hruid: string,
@@ -9,9 +10,11 @@ export interface LearningObject {
         description: string,
         contentType: string,
     };
+    // This is the object itself. The Dwengo server wraps it in for us.
     htmlContent: string;
 }
 
+// This is a learning object within a learning path (under the nodes property). It only has Identifier fields.
 export interface ShallowLearningObject {
     hruid: string,
     id: string,
@@ -26,6 +29,7 @@ export interface ShallowLearningObject {
     }
 }
 
+// This enum is used in LearninObjectRequests.
 export enum HtmlType {
     WRAPPED = "wrapped",
     RAW = "raw"
