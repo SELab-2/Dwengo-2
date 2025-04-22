@@ -127,6 +127,7 @@ export async function seedDatabase(): Promise<void> {
         // Deadline is sometime 1 to 14 days after startDate
         const additionalDays = faker.number.int({ min: 1, max: 14 });
         const deadline = new Date(startDate.getTime() + additionalDays * 24 * 60 * 60 * 1000);
+        const name = faker.lorem.sentence(3); // Random name for the assignment
         const extraInstructions = faker.lorem.sentence();
 
         const assignment = new Assignment(
@@ -134,6 +135,7 @@ export async function seedDatabase(): Promise<void> {
           learningPathId,
           startDate,
           deadline,
+          name,
           extraInstructions
         );
 
