@@ -1,6 +1,6 @@
-import { LearningObject, LearningObjectContentType } from "../../../../src/core/entities/learningObject";
-import { ILearningObjectRepository } from "../../../../src/core/repositories/learningObjectRepositoryInterface";
-import { GetAllLearningObjects } from "../../../../src/core/services/learningObject";
+import { LearningObject, LearningObjectContentType } from "../../../../../src/core/entities/learningObject";
+import { ILearningObjectRepository } from "../../../../../src/core/repositories/learningObjectRepositoryInterface";
+import { GetAllLearningObjects } from "../../../../../src/core/services/learningObject";
 
 describe("GetAllLearningObjects", () => {
     let mockRepo: jest.Mocked<ILearningObjectRepository>;

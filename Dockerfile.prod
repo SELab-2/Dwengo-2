@@ -11,16 +11,3 @@ RUN npm run build
 EXPOSE 3000
 
 CMD ["npm", "run", "start"]
-
-# Database set-up
-FROM postgres:alpine AS database
-WORKDIR /workspace/database
-#Moved database to infrastructure in backend
-COPY ./backend/src/infrastructure/database/ ./
-
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=postgres
-ENV POSTGRES_DB=dwengo-database
-
-EXPOSE 5432
-CMD ["postgres"]

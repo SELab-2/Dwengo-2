@@ -712,6 +712,7 @@ paths:
             This parameter takes a string as a value and searches all learning paths
             for which the value occurs in the title, description, or hruid.
             (This can have an empty string as a parameter which matches all descriptions and titles)
+            If multiple words want to be searched these can be added with a '-' e.g. "robot-python-arduino".
           schema:
             type: string
         - name: language
@@ -734,6 +735,11 @@ paths:
           description: Search for descriptions containing a specific search term
           schema:
             type: string
+        - in: query
+          name: includeNodes
+          schema:
+            type: boolean
+          description: Whether or not to include the nodes of the learningPath
       responses:
         '200':
           $ref: '#/components/responses/PathSearchOK'
@@ -760,6 +766,11 @@ paths:
           schema:
             type: string
           description: The language of the learningPath
+        - in: query
+          name: includeNodes
+          schema:
+            type: boolean
+          description: Whether or not to include the nodes of the learningPath
       responses:
         '200':
           $ref: '#/components/responses/LearningPathOK'
@@ -2446,6 +2457,7 @@ components:
         - learningPathId
         - startDate
         - deadline
+        - name
         - extraInstructions
       properties:
         id:
@@ -2466,6 +2478,10 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
+        name:
+          type: string
+          minLength: 0
+          description: Name of the assignment.
         extraInstructions:
           type: string
           minLength: 0
@@ -2477,6 +2493,7 @@ components:
         - learningPathId
         - startDate
         - deadline
+        - name
         - extraInstructions
       additionalProperties: false
       properties:
@@ -2495,6 +2512,10 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
+        name:
+          type: string
+          minLength: 0
+          description: Name of the assignment.
         extraInstructions:
           type: string
           minLength: 0
@@ -2520,6 +2541,10 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
+        name:
+          type: string
+          minLength: 0
+          description: Name of the assignment.
         extraInstructions:
           type: string
           minLength: 0

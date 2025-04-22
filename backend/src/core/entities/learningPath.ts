@@ -49,7 +49,7 @@ export class LearningPath {
      *
      * @returns the learningPath object
      */
-    public toObject(): object {
+    public toObject(includeNodes: boolean): object {
         return {
             id: this._id,
             language: this._language,
@@ -62,7 +62,7 @@ export class LearningPath {
             targetAges: this._targetAges,
             minAge: this._minAge,
             maxAge: this._maxAge,
-            nodes: this._nodes.map(node => node.toObject()), // Zet elk node-object om
+            ...(includeNodes && { nodes: this._nodes.map(node => node.toObject()) }), // Zet elk node-object om
         };
     }
 
@@ -70,9 +70,10 @@ export class LearningPath {
      * Static function that maps a dwengo object for a learningPath to our entity type.
      *
      * @param object interface that defines the fields on the object data
+     * @param includeNodes boolean that indicates if the nodes should be included in the object
      * @returns a LearningPath object
      */
-    public static fromObject(object: LearningPathData): LearningPath {
+    public static fromObject(object: LearningPathData, includeNodes: boolean): LearningPath {
         return new LearningPath(
             object._id,
             object.language,
@@ -85,7 +86,7 @@ export class LearningPath {
             object.target_ages,
             object.min_age,
             object.max_age,
-            object.nodes.map((node: PathLearningObjectData) => PathLearningObject.fromObject(node)),
+            includeNodes ? object.nodes.map((node: PathLearningObjectData) => PathLearningObject.fromObject(node)) : [],
         );
     }
 }
