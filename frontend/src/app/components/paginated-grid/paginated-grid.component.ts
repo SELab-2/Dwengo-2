@@ -4,6 +4,9 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { getCustomPaginatorIntl } from './custom-paginator-intl';
 
+const standardPageSizeOptions = [6, 8, 10, 12, 15, 20]; // the standard available page sizes the user can select from
+const standardPageSize = 12; // the default page size when the component is loaded
+
 @Component({
   selector: 'app-paginated-grid',
   standalone: true,
@@ -19,10 +22,10 @@ import { getCustomPaginatorIntl } from './custom-paginator-intl';
 })
 export class PaginatedGridComponent<T extends { id: string | number }> implements OnChanges {
   @Input() items: T[] = [];
-  @Input() pageSizeOptions: number[] = [6, 8, 10, 12, 15, 20];
+  @Input() pageSizeOptions: number[] = standardPageSizeOptions; // Page size options for the paginator
   @Input() showPageSizeOptions: boolean = true; // Show page size options in the paginator
   @Input() showPagination: boolean = true; // Show pagination controls
-  @Input() pageSize: number = 12;
+  @Input() pageSize: number = standardPageSize;
   @Input() itemTemplate!: TemplateRef<unknown>; // Template for projecting item cards
 
   pagedItems: T[] = [];

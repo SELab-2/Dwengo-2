@@ -48,31 +48,28 @@ export class StudentDashboardComponent implements OnInit {
   ngOnInit() {
     const storedPageSize = localStorage.getItem('dashboardPageSize');
     const storedPageIndex = localStorage.getItem('dashboardPageIndex');
-    if (storedPageSize) this.pageSize = +storedPageSize;
-    if (storedPageIndex) this.currentPageIndex = +storedPageIndex;
+    if (storedPageSize) this.pageSize = parseInt(storedPageSize);
+    if (storedPageIndex) this.currentPageIndex = parseInt(storedPageIndex);
 
-    this.classesService
-      .classesOfUser()
-      .subscribe({
-        next: (classes: Class[]) => {
-          this._classes = classes;
-        }
-      });
-    this.assignmentService
-      .retrieveAssignments()
-      .subscribe({
-        next: (assignments: Assignment[]) => {
-          this._assignments = assignments;
-          this._assignments.forEach((assignment) => {
-            const classId = assignment.classId;
+    this.classesService.classesOfUser().subscribe({
+      next: (classes: Class[]) => {
+        this._classes = classes;
+      }
+    });
+
+    this.assignmentService.retrieveAssignments().subscribe({
+      next: (assignments: Assignment[]) => {
+        this._assignments = assignments;
+        this._assignments.forEach((assignment) => {
+          const classId = assignment.classId;
           const className = this.classesService.classWithId(classId);
           className.subscribe(cls => {
             assignment.className = cls?.name || 'Unknown Class';
           });
-          });
-          this.updatePagedAssignments();
-        }
-      });
+        });
+        this.updatePagedAssignments();
+      }
+    });
   }
 
   public get assignments(): Assignment[] {
