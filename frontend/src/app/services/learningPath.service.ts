@@ -4,7 +4,7 @@ import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { LearningPathRequest, LearningPathResponse } from '../interfaces/learning-path';
+import { LearningPathRequest, LearningPathResponse, OneLearningPathResponse, SpecificLearningPathRequest } from '../interfaces/learning-path';
 
 @Injectable({
     providedIn: 'root'
@@ -41,5 +41,22 @@ export class LearningPathService {
                 this.errorService.retrieveError($localize`learning paths`)
             ),
         );
+    }
+
+    retrieveOneLearningPath(query: SpecificLearningPathRequest): Observable<OneLearningPathResponse> {
+        const headers = this.authenticationService.retrieveAuthenticationHeaders();
+
+        let params = new HttpParams();
+        if (query.language) params.set('language', query.language);
+        if (query.includeNodes) params.set('includeNodes', query.includeNodes);
+
+        return this.http.get<OneLearningPathResponse>(
+            `${this.API_URL}/learningPath/${query.hruid}`,
+            { ...headers, params }
+        ).pipe(
+            this.errorService.pipeHandler(
+                this.errorService.retrieveError($localize`a learning path`)
+            )
+        )
     }
 }
