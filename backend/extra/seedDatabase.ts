@@ -5,8 +5,10 @@
  * including users, students, teachers, assignments, threads, and messages.
  *
  * ➤ Usage:
- * You can manually run this as a script using the `runSeedDb.ts` file.
- * This function can be useful for development and testing purposes, like E2E tests.
+ * You can run this file as a script to seed your database for demo purposes or manual testing.
+ * When ran directly, it will first clear the database before seeding.
+ * The exported function can also be useful for development and testing purposes, like E2E tests.
+ * The exported function does not clear the database, but this can be done with the `clearDatabase` function located in the same folder.
  *
  * To run it in the terminal:
  *   $ docker-compose exec backend npm run db:seed
@@ -15,6 +17,7 @@
  */
 
 
+import { clearDatabase } from './clearDatabase';
 import bcrypt from "bcryptjs";
 import { faker } from '@faker-js/faker';
 import { Student } from '../src/core/entities/student'
@@ -71,7 +74,7 @@ export async function seedDatabase(): Promise<void> {
 
     // ── 2. Create Classes Per Teacher ──
     for (const teacherId of teacherIds) {
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 3; i++) {
         const className = `${faker.word.adjective()} ${faker.word.noun()} Class`;
         const description = faker.lorem.sentence();
         const targetAudience = `${faker.number.int({ min: 5, max: 12 })}th grade`;
@@ -100,6 +103,7 @@ export async function seedDatabase(): Promise<void> {
 
       const savedStudent = (await studentRep.create(studentInput)) as { id: string };
       studentIds.push(savedStudent.id);
+      // console.log(`Created student: ${firstName} ${lastName} email: ${email} with ID: ${savedStudent.id}`);
     }
 
     // ── 4. Add Students to Classes ──
@@ -107,8 +111,10 @@ export async function seedDatabase(): Promise<void> {
     for (const classId of classIds) {
       // faker.helpers.arrayElements picks a random subset from studentIds
       const selectedStudents = faker.helpers.arrayElements(studentIds, 7);
+      // console.log(`Adding students to class ID ${classId}:`, selectedStudents);
       for (const studentId of selectedStudents) {
         await classRep.addUserToClass(classId, studentId, JoinRequestType.STUDENT);
+        // console.log(`Added student ID ${studentId} to class ID ${classId}`);
       }
     }
 
@@ -247,4 +253,21 @@ export async function seedDatabase(): Promise<void> {
     console.error('Error during DB seeding:', err);
     throw err;
   }
+}
+
+// Run configuration (only executed when this file is run directly)
+if (require.main === module) {
+  clearDatabase().then(() => {
+    console.log('Database cleared successfully, now seeding...');
+    seedDatabase().then(() => {
+      console.log('Database seeded successfully');
+      process.exit(0);
+    }).catch((err) => {
+      console.error('Failed to seed database:', err);
+      process.exit(1);
+    });
+  }).catch((err) => {
+    console.error('Failed to clear database:', err);
+    process.exit(1);
+  });
 }
