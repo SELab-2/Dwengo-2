@@ -1,4 +1,4 @@
-import { DatabaseEntryNotFoundError, EntityNotFoundError } from "../../config/error";
+import { EntityNotFoundError } from "../../config/error";
 import { Class } from "../../core/entities/class";
 import { JoinRequest, JoinRequestType } from "../../core/entities/joinRequest";
 import { IJoinRequestRepository } from "../../core/repositories/joinRequestRepositoryInterface";
@@ -16,15 +16,7 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
     }
 
     public async create(joinRequest: JoinRequest): Promise<JoinRequest> {
-        try {
-            return await this.datasourceJoinRequest.createJoinRequest(joinRequest);
-        } catch (error: unknown) {
-            if (error instanceof DatabaseEntryNotFoundError) {
-                throw new EntityNotFoundError(error.message);
-            } else {
-                throw error;
-            }
-        }
+        return await this.datasourceJoinRequest.createJoinRequest(joinRequest);
     }
 
     public async createUsingCode(code: string, userId: string, type: JoinRequestType): Promise<JoinRequest> {

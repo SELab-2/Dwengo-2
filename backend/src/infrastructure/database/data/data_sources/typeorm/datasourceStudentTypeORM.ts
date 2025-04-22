@@ -1,5 +1,5 @@
 import { DatasourceTypeORM } from "./datasourceTypeORM";
-import { DatabaseEntryNotFoundError, EntityNotFoundError } from "../../../../../config/error";
+import { EntityNotFoundError } from "../../../../../config/error";
 import { Student } from "../../../../../core/entities/student";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
@@ -165,7 +165,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             });
 
         if (!studentOfClass || studentOfClass.class.id !== classId) {
-            throw new DatabaseEntryNotFoundError("Student not part of class");
+            throw new EntityNotFoundError("Student not part of class");
         }
 
         await datasource.getRepository(StudentOfClassTypeORM).delete(studentOfClass);
@@ -190,7 +190,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             });
 
         if (!studentOfGroup || studentOfGroup.group.id !== groupId) {
-            throw new DatabaseEntryNotFoundError("Student not part of group");
+            throw new EntityNotFoundError("Student not part of group");
         }
 
         await datasource.getRepository(StudentOfGroupTypeORM).delete(studentOfGroup);
