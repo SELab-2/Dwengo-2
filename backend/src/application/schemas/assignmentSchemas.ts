@@ -15,6 +15,7 @@ export const createAssignmentSchema = z.object({
         .string()
         .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for deadline" })
         .transform((val: string) => new Date(val)),
+    name: z.string(),
     extraInstructions: z.string(),
 });
 
@@ -44,5 +45,6 @@ export const updateAssignmentSchema = z.object({
         .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for deadline" })
         .transform((val: string) => new Date(val))
         .optional(),
+    name: z.string().optional(),
     extraInstructions: z.string().optional(),
 });

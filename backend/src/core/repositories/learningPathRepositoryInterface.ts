@@ -19,7 +19,7 @@ export abstract class ILearningPathRepository {
      *
      * @returns a promise that resolves to a learningPath.
      */
-    public abstract getLearningPath(hruid: string, language: string): Promise<LearningPath>;
+    public abstract getLearningPath(hruid: string, language: string, includeNodes: boolean): Promise<LearningPath>;
 
     /**
      * Function to get all available learningPath metadata with optional params
@@ -27,5 +27,5 @@ export abstract class ILearningPathRepository {
      * @param params string including the params for the query
      * @returns a promise that resolves to a list of all LearningPaths
      */
-    public abstract getLearningPaths(params: string): Promise<LearningPath[]>;
+    public abstract getLearningPaths(params: string, includeNodes: boolean): Promise<LearningPath[]>;
 }

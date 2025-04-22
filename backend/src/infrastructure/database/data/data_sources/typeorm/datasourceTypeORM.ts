@@ -11,10 +11,10 @@ export class DatasourceTypeORM implements IDatasource {
     private static datasourceConnectionSettings: DatasourceTypeORMConnectionSettings =
         DatasourceTypeORMConnectionSettingsFactory.createDatasourceTypeORMConnectionSettings(
             "postgres",
-            5432, // 5433 for development docker, 5432 for production docker (on server)
-            "postgres",
-            "postgres",
-            "dwengo-database",
+            parseInt(process.env.DB_PORT || "5432", 10),
+            process.env.POSTGRES_USER || "postgres",
+            process.env.POSTGRES_PASSWORD || "postgres",
+            process.env.POSTGRES_DB || "postgres",
             true,
             false,
             host,
