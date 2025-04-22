@@ -1,4 +1,3 @@
-import { EntityNotFoundError } from "../../config/error";
 import { Class } from "../../core/entities/class";
 import { JoinRequest, JoinRequestType } from "../../core/entities/joinRequest";
 import { IJoinRequestRepository } from "../../core/repositories/joinRequestRepositoryInterface";

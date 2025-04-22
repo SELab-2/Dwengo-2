@@ -1,4 +1,3 @@
-import { EntityNotFoundError } from "../../config/error";
 import { Group } from "../../core/entities/group";
 import { IGroupRepository } from "../../core/repositories/groupRepositoryInterface";
 import { DatasourceGroupTypeORM } from "../database/data/data_sources/typeorm/datasourceGroupTypeORM";

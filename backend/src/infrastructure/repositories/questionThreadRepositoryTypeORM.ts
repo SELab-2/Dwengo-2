@@ -1,4 +1,3 @@
-import { EntityNotFoundError } from "../../config/error";
 import { QuestionThread } from "../../core/entities/questionThread";
 import { IQuestionThreadRepository } from "../../core/repositories/questionThreadRepositoryInterface";
 import { DatasourceThreadTypeORM } from "../database/data/data_sources/typeorm/datasourceThreadTypeORM";

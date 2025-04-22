@@ -1,4 +1,3 @@
-import { EntityNotFoundError } from "../../config/error";
 import { Student } from "../../core/entities/student";
 import { IStudentRepository } from "../../core/repositories/studentRepositoryInterface";
 import { DatasourceStudentTypeORM } from "../database/data/data_sources/typeorm/datasourceStudentTypeORM";

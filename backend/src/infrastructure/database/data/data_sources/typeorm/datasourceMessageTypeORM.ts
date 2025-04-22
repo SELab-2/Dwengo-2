@@ -64,7 +64,7 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
         });
 
         if (!messageModel) {
-            throw new EntityNotFoundError(`Message with id ${id} not found`)
+            throw new EntityNotFoundError(`Message with id ${id} not found`);
         }
 
         const userModel: UserTypeORM | null = await datasource.getRepository(UserTypeORM).findOne({
@@ -88,9 +88,7 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
         } else if (teacherModel?.id) {
             messageModel.sent_by.id = teacherModel.id;
         } else {
-            throw new EntityNotFoundError(
-                `No valid student or teacher found for userModel with id: ${userModel?.id}`,
-            );
+            throw new EntityNotFoundError(`No valid student or teacher found for userModel with id: ${userModel?.id}`);
         }
 
         const message: Message = messageModel.toEntity();

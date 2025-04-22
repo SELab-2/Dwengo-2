@@ -1,4 +1,3 @@
-import { EntityNotFoundError } from "../../config/error";
 import { Assignment } from "../../core/entities/assignment";
 import { IAssignmentRepository } from "../../core/repositories/assignmentRepositoryInterface";
 import { DatasourceAssignmentTypeORM } from "../database/data/data_sources/typeorm/datasourceAssignmentTypeORM";

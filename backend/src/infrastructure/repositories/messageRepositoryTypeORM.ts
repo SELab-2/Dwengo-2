@@ -1,4 +1,3 @@
-import { EntityNotFoundError } from "../../config/error";
 import { Message } from "../../core/entities/message";
 import { IMessageRepository } from "../../core/repositories/messageRepositoryInterface";
 import { DatasourceMessageTypeORM } from "../database/data/data_sources/typeorm/datasourceMessageTypeORM";

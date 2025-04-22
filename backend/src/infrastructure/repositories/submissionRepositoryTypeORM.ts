@@ -1,4 +1,3 @@
-import { EntityNotFoundError } from "../../config/error";
 import { Submission } from "../../core/entities/submission";
 import { ISubmissionRepository } from "../../core/repositories/submissionRepositoryInterface";
 import { DatasourceSubmissionTypeORM } from "../database/data/data_sources/typeorm/datasourceSubmissionTypeORM";
