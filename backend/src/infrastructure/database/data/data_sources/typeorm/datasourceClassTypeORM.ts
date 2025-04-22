@@ -54,37 +54,39 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
         return _class!;
     }
 
-    public async getClassById(id: string): Promise<Class | null> {
+    public async getClassById(id: string): Promise<Class> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
         const classModel: ClassTypeORM | null = await datasource
             .getRepository(ClassTypeORM)
             .findOne({ where: { id: id } });
 
-        if (classModel !== null) {
-            const classTeacherModel: TeacherOfClassTypeORM | null = await datasource
-                .getRepository(TeacherOfClassTypeORM)
-                .findOne({ where: { class: { id: id } }, relations: ["teacher"] });
-
-            return classModel.toClassEntity(classTeacherModel!.teacher.id);
+        if (!classModel) {
+            throw new EntityNotFoundError(`Class with id ${id} not found`);
         }
-        return null; // No result
+
+        const classTeacherModel: TeacherOfClassTypeORM | null = await datasource
+            .getRepository(TeacherOfClassTypeORM)
+            .findOne({ where: { class: { id: id } }, relations: ["teacher"] });
+
+        return classModel.toClassEntity(classTeacherModel!.teacher.id);
     }
 
-    public async getClassByName(name: string): Promise<Class | null> {
+    public async getClassByName(name: string): Promise<Class> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const classModel: ClassTypeORM | null = await datasource
             .getRepository(ClassTypeORM)
             .findOne({ where: { name: name } });
 
-        if (classModel !== null) {
-            const classTeacherModel: TeacherOfClassTypeORM | null = await datasource
-                .getRepository(TeacherOfClassTypeORM)
-                .findOne({ where: { class: { id: classModel.id } } });
-
-            return classModel.toClassEntity(classTeacherModel!.teacher.id);
+        if (!classModel) {
+            throw new EntityNotFoundError(`Class with name ${name} not found`);
         }
-        return null; // No result
+
+        const classTeacherModel: TeacherOfClassTypeORM | null = await datasource
+            .getRepository(TeacherOfClassTypeORM)
+            .findOne({ where: { class: { id: classModel.id } } });
+
+        return classModel.toClassEntity(classTeacherModel!.teacher.id);
     }
 
     /**

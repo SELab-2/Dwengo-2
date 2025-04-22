@@ -16,13 +16,7 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
     }
 
     public async getById(id: string): Promise<Teacher> {
-        const teacher: Teacher | null = await this.datasourceTeacher.getTeacherById(id);
-
-        if (teacher) {
-            return teacher;
-        } else {
-            throw new EntityNotFoundError(`Teacher with id: ${id} not found`);
-        }
+        return await this.datasourceTeacher.getTeacherById(id);
     }
 
     async checkByEmail(email: string): Promise<boolean> {
@@ -35,33 +29,15 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
     }
 
     public async getByEmail(email: string): Promise<Teacher> {
-        const teacher: Teacher | null = await this.datasourceTeacher.getTeacherByEmail(email);
-
-        if (teacher) {
-            return teacher;
-        } else {
-            throw new EntityNotFoundError(`Teacher with email: ${email} not found`);
-        }
+        return await this.datasourceTeacher.getTeacherByEmail(email);
     }
 
     public async getByFirstName(first_name: string): Promise<Teacher> {
-        const teacher: Teacher | null = await this.datasourceTeacher.getTeacherByFirstName(first_name);
-
-        if (teacher) {
-            return teacher;
-        } else {
-            throw new EntityNotFoundError(`Teacher with first name: ${first_name} not found`);
-        }
+        return await this.datasourceTeacher.getTeacherByFirstName(first_name);
     }
 
     public async getByLastName(last_name: string): Promise<Teacher> {
-        const teacher: Teacher | null = await this.datasourceTeacher.getTeacherByLastName(last_name);
-
-        if (teacher) {
-            return teacher;
-        } else {
-            throw new EntityNotFoundError(`Teacher with last name: ${last_name} not found`);
-        }
+        return await this.datasourceTeacher.getTeacherByLastName(last_name);
     }
 
     public async getAll(): Promise<Teacher[]> {

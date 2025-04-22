@@ -16,43 +16,19 @@ export class StudentRepositoryTypeORM extends IStudentRepository {
     }
 
     public async getById(id: string): Promise<Student> {
-        const student: Student | null = await this.datasourceStudent.getStudentById(id);
-
-        if (student) {
-            return student;
-        } else {
-            throw new EntityNotFoundError(`Student with id: ${id} not found`);
-        }
+        return await this.datasourceStudent.getStudentById(id);
     }
 
     public async getByEmail(email: string): Promise<Student> {
-        const student: Student | null = await this.datasourceStudent.getStudentByEmail(email);
-
-        if (student) {
-            return student;
-        } else {
-            throw new EntityNotFoundError(`Student with email: ${email} not found`);
-        }
+        return await this.datasourceStudent.getStudentByEmail(email);
     }
 
     public async getByFirstName(first_name: string): Promise<Student> {
-        const student: Student | null = await this.datasourceStudent.getStudentByFirstName(first_name);
-
-        if (student) {
-            return student;
-        } else {
-            throw new EntityNotFoundError(`Student with first name: ${first_name} not found`);
-        }
+        return await this.datasourceStudent.getStudentByFirstName(first_name);
     }
 
     public async getByLastName(last_name: string): Promise<Student> {
-        const student: Student | null = await this.datasourceStudent.getStudentByLastName(last_name);
-
-        if (student) {
-            return student;
-        } else {
-            throw new EntityNotFoundError(`Student with last name: ${last_name} not found`);
-        }
+        return await this.datasourceStudent.getStudentByLastName(last_name);
     }
 
     public async getAll(): Promise<Student[]> {

@@ -28,34 +28,15 @@ export class JoinRequestRepositoryTypeORM extends IJoinRequestRepository {
     }
 
     public async getById(id: string): Promise<JoinRequest> {
-        const joinRequest: JoinRequest | null = await this.datasourceJoinRequest.getJoinRequestById(id);
-
-        if (joinRequest) {
-            return joinRequest;
-        } else {
-            throw new EntityNotFoundError(`Join request with id ${id} not found`);
-        }
+        return await this.datasourceJoinRequest.getJoinRequestById(id);
     }
 
     public async getByRequesterId(requesterId: string): Promise<JoinRequest[]> {
-        const joinRequests: JoinRequest[] | null =
-            await this.datasourceJoinRequest.getJoinRequestByRequesterId(requesterId);
-
-        if (joinRequests) {
-            return joinRequests;
-        } else {
-            throw new EntityNotFoundError(`Join requests for student or teacher with id ${requesterId} not found`);
-        }
+        return await this.datasourceJoinRequest.getJoinRequestByRequesterId(requesterId);
     }
 
     public async getByClassId(classId: string): Promise<JoinRequest[]> {
-        const joinRequests: JoinRequest[] | null = await this.datasourceJoinRequest.getJoinRequestByClassId(classId);
-
-        if (joinRequests) {
-            return joinRequests;
-        } else {
-            throw new EntityNotFoundError(`Join requests for class with id ${classId} not found`);
-        }
+        return await this.datasourceJoinRequest.getJoinRequestByClassId(classId);
     }
 
     public async delete(id: string): Promise<void> {

@@ -21,23 +21,11 @@ export class ClassRepositoryTypeORM extends IClassRepository {
     }
 
     public async getById(id: string): Promise<Class> {
-        const _class: Class | null = await this.datasourceClass.getClassById(id);
-
-        if (_class) {
-            return _class;
-        } else {
-            throw new EntityNotFoundError(`Class with id: ${id} not found`);
-        }
+        return await this.datasourceClass.getClassById(id);
     }
 
     public async getByName(name: string): Promise<Class> {
-        const _class: Class | null = await this.datasourceClass.getClassByName(name);
-
-        if (_class) {
-            return _class;
-        } else {
-            throw new EntityNotFoundError(`Class with name: ${name} not found`);
-        }
+        return await this.datasourceClass.getClassByName(name);
     }
 
     public async getAll(): Promise<Class[]> {

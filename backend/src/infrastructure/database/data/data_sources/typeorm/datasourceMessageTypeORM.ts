@@ -55,7 +55,7 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
         return savedMessageModel.toEntity();
     }
 
-    public async getMessageById(id: string): Promise<Message | null> {
+    public async getMessageById(id: string): Promise<Message> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const messageModel: MessageTypeORM | null = await datasource.getRepository(MessageTypeORM).findOne({
@@ -63,37 +63,38 @@ export class DatasourceMessageTypeORM extends DatasourceTypeORM {
             relations: ["sent_by", "thread"],
         });
 
-        if (messageModel !== null) {
-            const userModel: UserTypeORM | null = await datasource.getRepository(UserTypeORM).findOne({
-                where: { id: messageModel.sent_by.id },
-            });
-            if (userModel) {
-                const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
-                    where: { student: userModel },
-                });
-
-                const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
-                    where: { teacher: userModel },
-                });
-
-                if (studentModel?.id) {
-                    messageModel.sent_by.id = studentModel.id;
-                } else if (teacherModel?.id) {
-                    messageModel.sent_by.id = teacherModel.id;
-                } else {
-                    throw new EntityNotFoundError(
-                        `No valid student or teacher found for userModel with id: ${userModel?.id}`,
-                    );
-                }
-            } else {
-                return null;
-            }
-
-            const message: Message = messageModel.toEntity();
-            return message;
+        if (!messageModel) {
+            throw new EntityNotFoundError(`Message with id ${id} not found`)
         }
 
-        return null; // No result
+        const userModel: UserTypeORM | null = await datasource.getRepository(UserTypeORM).findOne({
+            where: { id: messageModel.sent_by.id },
+        });
+
+        if (!userModel) {
+            throw new EntityNotFoundError(`Sender of message with id ${id} not found`);
+        }
+
+        const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
+            where: { student: userModel },
+        });
+
+        const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
+            where: { teacher: userModel },
+        });
+
+        if (studentModel?.id) {
+            messageModel.sent_by.id = studentModel.id;
+        } else if (teacherModel?.id) {
+            messageModel.sent_by.id = teacherModel.id;
+        } else {
+            throw new EntityNotFoundError(
+                `No valid student or teacher found for userModel with id: ${userModel?.id}`,
+            );
+        }
+
+        const message: Message = messageModel.toEntity();
+        return message;
     }
 
     public async updateMessage(message: Message): Promise<Message> {

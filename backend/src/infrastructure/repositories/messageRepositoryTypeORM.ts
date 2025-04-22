@@ -16,13 +16,7 @@ export class MessageRepositoryTypeORM extends IMessageRepository {
     }
 
     public async getById(id: string): Promise<Message> {
-        const message: Message | null = await this.datasourceMessage.getMessageById(id);
-
-        if (message) {
-            return message;
-        } else {
-            throw new EntityNotFoundError(`Message with id: ${id} not found`);
-        }
+        return this.datasourceMessage.getMessageById(id);
     }
 
     public async update(message: Message): Promise<Message> {

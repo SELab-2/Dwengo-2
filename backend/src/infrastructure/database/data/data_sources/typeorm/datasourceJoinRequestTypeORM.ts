@@ -46,7 +46,7 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
         return joinRequestModel.toJoinRequestEntity();
     }
 
-    public async getJoinRequestById(id: string): Promise<JoinRequest | null> {
+    public async getJoinRequestById(id: string): Promise<JoinRequest> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const joinRequest: JoinRequestTypeORM | null = await datasource.getRepository(JoinRequestTypeORM).findOne({
@@ -54,7 +54,7 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
             relations: ["requester", "class"],
         });
         if (!joinRequest) {
-            return null;
+            throw new EntityNotFoundError(`Join request with id ${id} not found`);
         }
 
         let userId: string;
@@ -74,7 +74,7 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
         }
 
         if (!userId) {
-            return null;
+            throw new EntityNotFoundError(`The requester for join request with id ${id} was not found`);
         }
 
         joinRequest.requester.id = userId;
@@ -82,7 +82,7 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
         return joinRequest.toJoinRequestEntity();
     }
 
-    public async getJoinRequestByRequesterId(requesterId: string): Promise<JoinRequest[] | null> {
+    public async getJoinRequestByRequesterId(requesterId: string): Promise<JoinRequest[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         let userId: string;
@@ -102,7 +102,7 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
         } else if (teacherModel) {
             userId = teacherModel?.teacher.id;
         } else {
-            return null;
+            throw new EntityNotFoundError(`Student or teacher with id ${requesterId} not found`);
         }
 
         const joinRequests: JoinRequestTypeORM[] = await datasource.getRepository(JoinRequestTypeORM).find({
