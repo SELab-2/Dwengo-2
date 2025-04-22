@@ -22,7 +22,7 @@ export class GetUserAssignmentProgress
         );
         const learningPath: LearningPath = await this.learningPathRepository.getLearningPath(
             assignment.learningPathId,
-            "nl",
+            true,
         );
         const submissions: Submission[] = await tryRepoEntityOperation(
             this.submissionRepository.getAllForStudentInAssignment(input.userId, assignment.id!),

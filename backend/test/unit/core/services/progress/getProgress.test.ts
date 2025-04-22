@@ -136,7 +136,6 @@ describe("GetProgress", () => {
   
     expect(result.progresses).toHaveLength(2);
     for (const progress of result.progresses) {
-        console.log(progress);
       expect(progress.id).toBeNull();
       expect(progress.step).toBe(0);
       expect(progress.learningObjectId).toBeNull();

@@ -34,7 +34,7 @@ export abstract class GetProgress extends ProgressBaseService<GetProgressInput> 
 
         // Get the corresponding learningPath
         const assignment: Assignment = await this.getAssignment(input.idParent);
-        const learningPath = await this.learningPathRepository.getLearningPath(assignment.learningPathId, "nl");
+        const learningPath = await this.learningPathRepository.getLearningPath(assignment.learningPathId, true);
 
         // Get the furthest submission for each student
         const stepIndexes: number[] = Array(students.length).fill(-1);

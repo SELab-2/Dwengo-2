@@ -14,7 +14,7 @@ export class GetUserProgress extends ProgressBaseService<GetUserProgressInput> {
         const assignments: Assignment[] = await this.assignmentRepository.getByUserId(input.idParent);
         const learningPaths: LearningPath[] = await Promise.all(
             assignments.map(
-                async assignment => await this.learningPathRepository.getLearningPath(assignment.learningPathId, "nl"),
+                async assignment => await this.learningPathRepository.getLearningPath(assignment.learningPathId, true),
             ),
         );
 
