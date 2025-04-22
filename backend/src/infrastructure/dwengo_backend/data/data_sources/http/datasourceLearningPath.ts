@@ -24,8 +24,8 @@ export class DatasourceLearningPath extends DatasourceDwengo {
 
         // Extract the right language from all the available paths
         // (Dwengo API for some reason can't do this with &language=${language} in the query)
-        const learningPathObject: LearningPathData = language ?
-            data.find((path: LearningPathData) => path.language === language)
+        const learningPathObject: LearningPathData = language
+            ? data.find((path: LearningPathData) => path.language === language)
             : data[0];
         if (!learningPathObject) {
             // Should not happen because language is checked beforehand, but just to be sure.
