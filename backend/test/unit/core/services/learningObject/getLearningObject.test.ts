@@ -1,4 +1,4 @@
-import { HTMLType, LearningObject, LearningObjectContentType, LearningObjectData } from "../../../../../src/core/entities/learningObject";
+import { HTMLType, LearningObject, LearningObjectContentType } from "../../../../../src/core/entities/learningObject";
 import { ILearningObjectRepository } from "../../../../../src/core/repositories/learningObjectRepositoryInterface";
 import { GetLearningObject } from "../../../../../src/core/services/learningObject";
 

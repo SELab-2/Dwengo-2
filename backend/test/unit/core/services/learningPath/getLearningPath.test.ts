@@ -31,8 +31,8 @@ describe("GetLearningPath", () => {
 
         const result = await service.execute(parsedInput);
 
-        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "nl");
-        expect(result).toEqual(mockValue.toObject());
+        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "nl", false);
+        expect(result).toEqual(mockValue.toObject(false));
     });
 
     it("Should default to English if requested language is not available", async () => {
@@ -40,8 +40,8 @@ describe("GetLearningPath", () => {
 
         const result = await service.execute({ id: "123", language: "nl" });
 
-        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "en");
-        expect(result).toEqual(mockValue.toObject());
+        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "en", false);
+        expect(result).toEqual(mockValue.toObject(false));
     });
 
     it("Falls back to first language if English and requested is not available", async () => {
@@ -49,7 +49,7 @@ describe("GetLearningPath", () => {
 
         const result = await service.execute({ id: "123", language: "fr" });
 
-        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "nl");
+        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "nl", false);
     });
 
     it("Defaults to English when no specific language is requested", async () => {
@@ -57,6 +57,6 @@ describe("GetLearningPath", () => {
 
         const result = await service.execute({ id: "123" });
 
-        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "en");
+        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "en", false);
     });
 });

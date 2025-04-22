@@ -4,6 +4,7 @@ export class Assignment {
         private _learningPathId: string,
         private _startDate: Date,
         private _deadline: Date,
+        private _name: string,
         private _extraInstructions: string,
         private _id?: string,
     ) {}
@@ -27,6 +28,10 @@ export class Assignment {
 
     public get deadline(): Date {
         return this._deadline;
+    }
+
+    public get name(): string {
+        return this._name;
     }
 
     public get extraInstructions(): string {
@@ -54,6 +59,10 @@ export class Assignment {
         this._deadline = newDeadline;
     }
 
+    public set name(newName: string) {
+        this._name = newName;
+    }
+
     public set extraInstructions(newExtraInstructions: string) {
         this._extraInstructions = newExtraInstructions;
     }
@@ -65,6 +74,7 @@ export class Assignment {
             learningPathId: this._learningPathId,
             startDate: this._startDate,
             deadline: this._deadline,
+            name: this._name,
             extraInstructions: this._extraInstructions,
         };
     }

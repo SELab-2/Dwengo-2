@@ -47,6 +47,7 @@ describe("Test user API endpoints", () => {
                     "learningPathId": "string",
                     "startDate": "2025-04-10",
                     "deadline": "2025-04-10",
+                    "name": "name",
                     "extraInstructions": "extra_instructions"
                 })
                 .set("Content-Type", "application/json")

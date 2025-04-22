@@ -40,9 +40,9 @@ describe("GetAllLearningPaths", () => {
 
         const result = await service.execute(input);
 
-        expect(mockRepo.getLearningPaths).toHaveBeenCalledWith("?language=nl&title=robotica");
+        expect(mockRepo.getLearningPaths).toHaveBeenCalledWith("?language=nl&title=robotica", false);
         expect(result).toEqual({
-            learningPaths: [fakePath.toObject()],
+            learningPaths: [fakePath.toObject(false)],
         });
     });
 
@@ -52,7 +52,7 @@ describe("GetAllLearningPaths", () => {
 
         const result = await service.execute(input);
 
-        expect(mockRepo.getLearningPaths).toHaveBeenCalledWith("");
+        expect(mockRepo.getLearningPaths).toHaveBeenCalledWith("", false);
         expect(result).toEqual({ learningPaths: [] });
     });
 
@@ -67,6 +67,6 @@ describe("GetAllLearningPaths", () => {
 
         await service.execute(input);
 
-        expect(mockRepo.getLearningPaths).toHaveBeenCalledWith("?language=en");
+        expect(mockRepo.getLearningPaths).toHaveBeenCalledWith("?language=en", false);
     });
 });

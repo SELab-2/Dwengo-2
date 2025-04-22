@@ -3,6 +3,9 @@ export enum UserType {
     TEACHER = "teacher",
 }
 
+/**
+ * A user, as represented by the API
+ */
 export interface User {
     id: string;
     email: string;

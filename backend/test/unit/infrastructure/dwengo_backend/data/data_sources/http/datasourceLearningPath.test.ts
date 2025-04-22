@@ -49,11 +49,11 @@ describe("DatasourceLearningPath", () => {
                 json: jest.fn().mockResolvedValue(mockData),
             });
 
-            const result = await datasource.getLearningPath("test-path", "nl");
+            const result = await datasource.getLearningPath("test-path", "nl", true);
 
             expect(fetch).toHaveBeenCalledWith("https://dwengo.api/api/learningPath/search?hruid=test-path");
             expect(result).toBeInstanceOf(LearningPath);
-            expect(result.toObject()).toEqual({
+            expect(result.toObject(true)).toEqual({
                 id: "1",
                 hruid: "test-path",
                 language: "nl",
@@ -75,8 +75,7 @@ describe("DatasourceLearningPath", () => {
                 status: 400,
                 statusText: "Bad Request",
             });
-
-            await expect(datasource.getLearningPath("test-path", "nl")).rejects.toEqual({
+            await expect(datasource.getLearningPath("test-path", "nl", true)).rejects.toEqual({
                 code: ErrorCode.BAD_REQUEST,
                 message: "Error fetching from dwengo api: 400, Bad Request",
             } as ApiError);
@@ -88,7 +87,7 @@ describe("DatasourceLearningPath", () => {
                 json: jest.fn().mockResolvedValue([]),
             });
 
-            await expect(datasource.getLearningPath("test-path", "nl")).rejects.toEqual({
+            await expect(datasource.getLearningPath("test-path", "nl", true)).rejects.toEqual({
                 code: ErrorCode.NOT_FOUND,
                 message: "No learningPath exists with this hruid.",
             } as ApiError);
@@ -116,7 +115,7 @@ describe("DatasourceLearningPath", () => {
                 json: jest.fn().mockResolvedValue(mockData),
             });
 
-            await expect(datasource.getLearningPath("test-path", "nl")).rejects.toEqual({
+            await expect(datasource.getLearningPath("test-path", "nl", true)).rejects.toEqual({
                 code: ErrorCode.NOT_FOUND,
                 message: "No learningPath exists with this hruid.",
             } as ApiError);
@@ -160,12 +159,12 @@ describe("DatasourceLearningPath", () => {
                 json: jest.fn().mockResolvedValue(mockData),
             });
 
-            const result = await datasource.getLearningPaths("?language=nl");
+            const result = await datasource.getLearningPaths("?language=nl", true);
 
             expect(fetch).toHaveBeenCalledWith("https://dwengo.api/api/learningPath/search?language=nl");
             expect(result).toHaveLength(2);
             expect(result[0]).toBeInstanceOf(LearningPath);
-            expect(result[0].toObject()).toEqual({
+            expect(result[0].toObject(false)).toEqual({
                 id: "1",
                 hruid: "test-path-1",
                 language: "nl",
@@ -177,9 +176,8 @@ describe("DatasourceLearningPath", () => {
                 targetAges: [8, 10],
                 minAge: 8,
                 maxAge: 10,
-                nodes: [],
             });
-            expect(result[1].toObject()).toEqual({
+            expect(result[1].toObject(true)).toEqual({
                 id: "2",
                 hruid: "test-path-2",
                 language: "en",
@@ -201,7 +199,7 @@ describe("DatasourceLearningPath", () => {
                 json: jest.fn().mockResolvedValue([]),
             });
 
-            const result = await datasource.getLearningPaths("?language=nl");
+            const result = await datasource.getLearningPaths("?language=nl", true);
 
             expect(result).toEqual([]);
         });

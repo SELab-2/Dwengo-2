@@ -38,7 +38,7 @@ export class UpdateUser implements Service<UpdateUserInput> {
         }
 
         // Check if email is not same when being updated
-        if (input.email && oldUser.email === input.email) {
+        if (input.email && oldUser.email === input.email.toLowerCase()) {
             throw {
                 code: ErrorCode.BAD_REQUEST,
                 message: "Email cannot be the same as old one.",
@@ -47,8 +47,8 @@ export class UpdateUser implements Service<UpdateUserInput> {
 
         // Check if email is already in use
         if (input.email) {
-            const studentPresent: boolean = await this.studentRepository.checkByEmail(input.email);
-            const teacherPresent: boolean = await this.teacherRepository.checkByEmail(input.email);
+            const studentPresent: boolean = await this.studentRepository.checkByEmail(input.email.toLowerCase());
+            const teacherPresent: boolean = await this.teacherRepository.checkByEmail(input.email.toLowerCase());
             if (studentPresent || teacherPresent) {
                 throw {
                     code: ErrorCode.BAD_REQUEST,
