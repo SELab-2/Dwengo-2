@@ -49,7 +49,63 @@ describe("DatasourceLearningPath", () => {
                 json: jest.fn().mockResolvedValue(mockData),
             });
 
-            const result = await datasource.getLearningPath("test-path", "nl", true);
+            const result = await datasource.getLearningPath("test-path", true, "nl");
+
+            expect(fetch).toHaveBeenCalledWith("https://dwengo.api/api/learningPath/search?hruid=test-path");
+            expect(result).toBeInstanceOf(LearningPath);
+            expect(result.toObject(true)).toEqual({
+                id: "1",
+                hruid: "test-path",
+                language: "nl",
+                title: "Test Leerpad NL",
+                description: "Beschrijving NL",
+                image: "base64string",
+                numNodes: 3,
+                keywords: ["programmeren", "educatie"],
+                targetAges: [10, 12, 14],
+                minAge: 10,
+                maxAge: 14,
+                nodes: [],
+            });
+        });
+
+        it("Should fetch first learningPath if language not specified", async () => {
+            const mockData: LearningPathData[] = [
+                {
+                    _id: "1",
+                    hruid: "test-path",
+                    language: "nl",
+                    title: "Test Leerpad NL",
+                    description: "Beschrijving NL",
+                    image: "base64string",
+                    num_nodes: 3,
+                    keywords: "programmeren educatie",
+                    target_ages: [10, 12, 14],
+                    min_age: 10,
+                    max_age: 14,
+                    nodes: [],
+                },
+                {
+                    _id: "2",
+                    hruid: "test-path",
+                    language: "en",
+                    title: "Test Learning Path EN",
+                    description: "Description EN",
+                    image: "base64string",
+                    num_nodes: 3,
+                    keywords: "programming education",
+                    target_ages: [10, 12, 14],
+                    min_age: 10,
+                    max_age: 14,
+                    nodes: [],
+                },
+            ];
+            (fetch as jest.Mock).mockResolvedValue({
+                ok: true,
+                json: jest.fn().mockResolvedValue(mockData),
+            });
+
+            const result = await datasource.getLearningPath("test-path", true);
 
             expect(fetch).toHaveBeenCalledWith("https://dwengo.api/api/learningPath/search?hruid=test-path");
             expect(result).toBeInstanceOf(LearningPath);
@@ -75,8 +131,7 @@ describe("DatasourceLearningPath", () => {
                 status: 400,
                 statusText: "Bad Request",
             });
-
-            await expect(datasource.getLearningPath("test-path", "nl", true)).rejects.toEqual({
+            await expect(datasource.getLearningPath("test-path", true, "nl")).rejects.toEqual({
                 code: ErrorCode.BAD_REQUEST,
                 message: "Error fetching from dwengo api: 400, Bad Request",
             } as ApiError);
@@ -88,7 +143,7 @@ describe("DatasourceLearningPath", () => {
                 json: jest.fn().mockResolvedValue([]),
             });
 
-            await expect(datasource.getLearningPath("test-path", "nl", true)).rejects.toEqual({
+            await expect(datasource.getLearningPath("test-path", true, "nl")).rejects.toEqual({
                 code: ErrorCode.NOT_FOUND,
                 message: "No learningPath exists with this hruid.",
             } as ApiError);
@@ -116,7 +171,7 @@ describe("DatasourceLearningPath", () => {
                 json: jest.fn().mockResolvedValue(mockData),
             });
 
-            await expect(datasource.getLearningPath("test-path", "nl", true)).rejects.toEqual({
+            await expect(datasource.getLearningPath("test-path", true, "nl")).rejects.toEqual({
                 code: ErrorCode.NOT_FOUND,
                 message: "No learningPath exists with this hruid.",
             } as ApiError);

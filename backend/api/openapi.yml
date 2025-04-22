@@ -19,7 +19,7 @@ tags:
     description: User account management operations including profile updates and user information retrieval
   - name: requests
     description: Manage invitations and join requests for classes, including sending, accepting and rejecting requests
-  - name: progresses
+  - name: progress
     description: Track and manage student progress through learning paths, objects and assignments
   - name: classes
     description: Manage educational classes, including creation, enrollment, and class settings
@@ -1257,33 +1257,98 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-# TODO  '/users/{idParent}/progresses/{id}':
-#    get:
-#      tags:
-#        - progresses
-#      summary: Get user progress by ID
-#      description: Retrieve detailed information about a specific progress entry for a user by their unique identifiers.
-#      operationId: getUserProgressById
-#      parameters:
-#        - in: path
-#          name: id
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#        - in: path
-#          name: idParent
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#      responses:
-#        '200':
-#          $ref: '#/components/responses/ProgressOK'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
+  '/users/{userId}/assignment/{assignmentId}/progress':
+    get:
+      tags:
+        - progress
+      summary: Get the progress of a user in an assignment
+      description: Retrieve detailed information about a specific progress entry for a user in an assignment using their unique identifiers.
+      operationId: getUserProgressById
+      parameters:
+        - in: path
+          name: userId
+          description: id of the user to get the progress of
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: assignmentId
+          description: id of the assignment to get the progress of
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/users/{idParent}/progress':
+    get:
+      tags:
+        - progress
+      summary: Get the progress of a user in all their assignments
+      description: Retrieve detailed information about a specific progress entry for a user in an assignment using their unique identifiers.
+      parameters:
+        - in: path
+          name: idParent
+          description: id of the user to get the progress from
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressesOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/assignments/{idParent}/progress':
+    get:
+      tags:
+        - progress
+      summary: Get the progress of all users in an assignment
+      description: Retrieve detailed information about a specific progress entry for a user in an assignment using their unique identifiers.
+      parameters:
+        - in: path
+          name: idParent
+          description: id of the assignment to get the progress from
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressesOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/groups/{idParent}/progress':
+    get:
+      tags:
+        - progress
+      summary: Get the progress of all users in a group of an assignment
+      description: Retrieve detailed information about a specific progress entry for a user in an assignment using their unique identifiers.
+      parameters:
+        - in: path
+          name: idParent
+          description: id of the group to get the progress from
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressesOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 #  '/users/{idParent}/progresses':
 #    get:
 #      tags:
@@ -1872,6 +1937,17 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Progress'
+    ProgressesOK:
+      description: Progress request completed successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              progresses:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Progress'
     QuestionOK:
       description: Question request completed successfully
       content:
@@ -1999,14 +2075,6 @@ components:
                 items:
                   type: string
                   format: uuid
-    ProgressesOK:
-      description: Progresses collection request completed successfully
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Progress'
     QuestionsOK:
       description: Questions collection request completed successfully
       content:
@@ -2649,52 +2717,50 @@ components:
       type: object
       required:
         - id
-        - path
-        - object
-        - assignment
-        - group
-        - user
-        - question
-        - answer
-        - status
+        - studentId
+        - assignmentId
+        - learningObjectId
+        - step
+        - maxStep
+        - time
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
-          description: Unique identifier for the progress.
-        path:
+          description: |
+            Unique identifier for the latest submissions for this progress.
+            Can be undefined if the user hasn't started yet.
+        studentId:
           type: string
           format: uuid
-          description: ID of the learning path.
-        object:
+          readOnly: true
+          description: Unique identifier for the student.
+        assignmentId:
           type: string
           format: uuid
-          description: ID of the learning object.
-        assignment:
+          readOnly: true
+          description: Unique identifier for the assignment.
+        learningObjectId:
           type: string
           format: uuid
-          description: ID of the assignment.
-        group:
+          readOnly: true
+          description: Unique identifier for the learning object of the current step.
+        step:
+          type: integer
+          description: |
+            The current step of the learning object.
+            (0 = not started, 1 = finished first learningObject, maxStep = finished learningPath)
+        maxStep:
+          type: integer
+          description: The maximum step of the learning object.
+        time:
           type: string
-          format: uuid
-          description: ID of the group.
-        user:
-          type: string
-          format: uuid
-          description: ID of the user.
-        question:
-          type: string
-          format: uuid
-          description: ID of the question.
-        answer:
-          type: string
-          format: uuid
-          description: ID of the answer.
-        status:
-          type: string
-          enum: ['PENDING', 'STARTED', 'COMPLETED']
-          description: Current status of the progress.
+          format: time
+          description: |
+            The time this step was completed.
+            Can be undefined if the user hasn't started yet.
+        
     ProgressCreate:
       type: object
       required:
