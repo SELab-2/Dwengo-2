@@ -1,6 +1,21 @@
-#center-container {
+#class-update-form, #class-members-list, #class-requests {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 1;
+
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+    flex-direction: column; /* Ensures vertical alignment */
+    // justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    text-align: center; /* For centering text */
+}
+
+.class {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5%;
+    padding: 5%;
 }

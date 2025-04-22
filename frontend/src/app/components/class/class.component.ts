@@ -11,6 +11,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
+import { ClassMembersListComponent } from '../class-members-list/class-members-list.component';
+import { ClassPendingRequestsComponent } from '../class-pending-requests/class-pending-requests.component';
+import { UserType } from '../../interfaces';
+import { ClassCodePopupComponent } from '../class-code-popup/class-code-popup.component';
+
+import {
+  MatDialog,
+} from '@angular/material/dialog';
+import { AuthenticatedHeaderComponent } from '../authenticated-header/authenticated-header.component';
 
 
 @Component({
@@ -20,6 +29,9 @@ import { AuthenticationService } from '../../services/authentication.service';
     CommonModule,
     LoadingComponent,
     ReactiveFormsModule,
+    ClassMembersListComponent,
+    ClassPendingRequestsComponent,
+    AuthenticatedHeaderComponent,
 
     // Angular material
     MatFormFieldModule,
@@ -53,6 +65,9 @@ export class ClassComponent implements OnInit {
   // The form used to update the class
   public updateForm: FormGroup;
 
+  // Class code popup
+  readonly classCodePopup = inject(MatDialog);
+
   public constructor(
     private router: Router,
     private formBuilder: FormBuilder,
@@ -69,13 +84,13 @@ export class ClassComponent implements OnInit {
    * 
    * Also see: https://stackoverflow.com/questions/35763730/difference-between-constructor-and-ngoninit
    */
-  public ngOnInit() {
+  public ngOnInit(): void {
     const id: string | null = this.route.snapshot.paramMap.get('id');
 
     if(id) {
       const classObservable = this.classesService.classWithId(id);
 
-      classObservable.pipe().subscribe(
+      classObservable.subscribe(
         (response) => {
           this._class = response;
           this.fillUpdateForm(response);
@@ -90,7 +105,7 @@ export class ClassComponent implements OnInit {
    * Delete this class based on it's id.
    * Notifies the user if this fails or succeeds.
    */
-  public delete() {
+  public delete(): void {
     if(!this._class) {
       this.openSnackBar(this.errorMessage);
       return;
@@ -108,11 +123,11 @@ export class ClassComponent implements OnInit {
     );
   }
 
-  public startEdit() {
+  public startEdit(): void {
     this.editing = true;
   }
 
-  public cancelEdit() {
+  public cancelEdit(): void {
     this.editing = false;
     this.fillUpdateForm(this._class!);
   }
@@ -122,7 +137,7 @@ export class ClassComponent implements OnInit {
    * Done by extracting the values from the form and sending them to the API.
    * Notifies the user if this fails or succeeds.
    */
-  public saveEdit() {
+  public saveEdit(): void {
     const newClass = this.extractUpdateFormValues();
     const updateClassObservable = this.classesService.updateClass(newClass);
 
@@ -180,6 +195,26 @@ export class ClassComponent implements OnInit {
     this.snackBar.open(message, action, {
         duration: 2500
     });
+  }
+
+  /**
+   * Displays a popup with the class code (uses ClassCodePopupComponent).
+   */
+  public showClassCode(): void {
+    this.classCodePopup.open(ClassCodePopupComponent, {
+      data: {
+        // TODO: class code from BACKEND (https://github.com/SELab-2/Dwengo-2/pull/436)
+        classCode: this._class!.id
+      }
+    });
+  }
+
+  /**
+   * Checks whether the currently logged in user is a teacher or not.
+   * @returns Whether the logged in user is a teacher or not
+   */
+  public isTeacher(): boolean {
+    return this.authService.retrieveUserType() === UserType.TEACHER;
   }
 
 }

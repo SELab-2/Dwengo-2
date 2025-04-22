@@ -22,8 +22,8 @@ describe("UpdateAssignment Service", () => {
         const assignmentId = "1";
         const updatedExtraInstructions = "Updated Instructions";
 
-        const mockUpdatedAssignment = new Assignment("1", "1", startDate, deadline, updatedExtraInstructions, "1");
-        const mockNormalAssignment = new Assignment("1", "1", startDate, deadline, "Original Instructions", "1");
+        const mockUpdatedAssignment = new Assignment("1", "1", startDate, deadline, "Name", updatedExtraInstructions, "1");
+        const mockNormalAssignment = new Assignment("1", "1", startDate, deadline, "Name", "Original Instructions", "1");
 
         mockAssignmentRepository.getById.mockResolvedValue(mockNormalAssignment);
         mockAssignmentRepository.update.mockResolvedValue(mockUpdatedAssignment);

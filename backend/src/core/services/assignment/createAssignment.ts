@@ -22,6 +22,7 @@ export class CreateAssignment extends AssignmentService<CreateAssignmentInput> {
             input.learningPathId,
             input.startDate,
             input.deadline,
+            input.name,
             input.extraInstructions,
         );
 
