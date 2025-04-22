@@ -38,7 +38,7 @@ export class ExploreComponent implements OnInit {
 
     // The only thing you need to change to add a new "BASIC" category is to add it to the categories array and the title array.
     // I know this is a bit weird, but these custom themes have to be hard coded.
-    categories: string[] = ["maths", "climate", "robot", "AI", "elek"];
+    categories: string[] = ["maths", "climate-bio-microsc", "robot", "AI", "elek"];
     titles: string[] = [$localize`Maths`, $localize`Climate`, $localize`Robotics`, $localize`AI & Machine Learning`, $localize`Electronics`, $localize`Other Paths`];
 
     // The learning paths are categorized into different categories for better organization and filtering.
