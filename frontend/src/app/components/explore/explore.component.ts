@@ -9,11 +9,26 @@ import { FormsModule } from '@angular/forms';
 import { LearningPathFilterComponent } from '../small-components/learning-path-filter/learning-path-filter.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { UserType } from '../../interfaces';
 
 interface CategorizedLearningPath extends LearningPath {
     category: string;
 }
 
+enum ExploreSetting {
+    SELECT = "SELECT",
+    BASIC = "BASIC",
+    CUSTOM = "CUSTOM",
+}
+
+// These are the categories and their respective titles.
+const CATEGORY_CONFIGS: { key: string; title: string }[] = [
+    { key: "maths", title: $localize`Maths` },
+    { key: "climate-bio-microsc", title: $localize`Climate` },
+    { key: "robot", title: $localize`Robotics` },
+    { key: "AI", title: $localize`AI & Machine Learning` },
+    { key: "elek", title: $localize`Electronics` },
+];
 
 /**
  * The Explore Component
@@ -34,12 +49,10 @@ export class ExploreComponent implements OnInit {
 
     // This will display the selected visualization. It could be done by an enum, but this does the job.
     // Use "SELECT" when nothing is decided yet, "BASIC" for our suggested categories, "CUSTOM" to apply your own filters
-    visualize: string = "SELECT";
+    visualize: ExploreSetting = ExploreSetting.SELECT;
 
-    // The only thing you need to change to add a new "BASIC" category is to add it to the categories array and the title array.
-    // I know this is a bit weird, but these custom themes have to be hard coded.
-    categories: string[] = ["maths", "climate-bio-microsc", "robot", "AI", "elek"];
-    titles: string[] = [$localize`Maths`, $localize`Climate`, $localize`Robotics`, $localize`AI & Machine Learning`, $localize`Electronics`, $localize`Other Paths`];
+
+    categoryConfigs = CATEGORY_CONFIGS;
 
     // The learning paths are categorized into different categories for better organization and filtering.
     data: CategorizedLearningPath[] = [];
@@ -49,18 +62,18 @@ export class ExploreComponent implements OnInit {
 
     ngOnInit(): void {
         // We'll need this to display the *plus* sign on the learning path cards
-        this.isTeacher = this.authService.retrieveUserType() === "teacher";
+        this.isTeacher = this.authService.retrieveUserType() === UserType.TEACHER;
     }
 
     /**
      * Function to apply our suggested categories
      */
     setBasic(): void {
-        if (this.visualize === "BASIC") return;
+        if (this.visualize === ExploreSetting.BASIC) return;
 
         this.loading = true;
         this.getRegularSelection();
-        this.visualize = "BASIC";
+        this.visualize = ExploreSetting.BASIC;
     }
 
     /**
@@ -75,23 +88,20 @@ export class ExploreComponent implements OnInit {
      * Help function to collect the learning paths for each main category.
      */
     getRegularSelection(): void {
-        const observables = this.categories.map(category => {
-            const query: LearningPathRequest = { all: category };
+        const observables = this.categoryConfigs.map(cfg => {
+            const query: LearningPathRequest = { all: cfg.key };
             return this.learningPathService.retrieveLearningPathsByQuery(query);
         });
+
 
         forkJoin(observables).subscribe({
             next: (responses) => {
                 this.data = responses.flatMap((response, index) =>
                     response.learningPaths.map(path => ({
                         ...path,
-                        category: this.categories[index]
+                        category: this.categoryConfigs[index].key
                     }))
                 );
-                this.loading = false;
-            },
-            error: (err) => {
-                console.error("Failed to load one or more categories", err);
                 this.loading = false;
             }
         });
@@ -102,7 +112,7 @@ export class ExploreComponent implements OnInit {
      * @param filters the possible filters to take into account.
      */
     setCustom(filters: { minAge: number | null, maxAge: number | null, language: string, searchTerm: string }) {
-        this.visualize = "CUSTOM";
+        this.visualize = ExploreSetting.CUSTOM;
         this.loading = true;
         const query = {
             language: filters.language,

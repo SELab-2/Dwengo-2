@@ -1,5 +1,5 @@
 import { TestBed } from "@angular/core/testing";
-import { ActivatedRouteSnapshot, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { AuthenticationService } from "../services/authentication.service";
 import { AuthorizedGuard } from "./authorized.guard";
 import { UserType } from "../interfaces";
@@ -28,7 +28,7 @@ describe('AuthorizedGuard', () => {
     it('should allow access if user type is student', () => {
         authenticationService.retrieveUserType.and.returnValue(UserType.STUDENT);
 
-        const result = guard.canActivate({} as ActivatedRouteSnapshot);
+        const result = guard.canActivate();
         expect(result).toBeTrue();
         expect(routerSpy.navigateByUrl).not.toHaveBeenCalled();
     });
@@ -36,7 +36,7 @@ describe('AuthorizedGuard', () => {
     it('should allow access if user type is teacher', () => {
         authenticationService.retrieveUserType.and.returnValue(UserType.TEACHER);
 
-        const result = guard.canActivate({} as ActivatedRouteSnapshot);
+        const result = guard.canActivate();
         expect(result).toBeTrue();
         expect(routerSpy.navigateByUrl).not.toHaveBeenCalled();
     });
@@ -44,7 +44,7 @@ describe('AuthorizedGuard', () => {
     it('should deny access and navigate to unauthorized if user type is null', () => {
         authenticationService.retrieveUserType.and.returnValue(null);
 
-        const result = guard.canActivate({} as ActivatedRouteSnapshot);
+        const result = guard.canActivate();
         expect(result).toBeFalse();
         expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('unauthorized');
     });

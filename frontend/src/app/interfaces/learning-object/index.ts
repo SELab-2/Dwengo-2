@@ -1,1 +1,1 @@
-export * from "./learningObject"
+export * from './learningObject'

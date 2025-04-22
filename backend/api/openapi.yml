@@ -2457,6 +2457,7 @@ components:
         - learningPathId
         - startDate
         - deadline
+        - name
         - extraInstructions
       properties:
         id:
@@ -2477,6 +2478,10 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
+        name:
+          type: string
+          minLength: 0
+          description: Name of the assignment.
         extraInstructions:
           type: string
           minLength: 0
@@ -2488,6 +2493,7 @@ components:
         - learningPathId
         - startDate
         - deadline
+        - name
         - extraInstructions
       additionalProperties: false
       properties:
@@ -2506,6 +2512,10 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
+        name:
+          type: string
+          minLength: 0
+          description: Name of the assignment.
         extraInstructions:
           type: string
           minLength: 0
@@ -2531,6 +2541,10 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
+        name:
+          type: string
+          minLength: 0
+          description: Name of the assignment.
         extraInstructions:
           type: string
           minLength: 0
