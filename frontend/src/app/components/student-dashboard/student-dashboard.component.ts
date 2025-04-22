@@ -51,19 +51,26 @@ export class StudentDashboardComponent implements OnInit {
     if (storedPageSize) this.pageSize = +storedPageSize;
     if (storedPageIndex) this.currentPageIndex = +storedPageIndex;
 
-    this.assignmentService
-      .retrieveAssignments()
-      .subscribe({
-        next: (assignments: Assignment[]) => {
-          this._assignments = assignments;
-          this.updatePagedAssignments();
-        }
-      });
     this.classesService
       .classesOfUser()
       .subscribe({
         next: (classes: Class[]) => {
           this._classes = classes;
+        }
+      });
+    this.assignmentService
+      .retrieveAssignments()
+      .subscribe({
+        next: (assignments: Assignment[]) => {
+          this._assignments = assignments;
+          this._assignments.forEach((assignment) => {
+            const classId = assignment.classId;
+          const className = this.classesService.classWithId(classId);
+          className.subscribe(cls => {
+            assignment.className = cls?.name || 'Unknown Class';
+          });
+          });
+          this.updatePagedAssignments();
         }
       });
   }
