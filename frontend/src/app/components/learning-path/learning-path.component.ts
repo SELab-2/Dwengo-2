@@ -6,6 +6,7 @@ import { LearningObject, ShallowLearningObject } from "../../interfaces/learning
 import { LearningObjectService } from "../../services/learningObject.service";
 import { DirectedGraph, Node } from "../../datastructures/directed-graph";
 import { LearningPathService } from "../../services/learningPath.service";
+import { finalize, forkJoin, of } from "rxjs";
 
 @Component({
     selector: "app-learning-path-component",
@@ -18,10 +19,12 @@ export class LearningPathComponent implements OnInit {
     @Input() path!: LearningPath;
 
     loading: boolean = true;
-    fullObjectLoading: boolean = true;
-    nodesLoading: boolean = true;
     isTeacher: boolean = false;
     learningObjects!: LearningObject[];
+
+    // Trajectory based on transitions
+    trajectoryGraph?: DirectedGraph<LearningObject>;
+
 
     constructor(private authService: AuthenticationService, private learningObjectService: LearningObjectService, private learningPathService: LearningPathService) { }
 
@@ -29,36 +32,39 @@ export class LearningPathComponent implements OnInit {
         // This boole indicates wether the logged in user is a teacher or not
         this.isTeacher = this.authService.retrieveUserType() === UserType.TEACHER;
 
-        // Use the learning path to gather every learning object
-        this.learningObjectService.retrieveObjectsForLearningPath(
-            ({ hruid: this.path.hruid, language: this.path.language, includeNodes: true } as SpecificLearningPathRequest)
-        ).subscribe(
-            response => {
-                // Full objects are in the response
-                this.learningObjects = response;
-
-                // Turn off loading when both calls are done
-                this.fullObjectLoading = false;
-                if (!this.nodesLoading) this.loading = false;
-            }
+        // These are the observables for both required calls
+        const objectObservable = this.learningObjectService.retrieveObjectsForLearningPath(
+            { hruid: this.path.hruid, language: this.path.language, includeNodes: true } as SpecificLearningPathRequest
         );
 
-        // We also need to make sure we have the nodes available
-        if (!this.path.nodes) {
-            this.learningPathService.retrieveOneLearningPath(
-                ({ hruid: this.path.hruid, language: this.path.language, includeNodes: true } as SpecificLearningPathRequest)
-            ).subscribe(
-                response => {
-                    // Update the path
-                    this.path.nodes = response.nodes!
-
-                    // Turn off loading
-                    this.nodesLoading = false;
-                    if (!this.fullObjectLoading) this.loading = false
-                }
+        const nodesObservable = this.path.nodes
+            ? of(this.path) // If nodes already exist, we return the existing path
+            : this.learningPathService.retrieveOneLearningPath(
+                { hruid: this.path.hruid, language: this.path.language, includeNodes: true } as SpecificLearningPathRequest
             );
-        } else this.nodesLoading = false;
+
+        forkJoin([objectObservable, nodesObservable]).pipe(
+            finalize(() => this.loading = false)
+        ).subscribe({
+            next: ([objects, pathWithNodes]) => {
+                this.learningObjects = objects;
+
+                if (!this.path.nodes) {
+                    this.path.nodes = pathWithNodes.nodes!;
+                }
+
+                // Build trajectory when we're done
+                if (this.path.nodes && this.learningObjects) {
+                    this.trajectoryGraph = this.trajectory(this.path.nodes, this.learningObjects);
+                }
+            },
+            error: () => {
+                // Errors are being handled within the service, but we need to turn off loading
+                this.loading = false;
+            }
+        });
     }
+
 
 
     // Match helpfunction
@@ -71,8 +77,8 @@ export class LearningPathComponent implements OnInit {
     }
 
     /**
-   * Find the start node, follow the transitions and link the full objects. The full trajectory will be a directed graph.
-   */
+    * Find the start node, follow the transitions and link the full objects. The full trajectory will be a directed graph.
+    */
     trajectory(
         directions: ShallowLearningObject[],
         detailedObjects: LearningObject[]
