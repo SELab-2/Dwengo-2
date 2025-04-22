@@ -59,4 +59,4 @@ jobs:
         run: npm test
         working-directory: frontend
         env:
-          CHROME_BIN: "/snap/bin/chromium"
+          CHROME_BIN: "/usr/bin/google-chrome-stable"
