@@ -5,6 +5,9 @@ export class DirectedGraph<T> {
     private _nodes: Map<T, Node<T>> = new Map();
     private _adjacencyList: Map<T, Edge<T>[]> = new Map();
 
+    // Every learning path has exactly one root.
+    private _root: Node<T> | null = null;
+
     // Add a node to the graph
     public addNode(value: T): Node<T> {
         if (!this.hasNode(value)) {
@@ -15,12 +18,10 @@ export class DirectedGraph<T> {
         return this._nodes.get(value)!;
     }
 
-    // Connect nodes (they don't have to exist yet)
-    public addEdge(from: T, to: T): void {
-        this.addNode(from);
-        this.addNode(to);
+    // Connect nodes
+    public addEdge(from: Node<T>, to: Node<T>): void {
         const edge = new Edge<T>(from, to);
-        this._adjacencyList.get(from)!.push(edge);
+        this._adjacencyList.get(from.value)!.push(edge);
     }
 
     // Getter for the nodes
@@ -39,13 +40,21 @@ export class DirectedGraph<T> {
     }
 
     // Get the nodes connected to all outgoing edges
-    public getNeighbors(value: T): T[] {
+    public getNeighbors(value: T): Node<T>[] {
         return this.getOutgoingEdges(value).map(edge => edge.to);
     }
 
     // Check if the nodes exists
     public hasNode(value: T): boolean {
         return this._nodes.has(value);
+    }
+
+    public get root(): Node<T> | null {
+        return this._root;
+    }
+
+    public set root(node: Node<T>) {
+        this._root = node;
     }
 }
 
@@ -60,13 +69,13 @@ export class Node<T> {
 
 // Minimal implementation of an Edge
 export class Edge<T> {
-    constructor(private _from: T, private _to: T) { }
+    constructor(private _from: Node<T>, private _to: Node<T>) { }
 
-    public get from(): T {
+    public get from(): Node<T> {
         return this._from;
     }
 
-    public get to(): T {
+    public get to(): Node<T> {
         return this._to;
     }
 }
