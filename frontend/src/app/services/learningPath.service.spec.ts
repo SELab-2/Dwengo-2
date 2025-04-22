@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpHeaders } from '@angular/common/http';
 import { LearningPathService } from './learningPath.service';
 import { AuthenticationService } from './authentication.service';
@@ -37,11 +38,13 @@ describe('LearningPathService', () => {
         errorServiceSpy = jasmine.createSpyObj('ErrorService', ['pipeHandler', 'retrieveError']);
 
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
+            imports: [],
             providers: [
                 LearningPathService,
                 { provide: AuthenticationService, useValue: authServiceSpy },
-                { provide: ErrorService, useValue: errorServiceSpy }
+                { provide: ErrorService, useValue: errorServiceSpy },
+                provideHttpClient(),
+                provideHttpClientTesting(),
             ]
         });
 

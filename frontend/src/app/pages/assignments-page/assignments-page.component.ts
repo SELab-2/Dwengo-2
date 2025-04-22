@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
+import { CreateAssignmentComponent } from '../../components/create-assignment/create-assignment.component';
 
 type AssignmentDateFilter = (assignment: Assignment) => boolean;
 
@@ -28,7 +29,8 @@ type AssignmentDateFilter = (assignment: Assignment) => boolean;
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    CreateAssignmentComponent
   ],
   templateUrl: './assignments-page.component.html',
   styleUrl: './assignments-page.component.less'

@@ -42,4 +42,13 @@ export class LearningPathService {
             ),
         );
     }
+
+    /**
+     * Retrieve all learning paths that are made available from our backend
+     */
+    retrieveAll(): Observable<LearningPathResponse> {
+        // if we want to retrieve all learning paths
+        // our backend asks that the 'all' parameter is set to an empty string
+        return this.retrieveLearningPathsByQuery({ all: ''});
+    }
 }
