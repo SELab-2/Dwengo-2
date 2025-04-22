@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-learning-path-filter',
@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
     standalone: true,
     imports: [
         CommonModule,
-        FormsModule,
+        ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
@@ -21,10 +21,7 @@ import { FormsModule } from '@angular/forms';
     ]
 })
 export class LearningPathFilterComponent {
-    minAge: number | null = null;
-    maxAge: number | null = null;
-    language: string = '';
-    searchTerm: string = '';
+    filterForm: FormGroup;
 
     @Output() filtersApplied = new EventEmitter<{
         minAge: number | null,
@@ -33,12 +30,16 @@ export class LearningPathFilterComponent {
         searchTerm: string,
     }>();
 
-    applyFilters() {
-        this.filtersApplied.emit({
-            minAge: this.minAge,
-            maxAge: this.maxAge,
-            language: this.language,
-            searchTerm: this.searchTerm,
+    constructor(private fb: FormBuilder) {
+        this.filterForm = this.fb.group({
+            minAge: [null],
+            maxAge: [null],
+            language: [''],
+            searchTerm: ['']
         });
+    }
+
+    applyFilters() {
+        this.filtersApplied.emit(this.filterForm.value);
     }
 }
