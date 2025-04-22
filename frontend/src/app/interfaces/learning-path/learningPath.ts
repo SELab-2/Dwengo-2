@@ -8,6 +8,7 @@ export interface LearningPath {
     maxAge: number;
     learningPathId: string;
     nodes?: ShallowLearningObject[];
+    language: string;
 }
 
 /**

@@ -1,0 +1,31 @@
+<div class="main">
+    <div class="age-section">
+        <mat-form-field appearance="fill" class="filter-field">
+            <mat-label i18n>Min Age</mat-label>
+            <input matInput type="number" [(ngModel)]="minAge">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="filter-field">
+            <mat-label i18n>Max Age</mat-label>
+            <input matInput type="number" [(ngModel)]="maxAge">
+        </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="fill" class="filter-field">
+        <mat-label i18n>Language</mat-label>
+        <mat-select [(ngModel)]="language">
+            <mat-option value="">-- All --</mat-option>
+            <mat-option value="nl">NL</mat-option>
+            <mat-option value="en">EN</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="filter-field">
+        <mat-label i18n>Search Keywords...</mat-label>
+        <input matInput type="string" [(ngModel)]="searchTerm">
+    </mat-form-field>
+
+    <div class="apply-button">
+        <button mat-raised-button color="primary" (click)="applyFilters()" i18n>Apply Filters</button>
+    </div>
+</div>
