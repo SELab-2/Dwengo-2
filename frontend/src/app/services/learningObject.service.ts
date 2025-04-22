@@ -4,7 +4,7 @@ import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
 import { forkJoin, Observable, switchMap } from 'rxjs';
-import { LearningPathRequest, LearningPathResponse, SpecificLearningPathRequest } from '../interfaces/learning-path';
+import { SpecificLearningPathRequest } from '../interfaces/learning-path';
 import { HtmlType, LearningObject, LearningObjectRequest } from '../interfaces/learning-object';
 import { LearningPathService } from './learningPath.service';
 
@@ -44,17 +44,26 @@ export class LearningObjectService {
         );
     }
 
+
+    // Retrieve every learning object in the list
     retrieveMultipleLearningObjects(nodes: LearningObjectRequest[]): Observable<LearningObject[]> {
+
         return forkJoin(nodes.map(node => this.retrieveOneLearningObject(node)));
     }
 
+
+    /**
+     * Give the basic information for a learning path (hruid, language) and receive the full learning objects
+     * @param request the basic information to retrieve a learning path (hruid, language)
+     * @returns every object within that learning path
+     */
     retrieveObjectsForLearningPath(request: SpecificLearningPathRequest): Observable<LearningObject[]> {
         request.includeNodes = true;
         // We need the request to include nodes
         return this.learningPathService.retrieveOneLearningPath(request).pipe(
             switchMap(response =>
                 this.retrieveMultipleLearningObjects(
-                    response.learningPath.nodes!.map(node => ({
+                    response.nodes!.map(node => ({
                         hruid: node.hruid,
                         htmlType: HtmlType.WRAPPED,
                         language: node.language,

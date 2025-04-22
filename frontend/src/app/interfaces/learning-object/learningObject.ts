@@ -9,7 +9,7 @@ export interface LearningObject {
         description: string,
         contentType: string,
     };
-    content: string;
+    htmlContent: string;
 }
 
 export interface ShallowLearningObject {
