@@ -11,6 +11,7 @@ import { UserTypeGuard } from './guards/usertype.guard';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { UnauthorizedGuard } from './guards/unauthorized.guard';
 import { AlreadyAuthenticatedComponent } from './components/already-authenticated/already-authenticated.component';
+import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 
 /**
  * Routing of our frontend.
@@ -18,7 +19,7 @@ import { AlreadyAuthenticatedComponent } from './components/already-authenticate
  */
 export const routes: Routes = [
     { path: '', component: LandingPageComponent, title: 'Landing Page', canActivate: [UnauthorizedGuard] },
-    { path: 'student/dashboard', redirectTo: 'student/classes' },
+    { path: 'student/dashboard', component: ChatPageComponent, title: 'Chat', canActivate: [UserTypeGuard], data: { userType: 'student' } }, // temporary for quick testing
     { path: 'teacher/dashboard', component: TeacherDashboardPageComponent, canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'teacher/classes', component: ClassesPageComponent, title: "My Classes", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'teacher/classes/:id', component: ClassComponent, title: "Class", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },

@@ -1,0 +1,33 @@
+<mat-toolbar color="primary" class="chat-toolbar">
+    <span>Thread</span>
+    <span class="spacer"></span>
+    <button mat-icon-button aria-label="Settings">
+        <mat-icon>settings</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="More Options">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+</mat-toolbar>
+  
+<div class="chat-container">
+    <div class="messages">
+        @for (msg of messages; track msg.id) {
+            <mat-card class="message-card">
+                <mat-card-title>
+                    {{ msg.isInstructor ? 'Instructor' : 'User' }} ({{ msg.creatorId }})
+                    <span class="timestamp">{{ msg.createdAt | date: 'short' }}</span>
+                </mat-card-title>
+                <mat-card-content>{{ msg.content }}</mat-card-content>
+            </mat-card>
+        }
+    </div>
+
+    <form (ngSubmit)="sendMessage()" class="input-container">
+        <mat-form-field appearance="outline" class="input-field">
+            <input matInput [(ngModel)]="newMessageContent" name="message" placeholder="Type your message..." />
+        </mat-form-field>
+        <button mat-icon-button color="primary" type="submit">
+            <mat-icon>send</mat-icon>
+        </button>
+    </form>
+</div>

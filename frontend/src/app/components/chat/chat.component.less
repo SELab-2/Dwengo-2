@@ -1,0 +1,45 @@
+.chat-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 64px);
+    padding: 8px;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.message-card {
+    align-self: flex-start;
+    max-width: 75%;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    padding-top: 8px;
+}
+
+.input-field {
+    flex: 1;
+    margin-right: 8px;
+}
+
+.timestamp {
+    font-size: 0.8em;
+    color: gray;
+}
