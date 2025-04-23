@@ -1,0 +1,54 @@
+<main class="main-container">
+    <div class="main-title centered-title">
+        <h1 i18n>Home</h1>
+    </div>
+
+    <div class="assignments">
+        <div class="center-container">
+            <h2 i18n>Your assignments</h2>
+        </div>
+
+        <app-paginated-grid
+            [items]="assignments"
+            [itemTemplate]="assignmentCard">
+        </app-paginated-grid>
+
+        <ng-template #assignmentCard let-assignment>
+            <app-mini-assignment [_assignment]="assignment"></app-mini-assignment>
+        </ng-template>
+    </div>
+
+    <div class="classes">
+        <div class="header-container">
+            <h2 i18n>Your classes</h2>
+            <a routerLink="/student/classes" i18n>See all</a>
+        </div>
+
+        <app-paginated-grid
+            [items]="classes"
+            [pageSize]="6"
+            [itemTemplate]="classCard"
+            [showPagination]="false">
+        </app-paginated-grid>
+
+        <ng-template #classCard let-class>
+            <app-mini-class [_class]="class" _type="student"></app-mini-class>
+        </ng-template>
+    </div>
+
+    <div class="groups">
+        <div class="header-container">
+            <h2 i18n>Your groups</h2>
+        </div>
+
+        <app-paginated-grid
+            [items]="groups"
+            [pageSize]="6"
+            [itemTemplate]="groupCard"
+            [showPagination]="false">
+        </app-paginated-grid>
+        <ng-template #groupCard let-group>
+            <app-group-card [group]="group"></app-group-card>
+        </ng-template>
+    </div>
+</main>

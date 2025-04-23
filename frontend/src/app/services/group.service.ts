@@ -7,8 +7,12 @@ import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
 import { NewGroup } from "../interfaces/group/newGroup";
 import { GroupResponse } from "../interfaces/group/groupResponse";
-import { GroupWithUsers } from "../interfaces/group/groupWithUsers";
+import { GroupFilledIn } from "../interfaces/group/groupFilledIn";
 import { UserService } from "./user.service";
+import { AssignmentService } from "./assignment.service";
+import { Assignment } from "../interfaces/assignment";
+import { Groups } from "../interfaces/group/groups";
+
 
 @Injectable({
     providedIn: 'root'
@@ -20,13 +24,40 @@ export class GroupService {
         private http: HttpClient,
         private authService: AuthenticationService,
         private errorService: ErrorService,
-        private userSerice: UserService
+        private userService: UserService,
+        private assignmentService: AssignmentService
     ) {}
 
-    public getGroup(id: string): Observable<GroupWithUsers> {
+    public getAllGroupsFromUser(userId: string): Observable<GroupFilledIn[]> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+
+        return this.http.get<Groups>(
+            `${this.API_URL}/user/${userId}/groups`,
+            headers
+        ).pipe(
+            this.errorService.pipeHandler(),
+            switchMap(groups => 
+                forkJoin(
+                    groups.groups.map(groupId => 
+                        this.getGroup(groupId)
+                    )
+                )
+            )
+        );
+    }
+
+    public getGroup(id: string): Observable<GroupFilledIn> {
         return of({
             id: id,
-            assignment: '123',
+            assignment: {
+                id: '321',
+                classId: '123',
+                startDate: new Date(),
+                deadline: new Date(),
+                extraInstructions: 'Extra instructions',
+                learningPathId: '123',
+                name: 'Super coole assignment'
+            },
             members: [{
                 id: '123', email: 'alice@bob.com', firstName: 'Alice', familyName: 'And Bob', schoolName: 'Carol University', passwordHash: '1234',
             }]
@@ -46,17 +77,23 @@ export class GroupService {
                 forkJoin(
                     // Get all users
                     group.members.map(memberId => 
-                        this.userSerice.userWithId(memberId)
+                        this.userService.userWithId(memberId)
                     )
                 ).pipe(
                     this.errorService.pipeHandler(),
 
                     // Map the group to the group with it's users filled in
-                    switchMap(users => of({
-                        id: group.id,
-                        assignment: group.assignment,
-                        members: users
-                    }))
+                    switchMap(users => 
+                        this.assignmentService.retrieveAssignmentById(group.assignment)
+                            .pipe(
+                                this.errorService.pipeHandler(),
+                                switchMap(assignment => of({
+                                    id: group.id,
+                                    assignment: assignment,
+                                    members: users
+                                }))
+                            )
+                    )
                 )
             )
         );

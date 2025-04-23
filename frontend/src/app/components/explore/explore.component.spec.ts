@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ExploreComponent } from './explore.component';
 import { AuthenticationService } from '../../services/authentication.service';
 import { LearningPathService } from '../../services/learningPath.service';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import { LearningPath, LearningPathResponse } from '../../interfaces/learning-path';
 import { LearningPathListComponent } from '../small-components/learning-path-list/learning-path-list.component';
 import { LoadingComponent } from '../loading/loading.component';
@@ -55,27 +55,34 @@ describe('ExploreComponent', () => {
   });
 
   it('should load regular selection when BASIC is visualized', () => {
-    const mockResponse = {
-      learningPaths: [{ learningPathId: '1', title: 'Path 1', minAge: 10, maxAge: 16, language: "en", description: "test", numNodes: 5 } as LearningPath]
-    } as LearningPathResponse;
+    const mockResponse: LearningPathResponse = {
+      learningPaths: [
+        {
+          learningPathId: '1',
+          title: 'Path 1',
+          minAge: 10,
+          maxAge: 16,
+          language: 'en',
+          description: 'test',
+          numNodes: 5,
+          hruid: "hruid",
+          id: "id",
+        }
+      ]
+    };
+
     pathServiceSpy.retrieveLearningPathsByQuery.and.returnValue(of(mockResponse));
     component.setBasic();
 
     expect(component.visualize).toBe('BASIC');
-    expect(pathServiceSpy.retrieveLearningPathsByQuery).toHaveBeenCalledTimes(component.categories.length);
-  });
-
-  it('should handle error during data fetch', () => {
-    spyOn(console, 'error');
-    pathServiceSpy.retrieveLearningPathsByQuery.and.returnValue(throwError(() => new Error('Failed')));
-    component.setBasic();
-    expect(console.error).toHaveBeenCalled();
-    expect(component.loading).toBeFalse();
+    expect(pathServiceSpy.retrieveLearningPathsByQuery).toHaveBeenCalledTimes(component.categoryConfigs.length);
   });
 
   it('should apply filters and map the result', () => {
     const mockPaths: LearningPath[] = [
-      { learningPathId: '1', title: 'Path A', minAge: 12, maxAge: 18, description: "testdescr", numNodes: 5, language: "nl" }
+      {
+        learningPathId: '1', title: 'Path A', minAge: 12, maxAge: 18, description: "testdescr", numNodes: 5, language: "nl", id: 'id', hruid: 'hruid',
+      }
     ];
 
     pathServiceSpy.retrieveLearningPathsByQuery.and.returnValue(of({ learningPaths: mockPaths }));

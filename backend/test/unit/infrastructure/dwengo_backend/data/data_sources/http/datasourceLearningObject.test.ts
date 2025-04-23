@@ -1,5 +1,5 @@
-import { ErrorCode } from "../../../../../../src/application/types";
-import { DatasourceLearningObject } from "../../../../../../src/infrastructure/dwengo_backend/data/data_sources/http/datasourceLearningObject";
+import { ErrorCode } from "../../../../../../../src/application/types";
+import { DatasourceLearningObject } from "../../../../../../../src/infrastructure/dwengo_backend/data/data_sources/http/datasourceLearningObject";
 
 
 describe("DatasourceLearningObject", () => {

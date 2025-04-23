@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { GroupWithUsers } from '../../interfaces/group/groupWithUsers';
+import { GroupFilledIn } from '../../interfaces/group/groupFilledIn';
 import { GroupService } from '../../services/group.service';
 import { AuthenticatedHeaderComponent } from '../authenticated-header/authenticated-header.component';
 import { MiniUserComponent } from '../mini-user/mini-user.component';
@@ -22,7 +22,7 @@ export class GroupComponent implements OnInit {
 
   // The group represented by this component
   // TODO: assignment should also be filled in
-  private _group?: GroupWithUsers;
+  private _group?: GroupFilledIn;
 
   public constructor(
     private groupService: GroupService
@@ -42,7 +42,7 @@ export class GroupComponent implements OnInit {
     }
   }
 
-  public get group(): GroupWithUsers | undefined {
+  public get group(): GroupFilledIn | undefined {
     return this._group;
   }
 

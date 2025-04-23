@@ -12,6 +12,7 @@ describe('AssignmentService', () => {
     classId: "class-id",
     startDate: new Date(2001, 9, 11),
     deadline: new Date(2025, 3, 14),
+    name: "assignment-name",
     extraInstructions: "extra instructions",
     learningPathId: "learning-path-id",
   };
@@ -20,6 +21,7 @@ describe('AssignmentService', () => {
     classId: "class-id",
     startDate: new Date(2001, 9, 11),
     deadline: new Date(2025, 3, 14),
+    name: "assignment-name",
     extraInstructions: "extra instructions",
     learningPathId: "learning-path-id",
   };
@@ -29,6 +31,7 @@ describe('AssignmentService', () => {
     classId: "class-id",
     startDate: new Date(2001, 9, 11),
     deadline: new Date(2025, 3, 14),
+    name: "other-assignment-name",
     learningPathId: "learning-path-id",
     extraInstructions: "extra instructions",
   };

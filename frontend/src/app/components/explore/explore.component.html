@@ -27,9 +27,9 @@
     <app-loading></app-loading>
     } @else {
 
-    @for (category of categories; track category; let idx = $index) {
-    <app-learning-path-list [learningPaths]="getLearningPathsByCategory(category)" [isTeacher]="isTeacher"
-        [title]="titles[idx]"></app-learning-path-list>
+    @for (pair of categoryConfigs; track pair; let idx = $index) {
+    <app-learning-path-list [learningPaths]="getLearningPathsByCategory(pair.key)" [isTeacher]="isTeacher"
+        [title]="pair.title"></app-learning-path-list>
     }
     }
     }
