@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -35,6 +35,7 @@ import { MatCard } from '@angular/material/card';
 })
 export class ChatComponent implements OnInit, OnChanges {
     @Input() questionThreadId!: string;
+    @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
     messages: Message[] = [];
     newMessageContent = '';
@@ -50,8 +51,21 @@ export class ChatComponent implements OnInit, OnChanges {
 
     ngOnInit(): void {
         this.currentUserId = this.authService.retrieveUserId() || '';
+
+        if (!this.currentUserId) {
+            console.error('Could not retrieve user ID');
+        }
+
         this.isInstructor = this.authService.retrieveUserType() === UserType.TEACHER;
         this.loadMessages();
+        // this.scrollToBottom();
+    }
+
+    ngAfterViewInit() {
+        this.scrollToBottom();
+    }
+
+    ngAfterViewChecked() {
         this.scrollToBottom();
     }
 
@@ -60,11 +74,15 @@ export class ChatComponent implements OnInit, OnChanges {
         this.scrollToBottom();
     }
 
-    scrollToBottom(): void {
-        setTimeout(() => {
-            const el = document.querySelector('.messages-container');
-            if (el) el.scrollTop = el.scrollHeight;
-        }, 0);
+    // Helper method to check if message belongs to current user
+    isUserMessage(msg: Message): boolean {
+        return msg.creatorId === this.currentUserId;
+    }
+
+    private scrollToBottom(): void {
+        try {
+            this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+        } catch(err) { }
     }
 
     loadMessages(): void {

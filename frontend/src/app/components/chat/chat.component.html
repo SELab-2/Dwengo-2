@@ -1,18 +1,18 @@
-<mat-toolbar color="primary" class="chat-toolbar">
-    <span>Thread</span>
-    <span class="spacer"></span>
-    <button mat-icon-button aria-label="Settings">
-        <mat-icon>settings</mat-icon>
-    </button>
-    <button mat-icon-button aria-label="More Options">
-        <mat-icon>more_vert</mat-icon>
-    </button>
-</mat-toolbar>
-  
 <div class="chat-container">
-    <div class="messages-container">
+    <mat-toolbar color="primary" class="chat-toolbar">
+        <span>Thread</span>
+        <span class="spacer"></span>
+        <button mat-icon-button aria-label="Settings">
+            <mat-icon>settings</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="More Options">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+    </mat-toolbar>
+    
+    <div class="messages-container" #messagesContainer>
         @for (msg of messages; track msg.id) {
-            <mat-card class="message-card">
+            <mat-card class="message-card" [class.user-message]="isUserMessage(msg)">
                 <mat-card-title>
                     {{ msg.isInstructor ? 'Instructor' : (usernamesMap[msg.creatorId] || 'User') }}
                     <span class="timestamp">{{ msg.createdAt | date: 'short' }}</span>
