@@ -4,6 +4,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
 import { RouterLink } from "@angular/router";
+import { LearningPath } from "../../../interfaces/learning-path";
 
 @Component({
     selector: "app-learning-path-info-card",
@@ -13,12 +14,7 @@ import { RouterLink } from "@angular/router";
     styleUrls: ["./learning-path-info-card.component.less"],
 })
 export class LearningPathInfoCardComponent implements OnInit {
-    @Input() title!: string;
-    @Input() description: string = "";
-    @Input() steps!: number;
-    @Input() minAge!: number;
-    @Input() maxAge!: number;
-    @Input() learningPathId!: string;
+    @Input() path!: LearningPath;
     @Input() isTeacher: boolean = false;
 
     ngOnInit(): void {
@@ -26,6 +22,7 @@ export class LearningPathInfoCardComponent implements OnInit {
     }
 
     checkDescriptionLength = (): void => {
-        this.description = this.description.length > 100 ? this.description.substring(0, 100) + "..." : this.description;
+        this.path.description = this.path.description.length > 100 ? this.path.description.substring(0, 100) + "..." : this.path.description;
     }
+
 }

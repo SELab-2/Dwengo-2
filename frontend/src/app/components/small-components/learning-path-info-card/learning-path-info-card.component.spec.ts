@@ -28,6 +28,19 @@ describe('LearningPathInfoCardComponent', () => {
 
         fixture = TestBed.createComponent(LearningPathInfoCardComponent);
         component = fixture.componentInstance;
+
+        component.path = {
+            title: '',
+            description: '',
+            numNodes: 0,
+            minAge: 0,
+            maxAge: 0,
+            learningPathId: '',
+            language: 'en',
+            hruid: 'test',
+            id: 'aaargh'
+        };
+
         fixture.detectChanges();
     });
 
@@ -36,12 +49,12 @@ describe('LearningPathInfoCardComponent', () => {
     });
 
     it('should display title and truncated description', () => {
-        component.title = 'Algebra 101';
-        component.description = 'very long test description to test if everything after length 100 will be cut out. test test test test test test test test test test test test test test test test test test test test test test';
-        component.steps = 8;
-        component.minAge = 10;
-        component.maxAge = 15;
-        component.learningPathId = 'abc123';
+        component.path.title = 'Algebra 101';
+        component.path.description = 'very long test description to test if everything after length 100 will be cut out. test test test test test test test test test test test test test test test test test test test test test test';
+        component.path.numNodes = 8;
+        component.path.minAge = 10;
+        component.path.maxAge = 15;
+        component.path.learningPathId = 'abc123';
         component.isTeacher = false;
 
         component.checkDescriptionLength();
@@ -57,9 +70,9 @@ describe('LearningPathInfoCardComponent', () => {
 
     it('should show teacher button when isTeacher is true', () => {
         component.isTeacher = true;
-        component.title = 'Test';
-        component.description = 'Short description';
-        component.learningPathId = 'lp1';
+        component.path.title = 'Test';
+        component.path.description = 'Short description';
+        component.path.learningPathId = 'lp1';
         fixture.detectChanges();
 
         const button = fixture.debugElement.query(By.css('button[mat-icon-button]'));
@@ -68,9 +81,9 @@ describe('LearningPathInfoCardComponent', () => {
 
     it('should not show teacher button when isTeacher is false', () => {
         component.isTeacher = false;
-        component.title = 'Test';
-        component.description = 'Short description';
-        component.learningPathId = 'lp1';
+        component.path.title = 'Test';
+        component.path.description = 'Short description';
+        component.path.learningPathId = 'lp1';
         fixture.detectChanges();
 
         const button = fixture.debugElement.query(By.css('button[mat-icon-button]'));
@@ -78,12 +91,11 @@ describe('LearningPathInfoCardComponent', () => {
     });
 
     it('should navigate to correct learning path URL', () => {
-        component.learningPathId = 'xyz456';
-        component.title = 'Test';
-        component.description = 'Short description';
+        component.path.hruid = 'xyz456';
+        component.path.language = 'Test';
         fixture.detectChanges();
 
         const card = fixture.debugElement.query(By.css('mat-card'));
-        expect(card.attributes['ng-reflect-router-link']).toContain('/learning-path/xyz456');
+        expect(card.attributes['ng-reflect-router-link']).toContain('/paths,xyz456,Test');
     });
 });
