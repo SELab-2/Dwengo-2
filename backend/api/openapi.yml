@@ -27,6 +27,8 @@ tags:
     description: Manage student groups within classes, including group creation, assignment and membership
   - name: assignments
     description: Create and manage assignments, including deadlines, instructions and submissions
+  - name: submissions
+    description: Create, manage and get submissions for an assignment.
   - name: questions
     description: Handle Q&A interactions between students and teachers, including asking and answering questions
   - name: learningPath
@@ -1710,8 +1712,101 @@ paths:
           $ref: '#/components/responses/MessagesOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
-
-# TODO - Submissions
+  '/submissions/{id}':
+    get:
+      tags:
+        - submissions
+      summary: Get submission by ID
+      description: Retrieve detailed information about a specific submission using its unique identifier.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/SubmissionOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - submissions
+      summary: Delete submission
+      description: Permanently delete a submission using its unique identifier.
+      operationId: deleteSubmission
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/submissions':    
+    post:
+      tags:
+        - submissions
+      summary: Create new submission
+      description: Create a new submission for a specific assignment.
+      operationId: createSubmission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmissionCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/EntityCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  '/users/:idParent/submissions':
+    get:
+      tags:
+        - submissions
+      summary: Get all submission of a user, can be filtered with assignment and step. 
+      description: Retrieve a list of all submissions associated with a specific user.
+      operationId: getAssignmentSubmissions
+      parameters:
+        - in: path
+          name: idParent
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+        - in: query
+          name: asssignmentId
+          description: Optional param to get the user's submission for a certain assignment.
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: learningObjectId
+          description: |
+            Optional param to get the user's submission for a certain step in an assignment.
+            assignmentId is required otherwise this will not work.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/SubmissionsOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
 components:
   securitySchemes:
@@ -1876,6 +1971,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/LoginResponse'
+    SubmissionOK:
+      description: Submission request completed successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Submission'
     UsersOK:
       description: Users collection request completed successfully
       content:
@@ -2001,7 +2102,18 @@ components:
                 items:
                   type: string
                   format: uuid
-            
+    SubmissionsOK:
+      description: Submissions collection request completed successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              submissions:
+                type: array
+                items:
+                  type: string
+                  format: uuid
 
     EntityCreated:
       description: Entity created successfully
@@ -2904,3 +3016,69 @@ components:
           type: string
           enum: ["text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly"]
           description: One of the following content types -> "text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly".
+    Submission:
+      type: object
+      properties:
+        studentId:
+          type: string
+          example: "student123"
+        assignmentId:
+          type: string
+          example: "assignment456"
+        learningObjectId:
+          type: string
+          example: "object789"
+        time:
+          type: string
+          format: date-time
+          example: "2025-04-22T14:30:00Z"
+        contents:
+          type: string
+          format: byte
+          description: Base64-encoded data (can be a string, photo, etc.)
+          example: "SGVsbG8gV29ybGQ=" # (Hello World)
+        status:
+          type: string
+          enum:
+            - not_accepted
+            - accepted
+          default: not_accepted
+        id:
+          type: string
+          nullable: true
+          example: "submission123"
+      required:
+        - studentId
+        - assignmentId
+        - learningObjectId
+        - time
+        - contents
+        - status
+    SubmissionCreate:
+      properties:
+        studentId:
+          type: string
+          format: uuid
+          description: Unique identifier for the student.
+        assignmentId:
+          type: string
+          format: uuid
+          description: Unique identifier for the assignment.
+        learningObjectId:
+          type: string
+          format: uuid
+          description: Unique identifier for the learning object (hruid).
+        time:
+          type: string
+          format: date-time
+          description: Time of submission.
+        content:
+          type: string
+          format: buffer
+          description: | 
+            The content of the submission (buffer), empty if there was no question asked
+            but student proceeded to next step (used to keep progress in an assignment).
+        status:
+          type: string
+          enum: [ACCEPTED, NOT_ACCEPTED]
+          description: Current status of the submission. Defaults to NOT_ACCEPTED if no explicit status is given.
