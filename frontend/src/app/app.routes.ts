@@ -38,9 +38,11 @@ export const routes: Routes = [
     { path: 'unauthorized', component: UnauthorizedComponent, title: 'Unauthorized' },
     { path: 'already-authenticated', component: AlreadyAuthenticatedComponent, title: 'Already Authenticated' },
 
+    // TODO: new
+    { path: 'student/groups/:id', component: GroupComponent },
+
     // TODO: remove
     { path: 'create-group', component: CreateGroupComponent },
-    { path: 'group/:id', component: GroupComponent },
-
+    
     { path: '**', redirectTo: 'placeholder' },
 ];

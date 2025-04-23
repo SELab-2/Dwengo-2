@@ -13,7 +13,6 @@ import { PaginatedGridComponent } from '../paginated-grid/paginated-grid.compone
 import { MiniClassComponent } from '../mini-class/mini-class.component';
 import { RouterLink } from '@angular/router';
 import { GroupCardComponent } from '../group-card/group-card.component';
-import { Groups } from '../../interfaces/group/groups';
 import { GroupFilledIn } from '../../interfaces/group/groupFilledIn';
 import { GroupService } from '../../services/group.service';
 import { AuthenticationService } from '../../services/authentication.service';

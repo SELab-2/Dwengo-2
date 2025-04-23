@@ -1,4 +1,8 @@
-<mat-card class="group-card" appearance="outlined" style="max-width: 400px;">
+<mat-card 
+    routerLink="/student/groups/{{ group.id }}"
+    class="group-card" 
+    appearance="outlined" 
+    style="max-width: 400px;">
     <mat-card-header>
         <mat-card-title id="group-title" i18n>
             Group for: "{{ group.assignment.name }}"
