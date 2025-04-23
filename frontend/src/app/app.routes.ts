@@ -31,7 +31,7 @@ export const routes: Routes = [
     { path: 'teacher/login', component: LoginPageComponent, title: 'Teacher Login', data: { isTeacher: true }, canActivate: [UnauthorizedGuard] },
     { path: 'student/login', component: LoginPageComponent, title: 'Student Login', data: { isTeacher: false }, canActivate: [UnauthorizedGuard] },
     { path: 'explore', component: ExplorePageComponent, title: 'Explore', canActivate: [AuthorizedGuard] },
-    { path: 'paths/:id', component: LearningPathPageComponent, title: 'Learning Path', canActivate: [AuthorizedGuard] },
+    { path: 'paths/:hruid/:language', component: LearningPathPageComponent, title: 'Learning Path', canActivate: [AuthorizedGuard] },
     { path: 'register', component: RegisterPageComponent, title: 'Register', canActivate: [UnauthorizedGuard] },
     { path: 'placeholder', component: UnknownRouteComponent, title: 'Aur Naur', },
     { path: 'unauthorized', component: UnauthorizedComponent, title: 'Unauthorized' },

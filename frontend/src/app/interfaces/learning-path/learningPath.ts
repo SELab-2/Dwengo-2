@@ -6,7 +6,6 @@ export interface LearningPath {
     numNodes: number;
     minAge: number;
     maxAge: number;
-
     // Right now, this ID is kinda useless, but we need backend to pass this through as the one unique identifier.
     learningPathId: string;
     nodes?: ShallowLearningObject[];

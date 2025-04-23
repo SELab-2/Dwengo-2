@@ -7,16 +7,25 @@ import { LearningObjectService } from "../../services/learningObject.service";
 import { DirectedGraph, Node } from "../../datastructures/directed-graph";
 import { LearningPathService } from "../../services/learningPath.service";
 import { finalize, forkJoin, of } from "rxjs";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
 
 @Component({
-    selector: "app-learning-path-component",
+    selector: "app-learning-path",
     templateUrl: "learning-path.component.html",
     styleUrl: "learning-path.component.less",
     standalone: true,
-    imports: [],
+    imports: [MatFormFieldModule, MatSelectModule, MatOptionModule,],
 })
 export class LearningPathComponent implements OnInit {
-    @Input() path!: LearningPath;
+
+    // The learning path this whole page is about (to be fetched)
+    path!: LearningPath;
+
+    // We get the language and hruid as Input, we need to get our learning path based on this info
+    @Input() language!: string;
+    @Input() hruid!: string;
 
     loading: boolean = true;
     isTeacher: boolean = false;
@@ -34,28 +43,27 @@ export class LearningPathComponent implements OnInit {
 
         // These are the observables for both required calls
         const objectObservable = this.learningObjectService.retrieveObjectsForLearningPath(
-            { hruid: this.path.hruid, language: this.path.language, includeNodes: true } as SpecificLearningPathRequest
+            { hruid: this.hruid, language: this.language, includeNodes: true } as SpecificLearningPathRequest
         );
 
-        const nodesObservable = this.path.nodes
-            ? of(this.path) // If nodes already exist, we return the existing path
-            : this.learningPathService.retrieveOneLearningPath(
-                { hruid: this.path.hruid, language: this.path.language, includeNodes: true } as SpecificLearningPathRequest
-            );
+        const nodesObservable = this.learningPathService.retrieveOneLearningPath(
+            { hruid: this.hruid, language: this.language, includeNodes: true } as SpecificLearningPathRequest
+        );
 
         forkJoin([objectObservable, nodesObservable]).pipe(
             finalize(() => this.loading = false)
         ).subscribe({
             next: ([objects, pathWithNodes]) => {
-                this.learningObjects = objects;
 
-                if (!this.path.nodes) {
-                    this.path.nodes = pathWithNodes.nodes!;
-                }
+                console.log(objects, pathWithNodes)
+                // Assign both responses
+                this.learningObjects = objects;
+                this.path = pathWithNodes!;
 
                 // Build trajectory when we're done
                 if (this.path.nodes && this.learningObjects) {
                     this.trajectoryGraph = this.trajectory(this.path.nodes, this.learningObjects);
+                    console.log(this.trajectoryGraph)
                 }
             },
             error: () => {
@@ -83,7 +91,6 @@ export class LearningPathComponent implements OnInit {
         directions: ShallowLearningObject[],
         detailedObjects: LearningObject[]
     ): DirectedGraph<LearningObject> {
-
         // We will use our minimal implementation of a directed graph
         const graph = new DirectedGraph<LearningObject>();
 
