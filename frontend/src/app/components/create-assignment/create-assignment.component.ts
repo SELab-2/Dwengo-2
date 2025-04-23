@@ -32,7 +32,6 @@ import { NewAssignment } from '../../interfaces/assignment';
   standalone: true
 })
 export class CreateAssignmentComponent implements OnInit {
-
   public createForm: FormGroup;
 
   public classes: Class[] = [];
@@ -50,6 +49,7 @@ export class CreateAssignmentComponent implements OnInit {
     this.createForm = this.buildCreateForm();
     this.getClasses();
     this.getLearningPaths();
+    console.log(this.paths);
   }
 
   create() {
@@ -73,6 +73,7 @@ export class CreateAssignmentComponent implements OnInit {
 
   private buildCreateForm(): FormGroup {
     return this.formBuilder.group({
+      name: ['', [Validators.required, Validators.minLength(5)]],
       classId: ['', Validators.required],
       learningPathId: ['', Validators.required],
       startDate: [new Date(), Validators.required],
@@ -82,6 +83,7 @@ export class CreateAssignmentComponent implements OnInit {
   }
 
   private extractFormValues(): NewAssignment | null {
+    const name = this.createForm.get('name')?.value;
     const classId = this.createForm.get('classId')?.value;
     const learningPathId = this.createForm.get('learningPathId')?.value;
     const startDate = this.createForm.get('startDate')?.value;
@@ -94,7 +96,8 @@ export class CreateAssignmentComponent implements OnInit {
         learningPathId,
         startDate,
         deadline,
-        extraInstructions
+        extraInstructions,
+        name
       };
     }
 

@@ -9,9 +9,6 @@ export interface Assignment {
     extraInstructions: string,
     name: string;
     learningPathId: string,
-    name?: string;
-
-    // name of parent class
     className?: string;
 }
 

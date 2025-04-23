@@ -50,7 +50,7 @@ export class LearningPathService {
     retrieveAll(): Observable<LearningPathResponse> {
         // if we want to retrieve all learning paths
         // our backend asks that the 'all' parameter is set to an empty string
-        return this.retrieveLearningPathsByQuery({ all: ''});
+        return this.retrieveLearningPathsByQuery({ all: 'mathematics'});
     }
     
     retrieveOneLearningPath(query: SpecificLearningPathRequest): Observable<LearningPath> {
