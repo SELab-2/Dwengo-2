@@ -1,5 +1,5 @@
 import { DatasourceTypeORM } from "./datasourceTypeORM";
-import { DatabaseEntryNotFoundError, EntityNotFoundError } from "../../../../../config/error";
+import { EntityNotFoundError } from "../../../../../config/error";
 import { Student } from "../../../../../core/entities/student";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
@@ -23,7 +23,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         return studentModel.toStudentEntity(studentModel.student);
     }
 
-    public async getStudentById(id: string): Promise<Student | null> {
+    public async getStudentById(id: string): Promise<Student> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
         const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
             where: { id: id },
@@ -31,12 +31,12 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         });
 
         if (!studentModel) {
-            return null;
+            throw new EntityNotFoundError(`Student with id ${id} not found`);
         }
         return studentModel.toStudentEntity(studentModel.student);
     }
 
-    public async getStudentByEmail(email: string): Promise<Student | null> {
+    public async getStudentByEmail(email: string): Promise<Student> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const userModel: UserTypeORM | null = await datasource
@@ -44,19 +44,19 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .findOne({ where: { email: email } });
 
         if (!userModel) {
-            return null;
+            throw new EntityNotFoundError(`User with email ${email} not found`);
         }
         const studentModel: StudentTypeORM | null = await datasource
             .getRepository(StudentTypeORM)
             .findOne({ where: { student: userModel } });
 
         if (!studentModel) {
-            return null;
+            throw new EntityNotFoundError(`Student with email ${email} not found`);
         }
         return studentModel.toStudentEntity(userModel);
     }
 
-    public async getStudentByFirstName(first_name: string): Promise<Student | null> {
+    public async getStudentByFirstName(first_name: string): Promise<Student> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const userModel: UserTypeORM | null = await datasource
@@ -64,19 +64,19 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .findOne({ where: { first_name: first_name } });
 
         if (!userModel) {
-            return null;
+            throw new EntityNotFoundError(`User with first name ${first_name} not found`);
         }
         const studentModel: StudentTypeORM | null = await datasource
             .getRepository(StudentTypeORM)
             .findOne({ where: { student: userModel } });
 
         if (!studentModel) {
-            return null;
+            throw new EntityNotFoundError(`Student with first name ${first_name} not found`);
         }
         return studentModel.toStudentEntity(userModel);
     }
 
-    public async getStudentByLastName(last_name: string): Promise<Student | null> {
+    public async getStudentByLastName(last_name: string): Promise<Student> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const userModel: UserTypeORM | null = await datasource
@@ -84,14 +84,14 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .findOne({ where: { last_name: last_name } });
 
         if (!userModel) {
-            return null;
+            throw new EntityNotFoundError(`User with last name ${last_name} not found`);
         }
         const studentModel: StudentTypeORM | null = await datasource
             .getRepository(StudentTypeORM)
             .findOne({ where: { student: userModel } });
 
         if (!studentModel) {
-            return null;
+            throw new EntityNotFoundError(`Student with last name ${last_name} not found`);
         }
         return studentModel.toStudentEntity(userModel);
     }
@@ -165,7 +165,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             });
 
         if (!studentOfClass || studentOfClass.class.id !== classId) {
-            throw new DatabaseEntryNotFoundError("Student not part of class");
+            throw new EntityNotFoundError("Student not part of class");
         }
 
         await datasource.getRepository(StudentOfClassTypeORM).delete(studentOfClass);
@@ -190,7 +190,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             });
 
         if (!studentOfGroup || studentOfGroup.group.id !== groupId) {
-            throw new DatabaseEntryNotFoundError("Student not part of group");
+            throw new EntityNotFoundError("Student not part of group");
         }
 
         await datasource.getRepository(StudentOfGroupTypeORM).delete(studentOfGroup);

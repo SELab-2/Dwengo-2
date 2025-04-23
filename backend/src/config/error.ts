@@ -24,15 +24,6 @@ export class EntityNotFoundError extends Error {
     }
 }
 
-export class DatabaseEntryNotFoundError extends Error {
-    message: string;
-
-    constructor(message: string) {
-        super(message);
-        this.message = message;
-    }
-}
-
 /**
  * Error class for cases like failure to create a Class.
  */

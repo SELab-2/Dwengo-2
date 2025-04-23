@@ -43,17 +43,18 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         return returnSubmission.id;
     }
 
-    public async getById(id: string): Promise<Submission | null> {
+    public async getById(id: string): Promise<Submission> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const submissionModel: SubmissionTypeORM | null = await datasource.getRepository(SubmissionTypeORM).findOne({
             where: { id: id },
         });
 
-        if (submissionModel) {
-            return submissionModel.toEntity();
+        if (!submissionModel) {
+            throw new EntityNotFoundError(`Submission with id ${id} not found`);
         }
-        return null;
+
+        return submissionModel.toEntity();
     }
 
     public async update(submission: Submission): Promise<Submission> {
