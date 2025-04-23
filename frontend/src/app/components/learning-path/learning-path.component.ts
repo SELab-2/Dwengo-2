@@ -10,13 +10,15 @@ import { finalize, forkJoin, of } from "rxjs";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
+import { LoadingComponent } from "../loading/loading.component";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
     selector: "app-learning-path",
     templateUrl: "learning-path.component.html",
     styleUrl: "learning-path.component.less",
     standalone: true,
-    imports: [MatFormFieldModule, MatSelectModule, MatOptionModule,],
+    imports: [MatFormFieldModule, MatSelectModule, MatOptionModule, LoadingComponent, MatCardModule],
 })
 export class LearningPathComponent implements OnInit {
 
@@ -33,6 +35,7 @@ export class LearningPathComponent implements OnInit {
 
     // Trajectory based on transitions
     trajectoryGraph?: DirectedGraph<LearningObject>;
+    selectedNode!: Node<LearningObject> | null;
 
 
     constructor(private authService: AuthenticationService, private learningObjectService: LearningObjectService, private learningPathService: LearningPathService) { }
@@ -137,7 +140,13 @@ export class LearningPathComponent implements OnInit {
             }
         }
 
+        this.selectedNode = graph.root;
+
         return graph;
+    }
+
+    onNodeSelected(): void {
+        // TODO
     }
 
 }

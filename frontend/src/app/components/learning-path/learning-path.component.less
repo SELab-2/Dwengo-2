@@ -1,13 +1,37 @@
-// learning-path-viewer.component.scss
+/* learning-path-viewer.component.less */
+.card-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.learning-path-card {
+    width: 70%;
+    max-width: 1200px;
+    min-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    mat-card-content {
+        padding: 24px;
+    }
+}
+
 .full-width {
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .iframe-wrapper {
-    margin-top: 1rem;
+    margin-top: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
-.learning-object-frame {
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
 }
