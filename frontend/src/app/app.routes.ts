@@ -12,6 +12,8 @@ import { UnauthorizedComponent } from './components/unauthorized/unauthorized.co
 import { UnauthorizedGuard } from './guards/unauthorized.guard';
 import { AlreadyAuthenticatedComponent } from './components/already-authenticated/already-authenticated.component';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
+import { ExplorePageComponent } from './pages/explore-page/explore-page.component';
+import { AuthorizedGuard } from './guards/authorized.guard';
 
 /**
  * Routing of our frontend.
@@ -30,6 +32,7 @@ export const routes: Routes = [
     { path: 'student/assignments', component: StudentAssignmentComponent, title: "My Assignments", canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'teacher/login', component: LoginPageComponent, title: 'Teacher Login', data: { isTeacher: true }, canActivate: [UnauthorizedGuard] },
     { path: 'student/login', component: LoginPageComponent, title: 'Student Login', data: { isTeacher: false }, canActivate: [UnauthorizedGuard] },
+    { path: 'explore', component: ExplorePageComponent, title: 'Explore',canActivate: [AuthorizedGuard] },
     { path: 'register', component: RegisterPageComponent, title: 'Register', canActivate: [UnauthorizedGuard] },
     { path: 'placeholder', component: UnknownRouteComponent, title: 'Aur Naur', },
     { path: 'unauthorized', component: UnauthorizedComponent, title: 'Unauthorized' },
