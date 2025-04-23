@@ -12,6 +12,7 @@ import { UnauthorizedComponent } from './components/unauthorized/unauthorized.co
 import { UnauthorizedGuard } from './guards/unauthorized.guard';
 import { AlreadyAuthenticatedComponent } from './components/already-authenticated/already-authenticated.component';
 import { ExplorePageComponent } from './pages/explore-page/explore-page.component';
+import { CreateGroupComponent } from './components/create-group/create-group.component';
 
 /**
  * Routing of our frontend.
@@ -33,5 +34,7 @@ export const routes: Routes = [
     { path: 'placeholder', component: UnknownRouteComponent, title: 'Aur Naur', },
     { path: 'unauthorized', component: UnauthorizedComponent, title: 'Unauthorized' },
     { path: 'already-authenticated', component: AlreadyAuthenticatedComponent, title: 'Already Authenticated' },
+    // TODO: remove
+    { path: 'group', component: CreateGroupComponent },
     { path: '**', redirectTo: 'placeholder' },
 ];
