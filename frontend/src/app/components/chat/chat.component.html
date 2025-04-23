@@ -14,7 +14,7 @@
         @for (msg of messages; track msg.id) {
             <mat-card class="message-card" [class.user-message]="isUserMessage(msg)">
                 <mat-card-title>
-                    {{ msg.isInstructor ? 'Instructor' : (usernamesMap[msg.creatorId] || 'User') }}
+                    {{ msg.isInstructor ? 'Instructor' : (usernamesMap[msg.senderId] || 'User') }}
                     <span class="timestamp">{{ msg.createdAt | date: 'short' }}</span>
                 </mat-card-title>
                 <mat-card-content>{{ msg.content }}</mat-card-content>

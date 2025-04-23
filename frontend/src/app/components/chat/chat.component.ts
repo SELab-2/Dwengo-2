@@ -58,14 +58,9 @@ export class ChatComponent implements OnInit, OnChanges {
 
         this.isInstructor = this.authService.retrieveUserType() === UserType.TEACHER;
         this.loadMessages();
-        // this.scrollToBottom();
     }
 
     ngAfterViewInit() {
-        this.scrollToBottom();
-    }
-
-    ngAfterViewChecked() {
         this.scrollToBottom();
     }
 
@@ -76,7 +71,7 @@ export class ChatComponent implements OnInit, OnChanges {
 
     // Helper method to check if message belongs to current user
     isUserMessage(msg: Message): boolean {
-        return msg.creatorId === this.currentUserId;
+        return msg.senderId === this.authService.retrieveUserId();
     }
 
     private scrollToBottom(): void {
@@ -89,7 +84,7 @@ export class ChatComponent implements OnInit, OnChanges {
         this.messageService.retrieveMessagesByQuestion(this.questionThreadId).subscribe(messages => {
             this.messages = messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-            const uniqueUserIds = [...new Set(messages.map(m => m.creatorId))];
+            const uniqueUserIds = [...new Set(messages.map(m => m.senderId))];
             uniqueUserIds.forEach(id => {
                 if (this.usernamesMap[id]) return; // Skip if already fetched
                 this.userService.userWithId(id).subscribe(user => {
@@ -114,7 +109,7 @@ export class ChatComponent implements OnInit, OnChanges {
             this.messages.push(
                 {
                     id: messageId,
-                    creatorId: this.currentUserId,
+                    senderId: this.currentUserId,
                     questionId: this.questionThreadId,
                     createdAt: new Date(),
                     content: trimmed,

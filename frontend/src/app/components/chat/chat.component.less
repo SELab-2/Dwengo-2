@@ -1,97 +1,83 @@
 .chat-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    // position: relative;
-    min-height: 0;
-  
+
     .chat-toolbar {
+        height: 64px;
         flex-shrink: 0;
-        height: 64px; /* Match header height */
     }
-  
-    // .messages-container {
-    //     flex: 1;
-    //     min-height: 0;
-    //     overflow-y: auto;
-    //     display: flex;
-    //     flex-direction: column;
-    //     // position: relative;
-    //     padding: 16px;
-    //     background: #fafafa;
-        
-    //     // Force hardware acceleration for smooth scrolling
-    //     transform: translateZ(0);
-    // }
-  
+
     .messages-container {
         flex: 1;
         overflow-y: auto;
         padding: 16px;
+        background: #fafafa;
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        position: absolute;
-        top: 0;
-        bottom: 100px; /* Height of input area */
-        left: 0;
-        right: 0;
+        gap: 12px;
+        /* Ensure momentum scrolling on mobile */
+        -webkit-overflow-scrolling: touch;
         
-        /* Nice scrollbar */
+        /* Simple scrollbar styling */
         &::-webkit-scrollbar {
             width: 8px;
         }
         &::-webkit-scrollbar-thumb {
-            background: #ccc;
+            background-color: rgba(0,0,0,0.2);
             border-radius: 4px;
         }
     }
-  
+
     .message-input {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
         height: 80px;
         padding: 16px;
         background: white;
         border-top: 1px solid #eee;
+        flex-shrink: 0;
         display: flex;
         align-items: center;
+        gap: 8px;
+
+        mat-form-field {
+            flex: 1;
+        }
     }
 
-    .message-input {
-        flex-shrink: 0;
-        padding: 16px;
-        background: white;
-        border-top: 1px solid #eee;
-    }
-  
-    // .message-input {
-    //     height: 80px;
-    //     padding: 16px;
-    //     background: white;
-    //     border-top: 1px solid #eee;
-    //     flex-shrink: 0;
-    // }
-  
-    // .input-field {
-    //     flex: 1;
-    // }
-  
     .message-card {
-        max-width: 80%;
+        max-width: 75%;
         width: fit-content;
-        margin-bottom: 8px;
-        
+        // margin-bottom: 8px;
+        // transition: transform 0.2s ease;
+        margin: 4px 0;
+        background: #ffffff;
+        border-radius: 15px 15px 15px 5px;
+        align-self: flex-start; /* Default to left alignment */
+        transition: all 0.3s ease;
+
         &.user-message {
             align-self: flex-end;
             background: #e3f2fd;
-            border-radius: 18px 18px 4px 18px;
+            // border-radius: 18px 18px 4px 18px;
+            border-radius: 15px 15px 5px 15px;
+            margin-right: 8px; /* Add some right margin */
         }
-        
+
         &:not(.user-message) {
             border-radius: 18px 18px 18px 4px;
         }
+    }
+
+    .timestamp {
+        font-size: 0.75rem;
+        color: #666;
+        margin-left: 8px;
+        font-weight: 400;
+        display: inline-block;
+        vertical-align: middle;
     }
 }

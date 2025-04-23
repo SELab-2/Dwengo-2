@@ -3,7 +3,7 @@
  */
 export interface Message {
     id: string;
-    creatorId: string;
+    senderId: string;
     questionId: string;
     createdAt: Date;
     content: string;

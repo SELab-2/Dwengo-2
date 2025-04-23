@@ -46,7 +46,7 @@ export class MessageService {
       return of([
         {
           id: 'msg1',
-          creatorId: 'u1',
+          senderId: 'u1',
           questionId: idParent,
           createdAt: new Date(Date.now() - 60000),
           content: 'Hey there! This is a mock message.',
@@ -54,7 +54,7 @@ export class MessageService {
         },
         {
           id: 'msg2',
-          creatorId: 'u2',
+          senderId: 'u2',
           questionId: idParent,
           createdAt: new Date(),
           content: 'Hello! This one is from an instructor.',
