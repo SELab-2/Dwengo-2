@@ -5,13 +5,11 @@ import { User } from "../../interfaces";
 import { provideHttpClient } from "@angular/common/http";
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ActivatedRoute } from "@angular/router";
-import { By } from "@angular/platform-browser";
 
 
 describe('CreateGroupComponent', () => {
     let component: CreateGroupComponent;
     let fixture: ComponentFixture<CreateGroupComponent>;
-    let httpTesting: HttpTestingController;
     const members: User[] = [
         { id: '1', firstName: 'Alice', familyName: 'Smith', email: 'alice@school.com', schoolName: 'School', passwordHash: 'pass1' },
         { id: '2', firstName: 'Bob', familyName: 'Brown', email: 'bob@school.com', schoolName: 'School', passwordHash: 'pass2' },
@@ -40,7 +38,7 @@ describe('CreateGroupComponent', () => {
         }).compileComponents();
 
         // Inject mock HTTP client
-        httpTesting = TestBed.inject(HttpTestingController);
+        TestBed.inject(HttpTestingController);
 
         fixture = TestBed.createComponent(CreateGroupComponent);
         component = fixture.componentInstance;
