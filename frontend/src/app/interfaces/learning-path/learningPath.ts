@@ -5,6 +5,7 @@ export interface LearningPath {
     minAge: number;
     maxAge: number;
     learningPathId: string;
+    language: string;
 }
 
 export interface LearningPathRequest {
