@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { Class } from '../../interfaces/classes/class';
+import { Assignment } from '../../interfaces/assignment/assignment';
 import { CommonModule } from '@angular/common'
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card'
 import { RouterLink } from '@angular/router';
 
 @Component({
   standalone: true,
-  selector: 'app-mini-class',
+  selector: 'app-mini-assignment',
   imports: [
     CommonModule,
     RouterLink,
@@ -17,13 +17,13 @@ import { RouterLink } from '@angular/router';
     MatCardTitle,
     MatCardContent
   ],
-  templateUrl: './mini-class.component.html',
-  styleUrl: './mini-class.component.less'
+  templateUrl: './mini-assignment.component.html',
+  styleUrl: './mini-assignment.component.less'
 })
-export class MiniClassComponent {
-  @Input() _type: string = "teacher"; // or student
+export class MiniAssignmentComponent {
+  @Input() _type: string = "student"; // or teacher
 
-  // We get our class from somewhere else
-  @Input() _class!: Class;
+  // We get our assignment from somewhere else
+  @Input() _assignment!: Assignment;
 
 }
