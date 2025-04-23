@@ -41,7 +41,7 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.6.0",
+    "@faker-js/faker": "^9.7.0",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^5.0.0",
