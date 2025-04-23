@@ -29,6 +29,26 @@ export interface ShallowLearningObject {
     }
 }
 
+export interface MinimalLearningObject {
+    metadata: {
+        hruid: string,
+        version: number,
+        language: string,
+    }
+}
+
+export interface MinimalShallowLearningObject {
+    hruid: string;
+    version: number;
+    language: string;
+    startNode: boolean;
+    transitions: {
+        hruid: string,
+        version: number,
+        language: string,
+    }
+}
+
 // This enum is used in LearninObjectRequests.
 export enum HtmlType {
     WRAPPED = "wrapped",
