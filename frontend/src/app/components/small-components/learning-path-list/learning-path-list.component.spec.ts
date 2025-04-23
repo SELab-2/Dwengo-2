@@ -20,6 +20,8 @@ describe('LearningPathListComponent', () => {
             maxAge: 10,
             learningPathId: 'math101',
             language: 'en',
+            id: 'id',
+            hruid: 'hruid',
         },
         {
             title: 'Science 101',
@@ -29,6 +31,8 @@ describe('LearningPathListComponent', () => {
             maxAge: 13,
             learningPathId: 'sci101',
             language: 'nl',
+            id: 'id',
+            hruid: 'hruid',
         }
     ];
 

@@ -64,7 +64,9 @@ describe('ExploreComponent', () => {
           maxAge: 16,
           language: 'en',
           description: 'test',
-          numNodes: 5
+          numNodes: 5,
+          hruid: "hruid",
+          id: "id",
         }
       ]
     };
@@ -79,13 +81,7 @@ describe('ExploreComponent', () => {
   it('should apply filters and map the result', () => {
     const mockPaths: LearningPath[] = [
       {
-        learningPathId: '1',
-        title: 'Path A',
-        minAge: 12,
-        maxAge: 18,
-        description: 'testdescr',
-        numNodes: 5,
-        language: 'nl'
+        learningPathId: '1', title: 'Path A', minAge: 12, maxAge: 18, description: "testdescr", numNodes: 5, language: "nl", id: 'id', hruid: 'hruid',
       }
     ];
 
