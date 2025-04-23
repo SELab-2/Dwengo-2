@@ -1,24 +1,28 @@
+import { z } from "zod";
 import { AssignmentService } from "./assignmentService";
-import { ServiceParams } from "../../../config/service";
+import { getUserAssignmentsSchema } from "../../../application/schemas/assignmentSchemas";
 import { Assignment } from "../../entities/assignment";
+import { tryRepoEntityOperation } from "../../helpers";
 
-/**
- * Wrapper class for the input parameters of the GetUserAssignments service.
- */
-export class GetUserAssignmentsParams implements ServiceParams {
-    public constructor(private _id: string) {}
-
-    public get id() {
-        return this._id;
-    }
-}
+export type GetUserAssignmentsInput = z.infer<typeof getUserAssignmentsSchema>;
 
 /**
  * Service class to get all assignments of a user.
  */
-export class GetUserAssignments extends AssignmentService<GetUserAssignmentsParams> {
-    async execute(input: GetUserAssignmentsParams): Promise<object> {
-        const assignments: Assignment[] = await this.assignmentRepository.getAssignmentsByUserId(input.id);
-        return { assignments: assignments.map(assignment => assignment.toObject()) };
+export class GetUserAssignments extends AssignmentService<GetUserAssignmentsInput> {
+    /**
+     * Executes the user assignments get process.
+     * @param input - The input data for getting user assignments, validated by getUserAssignmentsSchema.
+     * @returns A promise resolving to an object with a list of assignments.
+     * @throws {ApiError} If the user with the given id is not found.
+     */
+    async execute(input: GetUserAssignmentsInput): Promise<object> {
+        const assignments: Assignment[] = await tryRepoEntityOperation(
+            this.assignmentRepository.getByUserId(input.idParent),
+            "User",
+            input.idParent,
+            true,
+        );
+        return { assignments: assignments.map(assignment => assignment.id) };
     }
 }

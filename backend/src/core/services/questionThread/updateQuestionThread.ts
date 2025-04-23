@@ -1,32 +1,30 @@
-import { QuestionThreadBaseService } from "./questionThreadBaseService";
-import { ServiceParams } from "../../../config/service";
-import { QuestionThread, VisibilityType } from "../../entities/questionThread";
+import { z } from "zod";
+import { QuestionThreadService } from "./questionThreadService";
+import { updateQuestionThreadSchema } from "../../../application/schemas/questionThreadSchemas";
+import { QuestionThread } from "../../entities/questionThread";
+import { tryRepoEntityOperation } from "../../helpers";
 
-export class UpdateQuestionThreadParams implements ServiceParams {
-    constructor(
-        private _id: string,
-        private _isClosed?: boolean,
-        private _visibility?: VisibilityType,
-    ) {}
+export type UpdateQuestionThreadInput = z.infer<typeof updateQuestionThreadSchema>;
 
-    public get id(): string {
-        return this._id;
-    }
-    public get isClosed(): boolean | undefined {
-        return this._isClosed;
-    }
-    public get visibility(): VisibilityType | undefined {
-        return this._visibility;
-    }
-}
-
-export class UpdateQuestionThread extends QuestionThreadBaseService<UpdateQuestionThreadParams> {
-    async execute(input: UpdateQuestionThreadParams): Promise<object> {
+export class UpdateQuestionThread extends QuestionThreadService<UpdateQuestionThreadInput> {
+    /**
+     * Executes the thread update process.
+     * @param input - The input data for updating a thread, validated by updateQuestionThreadSchema.
+     * @returns A promise resolving to an empty object.
+     * @throws {ApiError} If the thread with the given id is not found.
+     */
+    async execute(input: UpdateQuestionThreadInput): Promise<object> {
         const updatedFields: Partial<QuestionThread> = {};
 
         if (input.isClosed !== undefined) updatedFields.isClosed = input.isClosed;
         if (input.visibility) updatedFields.visibility = input.visibility;
 
-        return (await this.questionThreadRepository.updateQuestionThread(input.id, updatedFields)).toObject();
+        await tryRepoEntityOperation(
+            this.questionThreadRepository.update(input.id, updatedFields),
+            "Thread",
+            input.id,
+            true,
+        );
+        return {};
     }
 }

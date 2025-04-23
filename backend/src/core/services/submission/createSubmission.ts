@@ -1,49 +1,35 @@
+import { z } from "zod";
 import { SubmissionBaseService } from "./submissionBaseService";
-import { ServiceParams } from "../../../config/service";
-import { Submission, StatusType } from "../../entities/submission";
+import { createSubmissionSchema } from "../../../application/schemas/submissionSchemas";
+import { Submission } from "../../entities/submission";
+import { tryRepoEntityOperation } from "../../helpers";
 
-export class CreateSubmissionParams implements ServiceParams {
-    constructor(
-        private _studentId: string,
-        private _assignmentId: string,
-        private _learningObjectId: string,
-        private _time: Date,
-        private _contents: Buffer,
-        private _status: StatusType = StatusType.NOT_ACCEPTED,
-    ) {}
+export type CreateSubmissionInput = z.infer<typeof createSubmissionSchema>;
 
-    // Getters
-    public get studentId(): string {
-        return this._studentId;
-    }
-    public get assignmentId(): string {
-        return this._assignmentId;
-    }
-    public get learningObjectId(): string {
-        return this._learningObjectId;
-    }
-    public get time(): Date {
-        return this._time;
-    }
-    public get contents(): Buffer {
-        return this._contents;
-    }
-    public get status(): StatusType {
-        return this._status;
-    }
-}
-
-export class CreateSubmission extends SubmissionBaseService<CreateSubmissionParams> {
-    async execute(input: CreateSubmissionParams): Promise<object> {
+export class CreateSubmission extends SubmissionBaseService<CreateSubmissionInput> {
+    /**
+     * Executes the submission creation process.
+     * @param input - The input data for creating a submission, validated by createSubmissionSchema.
+     * @returns A promise resolving to an object containing the ID of the created submission.
+     * @throws {ApiError} If the given user, assignment, learning-object or messages are not found or if the creation fails.
+     */
+    async execute(input: CreateSubmissionInput): Promise<object> {
         const submission = new Submission(
             input.studentId,
             input.assignmentId,
             input.learningObjectId,
             input.time,
-            input.contents,
+            Buffer.from(input.contents, "utf8"),
             input.status,
         );
 
-        return { id: await this.submissionRepository.create(submission) };
+        const createdSubmission = await tryRepoEntityOperation(
+            this.submissionRepository.create(submission),
+            "Student | Assignment | LearningObject",
+            `${submission.studentId} | ${submission.assignmentId} | ${submission.learningObjectId}`,
+            true,
+        );
+
+        return { id: createdSubmission };
     }
 }

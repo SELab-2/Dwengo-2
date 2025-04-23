@@ -1,17 +1,19 @@
-import { QuestionThreadBaseService } from "./questionThreadBaseService";
-import { ServiceParams } from "../../../config/service";
+import { z } from "zod";
+import { QuestionThreadService } from "./questionThreadService";
+import { deleteQuestionThreadSchema } from "../../../application/schemas/questionThreadSchemas";
+import { tryRepoEntityOperation } from "../../helpers";
 
-export class DeleteQuestionThreadParams implements ServiceParams {
-    constructor(private _id: string) {}
+export type DeleteQuestionThreadInput = z.infer<typeof deleteQuestionThreadSchema>;
 
-    public get id(): string {
-        return this._id;
-    }
-}
-
-export class DeleteQuestionThread extends QuestionThreadBaseService<DeleteQuestionThreadParams> {
-    async execute(input: DeleteQuestionThreadParams): Promise<object> {
-        await this.questionThreadRepository.deleteQuestionThread(input.id);
+export class DeleteQuestionThread extends QuestionThreadService<DeleteQuestionThreadInput> {
+    /**
+     * Executes the thread deletion process.
+     * @param input - The input data for deleting a thread, validated by deleteQuestionThreadSchema.
+     * @returns An empty object.
+     * @throws {ApiError} If the thread with the given id is not found.
+     */
+    async execute(input: DeleteQuestionThreadInput): Promise<object> {
+        await tryRepoEntityOperation(this.questionThreadRepository.delete(input.id), "Thread", input.id, true);
         return {};
     }
 }

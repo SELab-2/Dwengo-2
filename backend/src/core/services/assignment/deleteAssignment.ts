@@ -1,23 +1,22 @@
+import { z } from "zod";
 import { AssignmentService } from "./assignmentService";
-import { ServiceParams } from "../../../config/service";
+import { deleteAssignmentSchema } from "../../../application/schemas/assignmentSchemas";
+import { tryRepoEntityOperation } from "../../helpers";
 
-/**
- * Wrapper class for the input parameters of the DeleteAssignment service.
- */
-export class DeleteAssignmentParams implements ServiceParams {
-    public constructor(private _id: string) {}
-
-    public get id(): string {
-        return this._id;
-    }
-}
+export type DeleteAssignmentInput = z.infer<typeof deleteAssignmentSchema>;
 
 /**
  * Service class to delete an assignment.
  */
-export class DeleteAssignment extends AssignmentService<DeleteAssignmentParams> {
-    async execute(input: DeleteAssignmentParams): Promise<object> {
-        await this.assignmentRepository.deleteAssignmentById(input.id);
+export class DeleteAssignment extends AssignmentService<DeleteAssignmentInput> {
+    /**
+     * Executes the assignment deletion process.
+     * @param input - The input data for deleting an assignment, validated by deleteAssignmentSchema.
+     * @returns An empty object.
+     * @throws {ApiError} If the assignment with the given id is not found.
+     */
+    async execute(input: DeleteAssignmentInput): Promise<object> {
+        await tryRepoEntityOperation(this.assignmentRepository.delete(input.id), "Assignment", input.id, true);
         return {};
     }
 }

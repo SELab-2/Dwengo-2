@@ -1,89 +1,61 @@
-import { EntityNotFoundError } from "../../config/error";
 import { Teacher } from "../../core/entities/teacher";
 import { ITeacherRepository } from "../../core/repositories/teacherRepositoryInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
-import { IDatasourceTeacher } from "../database/data/data_sources/datasourceTeacherInterface";
+import { DatasourceTeacherTypeORM } from "../database/data/data_sources/typeorm/datasourceTeacherTypeORM";
 
 export class TeacherRepositoryTypeORM extends ITeacherRepository {
-    private datasource: IDatasource;
-    private datasourceTeacher: Promise<IDatasourceTeacher>;
+    private datasourceTeacher: DatasourceTeacherTypeORM;
 
     public constructor() {
         super();
-        this.datasource = this.datasourceFactory.createDatasource();
-        this.datasourceTeacher = this.datasource.getDatasourceTeacher();
+        this.datasourceTeacher = new DatasourceTeacherTypeORM();
     }
 
-    public async createTeacher(teacher: Teacher): Promise<Teacher> {
-        return await (await this.datasourceTeacher).createTeacher(teacher);
+    public async create(teacher: Teacher): Promise<Teacher> {
+        return await this.datasourceTeacher.createTeacher(teacher);
     }
 
-    public async getTeacherById(id: string): Promise<Teacher> {
-        const teacher: Teacher | null = await (await this.datasourceTeacher).getTeacherById(id);
-
-        if (teacher) {
-            return teacher;
-        } else {
-            throw new EntityNotFoundError(`Teacher with id: ${id} not found`);
-        }
+    public async getById(id: string): Promise<Teacher> {
+        return await this.datasourceTeacher.getTeacherById(id);
     }
 
-    async checkTeacherByEmail(email: string): Promise<boolean> {
+    async checkByEmail(email: string): Promise<boolean> {
         try {
-            const teacher: Teacher = await this.getTeacherByEmail(email);
+            const teacher: Teacher = await this.getByEmail(email);
             return teacher !== null;
         } catch (EntityNotFoundError) {
             return false;
         }
     }
 
-    public async getTeacherByEmail(email: string): Promise<Teacher> {
-        const teacher: Teacher | null = await (await this.datasourceTeacher).getTeacherByEmail(email);
-
-        if (teacher) {
-            return teacher;
-        } else {
-            throw new EntityNotFoundError(`Teacher with email: ${email} not found`);
-        }
+    public async getByEmail(email: string): Promise<Teacher> {
+        return await this.datasourceTeacher.getTeacherByEmail(email);
     }
 
-    public async getTeacherByFirstName(first_name: string): Promise<Teacher> {
-        const teacher: Teacher | null = await (await this.datasourceTeacher).getTeacherByFirstName(first_name);
-
-        if (teacher) {
-            return teacher;
-        } else {
-            throw new EntityNotFoundError(`Teacher with first name: ${first_name} not found`);
-        }
+    public async getByFirstName(first_name: string): Promise<Teacher> {
+        return await this.datasourceTeacher.getTeacherByFirstName(first_name);
     }
 
-    public async getTeacherByLastName(last_name: string): Promise<Teacher> {
-        const teacher: Teacher | null = await (await this.datasourceTeacher).getTeacherByLastName(last_name);
-
-        if (teacher) {
-            return teacher;
-        } else {
-            throw new EntityNotFoundError(`Teacher with last name: ${last_name} not found`);
-        }
+    public async getByLastName(last_name: string): Promise<Teacher> {
+        return await this.datasourceTeacher.getTeacherByLastName(last_name);
     }
 
-    public async getAllTeachers(): Promise<Teacher[]> {
-        return await (await this.datasourceTeacher).getAllTeachers();
+    public async getAll(): Promise<Teacher[]> {
+        return await this.datasourceTeacher.getAllTeachers();
     }
 
-    public async updateTeacher(teacher: Teacher): Promise<Teacher> {
-        return await (await this.datasourceTeacher).updateTeacher(teacher);
+    public async update(teacher: Teacher): Promise<Teacher> {
+        return await this.datasourceTeacher.updateTeacher(teacher);
     }
 
-    public async deleteTeacherWithId(id: string): Promise<void> {
-        return await (await this.datasourceTeacher).deleteTeacherWithId(id);
+    public async delete(id: string): Promise<void> {
+        return await this.datasourceTeacher.deleteTeacherWithId(id);
     }
 
-    public async deleteTeacherFromClass(teacherId: string, classId: string): Promise<void> {
-        return await (await this.datasourceTeacher).deleteTeacherFromClass(teacherId, classId);
+    public async removeFromClass(teacherId: string, classId: string): Promise<void> {
+        return await this.datasourceTeacher.deleteTeacherFromClass(teacherId, classId);
     }
 
-    public async getClassTeachers(classId: string): Promise<Teacher[]> {
-        return await (await this.datasourceTeacher).getClassTeachers(classId);
+    public async getByClassId(classId: string): Promise<Teacher[]> {
+        return await this.datasourceTeacher.getClassTeachers(classId);
     }
 }

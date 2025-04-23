@@ -1,37 +1,26 @@
+import { z } from "zod";
 import { ClassBaseService } from "./baseClassService";
-import { ServiceParams } from "../../../config/service";
+import { updateClassSchema } from "../../../application/schemas/classSchemas";
 import { Class } from "../../entities/class";
+import { tryRepoEntityOperation } from "../../helpers";
 
-export class UpdateClassParams implements ServiceParams {
-    constructor(
-        private _id: string,
-        private _name?: string,
-        private _description?: string,
-        private _targetAudience?: string,
-    ) {}
+export type UpdateClassInput = z.infer<typeof updateClassSchema>;
 
-    public get id(): string {
-        return this._id;
-    }
-    public get name(): string | undefined {
-        return this._name;
-    }
-    public get description(): string | undefined {
-        return this._description;
-    }
-    public get targetAudience(): string | undefined {
-        return this._targetAudience;
-    }
-}
-
-export class UpdateClass extends ClassBaseService<UpdateClassParams> {
-    async execute(input: UpdateClassParams): Promise<object> {
+export class UpdateClass extends ClassBaseService<UpdateClassInput> {
+    /**
+     * Executes the class update process.
+     * @param input - The input data for updating a class, validated by updateClassSchema.
+     * @returns A promise resolving to an empty object.
+     * @throws {ApiError} If the class with the given id is not found.
+     */
+    async execute(input: UpdateClassInput): Promise<object> {
         // Object met alleen de velden die worden bijgewerkt
         const updatedFields: Partial<Class> = {};
         if (input.name) updatedFields.name = input.name;
         if (input.description) updatedFields.description = input.description;
         if (input.targetAudience) updatedFields.targetAudience = input.targetAudience;
 
-        return (await this.classRepository.updateClass(input.id, updatedFields)).toObject();
+        await tryRepoEntityOperation(this.classRepository.update(input.id, updatedFields), "Class", input.id, true);
+        return {};
     }
 }

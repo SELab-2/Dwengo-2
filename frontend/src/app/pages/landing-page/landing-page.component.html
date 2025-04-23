@@ -1,0 +1,24 @@
+<mat-card class="landing-page">
+    <mat-card-content class="landing-page__logo">
+        <img mat-card-image src="assets/dwengo-groen-zwart.svg" alt="Dwengo logo" />
+    </mat-card-content>
+
+    <mat-card-actions class="landing-page__buttons">
+        <div class="landing-page__mat-raised-buttons__login">
+            <button mat-raised-button color="primary" name="teacher-login-button" i18n 
+                    routerLink="teacher/login" routerLinkActive="active" ariaCurrentWhenActive="page">
+                Teacher Login
+            </button>
+            <button mat-raised-button color="primary" name="student-login-button" i18n 
+                    routerLink="student/login" routerLinkActive="active" ariaCurrentWhenActive="page">
+                Student Login
+            </button>
+        </div>
+        
+        <p i18n>No account yet?</p>
+        <button mat-raised-button color="primary" name="register-button" i18n 
+                routerLink="register" routerLinkActive="active" ariaCurrentWhenActive="page">
+            Register
+        </button>
+    </mat-card-actions>
+</mat-card>

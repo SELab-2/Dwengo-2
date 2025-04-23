@@ -1,17 +1,19 @@
+import { z } from "zod";
 import { GroupService } from "./groupService";
-import { ServiceParams } from "../../../config/service";
+import { deleteGroupSchema } from "../../../application/schemas/groupSchemas";
+import { tryRepoEntityOperation } from "../../helpers";
 
-export class DeleteGroupParams implements ServiceParams {
-    constructor(private _id: string) {}
+export type DeleteGroupInput = z.infer<typeof deleteGroupSchema>;
 
-    get id(): string {
-        return this._id;
-    }
-}
-
-export class DeleteGroup extends GroupService<DeleteGroupParams> {
-    async execute(input: DeleteGroupParams): Promise<object> {
-        await this.groupRepository.delete(input.id);
+export class DeleteGroup extends GroupService<DeleteGroupInput> {
+    /**
+     * Executes the group deletion process.
+     * @param input - The input data for deleting a group, validated by deleteGroupSchema.
+     * @returns An empty object.
+     * @throws {ApiError} If the group with the given id is not found.
+     */
+    async execute(input: DeleteGroupInput): Promise<object> {
+        await tryRepoEntityOperation(this.groupRepository.delete(input.id), "Group", input.id, true);
         return {};
     }
 }

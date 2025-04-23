@@ -24,7 +24,10 @@ export class EntityNotFoundError extends Error {
     }
 }
 
-export class DatabaseEntryNotFoundError extends Error {
+/**
+ * Error class for cases like failure to create a Class.
+ */
+export class DatabaseError extends Error {
     message: string;
 
     constructor(message: string) {
@@ -34,9 +37,9 @@ export class DatabaseEntryNotFoundError extends Error {
 }
 
 /**
- * Error class for cases like failure to create a Class.
+ * An error that is thrown when trying to use an expired join code.
  */
-export class DatabaseError extends Error {
+export class ExpiredError extends Error {
     message: string;
 
     constructor(message: string) {

@@ -1,52 +1,49 @@
-import { Service, ServiceParams } from "../../../config/service";
-import { User, UserType } from "../../entities/user";
+import { z } from "zod";
+import { getUserSchema } from "../../../application/schemas/userSchemas";
+import { Service } from "../../../config/service";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation } from "../../helpers";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
 
-/**
- * @description Parameters required to get a user.
- * @param _id - The ID of the user to get.
- * @param _userType - The type of the user (student or teacher).
- */
-export class GetUserParams implements ServiceParams {
-    constructor(
-        private _id: string,
-        private _userType: UserType,
-    ) {}
-
-    public get id() {
-        return this._id;
-    }
-
-    public get userType() {
-        return this._userType;
-    }
-}
+export type GetUserInput = z.infer<typeof getUserSchema>;
 
 /**
  * @description Class representing the service for getting a user.
  * @param {IStudentRepository} studentRepository - The student repository.
  * @param {ITeacherRepository} teacherRepository - The teacher repository.
  */
-export class GetUser implements Service<GetUserParams> {
+export class GetUser implements Service<GetUserInput> {
     constructor(
         private studentRepository: IStudentRepository,
         private teacherRepository: ITeacherRepository,
     ) {}
-    /**
-     * Gets a user from the DB.
-     *
-     * @param id ID of the user to get from the DB.
-     * @returns the user with the given id.
-     *
-     * @throws Error if the user is not present.
-     */
-    async execute(input: GetUserParams): Promise<object> {
-        const user: User =
-            input.userType === UserType.STUDENT
-                ? await this.studentRepository.getStudentById(input.id)
-                : await this.teacherRepository.getTeacherById(input.id);
 
-        return user;
+    /**
+     * Executes the user get process.
+     * @param input - The input data for getting a user, validated by getUserSchema.
+     * @returns A promise resolving to a user transformed into an object.
+     * @throws {ApiError} If the user with the given id was not found.
+     */
+    async execute(input: GetUserInput): Promise<object> {
+        const { getById, getByEmail } =
+            input.userType === UserType.STUDENT
+                ? {
+                      getById: (id: string) => this.studentRepository.getById(id),
+                      getByEmail: (email: string) => this.studentRepository.getByEmail(email),
+                  }
+                : {
+                      getById: (id: string) => this.teacherRepository.getById(id),
+                      getByEmail: (email: string) => this.teacherRepository.getByEmail(email),
+                  };
+
+        return (
+            await tryRepoEntityOperation(
+                input.id ? getById(input.id) : getByEmail(input.email?.toLowerCase() as string),
+                "User",
+                `${input.id ? input.id : input.email?.toLowerCase()}`,
+                true,
+            )
+        ).toObject();
     }
 }

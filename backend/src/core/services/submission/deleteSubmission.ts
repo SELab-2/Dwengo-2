@@ -1,17 +1,19 @@
+import { z } from "zod";
 import { SubmissionBaseService } from "./submissionBaseService";
-import { ServiceParams } from "../../../config/service";
+import { deleteSubmissionSchema } from "../../../application/schemas";
+import { tryRepoEntityOperation } from "../../helpers";
 
-export class DeleteSubmissionParams implements ServiceParams {
-    constructor(private _id: string) {}
+export type DeleteSubmissionInput = z.infer<typeof deleteSubmissionSchema>;
 
-    public get id(): string {
-        return this._id;
-    }
-}
-
-export class DeleteSubmission extends SubmissionBaseService<DeleteSubmissionParams> {
-    async execute(input: DeleteSubmissionParams): Promise<object> {
-        await this.submissionRepository.delete(input.id);
+export class DeleteSubmission extends SubmissionBaseService<DeleteSubmissionInput> {
+    /**
+     * Executes the submission deletion process.
+     * @param input - The input data for deleting a submission, validated by deleteSubmissionSchema.
+     * @returns An empty object.
+     * @throws {ApiError} If the submission with the given id is not found.
+     */
+    async execute(input: DeleteSubmissionInput): Promise<object> {
+        await tryRepoEntityOperation(this.submissionRepository.delete(input.id), "Submission", input.id, true);
         return {};
     }
 }

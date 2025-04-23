@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { ClassTypeORM } from "./classTypeorm";
 import { Assignment } from "../../../../core/entities/assignment";
 
@@ -7,7 +7,7 @@ export class AssignmentTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @OneToOne(() => ClassTypeORM)
+    @ManyToOne(() => ClassTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "class_id" })
     class!: ClassTypeORM;
 
@@ -20,22 +20,23 @@ export class AssignmentTypeORM {
     @Column({ type: "date" })
     deadline!: Date;
 
+    @Column({ type: "varchar" })
+    name!: string;
+
     @Column({ type: "text" })
     extra_instructions!: string;
 
-    public fromPartialAssignmentEntity(
-        assignment: Partial<Assignment>,
-        _class: ClassTypeORM | undefined,
-    ): Partial<AssignmentTypeORM> {
-        const updatedFields: Partial<AssignmentTypeORM> = {};
+    public static createTypeORM(assignment: Assignment, classEntity: ClassTypeORM): AssignmentTypeORM {
+        const assignmentTypeORM = new AssignmentTypeORM();
+        if (assignment.id) assignmentTypeORM.id = assignment.id;
+        assignmentTypeORM.class = classEntity;
+        assignmentTypeORM.learning_path_id = assignment.learningPathId;
+        assignmentTypeORM.start = assignment.startDate;
+        assignmentTypeORM.deadline = assignment.deadline;
+        assignmentTypeORM.name = assignment.name;
+        assignmentTypeORM.extra_instructions = assignment.extraInstructions;
 
-        if (assignment.classId) updatedFields.class = _class;
-        if (assignment.learningPathId) updatedFields.learning_path_id = assignment.learningPathId;
-        if (assignment.startDate) updatedFields.start = assignment.startDate;
-        if (assignment.deadline) updatedFields.deadline = assignment.deadline;
-        if (assignment.extraInstructions) updatedFields.extra_instructions = assignment.extraInstructions;
-
-        return updatedFields;
+        return assignmentTypeORM;
     }
 
     public toAssignmentEntity(): Assignment {
@@ -44,6 +45,7 @@ export class AssignmentTypeORM {
             this.learning_path_id,
             this.start,
             this.deadline,
+            this.name,
             this.extra_instructions,
             this.id,
         );

@@ -1,0 +1,11 @@
+<mat-card routerLink="/{{_type}}/classes/{{_class.id}}" class="mini-class" appearance="outlined" style="max-width: 400px;">
+    <mat-card-header>
+        <mat-card-title id="class-title">
+            {{ _class.name }}
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <p id="class-description">{{ _class.description }}</p>
+        <p id="class-target-audience">{{ _class.targetAudience }}</p>
+    </mat-card-content>
+</mat-card>

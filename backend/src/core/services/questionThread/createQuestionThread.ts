@@ -1,53 +1,35 @@
-import { QuestionThreadBaseService } from "./questionThreadBaseService";
-import { ServiceParams } from "../../../config/service";
-import { QuestionThread, VisibilityType } from "../../entities/questionThread";
+import { z } from "zod";
+import { QuestionThreadService } from "./questionThreadService";
+import { createQuestionThreadSchema } from "../../../application/schemas/questionThreadSchemas";
+import { QuestionThread } from "../../entities/questionThread";
+import { tryRepoEntityOperation } from "../../helpers";
 
-export class CreateQuestionThreadParams implements ServiceParams {
-    public constructor(
-        private _creatorId: string,
-        private _assignmentId: string,
-        private _learningObjectId: string,
-        private _isClosed: boolean = false,
-        private _visibility: VisibilityType,
-        private _messageIds: string[],
-        private _id?: string,
-    ) {}
+export type CreateQuestionThreadInput = z.infer<typeof createQuestionThreadSchema>;
 
-    // Getters
-    public get creatorId(): string {
-        return this._creatorId;
-    }
-    public get assignmentId(): string {
-        return this._assignmentId;
-    }
-    public get learningObjectId(): string {
-        return this._learningObjectId;
-    }
-    public get isClosed(): boolean {
-        return this._isClosed;
-    }
-    public get visibility(): VisibilityType {
-        return this._visibility;
-    }
-    public get messageIds(): string[] {
-        return this._messageIds;
-    }
-    public get id(): string | undefined {
-        return this._id;
-    }
-}
-
-export class CreateQuestionThread extends QuestionThreadBaseService<CreateQuestionThreadParams> {
-    async execute(input: CreateQuestionThreadParams): Promise<object> {
-        const qT: QuestionThread = new QuestionThread(
+export class CreateQuestionThread extends QuestionThreadService<CreateQuestionThreadInput> {
+    /**
+     * Executes the thread creation process.
+     * @param input - The input data for creating a thread, validated by createQuestionThreadSchema.
+     * @returns A promise resolving to an object containing the ID of the created thread.
+     * @throws {ApiError} If the given user, assignment, learning-object or messages are not found or if the creation fails.
+     */
+    async execute(input: CreateQuestionThreadInput): Promise<object> {
+        const questionThread = new QuestionThread(
             input.creatorId,
             input.assignmentId,
             input.learningObjectId,
             input.isClosed,
             input.visibility,
-            input.messageIds,
+            [],
             undefined,
         );
-        return (await this.questionThreadRepository.createQuestionThread(qT)).toObject();
+
+        const createdThread = await tryRepoEntityOperation(
+            this.questionThreadRepository.create(questionThread),
+            "User | Assignment | LearningObject | Message",
+            `${questionThread.creatorId} | ${questionThread.assignmentId} | ${questionThread.learningObjectId} | ${questionThread.messageIds}`,
+        );
+
+        return { id: createdThread.id };
     }
 }

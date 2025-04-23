@@ -1,10 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { AssignmentTypeORM } from "./assignmentTypeorm";
 import { MessageTypeORM } from "./messageTypeorm";
 import { StudentTypeORM } from "./studentTypeorm";
 import { QuestionThread } from "../../../../core/entities/questionThread";
 import { VisibilityType } from "../../../../core/entities/questionThread";
 
+//TODO: no public visibility support + why enum conversion?
 export enum ThreadVisibility {
     GROUP = "group",
     STUDENT = "student",
@@ -15,11 +16,11 @@ export class QuestionThreadTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @OneToOne(() => StudentTypeORM)
+    @ManyToOne(() => StudentTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "creator_id" })
     student!: StudentTypeORM;
 
-    @OneToOne(() => AssignmentTypeORM)
+    @ManyToOne(() => AssignmentTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "assignment_id" })
     assignment!: AssignmentTypeORM;
 

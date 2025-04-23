@@ -1,58 +1,42 @@
-import { EntityNotFoundError } from "../../config/error";
 import { Assignment } from "../../core/entities/assignment";
 import { IAssignmentRepository } from "../../core/repositories/assignmentRepositoryInterface";
-import { IDatasourceAssignment } from "../database/data/data_sources/datasourceAssignmentInterface";
-import { IDatasource } from "../database/data/data_sources/datasourceInterface";
+import { DatasourceAssignmentTypeORM } from "../database/data/data_sources/typeorm/datasourceAssignmentTypeORM";
 
 export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
-    private datasource: IDatasource;
-    private datasourceAssignment: Promise<IDatasourceAssignment>;
+    private datasourceAssignment: DatasourceAssignmentTypeORM;
 
     public constructor() {
         super();
-        this.datasource = this.datasourceFactory.createDatasource();
-        this.datasourceAssignment = this.datasource.getDatasourceAssignment();
+        this.datasourceAssignment = new DatasourceAssignmentTypeORM();
     }
 
-    public async createAssignment(assignment: Assignment, classId: string): Promise<Assignment> {
-        return await (await this.datasourceAssignment).createAssignment(assignment, classId);
+    public async create(assignment: Assignment): Promise<Assignment> {
+        return await this.datasourceAssignment.createAssignment(assignment, assignment.classId);
     }
 
-    public async getAssignmentById(id: string): Promise<Assignment> {
-        const assignment: Assignment | null = await (await this.datasourceAssignment).getAssignmentById(id);
-
-        if (assignment) {
-            return assignment;
-        } else {
-            throw new EntityNotFoundError(`Assignment with id ${id} not found`);
-        }
+    public async getById(id: string): Promise<Assignment> {
+        return await this.datasourceAssignment.getAssignmentById(id);
     }
 
-    public async getAssignmentsByClassId(classId: string): Promise<Assignment[]> {
-        return await (await this.datasourceAssignment).getAssignmentsByClassId(classId);
+    public async getByClassId(classId: string): Promise<Assignment[]> {
+        return await this.datasourceAssignment.getAssignmentsByClassId(classId);
     }
 
-    public async getAssignmentsByUserId(userId: string): Promise<Assignment[]> {
-        return await (await this.datasourceAssignment).getAssignmentsByUserId(userId);
+    public async getByUserId(userId: string): Promise<Assignment[]> {
+        return await this.datasourceAssignment.getAssignmentsByUserId(userId);
     }
 
-    public async getAssignmentsByLearningPathId(learningPathId: string): Promise<Assignment[]> {
-        return await (await this.datasourceAssignment).getAssignmentsByLearningPathId(learningPathId);
+    public async getByLearningPathId(learningPathId: string): Promise<Assignment[]> {
+        return await this.datasourceAssignment.getAssignmentsByLearningPathId(learningPathId);
     }
 
-    public async deleteAssignmentById(id: string): Promise<void> {
-        return await (await this.datasourceAssignment).deleteAssignmentById(id);
+    public async delete(id: string): Promise<void> {
+        return await this.datasourceAssignment.deleteAssignmentById(id);
     }
 
-    public async updateAssignmentById(id: string, updatedFields: Partial<Assignment>): Promise<Assignment> {
-        const updatedAssignment: Assignment | null = await (
-            await this.datasourceAssignment
-        ).updateAssignmentById(id, updatedFields);
+    public async update(updatedFields: Assignment): Promise<Assignment> {
+        const updatedAssignment: Assignment = await this.datasourceAssignment.updateAssignmentById(updatedFields);
 
-        if (updatedAssignment) {
-            return updatedAssignment;
-        } else {
-            throw new EntityNotFoundError(`Assignment with id ${id} not found`);
-        }
+        return updatedAssignment;
     }
 }

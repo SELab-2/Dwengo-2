@@ -1,5 +1,3 @@
-import { ServiceParams } from "../config/service";
-
 /* ************* HTTP Protocol Types ************* */
 
 /**
@@ -75,6 +73,18 @@ export interface ApiError {
     [key: string]: unknown; // Optional additional properties (for flexibility)
 }
 
+/* ************* Middleware & Authentication ************* */
+
+export interface AuthenticationTokenPayload {
+    id: string;
+    userType: string;
+}
+
+export interface TokenResponse {
+    accessToken: string;
+    refreshToken: string;
+}
+
 /* ************* Path/Routing Types ************* */
 
 /**
@@ -82,32 +92,13 @@ export interface ApiError {
  * Used for RESTful route pattern matching and parameter extraction.
  */
 export interface PathParams {
-    entity?: string;
-    parent?: string;
-    id?: string;
-    idParent?: string;
-    idType?: string;
-    idParentType?: string;
+    [key: string]: string;
 }
 
 /**
  * Type representing query parameters extracted from URL segments.
  * Used parameter extraction.
  */
-export type QueryParams = Record<string, string | number>;
-
-/**
- * Route pattern definition for declarative routing.
- * Used to match incoming requests to their appropriate handler functions
- * based on URL structure and parameters.
- */
-export interface RoutePattern {
-    parent?: string;
-    hasId: boolean;
-    hasParentId: boolean;
-    extractor: (req: Request) => ServiceParams;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    handler: (req: Request, data: any) => Promise<Response>;
+export interface QueryParams {
+    [key: string]: undefined | string | QueryParams | (string | QueryParams)[];
 }
-
-export type RouteHandlers = Partial<Record<HttpMethod, RoutePattern[]>>;

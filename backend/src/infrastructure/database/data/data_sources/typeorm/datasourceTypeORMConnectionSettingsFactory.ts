@@ -1,15 +1,14 @@
 import { DatasourceTypeORMConnectionSettings } from "./datasourceTypeORMConnectionSettings";
-import { AssignmentAnswerTypeORM } from "../../data_models/assignmentAnswerTypeorm";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
+import { JoinCodeTypeORM } from "../../data_models/joinCodeTypeorm";
 import { JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
-import { TeacherGroupAssignmentTypeORM } from "../../data_models/teacherGroupAssignmentTypeorm";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
@@ -42,7 +41,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
         password: string,
         database: string,
         synchronize: boolean = false,
-        logging: boolean = true,
+        logging: boolean = false,
         host: string = "database",
         dropschema: boolean = false, // Never set this to true in production
 
@@ -52,6 +51,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             UserTypeORM,
             StudentTypeORM,
             TeacherTypeORM,
+            JoinCodeTypeORM,
             JoinRequestTypeORM,
             ClassTypeORM,
             TeacherOfClassTypeORM,
@@ -59,10 +59,8 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             GroupTypeORM,
             StudentOfGroupTypeORM,
             AssignmentTypeORM,
-            TeacherGroupAssignmentTypeORM,
             QuestionThreadTypeORM,
             MessageTypeORM,
-            AssignmentAnswerTypeORM,
         ],
     ): DatasourceTypeORMConnectionSettings {
         return new DatasourceTypeORMConnectionSettings(

@@ -1,53 +1,40 @@
+import { z } from "zod";
 import { AssignmentService } from "./assignmentService";
-import { ServiceParams } from "../../../config/service";
+import { createAssignmentSchema } from "../../../application/schemas";
 import { Assignment } from "../../entities/assignment";
+import { tryRepoEntityOperation } from "../../helpers";
 
-/**
- * Wrapper class for the possible paramaters to create an assignment
- */
-export class CreateAssignmentParams implements ServiceParams {
-    public constructor(
-        private _classId: string,
-        private _learningPathId: string,
-        private _startDate: Date,
-        private _deadline: Date,
-        private _extraInstructions: string,
-    ) {}
-
-    public get classId(): string {
-        return this._classId;
-    }
-
-    public get learningPathId(): string {
-        return this._learningPathId;
-    }
-
-    public get startDate(): Date {
-        return this._startDate;
-    }
-
-    public get deadline(): Date {
-        return this._deadline;
-    }
-
-    public get extraInstructions(): string {
-        return this._extraInstructions;
-    }
-}
+export type CreateAssignmentInput = z.infer<typeof createAssignmentSchema>;
 
 /**
  * Service to create an assignment
  */
-export class CreateAssignment extends AssignmentService<CreateAssignmentParams> {
-    async execute(input: CreateAssignmentParams): Promise<object> {
+export class CreateAssignment extends AssignmentService<CreateAssignmentInput> {
+    /**
+     * Executes the assignment creation process.
+     * @param input - The input data for creating an assignment, validated by createAssignmentSchema.
+     * @returns A promise resolving to an object containing the ID of the created assignment.
+     * @throws {ApiError} If the class with the given classId is not found or if the creation fails.
+     */
+    async execute(input: CreateAssignmentInput): Promise<object> {
         const assignment: Assignment = new Assignment(
             input.classId,
             input.learningPathId,
             input.startDate,
             input.deadline,
+            input.name,
             input.extraInstructions,
         );
 
-        return { id: (await this.assignmentRepository.createAssignment(assignment, input.classId)).id };
+        const createdAssignment = await tryRepoEntityOperation(
+            this.assignmentRepository.create(assignment),
+            "Class",
+            input.classId,
+            true,
+        );
+
+        return {
+            id: createdAssignment.id,
+        };
     }
 }

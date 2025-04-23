@@ -1,24 +1,42 @@
+import { z } from "zod";
+import { JoinRequestService } from "./joinRequestService";
+import { createJoinRequestSchema } from "../../../application/schemas";
 import { ApiError, ErrorCode } from "../../../application/types";
-import { Service, ServiceParams } from "../../../config/service";
-import { JoinRequest, JoinRequestType } from "../../entities/joinRequest";
+import { JoinRequest } from "../../entities/joinRequest";
+import { tryRepoEntityOperation } from "../../helpers";
 import { IClassRepository } from "../../repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
 
-export class CreateJoinRequestParams implements ServiceParams {
-    constructor(
-        private _requesterId: string,
-        private _classId: string,
-        private _type: JoinRequestType,
-    ) {}
+export type CreateJoinRequestInput = z.infer<typeof createJoinRequestSchema>;
 
-    async fromObject(
-        joinRequestRepository: IJoinRequestRepository,
-        classRepository: IClassRepository,
-    ): Promise<JoinRequest> {
+export class CreateJoinRequest extends JoinRequestService<CreateJoinRequestInput> {
+    constructor(
+        _joinRequestRepository: IJoinRequestRepository,
+        private _classRepository: IClassRepository,
+    ) {
+        super(_joinRequestRepository);
+    }
+
+    /**
+     * Executes the join-request creation process.
+     * @param input - The input data for creating a join-request, validated by createJoinRequestSchema.
+     * @returns A promise resolving to an object containing the ID of the created join-request.
+     * @throws {ApiError} If the join-request with the given id is not found or if the creation fails.
+     */
+    async execute(input: CreateJoinRequestInput): Promise<object> {
+        const joinRequest: JoinRequest = await tryRepoEntityOperation(
+            this.joinRequestRepository.create(await this.fromObject(input)),
+            "Class | Requester",
+            `${input.class} | ${input.requester}`,
+        );
+        return { id: joinRequest.id };
+    }
+
+    async fromObject(input: CreateJoinRequestInput): Promise<JoinRequest> {
         // Check if user hasn't already requested to join the class
-        const classRequests: JoinRequest[] = await joinRequestRepository.getJoinRequestByClassId(this._classId);
+        const classRequests: JoinRequest[] = await this.joinRequestRepository.getByClassId(input.class);
         for (const req of classRequests) {
-            if (req.requester == this._requesterId) {
+            if (req.requester == input.requester) {
                 throw {
                     code: ErrorCode.CONFLICT,
                     message: "User already has a join request for this class.",
@@ -49,20 +67,6 @@ export class CreateJoinRequestParams implements ServiceParams {
             } as ApiError;
         } catch (EntityNotFoundError) {}
         */
-        return new JoinRequest(this._requesterId, this._classId, this._type);
-    }
-}
-
-export class CreateJoinRequest implements Service<CreateJoinRequestParams> {
-    constructor(
-        private _joinRequestRepository: IJoinRequestRepository,
-        private _classRepository: IClassRepository,
-    ) {}
-
-    async execute(input: CreateJoinRequestParams): Promise<object> {
-        const joinRequest: JoinRequest = await this._joinRequestRepository.createJoinRequest(
-            await input.fromObject(this._joinRequestRepository, this._classRepository),
-        );
-        return { id: joinRequest.id };
+        return new JoinRequest(input.requester, input.class, input.userType);
     }
 }

@@ -1,0 +1,9 @@
+<app-unauthenticated-header></app-unauthenticated-header>
+
+<mat-card class="login">
+    <mat-card-title>{{ userType | titlecase }} Login</mat-card-title>
+    <mat-card-content>
+        <app-login [userType]="userType"></app-login>
+    </mat-card-content>
+</mat-card>
+

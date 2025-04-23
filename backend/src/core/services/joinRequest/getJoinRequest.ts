@@ -1,36 +1,53 @@
-import { ApiError, ErrorCode } from "../../../application/types";
-import { Service, ServiceParams } from "../../../config/service";
+import { z } from "zod";
+import { JoinRequestService } from "./joinRequestService";
+import {
+    getJoinRequestSchema,
+    getUserJoinRequestsSchema,
+    getClassJoinRequestsSchema,
+} from "../../../application/schemas";
 import { JoinRequest } from "../../entities/joinRequest";
-import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
+import { tryRepoEntityOperation } from "../../helpers";
+
+/**
+ * @description paramaters to get all joinRequests of a class
+ *
+ * @param _classId The id of the class.
+ */
+export type GetClassJoinRequestsInput = z.infer<typeof getClassJoinRequestsSchema>;
 
 /**
  * @description paramaters to get all joinRequests of a user
  *
  * @param _userId The id of the user.
  */
-export class GetJoinRequestsParams implements ServiceParams {
-    constructor(protected _userId: string) {}
-
-    get userId() {
-        return this._userId;
-    }
-}
+export type GetUserJoinRequestsInput = z.infer<typeof getUserJoinRequestsSchema>;
 
 /**
- * @description paramaters to get a single joinRequest of a user
- * @param _userId The id of the user.
- * @param _requestId The id of the joinRequest.
+ * @description paramaters to get a single joinRequest
+ * @param id The id of the joinRequest.
  */
-export class GetJoinRequestParams extends GetJoinRequestsParams {
-    constructor(
-        userId: string,
-        private _requestId: string,
-    ) {
-        super(userId);
-    }
+export type GetJoinRequestInput = z.infer<typeof getJoinRequestSchema>;
 
-    get requestId(): string {
-        return this._requestId;
+/**
+ * @description class representing service to get all joinRequests of a class
+ *
+ */
+export class GetClassJoinRequests extends JoinRequestService<GetClassJoinRequestsInput> {
+    /**
+     * Executes the class join-request get process.
+     * @param input - The input data for getting class join-request, validated by getClassJoinCodesSchema.
+     * @returns A promise resolving to an object with a list of join-request.
+     * @throws {ApiError} If the class with the given id is not found.
+     */
+    async execute(input: GetClassJoinRequestsInput): Promise<object> {
+        // Get all requests for user
+        const requests: JoinRequest[] = await tryRepoEntityOperation(
+            this.joinRequestRepository.getByClassId(input.idParent),
+            "Class",
+            input.idParent,
+            true,
+        );
+        return { requests: requests.map(request => request.id) };
     }
 }
 
@@ -38,39 +55,38 @@ export class GetJoinRequestParams extends GetJoinRequestsParams {
  * @description class representing service to get all joinRequests of a user
  *
  */
-export class GetJoinRequests implements Service<GetJoinRequestsParams> {
-    constructor(private joinRequestRepository: IJoinRequestRepository) {}
-
-    async execute(input: GetJoinRequestsParams): Promise<object> {
+export class GetUserJoinRequests extends JoinRequestService<GetUserJoinRequestsInput> {
+    /**
+     * Executes the user join-request get process.
+     * @param input - The input data for getting user join-request, validated by getUserJoinRequestsSchema.
+     * @returns A promise resolving to an object with a list of join-request.
+     * @throws {ApiError} If the user with the given id is not found.
+     */
+    async execute(input: GetUserJoinRequestsInput): Promise<object> {
         // Get all requests for user
-        const requests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByRequesterId(input.userId);
-        return {
-            requests: requests.map(request => request.toObject()),
-        };
+        const requests: JoinRequest[] = await tryRepoEntityOperation(
+            this.joinRequestRepository.getByRequesterId(input.idParent),
+            "User",
+            input.idParent,
+            true,
+        );
+        return { requests: requests.map(request => request.id) };
     }
 }
 
 /**
- * @description class representing service to get a single joinRequest of a user
+ * @description class representing service to get a single joinRequest
  */
-export class GetJoinRequest implements Service<GetJoinRequestParams> {
-    constructor(private joinRequestRepository: IJoinRequestRepository) {}
-
-    async execute(input: GetJoinRequestParams): Promise<object> {
-        console.log(input.requestId, input.userId);
-        // Get all requests
-        const requests: JoinRequest[] = await this.joinRequestRepository.getJoinRequestByRequesterId(input.userId);
-
-        // Search for request with id
-        const joinRequest: JoinRequest[] = requests.filter(request => request.id === input.requestId);
-
-        // No request found for this user with the given id.
-        if (joinRequest.length === 0) {
-            throw {
-                code: ErrorCode.NOT_FOUND,
-                message: "joinRequest not found.",
-            } as ApiError;
-        }
-        return { request: joinRequest[0].toObject() };
+export class GetJoinRequest extends JoinRequestService<GetJoinRequestInput> {
+    /**
+     * Executes the join-request get process.
+     * @param input - The input data for getting a join-request, validated by getJoinRequestSchema.
+     * @returns A promise resolving to a join-request transformed into an object.
+     * @throws {ApiError} If the join-request with the given id was not found.
+     */
+    async execute(input: GetJoinRequestInput): Promise<object> {
+        return (
+            await tryRepoEntityOperation(this.joinRequestRepository.getById(input.id), "JoinRequest", input.id, true)
+        ).toObject();
     }
 }

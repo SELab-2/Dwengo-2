@@ -1,35 +1,28 @@
+import { z } from "zod";
 import { MessageService } from "./messageService";
-import { ServiceParams } from "../../../config/service";
+import { createMessageSchema } from "../../../application/schemas/messageSchemas";
 import { Message } from "../../entities/message";
+import { tryRepoEntityOperation } from "../../helpers";
 
-export class CreateMessageParams implements ServiceParams {
-    constructor(
-        private _senderId: string,
-        private _createdAt: Date,
-        private _threadId: string,
-        private _content: string,
-    ) {}
+export type CreateMessageInput = z.infer<typeof createMessageSchema>;
 
-    get senderId(): string {
-        return this._senderId;
-    }
-
-    get createdAt(): Date {
-        return this._createdAt;
-    }
-
-    get threadId(): string {
-        return this._threadId;
-    }
-
-    get content(): string {
-        return this._content;
-    }
-}
-
-export class CreateMessage extends MessageService<CreateMessageParams> {
-    async execute(input: CreateMessageParams): Promise<object> {
+export class CreateMessage extends MessageService<CreateMessageInput> {
+    /**
+     * Executes the message creation process.
+     * @param input - The input data for creating a message, validated by createMessageSchema.
+     * @returns A promise resolving to an object containing the ID of the created message.
+     * @throws {ApiError} If the given user or thread is not found or if the creation fails.
+     */
+    async execute(input: CreateMessageInput): Promise<object> {
         const newMessage = new Message(input.senderId, input.createdAt, input.threadId, input.content);
-        return { id: (await this.messageRepository.createMessage(newMessage)).id };
+
+        const createdMessage = await tryRepoEntityOperation(
+            this.messageRepository.create(newMessage),
+            "User | Thread",
+            `${newMessage.senderId} | ${newMessage.threadId}`,
+            true,
+        );
+
+        return { id: createdMessage.id };
     }
 }

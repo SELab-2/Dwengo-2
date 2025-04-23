@@ -25,4 +25,35 @@ export abstract class ISubmissionRepository extends AbstractRepository {
      * @returns A promise that resolves when the submission is deleted.
      */
     public abstract delete(id: string): Promise<void>;
+
+    /**
+     * Get all submissions  of an assignment for a specific student.
+     * @param studentId The id of the student.
+     * @param assignmentId The id of the assignment.
+     * @throws EntityNotFoundError when the assignment or student is not found.
+     * @returns A promise that resolves to the retrieved submissions.
+     */
+    public abstract getAllForStudentInAssignment(studentId: string, assignmentId: string): Promise<Submission[]>;
+
+    /**
+     * Get all submissions for a specific student in a specific step of an assignment.
+     * @param studentId The id of the student.
+     * @param assignmentId The id of the assignment.
+     * @param learning_object_id The id of the learning object.
+     * @throws EntityNotFoundError when the assignment or student is not found.
+     * @returns A promise that resolves to the retrieved submissions.
+     */
+    public abstract getAllForStudentInAssignmentStep(
+        studentId: string,
+        assignmentId: string,
+        learning_object_id: string,
+    ): Promise<Submission[]>;
+
+    /**
+     * Get all submissions for a specific student, for any assignment and step in that assignment.
+     * @param studentId The id of the student.
+     * @throws EntityNotFoundError when the student is not found.
+     * @returns A promise that resolves to the retrieved submissions.
+     */
+    public abstract getByStudentId(studentId: string): Promise<Submission[]>;
 }

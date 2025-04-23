@@ -1,15 +1,26 @@
-import { UserBaseService } from "./userBaseService";
-import { ServiceParams } from "../../../config/service";
+import { z } from "zod";
+import { getAllUsersSchema } from "../../../application/schemas/userSchemas";
+import { Service } from "../../../config/service";
+import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
+import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
 
-export class GetAllUsersParams implements ServiceParams {
-    public constructor() {} //needed for controller
-}
+export type GetAllUsersInput = z.infer<typeof getAllUsersSchema>;
 
-export class GetAllUsers extends UserBaseService<GetAllUsersParams> {
+export class GetAllUsers implements Service<GetAllUsersInput> {
+    constructor(
+        private studentRepository: IStudentRepository,
+        private teacherRepository: ITeacherRepository,
+    ) {}
+
+    /**
+     * Executes the all users get process.
+     * @param input - The input data for getting all users, validated by getAllUsersSchema.
+     * @returns A promise resolving to an object with a list of all users.
+     * @throws {Error} If something went wrong.
+     */
     async execute(): Promise<object> {
-        const students = (await this.studentRepository.getAllStudents()).map(student => student.toObject());
-        const teachers = (await this.teacherRepository.getAllTeachers()).map(teacher => teacher.toObject());
-
-        return { students: students, teachers: teachers };
+        const studentIds = (await this.studentRepository.getAll()).map(student => student.id);
+        const teacherIds = (await this.teacherRepository.getAll()).map(teacher => teacher.id);
+        return { students: studentIds, teachers: teacherIds };
     }
 }
