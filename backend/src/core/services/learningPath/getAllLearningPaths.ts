@@ -33,7 +33,8 @@ export class GetAllLearningPaths implements Service<GetAllLearningPathsInput> {
         const learningPaths: LearningPath[] = [];
         // Get all the learningObjects for each word in all if it exists
         if (input.all !== undefined) {
-            const allParams: string[] = input.all.length === 0 ? [""] : input.all.split("-").filter((val: string) => val.length > 0);
+            const allParams: string[] =
+                input.all.length === 0 ? [""] : input.all.split("-").filter((val: string) => val.length > 0);
             for (const allParam of allParams) {
                 const paramsString: string = `?all=${allParam}${params.length > 0 ? "&" : ""}${params.join("&")}`;
                 learningPaths.push(
