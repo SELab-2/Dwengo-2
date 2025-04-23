@@ -43,3 +43,27 @@
     font-size: 0.8em;
     color: gray;
 }
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    padding: 16px;
+    box-sizing: border-box;
+}
+  
+.messages-container {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+}
+  
+.message-input {
+    display: flex;
+    align-items: center;
+    padding-top: 8px;
+}

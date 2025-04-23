@@ -10,7 +10,7 @@
 </mat-toolbar>
   
 <div class="chat-container">
-    <div class="messages">
+    <div class="messages-container">
         @for (msg of messages; track msg.id) {
             <mat-card class="message-card">
                 <mat-card-title>
@@ -22,7 +22,7 @@
         }
     </div>
 
-    <form (ngSubmit)="sendMessage()" class="input-container">
+    <form (ngSubmit)="sendMessage()" class="message-input">
         <mat-form-field appearance="outline" class="input-field">
             <input matInput [(ngModel)]="newMessageContent" name="message" placeholder="Type your message..." />
         </mat-form-field>

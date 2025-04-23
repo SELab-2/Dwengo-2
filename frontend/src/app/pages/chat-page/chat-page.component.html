@@ -1,4 +1,28 @@
-<div class="chat-page-container">
+<!-- <div class="chat-page">
     <app-authenticated-header></app-authenticated-header>
     <app-chat [questionThreadId]="mockThreadId"></app-chat>
+</div> -->
+<div class="chat-page">
+    <app-authenticated-header></app-authenticated-header>
+    <main class="main-container">
+        <div class="sidebar">
+            <mat-nav-list>
+                @for (thread of questionThreads; track thread.id) {
+                <a mat-list-item [routerLink]="['/student/chat', thread.id]">
+                    Chat {{ thread.id.slice(0, 6) }}...
+                </a>
+                }
+            </mat-nav-list>
+        </div>
+      
+        <div class="chatbox">
+            @if (!validChatId) {
+                <div class="invalid-chat-message">
+                Invalid chat ID
+                </div>
+            } @else {
+                <app-chat [questionThreadId]="chatId" />
+            }
+        </div>
+    </main>
 </div>
