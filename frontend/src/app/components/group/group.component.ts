@@ -1,9 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { GroupFilledIn } from '../../interfaces/group/groupFilledIn';
+import { Group } from '../../interfaces/group/group';
 import { GroupService } from '../../services/group.service';
 import { AuthenticatedHeaderComponent } from '../authenticated-header/authenticated-header.component';
 import { MiniUserComponent } from '../mini-user/mini-user.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -17,12 +18,14 @@ import { MiniUserComponent } from '../mini-user/mini-user.component';
 })
 export class GroupComponent implements OnInit {
 
+  // Snackbar
+  private snackbar = inject(MatSnackBar);
+
   // The currently activated route
   private readonly route = inject(ActivatedRoute);
 
   // The group represented by this component
-  // TODO: assignment should also be filled in
-  private _group?: GroupFilledIn;
+  private _group?: Group;
 
   public constructor(
     private groupService: GroupService
@@ -38,12 +41,18 @@ export class GroupComponent implements OnInit {
       const group$ = this.groupService.getGroup(id);
       group$.subscribe(response => this._group = response);
     } else {
-      // TODO
+      this.openSnackBar($localize`Cannot read group id from URL`);
     }
   }
 
-  public get group(): GroupFilledIn | undefined {
+  public get group(): Group | undefined {
     return this._group;
+  }
+
+  private openSnackBar(message: string, action: string="Ok") {
+    this.snackbar.open(message, action, {
+        duration: 2500
+    });
   }
 
 }

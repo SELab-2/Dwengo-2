@@ -13,7 +13,7 @@ import { PaginatedGridComponent } from '../paginated-grid/paginated-grid.compone
 import { MiniClassComponent } from '../mini-class/mini-class.component';
 import { RouterLink } from '@angular/router';
 import { GroupCardComponent } from '../group-card/group-card.component';
-import { GroupFilledIn } from '../../interfaces/group/groupFilledIn';
+import { Group } from '../../interfaces/group/group';
 import { GroupService } from '../../services/group.service';
 import { AuthenticationService } from '../../services/authentication.service';
 
@@ -38,7 +38,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 export class StudentDashboardComponent implements OnInit {
   private _assignments: Assignment[] = [];
   private _classes: Class[] = [];
-  private _groups: GroupFilledIn[] = [];
+  private _groups: Group[] = [];
 
   public pagedAssignments: Assignment[] = [];
 
@@ -96,7 +96,7 @@ export class StudentDashboardComponent implements OnInit {
     return this._classes;
   }
 
-  public get groups(): GroupFilledIn[] {
+  public get groups(): Group[] {
     return this._groups;
   }
 

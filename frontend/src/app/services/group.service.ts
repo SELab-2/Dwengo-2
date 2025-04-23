@@ -7,7 +7,7 @@ import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
 import { NewGroup } from "../interfaces/group/newGroup";
 import { GroupResponse } from "../interfaces/group/groupResponse";
-import { GroupFilledIn } from "../interfaces/group/groupFilledIn";
+import { Group } from "../interfaces/group/group";
 import { UserService } from "./user.service";
 import { AssignmentService } from "./assignment.service";
 import { Groups } from "../interfaces/group/groups";
@@ -27,7 +27,7 @@ export class GroupService {
         private assignmentService: AssignmentService
     ) {}
 
-    public getAllGroupsFromUser(userId: string): Observable<GroupFilledIn[]> {
+    public getAllGroupsFromUser(userId: string): Observable<Group[]> {
         const headers = this.authService.retrieveAuthenticationHeaders();
 
         return this.http.get<Groups>(
@@ -45,7 +45,7 @@ export class GroupService {
         );
     }
 
-    public getGroup(id: string): Observable<GroupFilledIn> {
+    public getGroup(id: string): Observable<Group> {
         // return of({
         //     id: id,
         //     assignment: {

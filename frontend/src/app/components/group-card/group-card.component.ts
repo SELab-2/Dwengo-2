@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { GroupFilledIn } from '../../interfaces/group/groupFilledIn';
+import { Group } from '../../interfaces/group/group';
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card'
 import { RouterLink } from '@angular/router';
 
@@ -20,6 +20,6 @@ import { RouterLink } from '@angular/router';
 })
 export class GroupCardComponent {
 
-  @Input() group!: GroupFilledIn;
+  @Input() group!: Group;
 
 }

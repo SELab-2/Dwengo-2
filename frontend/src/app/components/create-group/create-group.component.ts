@@ -39,13 +39,7 @@ export class CreateGroupComponent {
   @Input() assignmentId?: string = "123";
 
   // The members of the class that need to be devided into groups
-  // TODO: remove mock data
-  @Input() members: User[] = [
-    { id: '1', firstName: 'Alice', familyName: 'Smith', email: 'alice@school.com', schoolName: 'School', passwordHash: 'pass1' },
-    { id: '2', firstName: 'Bob', familyName: 'Brown', email: 'bob@school.com', schoolName: 'School', passwordHash: 'pass2' },
-    { id: '3', firstName: 'Charlie', familyName: 'Jones', email: 'charlie@school.com', schoolName: 'School', passwordHash: 'pass3' },
-    { id: '4', firstName: 'Jone', familyName: 'Jones', email: 'charlie@school.com', schoolName: 'School', passwordHash: 'pass3' }
-  ];
+  @Input() members: User[] = [];
 
   // The groups
   private _groups: User[][] = [];
