@@ -12,6 +12,7 @@ import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { LoadingComponent } from "../loading/loading.component";
 import { MatCardModule } from "@angular/material/card";
+import { GraphBuilderService } from "../../services/graph-builder.service";
 
 @Component({
     selector: "app-learning-path",
@@ -38,7 +39,7 @@ export class LearningPathComponent implements OnInit {
     selectedNode!: Node<LearningObject> | null;
 
 
-    constructor(private authService: AuthenticationService, private learningObjectService: LearningObjectService, private learningPathService: LearningPathService) { }
+    constructor(private authService: AuthenticationService, private learningObjectService: LearningObjectService, private learningPathService: LearningPathService, private graphBuilderService: GraphBuilderService) { }
 
     ngOnInit(): void {
         // This boole indicates wether the logged in user is a teacher or not
@@ -65,8 +66,8 @@ export class LearningPathComponent implements OnInit {
 
                 // Build trajectory when we're done
                 if (this.path.nodes && this.learningObjects) {
-                    this.trajectoryGraph = this.trajectory(this.path.nodes, this.learningObjects);
-                    console.log(this.trajectoryGraph)
+                    this.trajectoryGraph = this.graphBuilderService.buildTrajectoryGraph(this.path.nodes, this.learningObjects);
+                    this.selectedNode = this.trajectoryGraph.root;
                 }
             },
             error: () => {
@@ -74,75 +75,6 @@ export class LearningPathComponent implements OnInit {
                 this.loading = false;
             }
         });
-    }
-
-
-
-    // Match helpfunction
-    match(lo: ShallowLearningObject | ShallowLearningObject['transitions'], full: LearningObject): boolean {
-        return (
-            lo.version === full.metadata.version &&
-            lo.language === full.metadata.language &&
-            lo.hruid === full.metadata.hruid
-        );
-    }
-
-    /**
-    * Find the start node, follow the transitions and link the full objects. The full trajectory will be a directed graph.
-    */
-    trajectory(
-        directions: ShallowLearningObject[],
-        detailedObjects: LearningObject[]
-    ): DirectedGraph<LearningObject> {
-        // We will use our minimal implementation of a directed graph
-        const graph = new DirectedGraph<LearningObject>();
-
-        // Maps to search faster
-        const objectMap = new Map<string, LearningObject>();
-        const nodeMap = new Map<string, Node<LearningObject>>();
-
-        // Identify based on hruid, version and language. Life would be easier if there was one necessary ID.
-        const makeKey = (hruid: string, version: number, lang: string): string => `${hruid}_${version}_${lang}`;
-
-        // We can assume that both object lists correspond semantically
-        for (const obj of detailedObjects) {
-            const key = makeKey(obj.metadata.hruid, obj.metadata.version, obj.metadata.language);
-            objectMap.set(key, obj);
-        }
-
-        // Now we make the
-        for (const shallow of directions) {
-            const key = makeKey(shallow.hruid, shallow.version, shallow.language);
-            const full = objectMap.get(key);
-
-            // We once again assume both list contain the same learning objects
-            const node = graph.addNode(full!);
-            nodeMap.set(key, node);
-
-            if (shallow.startNode) {
-                graph.root = node;
-            }
-        }
-
-        // Voeg de edges toe volgens de transitions
-        for (const shallow of directions) {
-            const fromKey = makeKey(shallow.hruid, shallow.version, shallow.language);
-            const fromNode = nodeMap.get(fromKey);
-
-            const transitions = Array.isArray(shallow.transitions)
-                ? shallow.transitions
-                : [shallow.transitions]; // if there only is one transition
-
-            for (const trans of transitions) {
-                const toKey = makeKey(trans.hruid, trans.version, trans.language);
-                const toNode = nodeMap.get(toKey);
-                graph.addEdge(fromNode!, toNode!);
-            }
-        }
-
-        this.selectedNode = graph.root;
-
-        return graph;
     }
 
     onNodeSelected(): void {
