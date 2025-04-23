@@ -1,3 +1,4 @@
+import { FindOptionsWhere } from "typeorm";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Submission } from "../../../../../core/entities/submission";
@@ -86,10 +87,10 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         await datasource.getRepository(SubmissionTypeORM).delete(submission);
     }
 
-    public async getAllForStudentInAssignmentStep(
+    private async getSubmissions(
         studentId: string,
         assignmentId: string,
-        learningObjectId: string,
+        learningObjectId?: string,
     ): Promise<Submission[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
@@ -104,6 +105,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         if (!studentModel) {
             throw new EntityNotFoundError(`Student with id ${studentId} not found`);
         }
+
         // Then get the assignment
         const assignmentModel: AssignmentTypeORM | null = await assignmentRepository.findOne({
             where: { id: assignmentId },
@@ -111,13 +113,36 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         if (!assignmentModel) {
             throw new EntityNotFoundError(`Assignment with id ${assignmentId} not found`);
         }
-        // Now get all the student's submissions for the step of the assignment
+
+        // Build the query conditions
+        const whereCondition: FindOptionsWhere<SubmissionTypeORM> = {
+            assignment: assignmentModel,
+            student: studentModel,
+        };
+        if (learningObjectId) {
+            whereCondition.learning_object_id = learningObjectId;
+        }
+
+        // Get the submissions
         const submissionModels: SubmissionTypeORM[] = await submissionRepository.find({
-            where: { assignment: assignmentModel, student: studentModel, learning_object_id: learningObjectId },
+            where: whereCondition,
             relations: ["student", "assignment"],
         });
+
         // Return the submissions as entities
         return submissionModels.map(model => model.toEntity());
+    }
+
+    public async getAllForStudentInAssignment(studentId: string, assignmentId: string): Promise<Submission[]> {
+        return this.getSubmissions(studentId, assignmentId);
+    }
+
+    public async getAllForStudentInAssignmentStep(
+        studentId: string,
+        assignmentId: string,
+        learningObjectId: string,
+    ): Promise<Submission[]> {
+        return this.getSubmissions(studentId, assignmentId, learningObjectId);
     }
 
     public async getByStudentId(studentId: string): Promise<Submission[]> {

@@ -15,11 +15,12 @@ export abstract class ILearningPathRepository {
      * Function to get a learningPath given the hruid and language.
      *
      * @param hruid of the learningPath.
-     * @param language of the learningPath.
+     * @param includeNodes if the nodes should be included in the learningPath.
+     * @param language of the learningPath can be undefined if not needed.
      *
      * @returns a promise that resolves to a learningPath.
      */
-    public abstract getLearningPath(hruid: string, language: string, includeNodes: boolean): Promise<LearningPath>;
+    public abstract getLearningPath(hruid: string, includeNodes: boolean, language?: string): Promise<LearningPath>;
 
     /**
      * Function to get all available learningPath metadata with optional params
