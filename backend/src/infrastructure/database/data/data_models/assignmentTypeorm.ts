@@ -20,6 +20,9 @@ export class AssignmentTypeORM {
     @Column({ type: "date" })
     deadline!: Date;
 
+    @Column({ type: "varchar" })
+    name!: string;
+
     @Column({ type: "text" })
     extra_instructions!: string;
 
@@ -30,6 +33,7 @@ export class AssignmentTypeORM {
         assignmentTypeORM.learning_path_id = assignment.learningPathId;
         assignmentTypeORM.start = assignment.startDate;
         assignmentTypeORM.deadline = assignment.deadline;
+        assignmentTypeORM.name = assignment.name;
         assignmentTypeORM.extra_instructions = assignment.extraInstructions;
 
         return assignmentTypeORM;
@@ -41,6 +45,7 @@ export class AssignmentTypeORM {
             this.learning_path_id,
             this.start,
             this.deadline,
+            this.name,
             this.extra_instructions,
             this.id,
         );

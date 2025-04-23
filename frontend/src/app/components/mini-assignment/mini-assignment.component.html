@@ -1,0 +1,12 @@
+<mat-card routerLink="/{{_type}}/assignments/{{_assignment.id}}" class="mini-assignment" appearance="outlined">
+    <mat-card-header>
+        <mat-card-title id="assignment-title">
+            {{ _assignment.name }}
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <p id="assignment-class">{{ _assignment.className }}</p>
+        <p id="assignment-startDate">{{ _assignment.startDate }}</p>
+        <p id="assignment-deadline">{{ _assignment.deadline }}</p>
+    </mat-card-content>
+</mat-card>

@@ -28,7 +28,10 @@ describe('LearningPathService', () => {
                 numNodes: 5,
                 minAge: 12,
                 maxAge: 18,
-                learningPathId: 'lp-123'
+                learningPathId: 'lp-123',
+                language: 'en',
+                hruid: 'test',
+                id: 'id',
             }
         ]
     };
@@ -84,4 +87,40 @@ describe('LearningPathService', () => {
         expect(req.request.headers.get('Authorization')).toBe('Bearer test-token');
         req.flush(mockResponse);
     });
+
+    it('should retrieve one learning path with query params', () => {
+        const onePathQuery = {
+            hruid: 'intro-ai',
+            language: 'en',
+            includeNodes: true
+        };
+
+        const onePathResponse = {
+            title: 'Intro to AI',
+            description: 'Basic intro to AI concepts',
+            numNodes: 5,
+            minAge: 12,
+            maxAge: 18,
+            learningPathId: 'lp-123',
+            language: 'en',
+            hruid: 'intro-ai',
+            id: 'some-uuid-123'
+        };
+
+
+        service.retrieveOneLearningPath(onePathQuery).subscribe((response) => {
+            expect(response).toEqual(onePathResponse);
+        });
+
+        const req = httpMock.expectOne(
+            req => req.method === 'GET' &&
+                req.url === `${service['API_URL']}/learningPath/intro-ai` &&
+                req.urlWithParams.includes('language=en') &&
+                req.urlWithParams.includes('includeNodes=true')
+        );
+
+        expect(req.request.headers.get('Authorization')).toBe('Bearer test-token');
+        req.flush(onePathResponse);
+    });
+
 });

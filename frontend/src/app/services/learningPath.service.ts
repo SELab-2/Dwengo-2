@@ -4,7 +4,7 @@ import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { LearningPathRequest, LearningPathResponse } from '../interfaces/learning-path';
+import { LearningPath, LearningPathRequest, LearningPathResponse, SpecificLearningPathRequest } from '../interfaces/learning-path';
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +32,7 @@ export class LearningPathService {
         if (query.hruid) params = params.set('hruid', query.hruid);
         if (query.language) params = params.set('language', query.language);
         if (query.description) params = params.set('description', query.description);
+        if (query.includeNodes) params = params.set('includeNodes', query.includeNodes);
 
         return this.http.get<LearningPathResponse>(
             `${this.API_URL}/learningPath`,
@@ -50,5 +51,21 @@ export class LearningPathService {
         // if we want to retrieve all learning paths
         // our backend asks that the 'all' parameter is set to an empty string
         return this.retrieveLearningPathsByQuery({ all: ''});
+    }
+    
+    retrieveOneLearningPath(query: SpecificLearningPathRequest): Observable<LearningPath> {
+        const headers = this.authenticationService.retrieveAuthenticationHeaders();
+        let params = new HttpParams();
+        if (query.language) params = params.set('language', query.language);
+        if (query.includeNodes) params = params.set('includeNodes', query.includeNodes);
+
+        return this.http.get<LearningPath>(
+            `${this.API_URL}/learningPath/${query.hruid}`,
+            { ...headers, params }
+        ).pipe(
+            this.errorService.pipeHandler(
+                this.errorService.retrieveError($localize`a learning path`)
+            )
+        )
     }
 }
