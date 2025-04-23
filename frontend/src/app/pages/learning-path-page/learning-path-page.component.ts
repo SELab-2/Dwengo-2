@@ -1,8 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { AuthenticatedHeaderComponent } from "../../components/authenticated-header/authenticated-header.component";
-import { LearningPath, SpecificLearningPathRequest } from "../../interfaces/learning-path";
 import { ActivatedRoute, Router } from "@angular/router";
-import { LearningPathService } from "../../services/learningPath.service";
 import { LearningPathComponent } from "../../components/learning-path/learning-path.component";
 
 @Component({
@@ -12,7 +10,7 @@ import { LearningPathComponent } from "../../components/learning-path/learning-p
     standalone: true,
     imports: [AuthenticatedHeaderComponent, LearningPathComponent],
 })
-export class LearningPathPageComponent {
+export class LearningPathPageComponent implements OnInit {
     hruid!: string | null;
     language!: string | null;
     loading = true;
@@ -29,7 +27,7 @@ export class LearningPathPageComponent {
 
         // Check if required parameters exist
         if (!this.hruid || !this.language) {
-            this.router.navigate(['/explore']); // TODO: fix so it does not redirect to explore page directly
+            this.router.navigate(['/explore']); // TODO: fix a smoother handling of wrong url params
             return;
         }
 

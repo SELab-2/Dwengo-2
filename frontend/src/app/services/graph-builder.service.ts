@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { DirectedGraph, Node } from "../datastructures/directed-graph";
-import { LearningObject, MinimalLearningObject, MinimalShallowLearningObject, ShallowLearningObject } from "../interfaces/learning-object";
+import { MinimalLearningObject, MinimalShallowLearningObject } from "../interfaces/learning-object";
 
 @Injectable({
     providedIn: 'root'

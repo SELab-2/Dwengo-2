@@ -2,11 +2,11 @@ import { Component, Input, OnInit } from "@angular/core";
 import { LearningPath, SpecificLearningPathRequest } from "../../interfaces/learning-path";
 import { AuthenticationService } from "../../services/authentication.service";
 import { UserType } from "../../interfaces";
-import { LearningObject, ShallowLearningObject } from "../../interfaces/learning-object";
+import { LearningObject } from "../../interfaces/learning-object";
 import { LearningObjectService } from "../../services/learningObject.service";
 import { DirectedGraph, Node } from "../../datastructures/directed-graph";
 import { LearningPathService } from "../../services/learningPath.service";
-import { finalize, forkJoin, of } from "rxjs";
+import { finalize, forkJoin } from "rxjs";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
@@ -59,7 +59,6 @@ export class LearningPathComponent implements OnInit {
         ).subscribe({
             next: ([objects, pathWithNodes]) => {
 
-                console.log(objects, pathWithNodes)
                 // Assign both responses
                 this.learningObjects = objects;
                 this.path = pathWithNodes!;
