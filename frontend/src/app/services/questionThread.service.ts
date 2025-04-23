@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
-import { forkJoin, Observable, of, switchMap } from 'rxjs';
+import { forkJoin, Observable, of, switchMap, tap } from 'rxjs';
 import { QuestionThread, NewQuestionThread, QuestionThreadUpdate } from '../interfaces/questionThread';
 import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
 
@@ -30,6 +30,8 @@ export class QuestionThreadService {
       `${this.API_URL}/questions/${id}`,
       headers
     ).pipe(
+      tap(() => console.log('Retrieving question thread with ID:', id)),
+      tap(response => console.log('Question thread response:', response)),
       this.errorService.pipeHandler(
         this.errorService.retrieveError($localize `question thread`)
       )
@@ -49,14 +51,20 @@ export class QuestionThreadService {
       this.errorService.pipeHandler(
         this.errorService.retrieveError($localize `question threads`)
       ),
-      switchMap(response => 
-        forkJoin(
-            response.questionThreads.map(id => 
-                this.retrieveQuestionThreadById(id)
-            )
-        )
-      )
-    );
+      switchMap(response => {
+        console.log('Question threads response:', response);
+        
+        const threadIds = response?.threads || [];
+        if (threadIds.length === 0) {
+          console.log('No question threads found for assignment ID:', idParent);
+          return of([]); // return empty array if there are no threads
+        }
+
+        return forkJoin(
+          threadIds.map(id => this.retrieveQuestionThreadById(id))
+        );
+      }),
+    )
   }
 
   /**

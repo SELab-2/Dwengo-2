@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Message, NewMessage } from '../../interfaces/message/index';
 import { MessageService } from '../../services/message.service';
-// import { QuestionThreadService } from '../../services/questionThread.service';
+import { UserService } from '../../services/user.service';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserType } from '../../interfaces';
 import { MatIcon } from '@angular/material/icon';
@@ -33,46 +33,78 @@ import { MatCard } from '@angular/material/card';
         MatIconModule,
     ]
 })
-export class ChatComponent implements OnInit {
-  @Input() questionThreadId!: string;
+export class ChatComponent implements OnInit, OnChanges {
+    @Input() questionThreadId!: string;
 
-  messages: Message[] = [];
-  newMessageContent = '';
-  currentUserId: string = '';
-  isInstructor: boolean = false;
+    messages: Message[] = [];
+    newMessageContent = '';
+    currentUserId: string = '';
+    isInstructor: boolean = false;
+    usernamesMap: { [id: string]: string } = {};
 
-  constructor(
-    private messageService: MessageService,
-    // private questionThreadService: QuestionThreadService,
-    private authService: AuthenticationService
-  ) {}
+    constructor(
+        private messageService: MessageService,
+        private authService: AuthenticationService,
+        private userService: UserService,
+    ) {}
 
-  ngOnInit(): void {
-    this.currentUserId = this.authService.retrieveUserId() || '';
-    this.isInstructor = this.authService.retrieveUserType() === UserType.TEACHER;
-    this.loadMessages();
-  }
+    ngOnInit(): void {
+        this.currentUserId = this.authService.retrieveUserId() || '';
+        this.isInstructor = this.authService.retrieveUserType() === UserType.TEACHER;
+        this.loadMessages();
+        this.scrollToBottom();
+    }
 
-  loadMessages(): void {
-    this.messageService.retrieveMessagesByQuestion(this.questionThreadId).subscribe(messages => {
-      this.messages = messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-    });
-  }
+    ngOnChanges(): void {
+        this.loadMessages();
+        this.scrollToBottom();
+    }
 
-  sendMessage(): void {
-    const trimmed = this.newMessageContent.trim();
-    if (!trimmed) return;
+    scrollToBottom(): void {
+        setTimeout(() => {
+            const el = document.querySelector('.messages-container');
+            if (el) el.scrollTop = el.scrollHeight;
+        }, 0);
+    }
 
-    const newMsg: NewMessage = {
-      creatorId: this.currentUserId,
-      questionId: this.questionThreadId,
-      content: trimmed,
-      isInstructor: this.isInstructor,
-    };
+    loadMessages(): void {
+        this.messageService.retrieveMessagesByQuestion(this.questionThreadId).subscribe(messages => {
+            this.messages = messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-    this.messageService.createMessage(newMsg).subscribe(message => {
-      this.messages.push(message);
-      this.newMessageContent = '';
-    });
-  }
+            const uniqueUserIds = [...new Set(messages.map(m => m.creatorId))];
+            uniqueUserIds.forEach(id => {
+                if (this.usernamesMap[id]) return; // Skip if already fetched
+                this.userService.userWithId(id).subscribe(user => {
+                    this.usernamesMap[id] = user.firstName + ' ' + user.familyName;
+                });
+            });
+        });
+    }
+
+    sendMessage(): void {
+        const trimmed = this.newMessageContent.trim();
+        if (!trimmed) return;
+
+        const newMsg: NewMessage = {
+            senderId: this.currentUserId,
+            threadId: this.questionThreadId,
+            createdAt: new Date(),
+            content: trimmed,
+        };
+
+        this.messageService.createMessage(newMsg).subscribe(messageId => {
+            this.messages.push(
+                {
+                    id: messageId,
+                    creatorId: this.currentUserId,
+                    questionId: this.questionThreadId,
+                    createdAt: new Date(),
+                    content: trimmed,
+                    isInstructor: this.isInstructor,
+                } as Message
+            );
+            this.newMessageContent = '';
+        });
+        this.scrollToBottom();
+    }
 }

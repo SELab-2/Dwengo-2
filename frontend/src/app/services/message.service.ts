@@ -84,7 +84,7 @@ export class MessageService {
   /**
    * Create a new message
    */
-  createMessage(message: NewMessage): Observable<Message> {
+  createMessage(message: NewMessage): Observable<string> {
     const headers = this.authService.retrieveAuthenticationHeaders();
 
     return this.http.post<MessageResponseSingle>(
@@ -95,11 +95,9 @@ export class MessageService {
       this.errorService.pipeHandler(
         this.errorService.createError($localize`message`)
       ),
-      switchMap(response => of({
-        ...message,
-        id: response.id,
-        createdAt: new Date()
-      }))
+      switchMap(response => of(
+        response.id
+      ))
     );
   }
 

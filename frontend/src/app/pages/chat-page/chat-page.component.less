@@ -2,19 +2,23 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+
+    app-authenticated-header {
+        flex-shrink: 0;
+    }
   
     .content {
       display: flex;
       flex: 1;
       overflow: hidden; // Important to keep sidebar/chat scrolls clean
+      height:100%;
     }
   
     .sidebar {
       width: 300px;
       border-right: 1px solid #ccc;
       overflow-y: auto;
-      padding: 8px;
-      background: #f7f7f7;
+      flex-shrink: 0;
     }
   
     .chatbox {
@@ -22,6 +26,5 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      background: #fff;
     }
 }

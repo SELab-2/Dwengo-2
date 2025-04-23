@@ -14,9 +14,9 @@ export interface Message {
    * Interface for a message that is being created (no id yet).
    */
   export interface NewMessage {
-    creatorId: string;
-    questionId: string;
+    senderId: string;
+    threadId: string;
+    createdAt: Date;
     content: string;
-    isInstructor: boolean;
   }
   

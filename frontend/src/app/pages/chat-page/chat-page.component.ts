@@ -1,18 +1,3 @@
-// import { Component } from '@angular/core';
-// import { ChatComponent } from '../../components/chat/chat.component';
-// import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
-
-// @Component({
-//     selector: 'app-chat-page',
-//     templateUrl: './chat-page.component.html',
-//     styleUrls: ['./chat-page.component.less'],
-//     standalone: true,
-//     imports: [ChatComponent, AuthenticatedHeaderComponent],
-// })
-// export class ChatPageComponent {
-//   mockThreadId = 'mock-thread-001'; // use something that triggers mock data
-// }
-
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -50,52 +35,48 @@ export class ChatPageComponent implements OnInit {
     public questionThreads: QuestionThread[] = [];
   
     ngOnInit(): void {
-      this.chatId = this.route.snapshot.paramMap.get('id') || '';
+    //   this.chatId = this.route.snapshot.paramMap.get('id') || '';
   
-      this.assignmentService.retrieveAssignments().pipe(
-        switchMap(assignments => {
-            if (!assignments || !Array.isArray(assignments)) {
-              console.log('Assignments response is not an array:', assignments);
-            //   throw new Error('Invalid assignments response');
+    //   this.assignmentService.retrieveAssignments().pipe(
+        this.assignmentService.retrieveAssignments().pipe(
+            switchMap(assignments => {
+                if (!assignments || !Array.isArray(assignments)) {
+                    console.error('Invalid assignments response:', assignments);
+                    return of([]);
+                }
+                // console.log('Assignments:', assignments);
+                const threadRequests = assignments.map(a =>
+                    this.threadService.retrieveQuestionThreadsByAssignment(a.id)
+                );
+                // console.log('Thread requests:', threadRequests);
+                return forkJoin(threadRequests);
+            }),
+            map(threadArrays => threadArrays.flat()),
+            // switchMap(allThreads => {
+            map(allThreads => {
+                const userId = this.authService.retrieveUserId() || '';
+                // console.log('User ID:', userId);
+                // console.log('All threads:', allThreads);
+                const userThreads = allThreads.filter(t => t.creatorId === userId);
+                // console.log('User threads:', userThreads);
+                this.questionThreads = userThreads;
+                // this.validChatId = !!this.chatId && userThreads.some(t => t.id === this.chatId);
+                // return of(true);
+                return userThreads.map(t => t.id);
+            })
+        ).subscribe({
+            next: validIds => {
+                // Once threads are loaded, now start watching route changes
+                this.route.paramMap.subscribe(params => {
+                    const id = params.get('id') || '';
+                    this.chatId = id;
+                    this.validChatId = validIds.includes(id);
+                });
+            },
+            error: (err) => {
+                console.error('Failed to load threads:', err);
+                this.validChatId = false;
             }
-            console.log('Assignments:', assignments);
-            const threadRequests = assignments.map(a =>
-                this.threadService.retrieveQuestionThreadsByAssignment(a.id)
-            );
-            console.log('Thread requests:', threadRequests);
-            return forkJoin(threadRequests);
-        }),
-        map(threadArrays => {
-            console.log('yo')
-            const allThreads = threadArrays.flat();
-            console.log('All threads:', allThreads);
-            // Add mock thread for testing
-            // allThreads.push({
-            //     id: 'mock-thread-001',
-            //     creatorId: this.authService.retrieveUserId() || '',
-            //     assignmentId: 'mock-assignment',
-            //     learningObjectId: 'mock-learning-object',
-            //     isClosed: false,
-            //     visibility: 'public',
-            // } as QuestionThread);
-    
-            return allThreads;
-        }),
-        switchMap(allThreads => {
-            const userId = this.authService.retrieveUserId() || '';
-            console.log('User ID:', userId);
-            console.log('All threads:', allThreads);
-            const userThreads = allThreads.filter(t => t.creatorId === userId);
-            console.log('User threads:', userThreads);
-            this.questionThreads = userThreads;
-            this.validChatId = !!this.chatId && userThreads.some(t => t.id === this.chatId);
-            return of(true); // just end the stream
-        })
-      ).subscribe({
-        error: (err) => {
-          console.error('Failed to load threads:', err);
-          this.validChatId = false;
-        }
-      });
+        });
     }
 }
