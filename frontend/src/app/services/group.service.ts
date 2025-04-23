@@ -56,10 +56,10 @@ export class GroupService {
                 deadline: new Date(),
                 extraInstructions: 'Extra instructions',
                 learningPathId: '123',
-                name: 'Super coole assignment'
+                name: 'Constructing profile HMMs'
             },
             members: [{
-                id: '123', email: 'alice@bob.com', firstName: 'Alice', familyName: 'And Bob', schoolName: 'Carol University', passwordHash: '1234',
+                id: '123', email: 'alice@bob.com', firstName: 'Alice', familyName: 'Daubechies', schoolName: 'Carol University', passwordHash: '1234',
             }]
         });
 
