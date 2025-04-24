@@ -69,7 +69,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
                 .createQueryBuilder("assignment")
                 .innerJoinAndSelect("assignment.class", "class")
                 .innerJoin(TeacherOfClassTypeORM, "teacherOfClass", "teacherOfClass.class_id = class.id")
-                .where("teacherOfClass.teacher_id = :teacherId", { studentOrTeacherId })
+                .where("teacherOfClass.teacher = :id", { id: studentOrTeacherId })
                 .getMany();
             return assignmentsJoinResult.map(assigmentJoinResult => assigmentJoinResult.toAssignmentEntity());
         }
