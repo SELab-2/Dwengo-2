@@ -23,16 +23,32 @@
             <h2 i18n>Your classes</h2>
             <a routerLink="/student/classes" i18n>See all</a>
         </div>
-    
+
         <app-paginated-grid
             [items]="classes"
             [pageSize]="6"
             [itemTemplate]="classCard"
             [showPagination]="false">
         </app-paginated-grid>
-    
+
         <ng-template #classCard let-class>
             <app-mini-class [_class]="class" _type="student"></app-mini-class>
+        </ng-template>
+    </div>
+
+    <div class="groups">
+        <div class="header-container">
+            <h2 i18n>Your groups</h2>
+        </div>
+
+        <app-paginated-grid
+            [items]="groups"
+            [pageSize]="6"
+            [itemTemplate]="groupCard"
+            [showPagination]="false">
+        </app-paginated-grid>
+        <ng-template #groupCard let-group>
+            <app-group-card [group]="group"></app-group-card>
         </ng-template>
     </div>
 </main>

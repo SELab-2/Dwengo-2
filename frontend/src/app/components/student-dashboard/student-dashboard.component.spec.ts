@@ -10,6 +10,8 @@ import { Component, Input } from '@angular/core';
 import { Assignment } from '../../interfaces/assignment/assignment';
 import { Class } from '../../interfaces/classes/class';
 import { By } from '@angular/platform-browser';
+import { GroupService } from '../../services/group.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 //stubs for child components
 @Component({ selector: 'app-mini-assignment', template: '' })
@@ -33,6 +35,14 @@ class MockAssignmentService {
     retrieveAssignments = () => of(MockServices.getAssignments());
 }
 
+class MockGroupService {
+  getAllGroupsFromUser = () => of(MockServices.getGroups());
+}
+
+class MockAuthenticationService {
+  retrieveUserId = () => of('123');
+}
+
 describe('StudentDashboardComponent', () => {
     let fixture: ComponentFixture<StudentDashboardComponent>;
     let component: StudentDashboardComponent;
@@ -49,6 +59,8 @@ describe('StudentDashboardComponent', () => {
           provideRouter([]),
           { provide: ClassesService, useClass: MockClassesService },
           { provide: AssignmentService, useClass: MockAssignmentService },
+          { provide: GroupService, useClass: MockGroupService },
+          { provide: AuthenticationService, useClass: MockAuthenticationService },
         ],
       }).compileComponents();
   
@@ -112,7 +124,7 @@ describe('StudentDashboardComponent', () => {
         fixture.detectChanges();    // update DOM after async
       
         const grids = fixture.debugElement.queryAll(By.directive(PaginatedGridComponent));
-        expect(grids.length).toBe(2);
+        expect(grids.length).toBe(3);
       
         const [assignmentsGrid, classesGrid] = grids.map(grid => grid.componentInstance);
       
