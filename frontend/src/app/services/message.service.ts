@@ -41,25 +41,6 @@ export class MessageService {
    * Retrieve all messages associated with a specific question
    */
   retrieveMessagesByQuestion(idParent: string): Observable<Message[]> {
-    if (idParent === 'mock-thread-001') { // Mock data for testing
-      // This is a mock thread ID. In a real application, you would remove this check.
-      return of([
-        {
-          id: 'msg1',
-          senderId: 'u1',
-          threadId: idParent,
-          createdAt: new Date(Date.now() - 60000),
-          content: 'Hey there! This is a mock message.',
-        } as Message,
-        {
-          id: 'msg2',
-          senderId: 'u2',
-          threadId: idParent,
-          createdAt: new Date(),
-          content: 'Hello! This one is from an instructor.',
-        } as Message,
-      ]);
-    } // End of mock data
     const headers = this.authService.retrieveAuthenticationHeaders();
 
     return this.http.get<MessageResponse>(
