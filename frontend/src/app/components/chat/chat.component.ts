@@ -106,9 +106,10 @@ export class ChatComponent implements OnInit, OnChanges {
     }
 
     loadMessages(): void {
+        // console.log('Loading messages for thread:', this.questionThreadId);
         this.messageService.retrieveMessagesByQuestion(this.questionThreadId).subscribe(messages => {
             this.messages = messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-
+            // console.log('Loaded messages:', this.messages);
             const uniqueUserIds = [...new Set(messages.map(m => m.senderId))];
             uniqueUserIds.forEach(id => {
                 if (this.usernamesMap[id]) return; // Skip if already fetched

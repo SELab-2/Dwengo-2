@@ -42,8 +42,8 @@ export class QuestionThreadService {
       `${this.API_URL}/questions/${id}`,
       headers
     ).pipe(
-      tap(() => console.log('Retrieving question thread with ID:', id)),
-      tap(response => console.log('Question thread response:', response)),
+      // tap(() => console.log('Retrieving question thread with ID:', id)),
+      // tap(response => console.log('Question thread response:', response)),
       this.errorService.pipeHandler(
         this.errorService.retrieveError($localize `question thread`)
       )
@@ -64,11 +64,10 @@ export class QuestionThreadService {
         this.errorService.retrieveError($localize `question threads`)
       ),
       switchMap(response => {
-        console.log('Question threads response:', response);
+        // console.log('Question threads response:', response);
         
         const threadIds = response?.threads || [];
         if (threadIds.length === 0) {
-          console.log('No question threads found for assignment ID:', idParent);
           return of([]); // return empty array if there are no threads
         }
 
@@ -130,7 +129,11 @@ export class QuestionThreadService {
           return 0;
         });
     } else {
-      return allThreads.filter(t => t.creatorId === userId);
+      if (this.authService.retrieveUserType() === 'student') {
+        return allThreads.filter(t => t.creatorId === userId);
+      } else {
+        return allThreads
+      }
     }
   }
 

@@ -10,6 +10,7 @@ import { QuestionThread } from '../../interfaces/questionThread';
 import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
 import { AuthenticationService } from '../../services/authentication.service';
 import { VisibilityType } from '../../interfaces/questionThread/questionThread';
+import { UserType } from '../../interfaces';
 
 @Component({
   selector: 'app-chat-page',
@@ -32,6 +33,7 @@ export class ChatPageComponent implements OnInit {
     public showPublicChats = false;
     public currentLearningObjectId: string | null = null;
     public VisibilityType = VisibilityType; // For template binding
+    public userType: string = this.authService.retrieveUserType() === UserType.STUDENT? 'student' : 'teacher';
 
     constructor(
         private route: ActivatedRoute,
@@ -71,6 +73,7 @@ export class ChatPageComponent implements OnInit {
           next: threads => {
             this.questionThreads = threads;
             this.updateCurrentLearningObjectId();
+            // console.log('Loaded question threads:', this.questionThreads);
           },
         });
     }
