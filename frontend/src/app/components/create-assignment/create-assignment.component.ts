@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { NewAssignment } from '../../interfaces/assignment';
+import { AssignmentService } from '../../services/assignment.service';
 
 @Component({
   selector: 'app-create-assignment',
@@ -41,6 +42,7 @@ export class CreateAssignmentComponent implements OnInit {
     private formBuilder: FormBuilder,
     private classesService: ClassesService,
     private learningPathService: LearningPathService,
+    private assignmentService: AssignmentService
   ) {
     this.createForm = this.buildCreateForm();
   }
@@ -49,14 +51,16 @@ export class CreateAssignmentComponent implements OnInit {
     this.createForm = this.buildCreateForm();
     this.getClasses();
     this.getLearningPaths();
-    console.log(this.paths);
   }
 
-  create() {
+  create(): void {
     const newAssignment: NewAssignment | null = this.extractFormValues();
 
-    window.alert('Assignment created successfully!');
-    console.log(newAssignment?.learningPathId);
+    console.log(`new assignment: ${JSON.stringify(newAssignment)}`);
+
+    if (newAssignment) {
+      this.assignmentService.createAssignment(newAssignment);
+    }
   }
 
   private getClasses(): void {
@@ -75,7 +79,7 @@ export class CreateAssignmentComponent implements OnInit {
     return this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
       classId: ['', Validators.required],
-      learningPathId: ['', Validators.required],
+      learningPath: ['', Validators.required],
       startDate: [new Date(), Validators.required],
       deadline: [new Date(), Validators.required],
       extraInstructions: ['', Validators.minLength(10)],
@@ -85,15 +89,15 @@ export class CreateAssignmentComponent implements OnInit {
   private extractFormValues(): NewAssignment | null {
     const name = this.createForm.get('name')?.value;
     const classId = this.createForm.get('classId')?.value;
-    const learningPathId = this.createForm.get('learningPathId')?.value;
+    const learningPath = this.createForm.get('learningPath')?.value;
     const startDate = this.createForm.get('startDate')?.value;
     const deadline = this.createForm.get('deadline')?.value;
     const extraInstructions = this.createForm.get('extraInstructions')?.value;
 
-    if (classId && learningPathId && startDate && deadline) {
+    if (classId && learningPath && startDate && deadline) {
       return {
         classId,
-        learningPathId,
+        learningPathId: learningPath.learningPathId,
         startDate,
         deadline,
         extraInstructions,
