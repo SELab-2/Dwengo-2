@@ -12,7 +12,6 @@ import { Message, NewMessage } from '../../interfaces/message/index';
 import { MessageService } from '../../services/message.service';
 import { UserService } from '../../services/user.service';
 import { AuthenticationService } from '../../services/authentication.service';
-import { UserType } from '../../interfaces';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard } from '@angular/material/card';
 import { QuestionThread, VisibilityType } from '../../interfaces/questionThread';
@@ -42,14 +41,13 @@ export class ChatComponent implements OnInit, OnChanges {
     @Input() questionThreadId!: string;
     @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
-    messages: Message[] = [];
-    newMessageContent = '';
-    currentUserId: string = '';
-    isInstructor: boolean = false;
-    usernamesMap: { [id: string]: string } = {};
-    currentThread: QuestionThread = {} as QuestionThread;
-    showVisibilityMenu = false;
-    VisibilityType = VisibilityType; // For template binding
+    public messages: Message[] = [];
+    public newMessageContent = '';
+    public currentUserId: string = '';
+    public usernamesMap: { [id: string]: string } = {};
+    public currentThread: QuestionThread = {} as QuestionThread;
+    public showVisibilityMenu = false;
+    public VisibilityType = VisibilityType; // For template binding
 
     constructor(
         private messageService: MessageService,
@@ -65,7 +63,6 @@ export class ChatComponent implements OnInit, OnChanges {
             console.error('Could not retrieve user ID');
         }
 
-        this.isInstructor = this.authService.retrieveUserType() === UserType.TEACHER;
         this.loadMessages();
         this.loadThread();
     }
@@ -142,7 +139,6 @@ export class ChatComponent implements OnInit, OnChanges {
                     threadId: this.questionThreadId,
                     createdAt: new Date(),
                     content: trimmed,
-                    isInstructor: this.isInstructor,
                 } as Message
             );
             this.newMessageContent = '';

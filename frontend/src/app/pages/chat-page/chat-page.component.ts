@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { QuestionThreadService } from '../../services/questionThread.service';
@@ -28,17 +28,19 @@ import { VisibilityType } from '../../interfaces/questionThread/questionThread';
   styleUrls: ['./chat-page.component.less']
 })
 export class ChatPageComponent implements OnInit {
-    private readonly route = inject(ActivatedRoute);
-    private readonly threadService = inject(QuestionThreadService);
-    private readonly assignmentService = inject(AssignmentService);
-    private readonly authService = inject(AuthenticationService);
-  
     public chatId: string = '';
     public validChatId: boolean = false;
     public questionThreads: QuestionThread[] = [];
     public showPublicChats = false;
     public currentLearningObjectId: string | null = null;
     public VisibilityType = VisibilityType; // For template binding
+
+    constructor(
+        private route: ActivatedRoute,
+        private threadService: QuestionThreadService,
+        private assignmentService: AssignmentService,
+        private authService: AuthenticationService
+    ){}
   
     ngOnInit(): void {
         this.loadChats();
