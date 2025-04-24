@@ -35,7 +35,7 @@
                 <div>
                     <!-- Group List -->
                     <span style="display: flex; justify-content: space-between;">
-                        <h3>Group {{i+1}}</h3>
+                        <h3 i18n>Group {{i+1}}</h3>
                         <button mat-mini-fab color="warn" (click)="deleteGroupList(i)">
                             <mat-icon>delete</mat-icon>
                         </button>
@@ -54,7 +54,7 @@
                 </div>
             }
             <div>
-                <h3>New group</h3>
+                <h3 i18n>New group</h3>
                 <div 
                     class="group-list" 
                     (click)="newGroupList()"
