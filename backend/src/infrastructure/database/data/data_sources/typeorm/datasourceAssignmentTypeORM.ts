@@ -4,10 +4,8 @@ import { Assignment } from "../../../../../core/entities/assignment";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { UserTypeORM } from "../../data_models/userTypeorm";
-import { StudentTypeORM } from "../../data_models/studentTypeorm";
-import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
+import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 
 export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     //TODO: classId can be removed
@@ -57,48 +55,40 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
         return assignmentModels.map((assignmentModel: AssignmentTypeORM) => assignmentModel.toAssignmentEntity());
     }
 
-
     public async getAssignmentsByUserId(studentOrTeacherId: string): Promise<Assignment[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
-            where: { id: studentOrTeacherId }
-        })
+            where: { id: studentOrTeacherId },
+        });
 
-        if (teacherModel) { // The user is a teacher
+        if (teacherModel) {
+            // The user is a teacher
             const assignmentsJoinResult = await datasource
                 .getRepository(AssignmentTypeORM)
                 .createQueryBuilder("assignment")
                 .innerJoinAndSelect("assignment.class", "class")
-                .innerJoin(
-                TeacherOfClassTypeORM,
-                "teacherOfClass",
-                "teacherOfClass.class_id = class.id"
-                )
+                .innerJoin(TeacherOfClassTypeORM, "teacherOfClass", "teacherOfClass.class_id = class.id")
                 .where("teacherOfClass.teacher_id = :teacherId", { studentOrTeacherId })
                 .getMany();
             return assignmentsJoinResult.map(assigmentJoinResult => assigmentJoinResult.toAssignmentEntity());
-            
-        } else { // The user is a student
-            const assignmentsJoinResult = await datasource
-                .getRepository(StudentOfGroupTypeORM)
-                .createQueryBuilder()
-                .where("StudentOfGroupTypeORM.student = :id", { id: studentOrTeacherId })
-                // Join StudentOfGroup
-                .leftJoinAndSelect("StudentOfGroupTypeORM.group", "group") // Last one is alias
-                // Join Group to AssignmentGroup
-                .leftJoinAndSelect("group.assignment", "assignment")
-                // Join Assignment to Class
-                .leftJoinAndSelect("assignment.class", "class")
-                .getMany();
-            return assignmentsJoinResult.map(assignmentJoinResult => {
-                return assignmentJoinResult.group.assignment.toAssignmentEntity();
-            });
-
         }
-        
 
-        
+        // The user is a student
+        const assignmentsJoinResult = await datasource
+            .getRepository(StudentOfGroupTypeORM)
+            .createQueryBuilder()
+            .where("StudentOfGroupTypeORM.student = :id", { id: studentOrTeacherId })
+            // Join StudentOfGroup
+            .leftJoinAndSelect("StudentOfGroupTypeORM.group", "group") // Last one is alias
+            // Join Group to AssignmentGroup
+            .leftJoinAndSelect("group.assignment", "assignment")
+            // Join Assignment to Class
+            .leftJoinAndSelect("assignment.class", "class")
+            .getMany();
+        return assignmentsJoinResult.map(assignmentJoinResult => {
+            return assignmentJoinResult.group.assignment.toAssignmentEntity();
+        });
     }
 
     public async getAssignmentsByLearningPathId(learningPathId: string): Promise<Assignment[]> {
