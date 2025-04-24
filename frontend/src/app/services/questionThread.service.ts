@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
-import { forkJoin, Observable, of, switchMap, tap } from 'rxjs';
-import { QuestionThread, NewQuestionThread, QuestionThreadUpdate } from '../interfaces/questionThread';
+import { BehaviorSubject, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
+import { QuestionThread, NewQuestionThread, QuestionThreadUpdate, VisibilityType } from '../interfaces/questionThread';
 import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
 
 @Injectable({
@@ -13,6 +13,16 @@ import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfa
 export class QuestionThreadService {
 
   private API_URL = environment.API_URL;
+  private threadUpdateSubject = new BehaviorSubject<{id: String, update: QuestionThreadUpdate}>(
+    {
+      id: '',
+      update: {
+        isClosed: false,
+        visibility: VisibilityType.PRIVATE,
+      } as QuestionThreadUpdate
+    }
+  );
+  threadUpdate$ = this.threadUpdateSubject.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -93,17 +103,30 @@ export class QuestionThreadService {
    */
   updateQuestionThread(id: string, question: QuestionThreadUpdate): Observable<QuestionThreadUpdate> {
     const headers = this.authService.retrieveAuthenticationHeaders();
-
-    return this.http.patch<void>(
+    console.log('Updating question thread with ID:', id, 'and data:', question);
+  
+    const result =  this.http.patch<void>(
       `${this.API_URL}/questions/${id}`,
       question,
       headers
     ).pipe(
+      tap(() => console.log('[PATCH] Question updated successfully')),
       this.errorService.pipeHandler(
-        this.errorService.updateError($localize `question`)
+        this.errorService.updateError($localize`question`)
       ),
-      switchMap(() => of(question))
+      switchMap(() => {
+        return of(question);
+      })
     );
+    const threadUpdate: {id: String, update: QuestionThreadUpdate} = {
+      id: id,
+      update: {
+        isClosed: question.isClosed,
+        visibility: question.visibility
+      } as QuestionThreadUpdate
+    };
+    this.threadUpdateSubject.next(threadUpdate);
+    return result;
   }
 
   /**

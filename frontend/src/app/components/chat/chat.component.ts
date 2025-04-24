@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -15,7 +15,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { UserType } from '../../interfaces';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard } from '@angular/material/card';
-import { QuestionThreadUpdate, VisibilityType } from '../../interfaces/questionThread';
+import { QuestionThread, VisibilityType } from '../../interfaces/questionThread';
 import { QuestionThreadService } from '../../services/questionThread.service';
 
 @Component({
@@ -47,7 +47,7 @@ export class ChatComponent implements OnInit, OnChanges {
     currentUserId: string = '';
     isInstructor: boolean = false;
     usernamesMap: { [id: string]: string } = {};
-    currentVisibility: VisibilityType = VisibilityType.PRIVATE;
+    currentThread: QuestionThread = {} as QuestionThread;
     showVisibilityMenu = false;
     VisibilityType = VisibilityType; // For template binding
 
@@ -56,7 +56,6 @@ export class ChatComponent implements OnInit, OnChanges {
         private threadService: QuestionThreadService,
         private authService: AuthenticationService,
         private userService: UserService,
-        private changeDetector: ChangeDetectorRef,
     ) {}
 
     ngOnInit(): void {
@@ -68,13 +67,13 @@ export class ChatComponent implements OnInit, OnChanges {
 
         this.isInstructor = this.authService.retrieveUserType() === UserType.TEACHER;
         this.loadMessages();
-        this.loadThreadVisibility();
+        this.loadThread();
     }
 
-    loadThreadVisibility(): void {
+    loadThread(): void {
         this.threadService.retrieveQuestionThreadById(this.questionThreadId)
             .subscribe(thread => {
-                this.currentVisibility = thread.visibility;
+                this.currentThread = thread;
             });
     }
 
@@ -82,7 +81,8 @@ export class ChatComponent implements OnInit, OnChanges {
         this.threadService.updateQuestionThread(this.questionThreadId, {
           isClosed: false,
           visibility: newVisibility
-        }).subscribe(); // TODO make it automatically update the UI
+        }).subscribe()
+        this.currentThread.visibility = newVisibility;
     }
 
     ngAfterViewInit() {
@@ -91,6 +91,7 @@ export class ChatComponent implements OnInit, OnChanges {
 
     ngOnChanges(): void {
         this.loadMessages();
+        this.loadThread();
         this.scrollToBottom();
     }
 

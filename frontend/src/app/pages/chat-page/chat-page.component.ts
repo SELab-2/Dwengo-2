@@ -48,6 +48,18 @@ export class ChatPageComponent implements OnInit {
             this.chatId = params.get('id') || '';
             this.updateCurrentLearningObjectId();
         });
+
+        this.threadService.threadUpdate$.subscribe(threadUpdate => {
+            // Update the sidebar badges based on the latest thread visibilities
+            console.log('[Sidebar Update] Got update for thread:', threadUpdate);
+            this.questionThreads = this.questionThreads.map(thread => {
+                if (thread.id === threadUpdate.id) {
+                    console.log('[Sidebar Update] Updating thread:', thread.id, 'with visibility:', threadUpdate.update.visibility);
+                    return { ...thread, visibility: threadUpdate.update.visibility };
+                }
+                return thread;
+            });
+        });
     }
 
     private loadChats(): void {
