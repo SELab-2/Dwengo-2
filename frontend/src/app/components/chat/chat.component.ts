@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -16,6 +16,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatCard } from '@angular/material/card';
 import { QuestionThread, VisibilityType } from '../../interfaces/questionThread';
 import { QuestionThreadService } from '../../services/questionThread.service';
+import { interval, Observable, Subscription, switchMap } from 'rxjs';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 
 @Component({
     selector: 'app-chat',
@@ -37,7 +39,7 @@ import { QuestionThreadService } from '../../services/questionThread.service';
         MatMenuTrigger,
     ]
 })
-export class ChatComponent implements OnInit, OnChanges {
+export class ChatComponent implements OnInit, OnChanges, OnDestroy {
     @Input() questionThreadId!: string;
     @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
@@ -48,6 +50,8 @@ export class ChatComponent implements OnInit, OnChanges {
     public currentThread: QuestionThread = {} as QuestionThread;
     public showVisibilityMenu = false;
     public VisibilityType = VisibilityType; // For template binding
+
+    private pollingSubscription!: Subscription;
 
     constructor(
         private messageService: MessageService,
@@ -65,6 +69,18 @@ export class ChatComponent implements OnInit, OnChanges {
 
         this.loadMessages();
         this.loadThread();
+        
+        this.pollingSubscription = interval(5000).pipe(
+            switchMap(() => this.fetchAndProcessMessages()),
+            distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
+        ).subscribe(messages => {
+            this.messages = messages;
+            this.scrollToBottom();
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.pollingSubscription?.unsubscribe();
     }
 
     loadThread(): void {
@@ -106,20 +122,31 @@ export class ChatComponent implements OnInit, OnChanges {
     }
 
     loadMessages(): void {
-        // console.log('Loading messages for thread:', this.questionThreadId);
-        this.messageService.retrieveMessagesByQuestion(this.questionThreadId).subscribe(messages => {
-            this.messages = messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-            // console.log('Loaded messages:', this.messages);
-            const uniqueUserIds = [...new Set(messages.map(m => m.senderId))];
-            uniqueUserIds.forEach(id => {
-                if (this.usernamesMap[id]) return; // Skip if already fetched
-                this.userService.userWithId(id).subscribe(user => {
-                    this.usernamesMap[id] = user.firstName + ' ' + user.familyName;
-                });
-            });
-            this.scrollToBottom();
+        this.fetchAndProcessMessages().subscribe(messages => {
+          this.messages = messages;
+          this.scrollToBottom();
         });
     }
+
+    private fetchAndProcessMessages(): Observable<Message[]> {
+        return this.messageService.retrieveMessagesByQuestion(this.questionThreadId).pipe(
+          map(messages =>
+            messages.sort(
+              (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+            )
+          ),
+          tap(sortedMessages => {
+            const uniqueUserIds = [...new Set(sortedMessages.map(m => m.senderId))];
+            uniqueUserIds.forEach(id => {
+              if (this.usernamesMap[id]) return;
+              this.userService.userWithId(id).subscribe(user => {
+                this.usernamesMap[id] = `${user.firstName} ${user.familyName}`;
+              });
+            });
+          })
+        );
+    }
+      
 
     sendMessage(): void {
         const trimmed = this.newMessageContent.trim();
