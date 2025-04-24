@@ -1,6 +1,6 @@
-<mat-card class="class-widget" [routerLink]="'/learning-path/' + learningPathId">
-    <div class="card-header-with-button">
-        <mat-card-title>{{ title }}</mat-card-title>
+<mat-card class="class-widget" [routerLink]="['/paths', path.hruid, path.language]">
+    <div class=" card-header-with-button">
+        <mat-card-title>{{ path.title }}</mat-card-title>
         @if (isTeacher) {
         <button mat-icon-button color="primary" matTooltip="Create assignment"
             i18n-matTooltip="@@createAssignmentTooltip" [routerLink]="'/teacher/assignments/create'"
@@ -11,16 +11,16 @@
     </div>
 
     <mat-card-content>
-        <p class="description">{{ description }}</p>
+        <p class="description">{{ path.description }}</p>
         <mat-list>
             <mat-list-item>
                 <mat-icon class="icon">list</mat-icon>
-                <span i18n="@@stepsCount">Steps: {{ steps }}</span>
+                <span i18n="@@stepsCount">Steps: {{ path.numNodes }}</span>
             </mat-list-item>
 
             <mat-list-item>
                 <mat-icon class="icon">face</mat-icon>
-                <span i18n="@@ageRange">Age: {{ minAge }} - {{ maxAge }}</span>
+                <span i18n="@@ageRange">Age: {{ path.minAge }} - {{ path.maxAge }}</span>
             </mat-list-item>
         </mat-list>
     </mat-card-content>

@@ -35,7 +35,7 @@ export class GetLearningPath implements Service<GetLearningPathInput> {
             }
         }
 
-        const path: LearningPath = await this._learningPathRepository.getLearningPath(input.id, language, includeNodes);
+        const path: LearningPath = await this._learningPathRepository.getLearningPath(input.id, includeNodes, language);
         return path.toObject(includeNodes);
     }
 }

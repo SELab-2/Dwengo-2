@@ -26,7 +26,29 @@ export interface ShallowLearningObject {
         id: string,
         version: number,
         language: string,
+    }[]
+}
+
+// This is the minimal data required for the GraphBuilder service. An assignment could extend this.
+export interface MinimalLearningObject {
+    metadata: {
+        hruid: string,
+        version: number,
+        language: string,
     }
+}
+
+// This is the minimal data required to represent a learning object as it's givin within a learning path
+export interface MinimalShallowLearningObject {
+    hruid: string;
+    version: number;
+    language: string;
+    startNode: boolean;
+    transitions: {
+        hruid: string,
+        version: number,
+        language: string,
+    }[]
 }
 
 // This enum is used in LearninObjectRequests.

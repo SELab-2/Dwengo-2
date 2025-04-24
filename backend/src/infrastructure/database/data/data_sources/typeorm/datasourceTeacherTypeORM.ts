@@ -1,4 +1,5 @@
 import { DatasourceTypeORM } from "./datasourceTypeORM";
+import { EntityNotFoundError } from "../../../../../config/error";
 import { Teacher } from "../../../../../core/entities/teacher";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
@@ -19,7 +20,7 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
         return teacherModel.toTeacherEntity(teacherModel.teacher);
     }
 
-    public async getTeacherById(id: string): Promise<Teacher | null> {
+    public async getTeacherById(id: string): Promise<Teacher> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
@@ -28,12 +29,12 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
         });
 
         if (!teacherModel) {
-            return null;
+            throw new EntityNotFoundError(`Teacher with id ${id} not found`);
         }
         return teacherModel.toTeacherEntity(teacherModel.teacher);
     }
 
-    public async getTeacherByEmail(email: string): Promise<Teacher | null> {
+    public async getTeacherByEmail(email: string): Promise<Teacher> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const userModel: UserTypeORM | null = await datasource
@@ -41,19 +42,19 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
             .findOne({ where: { email: email } });
 
         if (!userModel) {
-            return null;
+            throw new EntityNotFoundError(`User with email ${email} not found`);
         }
         const teacherModel: TeacherTypeORM | null = await datasource
             .getRepository(TeacherTypeORM)
             .findOne({ where: { teacher: userModel } });
 
         if (!teacherModel) {
-            return null;
+            throw new EntityNotFoundError(`Teacher with email ${email} not found`);
         }
         return teacherModel.toTeacherEntity(userModel);
     }
 
-    public async getTeacherByFirstName(first_name: string): Promise<Teacher | null> {
+    public async getTeacherByFirstName(first_name: string): Promise<Teacher> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const userModel: UserTypeORM | null = await datasource
@@ -61,19 +62,19 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
             .findOne({ where: { first_name: first_name } });
 
         if (!userModel) {
-            return null;
+            throw new EntityNotFoundError(`User with first name ${first_name} not found`);
         }
         const teacherModel: TeacherTypeORM | null = await datasource
             .getRepository(TeacherTypeORM)
             .findOne({ where: { teacher: userModel } });
 
         if (!teacherModel) {
-            return null;
+            throw new EntityNotFoundError(`Teacher with first name ${first_name} not found`);
         }
         return teacherModel.toTeacherEntity(userModel);
     }
 
-    public async getTeacherByLastName(last_name: string): Promise<Teacher | null> {
+    public async getTeacherByLastName(last_name: string): Promise<Teacher> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const userModel: UserTypeORM | null = await datasource
@@ -81,14 +82,14 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
             .findOne({ where: { last_name: last_name } });
 
         if (!userModel) {
-            return null;
+            throw new EntityNotFoundError(`User with last name ${last_name} not found`);
         }
         const teacherModel: TeacherTypeORM | null = await datasource
             .getRepository(TeacherTypeORM)
             .findOne({ where: { teacher: userModel } });
 
         if (!teacherModel) {
-            return null;
+            throw new EntityNotFoundError(`Teacher with last name ${last_name} not found`);
         }
         return teacherModel.toTeacherEntity(userModel);
     }

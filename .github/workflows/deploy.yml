@@ -41,6 +41,9 @@ jobs:
       - name: Build Docker image 
         run: docker compose -f compose.prod.yaml -p prod build # This docker container will serve the backend + DB
 
+      - name: Copy .env file to working directory
+        run: cp /home/selab2/.env-prod /home/selab2/actions-runner/_work/Dwengo-2/Dwengo-2/.env
+
       - name: Stop old containers
         run: docker compose -f compose.prod.yaml -p prod down
 

@@ -1,0 +1,36 @@
+.centered-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    h1 {
+      text-align: center;
+    }
+  }
+
+.assignments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    grid-auto-rows: auto;
+    gap: 16px;
+    padding: 16px;
+    justify-items: center;
+}
+  
+mat-paginator {
+    margin-top: 20px;
+    display: flex;
+    justify-content: right;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  gap:16px;
+}
+
+.see-all-link {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}

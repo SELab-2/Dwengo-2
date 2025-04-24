@@ -31,7 +31,7 @@ describe("GetLearningPath", () => {
 
         const result = await service.execute(parsedInput);
 
-        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "nl", false);
+        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", false, "nl");
         expect(result).toEqual(mockValue.toObject(false));
     });
 
@@ -40,7 +40,7 @@ describe("GetLearningPath", () => {
 
         const result = await service.execute({ id: "123", language: "nl" });
 
-        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "en", false);
+        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", false, "en");
         expect(result).toEqual(mockValue.toObject(false));
     });
 
@@ -49,7 +49,7 @@ describe("GetLearningPath", () => {
 
         const result = await service.execute({ id: "123", language: "fr" });
 
-        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "nl", false);
+        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", false, "nl");
     });
 
     it("Defaults to English when no specific language is requested", async () => {
@@ -57,6 +57,6 @@ describe("GetLearningPath", () => {
 
         const result = await service.execute({ id: "123" });
 
-        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", "en", false);
+        expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", false, "en");
     });
 });

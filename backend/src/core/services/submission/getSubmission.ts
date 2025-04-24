@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { SubmissionBaseService } from "./submissionBaseService";
 import { getSubmissionSchema, getUserSubmissionsSchema } from "../../../application/schemas/submissionSchemas";
+import { ApiError, ErrorCode } from "../../../application/types";
+import { Submission } from "../../entities/submission";
 import { tryRepoEntityOperation } from "../../helpers";
 
 export type GetSubmissionInput = z.infer<typeof getSubmissionSchema>;
@@ -22,26 +24,57 @@ export class GetSubmission extends SubmissionBaseService<GetSubmissionInput> {
 export type GetUserSubmissionsInput = z.infer<typeof getUserSubmissionsSchema>;
 
 export class GetUserSubmissions extends SubmissionBaseService<GetUserSubmissionsInput> {
+    /**
+     * Get all the submissions for a user.
+     * Get all the submissions for a user in a specific assignment.
+     * Get all the submissions for a user in a specific assignment and step.
+     *
+     * @param input - The input data for getting a submission, validated by getUserSubmissionsSchema.
+     * @returns A promise resolving to an object containing an array with the IDs of the submissions.
+     * @throws {ApiError} If the assignmentId is not provided when learningObjectId is provided.
+     */
     async execute(input: GetUserSubmissionsInput): Promise<object> {
-        const submissions: string[] = (
-            input.assignmentId && input.learningObjectId
-                ? await tryRepoEntityOperation(
-                      this.submissionRepository.getAllForStudentInAssignmentStep(
-                          input.idParent,
-                          input.assignmentId,
-                          input.learningObjectId,
-                      ),
-                      "User | Assignment | LearningObject",
-                      `${input.idParent} | ${input.assignmentId} | ${input.learningObjectId}`,
-                      true,
-                  )
-                : await tryRepoEntityOperation(
-                      this.submissionRepository.getByStudentId(input.idParent),
-                      "User",
-                      input.idParent,
-                      true,
-                  )
-        ).map(submission => submission.id!);
-        return { submisisons: submissions };
+        let submissions: Submission[];
+        // Check when learninObjectId is provided the assignmentId is also provided
+        if (!input.assignmentId && input.learningObjectId) {
+            throw {
+                code: ErrorCode.BAD_REQUEST,
+                message: "Can only request submissions for a user inside of an assignment.",
+            } as ApiError;
+        }
+
+        if (input.assignmentId) {
+            if (!input.learningObjectId) {
+                // Get the submissions for an assingment from a user
+                submissions = await tryRepoEntityOperation(
+                    this.submissionRepository.getAllForStudentInAssignment(input.idParent, input.assignmentId),
+                    "User | Assignment",
+                    `${input.idParent} | ${input.assignmentId}`,
+                    true,
+                );
+            } else {
+                // Get the submissions for an assingment from a user in a specific step
+                submissions = await tryRepoEntityOperation(
+                    this.submissionRepository.getAllForStudentInAssignmentStep(
+                        input.idParent,
+                        input.assignmentId,
+                        input.learningObjectId,
+                    ),
+                    "User | Assignment | LearningObject",
+                    `${input.idParent} | ${input.assignmentId} | ${input.learningObjectId}`,
+                    true,
+                );
+            }
+        } else {
+            // Get all the submissions for a user
+            submissions = await tryRepoEntityOperation(
+                this.submissionRepository.getByStudentId(input.idParent),
+                "User",
+                input.idParent,
+                true,
+            );
+        }
+
+        return { submisisons: submissions.map(submission => submission.id!) };
     }
 }
