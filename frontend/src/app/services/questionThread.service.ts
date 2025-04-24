@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
+import { AssignmentService } from './assignment.service';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 import { QuestionThread, NewQuestionThread, QuestionThreadUpdate, VisibilityType } from '../interfaces/questionThread';
 import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
 
@@ -28,6 +29,7 @@ export class QuestionThreadService {
     private http: HttpClient,
     private authService: AuthenticationService,
     private errorService: ErrorService,
+    private assignmentService: AssignmentService
   ) {}
 
   /**
@@ -75,6 +77,61 @@ export class QuestionThreadService {
         );
       }),
     )
+  }
+
+  /**
+  * Load and filter question threads for the authenticated user or current learning object
+  */
+  loadSideBarQuestionThreads(
+    userId: string,
+    currentLearningObjectId: string,
+    showPublicChats: boolean
+  ): Observable<QuestionThread[]> {
+    return this.assignmentService.retrieveAssignments().pipe(
+      switchMap(assignments => {
+        if (!assignments || !Array.isArray(assignments)) {
+          return of([]);
+        }
+
+        const threadRequests = assignments.map(a =>
+          this.retrieveQuestionThreadsByAssignment(a.id)
+        );
+        return forkJoin(threadRequests);
+      }),
+      map(threadArrays => threadArrays.flat()),
+      map(allThreads => {
+        const userId = this.authService.retrieveUserId() || '';
+        return this.filterThreads(allThreads, userId, currentLearningObjectId, showPublicChats);
+      }),
+      this.errorService.pipeHandler(
+        this.errorService.retrieveError($localize`loading user threads`)
+      )
+    );
+  }
+
+  /**
+  * Filter threads based on visibility or ownership
+  */
+  filterThreads(
+    allThreads: QuestionThread[],
+    userId: string,
+    currentLearningObjectId: string,
+    showPublicChats: boolean
+  ): QuestionThread[] {
+    if (showPublicChats) {
+      return allThreads
+        .filter(t =>
+          t.learningObjectId === currentLearningObjectId &&
+          (t.visibility === VisibilityType.GROUP || t.visibility === VisibilityType.PUBLIC)
+        )
+        .sort((a, b) => {
+          if (a.visibility === VisibilityType.GROUP && b.visibility !== VisibilityType.GROUP) return -1;
+          if (b.visibility === VisibilityType.GROUP && a.visibility !== VisibilityType.GROUP) return 1;
+          return 0;
+        });
+    } else {
+      return allThreads.filter(t => t.creatorId === userId);
+    }
   }
 
   /**

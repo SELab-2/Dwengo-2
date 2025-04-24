@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { QuestionThreadService } from './questionThread.service';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
+import { AssignmentService } from './assignment.service';
 import { of } from 'rxjs';
 import { QuestionThread, NewQuestionThread, VisibilityType } from '../interfaces/questionThread';
 import { QuestionThreadUpdate } from '../interfaces/questionThread/questionThreadUpdate';
@@ -42,6 +43,7 @@ describe('QuestionThreadService', () => {
   let http: jasmine.SpyObj<HttpClient>;
   let authenticationService: jasmine.SpyObj<AuthenticationService>;
   let errorService: jasmine.SpyObj<ErrorService>;
+  let assignmentService: jasmine.SpyObj<AssignmentService>;
   let service: QuestionThreadService;
 
   beforeEach(() => {
@@ -53,8 +55,9 @@ describe('QuestionThreadService', () => {
     authenticationService.retrieveAuthenticationHeaders.and.returnValue({
       headers: new HttpHeaders().append('Authorization', `Bearer token`).append('Content-Type', 'application/json'),
     });
+    assignmentService = jasmine.createSpyObj('AssignmentService', ['retrieveAssignmentById']);
 
-    service = new QuestionThreadService(http, authenticationService, errorService);
+    service = new QuestionThreadService(http, authenticationService, errorService, assignmentService);
   });
 
   it('should be created', () => {
