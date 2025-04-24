@@ -1,4 +1,3 @@
-import { EntityNotFoundError } from "../../config/error";
 import { QuestionThread } from "../../core/entities/questionThread";
 import { IQuestionThreadRepository } from "../../core/repositories/questionThreadRepositoryInterface";
 import { DatasourceThreadTypeORM } from "../database/data/data_sources/typeorm/datasourceThreadTypeORM";
@@ -16,13 +15,7 @@ export class ThreadRepositoryTypeORM extends IQuestionThreadRepository {
     }
 
     public async getById(id: string): Promise<QuestionThread> {
-        const thread: QuestionThread | null = await this.datasourceThread.getById(id);
-
-        if (thread) {
-            return thread;
-        } else {
-            throw new EntityNotFoundError(`Thread with id: ${id} not found`);
-        }
+        return await this.datasourceThread.getById(id);
     }
 
     public async update(id: string, updatedThread: Partial<QuestionThread>): Promise<QuestionThread> {

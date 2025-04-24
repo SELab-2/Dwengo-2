@@ -12,6 +12,8 @@ import * as SubmissionSchemas from "../schemas/submissionSchemas";
  * - DELETE /submissions/:id - Delete submission
  * - POST /submissions - Create a new submission
  * - GET /users/:idParent/submissions - Get all user submissions
+ *   Can be filtered with assingmentId to get submissions for a specific assignment.
+ *   Can also be filtered with a learningObject id to get submissions for an assignment of a user in a specific step.
  */
 
 /* ************* Extractors ************* */

@@ -8,8 +8,8 @@ export class LearningPathRepository implements ILearningPathRepository {
     public getLanguages(hruid: string): Promise<string[]> {
         return this.datasource.getLanguages(hruid);
     }
-    public getLearningPath(hruid: string, language: string, includeNodes: boolean): Promise<LearningPath> {
-        return this.datasource.getLearningPath(hruid, language, includeNodes);
+    public getLearningPath(hruid: string, includeNodes: boolean, language?: string): Promise<LearningPath> {
+        return this.datasource.getLearningPath(hruid, includeNodes, language);
     }
     public getLearningPaths(params: string, includeNodes: boolean): Promise<LearningPath[]> {
         return this.datasource.getLearningPaths(params, includeNodes);

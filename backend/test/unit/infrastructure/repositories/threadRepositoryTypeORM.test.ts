@@ -79,22 +79,4 @@ describe("ThreadRepositoryTypeORM", () => {
         expect(datasourceThread.delete).toHaveBeenCalledWith(createdThread);
     });
 
-    test('delete throws error if not in database', async () => {
-        const nonExistentThreadId = "non-existent-id";
-        datasourceThread.getById = jest.fn(() => Promise.resolve(null));
-        datasourceThread.delete = jest.fn(async (thread: QuestionThread) => {
-            const foundThread = await datasourceThread.getById(thread.id!);
-            if (!foundThread) {
-                throw new EntityNotFoundError('Thread not found');
-            }
-        });
-
-        await expect(datasourceThread.delete({ id: nonExistentThreadId } as QuestionThread))
-            .rejects
-            .toThrow(EntityNotFoundError);
-
-        expect(datasourceThread.delete).toHaveBeenCalledTimes(1);
-        expect(datasourceThread.delete).toHaveBeenCalledWith({ id: nonExistentThreadId });
-    });
-
 });

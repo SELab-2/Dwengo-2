@@ -96,6 +96,7 @@ const routeFunctions = {
     messageRoutes: Resources.messageRoutes,
     questionThreadRoutes: Resources.questionThreadRoutes,
     submissionRoutes: Resources.submissionRoutes,
+    progressRoutes: Resources.progressRoutes,
     userRoutes: Resources.userRoutes,
     learningObjectRoutes: Resources.learningObjectRoutes,
     learningPathRoutes: Resources.learningPathRoutes,
@@ -477,6 +478,40 @@ const routeConfigs: Record<
             hasController: true,
             request: {
                 pathParams: { idParent: "user-1" },
+            },
+        },
+    ],
+    progressRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/users/:idParent/progress",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "user-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/assignments/:idParent/progress",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "assignment-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/groups/:idParent/progress",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "group-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/users/:userId/assignments/:assignmentId/progress",
+            hasController: true,
+            request: {
+                pathParams: { userId: "user-1", assignmentId: "assignment-1" },
             },
         },
     ],

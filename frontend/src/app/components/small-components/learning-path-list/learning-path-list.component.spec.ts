@@ -79,12 +79,12 @@ describe('LearningPathListComponent', () => {
         const cardDebugEl = fixture.debugElement.query(By.directive(LearningPathInfoCardComponent));
         const cardInstance = cardDebugEl.componentInstance as LearningPathInfoCardComponent;
 
-        expect(cardInstance.title).toBe('Math Basics');
-        expect(cardInstance.description).toBe('Learn addition and subtraction');
-        expect(cardInstance.steps).toBe(6);
-        expect(cardInstance.minAge).toBe(7);
-        expect(cardInstance.maxAge).toBe(10);
-        expect(cardInstance.learningPathId).toBe('math101');
+        expect(cardInstance.path.title).toBe('Math Basics');
+        expect(cardInstance.path.description).toBe('Learn addition and subtraction');
+        expect(cardInstance.path.numNodes).toBe(6);
+        expect(cardInstance.path.minAge).toBe(7);
+        expect(cardInstance.path.maxAge).toBe(10);
+        expect(cardInstance.path.learningPathId).toBe('math101');
         expect(cardInstance.isTeacher).toBe(true);
     });
 

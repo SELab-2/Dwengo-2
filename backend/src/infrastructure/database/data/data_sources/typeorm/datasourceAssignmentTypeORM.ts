@@ -28,18 +28,18 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
         return assignmentModel.toAssignmentEntity();
     }
 
-    public async getAssignmentById(id: string): Promise<Assignment | null> {
+    public async getAssignmentById(id: string): Promise<Assignment> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const assignmentModel: AssignmentTypeORM | null = await datasource.getRepository(AssignmentTypeORM).findOne({
             where: { id: id },
             relations: ["class"],
         });
-
-        if (assignmentModel !== null) {
-            return assignmentModel.toAssignmentEntity();
+        if (!assignmentModel) {
+            throw new EntityNotFoundError(`Assignment with id ${id} not found`);
         }
-        return null;
+
+        return assignmentModel.toAssignmentEntity();
     }
 
     public async getAssignmentsByClassId(classId: string): Promise<Assignment[]> {
