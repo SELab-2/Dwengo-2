@@ -59,7 +59,9 @@ export class CreateAssignmentComponent implements OnInit {
     console.log(`new assignment: ${JSON.stringify(newAssignment)}`);
 
     if (newAssignment) {
-      this.assignmentService.createAssignment(newAssignment);
+      this.assignmentService.createAssignment(newAssignment).subscribe((response) => {
+        console.log(`Assignment created: ${JSON.stringify(response)}`);
+      })
     }
   }
 
@@ -79,7 +81,7 @@ export class CreateAssignmentComponent implements OnInit {
     return this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
       classId: ['', Validators.required],
-      learningPath: ['', Validators.required],
+      learningPathId: ['', Validators.required],
       startDate: [new Date(), Validators.required],
       deadline: [new Date(), Validators.required],
       extraInstructions: ['', Validators.minLength(10)],
@@ -89,15 +91,15 @@ export class CreateAssignmentComponent implements OnInit {
   private extractFormValues(): NewAssignment | null {
     const name = this.createForm.get('name')?.value;
     const classId = this.createForm.get('classId')?.value;
-    const learningPath = this.createForm.get('learningPath')?.value;
+    const learningPathId = this.createForm.get('learningPathId')?.value;
     const startDate = this.createForm.get('startDate')?.value;
     const deadline = this.createForm.get('deadline')?.value;
     const extraInstructions = this.createForm.get('extraInstructions')?.value;
 
-    if (classId && learningPath && startDate && deadline) {
+    if (classId && learningPathId && startDate && deadline) {
       return {
         classId,
-        learningPathId: learningPath.learningPathId,
+        learningPathId: learningPathId,
         startDate,
         deadline,
         extraInstructions,

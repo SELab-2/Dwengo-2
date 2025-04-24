@@ -33,10 +33,10 @@
                 
                 <mat-form-field>
                     <mat-label i18n>Learning path</mat-label>
-                    <mat-select formControlName="learningPath">
+                    <mat-select formControlName="learningPathId">
                         @for (path of paths; track path) {
-                            <mat-option [value]="path">
-                                {{ path.learningPathId }}
+                            <mat-option [value]="path.hruid">
+                                {{ path.title }}
                             </mat-option>
                         }
                     </mat-select>
