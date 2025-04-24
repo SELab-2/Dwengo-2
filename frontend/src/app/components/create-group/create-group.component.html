@@ -1,0 +1,72 @@
+<app-authenticated-header></app-authenticated-header>
+<div class="create-group">
+    <!-- Members Section -->
+    <div class="members-container">
+        <h1>Create groups</h1>
+        <p i18n>
+            Here you can divide the members of your class into groups. 
+            Drag a member into an existing group or onto the new group.
+        </p>
+        <h2>Members</h2>
+        <div
+            id="members-list"
+            class="members-list"
+            cdkDropList
+            [cdkDropListData]="members"
+            [cdkDropListConnectedTo]="connectedDropLists"
+            (cdkDropListDropped)="drop($event)">
+            @for (user of members; track user.id) {
+                <app-mini-user [user]="user" cdkDrag></app-mini-user>
+            } @empty {
+                <p i18n>No members left</p>
+            }
+        </div>
+        <br>
+        <button mat-fab extended (click)="createGroups()" id="create-group-button">
+            <mat-icon>add</mat-icon>
+            Create groups
+        </button>
+    </div>
+
+    <!-- Groups Section -->
+    <span>
+        <div class="groups-container">
+            @for (group of groups; let i = $index; track i) {
+                <div>
+                    <!-- Group List -->
+                    <span style="display: flex; justify-content: space-between;">
+                        <h3 i18n>Group {{i+1}}</h3>
+                        <button mat-mini-fab color="warn" (click)="deleteGroupList(i)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </span>
+                    <div
+                    cdkDropList
+                    class="group-list"
+                    [id]="'group-list-' + i"
+                    [cdkDropListData]="group"
+                    [cdkDropListConnectedTo]="connectedDropLists"
+                    (cdkDropListDropped)="drop($event)">
+                    @for (user of group; track user.id) {
+                        <app-mini-user [user]="user" cdkDrag></app-mini-user>
+                    }
+                    </div>
+                </div>
+            }
+            <div>
+                <h3 i18n>New group</h3>
+                <div 
+                    class="group-list" 
+                    (click)="newGroupList()"
+                    
+                    cdkDropList
+                    id="new-group"
+                    [cdkDropListData]="emptyGroup"
+                    [cdkDropListConnectedTo]="connectedDropLists"
+                    (cdkDropListDropped)="drop($event)">
+                    <mat-icon>add</mat-icon>
+                </div>
+            </div>
+        </div>
+    </span>
+</div>

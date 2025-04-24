@@ -12,6 +12,10 @@ import { MiniAssignmentComponent } from '../mini-assignment/mini-assignment.comp
 import { PaginatedGridComponent } from '../paginated-grid/paginated-grid.component';
 import { MiniClassComponent } from '../mini-class/mini-class.component';
 import { RouterLink } from '@angular/router';
+import { GroupCardComponent } from '../group-card/group-card.component';
+import { Group } from '../../interfaces/group/group';
+import { GroupService } from '../../services/group.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 
 @Component({
@@ -23,6 +27,7 @@ import { RouterLink } from '@angular/router';
     MatIconModule,
     MiniAssignmentComponent,
     MiniClassComponent,
+    GroupCardComponent,
     MatPaginatorModule,
     MatButtonModule,
     PaginatedGridComponent,
@@ -33,6 +38,8 @@ import { RouterLink } from '@angular/router';
 export class StudentDashboardComponent implements OnInit {
   private _assignments: Assignment[] = [];
   private _classes: Class[] = [];
+  private _groups: Group[] = [];
+
   public pagedAssignments: Assignment[] = [];
 
   pageSize = 12;
@@ -43,8 +50,10 @@ export class StudentDashboardComponent implements OnInit {
   constructor(
     private classesService: ClassesService,
     private assignmentService: AssignmentService,
+    private groupService: GroupService,
+    private authService: AuthenticationService
   ) {}
-  
+
   ngOnInit() {
     const storedPageSize = localStorage.getItem('dashboardPageSize');
     const storedPageIndex = localStorage.getItem('dashboardPageIndex');
@@ -70,6 +79,13 @@ export class StudentDashboardComponent implements OnInit {
         this.updatePagedAssignments();
       }
     });
+
+    const userId: string | null = this.authService.retrieveUserId();
+
+    if(userId) {
+      this.groupService.getAllGroupsFromUser(userId)
+        .subscribe(response => this._groups = response);
+    }
   }
 
   public get assignments(): Assignment[] {
@@ -78,6 +94,10 @@ export class StudentDashboardComponent implements OnInit {
 
   public get classes(): Class[] {
     return this._classes;
+  }
+
+  public get groups(): Group[] {
+    return this._groups;
   }
 
   public get totalAssignments(): number {

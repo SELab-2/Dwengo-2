@@ -147,4 +147,21 @@ export class MockServices {
         ] as Assignment[];
 
     }
+    public static getGroups = () => {
+        return [{
+            id: '1234',
+            assignment: {
+                id: '321',
+                classId: '123',
+                startDate: new Date(),
+                deadline: new Date(),
+                extraInstructions: 'Extra instructions',
+                learningPathId: '123',
+                name: 'Constructing profile HMMs'
+            },
+            members: [{
+                id: '123', email: 'alice@bob.com', firstName: 'Alice', familyName: 'Daubechies', schoolName: 'Carol University', passwordHash: '1234',
+            }]
+        }];
+    }
 }
