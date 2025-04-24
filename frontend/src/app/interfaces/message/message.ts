@@ -4,10 +4,9 @@
 export interface Message {
     id: string;
     senderId: string;
-    questionId: string;
+    threadId: string;
     createdAt: Date;
     content: string;
-    isInstructor: boolean;
   }
   
   /**

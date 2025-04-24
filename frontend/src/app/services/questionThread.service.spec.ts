@@ -32,7 +32,7 @@ describe('QuestionThreadService', () => {
   };
 
   const questionThreadResponse: QuestionThreadResponse = {
-    questionThreads: [questionThread.id],
+    threads: [questionThread.id],
   };
 
   const questionThreadResponseSingle: QuestionThreadResponseSingle = {

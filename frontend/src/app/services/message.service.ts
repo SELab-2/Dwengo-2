@@ -47,19 +47,17 @@ export class MessageService {
         {
           id: 'msg1',
           senderId: 'u1',
-          questionId: idParent,
+          threadId: idParent,
           createdAt: new Date(Date.now() - 60000),
           content: 'Hey there! This is a mock message.',
-          isInstructor: false,
-        },
+        } as Message,
         {
           id: 'msg2',
           senderId: 'u2',
-          questionId: idParent,
+          threadId: idParent,
           createdAt: new Date(),
           content: 'Hello! This one is from an instructor.',
-          isInstructor: true,
-        }
+        } as Message,
       ]);
     } // End of mock data
     const headers = this.authService.retrieveAuthenticationHeaders();

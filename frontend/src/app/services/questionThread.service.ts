@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
 import { QuestionThread, NewQuestionThread, QuestionThreadUpdate, VisibilityType } from '../interfaces/questionThread';
 import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
 
@@ -13,7 +13,7 @@ import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfa
 export class QuestionThreadService {
 
   private API_URL = environment.API_URL;
-  private threadUpdateSubject = new BehaviorSubject<{id: String, update: QuestionThreadUpdate}>(
+  private threadUpdateSubject = new BehaviorSubject<{id: string, update: QuestionThreadUpdate}>(
     {
       id: '',
       update: {
@@ -118,7 +118,7 @@ export class QuestionThreadService {
         return of(question);
       })
     );
-    const threadUpdate: {id: String, update: QuestionThreadUpdate} = {
+    const threadUpdate: {id: string, update: QuestionThreadUpdate} = {
       id: id,
       update: {
         isClosed: question.isClosed,

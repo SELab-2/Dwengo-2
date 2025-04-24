@@ -85,14 +85,9 @@ export class ChatComponent implements OnInit, OnChanges {
         this.currentThread.visibility = newVisibility;
     }
 
-    ngAfterViewInit() {
-        this.scrollToBottom();
-    }
-
     ngOnChanges(): void {
         this.loadMessages();
         this.loadThread();
-        this.scrollToBottom();
     }
 
     // Helper method to check if message belongs to current user
@@ -102,8 +97,15 @@ export class ChatComponent implements OnInit, OnChanges {
 
     private scrollToBottom(): void {
         try {
-            this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
-        } catch(err) { }
+            if (this.messagesContainer && this.messagesContainer.nativeElement) {
+                // Use a small delay to ensure the DOM updates before scrolling
+                setTimeout(() => {
+                    this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+                }, 100); // Delay in milliseconds (100ms)
+            }
+        } catch(err) {
+            console.error('Error scrolling to bottom:', err);
+        }
     }
 
     loadMessages(): void {
@@ -117,6 +119,7 @@ export class ChatComponent implements OnInit, OnChanges {
                     this.usernamesMap[id] = user.firstName + ' ' + user.familyName;
                 });
             });
+            this.scrollToBottom();
         });
     }
 
@@ -136,14 +139,14 @@ export class ChatComponent implements OnInit, OnChanges {
                 {
                     id: messageId,
                     senderId: this.currentUserId,
-                    questionId: this.questionThreadId,
+                    threadId: this.questionThreadId,
                     createdAt: new Date(),
                     content: trimmed,
                     isInstructor: this.isInstructor,
                 } as Message
             );
             this.newMessageContent = '';
+            this.scrollToBottom();
         });
-        this.scrollToBottom();
     }
 }
