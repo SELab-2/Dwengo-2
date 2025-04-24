@@ -3,9 +3,24 @@
   
     <div class="content">
         <div class="sidebar">
+            <button mat-stroked-button 
+                    class="toggle-button"
+                    (click)="toggleChatVisibility()">
+                {{ showPublicChats ? 'Show My Chats' : 'Show Other Chats for This Step' }}
+            </button>
+            
             <mat-nav-list>
                 @for (thread of questionThreads; track thread.id) {
-                    <a mat-list-item [routerLink]="['/student/chat', thread.id]">
+                    <a mat-list-item 
+                       [routerLink]="['/student/chat', thread.id]"
+                       [class.active]="thread.id === chatId">
+                       @if (thread.visibility !== 'private') {
+                           <span class="visibility-badge" 
+                                 [class.group]="thread.visibility === 'group'"
+                                 [class.public]="thread.visibility === 'public'">
+                               {{ thread.visibility === 'group' ? 'Group' : 'Public' }}
+                           </span>
+                       }
                         Chat {{ thread.id.slice(0, 6) }}...
                     </a>
                 }

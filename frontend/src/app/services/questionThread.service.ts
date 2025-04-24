@@ -91,7 +91,7 @@ export class QuestionThreadService {
   /**
    * Update an existing question
    */
-  updateQuestion(id: string, question: QuestionThreadUpdate): Observable<QuestionThreadUpdate> {
+  updateQuestionThread(id: string, question: QuestionThreadUpdate): Observable<QuestionThreadUpdate> {
     const headers = this.authService.retrieveAuthenticationHeaders();
 
     return this.http.patch<void>(
@@ -109,7 +109,7 @@ export class QuestionThreadService {
   /**
    * Delete a question
    */
-  deleteQuestion(id: string): Observable<boolean> {
+  deleteQuestionThread(id: string): Observable<boolean> {
     const headers = this.authService.retrieveAuthenticationHeaders();
 
     return this.http.delete<void>(

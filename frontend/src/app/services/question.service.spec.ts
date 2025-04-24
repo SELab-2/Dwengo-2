@@ -94,14 +94,14 @@ describe('QuestionThreadService', () => {
 
   it('should update a question thread', () => {
     http.patch.and.returnValue(of({}));
-    service.updateQuestion(questionThread.id, updatedQuestionThread).subscribe(result => {
+    service.updateQuestionThread(questionThread.id, updatedQuestionThread).subscribe(result => {
       expect(result).toEqual(updatedQuestionThread);
     });
   });
 
   it('should delete a question thread', () => {
     http.delete.and.returnValue(of({}));
-    service.deleteQuestion(questionThread.id).subscribe(result => {
+    service.deleteQuestionThread(questionThread.id).subscribe(result => {
       expect(result).toBeTrue();
     });
   });

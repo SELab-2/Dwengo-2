@@ -4,12 +4,14 @@ import { CommonModule } from '@angular/common';
 import { QuestionThreadService } from '../../services/questionThread.service';
 import { AssignmentService } from '../../services/assignment.service';
 import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { ChatComponent } from '../../components/chat/chat.component';
 import { QuestionThread } from '../../interfaces/questionThread';
 import { forkJoin, of, switchMap, map } from 'rxjs';
 import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
 import { AuthenticationService } from '../../services/authentication.service';
+import { VisibilityType } from '../../interfaces/questionThread/questionThread';
 
 @Component({
   selector: 'app-chat-page',
@@ -17,9 +19,10 @@ import { AuthenticationService } from '../../services/authentication.service';
   imports: [
     CommonModule,
     MatListModule,
+    MatButtonModule,
     RouterModule,
     ChatComponent,
-    AuthenticatedHeaderComponent
+    AuthenticatedHeaderComponent,
   ],
   templateUrl: './chat-page.component.html',
   styleUrls: ['./chat-page.component.less']
@@ -33,50 +36,73 @@ export class ChatPageComponent implements OnInit {
     public chatId: string = '';
     public validChatId: boolean = false;
     public questionThreads: QuestionThread[] = [];
+    public showPublicChats = false;
+    public currentLearningObjectId: string | null = null;
   
     ngOnInit(): void {
-    //   this.chatId = this.route.snapshot.paramMap.get('id') || '';
-  
-    //   this.assignmentService.retrieveAssignments().pipe(
+        this.loadChats();
+        
+        // Watch for route changes to get current thread's learning object ID
+        this.route.paramMap.subscribe(params => {
+            this.chatId = params.get('id') || '';
+            this.updateCurrentLearningObjectId();
+        });
+    }
+
+    private loadChats(): void {
         this.assignmentService.retrieveAssignments().pipe(
             switchMap(assignments => {
                 if (!assignments || !Array.isArray(assignments)) {
-                    console.error('Invalid assignments response:', assignments);
                     return of([]);
                 }
-                // console.log('Assignments:', assignments);
-                const threadRequests = assignments.map(a =>
+                const threadRequests = assignments.map(a => 
                     this.threadService.retrieveQuestionThreadsByAssignment(a.id)
                 );
-                // console.log('Thread requests:', threadRequests);
                 return forkJoin(threadRequests);
             }),
             map(threadArrays => threadArrays.flat()),
-            // switchMap(allThreads => {
             map(allThreads => {
                 const userId = this.authService.retrieveUserId() || '';
-                // console.log('User ID:', userId);
-                // console.log('All threads:', allThreads);
-                const userThreads = allThreads.filter(t => t.creatorId === userId);
-                // console.log('User threads:', userThreads);
-                this.questionThreads = userThreads;
-                // this.validChatId = !!this.chatId && userThreads.some(t => t.id === this.chatId);
-                // return of(true);
-                return userThreads.map(t => t.id);
+                return this.filterThreads(allThreads, userId);
             })
         ).subscribe({
-            next: validIds => {
-                // Once threads are loaded, now start watching route changes
-                this.route.paramMap.subscribe(params => {
-                    const id = params.get('id') || '';
-                    this.chatId = id;
-                    this.validChatId = validIds.includes(id);
-                });
-            },
-            error: (err) => {
-                console.error('Failed to load threads:', err);
-                this.validChatId = false;
-            }
+            next: () => this.updateCurrentLearningObjectId(),
+            error: (err) => console.error('Failed to load threads:', err)
         });
+    }
+
+    private filterThreads(allThreads: QuestionThread[], userId: string): string[] {
+        if (this.showPublicChats) {
+            // Filter public/group chats for current learning object
+            this.questionThreads = allThreads.filter(t => 
+                t.learningObjectId === this.currentLearningObjectId &&
+                (t.visibility === VisibilityType.GROUP || 
+                 t.visibility === VisibilityType.PUBLIC)
+            ).sort((a, b) => {
+                // Group chats first, then public
+                if (a.visibility === VisibilityType.GROUP && 
+                    b.visibility !== VisibilityType.GROUP) return -1;
+                if (b.visibility === VisibilityType.GROUP && 
+                    a.visibility !== VisibilityType.GROUP) return 1;
+                return 0;
+            });
+        } else {
+            // Show only user's chats
+            this.questionThreads = allThreads.filter(t => t.creatorId === userId);
+        }
+        return this.questionThreads.map(t => t.id);
+    }
+
+    private updateCurrentLearningObjectId(): void {
+        if (this.chatId) {
+            const currentThread = this.questionThreads.find(t => t.id === this.chatId);
+            this.currentLearningObjectId = currentThread?.learningObjectId || null;
+        }
+        this.validChatId = this.questionThreads.some(t => t.id === this.chatId);
+    }
+
+    toggleChatVisibility(): void {
+        this.showPublicChats = !this.showPublicChats;
+        this.loadChats(); // Reload chats with new filter
     }
 }
