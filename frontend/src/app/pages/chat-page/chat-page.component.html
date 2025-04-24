@@ -14,13 +14,12 @@
                     <a mat-list-item 
                        [routerLink]="['/student/chat', thread.id]"
                        [class.active]="thread.id === chatId">
-                       @if (thread.visibility !== 'private') {
-                           <span class="visibility-badge" 
-                                 [class.group]="thread.visibility === 'group'"
-                                 [class.public]="thread.visibility === 'public'">
-                               {{ thread.visibility === 'group' ? 'Group' : 'Public' }}
-                           </span>
-                       }
+                        <span class="visibility-badge" 
+                            [class.private]="thread.visibility === VisibilityType.PRIVATE"
+                            [class.group]="thread.visibility === VisibilityType.GROUP"
+                            [class.public]="thread.visibility === VisibilityType.PUBLIC">
+                            {{ thread.visibility === VisibilityType.PRIVATE ? '💬' : (thread.visibility === VisibilityType.GROUP ? '👥' : '🌐') }}
+                        </span>
                         Chat {{ thread.id.slice(0, 6) }}...
                     </a>
                 }

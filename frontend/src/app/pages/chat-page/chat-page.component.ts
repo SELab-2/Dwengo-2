@@ -38,6 +38,7 @@ export class ChatPageComponent implements OnInit {
     public questionThreads: QuestionThread[] = [];
     public showPublicChats = false;
     public currentLearningObjectId: string | null = null;
+    public VisibilityType = VisibilityType; // For template binding
   
     ngOnInit(): void {
         this.loadChats();
