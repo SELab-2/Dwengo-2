@@ -48,6 +48,8 @@ export class ClassesPageComponent implements OnInit {
   // Whether the currently logged in user is a teacher or not
   public isTeacher: boolean = false;
 
+  public _type: UserType = UserType.TEACHER;
+
   // Classes of the currently logged in user
   private _classes: Class[] = [];
 
@@ -70,7 +72,8 @@ export class ClassesPageComponent implements OnInit {
         next: (classes) => this._classes = classes,
       });
 
-    this.isTeacher = this.authService.retrieveUserType() === UserType.TEACHER;
+    this._type = this.authService.retrieveUserType()!;
+    this.isTeacher = this._type === UserType.TEACHER;
   }
 
   /**
