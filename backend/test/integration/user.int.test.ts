@@ -9,7 +9,6 @@ describe("Test user API endpoints", () => {
     let classId: string;
     let assignmentId: string;
     let groupId: string;
-
     beforeEach(async () => {
         studentAuthDetails = await initializeUser("student", app);
         teacherAuthDetails = await initializeUser("teacher", app, "teacher@gmail.com");
