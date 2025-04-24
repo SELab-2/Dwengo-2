@@ -16,6 +16,7 @@ import { ExplorePageComponent } from './pages/explore-page/explore-page.componen
 import { GroupComponent } from './components/group/group.component';
 import { AuthorizedGuard } from './guards/authorized.guard';
 import { LearningPathPageComponent } from './pages/learning-path-page/learning-path-page.component';
+import { CreateGroupComponent } from './components/create-group/create-group.component';
 
 /**
  * Routing of our frontend.
@@ -39,5 +40,9 @@ export const routes: Routes = [
     { path: 'placeholder', component: UnknownRouteComponent, title: 'Aur Naur', },
     { path: 'unauthorized', component: UnauthorizedComponent, title: 'Unauthorized' },
     { path: 'already-authenticated', component: AlreadyAuthenticatedComponent, title: 'Already Authenticated' },
+
+    // TODO: remove, is just for presentation
+    { path: 'create-group', component: CreateGroupComponent },
+
     { path: '**', redirectTo: 'placeholder' },
 ];

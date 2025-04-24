@@ -39,7 +39,10 @@ export class CreateGroupComponent {
   @Input() assignmentId?: string = "123";
 
   // The members of the class that need to be devided into groups
-  @Input() members: User[] = [];
+  @Input() members: User[] = [
+    { id: '1', email: 'alice@gmail.com', firstName: 'Alice', familyName: 'Smith', schoolName: 'Aur Naur', passwordHash: '123' },
+    { id: '2', email: 'bob@gmail.com', firstName: 'Bob', familyName: 'Johnson', schoolName: 'Aur Naur', passwordHash: '123' },
+  ];
 
   // The groups
   private _groups: User[][] = [];
