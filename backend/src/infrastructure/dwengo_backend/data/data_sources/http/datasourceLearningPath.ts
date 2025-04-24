@@ -7,7 +7,7 @@ export class DatasourceLearningPath extends DatasourceDwengo {
         super(host, "learningPath");
     }
 
-    public async getLearningPath(hruid: string, language: string, includeNodes: boolean): Promise<LearningPath> {
+    public async getLearningPath(hruid: string, includeNodes: boolean, language?: string): Promise<LearningPath> {
         // Fetch from dwengo
         const response = await fetch(`${this.host}/api/${this.learningType}/search?hruid=${hruid}`);
         if (!response.ok) {
@@ -24,7 +24,9 @@ export class DatasourceLearningPath extends DatasourceDwengo {
 
         // Extract the right language from all the available paths
         // (Dwengo API for some reason can't do this with &language=${language} in the query)
-        const learningPathObject: LearningPathData = data.find((path: LearningPathData) => path.language === language);
+        const learningPathObject: LearningPathData = language
+            ? data.find((path: LearningPathData) => path.language === language)
+            : data[0];
         if (!learningPathObject) {
             // Should not happen because language is checked beforehand, but just to be sure.
             throw { code: ErrorCode.NOT_FOUND, message: `No learningPath exists with this hruid.` } as ApiError;

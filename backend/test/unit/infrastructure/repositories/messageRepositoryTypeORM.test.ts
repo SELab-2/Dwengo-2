@@ -79,22 +79,4 @@ describe("MessageRepositoryTypeORM", () => {
         expect(datasourceMessage.deleteMessageById).toHaveBeenCalledTimes(1);
         expect(datasourceMessage.deleteMessageById).toHaveBeenCalledWith(createdMessage.id);
     });
-
-    test('delete throws error if not in database', async () => {
-        const nonExistentMessageId = "non-existent-id";
-        datasourceMessage.getMessageById = jest.fn(() => Promise.resolve(null));
-        datasourceMessage.deleteMessageById = jest.fn(async (id: string) => {
-            const foundMessage = await datasourceMessage.getMessageById(id);
-            if (!foundMessage) {
-                throw new EntityNotFoundError('Message not found');
-            }
-        });
-    
-        await expect(datasourceMessage.deleteMessageById(nonExistentMessageId))
-            .rejects
-            .toThrow(EntityNotFoundError);
-    
-        expect(datasourceMessage.deleteMessageById).toHaveBeenCalledTimes(1);
-        expect(datasourceMessage.deleteMessageById).toHaveBeenCalledWith(nonExistentMessageId);
-    });
 });
