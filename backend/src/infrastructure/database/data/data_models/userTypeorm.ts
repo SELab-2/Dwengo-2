@@ -54,23 +54,23 @@ export class UserTypeORM {
         return userTypeORM;
     }
 
-    public toEntity(userModel: UserTypeORM): User {
-        if (userModel.role == UserType.TEACHER) {
+    public toEntity(): User {
+        if (this.role == UserType.TEACHER) {
             return new Teacher(
-                userModel.email,
-                userModel.first_name,
-                userModel.last_name,
-                userModel.password_hash,
-                userModel.school_name,
+                this.email,
+                this.first_name,
+                this.last_name,
+                this.password_hash,
+                this.school_name,
                 this.id,
             );
-        } else if (userModel.role == UserType.STUDENT) {
+        } else if (this.role == UserType.STUDENT) {
             return new Student(
-                userModel.email,
-                userModel.first_name,
-                userModel.last_name,
-                userModel.password_hash,
-                userModel.school_name,
+                this.email,
+                this.first_name,
+                this.last_name,
+                this.password_hash,
+                this.school_name,
                 this.id,
             );
         } else {
