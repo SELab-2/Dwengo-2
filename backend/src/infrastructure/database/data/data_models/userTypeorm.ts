@@ -1,5 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { User } from "../../../../core/entities/user";
+import { Teacher } from "../../../../core/entities/teacher";
+import { Student } from "../../../../core/entities/student";
+
+export enum UserType {
+    TEACHER = "teacher",
+    STUDENT = "student",
+}
 
 @Entity()
 export class UserTypeORM {
@@ -21,6 +28,12 @@ export class UserTypeORM {
     @Column({ type: "varchar", length: 64 }) // 256-bit hash => 32 bytes => 64 hexadecimals
     password_hash!: string;
 
+    @Column({
+            type: "enum",
+            enum: UserType,
+        })
+    role!: UserType;
+
     // Since multiple constructors isn't supported by Typescript
     // https://stackoverflow.com/questions/12702548/constructor-overload-in-typescript
     public static createUserTypeORM(user: User): UserTypeORM {
@@ -30,6 +43,39 @@ export class UserTypeORM {
         userTypeORM.last_name = user.familyName;
         if (user.schoolName) userTypeORM.school_name = user.schoolName;
         userTypeORM.password_hash = user.passwordHash;
+        // Set the role of the user by checking the class of the object.
+        if (user instanceof Teacher) {
+            userTypeORM.role = UserType.TEACHER
+        } else if (user instanceof Student) {
+            userTypeORM.role = UserType.STUDENT
+        } else {
+            throw new Error("The user provided was neither a student or a teacher");
+        }
         return userTypeORM;
+    }
+
+    public toEntity(userModel: UserTypeORM): User {
+        if (userModel.role == UserType.TEACHER) {
+            return new Teacher(
+                userModel.email,
+                userModel.first_name,
+                userModel.last_name,
+                userModel.password_hash,
+                userModel.school_name,
+                this.id,
+            );
+        } else if (userModel.role == UserType.STUDENT) {
+            return new Student(
+                userModel.email,
+                userModel.first_name,
+                userModel.last_name,
+                userModel.password_hash,
+                userModel.school_name,
+                this.id,
+            );
+        } else {
+            throw new Error("The user in the database was neither a student or a teacher");
+        }
+        
     }
 }

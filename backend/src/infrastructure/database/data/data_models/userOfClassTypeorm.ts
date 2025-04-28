@@ -1,15 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, JoinColumn, CreateDateColumn, ManyToOne } from "typeorm";
 import { ClassTypeORM } from "./classTypeorm";
-import { StudentTypeORM } from "./studentTypeorm";
+import { UserTypeORM } from "./userTypeorm";
 
 @Entity()
-export class StudentOfClassTypeORM {
+export class UserOfClassTypeORM { // A table with both the students and the teachers of the class
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @ManyToOne(() => StudentTypeORM, { cascade: true, onDelete: "CASCADE" })
-    @JoinColumn({ name: "student_id" })
-    student!: StudentTypeORM;
+    @ManyToOne(() => UserTypeORM, { cascade: true, onDelete: "CASCADE" })
+    @JoinColumn({ name: "user_id" })
+    user!: UserTypeORM;
 
     @ManyToOne(() => ClassTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "class_id" })
