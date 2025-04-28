@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { User } from "../../../../core/entities/user";
-import { Teacher } from "../../../../core/entities/teacher";
 import { Student } from "../../../../core/entities/student";
+import { Teacher } from "../../../../core/entities/teacher";
+import { User } from "../../../../core/entities/user";
 
 export enum UserType {
     TEACHER = "teacher",
@@ -29,9 +29,9 @@ export class UserTypeORM {
     password_hash!: string;
 
     @Column({
-            type: "enum",
-            enum: UserType,
-        })
+        type: "enum",
+        enum: UserType,
+    })
     role!: UserType;
 
     // Since multiple constructors isn't supported by Typescript
@@ -45,9 +45,9 @@ export class UserTypeORM {
         userTypeORM.password_hash = user.passwordHash;
         // Set the role of the user by checking the class of the object.
         if (user instanceof Teacher) {
-            userTypeORM.role = UserType.TEACHER
+            userTypeORM.role = UserType.TEACHER;
         } else if (user instanceof Student) {
-            userTypeORM.role = UserType.STUDENT
+            userTypeORM.role = UserType.STUDENT;
         } else {
             throw new Error("The user provided was neither a student or a teacher");
         }
@@ -76,6 +76,5 @@ export class UserTypeORM {
         } else {
             throw new Error("The user in the database was neither a student or a teacher");
         }
-        
     }
 }

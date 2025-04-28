@@ -153,7 +153,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         const submissionRepository = datasource.getRepository(SubmissionTypeORM);
         // First get the student
         const studentModel: UserTypeORM | null = await studentRepository.findOne({
-            where: { id: studentId, role: UserType.STUDENT},
+            where: { id: studentId, role: UserType.STUDENT },
         });
         if (!studentModel) {
             throw new EntityNotFoundError(`Student with id ${studentId} not found`);

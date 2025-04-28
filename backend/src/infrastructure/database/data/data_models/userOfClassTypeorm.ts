@@ -3,7 +3,8 @@ import { ClassTypeORM } from "./classTypeorm";
 import { UserTypeORM } from "./userTypeorm";
 
 @Entity()
-export class UserOfClassTypeORM { // A table with both the students and the teachers of the class
+export class UserOfClassTypeORM {
+    // A table with both the students and the teachers of the class
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 

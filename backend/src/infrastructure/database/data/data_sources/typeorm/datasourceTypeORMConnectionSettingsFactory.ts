@@ -7,8 +7,8 @@ import { JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { UserTypeORM } from "../../data_models/userTypeorm";
 import { UserOfClassTypeORM } from "../../data_models/userOfClassTypeorm";
+import { UserTypeORM } from "../../data_models/userTypeorm";
 
 /**
  * Factory class for creating DatasourceTypeORMConnectionSettings objects.

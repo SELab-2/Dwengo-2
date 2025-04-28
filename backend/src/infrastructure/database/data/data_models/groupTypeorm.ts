@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { AssignmentTypeORM } from "./assignmentTypeorm";
-import {  UserTypeORM } from "./userTypeorm";
+import { UserTypeORM } from "./userTypeorm";
 import { Group } from "../../../../core/entities/group";
 
 @Entity()

@@ -1,14 +1,14 @@
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Student } from "../../../../../core/entities/student";
-import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
-import { GroupTypeORM } from "../../data_models/groupTypeorm";
-import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
-import { UserOfClassTypeORM } from "../../data_models/userOfClassTypeorm";
-import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { Teacher } from "../../../../../core/entities/teacher";
 import { User } from "../../../../../core/entities/user";
+import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
+import { ClassTypeORM } from "../../data_models/classTypeorm";
+import { GroupTypeORM } from "../../data_models/groupTypeorm";
+import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
+import { UserOfClassTypeORM } from "../../data_models/userOfClassTypeorm";
+import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceStudentTypeORM extends DatasourceTypeORM {
     public async createStudent(student: Student): Promise<Student> {
@@ -24,7 +24,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
     public async getStudentById(id: string): Promise<Student> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
         const studentModel: UserTypeORM | null = await datasource.getRepository(UserTypeORM).findOne({
-            where: { id: id, role: UserType.STUDENT }
+            where: { id: id, role: UserType.STUDENT },
         });
 
         if (!studentModel) {
@@ -93,9 +93,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError(`Student with id ${student.id} not found`);
         }
 
-        await datasource
-            .getRepository(UserTypeORM)
-            .update(studentModel.id!, UserTypeORM.createUserTypeORM(student));
+        await datasource.getRepository(UserTypeORM).update(studentModel.id!, UserTypeORM.createUserTypeORM(student));
 
         return student;
     }
@@ -133,12 +131,10 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError(`Student with id ${studentId} not found`);
         }
 
-        const studentOfClass: UserOfClassTypeORM | null = await datasource
-            .getRepository(UserOfClassTypeORM)
-            .findOne({
-                where: { user: studentModel, class: classModel },
-                relations: ["class"],
-            });
+        const studentOfClass: UserOfClassTypeORM | null = await datasource.getRepository(UserOfClassTypeORM).findOne({
+            where: { user: studentModel, class: classModel },
+            relations: ["class"],
+        });
 
         if (!studentOfClass || studentOfClass.class.id !== classId) {
             throw new EntityNotFoundError("Student not part of class");
@@ -209,18 +205,18 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
 
         // Map the users to entities
         const users: User[] = classJoinResult.map(classJoinResult => {
-            if (classJoinResult.user.role == UserType.TEACHER){
+            if (classJoinResult.user.role == UserType.TEACHER) {
                 return classJoinResult.user.toEntity() as Teacher;
-            } else  {
-                return classJoinResult.user.toEntity() as Student
+            } else {
+                return classJoinResult.user.toEntity() as Student;
             }
         });
-        
+
         // filter out all teachers in the result
         const students = users.filter(user => {
-            return user instanceof Student
-        })
-        
+            return user instanceof Student;
+        });
+
         return students;
     }
 
