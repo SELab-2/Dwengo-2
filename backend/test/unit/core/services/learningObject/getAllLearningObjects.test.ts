@@ -28,7 +28,7 @@ describe("GetAllLearningObjects", () => {
 
         const result = await service.execute(input);
 
-        expect(mockRepo.getLearningObjects).toHaveBeenCalledWith("?search_term=robot&language=nl&min_difficulty=2");
+        expect(mockRepo.getLearningObjects).toHaveBeenCalledWith("?searchTerm=robot&language=nl&min_difficulty=2");
 
         expect(result).toEqual({
             learningObjects: [mockLO.toMetaData()],

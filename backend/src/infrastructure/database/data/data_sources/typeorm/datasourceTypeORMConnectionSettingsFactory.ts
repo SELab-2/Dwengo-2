@@ -12,6 +12,7 @@ import { StudentTypeORM } from "../../data_models/studentTypeorm";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
+import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
 
 /**
  * Factory class for creating DatasourceTypeORMConnectionSettings objects.
@@ -61,6 +62,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             AssignmentTypeORM,
             QuestionThreadTypeORM,
             MessageTypeORM,
+            SubmissionTypeORM
         ],
     ): DatasourceTypeORMConnectionSettings {
         return new DatasourceTypeORMConnectionSettings(

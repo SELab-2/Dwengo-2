@@ -48,6 +48,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
 
         const submissionModel: SubmissionTypeORM | null = await datasource.getRepository(SubmissionTypeORM).findOne({
             where: { id: id },
+            relations: ["student", "assignment"],
         });
 
         if (!submissionModel) {
@@ -85,7 +86,10 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
 
     public async delete(submission: string): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-        await datasource.getRepository(SubmissionTypeORM).delete(submission);
+        const result = await datasource.getRepository(SubmissionTypeORM).delete(submission);
+        if (result.affected === 0) {
+            throw new EntityNotFoundError(`Submission with id ${submission} not found`);
+        }
     }
 
     private async getSubmissions(
@@ -161,7 +165,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         // Now get all the student's submissions for any assignment and step
         const submissionModels: SubmissionTypeORM[] = await submissionRepository.find({
             where: { student: studentModel },
-            relations: ["student"],
+            relations: ["student", "assignment"],
         });
         // Return the submissions as entities
         return submissionModels.map(model => model.toEntity());
