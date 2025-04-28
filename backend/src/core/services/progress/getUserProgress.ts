@@ -17,7 +17,7 @@ export class GetUserProgress extends ProgressBaseService<GetUserProgressInput> {
                 async assignment => await this.learningPathRepository.getLearningPath(assignment.learningPathId, true),
             ),
         );
-
+        console.log("Assignments: ", assignments);
         const stepIndexes: number[] = Array(learningPaths.length).fill(-1);
         const submissions: Submission[] = Array(learningPaths.length).fill(null);
         for (let i = 0; i < assignments.length; i++) {
@@ -28,7 +28,7 @@ export class GetUserProgress extends ProgressBaseService<GetUserProgressInput> {
                 input.idParent + " - " + assignments[i].id!,
                 true,
             );
-
+            console.log("Submissions for assignment: ", submissionsForAssignment);
             // Get the index of the furthest node (in the learningPath) that has been submitted to
             for (let j = 0; j < learningPaths[i].numNodes; j++) {
                 // Get the furthest node that has been submitted to
