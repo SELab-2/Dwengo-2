@@ -1,12 +1,7 @@
 import { app } from "../../src/app";
 import request from "supertest";
-import { AuthDetails, initializeUser } from "./helpers";
 
-describe("Test class API endpoints", () => {
-    let authDetails: AuthDetails;
-    let mockPath: object;
-    let hruid: string;
-    
+describe("Test learningPath API endpoints", () => {
     describe("GET /learningPath", () => {
             it("Should get a list with multiple learningPaths", async () => {
                 const response = await request(app)
