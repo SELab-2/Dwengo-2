@@ -27,7 +27,7 @@ export class GetAllLearningObjects implements Service<GetAllLearningObjectsInput
             if (key !== "searchTerm") {
                 dwengoKey = key.replace(/[A-Z]/g, match => `_${match.toLowerCase()}`);
             }
-            
+
             // Add key-value pair to params
             const val = input[key as keyof GetAllLearningObjectsInput];
             if (val !== undefined && val !== null) {
