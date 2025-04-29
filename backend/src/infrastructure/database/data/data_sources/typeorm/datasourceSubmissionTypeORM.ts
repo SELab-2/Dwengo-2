@@ -171,7 +171,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     public async getMonthlySubmissionCounts(classId: string): Promise<number[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const classRepository = datasource.getRepositor(ClassTypeORM);
+        const classRepository = datasource.getRepository(ClassTypeORM);
         const existingClass = await classRepository.findOne({ where: { id: classId } });
 
         if (!existingClass) {
