@@ -1807,7 +1807,30 @@ paths:
           $ref: '#/components/responses/SubmissionsOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
+  '/classes/:idParent/completion':
+    get:
+      tags:
+        - progress
+      description: |
+        The completion percentage equals the amount of submissions in the class divided by
+        the maximum possible number of submissions in that class (when every student completed every assignment).
+      parameters:
+        - in: path
+          name: idParent
+          description: The id of the class to get the completion of
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/CompletionOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
+      
 components:
   securitySchemes:
     apiKeyAuth:
@@ -2125,6 +2148,16 @@ components:
               id:
                 type: string
                 format: uuid
+    CompletionOK:
+      description: Class completion request completed sucessfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              percentage:
+                type: number
+                description: null if no assignments are present for class 
     NoContent:
       description: Resource deleted successfully
   schemas:

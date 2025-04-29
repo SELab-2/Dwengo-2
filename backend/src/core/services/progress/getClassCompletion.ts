@@ -17,7 +17,6 @@ export type GetClassCompletionInput = z.infer<typeof getProgressSchema>;
 export class GetClassCompletion implements Service<GetClassCompletionInput> {
     constructor(
         private _submissionRepository: ISubmissionRepository,
-        private _classRepository: IClassRepository,
         private _studentRepository: IStudentRepository,
         private _assignmentRepository: IAssignmentRepository,
         private _learningPathRepository: ILearningPathRepository,
