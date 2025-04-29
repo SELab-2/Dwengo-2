@@ -110,14 +110,12 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         if (!studentModel) {
             throw new EntityNotFoundError(`Student with id ${studentId} not found`);
         }
-        console.log("Student found: ", studentModel.id);
 
         // Then get the assignment
         const assignmentModel: AssignmentTypeORM | null = await assignmentRepository.findOne({
             where: { id: assignmentId },
         });
         if (!assignmentModel) {
-            console.log("Assignment not found: ", assignmentId);
             throw new EntityNotFoundError(`Assignment with id ${assignmentId} not found`);
         }
 

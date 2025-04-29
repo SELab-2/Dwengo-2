@@ -31,7 +31,6 @@ export abstract class GetProgress extends ProgressBaseService<GetProgressInput> 
     public async execute(input: GetProgressInput): Promise<object> {
         // Get all users for the assignment
         const students: User[] = await this.getUsers(input.idParent);
-        console.log("Students: ", students);
         // Get the corresponding learningPath
         const assignment: Assignment = await this.getAssignment(input.idParent);
         const learningPath = await this.learningPathRepository.getLearningPath(assignment.learningPathId, true);
@@ -46,7 +45,6 @@ export abstract class GetProgress extends ProgressBaseService<GetProgressInput> 
                 input.idParent + " - " + students[i].id!,
                 true,
             );
-            console.log("Submissions: ", submissions);
             // Get the furthest submission with latest time
             for (let j = 0; j < learningPath.numNodes; j++) {
                 for (let k = 0; k < submissions.length; k++) {
