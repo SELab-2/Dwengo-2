@@ -10,7 +10,7 @@ export const config = {
         errors: { type: "file", filename: "errors.log" },
     },
     categories: {
-        default: { appenders: ["console", "file"], level: logLevel},
+        default: { appenders: ["console", "file"], level: logLevel },
         http: { appenders: ["console", "file"], level: logLevel },
         error: { appenders: ["console", "errors"], level: "error" },
     },
