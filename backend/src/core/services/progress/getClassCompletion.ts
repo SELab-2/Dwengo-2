@@ -7,7 +7,6 @@ import { Student } from "../../entities/student";
 import { Submission } from "../../entities/submission";
 import { tryRepoEntityOperation } from "../../helpers";
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
-import { IClassRepository } from "../../repositories/classRepositoryInterface";
 import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
 import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ISubmissionRepository } from "../../repositories/submissionRepositoryInterface";
@@ -22,7 +21,7 @@ export class GetClassCompletion implements Service<GetClassCompletionInput> {
         private _learningPathRepository: ILearningPathRepository,
     ) {}
 
-    public async execute(input: z.infer<GetClassCompletionInput>): Promise<object> {
+    public async execute(input: GetClassCompletionInput): Promise<object> {
         // Get the assignments of the class
         const assignments: Assignment[] = await tryRepoEntityOperation(
             this._assignmentRepository.getByClassId(input.idParent),

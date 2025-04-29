@@ -514,6 +514,22 @@ const routeConfigs: Record<
                 pathParams: { userId: "user-1", assignmentId: "assignment-1" },
             },
         },
+        {
+            method: HttpMethod.GET,
+            path: "/classes/:idParent/completion",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "class-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/classes/:idParent/activity",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "class-1" },
+            },
+        },
     ],
     userRoutes: [
         {

@@ -23,6 +23,7 @@ const extractors = {
     getGroupProgress: deps.createZodParamsExtractor(ProgressSchemas.getProgressSchema),
     getUserAssignmentProgress: deps.createZodParamsExtractor(ProgressSchemas.getUserAssignmentProgressSchema),
     getClassCompletion: deps.createZodParamsExtractor(ProgressSchemas.getProgressSchema),
+    getSubmissionActivity: deps.createZodParamsExtractor(ProgressSchemas.getProgressSchema),
 };
 
 /* ************* Controller ************* */
@@ -34,8 +35,16 @@ export class ProgressController extends deps.Controller {
         getGroupProgress: ProgressServices.GetGroupProgress,
         get: ProgressServices.GetUserAssignmentProgress,
         getClassCompletion: ProgressServices.GetClassCompletion,
+        getSubmissionActivity: ProgressServices.GetSubmissionActivity,
     ) {
-        super({ getUserProgress, getAssignmentProgress, getGroupProgress, get, getClassCompletion });
+        super({
+            getUserProgress,
+            getAssignmentProgress,
+            getGroupProgress,
+            get,
+            getClassCompletion,
+            getSubmissionActivity,
+        });
     }
 }
 
@@ -91,6 +100,15 @@ export function progressRoutes(
                 controller,
                 extractor: extractors.getClassCompletion,
                 handler: (req, data) => controller.getChildren(req, data, controller.services.getClassCompletion),
+                middleware,
+            },
+            {
+                app,
+                method: deps.HttpMethod.GET,
+                urlPattern: "/classes/:idParent/activity",
+                controller,
+                extractor: extractors.getSubmissionActivity,
+                handler: (req, data) => controller.getChildren(req, data, controller.services.getSubmissionActivity),
                 middleware,
             },
         ],

@@ -14,8 +14,6 @@ const mockSubmissionRepository: jest.Mocked<ISubmissionRepository> = {
     getAllForStudentInAssignment: jest.fn()
 } as any;
 
-const mockClassRepository: jest.Mocked<IClassRepository> = {} as any;
-
 const mockStudentRepository: jest.Mocked<IStudentRepository> = {
     getByAssignmentId: jest.fn()
 } as any;
@@ -31,7 +29,6 @@ const mockLearningPathRepository: jest.Mocked<ILearningPathRepository> = {
 describe("GetClassCompletion", () => {
     const service = new GetClassCompletion(
         mockSubmissionRepository,
-        mockClassRepository,
         mockStudentRepository,
         mockAssignmentRepository,
         mockLearningPathRepository

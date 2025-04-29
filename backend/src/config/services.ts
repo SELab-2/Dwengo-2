@@ -8,6 +8,7 @@ import * as LearningPathServices from "../core/services/learningPath";
 import * as MessageServices from "../core/services/message";
 import * as ProgressServices from "../core/services/progress";
 import { GetClassCompletion } from "../core/services/progress/getClassCompletion";
+import { GetSubmissionActivity } from "../core/services/progress/getSubmissionActivity";
 import * as QuestionThreadServices from "../core/services/questionThread";
 import * as SubmissionServices from "../core/services/submission";
 import * as UserServices from "../core/services/user";
@@ -89,8 +90,9 @@ export const services = {
             repos.submission,
             repos.student,
             repos.assignment,
-            repos.learningPath
+            repos.learningPath,
         ),
+        getSubmissionActivity: new GetSubmissionActivity(repos.submission),
     },
     user: {
         get: new UserServices.GetUser(repos.student, repos.teacher),
