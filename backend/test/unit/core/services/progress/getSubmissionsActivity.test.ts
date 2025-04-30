@@ -1,0 +1,27 @@
+import { ISubmissionRepository } from "../../../../../src/core/repositories/submissionRepositoryInterface";
+import { GetSubmissionActivity } from "../../../../../src/core/services/progress";
+
+describe("GetSubmissionActivity", () => {
+    const mockRepo: ISubmissionRepository = {
+        getMonthlySubmissionCounts: jest.fn(),
+    };
+
+    const service = new GetSubmissionActivity(mockRepo);
+
+    const input = {
+        idParent: "class-id-123",
+    };
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it("should return submissions array from tryRepoEntityOperation", async () => {
+        const mockCounts = [5, 8, 12];
+        (mockRepo.getMonthlySubmissionCounts as jest.Mock).mockReturnValue(mockCounts);
+        const result = await service.execute(input);
+
+        expect(mockRepo.getMonthlySubmissionCounts).toHaveBeenCalledWith("class-id-123");
+        expect(result).toEqual({ submissions: mockCounts });
+    });
+});
