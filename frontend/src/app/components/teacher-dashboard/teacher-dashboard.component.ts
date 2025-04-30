@@ -44,8 +44,8 @@ export class TeacherDashboardComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
 
   id: string = "test";
-  learningPathsLink: string = '/teacher/learning-paths';
-  createClassLink: string = '/teacher/classes/new/select';
+  learningPathsLink: string = '/explore';
+  createClassLink: string = '/teacher/classes/';
 
   selectedView: string | null = "classes";
   displayClassChart: boolean = false;

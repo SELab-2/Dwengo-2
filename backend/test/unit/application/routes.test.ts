@@ -38,6 +38,7 @@ jest.mock("../../../src/config/controllers", () => ({
         questionThread: {},
         submission: {},
         user: {},
+        learningObject: {}
     },
 }));
 
@@ -95,7 +96,10 @@ const routeFunctions = {
     messageRoutes: Resources.messageRoutes,
     questionThreadRoutes: Resources.questionThreadRoutes,
     submissionRoutes: Resources.submissionRoutes,
+    progressRoutes: Resources.progressRoutes,
     userRoutes: Resources.userRoutes,
+    learningObjectRoutes: Resources.learningObjectRoutes,
+    learningPathRoutes: Resources.learningPathRoutes,
 };
 
 const routeConfigs: Record<
@@ -477,6 +481,40 @@ const routeConfigs: Record<
             },
         },
     ],
+    progressRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/users/:idParent/progress",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "user-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/assignments/:idParent/progress",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "assignment-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/groups/:idParent/progress",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "group-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/users/:userId/assignments/:assignmentId/progress",
+            hasController: true,
+            request: {
+                pathParams: { userId: "user-1", assignmentId: "assignment-1" },
+            },
+        },
+    ],
     userRoutes: [
         {
             method: HttpMethod.GET,
@@ -566,6 +604,40 @@ const routeConfigs: Record<
             request: {},
         },
     ],
+    learningObjectRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/learningObject",
+            hasController: true,
+            request: {},
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/learningObject/:id",
+            hasController: true,
+            request: {
+                pathParams: {id: "ct08_05"},
+                queryParams: { type: "raw" },
+            },
+        },
+    ],
+    learningPathRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/learningPath",
+            hasController: true,
+            request: {},
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/learningPath/:id",
+            hasController: true,
+            request: {
+                pathParams: {id: "anm3"},
+                queryParams: { type: "nl" },
+            },
+        },
+    ]
 };
 
 const testRoutes = (

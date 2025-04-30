@@ -47,12 +47,16 @@
             <mat-list id="class-list">
                 @for (class of classes; track class.id) {
                     <li>
-                        <app-mini-class [_class]="class"></app-mini-class>
+                        <app-mini-class [_class]="class" [_type]="_type.toString()"></app-mini-class>
                     </li>
                 } @empty {
                     <p i18n>No classes found</p>
                 }
             </mat-list>
+        </div>
+
+        <div class="center-container">
+            <app-create-request></app-create-request>
         </div>
     }
 </div>

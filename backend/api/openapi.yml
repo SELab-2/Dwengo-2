@@ -19,7 +19,7 @@ tags:
     description: User account management operations including profile updates and user information retrieval
   - name: requests
     description: Manage invitations and join requests for classes, including sending, accepting and rejecting requests
-  - name: progresses
+  - name: progress
     description: Track and manage student progress through learning paths, objects and assignments
   - name: classes
     description: Manage educational classes, including creation, enrollment, and class settings
@@ -27,11 +27,13 @@ tags:
     description: Manage student groups within classes, including group creation, assignment and membership
   - name: assignments
     description: Create and manage assignments, including deadlines, instructions and submissions
+  - name: submissions
+    description: Create, manage and get submissions for an assignment.
   - name: questions
     description: Handle Q&A interactions between students and teachers, including asking and answering questions
-  - name: paths
+  - name: learningPath
     description: Manage learning paths that organize educational content into structured sequences
-  - name: objects
+  - name: learningObject
     description: Handle learning objects like lessons, exercises and interactive content
 security:
   - apiKeyAuth: []
@@ -699,6 +701,86 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  '/learningPath':
+    get:
+      tags:
+        - learningPath
+      description: |
+        Get all learningPaths available from the Dwengo API filtered with params.
+      parameters:
+        - name: all
+          in: query
+          description: | 
+            This parameter takes a string as a value and searches all learning paths
+            for which the value occurs in the title, description, or hruid.
+            (This can have an empty string as a parameter which matches all descriptions and titles)
+            If multiple words want to be searched these can be added with a '-' e.g. "robot-python-arduino".
+          schema:
+            type: string
+        - name: language
+          in: query
+          description: Language of the learning path
+          schema:
+            type: string
+        - name: hruid
+          in: query
+          description: Search for learning paths with this human-readable unique identifier
+          schema:
+            type: string
+        - name: title
+          in: query
+          description: Search for titles containing a specific search term
+          schema:
+            type: string
+        - name: description
+          in: query
+          description: Search for descriptions containing a specific search term
+          schema:
+            type: string
+        - in: query
+          name: includeNodes
+          schema:
+            type: boolean
+          description: Whether or not to include the nodes of the learningPath
+      responses:
+        '200':
+          $ref: '#/components/responses/PathSearchOK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        
+
+  '/learningPath/{id}':
+    get:
+      tags:
+        - learningPath
+      description: Get a learningPath given it's hruid and preffered language.
+      parameters:
+        - in: path
+          name: id
+          required: true 
+          schema:
+            type: string
+          description: The hruid of the learningPath
+        - in: query
+          name: language
+          schema:
+            type: string
+          description: The language of the learningPath
+        - in: query
+          name: includeNodes
+          schema:
+            type: boolean
+          description: Whether or not to include the nodes of the learningPath
+      responses:
+        '200':
+          $ref: '#/components/responses/LearningPathOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
 # TODO  '/paths/{idParent}/objects/{id}':
 #    get:
 #      tags:
@@ -794,26 +876,175 @@ paths:
 #          $ref: '#/components/responses/Unauthorized'
 #        '404':
 #          $ref: '#/components/responses/NotFound'
-#  /objects:
-#    post:
-#      tags:
-#        - objects
-#      summary: Create new learning object
-#      description: Create a new learning object with the specified properties.
-#      operationId: createObject
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/LearningObjectCreate'
-#      responses:
-#        '201':
-#          $ref: '#/components/responses/EntityCreated'
-#        '400':
-#          $ref: '#/components/responses/BadRequest'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
+  '/learningObject':
+    get:
+      tags:
+        - learningObject
+      description: |
+        Get all learningObjects available from the Dwengo API filtered with params.
+      parameters:
+        - name: searchTerm
+          in: query
+          description: A generic search term used to match words in the title, description, and keywords.
+          schema:
+            type: string
+        - name: uuid
+          in: query
+          description: Search for learning objects with uuid
+          schema:
+            type: string
+        - name: hruid
+          in: query
+          description: Search for learning objects with hruid
+          schema:
+            type: string
+        - name: version
+          in: query
+          description: Search for specific version
+          schema:
+            type: number
+        - name: language
+          in: query
+          description: Search for a specific language
+          schema:
+            type: string
+        - name: contentType
+          in: query
+          description: Search for a specific dwengo content type
+          schema:
+            type: string
+            enum: ["text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly"]
+        - name: available
+          in: query
+          description: Filter search on (un)available learning objects
+          schema:
+            type: boolean
+        - name: teacherExclusive
+          in: query
+          description: Filter search on learning content for teachers and not students
+          schema:
+            type: boolean
+        - name: difficulty
+          in: query
+          description: Search specific difficulty
+          schema:
+            type: integer
+        - name: title
+          in: query
+          description: Search matches if title contains searchTerm
+          schema:
+            type: string
+        - name: description
+          in: query
+          description: Search matches if description contains searchTerm
+          schema:
+            type: string
+        - name: targetAges
+          in: query
+          description: JSON array with ages to match
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: keywords
+          in: query
+          description: JSON array with keywords to match
+          schema:
+            type: array
+            items:
+              type: string
+        - name: skosConcepts
+          in: query
+          description: JSON array with skos concepts to match
+          schema:
+            type: array
+            items:
+              type: string
+        - name: minDifficulty
+          in: query
+          description: Search for learning objects with a difficulty higher than min difficulty
+          schema:
+            type: integer
+        - name: maxDifficulty
+          in: query
+          description: Search for learning objects with a difficulty lower than max difficulty
+          schema:
+            type: integer
+        - name: minTime
+          in: query
+          description: Search for learning objects with a duration longer than min time
+          schema:
+            type: integer
+        - name: maxTime
+          in: query
+          description: Search for learning objects with a duration shorter than max time
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/ObjectSearchOK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        
+  '/learningObject/{id}':
+    get:
+      description: |
+        Get a learningObject by it's hruid, the learningObject is made of the metadata + the html in raw or wrapped format.
+        When no version is given or the requested version is unavailable, the latest version will be returned.
+        When no language is given or the requested version is unavailable, it will default to english.
+        If English is also unavailable it will fall back to the first language that is available from the Dwengo API.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The hruid of the learningobject
+          schema:
+            type: string 
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum: [wrapped, raw]       
+        - in: query
+          name: language
+          schema:
+            type: string
+        - in: query
+          name: version 
+          schema:
+            type: number
+      tags:
+        - learningObject
+      responses:
+        '200':
+          $ref: '#/components/responses/LearningObjectOK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    # post:
+    #   tags:
+    #     - objects
+    #   summary: Create new learning object
+    #   description: Create a new learning object with the specified properties.
+    #   operationId: createObject
+    #   requestBody:
+    #     required: true
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: '#/components/schemas/LearningObjectCreate'
+    #   responses:
+    #     '201':
+    #       $ref: '#/components/responses/EntityCreated'
+    #     '400':
+    #       $ref: '#/components/responses/BadRequest'
+    #     '401':
+    #       $ref: '#/components/responses/Unauthorized'
 
 # TODO  '/paths/{id}':
 #    get:
@@ -1026,33 +1257,98 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-# TODO  '/users/{idParent}/progresses/{id}':
-#    get:
-#      tags:
-#        - progresses
-#      summary: Get user progress by ID
-#      description: Retrieve detailed information about a specific progress entry for a user by their unique identifiers.
-#      operationId: getUserProgressById
-#      parameters:
-#        - in: path
-#          name: id
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#        - in: path
-#          name: idParent
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#      responses:
-#        '200':
-#          $ref: '#/components/responses/ProgressOK'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
+  '/users/{userId}/assignment/{assignmentId}/progress':
+    get:
+      tags:
+        - progress
+      summary: Get the progress of a user in an assignment
+      description: Retrieve detailed information about a specific progress entry for a user in an assignment using their unique identifiers.
+      operationId: getUserProgressById
+      parameters:
+        - in: path
+          name: userId
+          description: id of the user to get the progress of
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: assignmentId
+          description: id of the assignment to get the progress of
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/users/{idParent}/progress':
+    get:
+      tags:
+        - progress
+      summary: Get the progress of a user in all their assignments
+      description: Retrieve detailed information about a specific progress entry for a user in an assignment using their unique identifiers.
+      parameters:
+        - in: path
+          name: idParent
+          description: id of the user to get the progress from
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressesOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/assignments/{idParent}/progress':
+    get:
+      tags:
+        - progress
+      summary: Get the progress of all users in an assignment
+      description: Retrieve detailed information about a specific progress entry for a user in an assignment using their unique identifiers.
+      parameters:
+        - in: path
+          name: idParent
+          description: id of the assignment to get the progress from
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressesOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/groups/{idParent}/progress':
+    get:
+      tags:
+        - progress
+      summary: Get the progress of all users in a group of an assignment
+      description: Retrieve detailed information about a specific progress entry for a user in an assignment using their unique identifiers.
+      parameters:
+        - in: path
+          name: idParent
+          description: id of the group to get the progress from
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressesOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 #  '/users/{idParent}/progresses':
 #    get:
 #      tags:
@@ -1416,8 +1712,101 @@ paths:
           $ref: '#/components/responses/MessagesOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
-
-# TODO - Submissions
+  '/submissions/{id}':
+    get:
+      tags:
+        - submissions
+      summary: Get submission by ID
+      description: Retrieve detailed information about a specific submission using its unique identifier.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/SubmissionOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - submissions
+      summary: Delete submission
+      description: Permanently delete a submission using its unique identifier.
+      operationId: deleteSubmission
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/submissions':    
+    post:
+      tags:
+        - submissions
+      summary: Create new submission
+      description: Create a new submission for a specific assignment.
+      operationId: createSubmission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmissionCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/EntityCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  '/users/:idParent/submissions':
+    get:
+      tags:
+        - submissions
+      summary: Get all submission of a user, can be filtered with assignment and step. 
+      description: Retrieve a list of all submissions associated with a specific user.
+      operationId: getAssignmentSubmissions
+      parameters:
+        - in: path
+          name: idParent
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+        - in: query
+          name: asssignmentId
+          description: Optional param to get the user's submission for a certain assignment.
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: learningObjectId
+          description: |
+            Optional param to get the user's submission for a certain step in an assignment.
+            assignmentId is required otherwise this will not work.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/SubmissionsOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
 components:
   securitySchemes:
@@ -1504,7 +1893,35 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/LearningObject'
+            $ref: '#components/schemas/LearningObject'
+    ObjectSearchOK:
+      description: Learning object search request completed sucessfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              learningObjects:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Metadata"
+    MetadataOK:
+      description: Metadata request completed successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Metadata'
+    PathSearchOK:
+      description: Learning path search request completed sucessfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              learningPaths:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LearningPath"
     LearningPathOK:
       description: Learning path request completed successfully
       content:
@@ -1523,6 +1940,17 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Progress'
+    ProgressesOK:
+      description: Progress request completed successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              progresses:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Progress'
     QuestionOK:
       description: Question request completed successfully
       content:
@@ -1543,6 +1971,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/LoginResponse'
+    SubmissionOK:
+      description: Submission request completed successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Submission'
     UsersOK:
       description: Users collection request completed successfully
       content:
@@ -1616,14 +2050,14 @@ components:
                   type: string
                   format: uuid
                 description: All groups of a specific user.
-    LearningObjectsOK:
+    MetadatasOK:
       description: Learning objects collection request completed successfully
       content:
         application/json:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/LearningObject'
+              $ref: '#/components/schemas/Metadata'
     LearningPathsOK:
       description: Learning paths collection request completed successfully
       content:
@@ -1644,14 +2078,6 @@ components:
                 items:
                   type: string
                   format: uuid
-    ProgressesOK:
-      description: Progresses collection request completed successfully
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Progress'
     QuestionsOK:
       description: Questions collection request completed successfully
       content:
@@ -1676,7 +2102,18 @@ components:
                 items:
                   type: string
                   format: uuid
-            
+    SubmissionsOK:
+      description: Submissions collection request completed successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              submissions:
+                type: array
+                items:
+                  type: string
+                  format: uuid
 
     EntityCreated:
       description: Entity created successfully
@@ -1789,8 +2226,6 @@ components:
           default: student
           description: User's type in the system.
 
-    LearningObject:
-      type: object
     LearningObjectUpdate:
       type: object
     LearningObjectCreate:
@@ -1798,6 +2233,72 @@ components:
 
     LearningPath:
       type: object
+      properties:
+        hruid:
+          type: string
+        id:
+          type: string
+        language:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        image:
+          type: string # Base64String
+          description: image with Base64String format
+        numNodes:
+          type: number
+        keywords:
+          type: array
+          items:
+            type: string
+        targetAges:
+          type: array
+          items:
+            type: number
+        minAge:
+          type: number
+        maxAge:
+          type: number
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LearningPathObject'
+        
+        
+    LearningPathObject:
+      type: object
+      properties:
+        hruid:
+          type: string
+        id:
+          type: string
+        version:
+          type: number
+        language:
+          type: string
+        startNode:
+          type: boolean
+        transitions:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/BaseLearningObject'
+        
+    BaseLearningObject:
+      type: object
+      properties:
+        hruid:
+          type: string
+        id:
+          type: string
+        version:
+          type: number
+        language:
+          type: string
+
+        
     LearningPathUpdate:
       type: object
     LearningPathCreate:
@@ -2136,6 +2637,7 @@ components:
         - learningPathId
         - startDate
         - deadline
+        - name
         - extraInstructions
       properties:
         id:
@@ -2156,6 +2658,10 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
+        name:
+          type: string
+          minLength: 0
+          description: Name of the assignment.
         extraInstructions:
           type: string
           minLength: 0
@@ -2167,6 +2673,7 @@ components:
         - learningPathId
         - startDate
         - deadline
+        - name
         - extraInstructions
       additionalProperties: false
       properties:
@@ -2185,6 +2692,10 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
+        name:
+          type: string
+          minLength: 0
+          description: Name of the assignment.
         extraInstructions:
           type: string
           minLength: 0
@@ -2210,6 +2721,10 @@ components:
           type: string
           format: date
           description: Deadline date of the assignment.
+        name:
+          type: string
+          minLength: 0
+          description: Name of the assignment.
         extraInstructions:
           type: string
           minLength: 0
@@ -2219,52 +2734,50 @@ components:
       type: object
       required:
         - id
-        - path
-        - object
-        - assignment
-        - group
-        - user
-        - question
-        - answer
-        - status
+        - studentId
+        - assignmentId
+        - learningObjectId
+        - step
+        - maxStep
+        - time
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
-          description: Unique identifier for the progress.
-        path:
+          description: |
+            Unique identifier for the latest submissions for this progress.
+            Can be undefined if the user hasn't started yet.
+        studentId:
           type: string
           format: uuid
-          description: ID of the learning path.
-        object:
+          readOnly: true
+          description: Unique identifier for the student.
+        assignmentId:
           type: string
           format: uuid
-          description: ID of the learning object.
-        assignment:
+          readOnly: true
+          description: Unique identifier for the assignment.
+        learningObjectId:
           type: string
           format: uuid
-          description: ID of the assignment.
-        group:
+          readOnly: true
+          description: Unique identifier for the learning object of the current step.
+        step:
+          type: integer
+          description: |
+            The current step of the learning object.
+            (0 = not started, 1 = finished first learningObject, maxStep = finished learningPath)
+        maxStep:
+          type: integer
+          description: The maximum step of the learning object.
+        time:
           type: string
-          format: uuid
-          description: ID of the group.
-        user:
-          type: string
-          format: uuid
-          description: ID of the user.
-        question:
-          type: string
-          format: uuid
-          description: ID of the question.
-        answer:
-          type: string
-          format: uuid
-          description: ID of the answer.
-        status:
-          type: string
-          enum: ['PENDING', 'STARTED', 'COMPLETED']
-          description: Current status of the progress.
+          format: time
+          description: |
+            The time this step was completed.
+            Can be undefined if the user hasn't started yet.
+        
     ProgressCreate:
       type: object
       required:
@@ -2463,3 +2976,109 @@ components:
           type: string
           minLength: 1
           description: The new content of the message.
+
+    LearningObject:
+      type: object
+      properties:
+        metadata:
+          type: object
+          $ref: '#/components/schemas/Metadata'
+          description: The metadata containing info about the learnign object
+        content:
+          type: string
+          description: The string containing the HTML of the learning object
+
+    Metadata:
+      type: object
+      properties:
+        hruid:
+          type: string
+          description: Human readable unique id
+        uuid:
+          type: string
+          description: Numerical equivalent of hruid
+        id:
+          type: string
+          description: Unique id
+        version:
+          type: integer
+          description: The version of that specific learning object. Unique in combination with hruid (or uuid) and language.
+        language:
+          type: string
+          description: The language of the learning object.
+        title:
+          type: string
+          description: Short description of the learning object.
+        description:
+          type: string
+          description: Long description of the learning object.
+        contentType:
+          type: string
+          enum: ["text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly"]
+          description: One of the following content types -> "text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly".
+    Submission:
+      type: object
+      properties:
+        studentId:
+          type: string
+          example: "student123"
+        assignmentId:
+          type: string
+          example: "assignment456"
+        learningObjectId:
+          type: string
+          example: "object789"
+        time:
+          type: string
+          format: date-time
+          example: "2025-04-22T14:30:00Z"
+        contents:
+          type: string
+          format: byte
+          description: Base64-encoded data (can be a string, photo, etc.)
+          example: "SGVsbG8gV29ybGQ=" # (Hello World)
+        status:
+          type: string
+          enum:
+            - not_accepted
+            - accepted
+          default: not_accepted
+        id:
+          type: string
+          nullable: true
+          example: "submission123"
+      required:
+        - studentId
+        - assignmentId
+        - learningObjectId
+        - time
+        - contents
+        - status
+    SubmissionCreate:
+      properties:
+        studentId:
+          type: string
+          format: uuid
+          description: Unique identifier for the student.
+        assignmentId:
+          type: string
+          format: uuid
+          description: Unique identifier for the assignment.
+        learningObjectId:
+          type: string
+          format: uuid
+          description: Unique identifier for the learning object (hruid).
+        time:
+          type: string
+          format: date-time
+          description: Time of submission.
+        content:
+          type: string
+          format: buffer
+          description: | 
+            The content of the submission (buffer), empty if there was no question asked
+            but student proceeded to next step (used to keep progress in an assignment).
+        status:
+          type: string
+          enum: [ACCEPTED, NOT_ACCEPTED]
+          description: Current status of the submission. Defaults to NOT_ACCEPTED if no explicit status is given.

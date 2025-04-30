@@ -1,4 +1,3 @@
-import { EntityNotFoundError } from "../../config/error";
 import { Assignment } from "../../core/entities/assignment";
 import { IAssignmentRepository } from "../../core/repositories/assignmentRepositoryInterface";
 import { DatasourceAssignmentTypeORM } from "../database/data/data_sources/typeorm/datasourceAssignmentTypeORM";
@@ -16,13 +15,7 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
     }
 
     public async getById(id: string): Promise<Assignment> {
-        const assignment: Assignment | null = await this.datasourceAssignment.getAssignmentById(id);
-
-        if (assignment) {
-            return assignment;
-        } else {
-            throw new EntityNotFoundError(`Assignment with id ${id} not found`);
-        }
+        return await this.datasourceAssignment.getAssignmentById(id);
     }
 
     public async getByClassId(classId: string): Promise<Assignment[]> {

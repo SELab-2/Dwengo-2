@@ -9,7 +9,6 @@ describe("Test user API endpoints", () => {
     let classId: string;
     let assignmentId: string;
     let groupId: string;
-
     beforeEach(async () => {
         studentAuthDetails = await initializeUser("student", app);
         teacherAuthDetails = await initializeUser("teacher", app, "teacher@gmail.com");
@@ -47,6 +46,7 @@ describe("Test user API endpoints", () => {
                     "learningPathId": "string",
                     "startDate": "2025-04-10",
                     "deadline": "2025-04-10",
+                    "name": "name",
                     "extraInstructions": "extra_instructions"
                 })
                 .set("Content-Type", "application/json")

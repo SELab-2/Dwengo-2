@@ -1,68 +1,91 @@
+<app-authenticated-header></app-authenticated-header>
 <div class="class">
     @if(_class) {
-        <form [formGroup]="updateForm" id="class-update-form">
-            <div id="center-container">
-                <span>
-                    <h2 i18n>Class name</h2>
-                    <mat-form-field>
-                        <input
-                            matInput
-                            name="name"
-                            id="name"
-                            formControlName="name"
-                            readonly="{{ !editing }}"
-                            required >
-                    </mat-form-field>   
-                </span>
-            </div>
-            <div id="center-container">
-                <span>
-                    <h4 i18n>Description</h4>
-                    <mat-form-field>
-                        <textarea
-                            matInput
-                            name="description"
-                            id="description"
-                            formControlName="description"
-                            readonly="{{ !editing }}"
-                            required ></textarea>
-                    </mat-form-field>
-                </span>
-            </div>
-            <div id="center-container">
-                <span>
-                    <h4 i18n>Target audience</h4>
-                    <mat-form-field>
-                        <input
-                            matInput
-                            name="target-audience"
-                            id="target-audience"
-                            formControlName="targetAudience"
-                            readonly="{{ !editing }}"
-                            required >
-                    </mat-form-field>
-                </span>
-            </div>
-            <div id="center-container">
-                <span>
-                    @if (editing) {
-                        <button mat-raised-button (click)="saveEdit()" [disabled]="!updateForm.valid" i18n>
-                            Save
-                        </button>
-                        <button mat-raised-button (click)="cancelEdit()" i18n>
-                            Cancel
-                        </button>
-                    } @else {
-                        <button mat-raised-button (click)="startEdit()" i18n>
-                            Edit
-                        </button>
+        <div id="class-update-form">
+            <form [formGroup]="updateForm">
+                <div>
+                    <span>
+                        <h2 i18n>Class name</h2>
+                        <mat-form-field>
+                            <input
+                                matInput
+                                name="name"
+                                id="name"
+                                formControlName="name"
+                                readonly="{{ !editing }}"
+                                required >
+                        </mat-form-field>   
+                    </span>
+                </div>
+                <div>
+                    <span>
+                        <h4 i18n>Description</h4>
+                        <mat-form-field>
+                            <textarea
+                                matInput
+                                name="description"
+                                id="description"
+                                formControlName="description"
+                                readonly="{{ !editing }}"
+                                required ></textarea>
+                        </mat-form-field>
+                    </span>
+                </div>
+                <div>
+                    <span>
+                        <h4 i18n>Target audience</h4>
+                        <mat-form-field>
+                            <input
+                                matInput
+                                name="target-audience"
+                                id="target-audience"
+                                formControlName="targetAudience"
+                                readonly="{{ !editing }}"
+                                required >
+                        </mat-form-field>
+                    </span>
+                </div>
+                <div>
+                    @if(isTeacher()) {
+                        <span>
+                            @if (editing) {
+                                <button mat-raised-button (click)="saveEdit()" [disabled]="!updateForm.valid" i18n>
+                                    Save
+                                </button>
+                                <button mat-raised-button (click)="cancelEdit()" i18n>
+                                    Cancel
+                                </button>
+                            } @else {
+                                <button mat-raised-button (click)="startEdit()" id="edit-button" i18n>
+                                    Edit
+                                </button>
+                            }
+                            <button mat-raised-button (click)="delete()" style="background-color: lightcoral;" i18n>
+                                Delete
+                            </button>
+                        </span>
                     }
-                    <button mat-raised-button (click)="delete()" style="background-color: lightcoral;" i18n>
-                        Delete
-                    </button>
-                </span>
+                </div>
+            </form>
+        </div>
+        <div id="class-members-list">
+            <div>
+                <app-class-members-list [_class]="_class"></app-class-members-list>
             </div>
-        </form>
+        </div>   
+        @if(isTeacher()) {
+            <div id="class-requests">
+                <div>
+                    <app-class-pending-requests [_class]="_class"></app-class-pending-requests>
+                </div>
+                <div>
+                    <button mat-raised-button (click)="showClassCode()" i18n>
+                        Show class code
+                    </button>
+                </div>
+            </div>
+        }     
+        
     } @else {
         <app-loading></app-loading>
     }

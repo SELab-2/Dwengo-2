@@ -5,12 +5,18 @@ import { RegisterPageComponent } from './pages/register-page/register-page.compo
 import { TeacherDashboardPageComponent } from './pages/teacher-dashboard-page/teacher-dashboard-page.component';
 import { ClassesPageComponent } from './pages/classes-page/classes-page.component';
 import { ClassComponent } from './components/class/class.component';
+import { StudentDashboardPageComponent } from './pages/student-dashboard-page/student-dashboard-page.component';
 import { UnknownRouteComponent } from './components/unknown-route/unknown-route.component';
 import { StudentAssignmentComponent } from './pages/student-assignment/student-assignment.component';
 import { UserTypeGuard } from './guards/usertype.guard';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { UnauthorizedGuard } from './guards/unauthorized.guard';
 import { AlreadyAuthenticatedComponent } from './components/already-authenticated/already-authenticated.component';
+import { ExplorePageComponent } from './pages/explore-page/explore-page.component';
+import { GroupComponent } from './components/group/group.component';
+import { AuthorizedGuard } from './guards/authorized.guard';
+import { LearningPathPageComponent } from './pages/learning-path-page/learning-path-page.component';
+import { CreateGroupComponent } from './components/create-group/create-group.component';
 
 /**
  * Routing of our frontend.
@@ -18,18 +24,25 @@ import { AlreadyAuthenticatedComponent } from './components/already-authenticate
  */
 export const routes: Routes = [
     { path: '', component: LandingPageComponent, title: 'Landing Page', canActivate: [UnauthorizedGuard] },
-    { path: 'student/dashboard', redirectTo: 'student/classes' },
     { path: 'teacher/dashboard', component: TeacherDashboardPageComponent, canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'teacher/classes', component: ClassesPageComponent, title: "My Classes", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'teacher/classes/:id', component: ClassComponent, title: "Class", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
+    { path: 'student/dashboard', component: StudentDashboardPageComponent, canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'student/classes', component: ClassesPageComponent, title: "My Classes", canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'student/classes/:id', component: ClassComponent, title: "Class", canActivate: [UserTypeGuard], data: { userType: 'student' } },
+    { path: 'student/groups/:id', component: GroupComponent },
     { path: 'student/assignments', component: StudentAssignmentComponent, title: "My Assignments", canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'teacher/login', component: LoginPageComponent, title: 'Teacher Login', data: { isTeacher: true }, canActivate: [UnauthorizedGuard] },
     { path: 'student/login', component: LoginPageComponent, title: 'Student Login', data: { isTeacher: false }, canActivate: [UnauthorizedGuard] },
+    { path: 'explore', component: ExplorePageComponent, title: 'Explore', canActivate: [AuthorizedGuard] },
+    { path: 'paths/:hruid/:language', component: LearningPathPageComponent, title: 'Learning Path', canActivate: [AuthorizedGuard] },
     { path: 'register', component: RegisterPageComponent, title: 'Register', canActivate: [UnauthorizedGuard] },
     { path: 'placeholder', component: UnknownRouteComponent, title: 'Aur Naur', },
     { path: 'unauthorized', component: UnauthorizedComponent, title: 'Unauthorized' },
     { path: 'already-authenticated', component: AlreadyAuthenticatedComponent, title: 'Already Authenticated' },
+
+    // TODO: remove, is just for presentation
+    { path: 'create-group', component: CreateGroupComponent },
+
     { path: '**', redirectTo: 'placeholder' },
 ];

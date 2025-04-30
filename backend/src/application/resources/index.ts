@@ -8,3 +8,6 @@ export * from "./messageResource";
 export * from "./questionThreadResource";
 export * from "./submissionResource";
 export * from "./userResource";
+export * from "./learningObjectResource";
+export * from "./learningPathResource";
+export * from "./progressResource";

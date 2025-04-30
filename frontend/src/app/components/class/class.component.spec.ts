@@ -77,4 +77,19 @@ describe('ClassComponent', () => {
     expect(targetAudience).toBeDefined();
   });
 
+  it('should have an edit button', () => {
+    const editButton = harness.fixture.nativeElement.querySelector('button[id="edit-button"]');
+    expect(editButton).toBeDefined();
+  });
+
+  it('should have a class members list', () => {
+    const classMembersList = harness.fixture.nativeElement.querySelector('app-class-members-list');
+    expect(classMembersList).toBeDefined();
+  });
+
+  it('should have a class pending requests list', () => {
+    const classPendingRequestsList = harness.fixture.nativeElement.querySelector('app-class-pending-requests');
+    expect(classPendingRequestsList).toBeDefined();
+  });
+
 });

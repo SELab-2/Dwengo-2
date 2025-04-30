@@ -21,6 +21,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './mini-class.component.less'
 })
 export class MiniClassComponent {
+  @Input() _type: string = "teacher"; // or student
 
   // We get our class from somewhere else
   @Input() _class!: Class;

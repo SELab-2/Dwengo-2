@@ -44,7 +44,7 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         return new Group(entity.memberIds, entity.assignmentId, savedGroup.id);
     }
 
-    public async getById(id: string): Promise<Group | null> {
+    public async getById(id: string): Promise<Group> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         // Fetch the group model
@@ -54,7 +54,7 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         });
 
         if (!groupModel) {
-            return null;
+            throw new EntityNotFoundError(`Group with id ${id} not found`);
         }
 
         // Fetch all students in that group

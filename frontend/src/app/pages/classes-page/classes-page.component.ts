@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Class } from '../../interfaces/classes/class';
 import { CommonModule } from "@angular/common";
 import { ClassesService } from '../../services/classes.service';
@@ -9,10 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserType } from '../../interfaces';
 import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
+import { CreateRequestComponent } from '../../components/create-request/create-request.component';
 
 
 // Type alias
@@ -26,6 +26,7 @@ type classFilterType = (c: Class) => boolean;
     MiniClassComponent,
     CreateClassComponent,
     AuthenticatedHeaderComponent,
+    CreateRequestComponent,
 
     // Angular material
     MatList,
@@ -44,12 +45,10 @@ export class ClassesPageComponent implements OnInit {
   // You can specify this function all you want as long as it returns a boolean
   private classFilter: classFilterType = () => true;
 
-  // Snackbar
-  private snackBar = inject(MatSnackBar);
-  private readonly errorMessage = $localize `An error occured, please try again.`;
-
   // Whether the currently logged in user is a teacher or not
   public isTeacher: boolean = false;
+
+  public _type: UserType = UserType.TEACHER;
 
   // Classes of the currently logged in user
   private _classes: Class[] = [];
@@ -73,7 +72,8 @@ export class ClassesPageComponent implements OnInit {
         next: (classes) => this._classes = classes,
       });
 
-    this.isTeacher = this.authService.retrieveUserType() === UserType.TEACHER;
+    this._type = this.authService.retrieveUserType()!;
+    this.isTeacher = this._type === UserType.TEACHER;
   }
 
   /**
@@ -109,12 +109,6 @@ export class ClassesPageComponent implements OnInit {
    */
   public get classes(): Class[] {
     return this._classes.filter(this.classFilter);
-  }
-
-  private openSnackBar(message: string, action: string="Ok") {
-    this.snackBar.open(message, action, {
-        duration: 2500
-    });
   }
 
 }

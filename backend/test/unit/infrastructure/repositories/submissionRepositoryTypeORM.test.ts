@@ -77,6 +77,24 @@ describe("SubmissionRepositoryTypeORM", () => {
             expect(datasourceSubmission.delete).toHaveBeenCalledWith(createdSubmissionId);
     });
 
+    test("getAllForStudentInAssignment", async () => {
+        const mockResult: Submission[] = [submission];
+        datasourceSubmission.getAllForStudentInAssignment = jest.fn(() => Promise.resolve(mockResult));
+
+        const result: Submission[] = await datasourceSubmission.getAllForStudentInAssignment(
+            submission.studentId,
+            submission.assignmentId,
+        );
+
+        expect(datasourceSubmission.getAllForStudentInAssignment).toHaveBeenCalledTimes(1);
+        expect(datasourceSubmission.getAllForStudentInAssignment).toHaveBeenCalledWith(
+            submission.studentId,
+            submission.assignmentId,
+        )
+
+        expect(result).toEqual(mockResult);
+    });
+
     test("getAllForStudentInAssignmentStep", async () => {
 
         const id: string = await datasourceSubmission.create(submission);

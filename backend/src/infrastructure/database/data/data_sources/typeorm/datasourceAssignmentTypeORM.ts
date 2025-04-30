@@ -20,31 +20,26 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
         }
 
         // Class exists and teacher exist: insert assignment into the database
-        const assignmentModel: AssignmentTypeORM = datasource.getRepository(AssignmentTypeORM).create({
-            class: { id: newAssignment.classId },
-            learning_path_id: newAssignment.learningPathId,
-            start: newAssignment.startDate,
-            deadline: newAssignment.deadline,
-            extra_instructions: newAssignment.extraInstructions,
-        });
+        let assignmentModel = AssignmentTypeORM.createTypeORM(newAssignment, classModel);
+        assignmentModel = datasource.getRepository(AssignmentTypeORM).create(assignmentModel);
 
         await datasource.getRepository(AssignmentTypeORM).save(assignmentModel);
 
         return assignmentModel.toAssignmentEntity();
     }
 
-    public async getAssignmentById(id: string): Promise<Assignment | null> {
+    public async getAssignmentById(id: string): Promise<Assignment> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const assignmentModel: AssignmentTypeORM | null = await datasource.getRepository(AssignmentTypeORM).findOne({
             where: { id: id },
             relations: ["class"],
         });
-
-        if (assignmentModel !== null) {
-            return assignmentModel.toAssignmentEntity();
+        if (!assignmentModel) {
+            throw new EntityNotFoundError(`Assignment with id ${id} not found`);
         }
-        return null;
+
+        return assignmentModel.toAssignmentEntity();
     }
 
     public async getAssignmentsByClassId(classId: string): Promise<Assignment[]> {

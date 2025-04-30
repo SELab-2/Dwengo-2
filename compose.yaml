@@ -7,6 +7,7 @@ services:
       - "3001:3000"
     environment:
       - NODE_ENV=development
+    env_file: ".env"
     depends_on:
       database:
         condition: service_healthy
@@ -31,18 +32,21 @@ services:
     restart: always
 
   database:
-    build:
-      context: .
-      target: database
+    image: postgres:alpine
     ports:
       - "5433:5432"
     volumes:
-      - ./backend/src/infrastructure/database:/workspace/database  # Bind local database folder
+      - ./backend/src/infrastructure/database:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=dwengo-database
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       retries: 5
+    restart: always
+
+volumes:
+  postgres_data:

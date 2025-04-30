@@ -36,7 +36,7 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
         return savedThreadModel.toEntity([]); // We create a thread with no messages yet.
     }
 
-    public async getById(id: string): Promise<QuestionThread | null> {
+    public async getById(id: string): Promise<QuestionThread> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const threadRepository = datasource.getRepository(QuestionThreadTypeORM);
@@ -48,7 +48,7 @@ export class DatasourceThreadTypeORM extends DatasourceTypeORM {
         });
 
         if (!threadModel) {
-            return null;
+            throw new EntityNotFoundError(`Thread with id ${id} not found`);
         }
 
         const messageModels = await messageRepository.find({ where: { thread: threadModel } });

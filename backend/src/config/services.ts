@@ -4,9 +4,12 @@ import * as ClassServices from "../core/services/class";
 import * as GroupServices from "../core/services/group";
 import * as JoinCodeServices from "../core/services/joinCode";
 import * as JoinRequestServices from "../core/services/joinRequest";
+import * as LearningObjectServices from "../core/services/learningObject";
+import * as LearningPathServices from "../core/services/learningPath";
 import * as MessageServices from "../core/services/message";
+import * as ProgressServices from "../core/services/progress";
 import * as QuestionThreadServices from "../core/services/questionThread";
-import * as Submission from "../core/services/submission";
+import * as SubmissionServices from "../core/services/submission";
 import * as UserServices from "../core/services/user";
 
 /**
@@ -68,10 +71,27 @@ export const services = {
         getAssignmentQuestionThreads: new QuestionThreadServices.GetAssignmentQuestionThreads(repos.questionThread),
     },
     submission: {
-        get: new Submission.GetSubmission(repos.submission),
-        remove: new Submission.DeleteSubmission(repos.submission),
-        create: new Submission.CreateSubmission(repos.submission),
-        getUserSubmissions: new Submission.GetUserSubmissions(repos.submission),
+        get: new SubmissionServices.GetSubmission(repos.submission),
+        remove: new SubmissionServices.DeleteSubmission(repos.submission),
+        create: new SubmissionServices.CreateSubmission(repos.submission),
+        getUserSubmissions: new SubmissionServices.GetUserSubmissions(repos.submission),
+    },
+    progress: {
+        getUserProgress: new ProgressServices.GetUserProgress(repos.submission, repos.assignment, repos.learningPath),
+        getAssignmentProgress: new ProgressServices.GetAssignmentProgress(
+            repos.student,
+            repos.submission,
+            repos.assignment,
+            repos.learningPath,
+        ),
+        getGroupProgress: new ProgressServices.GetGroupProgress(
+            repos.group,
+            repos.student,
+            repos.submission,
+            repos.assignment,
+            repos.learningPath,
+        ),
+        get: new ProgressServices.GetUserAssignmentProgress(repos.submission, repos.assignment, repos.learningPath),
     },
     user: {
         get: new UserServices.GetUser(repos.student, repos.teacher),
@@ -84,5 +104,13 @@ export const services = {
         removeUserFromGroup: new UserServices.RemoveUserFromGroup(repos.student),
         getAssignmentUsers: new UserServices.GetAssignmentUsers(repos.student),
         getAll: new UserServices.GetAllUsers(repos.student, repos.teacher),
+    },
+    learningObject: {
+        get: new LearningObjectServices.GetLearningObject(repos.learningObject),
+        getAll: new LearningObjectServices.GetAllLearningObjects(repos.learningObject),
+    },
+    learningPath: {
+        get: new LearningPathServices.GetLearningPath(repos.learningPath),
+        getAll: new LearningPathServices.GetAllLearningPaths(repos.learningPath),
     },
 };

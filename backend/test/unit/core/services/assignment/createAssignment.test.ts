@@ -26,10 +26,11 @@ describe("CreateAssignment", () => {
             learningPathId: "1",
             startDate,
             deadline,
+            name: "Name",
             extraInstructions: "Extra Instructions",
         };
-        inputAssignment = new Assignment("1", "1", startDate, deadline, "Extra Instructions");
-        createdAssignment = new Assignment("1", "1", startDate, deadline, "Extra Instructions", "1");
+        inputAssignment = new Assignment("1", "1", startDate, deadline, "Name", "Extra Instructions");
+        createdAssignment = new Assignment("1", "1", startDate, deadline, "Name", "Extra Instructions", "1");
     });
 
     test("Should create a Assignment and return its ID", async () => {

@@ -88,9 +88,6 @@ export function configureRoute(
  */
 export function configureRoutes(configs: RouteConfig[], methodMap: [HttpMethod, keyof Express][]): void {
     configs.forEach(config => {
-        logger.info(
-            `Registering route: ${config.method} ${config.urlPattern}, Middleware Count: ${config.middleware?.length || 0}`,
-        );
         configureRoute(config, methodMap);
     });
 }

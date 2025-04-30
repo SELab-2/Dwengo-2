@@ -25,8 +25,8 @@ export class CreateUser implements Service<CreateUserInput> {
      */
     async execute(input: CreateUserInput): Promise<object> {
         const emailInUse = await Promise.all([
-            this.studentRepository.checkByEmail(input.email),
-            this.teacherRepository.checkByEmail(input.email),
+            this.studentRepository.checkByEmail(input.email.toLowerCase()),
+            this.teacherRepository.checkByEmail(input.email.toLowerCase()),
         ]);
 
         if (emailInUse.some(present => present)) {

@@ -10,9 +10,9 @@ jobs:
         ports:
           - 5433:5432
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: dwengo-database
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         options: >-
           --health-cmd="pg_isready -U postgres"
           --health-interval=10s
@@ -33,8 +33,12 @@ jobs:
         run: npm run lint
         working-directory: backend
 
-      - name: Test backend
-        run: npm test
+      - name: Load env vars and test backend
+        run: |
+          set -a
+          source /home/selab2/Dwengo-2/.env
+          set +a
+          npm test
         working-directory: backend
         env:
           CI: "true"
@@ -59,4 +63,4 @@ jobs:
         run: npm test
         working-directory: frontend
         env:
-          CHROME_BIN: "/usr/bin/chromium-browser"
+          CHROME_BIN: "/usr/bin/google-chrome-stable"
