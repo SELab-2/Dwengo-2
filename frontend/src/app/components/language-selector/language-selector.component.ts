@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatFormField, MatOption, MatSelect, MatSelectModule, MatSelectTrigger } from '@angular/material/select';
+import { MatOption, MatSelectModule, MatSelectTrigger } from '@angular/material/select';
 
 @Component({
-  selector: 'app-language-selector',
+  selector: 'language-selector',
   imports: [MatSelectModule, MatOption, MatSelectTrigger],
   templateUrl: './language-selector.component.html',
   styleUrl: './language-selector.component.less'
@@ -16,11 +15,14 @@ export class LanguageSelectorComponent implements OnInit {
     "nl-BE": "be"
   }
   currentFlag: string = "us";
-  constructor(private router: Router) {}
+
+  constructor() {}
+
   ngOnInit() {
-    const locale: string = this.router.url.split("/")[0];
+    const locale: string = window.location.pathname.split("/")[1];
     if (Object.keys(this.localeToFlag).includes(locale)) {
       this.currentLocale = locale;
+      this.currentFlag = this.localeToFlag[locale];
     }
   }
 
@@ -29,7 +31,6 @@ export class LanguageSelectorComponent implements OnInit {
     this.currentFlag = this.localeToFlag[locale];
 
     const newPath = window.location.pathname.replace(/^\/[a-z]{2}-[A-Z]{2}/, `/${locale}`);
-    console.log("navigate:", newPath)
     window.location.href = newPath;
 
   }
