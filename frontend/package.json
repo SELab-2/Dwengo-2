@@ -21,7 +21,7 @@
     "@angular/cli": "^19.1.0",
     "@angular/compiler-cli": "^19.1.0",
     "@angular/core": "^19.1.0",
-    "@angular/forms": "^19.1.0",
+    "@angular/forms": "^19.2.9",
     "@angular/material": "^19.2.6",
     "@angular/platform-browser": "^19.1.0",
     "@angular/platform-browser-dynamic": "^19.1.0",
