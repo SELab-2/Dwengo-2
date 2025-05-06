@@ -69,6 +69,6 @@ jobs:
         run: npm run e2e-ci:test
         working-directory: frontend
         env:
-          CHROME_BIN: "/usr/bin/google-chrome"
+          CHROME_BIN: "/usr/bin/google-chrome-stable"
           CHROMEDRIVER_BIN: "/usr/bin/chromedriver"
           FIREFOX_BIN: "/usr/bin/firefox"
