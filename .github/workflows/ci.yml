@@ -59,8 +59,16 @@ jobs:
         run: npm run lint
         working-directory: frontend
 
-      - name: Test frontend
+      - name: Unit tests frontend
         run: npm test
         working-directory: frontend
         env:
           CHROME_BIN: "/usr/bin/google-chrome-stable"
+      
+      - name: Integration tests frontend
+        run: npm e2e:test
+        working-directory: frontend
+        env:
+          CHROME_BIN: "/usr/bin/google-chrome-stable"
+          CHROMEDRIVER_BIN: "/usr/bin/chromedriver"
+          FIREFOX_BIN: "/usr/bin/firefox"
