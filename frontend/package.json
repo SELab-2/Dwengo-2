@@ -13,7 +13,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/build-angular": "^19.2.3",
+    "@angular-devkit/core": "^19.2.10",
     "@angular-eslint/builder": "^19.1.0",
     "@angular-eslint/eslint-plugin": "^19.1.0",
     "@angular-eslint/eslint-plugin-template": "^19.1.0",
@@ -51,7 +51,7 @@
     "@types/node": "22.15.12",
     "@typescript-eslint/eslint-plugin": "^8.25.0",
     "@typescript-eslint/parser": "^8.25.0",
-    "chromedriver": "136.0.0",
+    "chromedriver": "^136.0.0",
     "eslint": "^9.21.0",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
@@ -59,7 +59,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "nightwatch": "3.12.1",
+    "nightwatch": "^3.12.1",
     "ts-node": "10.9.2",
     "typescript": ">=5.5 <5.9"
   }

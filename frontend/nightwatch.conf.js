@@ -15,24 +15,23 @@
 module.exports = {
   // An array of folders (excluding subfolders) where your tests are located;
   // if this is not specified, the test source must be passed as the second argument to the test runner.
-  src_folders: ['./nightwatch'],
+  src_folders: ['tests/e2e'],
+  output_folder: 'tests/output',
 
   // See https://nightwatchjs.org/guide/concepts/page-object-model.html
-  page_objects_path: [],
+  page_objects_path: ['node_modules/nightwatch/examples/pages/'],
 
   // See https://nightwatchjs.org/guide/extending-nightwatch/adding-custom-commands.html
-  custom_commands_path: [],
+  custom_commands_path: ['node_modules/nightwatch/examples/custom-commands/'],
 
   // See https://nightwatchjs.org/guide/extending-nightwatch/adding-custom-assertions.html
   custom_assertions_path: '',
 
   // See https://nightwatchjs.org/guide/extending-nightwatch/adding-plugins.html
-  plugins: ['@nightwatch/angular'],
+  plugins: [],
   
   // See https://nightwatchjs.org/guide/concepts/test-globals.html#external-test-globals
   globals_path : '',
-
-  
 
   webdriver: {},
   
@@ -53,39 +52,27 @@ module.exports = {
       },
 
       desiredCapabilities: {
-        browserName : 'firefox'
+        browserName : 'chrome'
       },
 
       webdriver: {
         start_process: true,
-        server_path: ''
+        server_path: require('chromedriver').path,
+        port: 9515,
       }
     },
 
-    safari: {
-      desiredCapabilities : {
-        browserName : 'safari',
-        alwaysMatch: {
-          acceptInsecureCerts: false
-        }
-      },
-      webdriver: {
-        start_process: true,
-        server_path: ''
-      }
-    },
+    
 
     firefox: {
       desiredCapabilities : {
         browserName : 'firefox',
-        alwaysMatch: {
-          acceptInsecureCerts: true,
-          'moz:firefoxOptions': {
-            args: [
-              // '-headless',
-              // '-verbose'
-            ]
-          }
+        acceptInsecureCerts: true,
+        'moz:firefoxOptions': {
+          args: [
+            // '-headless',
+            // '-verbose'
+          ]
         }
       },
       webdriver: {
@@ -119,7 +106,7 @@ module.exports = {
         start_process: true,
         server_path: '',
         cli_args: [
-          // --verbose
+          // '--verbose'
         ]
       }
     },
@@ -142,7 +129,7 @@ module.exports = {
         //  and set the location below:
         server_path: '',
         cli_args: [
-          // --verbose
+          // '--verbose'
         ]
       }
     },
@@ -199,7 +186,7 @@ module.exports = {
       disable_error_log: true,
       webdriver: {
         timeout_options: {
-          timeout: 15000,
+          timeout: 60000,
           retry_attempts: 3
         },
         keep_alive: true,
