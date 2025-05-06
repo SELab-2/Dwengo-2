@@ -66,14 +66,14 @@ module.exports = {
       desiredCapabilities: {
         browserName: 'chrome',
         'goog:chromeOptions': {
-          binary: '/snap/bin/chromium',
+          binary: '/usr/bin/chromium-browser',
           args: [ 
             '--headless',
             // Extra options because otherwise get that the ChromeDriver cannot create a session
             '--disable-gpu', 
             '--no-sandbox',
             '--disable-dev-shm-usage',
-            '--user-data-dir=/tmp/chrome-profile' + Math.floor(Math.random() * 100000),
+            '--user-data-dir=/tmp/chrome-profile',
           ],
         }
       },
