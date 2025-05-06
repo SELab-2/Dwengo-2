@@ -36,12 +36,6 @@ module.exports = {
 
   webdriver: {},
   
-  // Test in parallel
-  test_workers: {
-    enabled: false,
-    workers: 'auto'
-  },
-
   test_settings: {
     firefox: {
       launch_url: 'http://localhost:4200',
@@ -66,7 +60,7 @@ module.exports = {
       desiredCapabilities: {
         browserName: 'chrome',
         'goog:chromeOptions': {
-          binary: '/usr/bin/chromium-browser',
+          binary: '/usr/bin/chromium',
           args: [ 
             '--headless',
             // Extra options because otherwise get that the ChromeDriver cannot create a session
