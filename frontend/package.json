@@ -47,7 +47,7 @@
     "@nightwatch/angular": "3.1.1",
     "@nightwatch/schematics": "^1.2.1",
     "@types/jasmine": "~5.1.0",
-    "@types/nightwatch": "3.0.1",
+    "@types/nightwatch": "^3.0.1",
     "@types/node": "22.15.12",
     "@typescript-eslint/eslint-plugin": "^8.25.0",
     "@typescript-eslint/parser": "^8.25.0",

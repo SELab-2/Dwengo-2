@@ -16,7 +16,8 @@ module.exports = {
   // An array of folders (excluding subfolders) where your tests are located;
   // if this is not specified, the test source must be passed as the second argument to the test runner.
   src_folders: ['tests/e2e'],
-  output_folder: 'tests/output',
+  output_folder: '/tests/output',
+  // test_runner: 'mocha',
 
   // See https://nightwatchjs.org/guide/concepts/page-object-model.html
   page_objects_path: ['node_modules/nightwatch/examples/pages/'],
@@ -43,6 +44,7 @@ module.exports = {
 
   test_settings: {
     firefox: {
+      launch_url: 'http://localhost:4200',
       desiredCapabilities: {
         browserName : 'firefox',
         'moz:firefoxOptions': {
@@ -60,6 +62,7 @@ module.exports = {
     },
 
     chrome: {
+      launch_url: 'http://localhost:4200',
       desiredCapabilities: {
         browserName: 'chrome',
         'goog:chromeOptions': {
