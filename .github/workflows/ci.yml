@@ -66,7 +66,7 @@ jobs:
           CHROME_BIN: "/usr/bin/google-chrome-stable"
       
       - name: Integration tests frontend
-        run: npm e2e:test
+        run: npm run e2e:test
         working-directory: frontend
         env:
           CHROME_BIN: "/usr/bin/google-chrome-stable"
