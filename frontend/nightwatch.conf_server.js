@@ -33,10 +33,10 @@ module.exports = {
   
   // See https://nightwatchjs.org/guide/concepts/test-globals.html#external-test-globals
   globals_path : '',
-
-  webdriver: {},
   
   test_settings: {
+    debug: true,
+    verbose: true,
     firefox: {
       launch_url: 'http://localhost:4200',
       desiredCapabilities: {
@@ -66,6 +66,7 @@ module.exports = {
             // Extra options because otherwise get that the ChromeDriver cannot create a session
             '--disable-gpu', 
             '--no-sandbox',
+            '--disable-software-rasterizer',
             '--disable-dev-shm-usage',
             '--user-data-dir=/tmp/chrome-profile',
           ],
