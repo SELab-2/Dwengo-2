@@ -60,7 +60,7 @@ module.exports = {
       desiredCapabilities: {
         browserName: 'chrome',
         'goog:chromeOptions': {
-          binary: '/usr/bin/google-chrome-stable',
+          binary: '/snap/bin/chromium',
           args: [ 
             '--headless',
             // Extra options because otherwise get that the ChromeDriver cannot create a session
