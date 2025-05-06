@@ -38,7 +38,7 @@ module.exports = {
   
   // Test in parallel
   test_workers: {
-    enabled: true,
+    enabled: false,
     workers: 'auto'
   },
 
@@ -73,7 +73,7 @@ module.exports = {
             '--disable-gpu', 
             '--no-sandbox',
             '--disable-dev-shm-usage',
-            '--user-data-dir=/tmp/chrome-profile',
+            '--user-data-dir=/tmp/chrome-profile' + Math.floor(Math.random() * 100000),
           ],
         }
       },
