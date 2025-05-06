@@ -22,8 +22,15 @@ RUN npm install -g @angular/cli
 
 # Install chromium for headless browser testing
 RUN apk add --no-cache chromium harfbuzz ttf-freefont
+
+# Install firefox for browser testing
+RUN apk add --no-cache firefox
+
 # Set the chromium binary path
 ENV CHROME_BIN=/usr/bin/chromium
+
+# Set the firefox binary path
+ENV FIREFOX_BIN=/usr/bin/firefox
 
 EXPOSE 4201
 CMD ["npm", "start"]
