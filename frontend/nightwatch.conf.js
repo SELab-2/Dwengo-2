@@ -12,8 +12,6 @@
 //            |___/
 //
 
-const { log } = require('console');
-
 module.exports = {
   // An array of folders (excluding subfolders) where your tests are located;
   // if this is not specified, the test source must be passed as the second argument to the test runner.
@@ -37,18 +35,21 @@ module.exports = {
 
   webdriver: {},
   
+  // Test in parallel
   test_workers: {
     enabled: true,
     workers: 'auto'
   },
 
   test_settings: {
-    default: {
+    firefox: {
       desiredCapabilities: {
         browserName : 'firefox',
         'moz:firefoxOptions': {
           binary: '/usr/bin/firefox',
-          args: [ '-headless' ],
+          args: [ 
+            '--headless'
+          ],
         }
       },
       webdriver: {
@@ -62,12 +63,19 @@ module.exports = {
       desiredCapabilities: {
         browserName: 'chrome',
         'goog:chromeOptions': {
-          args: [ '--headless', '--disable-gpu', '--no-sandbox' ],
+          binary: '/usr/bin/chromium',
+          args: [ 
+            '--headless',
+            // Extra options because otherwise get that the ChromeDriver cannot create a session
+            '--disable-gpu', 
+            '--no-sandbox',
+            '--disable-dev-shm-usage',
+          ],
         }
       },
       webdriver: {
         start_process: true,
-        server_path: "node_modules/.bin/chromedriver",
+        server_path: '/usr/bin/chromedriver',
         port: 9515,
       }
     }

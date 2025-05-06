@@ -21,13 +21,14 @@ RUN npm install
 RUN npm install -g @angular/cli
 
 # Install chromium for headless browser testing
-RUN apk add --no-cache chromium harfbuzz ttf-freefont
+RUN apk add --no-cache chromium chromium-chromedriver harfbuzz ttf-freefont
 
 # Install firefox for browser testing
 RUN apk add --no-cache firefox
 
 # Set the chromium binary path
 ENV CHROME_BIN=/usr/bin/chromium
+ENV CHROMEDRIVER_BIN=/usr/bin/chromedriver
 
 # Set the firefox binary path
 ENV FIREFOX_BIN=/usr/bin/firefox
