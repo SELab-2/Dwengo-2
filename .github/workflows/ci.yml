@@ -77,7 +77,7 @@ jobs:
         run: docker compose up -d
       
       - name: Integration tests frontend
-        run: docker exec dewngo-2-frontend-1 npm run e2e:test
+        run: docker exec dwengo-2-frontend-1 npm run e2e:test
         working-directory: frontend
         env:
           CHROME_BIN: "/usr/bin/chromium"
