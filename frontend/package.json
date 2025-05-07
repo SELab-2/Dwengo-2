@@ -4,7 +4,6 @@
   "scripts": {
     "e2e": "ng e2e",
     "e2e:test": "./node_modules/.bin/nightwatch --env chrome,firefox --config './nightwatch.conf.js'",
-    "e2e-ci:test": "./node_modules/.bin/nightwatch --env chrome,firefox --config './nightwatch.conf_server.js'",
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
     "build": "ng build",

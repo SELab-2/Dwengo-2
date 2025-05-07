@@ -64,11 +64,19 @@ jobs:
         working-directory: frontend
         env:
           CHROME_BIN: "/usr/bin/google-chrome-stable"
+      - name: Build Docker image 
+        run: docker compose build # This docker container will serve the backend + DB
       
-      # - name: Integration tests frontend
-      #   run: npm run e2e-ci:test
-      #   working-directory: frontend
-      #   env:
-      #     CHROME_BIN: "/snap/bin/chromium"
-      #     CHROMEDRIVER_BIN: "/usr/bin/chromedriver"
-      #     FIREFOX_BIN: "/usr/bin/firefox"
+      - name: Stop old containers
+        run: docker compose down
+      
+      - name: Start new container
+        run: docker compose up -d
+      
+      - name: Integration tests frontend
+        run: docker exec dewngo-2-frontend-1 npm run e2e:test
+        working-directory: frontend
+        env:
+          CHROME_BIN: "/usr/bin/chromium"
+          CHROMEDRIVER_BIN: "/usr/bin/chromedriver"
+          FIREFOX_BIN: "/usr/bin/firefox"
