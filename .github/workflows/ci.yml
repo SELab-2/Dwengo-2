@@ -76,6 +76,18 @@ jobs:
       - name: Start new container
         run: docker compose up -d
       
+      - name: Wait for frontend to respond
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:4200 > /dev/null; then
+              echo "Frontend is up!";
+              break;
+            fi
+            echo "Waiting for frontend...";
+            sleep 2;
+          done
+      
+      
       - name: Integration tests frontend
         run: docker exec dwengo-2-frontend-1 npm run e2e:test
         working-directory: frontend
@@ -83,3 +95,8 @@ jobs:
           CHROME_BIN: "/usr/bin/chromium"
           CHROMEDRIVER_BIN: "/usr/bin/chromedriver"
           FIREFOX_BIN: "/usr/bin/firefox"
+      
+      # Always stop testing containers
+      - name: Stop containers
+        if: always()
+        run: docker compose down
