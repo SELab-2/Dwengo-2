@@ -31,6 +31,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
      * @param logging Enable logging (recommended)
      * @param host Hostname
      * @param dropschema Drop the schema after closing the connection (never set this to true in production)
+     * @param poolSize Number of open connections in the connection pool
      * @param entities The entities of the database (our data models)
      * @returns A new DatasourceTypeORMConnectionSettings object with the given configurations
      */
@@ -44,6 +45,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
         logging: boolean = false,
         host: string = "database",
         dropschema: boolean = false, // Never set this to true in production
+        poolSize: number = 15,
 
         // Next any[] is not possible to replace with a more specific type
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -73,6 +75,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             synchronize,
             logging,
             dropschema,
+            poolSize,
             entities,
         );
     }
