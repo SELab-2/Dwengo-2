@@ -115,11 +115,13 @@ export class CreateGroupComponent {
     if (this.members.length > 0) {
       this.openSnackBar("There are still members not in a group.");
     } else {
-      this.groupService.createGroups(this.groups, this.assignmentId!)
+      const nonEmptyGroups = this.groups.filter(group => group.length > 0);
+
+      this.groupService.createGroups(nonEmptyGroups, this.assignmentId!)
         .subscribe((response) => {
           if(response) {
             this.openSnackBar("Groups created successfully.");
-            // TODO: redirects? empty lists?
+            // TODO: wait until create assignment is done #338
           } else {
             this.openSnackBar("Failed to create groups.");
           }
@@ -140,6 +142,13 @@ export class CreateGroupComponent {
    */
   public get emptyGroup(): User[] {
     return [];
+  }
+
+  public partitionMembers(): void {
+    this.members.forEach((member) => {
+      this._groups.push([member]);
+    });
+    this.members = [];
   }
 
   private openSnackBar(message: string, action: string="Ok") {
