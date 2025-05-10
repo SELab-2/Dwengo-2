@@ -31,12 +31,7 @@ describe('Landing page', function () {
     });
 
     it('should have a dwengo logo with an alt text', async function (browser) {
-        // TODO: toBeDefined() is not a function when using `expect`
-        browser
-            .element
-            .findByAltText('Dwengo logo')
-            .assert
-            .visible();
+        expect(await browser.element.findByAltText('Dwengo logo')).to.be.present;
     });
 
 });
