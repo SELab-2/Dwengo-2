@@ -28,6 +28,13 @@ export const controllers = {
         services.group.getUserGroups,
         services.group.getAssignmentGroups,
     ),
+    joinCode: new Resources.JoinCodeController(
+        services.joinCode.get,
+        services.joinCode.update,
+        services.joinCode.remove,
+        services.joinCode.create,
+        services.joinCode.getClassJoinCodes,
+    ),
     joinRequest: new Resources.JoinRequestController(
         services.joinRequest.get,
         services.joinRequest.update,

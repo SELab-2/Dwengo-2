@@ -1,6 +1,7 @@
 export * from "./assignmentSchemas";
 export * from "./classSchemas";
 export * from "./groupSchemas";
+export * from "./joinCodeSchemas";
 export * from "./joinRequestSchemas";
 export * from "./messageSchemas";
 export * from "./questionThreadSchemas";

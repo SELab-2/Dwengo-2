@@ -23,6 +23,10 @@ export class ClassRepositoryTypeORM extends IClassRepository {
         return await this.datasourceClass.getClassById(id);
     }
 
+    public async getByCode(code: string): Promise<Class> {
+        return await this.datasourceClass.getClassByActiveCode(code);
+    }
+
     public async getByName(name: string): Promise<Class> {
         return await this.datasourceClass.getClassByName(name);
     }

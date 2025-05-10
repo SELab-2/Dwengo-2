@@ -32,6 +32,14 @@ export abstract class IClassRepository extends AbstractRepository {
     public abstract getById(id: string): Promise<Class>;
 
     /**
+     * Get a class by its code.
+     * @param id The code of the class.
+     * @throws EntityNotFoundError when code wan't found or expired.
+     * @returns A promise that resolves to the class corresponding to the code.
+     */
+    public abstract getByCode(code: string): Promise<Class>;
+
+    /**
      * Get a class by its name.
      * @param name The name of the class.
      * @throws EntityNotFoundError when no class is found.
