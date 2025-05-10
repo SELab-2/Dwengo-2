@@ -34,10 +34,13 @@ export async function clearDatabase(): Promise<void> {
 
 // Run configuration (only executed when this file is run directly)
 if (require.main === module) {
-  clearDatabase().catch((err) => {
-    console.error('Failed to clear database:', err);
-    process.exit(1);
-  });
-  console.log('Database cleared successfully');
-  process.exit(0);
+  clearDatabase()
+    .then(() => {
+      console.log('Database cleared successfully');
+      process.exit(0);
+    })
+    .catch((err) => {
+      console.error('Failed to clear database:', err);
+      process.exit(1);
+    });
 }
