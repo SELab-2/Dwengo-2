@@ -1,4 +1,5 @@
 node_modules/
+frontend/tests/output/
 .angular/
 .vscode/
 coverage/
