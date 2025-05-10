@@ -36,8 +36,10 @@
             <mat-list id="assignments-list">
                 @for (assignment of filteredAssignments; track assignment.id) {
                     <li>
-                        <h3>{{ assignment.id }}</h3>
-                        <p>{{ assignment.extraInstructions }}</p>
+                        <h3>{{ assignment.name }}</h3>
+                        <p>
+                            <strong i18n>Due date:</strong>
+                            {{ assignment.deadline }}
                     </li>
                 } @empty {
                     <p i18n>No assignments found</p>
