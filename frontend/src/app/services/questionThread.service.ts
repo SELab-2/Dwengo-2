@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
+import { AssignmentService } from './assignment.service';
 import { environment } from '../../environments/environment';
-import { forkJoin, Observable, of, switchMap } from 'rxjs';
-import { QuestionThread, NewQuestionThread, QuestionThreadUpdate } from '../interfaces/questionThread';
+import { BehaviorSubject, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
+import { QuestionThread, NewQuestionThread, QuestionThreadUpdate, VisibilityType } from '../interfaces/questionThread';
 import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
 
 @Injectable({
@@ -13,11 +14,22 @@ import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfa
 export class QuestionThreadService {
 
   private API_URL = environment.API_URL;
+  private threadUpdateSubject = new BehaviorSubject<{id: string, update: QuestionThreadUpdate}>(
+    {
+      id: '',
+      update: {
+        isClosed: false,
+        visibility: VisibilityType.PRIVATE,
+      } as QuestionThreadUpdate
+    }
+  );
+  threadUpdate$ = this.threadUpdateSubject.asObservable();
 
   constructor(
     private http: HttpClient,
     private authService: AuthenticationService,
     private errorService: ErrorService,
+    private assignmentService: AssignmentService
   ) {}
 
   /**
@@ -30,6 +42,8 @@ export class QuestionThreadService {
       `${this.API_URL}/questions/${id}`,
       headers
     ).pipe(
+      // tap(() => console.log('Retrieving question thread with ID:', id)),
+      // tap(response => console.log('Question thread response:', response)),
       this.errorService.pipeHandler(
         this.errorService.retrieveError($localize `question thread`)
       )
@@ -49,14 +63,78 @@ export class QuestionThreadService {
       this.errorService.pipeHandler(
         this.errorService.retrieveError($localize `question threads`)
       ),
-      switchMap(response => 
-        forkJoin(
-            response.questionThreads.map(id => 
-                this.retrieveQuestionThreadById(id)
-            )
-        )
+      switchMap(response => {
+        // console.log('Question threads response:', response);
+        
+        const threadIds = response?.threads || [];
+        if (threadIds.length === 0) {
+          return of([]); // return empty array if there are no threads
+        }
+
+        return forkJoin(
+          threadIds.map(id => this.retrieveQuestionThreadById(id))
+        );
+      }),
+    )
+  }
+
+  /**
+  * Load and filter question threads for the authenticated user or current learning object
+  */
+  loadSideBarQuestionThreads(
+    userId: string,
+    currentLearningObjectId: string,
+    showPublicChats: boolean
+  ): Observable<QuestionThread[]> {
+    return this.assignmentService.retrieveAssignments().pipe(
+      switchMap(assignments => {
+        if (!assignments || !Array.isArray(assignments)) {
+          return of([]);
+        }
+
+        const threadRequests = assignments.map(a =>
+          this.retrieveQuestionThreadsByAssignment(a.id)
+        );
+        return forkJoin(threadRequests);
+      }),
+      map(threadArrays => threadArrays.flat()),
+      map(allThreads => {
+        const userId = this.authService.retrieveUserId() || '';
+        return this.filterThreads(allThreads, userId, currentLearningObjectId, showPublicChats);
+      }),
+      this.errorService.pipeHandler(
+        this.errorService.retrieveError($localize`loading user threads`)
       )
     );
+  }
+
+  /**
+  * Filter threads based on visibility or ownership
+  */
+  filterThreads(
+    allThreads: QuestionThread[],
+    userId: string,
+    currentLearningObjectId: string,
+    showPublicChats: boolean
+  ): QuestionThread[] {
+    if (showPublicChats) {
+      return allThreads
+        .filter(t =>
+          t.learningObjectId === currentLearningObjectId &&
+          (t.visibility === VisibilityType.GROUP || t.visibility === VisibilityType.PUBLIC)
+        )
+        .sort((a, b) => {
+          if (a.visibility === VisibilityType.GROUP && b.visibility !== VisibilityType.GROUP) return -1;
+          if (b.visibility === VisibilityType.GROUP && a.visibility !== VisibilityType.GROUP) return 1;
+          return 0;
+        });
+    } else {
+      if (this.authService.retrieveUserType() === 'student') {
+        return allThreads.filter(t => t.creatorId === userId);
+      } else {
+        return allThreads
+      }
+    }
   }
 
   /**
@@ -83,25 +161,38 @@ export class QuestionThreadService {
   /**
    * Update an existing question
    */
-  updateQuestion(id: string, question: QuestionThreadUpdate): Observable<QuestionThreadUpdate> {
+  updateQuestionThread(id: string, question: QuestionThreadUpdate): Observable<QuestionThreadUpdate> {
     const headers = this.authService.retrieveAuthenticationHeaders();
-
-    return this.http.patch<void>(
+    console.log('Updating question thread with ID:', id, 'and data:', question);
+  
+    const result =  this.http.patch<void>(
       `${this.API_URL}/questions/${id}`,
       question,
       headers
     ).pipe(
+      tap(() => console.log('[PATCH] Question updated successfully')),
       this.errorService.pipeHandler(
-        this.errorService.updateError($localize `question`)
+        this.errorService.updateError($localize`question`)
       ),
-      switchMap(() => of(question))
+      switchMap(() => {
+        return of(question);
+      })
     );
+    const threadUpdate: {id: string, update: QuestionThreadUpdate} = {
+      id: id,
+      update: {
+        isClosed: question.isClosed,
+        visibility: question.visibility
+      } as QuestionThreadUpdate
+    };
+    this.threadUpdateSubject.next(threadUpdate);
+    return result;
   }
 
   /**
    * Delete a question
    */
-  deleteQuestion(id: string): Observable<boolean> {
+  deleteQuestionThread(id: string): Observable<boolean> {
     const headers = this.authService.retrieveAuthenticationHeaders();
 
     return this.http.delete<void>(

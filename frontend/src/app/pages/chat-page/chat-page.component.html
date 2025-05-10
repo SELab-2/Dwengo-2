@@ -1,0 +1,37 @@
+<div class="chat-page">
+    <app-authenticated-header></app-authenticated-header>
+  
+    <div class="content">
+        <div class="sidebar">
+            <button mat-stroked-button 
+                    class="toggle-button"
+                    (click)="toggleChatVisibility()">
+                {{ showPublicChats ? 'Show My Chats' : 'Show Other Chats for This Step' }}
+            </button>
+            
+            <mat-nav-list>
+                @for (thread of questionThreads; track thread.id) {
+                    <a mat-list-item 
+                       [routerLink]="['/', userType, 'chat', thread.id]"
+                       [class.active]="thread.id === chatId">
+                        <span class="visibility-badge" 
+                            [class.private]="thread.visibility === VisibilityType.PRIVATE"
+                            [class.group]="thread.visibility === VisibilityType.GROUP"
+                            [class.public]="thread.visibility === VisibilityType.PUBLIC">
+                            {{ thread.visibility === VisibilityType.PRIVATE ? '💬' : (thread.visibility === VisibilityType.GROUP ? '👥' : '🌐') }}
+                        </span>
+                        Chat {{ thread.id.slice(0, 12) }}...
+                    </a>
+                }
+            </mat-nav-list>
+        </div>
+    
+        <div class="chatbox">
+            @if (!validChatId) {
+                <div class="invalid-chat-message">Invalid chat ID</div>
+            } @else {
+                <app-chat [questionThreadId]="chatId" />
+            }
+        </div>
+    </div>
+</div>
