@@ -1,5 +1,8 @@
 import log4js from "log4js";
 
+// When testing on server use "warning" or "error" defined in env files
+const logLevel: string = process.env.LOG_LEVEL || "info";
+
 export const config = {
     appenders: {
         console: { type: "console" },
@@ -7,8 +10,8 @@ export const config = {
         errors: { type: "file", filename: "errors.log" },
     },
     categories: {
-        default: { appenders: ["console", "file"], level: "info" },
-        http: { appenders: ["console", "file"], level: "info" },
+        default: { appenders: ["console", "file"], level: logLevel },
+        http: { appenders: ["console", "file"], level: logLevel },
         error: { appenders: ["console", "errors"], level: "error" },
     },
 };

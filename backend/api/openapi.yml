@@ -1257,7 +1257,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  '/users/{userId}/assignment/{assignmentId}/progress':
+  '/users/{userId}/assignments/{assignmentId}/progress':
     get:
       tags:
         - progress

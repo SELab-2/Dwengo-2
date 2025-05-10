@@ -120,7 +120,6 @@ export class DatasourceLearningObject extends DatasourceDwengo {
      */
     public async getLearningObjects(params: string): Promise<LearningObject[]> {
         const response = await fetch(`${this.host}/api/${this.learningType}/search${params}`);
-
         // Map all objects to LearningObjects
         return (await response.json()).map((o: LearningObjectData) => LearningObject.fromObject(o));
     }

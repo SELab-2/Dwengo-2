@@ -22,7 +22,12 @@ export class GetAllLearningObjects implements Service<GetAllLearningObjectsInput
         const params: string[] = [];
         for (const key of learningObjectSearchParams) {
             // Convert the camelCase param to snake_case for Dwengo API
-            const dwengoKey: string = key.replace(/[A-Z]/g, match => `_${match.toLowerCase()}`);
+            let dwengoKey: string = key;
+            // Skip the searchTerm key, as it is used in camelCase in the API
+            if (key !== "searchTerm") {
+                dwengoKey = key.replace(/[A-Z]/g, match => `_${match.toLowerCase()}`);
+            }
+
             // Add key-value pair to params
             const val = input[key as keyof GetAllLearningObjectsInput];
             if (val !== undefined && val !== null) {

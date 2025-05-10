@@ -224,7 +224,6 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
 
     public async getClassStudents(classId: string): Promise<Student[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-
         const classJoinResult: StudentOfClassTypeORM[] = await datasource
             .getRepository(StudentOfClassTypeORM)
             .createQueryBuilder("studentOfClass")
@@ -232,7 +231,6 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             .leftJoinAndSelect("student.student", "user") // Fetch the related UserTypeORM entity
             .where("studentOfClass.class.id = :classId", { classId: classId })
             .getMany();
-
         return classJoinResult.map(classJoinResult => {
             return classJoinResult.student.toStudentEntity(classJoinResult.student.student);
         });

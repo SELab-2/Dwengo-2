@@ -9,6 +9,7 @@ import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { StudentTypeORM } from "../../data_models/studentTypeorm";
+import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
 import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
 import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
@@ -61,6 +62,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             AssignmentTypeORM,
             QuestionThreadTypeORM,
             MessageTypeORM,
+            SubmissionTypeORM,
         ],
     ): DatasourceTypeORMConnectionSettings {
         return new DatasourceTypeORMConnectionSettings(

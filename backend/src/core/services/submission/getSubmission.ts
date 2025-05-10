@@ -75,6 +75,6 @@ export class GetUserSubmissions extends SubmissionBaseService<GetUserSubmissions
             );
         }
 
-        return { submisisons: submissions.map(submission => submission.id!) };
+        return { submissions: submissions.map(submission => submission.id!) };
     }
 }
