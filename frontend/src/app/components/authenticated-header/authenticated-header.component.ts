@@ -4,10 +4,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserType } from '../../interfaces';
 import { AuthenticatedMenuComponent } from '../authenticated-menu/authenticated-menu.component';
+import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
 
 @Component({
   selector: 'app-authenticated-header',
-  imports: [MatButtonModule, AuthenticatedMenuComponent],
+  imports: [MatButtonModule, AuthenticatedMenuComponent, LanguageSelectorComponent],
   templateUrl: './authenticated-header.component.html',
   styleUrl: './authenticated-header.component.less'
 })
