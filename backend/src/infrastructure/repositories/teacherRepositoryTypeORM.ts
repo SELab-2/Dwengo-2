@@ -52,7 +52,7 @@ export class TeacherRepositoryTypeORM extends ITeacherRepository {
     }
 
     public async removeFromClass(teacherId: string, classId: string): Promise<void> {
-        return await this.datasourceTeacher.deleteTeacherFromClass(teacherId, classId);
+        return await this.datasourceTeacher.removeTeacherFromClass(teacherId, classId);
     }
 
     public async getByClassId(classId: string): Promise<Teacher[]> {

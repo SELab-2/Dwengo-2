@@ -1,9 +1,9 @@
 import { DataSource, Repository } from "typeorm";
-import { TeacherTypeORM } from "../../../../../../src/infrastructure/database/data/data_models/teacherTypeorm";
 import { DatasourceTypeORMConnectionSettings } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
 import { Class } from "../../../../../../src/core/entities/class";
 import { DatasourceTypeORMConnectionSettingsFactory } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
 import { ClassTypeORM } from "../../../../../../src/infrastructure/database/data/data_models/classTypeorm";
+import { UserTypeORM } from "../../../../../../src/infrastructure/database/data/data_models/userTypeorm";
 
 // Variables
 let datasourceSettings: DatasourceTypeORMConnectionSettings;
@@ -19,8 +19,8 @@ jest.mock("typeorm", () => {
         DataSource: jest.fn().mockImplementation(() => ({
             getRepository: jest.fn().mockReturnValue({
                 save: jest.fn(),
-                findOne: jest.fn(() => Promise.resolve(new TeacherTypeORM())),
-                find: jest.fn(() => Promise.resolve([new TeacherTypeORM()])),
+                findOne: jest.fn(() => Promise.resolve(new UserTypeORM())),
+                find: jest.fn(() => Promise.resolve([new UserTypeORM()])),
                 delete: jest.fn()
             } as any),
         })),

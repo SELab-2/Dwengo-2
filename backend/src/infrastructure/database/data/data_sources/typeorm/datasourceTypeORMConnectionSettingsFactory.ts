@@ -6,11 +6,8 @@ import { JoinCodeTypeORM } from "../../data_models/joinCodeTypeorm";
 import { JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
-import { StudentOfClassTypeORM } from "../../data_models/studentOfClassTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { StudentTypeORM } from "../../data_models/studentTypeorm";
-import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
-import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
+import { UserOfClassTypeORM } from "../../data_models/userOfClassTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
 
 /**
@@ -49,13 +46,10 @@ export class DatasourceTypeORMConnectionSettingsFactory {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         entities: any[] = [
             UserTypeORM,
-            StudentTypeORM,
-            TeacherTypeORM,
             JoinCodeTypeORM,
             JoinRequestTypeORM,
             ClassTypeORM,
-            TeacherOfClassTypeORM,
-            StudentOfClassTypeORM,
+            UserOfClassTypeORM,
             GroupTypeORM,
             StudentOfGroupTypeORM,
             AssignmentTypeORM,

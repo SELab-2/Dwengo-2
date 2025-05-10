@@ -1,8 +1,7 @@
 import { DataSource, Repository } from "typeorm";
-import { UserTypeORM } from "../../../../../../src/infrastructure/database/data/data_models/userTypeorm";
+import { UserTypeORM , UserType} from "../../../../../../src/infrastructure/database/data/data_models/userTypeorm";
 import { DatasourceTypeORMConnectionSettingsFactory } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
 import { DatasourceTypeORMConnectionSettings } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
-import { TeacherTypeORM } from "../../../../../../src/infrastructure/database/data/data_models/teacherTypeorm";
 import { Teacher } from "../../../../../../src/core/entities/teacher";
 import { Class } from "../../../../../../src/core/entities/class";
 
@@ -20,8 +19,8 @@ jest.mock("typeorm", () => {
         DataSource: jest.fn().mockImplementation(() => ({
             getRepository: jest.fn().mockReturnValue({
                 save: jest.fn(),
-                findOne: jest.fn(() => Promise.resolve(new TeacherTypeORM())),
-                find: jest.fn(() => Promise.resolve([new TeacherTypeORM()])),
+                findOne: jest.fn(() => Promise.resolve(new UserTypeORM())),
+                find: jest.fn(() => Promise.resolve([new UserTypeORM()])),
                 delete: jest.fn()
             } as any),
         })),
@@ -49,31 +48,24 @@ describe("DatasourceTeacherTypeORM", () => {
     test("createTeacher", () => {
         // Save user
         const userRepository = dataSource.getRepository(UserTypeORM);
-        userRepository.save(UserTypeORM.createUserTypeORM({} as any));
+        userRepository.save(UserTypeORM.createUserTypeORM(new Teacher("slaag.deze@test.nu", "firstname", "familyname", "passw", "school") as any));
 
         expect(dataSource.getRepository).toHaveBeenCalledWith(UserTypeORM);
         expect(userRepository.save).toHaveBeenCalled();
-        
-        // Save teacher
-        const teacherRepository = dataSource.getRepository(TeacherTypeORM);
-        teacherRepository.save(TeacherTypeORM.createTeacherTypeORM({} as any, {} as any));
-
-        expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
-        expect(teacherRepository.save).toHaveBeenCalled();
     });
 
     test("getTeacherById", async () => {
         // Find teacher
-        const teacherRepository: Repository<TeacherTypeORM> = dataSource.getRepository(TeacherTypeORM);
-        const teacherModel: TeacherTypeORM = (await teacherRepository.findOne({
+        const teacherRepository: Repository<UserTypeORM> = dataSource.getRepository(UserTypeORM);
+        const teacherModel: UserTypeORM = (await teacherRepository.findOne({
             where: { id: "id" },
             relations: ["teacher"],
         }))!;
 
         // Assertions
-        expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
+        expect(dataSource.getRepository).toHaveBeenCalledWith(UserTypeORM);
         expect(teacherRepository.findOne).toHaveBeenCalled();
-        expect(teacherModel).toBeInstanceOf(TeacherTypeORM);
+        expect(teacherModel).toBeInstanceOf(UserTypeORM);
     });
 
     test("getTeacherByEmail", async () => {
@@ -83,15 +75,9 @@ describe("DatasourceTeacherTypeORM", () => {
             where: { email: "email" },
         }))!;
 
-        // Find teacher
-        const teacherRepository: Repository<TeacherTypeORM> = dataSource.getRepository(TeacherTypeORM);
-        const teacherModel: TeacherTypeORM = (await teacherRepository.findOne({
-            where: { teacher: userModel },
-        }))!;
-
-        expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
-        expect(teacherRepository.findOne).toHaveBeenCalled();
-        expect(teacherModel).toBeInstanceOf(TeacherTypeORM);
+        expect(dataSource.getRepository).toHaveBeenCalledWith(UserTypeORM);
+        expect(userRepository.findOne).toHaveBeenCalled();
+        expect(userModel).toBeInstanceOf(UserTypeORM);
     });
 
     test("getTeacherByFirstName", async () => {
@@ -101,15 +87,9 @@ describe("DatasourceTeacherTypeORM", () => {
             where: { first_name: "first_name" },
         }))!;
 
-        // Find teacher
-        const teacherRepository: Repository<TeacherTypeORM> = dataSource.getRepository(TeacherTypeORM);
-        const teacherModel: TeacherTypeORM = (await teacherRepository.findOne({
-            where: { teacher: userModel },
-        }))!;
-
-        expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
-        expect(teacherRepository.findOne).toHaveBeenCalled();
-        expect(teacherModel).toBeInstanceOf(TeacherTypeORM);
+        expect(dataSource.getRepository).toHaveBeenCalledWith(UserTypeORM);
+        expect(userRepository.findOne).toHaveBeenCalled();
+        expect(userModel).toBeInstanceOf(UserTypeORM);
     });
 
     test("getTeacherByLastName", async () => {
@@ -119,26 +99,20 @@ describe("DatasourceTeacherTypeORM", () => {
             where: { last_name: "last_name" },
         }))!;
 
-        // Find teacher
-        const teacherRepository: Repository<TeacherTypeORM> = dataSource.getRepository(TeacherTypeORM);
-        const teacherModel: TeacherTypeORM = (await teacherRepository.findOne({
-            where: { teacher: userModel },
-        }))!;
-
-        expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
-        expect(teacherRepository.findOne).toHaveBeenCalled();
-        expect(teacherModel).toBeInstanceOf(TeacherTypeORM);
+        expect(dataSource.getRepository).toHaveBeenCalledWith(UserTypeORM);
+        expect(userRepository.findOne).toHaveBeenCalled();
+        expect(userModel).toBeInstanceOf(UserTypeORM);
     });
 
     test("getAllTeachers", async () => {
         // Find all teachers
-        const teacherRepository: Repository<TeacherTypeORM> = dataSource.getRepository(TeacherTypeORM);
-        const teacherModels: TeacherTypeORM[] = await teacherRepository.find({ relations: ["teacher"] });
+        const teacherRepository: Repository<UserTypeORM> = dataSource.getRepository(UserTypeORM);
+        const teacherModels: UserTypeORM[] = await teacherRepository.find({ relations: ["teacher"] });
 
-        expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
+        expect(dataSource.getRepository).toHaveBeenCalledWith(UserTypeORM);
         expect(teacherRepository.find).toHaveBeenCalled();
         expect(teacherModels).toBeInstanceOf(Array);
-        expect(teacherModels[0]).toBeInstanceOf(TeacherTypeORM);
+        expect(teacherModels[0]).toBeInstanceOf(UserTypeORM);
     });
 
     test("updateTeacher", () => {
@@ -152,17 +126,16 @@ describe("DatasourceTeacherTypeORM", () => {
 
     test("deleteTeacherWithId", () => {
         // Delete teacher
-        let teacherRepository = dataSource.getRepository(TeacherTypeORM);
-        const teacherModel = teacherRepository.findOne({ where: {id: "id"}, relations: ["teacher"] });
+        const userRepository = dataSource.getRepository(UserTypeORM);
+        userRepository.findOne({ where: {id: "id"}, relations: ["teacher"] });
 
-        expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
-        expect(teacherRepository.findOne).toHaveBeenCalled();
+        expect(dataSource.getRepository).toHaveBeenCalledWith(UserTypeORM);
+        expect(userRepository.findOne).toHaveBeenCalled();
 
-        teacherRepository = dataSource.getRepository(TeacherTypeORM);
-        teacherRepository.delete("id");
+        userRepository.delete("id");
 
-        expect(dataSource.getRepository).toHaveBeenCalledWith(TeacherTypeORM);
-        expect(teacherRepository.delete).toHaveBeenCalled();
+        expect(dataSource.getRepository).toHaveBeenCalledWith(UserTypeORM);
+        expect(userRepository.delete).toHaveBeenCalled();
     });
 
     // test("createClass", () => {

@@ -4,7 +4,7 @@ import { Group } from "../../../../../core/entities/group";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { StudentTypeORM } from "../../data_models/studentTypeorm";
+import { UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceGroupTypeORM extends DatasourceTypeORM {
     public async create(entity: Group): Promise<Group> {
@@ -33,8 +33,9 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
 
         // Link students to the group
         const studentsOfGroup = entity.memberIds.map(memberId => {
+            // TODO: check if the users are actually all students, now teachers can be added to groups too.
             const studentOfGroup = new StudentOfGroupTypeORM();
-            studentOfGroup.student = { id: memberId } as StudentTypeORM;
+            studentOfGroup.user = { id: memberId } as UserTypeORM;
             studentOfGroup.group = savedGroup;
             return studentOfGroup;
         });
@@ -60,11 +61,11 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         // Fetch all students in that group
         const studentOfGroups: StudentOfGroupTypeORM[] = await datasource.getRepository(StudentOfGroupTypeORM).find({
             where: { group: groupModel },
-            relations: ["student", "student.student"], // student.student fetches UserTypeORM
+            relations: ["user"],
         });
 
-        // Extract StudentTypeORM models
-        const studentModels: StudentTypeORM[] = studentOfGroups.map(entry => entry.student);
+        // Extract UserTypeORM models
+        const studentModels: UserTypeORM[] = studentOfGroups.map(entry => entry.user);
 
         return groupModel.toEntity(studentModels);
     }
@@ -94,8 +95,9 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         await studentOfGroupRepository.delete({ group: groupModel });
 
         const studentOfGroups = group.memberIds.map(memberId => {
+            // TODO: check if the users are actually all students, now teachers can be added to groups too.
             const studentOfGroup = new StudentOfGroupTypeORM();
-            studentOfGroup.student = { id: memberId } as StudentTypeORM;
+            studentOfGroup.user = { id: memberId } as UserTypeORM;
             studentOfGroup.group = groupModel as GroupTypeORM;
             return studentOfGroup;
         });
@@ -151,7 +153,7 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         const groupsJoinResult = await datasource
             .getRepository(StudentOfGroupTypeORM)
             .createQueryBuilder("studentOfGroup")
-            .where("studentOfGroup.student.id = :id", { id: userId })
+            .where("studentOfGroup.user.id = :id", { id: userId })
             .leftJoinAndSelect("studentOfGroup.group", "group")
             .getMany();
 

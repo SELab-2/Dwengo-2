@@ -2,38 +2,14 @@ import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { JoinRequest, JoinRequestType } from "../../../../../core/entities/joinRequest";
 import { JoinAsType, JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
-import { StudentTypeORM } from "../../data_models/studentTypeorm";
-import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 
 export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
     public async createJoinRequest(joinRequest: JoinRequest): Promise<JoinRequest> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-        // Look up the id of the requester
-        let id: string;
-
-        if (joinRequest.type === JoinRequestType.TEACHER) {
-            const teacher: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
-                where: { id: joinRequest.requester },
-                relations: ["teacher"],
-            });
-            if (!teacher) {
-                throw new EntityNotFoundError(`Teacher with id ${joinRequest.requester} not found`);
-            }
-            id = teacher.teacher.id;
-        } else {
-            const student: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
-                where: { id: joinRequest.requester }, // requester is the id of the user. Match the user in the student table
-                relations: ["student"],
-            });
-            if (!student) {
-                throw new EntityNotFoundError(`Student with id ${joinRequest.requester} not found`);
-            }
-            id = student.student.id;
-        }
 
         // Create partial object
         const joinRequestModel = datasource.getRepository(JoinRequestTypeORM).create({
-            requester: { id: id },
+            requester: { id: joinRequest.requester },
             class: { id: joinRequest.classId },
             type: joinRequest.type === JoinRequestType.TEACHER ? JoinAsType.TEACHER : JoinAsType.STUDENT,
         });
@@ -57,56 +33,14 @@ export class DatasourceJoinRequestTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError(`Join request with id ${id} not found`);
         }
 
-        let userId: string;
-
-        if (joinRequest.type === JoinAsType.STUDENT) {
-            const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
-                where: { student: joinRequest.requester },
-            });
-
-            userId = studentModel!.id;
-        } else {
-            const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
-                where: { teacher: joinRequest.requester },
-            });
-
-            userId = teacherModel!.id;
-        }
-
-        if (!userId) {
-            throw new EntityNotFoundError(`The requester for join request with id ${id} was not found`);
-        }
-
-        joinRequest.requester.id = userId;
-
         return joinRequest.toJoinRequestEntity();
     }
 
     public async getJoinRequestByRequesterId(requesterId: string): Promise<JoinRequest[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        let userId: string;
-
-        const studentModel: StudentTypeORM | null = await datasource.getRepository(StudentTypeORM).findOne({
-            where: { id: requesterId },
-            relations: ["student"],
-        });
-
-        const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
-            where: { id: requesterId },
-            relations: ["teacher"],
-        });
-
-        if (studentModel) {
-            userId = studentModel?.student.id;
-        } else if (teacherModel) {
-            userId = teacherModel?.teacher.id;
-        } else {
-            throw new EntityNotFoundError(`Student or teacher with id ${requesterId} not found`);
-        }
-
         const joinRequests: JoinRequestTypeORM[] = await datasource.getRepository(JoinRequestTypeORM).find({
-            where: { requester: { id: userId } },
+            where: { requester: { id: requesterId } },
             relations: ["requester", "class"],
         });
 

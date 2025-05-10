@@ -1,11 +1,11 @@
 import { DataSource, ObjectLiteral, Repository } from "typeorm";
-import { TeacherTypeORM } from "../../../../../../src/infrastructure/database/data/data_models/teacherTypeorm";
 import { DatasourceTypeORMConnectionSettings } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
 import { Class } from "../../../../../../src/core/entities/class";
 import { DatasourceTypeORMConnectionSettingsFactory } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
 import { Teacher } from "../../../../../../src/core/entities/teacher";
 import { JoinRequest, JoinRequestType } from "../../../../../../src/core/entities/joinRequest";
 import { JoinAsType, JoinRequestTypeORM } from "../../../../../../src/infrastructure/database/data/data_models/joinRequestTypeorm";
+import { UserTypeORM } from "../../../../../../src/infrastructure/database/data/data_models/userTypeorm";
 
 // Variables
 let datasourceSettings: DatasourceTypeORMConnectionSettings;
@@ -42,7 +42,7 @@ jest.mock("typeorm", () => {
 describe("DatasourceClassTypeORM", () => {
 
     let joinRequestRepository: Repository<JoinRequestTypeORM>;
-    let teacherRepository: Repository<TeacherTypeORM>;
+    let teacherRepository: Repository<UserTypeORM>;
 
     beforeAll(() => {
         datasourceSettings = DatasourceTypeORMConnectionSettingsFactory.createDatasourceTypeORMConnectionSettings(
@@ -54,7 +54,7 @@ describe("DatasourceClassTypeORM", () => {
         );
         dataSource = new DataSource(datasourceSettings.toObject());
         joinRequestRepository = dataSource.getRepository(JoinRequestTypeORM);
-        teacherRepository = dataSource.getRepository(TeacherTypeORM);
+        teacherRepository = dataSource.getRepository(UserTypeORM);
     });
 
     test("createJoinRequest", async () => {

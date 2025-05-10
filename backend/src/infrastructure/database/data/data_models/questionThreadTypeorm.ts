@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { AssignmentTypeORM } from "./assignmentTypeorm";
 import { MessageTypeORM } from "./messageTypeorm";
-import { StudentTypeORM } from "./studentTypeorm";
+import { UserTypeORM } from "./userTypeorm";
 import { QuestionThread } from "../../../../core/entities/questionThread";
 import { VisibilityType } from "../../../../core/entities/questionThread";
 
@@ -16,9 +16,9 @@ export class QuestionThreadTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @ManyToOne(() => StudentTypeORM, { cascade: true, onDelete: "CASCADE" })
+    @ManyToOne(() => UserTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "creator_id" })
-    student!: StudentTypeORM;
+    user!: UserTypeORM;
 
     @ManyToOne(() => AssignmentTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "assignment_id" })
@@ -39,12 +39,12 @@ export class QuestionThreadTypeORM {
 
     public static createTypeORM(
         thread: QuestionThread,
-        studentModel: StudentTypeORM,
+        userModel: UserTypeORM,
         assignmentModel: AssignmentTypeORM,
     ): QuestionThreadTypeORM {
         const threadTypeORM: QuestionThreadTypeORM = new QuestionThreadTypeORM();
         threadTypeORM.assignment = assignmentModel;
-        threadTypeORM.student = studentModel;
+        threadTypeORM.user = userModel;
         threadTypeORM.is_closed = thread.isClosed;
         threadTypeORM.learning_object_id = thread.learningObjectId;
 
@@ -66,7 +66,7 @@ export class QuestionThreadTypeORM {
             visibilityType = VisibilityType.PRIVATE;
         }
         return new QuestionThread(
-            this.student.id,
+            this.user.id,
             this.assignment.id,
             this.learning_object_id,
             this.is_closed,

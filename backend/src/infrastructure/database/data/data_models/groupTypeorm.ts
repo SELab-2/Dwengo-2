@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { AssignmentTypeORM } from "./assignmentTypeorm";
-import { StudentTypeORM } from "./studentTypeorm";
+import { UserTypeORM } from "./userTypeorm";
 import { Group } from "../../../../core/entities/group";
 
 @Entity()
@@ -12,8 +12,8 @@ export class GroupTypeORM {
     @JoinColumn({ name: "assignment" })
     assignment!: AssignmentTypeORM;
 
-    public toEntity(studentModels: StudentTypeORM[]): Group {
-        const students: string[] = studentModels.map((studentModel: StudentTypeORM) => studentModel.id);
+    public toEntity(userModels: UserTypeORM[]): Group {
+        const students: string[] = userModels.map((userModel: UserTypeORM) => userModel.id);
 
         return new Group(students, this.assignment.id, this.id);
     }

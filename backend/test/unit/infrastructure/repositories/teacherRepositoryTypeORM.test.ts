@@ -28,7 +28,7 @@ describe("TeacherRepositoryTypeORM", () => {
             getAllTeachers: jest.fn(() => Promise.resolve([teacher, teacher])),
             updateTeacher: jest.fn(() => Promise.resolve(teacher)),
             deleteTeacherWithId: jest.fn(),
-            deleteTeacherFromClass: jest.fn()
+            removeTeacherFromClass: jest.fn()
         } as any;
 
         // Mock teacher
@@ -107,10 +107,10 @@ describe("TeacherRepositoryTypeORM", () => {
 
     test("deleteTeacherFromClass", async () => {
         // Call function from repository
-        await datasourceTeacher.deleteTeacherFromClass(teacher.id!, "1");
+        await datasourceTeacher.removeTeacherFromClass(teacher.id!, "1");
 
-        expect(datasourceTeacher.deleteTeacherFromClass).toHaveBeenCalledTimes(1);
-        expect(datasourceTeacher.deleteTeacherFromClass).toHaveBeenCalledWith(teacher.id!, "1");
+        expect(datasourceTeacher.removeTeacherFromClass).toHaveBeenCalledTimes(1);
+        expect(datasourceTeacher.removeTeacherFromClass).toHaveBeenCalledWith(teacher.id!, "1");
     });
 
 });
