@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="1"
+            failures="0"
+            tests="0">
+
+  <testsuite name="Register page" id="registerPageTest"
+    errors="1" failures="0" hostname="" package="registerPageTest" skipped="2"
+    tests="0" time="0.002000" timestamp="">
+  
+
+  
+    <system-err>
+       An error occurred while creating a new GeckoDriver session: Connection refused to localhost:4444. If the Webdriver/Selenium service is managed by Nightwatch, check if &#34;start_process&#34; is set to &#34;true&#34;.
+    </system-err>
+  
+
+    
+    <error message=""><![CDATA[
+      
+      ]]></error>  
+
+  
+    
+    <testcase
+      name="should be on the register page" classname="Register page">
+      <skipped />
+    </testcase>
+    
+    <testcase
+      name="should be able to fill information" classname="Register page">
+      <skipped />
+    </testcase>
+    
+  
+  </testsuite>
+</testsuites>

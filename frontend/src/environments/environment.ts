@@ -5,5 +5,5 @@ interface Environment {
 
 export const environment: Environment = {
     production: false,
-    API_URL: 'http://dwengo-2-backend-1:3001'// 'http://localhost:3000'
+    API_URL: 'http://localhost:3001'
 }

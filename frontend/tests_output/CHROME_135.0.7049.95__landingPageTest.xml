@@ -5,29 +5,29 @@
 
   <testsuite name="Landing page" id="landingPageTest"
     errors="0" failures="0" hostname="" package="landingPageTest" skipped="0"
-    tests="5" time="1.496" timestamp="">
+    tests="5" time="1.621" timestamp="">
   
-    <testcase name="should load the page and contain title: &#34;Landing Page&#34;" classname="Landing page" time="0.4590" assertions="1">
+    <testcase name="should load the page and contain title: &#34;Landing Page&#34;" classname="Landing page" time="0.7360" assertions="1">
 
     
     </testcase>
   
-    <testcase name="should route to register page after clicking &#34;Register&#34;" classname="Landing page" time="0.3600" assertions="1">
+    <testcase name="should route to register page after clicking &#34;Register&#34;" classname="Landing page" time="0.2980" assertions="1">
 
     
     </testcase>
   
-    <testcase name="should route to teacher login page after clicking &#34;Teacher login&#34;" classname="Landing page" time="0.2570" assertions="1">
+    <testcase name="should route to teacher login page after clicking &#34;Teacher login&#34;" classname="Landing page" time="0.2240" assertions="1">
 
     
     </testcase>
   
-    <testcase name="should route to student login page after clicking &#34;Student login&#34;" classname="Landing page" time="0.2450" assertions="1">
+    <testcase name="should route to student login page after clicking &#34;Student login&#34;" classname="Landing page" time="0.2160" assertions="1">
 
     
     </testcase>
   
-    <testcase name="should have a dwengo logo with an alt text" classname="Landing page" time="0.1720" assertions="1">
+    <testcase name="should have a dwengo logo with an alt text" classname="Landing page" time="0.1430" assertions="1">
 
     
     </testcase>

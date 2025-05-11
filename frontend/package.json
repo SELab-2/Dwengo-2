@@ -2,10 +2,8 @@
   "name": "frontend",
   "version": "0.1.0",
   "scripts": {
-    "e2e": "ng e2e",
-    "e2e:test": "./node_modules/.bin/nightwatch --env chrome,firefox --config './nightwatch.conf.js'",
-    "e2e:test:chrome": "./node_modules/.bin/nightwatch --env chrome --config './nightwatch.conf.js'",
-    "e2e:test:firefox": "./node_modules/.bin/nightwatch --env firefox --config './nightwatch.conf.js'",
+    "e2e:chrome": "./node_modules/.bin/nightwatch --env chrome --config './nightwatch.conf.js'",
+    "e2e:firefox": "./node_modules/.bin/nightwatch --env firefox --config './nightwatch.conf.js'",
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
     "build": "ng build",
