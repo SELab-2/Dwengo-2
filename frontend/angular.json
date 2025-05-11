@@ -43,6 +43,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/flag-icons/css/flag-icons.min.css",
               "src/custom-theme.scss",
               "src/styles.less"
             ],
@@ -73,7 +74,8 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "outputHashing": "media"
             },
             "e2e": {
               "fileReplacements": [
