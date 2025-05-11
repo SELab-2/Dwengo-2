@@ -87,9 +87,12 @@ jobs:
             sleep 2;
           done
       
-      
+      - name: Serving integration tests frontend
+        run: docker exec dwengo-2-frontend-1 ng serve --configuration=e2e --port=4202      
+        working-directory: frontend
+
       - name: Integration tests frontend
-        run: docker exec dwengo-2-frontend-1 npm run e2e:test
+        run: docker exec dwengo-2-frontend-1 ng e2e:firefox
         working-directory: frontend
         env:
           CHROME_BIN: "/usr/bin/chromium"
