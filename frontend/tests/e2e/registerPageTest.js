@@ -49,8 +49,6 @@ describe('Register page', function () {
 
         // Click on submit button
         await browser.click('button[type=submit]');
-
-        // expect(await browser.getTitle()).to.contain('Teacher Login');
     });
 
 });

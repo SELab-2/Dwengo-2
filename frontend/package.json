@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "scripts": {
     "e2e": "ng e2e",
-    "e2e:test": "./node_modules/.bin/nightwatch --env chrome --config './nightwatch.conf.js'",
+    "e2e:test": "./node_modules/.bin/nightwatch --env chrome,firefox --config './nightwatch.conf.js'",
+    "e2e:test:chrome": "./node_modules/.bin/nightwatch --env chrome --config './nightwatch.conf.js'",
+    "e2e:test:firefox": "./node_modules/.bin/nightwatch --env firefox --config './nightwatch.conf.js'",
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
     "build": "ng build",
@@ -48,7 +50,6 @@
     "@nightwatch/schematics": "^1.2.1",
     "@types/jasmine": "~5.1.0",
     "@types/nightwatch": "^3.0.1",
-    "@types/node": "22.15.12",
     "@typescript-eslint/eslint-plugin": "^8.25.0",
     "@typescript-eslint/parser": "^8.25.0",
     "chromedriver": "^136.0.0",

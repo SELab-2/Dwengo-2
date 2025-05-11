@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="2">
+
+  <testsuite name="Register page" id="registerPageTest"
+    errors="0" failures="0" hostname="" package="registerPageTest" skipped="0"
+    tests="2" time="1.765" timestamp="">
+  
+    <testcase name="should be on the register page" classname="Register page" time="0.5020" assertions="1">
+
+    
+    </testcase>
+  
+    <testcase name="should be able to fill information" classname="Register page" time="1.261" assertions="7">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+
+  
+
+    
+
+  
+  </testsuite>
+</testsuites>
