@@ -5,6 +5,7 @@ import { CreateClass } from "../../../../../src/core/services/class/createClass"
 // Mock repository
 const mockClassRepository = {
     create: jest.fn(),
+    addUserToClass: jest.fn(),
 };
 
 describe("CreateClass", () => {
