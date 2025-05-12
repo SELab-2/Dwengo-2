@@ -8,7 +8,6 @@ import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
 import { UserService } from "./user.service";
 import { UsersOfClass } from "../interfaces/user/usersOfClass";
-import { User } from "../interfaces";
 
 describe('ClassesService', () => {
     let http: jasmine.SpyObj<HttpClient>;
