@@ -1,0 +1,25 @@
+<app-authenticated-header></app-authenticated-header>
+@if (loading) {
+    <p>Loading</p>
+} @else {
+    <mat-card class="progress-card">
+      <mat-card-title>Progress: {{step}}/{{maxStep}}</mat-card-title>
+      <mat-card-content>
+        <mat-progress-bar class="custom-progress" mode="determinate" value="{{getProgressPercentage()}}" color="primary"></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+    
+    <app-learning-path
+      [hruid]="learningPathId"
+      [language]="language"
+      [assignment]="true"
+      [progress]="progress"
+      (selectedNodeChanged)="onSelectedNodeChanged($event)"
+    >
+    </app-learning-path>
+    <app-create-submission
+      [assignmentId]="assignmentId"
+      [learningObjectId]="currentLearningObjectId"
+      (submissionCreated)="onSubmissionCreated()"
+    ></app-create-submission>
+}

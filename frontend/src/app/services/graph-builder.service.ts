@@ -41,7 +41,7 @@ export class GraphBuilderService {
             const node = graph.addNode(full!);
             nodeMap.set(key, node);
 
-            if (shallow.startNode) {
+            if (!graph.root) {
                 graph.root = node;
             }
         }

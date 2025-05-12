@@ -56,6 +56,10 @@ export class DirectedGraph<T> {
     public set root(node: Node<T>) {
         this._root = node;
     }
+
+    public searchNode(value: T): Node<T> | null{
+        return this._nodes.get(value) ?? null;
+    }
 }
 
 // Minimal implementation of a Node
