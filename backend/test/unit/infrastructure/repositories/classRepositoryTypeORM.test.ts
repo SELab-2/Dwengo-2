@@ -1,4 +1,4 @@
-import { Class } from "../../../../src/core/entities/class";
+import { ClassTypeORM as Class } from "../../../../src/infrastructure/database/data/data_models/classTypeorm";
 import { DatasourceClassTypeORM } from "../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceClassTypeORM";
 
 describe("ClassRepositoryTypeORM", () => {
@@ -20,7 +20,11 @@ describe("ClassRepositoryTypeORM", () => {
         } as any;
 
         // Mock class
-        newClass = new Class("Programmeren", "Voor mensen die niet kunnen programmeren", "Beginners", "test_teacher_id", "class_id");
+        newClass = new Class();
+        newClass.name = "Programmeren";
+        newClass.description = "Voor mensen die niet kunnen programmeren";
+        newClass.targetAudience = "Beginners";
+        newClass.id = "class_id";
     });
 
     test("createClass", async () => {

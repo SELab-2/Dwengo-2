@@ -1,6 +1,6 @@
 import { DataSource, ObjectLiteral, Repository } from "typeorm";
 import { DatasourceTypeORMConnectionSettings } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
-import { Class } from "../../../../../../src/core/entities/class";
+import { ClassTypeORM as Class } from "../../../../../../src/infrastructure/database/data/data_models/classTypeorm";
 import { DatasourceTypeORMConnectionSettingsFactory } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
 import { Teacher } from "../../../../../../src/core/entities/teacher";
 import { JoinRequest, JoinRequestType } from "../../../../../../src/core/entities/joinRequest";
@@ -12,7 +12,11 @@ let datasourceSettings: DatasourceTypeORMConnectionSettings;
 let dataSource: DataSource;
 
 let teacher: Teacher = new Teacher("mail@mail.com", "John", "Doe", "password", "UGent", "1");
-let class_: Class = new Class("Math", "1+2=3", "Students", "2"); // _ because `class` is a keyword
+let class_: Class = new Class(); // _ because `class` is a keyword
+class_.name = "Math";
+class_.description = "1+2=3";
+class_.targetAudience = "Students";
+class_.id = "2";
 let joinRequest: JoinRequest = new JoinRequest(teacher.id!, class_.id!, JoinRequestType.TEACHER);
 
 // Helper: Generic Repository Mock Factory

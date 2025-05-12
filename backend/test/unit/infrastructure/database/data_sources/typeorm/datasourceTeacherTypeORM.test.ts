@@ -3,7 +3,7 @@ import { UserTypeORM , UserType} from "../../../../../../src/infrastructure/data
 import { DatasourceTypeORMConnectionSettingsFactory } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
 import { DatasourceTypeORMConnectionSettings } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
 import { Teacher } from "../../../../../../src/core/entities/teacher";
-import { Class } from "../../../../../../src/core/entities/class";
+import { ClassTypeORM as Class } from "../../../../../../src/infrastructure/database/data/data_models/classTypeorm";
 
 // Variables
 let datasourceSettings: DatasourceTypeORMConnectionSettings;
@@ -35,12 +35,11 @@ beforeAll(() => {
         "postgres",
         "dwengo-database"
     );
-    class_ = new Class(
-        "Programmeren",
-        "Voor mensen die niet kunnen programmeren",
-        "Beginners",
-        "Puk van de Petterflet"
-    );
+    class_ = new Class();
+    class_.name = "Programmeren";
+    class_.description = "Voor mensen die niet kunnen programmeren";
+    class_.targetAudience = "Beginners";
+    class_.id = "Puk van de Petterflet";
     dataSource = new DataSource(datasourceSettings.toObject());
 });
 

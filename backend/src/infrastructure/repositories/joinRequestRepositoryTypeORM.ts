@@ -1,6 +1,6 @@
-import { Class } from "../../core/entities/class";
 import { JoinRequest, JoinRequestType } from "../../core/entities/joinRequest";
 import { IJoinRequestRepository } from "../../core/repositories/joinRequestRepositoryInterface";
+import { ClassTypeORM as Class } from "../database/data/data_models/classTypeorm";
 import { DatasourceClassTypeORM } from "../database/data/data_sources/typeorm/datasourceClassTypeORM";
 import { DatasourceJoinRequestTypeORM } from "../database/data/data_sources/typeorm/datasourceJoinRequestTypeORM";
 

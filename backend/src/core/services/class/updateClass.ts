@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { ClassBaseService } from "./baseClassService";
 import { updateClassSchema } from "../../../application/schemas/classSchemas";
-import { Class } from "../../entities/class";
+import { ClassTypeORM as Class } from "../../../infrastructure/database/data/data_models/classTypeorm";
 import { tryRepoEntityOperation } from "../../helpers";
 
 export type UpdateClassInput = z.infer<typeof updateClassSchema>;

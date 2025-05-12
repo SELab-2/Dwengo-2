@@ -1,4 +1,4 @@
-import { Class } from "../../../../../src/core/entities/class";
+import { ClassTypeORM as Class } from "../../../../../src/infrastructure/database/data/data_models/classTypeorm";
 import { UpdateClass } from "../../../../../src/core/services/class";
 
 // Mock repository
@@ -18,14 +18,13 @@ describe("UpdateClass Service", () => {
         const updatedName = "Updated Class Name";
         const updatedDescription = "Updated Description";
 
-        const mockUpdatedClass = new Class(updatedName, updatedDescription, "Target Audience", id);
+        const mockUpdatedClass = new Class();
+        mockUpdatedClass.name = updatedName;
+        mockUpdatedClass.description = updatedDescription;
+        mockUpdatedClass.targetAudience = "Target Audience";
+        mockUpdatedClass.id = id;
+
         mockClassRepository.update.mockResolvedValue(mockUpdatedClass);
-        mockUpdatedClass.toObject = jest.fn(() => ({
-            id: id,
-            name: updatedName,
-            description: updatedDescription,
-            targetAudience: "Target Audience",
-        }));
 
         const params = {
             id: id,
@@ -49,14 +48,14 @@ describe("UpdateClass Service", () => {
         const id = "5678";
         const updatedTargetAudience = "Advanced Students";
 
-        const mockUpdatedClass = new Class("Original Name", "Original Description", updatedTargetAudience, id);
+        const mockUpdatedClass = new Class();
+        mockUpdatedClass.name = "Original Name";
+        mockUpdatedClass.description = "Original Description";
+        mockUpdatedClass.targetAudience = updatedTargetAudience;
+        mockUpdatedClass.id = id;
+
         mockClassRepository.update.mockResolvedValue(mockUpdatedClass);
-        mockUpdatedClass.toObject = jest.fn(() => ({
-            id: id,
-            name: "Original Name",
-            description: "Original Description",
-            targetAudience: updatedTargetAudience,
-        }));
+
         const params = {
             id: id,
             targetAudience: updatedTargetAudience,

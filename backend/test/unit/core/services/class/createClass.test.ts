@@ -1,5 +1,5 @@
 import { DatabaseError } from "../../../../../src/config/error";
-import { Class } from "../../../../../src/core/entities/class";
+import { ClassTypeORM as Class } from "../../../../../src/infrastructure/database/data/data_models/classTypeorm";
 import { CreateClass } from "../../../../../src/core/services/class/createClass";
 
 // Mock repository
@@ -22,7 +22,11 @@ describe("CreateClass", () => {
     });
 
     test("Should create a class and return its ID", async () => {
-        const createdClass = new Class("Math 101", "Basic math class", "Primary School", "teacher-id", "mock-class-id");
+        const createdClass = new Class();
+        createdClass.name = "Math 101";
+        createdClass.description = "Basic math class";
+        createdClass.targetAudience = "Primary School";
+        createdClass.id = "mock-class-id";
 
         mockClassRepository.create.mockResolvedValue(createdClass);
 

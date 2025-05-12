@@ -1,5 +1,5 @@
 import { AbstractRepository } from "./abstractRepository";
-import { Class } from "../entities/class";
+import { ClassTypeORM as Class } from "../../infrastructure/database/data/data_models/classTypeorm";
 import { JoinRequestType } from "../entities/joinRequest";
 
 /**

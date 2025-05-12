@@ -22,7 +22,7 @@ import bcrypt from "bcryptjs";
 import { faker } from '@faker-js/faker';
 import { Student } from '../src/core/entities/student'
 import { Teacher } from '../src/core/entities/teacher'
-import { Class } from '../src/core/entities/class'
+import { ClassTypeORM as Class } from '../src/infrastructure/database/data/data_models/classTypeorm';
 import { Assignment } from "../src/core/entities/assignment";
 import { Group } from '../src/core/entities/group'
 import { QuestionThread } from "../src/core/entities/questionThread";
@@ -79,7 +79,10 @@ export async function seedDatabase(): Promise<void> {
         const description = faker.lorem.sentence();
         const targetAudience = `${faker.number.int({ min: 5, max: 12 })}th grade`;
 
-        const newClass = new Class(className, description, targetAudience, teacherId);
+        const newClass = new Class();
+        newClass.name = className;
+        newClass.description = description;
+        newClass.targetAudience = targetAudience;
         const createdClass = (await classRep.create(newClass)) as { id: string };
         classIds.push(createdClass.id);
       }

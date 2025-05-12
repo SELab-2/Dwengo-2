@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { ClassBaseService } from "./baseClassService";
 import { getAllClassesSchema, getClassSchema, getUserClassesSchema } from "../../../application/schemas/classSchemas";
-import { Class } from "../../entities/class";
+import { ClassTypeORM as Class } from "../../../infrastructure/database/data/data_models/classTypeorm";
 import { tryRepoEntityOperation } from "../../helpers";
 
 export type GetClassInput = z.infer<typeof getClassSchema>;
@@ -16,9 +16,9 @@ export class GetClass extends ClassBaseService<GetClassInput> {
     async execute(input: GetClassInput): Promise<object> {
         const { id, name } = input;
         if (id) {
-            return (await tryRepoEntityOperation(this.classRepository.getById(id), "Class", id, true)).toObject();
+            return await tryRepoEntityOperation(this.classRepository.getById(id), "Class", id, true);
         }
-        return (await tryRepoEntityOperation(this.classRepository.getByName(name!), "Class", name!, false)).toObject();
+        return await tryRepoEntityOperation(this.classRepository.getByName(name!), "Class", name!, false);
     }
 }
 
@@ -52,6 +52,6 @@ export class GetAllClasses extends ClassBaseService<GetAllClassesInput> {
      * @returns every class stored inside the database.
      */
     async execute(): Promise<object> {
-        return { classes: (await this.classRepository.getAll()).forEach(c => c.toObject()) };
+        return { classes: await this.classRepository.getAll() };
     }
 }

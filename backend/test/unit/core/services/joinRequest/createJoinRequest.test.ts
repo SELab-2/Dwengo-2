@@ -1,5 +1,4 @@
 import { ApiError, ErrorCode } from "../../../../../src/application/types";
-import { Class } from "../../../../../src/core/entities/class";
 import { JoinRequest, JoinRequestType } from "../../../../../src/core/entities/joinRequest";
 import { IClassRepository } from "../../../../../src/core/repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../../../../src/core/repositories/joinRequestRepositoryInterface";

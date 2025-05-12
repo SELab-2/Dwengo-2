@@ -53,7 +53,9 @@ describe("Test class API endpoints", () => {
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
                     "id": classId,
-                    ...mockClass
+                    "name": "class_123",
+                    "description": "string",
+                    "targetAudience": "string",
                 });
             });
         });
@@ -110,7 +112,6 @@ describe("Test class API endpoints", () => {
                 "name": "newName",
                 "description": "string",
                 "targetAudience": "string",
-                "teacherId": authDetails.id  
             });
         });
     });
