@@ -1,11 +1,10 @@
 
 import { DataSource, ObjectLiteral, Repository } from "typeorm";
-import { AssignmentTypeORM } from "../../../../../../src/infrastructure/database/data/data_models/assignmentTypeorm";
+import { AssignmentTypeORM as Assignment} from "../../../../../../src/infrastructure/database/data/data_models/assignmentTypeorm";
 import { DatasourceTypeORMConnectionSettings } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettings";
 import { ClassTypeORM as Class } from "../../../../../../src/infrastructure/database/data/data_models/classTypeorm";
 import { DatasourceTypeORMConnectionSettingsFactory } from "../../../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceTypeORMConnectionSettingsFactory";
 import { Teacher } from "../../../../../../src/core/entities/teacher";
-import { Assignment } from "../../../../../../src/core/entities/assignment";
 
 // Variables
 let datasourceSettings: DatasourceTypeORMConnectionSettings;
@@ -17,7 +16,14 @@ class_.name = "Math";
 class_.description = "1+2=3";
 class_.targetAudience = "Students";
 class_.id = "2";
-let assignment: Assignment = new Assignment(class_.id!, "123", new Date(), new Date(), "Assignment", "3");
+let assignment: Assignment = {
+    class: class_,
+    learningPathId: "123",
+    start: new Date(),
+    deadline: new Date(),
+    name: "Assignment",
+    id: "3"
+} as Assignment;
 
 // Helper: Generic Repository Mock Factory
 function createMockRepository<T extends ObjectLiteral>() {
@@ -44,7 +50,7 @@ jest.mock("typeorm", () => {
 
 describe("DatasourceAssignmentTypeORM", () => {
 
-    let assignmentRepository: Repository<AssignmentTypeORM>;
+    let assignmentRepository: Repository<Assignment>;
 
     beforeAll(() => {
         datasourceSettings = DatasourceTypeORMConnectionSettingsFactory.createDatasourceTypeORMConnectionSettings(
@@ -55,18 +61,18 @@ describe("DatasourceAssignmentTypeORM", () => {
             "dwengo-database"
         );
         dataSource = new DataSource(datasourceSettings.toObject());
-        assignmentRepository = dataSource.getRepository(AssignmentTypeORM);
+        assignmentRepository = dataSource.getRepository(Assignment);
     });
 
     test("createAssignment", async () => {
         // Assume class and teacher exist
 
         const assignmentModel = assignmentRepository.create({
-            class: { id: assignment.classId },
-            learning_path_id: assignment.learningPathId,
-            start: assignment.startDate,
+            class: { id: assignment.class.id },
+            learningPathId: assignment.learningPathId,
+            start: assignment.start,
             deadline: assignment.deadline,
-            extra_instructions: assignment.extraInstructions
+            extraInstructions: assignment.extraInstructions
         });
 
         expect(assignmentRepository.create).toHaveBeenCalled();
@@ -102,12 +108,12 @@ describe("DatasourceAssignmentTypeORM", () => {
 
     test("getAssignmentsByLearningPathId", async () => {
         const assignmentsModel = await assignmentRepository.find({ 
-            where: { learning_path_id: assignment.learningPathId },
+            where: { learningPathId: assignment.learningPathId },
             relations: ["class"]
         });
 
         expect(assignmentRepository.find).toHaveBeenCalledWith({
-            where: { learning_path_id: assignment.learningPathId },
+            where: { learningPathId: assignment.learningPathId },
             relations: ["class"]
         });
     });

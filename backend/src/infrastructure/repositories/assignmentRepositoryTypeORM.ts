@@ -1,5 +1,5 @@
-import { Assignment } from "../../core/entities/assignment";
 import { IAssignmentRepository } from "../../core/repositories/assignmentRepositoryInterface";
+import { AssignmentTypeORM as Assignment } from "../database/data/data_models/assignmentTypeorm";
 import { DatasourceAssignmentTypeORM } from "../database/data/data_sources/typeorm/datasourceAssignmentTypeORM";
 
 export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
@@ -11,7 +11,7 @@ export class AssignmentRepositoryTypeORM extends IAssignmentRepository {
     }
 
     public async create(assignment: Assignment): Promise<Assignment> {
-        return await this.datasourceAssignment.createAssignment(assignment, assignment.classId);
+        return await this.datasourceAssignment.createAssignment(assignment, assignment.class.id);
     }
 
     public async getById(id: string): Promise<Assignment> {

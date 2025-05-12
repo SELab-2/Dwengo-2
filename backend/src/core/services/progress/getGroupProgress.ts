@@ -1,5 +1,5 @@
 import { GetProgress } from "./getProgress";
-import { Assignment } from "../../entities/assignment";
+import { AssignmentTypeORM as Assignment } from "../../../infrastructure/database/data/data_models/assignmentTypeorm";
 import { Group } from "../../entities/group";
 import { User } from "../../entities/user";
 import { tryRepoEntityOperation } from "../../helpers";

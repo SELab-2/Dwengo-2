@@ -1,4 +1,5 @@
-import { Assignment } from "../../../../src/core/entities/assignment";
+import { AssignmentTypeORM as Assignment } from "../../../../src/infrastructure/database/data/data_models/assignmentTypeorm";
+import { ClassTypeORM as Class } from "../../../../src/infrastructure/database/data/data_models/classTypeorm";
 import { IDatasourceFactory } from "../../../../src/infrastructure/database/data/data_sources/datasourceFactoryInterface";
 import { IDatasource } from "../../../../src/infrastructure/database/data/data_sources/datasourceInterface";
 import { DatasourceAssignmentTypeORM } from "../../../../src/infrastructure/database/data/data_sources/typeorm/datasourceAssignmentTypeORM";
@@ -27,7 +28,14 @@ describe("ClassRepositoryTypeORM", () => {
         } as any;
 
         // Mock assignment
-        assignment = new Assignment("123", "123", new Date(), new Date(), "Assignment", "3");
+        assignment = {
+            class: {id: "122"} as Class,
+            learningPathId: "123",
+            start: new Date(),
+            deadline: new Date(),
+            name: "Assignment",
+            id: "3",
+        } as Assignment
     });
 
     test("createAssignment", async () => {
@@ -48,10 +56,10 @@ describe("ClassRepositoryTypeORM", () => {
 
     test("getAssignmentsByClassId", async () => {
         // Call function from repository
-        await datasourceAssignment.getAssignmentsByClassId(assignment.classId);
+        await datasourceAssignment.getAssignmentsByClassId(assignment.class.id);
 
         expect(datasourceAssignment.getAssignmentsByClassId).toHaveBeenCalledTimes(1);
-        expect(datasourceAssignment.getAssignmentsByClassId).toHaveBeenCalledWith(assignment.classId);
+        expect(datasourceAssignment.getAssignmentsByClassId).toHaveBeenCalledWith(assignment.class.id);
     });
 
     test("getAssignmentsByLearningPathId", async () => {

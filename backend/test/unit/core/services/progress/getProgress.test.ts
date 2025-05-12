@@ -1,4 +1,4 @@
-import { Assignment } from "../../../../../src/core/entities/assignment";
+import { AssignmentTypeORM as Assignment } from "../../../../../src/infrastructure/database/data/data_models/assignmentTypeorm";
 import { Submission } from "../../../../../src/core/entities/submission";
 import { User } from "../../../../../src/core/entities/user";
 import { IAssignmentRepository } from "../../../../../src/core/repositories/assignmentRepositoryInterface";

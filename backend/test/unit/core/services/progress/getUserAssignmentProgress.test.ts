@@ -1,4 +1,4 @@
-import { Assignment } from "../../../../../src/core/entities/assignment";
+import { AssignmentTypeORM as Assignment } from "../../../../../src/infrastructure/database/data/data_models/assignmentTypeorm";
 import { PathLearningObject } from "../../../../../src/core/entities/learningObject";
 import { LearningPath } from "../../../../../src/core/entities/learningPath";
 import { Submission } from "../../../../../src/core/entities/submission";

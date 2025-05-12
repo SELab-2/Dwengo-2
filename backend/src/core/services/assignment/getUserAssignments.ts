@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { AssignmentService } from "./assignmentService";
 import { getUserAssignmentsSchema } from "../../../application/schemas/assignmentSchemas";
-import { Assignment } from "../../entities/assignment";
+import { AssignmentTypeORM as Assignment } from "../../../infrastructure/database/data/data_models/assignmentTypeorm";
 import { tryRepoEntityOperation } from "../../helpers";
 
 export type GetUserAssignmentsInput = z.infer<typeof getUserAssignmentsSchema>;

@@ -30,7 +30,7 @@ describe("Test assignment API Endpoints", () => {
         mockAssignment = {
             "classId": classId,
             "learningPathId": "string",
-            "startDate": "2025-04-10",
+            "start": "2025-04-10",
             "deadline": "2025-04-10",
             "name": "name",
             "extraInstructions": "extra_instructions"
@@ -145,7 +145,7 @@ describe("Test assignment API Endpoints", () => {
                 "id": assignmentId,
                 "classId": classId,
                 "learningPathId": "string",
-                "startDate": "2025-04-10",
+                "start": "2025-04-10",
                 "deadline": newDate,
                 "name": "name",
                 "extraInstructions": "extra_instructions"

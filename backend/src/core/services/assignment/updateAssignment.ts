@@ -18,9 +18,9 @@ export class UpdateAssignment extends AssignmentService<UpdateAssignmentInput> {
     async execute(input: UpdateAssignmentInput): Promise<object> {
         const assignment = await this.assignmentRepository.getById(input.id);
 
-        if (input.classId) assignment.classId = input.classId;
+        if (input.classId) assignment.class.id = input.classId;
         if (input.learningPathId) assignment.learningPathId = input.learningPathId;
-        if (input.startDate) assignment.startDate = input.startDate;
+        if (input.start) assignment.start = input.start;
         if (input.deadline) assignment.deadline = input.deadline;
         if (input.name) assignment.name = input.name;
         if (input.extraInstructions) assignment.extraInstructions = input.extraInstructions;

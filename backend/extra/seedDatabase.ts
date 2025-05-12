@@ -23,7 +23,7 @@ import { faker } from '@faker-js/faker';
 import { Student } from '../src/core/entities/student'
 import { Teacher } from '../src/core/entities/teacher'
 import { ClassTypeORM as Class } from '../src/infrastructure/database/data/data_models/classTypeorm';
-import { Assignment } from "../src/core/entities/assignment";
+import { AssignmentTypeORM as Assignment } from '../src/infrastructure/database/data/data_models/assignmentTypeorm';
 import { Group } from '../src/core/entities/group'
 import { QuestionThread } from "../src/core/entities/questionThread";
 import { Message } from "../src/core/entities/message";
@@ -133,14 +133,15 @@ export async function seedDatabase(): Promise<void> {
         const name = faker.lorem.sentence(3); // Random name for the assignment
         const extraInstructions = faker.lorem.sentence();
 
-        const assignment = new Assignment(
-          classId,
-          learningPathId,
-          startDate,
-          deadline,
-          name,
-          extraInstructions
-        );
+        const assignment = new Assignment();
+        assignment.class = new Class();
+        assignment.class.id = classId;
+        assignment.learning_path_id = learningPathId;
+        assignment.start = startDate;
+        assignment.deadline = deadline;
+        assignment.name = name;
+        assignment.extra_instructions = extraInstructions;
+
 
         const savedAssignment = await assignmentRep.create(assignment) as { id: string };
         assignments.push({ id: savedAssignment.id, classId });

@@ -1,5 +1,5 @@
 import { AbstractRepository } from "./abstractRepository";
-import { Assignment } from "../entities/assignment";
+import { AssignmentTypeORM as Assignment } from "../../infrastructure/database/data/data_models/assignmentTypeorm";
 
 /**
  * Interface for assignment repositories.

@@ -25,6 +25,17 @@ export class GetAssignment implements Service<GetAssignmentInput> {
             input.id,
             true,
         );
-        return queriedAssignment.toObject();
+
+        // TODO: maybe just return the queriedAssignment directly? The class will be a nested object then: `{ class: {id: ...}, ...}´
+        // But it would be cleaner code
+        return {
+            classId: queriedAssignment.class.id,
+            deadline: queriedAssignment.deadline,
+            start: queriedAssignment.start,
+            extraInstructions: queriedAssignment.extraInstructions,
+            learningPathId: queriedAssignment.learningPathId,
+            name: queriedAssignment.name,
+            id: queriedAssignment.id,
+        };
     }
 }

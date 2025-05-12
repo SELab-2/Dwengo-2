@@ -1,6 +1,7 @@
 import { ErrorCode } from "../../../../../src/application/types";
 import { EntityNotFoundError } from "../../../../../src/config/error";
-import { Assignment } from "../../../../../src/core/entities/assignment";
+import { AssignmentTypeORM as Assignment } from "../../../../../src/infrastructure/database/data/data_models/assignmentTypeorm";
+import { ClassTypeORM as Class } from "../../../../../src/infrastructure/database/data/data_models/classTypeorm";
 import { IAssignmentRepository } from "../../../../../src/core/repositories/assignmentRepositoryInterface";
 import { GetUserAssignments, GetUserAssignmentsInput } from "../../../../../src/core/services/assignment";
 
@@ -25,14 +26,15 @@ describe("GetUserAssignments Service", () => {
         deadline = new Date();
         assignments = [];
         for (let i = 0; i++; i < 5) {
-            const assignment = new Assignment(
-                i.toString(),
-                i.toString(),
-                startDate,
-                deadline,
-                "Extra Instructions",
-                i.toString(),
-            );
+            const assignment = new Assignment();
+            assignment.class = new Class()
+            assignment.class.id = i.toString();
+            assignment.learningPathId = i.toString();
+            assignment.start = startDate;
+            assignment.deadline = deadline;
+            assignment.extraInstructions = "Extra Instructions";
+            assignment.id = i.toString();
+
             assignments.push(assignment);
         }
     });

@@ -7,9 +7,9 @@ import { z } from "zod";
 export const createAssignmentSchema = z.object({
     classId: z.string(),
     learningPathId: z.string(),
-    startDate: z
+    start: z
         .string()
-        .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for startDate" })
+        .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for start date" })
         .transform((val: string) => new Date(val)),
     deadline: z
         .string()
@@ -35,9 +35,9 @@ export const updateAssignmentSchema = z.object({
     id: z.string(),
     classId: z.string().optional(),
     learningPathId: z.string().optional(),
-    startDate: z
+    start: z
         .string()
-        .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for startDate" })
+        .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format for start date" })
         .transform((val: string) => new Date(val))
         .optional(),
     deadline: z

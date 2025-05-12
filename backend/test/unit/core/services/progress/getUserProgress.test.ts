@@ -1,4 +1,4 @@
-import { Assignment } from "../../../../../src/core/entities/assignment";
+import { AssignmentTypeORM as Assignment } from "../../../../../src/infrastructure/database/data/data_models/assignmentTypeorm";
 import { LearningPath } from "../../../../../src/core/entities/learningPath";
 import { Submission } from "../../../../../src/core/entities/submission";
 import { GetUserProgress } from "../../../../../src/core/services/progress";

@@ -1,6 +1,7 @@
 import { ErrorCode } from "../../../../../src/application/types";
 import { EntityNotFoundError } from "../../../../../src/config/error";
-import { Assignment } from "../../../../../src/core/entities/assignment";
+import { AssignmentTypeORM as Assignment } from "../../../../../src/infrastructure/database/data/data_models/assignmentTypeorm";
+import { ClassTypeORM as Class } from "../../../../../src/infrastructure/database/data/data_models/classTypeorm";
 import { IAssignmentRepository } from "../../../../../src/core/repositories/assignmentRepositoryInterface";
 import { GetAssignment, GetAssignmentInput } from "../../../../../src/core/services/assignment/getAssignment";
 
@@ -25,7 +26,15 @@ describe("getAssignment Service", () => {
     });
 
     test("Should return assignment if found", async () => {
-        const assignment = new Assignment("1", "1", date, date, "name", "extra_instructions", "1");
+        const assignment = new Assignment();
+        assignment.class = new Class()    
+        assignment.class.id = "1";
+        assignment.learningPathId = "1";
+        assignment.start = date;
+        assignment.deadline = date;
+        assignment.name = "name";
+        assignment.extraInstructions = "extra_instructions";
+        assignment.id = "1";
 
         mockAssignmentRepository.getById.mockResolvedValue(assignment);
         const result = await getAssignmentService.execute(getAssignmentParams);
@@ -33,7 +42,7 @@ describe("getAssignment Service", () => {
         expect(result).toEqual({
             id: "1",
             classId: "1",
-            startDate: date,
+            start: date,
             deadline: date,
             name: "name",
             extraInstructions: "extra_instructions",

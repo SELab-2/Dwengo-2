@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { ProgressBaseService } from "./progressBaseService";
 import { getProgressSchema } from "../../../application/schemas";
-import { Assignment } from "../../entities/assignment";
+import { AssignmentTypeORM as Assignment } from "../../../infrastructure/database/data/data_models/assignmentTypeorm";
 import { Submission } from "../../entities/submission";
 import { User } from "../../entities/user";
 import { tryRepoEntityOperation } from "../../helpers";

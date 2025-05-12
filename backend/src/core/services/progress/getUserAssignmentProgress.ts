@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ProgressBaseService } from "./progressBaseService";
 import { getUserAssignmentProgressSchema } from "../../../application/schemas";
 import { Service } from "../../../config/service";
-import { Assignment } from "../../entities/assignment";
+import { AssignmentTypeORM as Assignment } from "../../../infrastructure/database/data/data_models/assignmentTypeorm";
 import { LearningPath } from "../../entities/learningPath";
 import { Submission } from "../../entities/submission";
 import { tryRepoEntityOperation } from "../../helpers";

@@ -44,7 +44,7 @@ describe("Test user API endpoints", () => {
                 .send({
                     "classId": classId,
                     "learningPathId": "string",
-                    "startDate": "2025-04-10",
+                    "start": "2025-04-10",
                     "deadline": "2025-04-10",
                     "name": "name",
                     "extraInstructions": "extra_instructions"
