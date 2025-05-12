@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, CreateDateColumn, ManyToOne } from "typeorm";
 import { AssignmentTypeORM } from "./assignmentTypeorm";
-import { StudentTypeORM } from "./studentTypeorm";
+import { UserTypeORM } from "./userTypeorm";
 import { StatusType, Submission } from "../../../../core/entities/submission";
 
 export enum SubmissionStatus {
@@ -13,9 +13,9 @@ export class SubmissionTypeORM {
     @PrimaryGeneratedColumn("uuid")
     id!: string;
 
-    @ManyToOne(() => StudentTypeORM, { cascade: true, onDelete: "CASCADE" })
+    @ManyToOne(() => UserTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "student_id" })
-    student!: StudentTypeORM;
+    user!: UserTypeORM;
 
     @ManyToOne(() => AssignmentTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "assignment_id" })
@@ -45,7 +45,7 @@ export class SubmissionTypeORM {
             status = StatusType.NOT_ACCEPTED;
         }
         return new Submission(
-            this.student.id,
+            this.user.id,
             this.assignment.id,
             this.learning_object_id,
             this.time,
@@ -57,7 +57,7 @@ export class SubmissionTypeORM {
 
     public static createTypeORM(
         submission: Submission,
-        studentModel: StudentTypeORM,
+        userModel: UserTypeORM,
         assignmentModel: AssignmentTypeORM,
     ): SubmissionTypeORM {
         const submissionModel: SubmissionTypeORM = new SubmissionTypeORM();
@@ -69,7 +69,7 @@ export class SubmissionTypeORM {
             status = SubmissionStatus.NOT_ACCEPTED;
         }
 
-        submissionModel.student = studentModel;
+        submissionModel.user = userModel;
         submissionModel.assignment = assignmentModel;
         submissionModel.learning_object_id = submission.learningObjectId;
         submissionModel.time = submission.time;
