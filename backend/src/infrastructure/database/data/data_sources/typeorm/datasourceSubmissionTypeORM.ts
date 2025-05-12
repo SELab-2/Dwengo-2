@@ -195,6 +195,20 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
             .orderBy("month", "ASC")
             .getRawMany();
 
-        return result.map((row: { count: string }) => parseInt(row.count));
+        const resultMap = new Map<string, number>();
+        result.forEach((row: { month: string; count: string }) => {
+            resultMap.set(row.month, parseInt(row.count));
+        });
+
+        // Vul alle 12 maanden aan met 0 indien geen resultaat
+        const now = new Date();
+        const monthlyCounts: number[] = [];
+        for (let i = 11; i >= 0; i--) {
+            const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            const key = date.toISOString().slice(0, 7); // "YYYY-MM"
+            monthlyCounts.push(resultMap.get(key) ?? 0);
+        }
+
+        return monthlyCounts;
     }
 }

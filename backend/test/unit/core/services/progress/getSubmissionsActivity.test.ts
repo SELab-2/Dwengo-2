@@ -4,7 +4,7 @@ import { GetSubmissionActivity } from "../../../../../src/core/services/progress
 describe("GetSubmissionActivity", () => {
     const mockRepo: ISubmissionRepository = {
         getMonthlySubmissionCounts: jest.fn(),
-    };
+    } as any;
 
     const service = new GetSubmissionActivity(mockRepo);
 
@@ -22,6 +22,6 @@ describe("GetSubmissionActivity", () => {
         const result = await service.execute(input);
 
         expect(mockRepo.getMonthlySubmissionCounts).toHaveBeenCalledWith("class-id-123");
-        expect(result).toEqual({ submissions: mockCounts });
+        expect(result).toEqual({ activity: mockCounts });
     });
 });

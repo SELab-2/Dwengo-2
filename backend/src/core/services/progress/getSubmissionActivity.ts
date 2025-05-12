@@ -17,6 +17,6 @@ export class GetSubmissionActivity implements Service<GetSubmissionActivitySchem
             input.idParent,
             true,
         );
-        return { submissions };
+        return { activity: submissions };
     }
 }

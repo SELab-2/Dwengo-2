@@ -1823,6 +1823,14 @@ paths:
           schema:
             type: string
             format: uuid
+        responses:
+        '200':
+          $ref: '#/components/responses/CompletionOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+          
   '/classes/:idParent/activity':
     get:
       tags:

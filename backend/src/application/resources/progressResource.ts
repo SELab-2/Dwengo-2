@@ -12,7 +12,8 @@ import * as ProgressSchemas from "../schemas/progressSchemas";
  * - GET /assignments/:idParent/progress - Get the progress of all users in an assignment
  * - GET /groups/:idParent/progress - Get the progress of all users in a group
  * - GET /users/:userId/assignment/:assignmentId/progress - Get the progress of a user for a specific assignment
- *   idParent := {userId-assignmentId}
+ * - GET /classes/:idParent/completion - Shows how much of the assignments for a class have been completed (on average)
+ * - GET /classes/:idParent/activity - Get an array with the amount of submissions for a class in the last 12 months (array of zero to twelve numbers)
  */
 
 /* ************* Extractors ************* */

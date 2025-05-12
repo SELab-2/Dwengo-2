@@ -37,13 +37,12 @@ export class GetClassCompletion implements Service<GetClassCompletionInput> {
 
         let totalSteps: number = 0;
         let totalMaxSteps: number = 0;
-
         // For all assignments
         for (let i: number = 0; i < assignments.length; i++) {
             const assignment: Assignment = assignments[i];
             // Get the corresponding learningPath
             const learningPath: LearningPath = await tryRepoEntityOperation(
-                this._learningPathRepository.getLearningPath(assignment.learningPathId, false),
+                this._learningPathRepository.getLearningPath(assignment.learningPathId, true),
                 "LearningPath",
                 assignment.learningPathId,
                 true,
