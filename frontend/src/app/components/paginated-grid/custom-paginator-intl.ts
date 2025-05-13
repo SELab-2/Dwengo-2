@@ -12,7 +12,7 @@ export function getCustomPaginatorIntl(): MatPaginatorIntl {
   paginatorIntl.lastPageLabel = $localize`:@@lastPage:Last page`;
   paginatorIntl.getRangeLabel = (page: number, pageSize: number, length: number): string => {
     if (length === 0 || pageSize === 0) {
-      return $localize`:@@rangeLabel:0 of ${length}`;
+      return $localize`:@@rangeLabel0:0 of ${length}`;
     }
     const startIndex = page * pageSize;
     const endIndex = Math.min(startIndex + pageSize, length);
