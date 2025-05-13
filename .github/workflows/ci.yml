@@ -88,16 +88,38 @@ jobs:
           done
       
       - name: Serving integration tests frontend
-        run: docker exec dwengo-2-frontend-1 ng serve --configuration=e2e --port=4202      
+        run: docker exec dwengo-2-frontend-1 ng serve --configuration=e2e --port=4202 &
         working-directory: frontend
 
-      - name: Integration tests frontend
-        run: docker exec dwengo-2-frontend-1 ng e2e:firefox
+      - name: Wait for frontend to respond
+        run: |
+          for i in {1..30}; do
+            if docker exec dwengo-2-frontend-1 curl -s http://localhost:4202 > /dev/null; then
+              echo "Frontend is up!";
+              break;
+            fi
+            echo "Waiting for frontend...";
+            sleep 2;
+          done
+
+      - name: Integration tests frontend (CHROME)
+        run: docker exec dwengo-2-frontend-1 npm run e2e:chrome
         working-directory: frontend
         env:
           CHROME_BIN: "/usr/bin/chromium"
           CHROMEDRIVER_BIN: "/usr/bin/chromedriver"
           FIREFOX_BIN: "/usr/bin/firefox"
+
+      - name: Clear end-to-end test database
+        run: docker exec dwengo-2-backend-1 npm run db:clear
+
+      # - name: Integration tests frontend (FIREFOX)
+      #   run: docker exec dwengo-2-frontend-1 npm run e2e:firefox
+      #   working-directory: frontend
+      #   env:
+      #     CHROME_BIN: "/usr/bin/chromium"
+      #     CHROMEDRIVER_BIN: "/usr/bin/chromedriver"
+      #     FIREFOX_BIN: "/usr/bin/firefox"
       
       # Always stop testing containers
       - name: Stop containers

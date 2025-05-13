@@ -26,6 +26,9 @@ RUN apk add --no-cache chromium chromium-chromedriver harfbuzz ttf-freefont
 # Install firefox for browser testing
 RUN apk add --no-cache firefox
 
+# Install curl
+RUN apk add --no-cache curl
+
 # Set the chromium binary path
 ENV CHROME_BIN=/usr/bin/chromium
 ENV CHROMEDRIVER_BIN=/usr/bin/chromedriver
