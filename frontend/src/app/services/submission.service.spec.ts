@@ -18,14 +18,22 @@ describe('SubmissionService', () => {
     })
   };
 
-  const mockErrorService = {};
+    let errorService: jasmine.SpyObj<ErrorService>;
+
 
   beforeEach(() => {
+    errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler', 'retrieveError', 'createError', 'deleteError', 'updateError']);
+    errorService.pipeHandler.and.callFake(() => (source) => source);
+    errorService.retrieveError.and.returnValue("retrieveError");
+    errorService.createError.and.returnValue("createError");
+    errorService.deleteError.and.returnValue("deleteError");
+    errorService.updateError.and.returnValue("updateError");
     TestBed.configureTestingModule({
+      
       providers: [
         SubmissionService,
         { provide: AuthenticationService, useValue: mockAuthService },
-        { provide: ErrorService, useValue: mockErrorService },
+        { provide: ErrorService, useValue: errorService },
         provideHttpClient(),
         provideHttpClientTesting()
       ]
