@@ -14,6 +14,7 @@ export class DatasourceTypeORMConnectionSettings {
         private synchronize: boolean,
         private logging: boolean,
         private dropschema: boolean,
+        private poolSize: number,
 
         // Next any[] is not possible to replace with a more specific type
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,6 +93,14 @@ export class DatasourceTypeORMConnectionSettings {
         this.dropschema = dropschema;
     }
 
+    public getPoolSize(): number {
+        return this.poolSize;
+    }
+
+    public setPoolSize(poolSize: number): void {
+        this.poolSize = poolSize;
+    }
+
     // Next any[] is not possible to replace with a more specific type
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public getEntities(): any[] {
@@ -117,6 +126,7 @@ export class DatasourceTypeORMConnectionSettings {
             synchronize: this.synchronize,
             logging: this.logging,
             dropschema: this.dropschema,
+            poolSize: this.poolSize,
             entities: this.entities,
         };
     }
