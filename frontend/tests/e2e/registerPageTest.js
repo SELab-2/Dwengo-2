@@ -38,7 +38,7 @@ describe('Register page', function () {
         // Fill in email
         await browser.setValue('input[type=email]', email);
         expect(await browser.getValue('input[type=email]')).to.contain(email);
-        
+
         // Fill in password
         await browser.setValue('input[type=password]', password);
         expect(await browser.getValue('input[type=password]')).to.contain(password);
