@@ -1,80 +1,92 @@
 import { DatasourceTypeORM } from "./datasourceTypeORM";
-import { DatabaseEntryNotFoundError } from "../../../../../config/error";
+import { EntityNotFoundError } from "../../../../../config/error";
 import { JoinCode } from "../../../../../core/entities/joinCode";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { JoinCodeTypeORM } from "../../data_models/joinCodeTypeorm";
 
 export class DatasourceJoinCodeTypeORM extends DatasourceTypeORM {
-    /*
-    Creates a new join code for a class and returns the code that was created as an alphanumerical string of length 6
-    */
-    public async createForClass(classId: string): Promise<JoinCode> {
+    public async create(joinCode: JoinCode): Promise<JoinCode> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
+        const classRepository = datasource.getRepository(ClassTypeORM);
+        const joinCodeRepository = datasource.getRepository(JoinCodeTypeORM);
+
         // Find the relevant class
-        const classModel: ClassTypeORM | null = await datasource
-            .getRepository(ClassTypeORM)
-            .findOne({ where: { id: classId } });
+        const classModel = await classRepository.findOne({ where: { id: joinCode.classId } });
 
         if (!classModel) {
-            throw new DatabaseEntryNotFoundError(`Class with id ${classId} not found`);
+            throw new EntityNotFoundError(`Class with id ${joinCode.classId} not found`);
         }
 
         // Create a new join code
-        const joinCodeModel: JoinCodeTypeORM = datasource.getRepository(JoinCodeTypeORM).create({
-            class: classModel,
-            isExpired: false,
-        });
-        await datasource.getRepository(JoinCodeTypeORM).save(joinCodeModel);
+        const joinCodeModel = JoinCodeTypeORM.createTypeORM(joinCode, classModel);
 
-        return joinCodeModel.toJoinCodeEntity();
+        const savedJoinCodeModel = await joinCodeRepository.save(joinCodeModel);
+
+        return savedJoinCodeModel.toEntity();
     }
 
-    public async getJoinCodeById(code: string): Promise<JoinCode | null> {
+    public async getById(code: string): Promise<JoinCode> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const joinCode: JoinCodeTypeORM | null = await datasource.getRepository(JoinCodeTypeORM).findOne({
+        const joinCodeRepository = datasource.getRepository(JoinCodeTypeORM);
+        const joinCodeModel: JoinCodeTypeORM | null = await joinCodeRepository.findOne({
             where: { code: code },
             relations: ["class"],
         });
 
-        return joinCode ? joinCode.toJoinCodeEntity() : null;
+        if (!joinCodeModel) {
+            throw new EntityNotFoundError(`JoinCode with code ${code} not found`);
+        }
+
+        const joinCode: JoinCode = joinCodeModel.toEntity();
+        return joinCode;
     }
 
-    public async getActiveCodeByClassId(classId: string): Promise<JoinCode[]> {
+    public async update(joinCode: JoinCode): Promise<JoinCode> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const joinCodes: JoinCodeTypeORM[] = await datasource.getRepository(JoinCodeTypeORM).find({
-            where: { class: { id: classId }, isExpired: false },
+        const joinCodeRepository = datasource.getRepository(JoinCodeTypeORM);
+        const joinCodeModel: JoinCodeTypeORM | null = await joinCodeRepository.findOne({
+            where: { code: joinCode.code },
             relations: ["class"],
         });
 
-        return joinCodes.map(joinCode => joinCode.toJoinCodeEntity());
-    }
-
-    /*
-    Marks the join code as being expired. No one can use expired codes to join a class
-    */
-    public async setExpired(code: string) {
-        const datasource = await DatasourceTypeORM.datasourcePromise;
-        const joinCodeRepository = datasource.getRepository(JoinCodeTypeORM);
-
-        // Find the code
-        const joinCodeModel: JoinCodeTypeORM | null = await joinCodeRepository.findOne({ where: { code: code } });
-
         if (!joinCodeModel) {
-            throw new DatabaseEntryNotFoundError(`Join code ${code} not found`);
+            throw new EntityNotFoundError(`JoinCode with code ${joinCode.code} not found`);
         }
 
-        // Set expired to true
-        joinCodeModel.isExpired = true;
+        const updatedJoinCode = JoinCodeTypeORM.createTypeORM(joinCode, joinCodeModel.class);
+        updatedJoinCode.class = joinCodeModel.class;
 
-        // Update the database
-        await joinCodeRepository.update(code, joinCodeModel);
+        joinCodeRepository.delete(joinCodeModel.code);
+        joinCodeRepository.save(updatedJoinCode);
+
+        return updatedJoinCode.toEntity();
     }
 
-    public async delete(code: string) {
+    public async delete(code: string): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
         await datasource.getRepository(JoinCodeTypeORM).delete(code);
+    }
+
+    public async getByClassId(classId: string): Promise<JoinCode[]> {
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const classRepository = datasource.getRepository(ClassTypeORM);
+        const joinCodeRepository = datasource.getRepository(JoinCodeTypeORM);
+
+        const classModel = await classRepository.findOne({ where: { id: classId } });
+
+        if (!classModel) {
+            throw new EntityNotFoundError(`Class with id ${classId} not found`);
+        }
+
+        const joinCodes = await joinCodeRepository.find({
+            where: { class: classModel },
+            relations: ["class"],
+        });
+
+        return joinCodes.map(model => model.toEntity());
     }
 }

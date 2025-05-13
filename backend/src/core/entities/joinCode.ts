@@ -3,6 +3,7 @@ export class JoinCode {
         private _classId: string,
         private _createdAt?: Date,
         private _code?: string,
+        private _isExpired?: boolean,
     ) {}
 
     // Getters
@@ -18,6 +19,10 @@ export class JoinCode {
         return this._code;
     }
 
+    public get isExpired(): boolean | undefined {
+        return this._isExpired;
+    }
+
     // Setters
     public set classId(newClassId: string) {
         this._classId = newClassId;
@@ -29,6 +34,10 @@ export class JoinCode {
 
     public set code(newCode: string) {
         this._code = newCode;
+    }
+
+    public set isExpired(newIsExpired: boolean) {
+        this._isExpired = newIsExpired;
     }
 
     public toObject(): object {

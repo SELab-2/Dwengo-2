@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { JoinCodeService } from "./joinCodeService";
 import { createJoinCodeSchema } from "../../../application/schemas";
-import { ApiError, ErrorCode } from "../../../application/types";
 import { JoinCode } from "../../entities/joinCode";
 import { tryRepoEntityOperation } from "../../helpers";
 import { IJoinCodeRepository } from "../../repositories/joinCodeRepositoryInterface";
@@ -20,24 +19,11 @@ export class CreateJoinCode extends JoinCodeService<CreateJoinCodeInput> {
      * @throws {ApiError} If the class with the given id is not found or if the creation fails.
      */
     async execute(input: CreateJoinCodeInput): Promise<object> {
-        const activeCodes: JoinCode[] = await tryRepoEntityOperation(
-            this.JoinCodeRepository.getByClassId(input.classId),
+        const joinCode: JoinCode = await tryRepoEntityOperation(
+            this.JoinCodeRepository.create(new JoinCode(input.classId, undefined, undefined, false)),
             "Class",
             `${input.classId}`,
         );
-
-        if (activeCodes.length > 0) {
-            throw {
-                code: ErrorCode.CONFLICT,
-                message: `An active join code (${activeCodes[0].code}) already exists for class ${input.classId}`,
-            } as ApiError;
-        }
-
-        const JoinCode: JoinCode = await tryRepoEntityOperation(
-            this.JoinCodeRepository.create(input.classId),
-            "Class",
-            `${input.classId}`,
-        );
-        return { id: JoinCode.code };
+        return { id: joinCode.code };
     }
 }

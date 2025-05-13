@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { JoinCodeService } from "./joinCodeService";
 import { updateJoinCodeSchema } from "../../../application/schemas";
-import { ApiError, ErrorCode } from "../../../application/types";
 import { tryRepoEntityOperation } from "../../helpers";
 
 export type UpdateJoinCodeInput = z.infer<typeof updateJoinCodeSchema>;
@@ -17,8 +16,15 @@ export class UpdateJoinCode extends JoinCodeService<UpdateJoinCodeInput> {
      * @throws {ApiError} If the JoinCode with the given id is not found.
      */
     async execute(input: UpdateJoinCodeInput): Promise<object> {
+        const joinCode = await tryRepoEntityOperation(
+            this.JoinCodeRepository.getById(input.id),
+            "JoinCode",
+            input.id,
+            true,
+        );
         if (input.expired) {
-            await tryRepoEntityOperation(this.JoinCodeRepository.setExpired(input.id), "JoinCode", input.id, true);
+            joinCode.isExpired = input.expired;
+            await tryRepoEntityOperation(this.JoinCodeRepository.update(joinCode), "JoinCode", input.id, true);
         }
         return {};
     }
