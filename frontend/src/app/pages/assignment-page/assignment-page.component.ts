@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
 import { LearningPathComponent } from '../../components/learning-path/learning-path.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Assignment } from '../../interfaces/assignment';
 import { AssignmentService } from '../../services/assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -14,6 +14,7 @@ import { Progress } from '../../interfaces/progress/Progress';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
 import { LoadingComponent } from '../../components/loading/loading.component';
+import { UserType } from '../../interfaces';
 
 @Component({
   selector: 'app-assignment-page',
@@ -27,8 +28,8 @@ export class AssignmentPageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   private readonly snackBar = inject(MatSnackBar);
-  private readonly invalidURLMessage = $localize `Invalid URL`;
-  private readonly closeMessage = $localize `Close`;
+  private readonly invalidURLMessage = $localize`Invalid URL`;
+  private readonly closeMessage = $localize`Close`;
   public loading = true;
 
   private _assignment?: Assignment;
@@ -39,29 +40,31 @@ export class AssignmentPageComponent implements OnInit {
   public currentLearningObjectId!: string;
   public step: number = 0;
   public maxStep: number = 1;
-   
+
+  private isStudent!: boolean;
+
 
   public constructor(
     private assignmentService: AssignmentService,
     private progressService: ProgressService,
     private authService: AuthenticationService,
-  ) {}
+  ) { }
 
-   
-  public get assignment() : Assignment | undefined {
+
+  public get assignment(): Assignment | undefined {
     return this._assignment;
   }
-  
+
 
   getProgressPercentage(): number {
-    return (this.step/this.maxStep)*100;
+    return (this.step / this.maxStep) * 100;
   }
-  
+
   onSelectedNodeChanged(node: Node<LearningObject> | null) {
     if (node) {
       this.currentLearningObjectId = node.value.metadata.hruid!;
     }
-    
+
   }
 
   onSubmissionCreated(): void {
@@ -77,6 +80,7 @@ export class AssignmentPageComponent implements OnInit {
     )
     progressObservable.subscribe(
       (res) => {
+        console.log(res)
         this.progress = res;
         this.step = this.progress.step;
         this.maxStep = this.progress.maxStep;
@@ -85,7 +89,14 @@ export class AssignmentPageComponent implements OnInit {
     )
   }
 
+  private setupTeacher(res: Assignment): void {
+    this.loading = false;
+    this.learningPathId = res.learningPathId;
+  }
+
   public ngOnInit(): void {
+    this.isStudent = this.authService.retrieveUserType() === UserType.STUDENT
+
     // Use the locale to determine in which language the learning path should be.
     const locale: string = window.location.pathname.split("/")[1];
     this.language = locale.split("-")[0]
@@ -97,10 +108,13 @@ export class AssignmentPageComponent implements OnInit {
       const assignmentObservable = this.assignmentService.retrieveAssignmentById(this.assignmentId);
       assignmentObservable.subscribe(
         (res) => {
+          console.log(res)
           this._assignment = res;
-          if (this._assignment) {
+          if (res && this.isStudent) {
             this.getProgress();
             this.learningPathId = this._assignment.learningPathId;
+          } else if (!this.isStudent) {
+            this.setupTeacher(res);
           }
         }
       )
@@ -108,10 +122,10 @@ export class AssignmentPageComponent implements OnInit {
       this.openSnackBar(this.invalidURLMessage, this.closeMessage);
     }
   }
-  
-  private openSnackBar(message: string, action: string="Ok") {
+
+  private openSnackBar(message: string, action: string = "Ok") {
     this.snackBar.open(message, action, {
-        duration: 2500
+      duration: 2500
     });
   }
 
