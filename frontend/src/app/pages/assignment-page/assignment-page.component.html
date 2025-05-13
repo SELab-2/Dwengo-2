@@ -2,12 +2,6 @@
 @if (loading) {
     <app-loading></app-loading>
 } @else {
-    <mat-card class="progress-card">
-      <mat-card-title>Progress: {{step}}/{{maxStep}}</mat-card-title>
-      <mat-card-content>
-        <mat-progress-bar class="custom-progress" mode="determinate" value="{{getProgressPercentage()}}" color="primary"></mat-progress-bar>
-      </mat-card-content>
-    </mat-card>
     
     <app-learning-path
       [hruid]="learningPathId"
@@ -22,4 +16,18 @@
       [learningObjectId]="currentLearningObjectId"
       (submissionCreated)="onSubmissionCreated()"
     ></app-create-submission>
+    <div class="progress-container">
+      <mat-card class="progress-card">
+        <mat-card-content>
+          <mat-progress-bar
+            class="custom-progress"
+            mode="determinate"
+            value="{{getProgressPercentage()}}"
+            color="primary"
+          ></mat-progress-bar>
+        </mat-card-content>
+      </mat-card>
+      
+    </div>
+    
 }

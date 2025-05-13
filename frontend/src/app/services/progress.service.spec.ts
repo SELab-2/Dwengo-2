@@ -1,6 +1,6 @@
-import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
+import { HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { ProgressService } from './progress.service';
@@ -18,9 +18,7 @@ describe('ProgressService', () => {
     })
   };
 
-  const mockErrorService = {
-    pipeHandler: () => (source: any) => source // doe niks met errors voor nu
-  };
+  const mockErrorService = {};
 
   beforeEach(() => {
     TestBed.configureTestingModule({

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 
 import { SubmissionService } from './submission.service';
@@ -18,9 +18,7 @@ describe('SubmissionService', () => {
     })
   };
 
-  const mockErrorService = {
-    pipeHandler: () => (source: any) => source
-  };
+  const mockErrorService = {};
 
   beforeEach(() => {
     TestBed.configureTestingModule({

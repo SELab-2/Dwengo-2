@@ -56,7 +56,7 @@ describe('AssignmentPageComponent', () => {
           useValue: {
             snapshot: {
               paramMap: {
-                get: (key: string) => 'test-assignment-id', // Mocking assignment ID in URL
+                get: () => 'test-assignment-id', // Mocking assignment ID in URL
               },
             },
           },
