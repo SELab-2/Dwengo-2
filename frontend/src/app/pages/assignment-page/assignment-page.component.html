@@ -1,9 +1,9 @@
 <app-authenticated-header></app-authenticated-header>
 @if (loading) {
-    <app-loading></app-loading>
+<app-loading></app-loading>
 } @else {
-    
-    <app-learning-path
+
+<!-- <app-learning-path
       [hruid]="learningPathId"
       [language]="language"
       [assignment]="true"
@@ -15,8 +15,13 @@
       [assignmentId]="assignmentId"
       [learningObjectId]="currentLearningObjectId"
       (submissionCreated)="onSubmissionCreated()"
-    ></app-create-submission>
-    <div class="progress-container">
+    ></app-create-submission> -->
+@if (!isStudent){
+<app-create-task>
+
+</app-create-task>
+}
+<!-- <div class="progress-container">
       <mat-card class="progress-card">
         <mat-card-content>
           <mat-progress-bar
@@ -30,6 +35,6 @@
         
       </mat-card>
       
-    </div>
-    
+    </div> -->
+
 }

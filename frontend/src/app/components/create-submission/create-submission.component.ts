@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { UserType } from '../../interfaces';
 @Component({
   selector: 'app-create-submission',
   imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule],
@@ -22,21 +23,24 @@ export class CreateSubmissionComponent {
 
   // Content of the input field
   public answer: string = "";
-  
+
   // Emit an event when the submission is created
   @Output() submissionCreated: EventEmitter<void> = new EventEmitter<void>();
   private readonly snackBar = inject(MatSnackBar);
-  private readonly errorMessage = $localize `An error occured, please try again.`;
-  private readonly createSuccesMessage = $localize `Submission created succesfully!`;
-  
-  constructor(private submissionService: SubmissionService, private authService: AuthenticationService) {}
+  private readonly errorMessage = $localize`An error occured, please try again.`;
+  private readonly createSuccesMessage = $localize`Submission created succesfully!`;
+
+  constructor(private submissionService: SubmissionService, private authService: AuthenticationService) { }
 
   /**
      * Create a submission
      * Make a request to the API to create a submission
      * Notify the user of the result
      */
-    public create() {
+  public create() {
+    if (this.authService.retrieveUserType() === UserType.TEACHER) {
+      this.submissionCreated.emit();
+    } else {
       // Create a new submission
       const newSubmission: NewSubmission = {
         studentId: this.authService.retrieveUserId()!,
@@ -44,12 +48,12 @@ export class CreateSubmissionComponent {
         learningObjectId: this.learningObjectId,
         contents: this.answer,
         time: new Date()
-      }  
-      if(newSubmission) {
+      }
+      if (newSubmission) {
         const idObservable: Observable<string> = this.submissionService.createSubmission(
           newSubmission
         );
-    
+
         idObservable.pipe().subscribe(() => {
           this.openSnackBar(this.createSuccesMessage);
           // Emit the event that submission was created
@@ -61,10 +65,11 @@ export class CreateSubmissionComponent {
         this.openSnackBar(this.errorMessage);
       }
     }
+  }
 
-    private openSnackBar(message: string, action: string="Ok") {
-      this.snackBar.open(message, action, {
-          duration: 2500
-      });
-    }
+  private openSnackBar(message: string, action: string = "Ok") {
+    this.snackBar.open(message, action, {
+      duration: 2500
+    });
+  }
 }

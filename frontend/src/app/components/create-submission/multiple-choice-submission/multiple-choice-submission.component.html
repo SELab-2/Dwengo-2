@@ -1,0 +1,23 @@
+<div class="card-container">
+    <mat-card class="submission-card">
+        <mat-card-title>Multiple Choice Question</mat-card-title>
+        <mat-card-content>
+            <mat-button-toggle-group [(ngModel)]="allowMultipleAnswers" aria-label="Allow multiple answers">
+                <mat-button-toggle [value]="true">Multiple answers</mat-button-toggle>
+                <mat-button-toggle [value]="false">Single answer</mat-button-toggle>
+            </mat-button-toggle-group>
+
+            <div *ngFor="let option of choiceObject.options; let i = index">
+                <mat-checkbox [(ngModel)]="optionStates[i]" (change)="onCheckboxChange(i)">
+                    {{ option }}
+                </mat-checkbox>
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button mat-fab color="primary" (click)="submitAnswers()">
+                <mat-icon>send</mat-icon>
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

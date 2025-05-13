@@ -15,10 +15,13 @@ import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
 import { LoadingComponent } from '../../components/loading/loading.component';
 import { UserType } from '../../interfaces';
+import { LearningPathService } from '../../services/learningPath.service';
+import { SpecificLearningPathRequest } from '../../interfaces/learning-path';
+import { CreateTaskComponent } from '../../components/create-task/create-task-component/create-task.component';
 
 @Component({
   selector: 'app-assignment-page',
-  imports: [AuthenticatedHeaderComponent, LearningPathComponent, CreateSubmissionComponent, MatProgressBar, MatCardModule, LoadingComponent],
+  imports: [AuthenticatedHeaderComponent, LearningPathComponent, CreateSubmissionComponent, MatProgressBar, MatCardModule, LoadingComponent, CreateTaskComponent],
   templateUrl: './assignment-page.component.html',
   styleUrl: './assignment-page.component.less'
 })
@@ -41,13 +44,14 @@ export class AssignmentPageComponent implements OnInit {
   public step: number = 0;
   public maxStep: number = 1;
 
-  private isStudent!: boolean;
+  public isStudent!: boolean;
 
 
   public constructor(
     private assignmentService: AssignmentService,
     private progressService: ProgressService,
     private authService: AuthenticationService,
+    private learningPathService: LearningPathService,
   ) { }
 
 
@@ -90,8 +94,15 @@ export class AssignmentPageComponent implements OnInit {
   }
 
   private setupTeacher(res: Assignment): void {
+    // Let the teacher always start at the beginning
+    this.step = 0;
     this.loading = false;
-    this.learningPathId = res.learningPathId;
+    // Set the length of the learning path, we cant use our viewchild because at this point is has not been created
+    this.learningPathService.retrieveOneLearningPath({ hruid: this.learningPathId, language: this.language } as SpecificLearningPathRequest).subscribe(
+      (path) => {
+        this.maxStep = path.numNodes
+      }
+    )
   }
 
   public ngOnInit(): void {
@@ -110,9 +121,9 @@ export class AssignmentPageComponent implements OnInit {
         (res) => {
           console.log(res)
           this._assignment = res;
+          this.learningPathId = res.learningPathId;
           if (res && this.isStudent) {
             this.getProgress();
-            this.learningPathId = this._assignment.learningPathId;
           } else if (!this.isStudent) {
             this.setupTeacher(res);
           }
