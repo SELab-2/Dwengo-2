@@ -33,7 +33,7 @@ export class AssignmentService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize `assignments`)
+        this.errorService.retrieveError($localize `:@@assignmentsServicesTestAssignments:assignments`)
       ),
       switchMap(response => 
         forkJoin(
@@ -59,7 +59,7 @@ export class AssignmentService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize `assignment`)
+        this.errorService.retrieveError($localize `:@@assignmentsServicesTestAssignments:assignment`)
       )
     ); 
   }
@@ -78,7 +78,7 @@ export class AssignmentService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.createError($localize `assignment`)
+        this.errorService.createError($localize `:@@assignmentsServicesTestAssignments:assignment`)
       ),
       switchMap(response => of({
           ...assignment,
@@ -102,7 +102,7 @@ export class AssignmentService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.updateError($localize `assignment`)
+        this.errorService.updateError($localize `:@@assignmentsServicesTestAssignments:assignment`)
       ),
       switchMap(() => of(assignment)) // return the updated assignment
     );
@@ -121,7 +121,7 @@ export class AssignmentService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.deleteError($localize `assignment`)
+        this.errorService.deleteError($localize `:@@assignmentsServicesTestAssignments:assignment`)
       ),
       switchMap(() => of(true)) // return true if the assignment was deleted
     );

@@ -4,9 +4,9 @@
     </span>
 
     <span class="links">
-        <button mat-raised-button color="primary" i18n class="home-button" (click)="goToDashboard()">Home</button>
+        <button mat-raised-button color="primary" i18n="@@authenticatedHeaderHome" class="home-button" (click)="goToDashboard()">Home</button>
         <app-authenticated-menu [isStudent]="isStudent"></app-authenticated-menu>
-        <button mat-raised-button color="primary" i18n class="logout-button" (click)="logout()">Logout</button>
+        <button mat-raised-button color="primary" i18n="@authenticatedHeaderLogout" class="logout-button" (click)="logout()">Logout</button>
         <language-selector></language-selector>
     </span>
 </header>

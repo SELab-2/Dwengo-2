@@ -5,7 +5,7 @@
             <form [formGroup]="updateForm">
                 <div>
                     <span>
-                        <h2 i18n>Class name</h2>
+                        <h2 i18n="@@classUpdateName">Class name</h2>
                         <mat-form-field>
                             <input
                                 matInput
@@ -19,7 +19,7 @@
                 </div>
                 <div>
                     <span>
-                        <h4 i18n>Description</h4>
+                        <h4 i18n="@@classUpdateDescription">Description</h4>
                         <mat-form-field>
                             <textarea
                                 matInput
@@ -33,7 +33,7 @@
                 </div>
                 <div>
                     <span>
-                        <h4 i18n>Target audience</h4>
+                        <h4 i18n="@@classUpdateTargetAudience">Target audience</h4>
                         <mat-form-field>
                             <input
                                 matInput
@@ -49,18 +49,19 @@
                     @if(isTeacher()) {
                         <span>
                             @if (editing) {
-                                <button mat-raised-button (click)="saveEdit()" [disabled]="!updateForm.valid" i18n>
+                                <button mat-raised-button (click)="saveEdit()" [disabled]="!updateForm.valid" i18n="@@classUpdateSave">
                                     Save
                                 </button>
-                                <button mat-raised-button (click)="cancelEdit()" i18n>
+                                <button mat-raised-button (click)="cancelEdit()" i18n="@@classUpdateCancel">
                                     Cancel
                                 </button>
                             } @else {
-                                <button mat-raised-button (click)="startEdit()" id="edit-button" i18n>
+                                <button mat-raised-button (click)="startEdit()" id="edit-button" i18n="@@classUpdateEdit">
                                     Edit
                                 </button>
                             }
-                            <button mat-raised-button (click)="delete()" style="background-color: lightcoral;" i18n>
+
+                            <button mat-raised-button (click)="delete()" style="background-color: lightcoral;" i18n="@@classUpdateDelete">
                                 Delete
                             </button>
                         </span>
@@ -68,23 +69,25 @@
                 </div>
             </form>
         </div>
+
         <div id="class-members-list">
             <div>
                 <app-class-members-list [_class]="_class"></app-class-members-list>
             </div>
         </div>   
+
         @if(isTeacher()) {
             <div id="class-requests">
                 <div>
                     <app-class-pending-requests [_class]="_class"></app-class-pending-requests>
                 </div>
                 <div>
-                    <button mat-raised-button (click)="showClassCode()" i18n>
+                    <button mat-raised-button (click)="showClassCode()" i18n="@@showClassCode">
                         Show class code
                     </button>
                 </div>
             </div>
-        }     
+        }    
         
     } @else {
         <app-loading></app-loading>

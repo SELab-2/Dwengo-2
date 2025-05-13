@@ -2,31 +2,31 @@
 <div class="card-container">
   <mat-card class="learning-path-card">
     <mat-card-header>
-      <mat-card-title i18n>Learning Path: {{path.title}}</mat-card-title>
+      <mat-card-title i18n="@@learningPathComponentTitle">Learning Path: {{path.title}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       @if(!loading) {
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label i18n>Select Learning Object</mat-label>
-        <mat-select [(value)]="selectedNode" (selectionChange)="onNodeSelected()">
-          @for(node of trajectoryGraph!.nodes; track node) {
-          <mat-option [value]="node">
-            {{ node.value.metadata.title }} ({{ node.value.metadata.language }})
-          </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label i18n="@@selectLearningObject">Select Learning Object</mat-label>
+          <mat-select [(value)]="selectedNode" (selectionChange)="onNodeSelected()">
+            @for(node of trajectoryGraph!.nodes; track node) {
+            <mat-option [value]="node">
+              {{ node.value.metadata.title }} ({{ node.value.metadata.language }})
+            </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-      @if (selectedNode) {
-      <div class="iframe-wrapper">
-        <iframe class="learning-object-frame" [srcdoc]="selectedNode!.value.htmlContent" frameborder="0" width="100%"
-          height="600px"></iframe>
-      </div>
-      }
+        @if (selectedNode) {
+          <div class="iframe-wrapper">
+            <iframe class="learning-object-frame" [srcdoc]="selectedNode!.value.htmlContent" frameborder="0" width="100%"
+              height="600px"></iframe>
+          </div>
+        }
       } @else {
-      <div class="loading-container">
-        <app-loading></app-loading>
-      </div>
+        <div class="loading-container">
+          <app-loading></app-loading>
+        </div>
       }
     </mat-card-content>
   </mat-card>

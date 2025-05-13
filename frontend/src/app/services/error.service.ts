@@ -97,7 +97,7 @@ export class ErrorService {
             if(errorMessage) errorMessage = errorMessage.toLocaleLowerCase();
             this.handleCode[status](errorMessage);
         } else {
-            this.openSnackBar($localize `Unknown error`);
+            this.openSnackBar($localize `:@@unknownError:Unknown error`);
         }
     }
 
@@ -105,7 +105,7 @@ export class ErrorService {
     private handle401(errorMessage?: string) {
         this.openSnackBar(
             `${errorMessage ? errorMessage + '. ' : ''}`
-            + $localize `Authentication required.`
+            + $localize `:@@authenticationRequired:Authentication required.`
         );
     }
 
@@ -113,7 +113,7 @@ export class ErrorService {
     private handle404(errorMessage?: string) {
         this.openSnackBar(
            `${errorMessage ? errorMessage + '. ' : ''}`
-            + $localize `Not found.`
+            + $localize `@@notFound:Not found.`
         );
     }
 
@@ -121,7 +121,7 @@ export class ErrorService {
     private handle409(errorMessage?: string) {
         this.openSnackBar(
             `${errorMessage ? errorMessage + '. ' : ''}`
-            + $localize `Conflict.`
+            + $localize `:@@conflict:Conflict.`
         );
     }
 
@@ -129,7 +129,7 @@ export class ErrorService {
     private handle500(errorMessage?: string) {
         this.openSnackBar(
             `${errorMessage ? errorMessage + '. ' : ''}`
-            + $localize `Internal server error.`
+            + $localize `:@@internalServerError:Internal server error.`
         );
     }
 
@@ -140,19 +140,19 @@ export class ErrorService {
     }
 
     public retrieveError(retrieval: string): string {
-        return $localize `An error occured whilst retrieving` + ` ${retrieval}`;
+        return $localize `:@@retrieveError:An error occured whilst retrieving` + ` ${retrieval}`;
     }
 
     public updateError(update: string): string {
-        return $localize `An error occured whilst updating` + ` ${update}`;
+        return $localize `:@@updateError:An error occured whilst updating` + ` ${update}`;
     }
 
     public createError(create: string): string {
-        return $localize `An error occured whilst creating` + ` ${create}`;
+        return $localize `:@@createError:An error occured whilst creating` + ` ${create}`;
     }
 
     public deleteError(deleteItem: string): string {
-        return $localize `An error occured whilst deleting` + ` ${deleteItem}`;
+        return $localize `:@@deleteError:An error occured whilst deleting` + ` ${deleteItem}`;
     }   
 
 }

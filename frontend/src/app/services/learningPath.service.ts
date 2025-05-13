@@ -39,7 +39,7 @@ export class LearningPathService {
             { ...headers, params }
         ).pipe(
             this.errorService.pipeHandler(
-                this.errorService.retrieveError($localize`learning paths`)
+                this.errorService.retrieveError($localize`:@@learningPathServiceLearningPaths:learning paths`)
             ),
         );
     }
@@ -55,7 +55,7 @@ export class LearningPathService {
             { ...headers, params }
         ).pipe(
             this.errorService.pipeHandler(
-                this.errorService.retrieveError($localize`a learning path`)
+                this.errorService.retrieveError($localize`:@@learningPathServiceLearningPath:a learning path`)
             )
         )
     }

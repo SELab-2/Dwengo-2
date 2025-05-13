@@ -2,13 +2,13 @@
 <div class="group">
     @if(group) {
         <span>
-            <h2 i18n>Group for assignment: "{{ group.assignment.name }}"</h2>
+            <h2 i18n="@@groupForAssignment">Group for assignment: "{{ group.assignment.name }}"</h2>
 
             <div class="members-list">
                 @for(member of group.members; track member.id) {
                     <app-mini-user [user]="member"></app-mini-user>
                 } @empty {
-                    <p i18n>There are no users in this group</p>
+                    <p i18n="@@noOtherUsersInGroup">There are no users in this group</p>
                 }
             </div>
         </span>

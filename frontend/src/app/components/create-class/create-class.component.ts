@@ -35,14 +35,13 @@ export class CreateClassComponent {
   private readonly snackBar = inject(MatSnackBar);
 
   // Snackbar messages
-  private readonly errorMessage = $localize `An error occured, please try again.`;
-  private readonly createSuccesMessage = $localize `Class created succesfully!`;
+  private readonly errorMessage = $localize `:@@createClassErrorOccured:An error occured, please try again.`;
+  private readonly createSuccesMessage = $localize `:@@createClassSuccesfull:Class created succesfully!`;
 
   // The form used to create a class
   public createForm: FormGroup;
   
   public constructor(
-    private router: Router,
     private formBuilder: FormBuilder,
     private classesService: ClassesService,
     private authService: AuthenticationService

@@ -30,7 +30,7 @@ export class AuthenticationService {
 
   register(user: UserRegistration): void {
     this.http.post<RegisterResponse>(this.registerUrl, user).pipe(
-      this.errorService.pipeHandler($localize`Registration failed`)
+      this.errorService.pipeHandler($localize`:@@registrationFailed:Registration failed`)
     ).subscribe((response) => {
       let url: string;
       if (user.userType === UserType.STUDENT) {
@@ -45,7 +45,7 @@ export class AuthenticationService {
       if (response) {
         this.router.navigateByUrl(url);
       } else {
-        window.alert($localize`Registration failed. Please try again.`);
+        window.alert($localize`:@@registrationFailedTryAgain:Registration failed. Please try again.`);
       }
 
     });

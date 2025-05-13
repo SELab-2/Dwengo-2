@@ -1,11 +1,11 @@
 <main class="main-container">
     <div class="main-title centered-title">
-        <h1 i18n>Home</h1>
+        <h1 i18n="@@studentDashboardHome">Home</h1>
     </div>
 
     <div class="assignments">
         <div class="center-container">
-            <h2 i18n>Your assignments</h2>
+            <h2 i18n="@@studentDashboardAssignmentsOverview">Your assignments</h2>
         </div>
 
         <app-paginated-grid
@@ -20,8 +20,8 @@
 
     <div class="classes">
         <div class="header-container">
-            <h2 i18n>Your classes</h2>
-            <a routerLink="/student/classes" i18n>See all</a>
+            <h2 i18n="@@studentDashboardClassOverview">Your classes</h2>
+            <a routerLink="/student/classes" i18n="@@studentDashboardViewAll">View all</a>
         </div>
 
         <app-paginated-grid
@@ -38,7 +38,7 @@
 
     <div class="groups">
         <div class="header-container">
-            <h2 i18n>Your groups</h2>
+            <h2 i18n="@@studentDashboardGroups">Your groups</h2>
         </div>
 
         <app-paginated-grid
@@ -47,6 +47,7 @@
             [itemTemplate]="groupCard"
             [showPagination]="false">
         </app-paginated-grid>
+        
         <ng-template #groupCard let-group>
             <app-group-card [group]="group"></app-group-card>
         </ng-template>
