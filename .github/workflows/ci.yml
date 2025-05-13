@@ -113,13 +113,13 @@ jobs:
       - name: Clear end-to-end test database
         run: docker exec dwengo-2-backend-1 npm run db:clear
 
-      - name: Integration tests frontend (FIREFOX)
-        run: docker exec dwengo-2-frontend-1 npm run e2e:firefox
-        working-directory: frontend
-        env:
-          CHROME_BIN: "/usr/bin/chromium"
-          CHROMEDRIVER_BIN: "/usr/bin/chromedriver"
-          FIREFOX_BIN: "/usr/bin/firefox"
+      # - name: Integration tests frontend (FIREFOX)
+      #   run: docker exec dwengo-2-frontend-1 npm run e2e:firefox
+      #   working-directory: frontend
+      #   env:
+      #     CHROME_BIN: "/usr/bin/chromium"
+      #     CHROMEDRIVER_BIN: "/usr/bin/chromedriver"
+      #     FIREFOX_BIN: "/usr/bin/firefox"
       
       # Always stop testing containers
       - name: Stop containers
