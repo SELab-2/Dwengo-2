@@ -47,6 +47,12 @@ export class AssignmentPageComponent implements OnInit {
     private authService: AuthenticationService,
   ) {}
 
+   
+  public get assignment() : Assignment | undefined {
+    return this._assignment;
+  }
+  
+
   getProgressPercentage(): number {
     return (this.step/this.maxStep)*100;
   }
