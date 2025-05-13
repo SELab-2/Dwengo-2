@@ -113,7 +113,7 @@ export class ErrorService {
     private handle404(errorMessage?: string) {
         this.openSnackBar(
            `${errorMessage ? errorMessage + '. ' : ''}`
-            + $localize `@@notFound:Not found.`
+            + $localize `:@@notFound:Not found.`
         );
     }
 
@@ -133,7 +133,7 @@ export class ErrorService {
         );
     }
 
-    private openSnackBar(message: string, action: string=$localize `Ok`) {
+    private openSnackBar(message: string, action: string=$localize `:@@ok:Ok`) {
         this.snackBar.open(message, action, {
             duration: 2500
         });

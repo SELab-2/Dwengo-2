@@ -9,6 +9,12 @@
         "locales": {
           "nl-BE": {
             "translation": "src/locale/messages.nl.json"
+          },
+          "fr-FR": {
+            "translation": "src/locale/messages.fr.json"
+          },
+          "de-DE": {
+            "translation": "src/locale/messages.de.json"
           }
         }
       },
@@ -27,7 +33,9 @@
           "options": {
             "localize": [
               "en-US",
-              "nl-BE"
+              "nl-BE",
+              "fr-FR",
+              "de-DE"
             ],
             "outputPath": "dist/frontend",
             "index": "src/index.html",
@@ -90,6 +98,20 @@
               "sourceMap": true,
               "outputHashing": "media",
               "localize": ["nl-BE"]
+            },
+            "development-fr-FR": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "outputHashing": "media",
+              "localize": ["fr-FR"]
+            },
+            "development-de-DE": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "outputHashing": "media",
+              "localize": ["de-DE"]
             }
           },
           "defaultConfiguration": "production"
@@ -108,6 +130,12 @@
             },
             "development-nl-BE": {
               "buildTarget": "frontend:build:development-nl-BE"
+            },
+            "development-fr-FR": {
+              "buildTarget": "frontend:build:development-fr-FR"
+            },
+            "development-de-DE": {
+              "buildTarget": "frontend:build:development-de-DE"
             }
           },
           "defaultConfiguration": "development"

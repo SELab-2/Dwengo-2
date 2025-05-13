@@ -53,7 +53,7 @@ export class AuthenticationService {
 
   login(credentials: UserLoginCredentials, userType: UserType): void {
     this.http.post<LoginResponse>(this.loginUrl, credentials).pipe(
-      this.errorService.pipeHandler($localize`Login failed`),
+      this.errorService.pipeHandler($localize`:@@loginFailed:Login failed`),
     ).subscribe((response: LoginResponse | null) => {
       let url: string;
       if (userType === UserType.STUDENT) {

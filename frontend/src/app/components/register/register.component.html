@@ -1,17 +1,17 @@
 <form [formGroup]="registrationForm" (ngSubmit)="register()">
     <mat-form-field appearance="outline" class="full-width">
         <mat-label i18n="@@registerFirstName">First Name</mat-label>
-        <input matInput name="first-name" id="first-name" formControlName="firstName" required placeholder="Enter your first name">
+        <input matInput name="first-name" id="first-name" formControlName="firstName" required i18n-placeholder="@@registerFirstNamePlaceholder" placeholder="Enter your first name">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
         <mat-label i18n="@@registerLastName">Last Name</mat-label>
-        <input matInput name="last-name" id="last-name" formControlName="lastName" required placeholder="Enter your last name">
+        <input matInput name="last-name" id="last-name" formControlName="lastName" required i18n-placeholder="@@registerLastNamePlaceholder" placeholder="Enter your last name">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
         <mat-label i18n="@@registerSchool">Your School</mat-label>
-        <input matInput name="school-name" id="school-name" formControlName="school" required placeholder="Enter your school">
+        <input matInput name="school-name" id="school-name" formControlName="school" required i18n-placeholder="@@registerSchoolPlaceholder" placeholder="Enter your school">
     </mat-form-field>
 
     <mat-checkbox formControlName="teacher" id="teacher">
@@ -20,17 +20,17 @@
 
     <mat-form-field appearance="outline" class="full-width">
         <mat-label i18n="@@registerEmail">Email</mat-label>
-        <input matInput type="email" id="email" formControlName="email" required placeholder="Enter email address">
+        <input matInput type="email" id="email" formControlName="email" required i18n-placeholder="@@registerEmailPlaceholder" placeholder="Enter email address">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
         <mat-label i18n="@@registerPassword">Password</mat-label>
-        <input matInput type="password" id="password" formControlName="password" required placeholder="Create a password">
+        <input matInput type="password" id="password" formControlName="password" required i18n-placeholder="@@registerPasswordPlaceholder" placeholder="Create a password">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
         <mat-label i18n="@@registerConfirmPassword">Confirm Password</mat-label>
-        <input matInput type="password" id="confirmPassword" formControlName="confirmPassword" required placeholder="Confirm password">
+        <input matInput type="password" id="confirmPassword" formControlName="confirmPassword" required i18n-placeholder="@@registerConfirmPasswordPlaceholder" placeholder="Confirm password">
     </mat-form-field>
 
     <div class="register-submit">
