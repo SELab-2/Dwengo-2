@@ -74,7 +74,8 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "outputHashing": "media"
             },
             "e2e": {
               "fileReplacements": [
@@ -82,7 +83,8 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.e2e.ts"
                 }
-              ]
+              ],
+              "outputHashing": "media"
             }
           },
           "defaultConfiguration": "production"
