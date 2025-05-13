@@ -1,11 +1,10 @@
-import { Component, inject, NgModule, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
 import { LearningPathComponent } from '../../components/learning-path/learning-path.component';
 import { ActivatedRoute } from '@angular/router';
 import { Assignment } from '../../interfaces/assignment';
 import { AssignmentService } from '../../services/assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LearningPathService } from '../../services/learningPath.service';
 import { CreateSubmissionComponent } from '../../components/create-submission/create-submission.component';
 import { LearningObject } from '../../interfaces/learning-object';
 import { Node } from "../../datastructures/directed-graph";
@@ -14,10 +13,11 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { Progress } from '../../interfaces/progress/Progress';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
+import { LoadingComponent } from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-assignment-page',
-  imports: [AuthenticatedHeaderComponent, LearningPathComponent, CreateSubmissionComponent, MatProgressBar, MatCardModule],
+  imports: [AuthenticatedHeaderComponent, LearningPathComponent, CreateSubmissionComponent, MatProgressBar, MatCardModule, LoadingComponent],
   templateUrl: './assignment-page.component.html',
   styleUrl: './assignment-page.component.less'
 })
@@ -52,16 +52,18 @@ export class AssignmentPageComponent implements OnInit {
   }
   
   onSelectedNodeChanged(node: Node<LearningObject> | null) {
-    this.currentLearningObjectId = node?.value.metadata.hruid!;
+    if (node) {
+      this.currentLearningObjectId = node.value.metadata.hruid!;
+    }
+    
   }
 
-  ngAfterViewInit(): void {}
-
   onSubmissionCreated(): void {
-    this.learningPathComponent.goToNextNode();  // Roep de goToNextNode aan in de LearningPathComponent
+    this.learningPathComponent.goToNextNode();  // Execute goToNextNode in LearningPathComponent
     this.step = Math.min(this.step + 1, this.maxStep) // Update step
   }
 
+  // Get the users progress for this assignment
   private getProgress(): void {
     const userId: string = this.authService.retrieveUserId()!;
     const progressObservable = this.progressService.getUserAssignmentProgress(
@@ -72,19 +74,22 @@ export class AssignmentPageComponent implements OnInit {
         this.progress = res;
         this.step = this.progress.step;
         this.maxStep = this.progress.maxStep;
-        console.log(this.progress);
         this.loading = false;
       }
     )
   }
 
   public ngOnInit(): void {
+    // Use the locale to determine in which language the learning path should be.
+    const locale: string = window.location.pathname.split("/")[1];
+    this.language = locale.split("-")[0]
+
     const assignmentId = this.route.snapshot.paramMap.get('id');
 
     if (assignmentId) {
       this.assignmentId = assignmentId;
       const assignmentObservable = this.assignmentService.retrieveAssignmentById(this.assignmentId);
--      assignmentObservable.subscribe(
+      assignmentObservable.subscribe(
         (res) => {
           this._assignment = res;
           if (this._assignment) {

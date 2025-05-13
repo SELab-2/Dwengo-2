@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
-import { NewSubmission } from "../interfaces/submissions/newSubmission";
 import { Progress } from "../interfaces/progress/Progress";
 
 @Injectable({
