@@ -5,7 +5,8 @@ export interface MultipleChoice extends AssignmentTask {
 }
 
 export interface NormalQuestion extends AssignmentTask {
-    answer: string | null;
+    predefined_answer: string | null; // This is the 'correct' answer, optional
+    answer: string | null; // When an answer to the question is given, it is displayed here
 }
 
 export interface AssignmentTask {

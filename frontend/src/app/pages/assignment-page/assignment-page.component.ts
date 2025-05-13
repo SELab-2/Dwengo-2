@@ -18,6 +18,7 @@ import { UserType } from '../../interfaces';
 import { LearningPathService } from '../../services/learningPath.service';
 import { SpecificLearningPathRequest } from '../../interfaces/learning-path';
 import { CreateTaskComponent } from '../../components/create-task/create-task-component/create-task.component';
+import { AssignmentTask } from '../../interfaces/assignment/tasks';
 
 @Component({
   selector: 'app-assignment-page',
@@ -74,6 +75,12 @@ export class AssignmentPageComponent implements OnInit {
   onSubmissionCreated(): void {
     this.learningPathComponent.goToNextNode();  // Execute goToNextNode in LearningPathComponent
     this.step = Math.min(this.step + 1, this.maxStep) // Update step
+  }
+
+  onTaskCreated(task: AssignmentTask): void {
+    // Implement and call the services to create this task
+    this.openSnackBar($localize`Task Succesfully Created!`);
+    console.log(task);
   }
 
   // Get the users progress for this assignment

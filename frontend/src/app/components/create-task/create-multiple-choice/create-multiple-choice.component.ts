@@ -25,10 +25,6 @@ export class CreateMultipleChoiceComponent {
 
   constructor() { }
   @Output() taskCreated: EventEmitter<MultipleChoice> = new EventEmitter<MultipleChoice>();
-  private readonly snackBar = inject(MatSnackBar);
-  private readonly errorMessage = $localize`An error occured, please try again.`;
-  private readonly createSuccesMessage = $localize`Submission created succesfully!`;
-
 
   addOption(): void {
     const val = this.newOption.value;
@@ -53,7 +49,6 @@ export class CreateMultipleChoiceComponent {
 
   submitQuestion(): void {
     // This one does not make any calls, it just returns the multiple-choice object
-    this.openSnackBar($localize`Task Created Successfully`)
     const obj = {
       question: this.title.value,
       allowMultipleAnswers: this.allowMultipleOptions,
@@ -62,10 +57,5 @@ export class CreateMultipleChoiceComponent {
 
     } as MultipleChoice;
     this.taskCreated.emit(obj)
-  }
-  private openSnackBar(message: string, action: string = "Ok") {
-    this.snackBar.open(message, action, {
-      duration: 2500
-    });
   }
 }

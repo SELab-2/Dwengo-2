@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AssignmentTask, MultipleChoice } from '../../../interfaces/assignment/tasks';
 import { CreateMultipleChoiceComponent } from '../create-multiple-choice/create-multiple-choice.component';
+import { CreateNormalTaskComponent } from '../create-normal-task/create-normal-task.component';
 
 
 enum TaskType {
@@ -17,7 +18,7 @@ enum TaskType {
 
 @Component({
   selector: 'app-create-task',
-  imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, CreateMultipleChoiceComponent],
+  imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, CreateMultipleChoiceComponent, CreateNormalTaskComponent],
   templateUrl: './create-task.component.html',
   styleUrl: './create-task.component.less'
 })
@@ -41,7 +42,6 @@ export class CreateTaskComponent {
 
   public select(type: string) {
     this.selected = TaskType.MultipleChoice === type ? TaskType.MultipleChoice : TaskType.NormalQuestion;
-    console.log(this.selected, this.selected.toString())
   }
   public onTaskCreated(task: AssignmentTask): void {
     // This component should just pass through the object

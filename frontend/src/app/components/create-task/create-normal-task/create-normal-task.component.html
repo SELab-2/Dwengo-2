@@ -1,0 +1,33 @@
+<div class="card-container">
+    <mat-card class="multiple-choice-card">
+        <mat-card-title i18n>Create an Open Question</mat-card-title>
+        <mat-card-content>
+        </mat-card-content>
+        <div class="inline">
+            <mat-card-title i18n class="pad">Question: </mat-card-title>
+            <mat-form-field class="long">
+                <input matInput type="text" [formControl]="title">
+            </mat-form-field>
+        </div>
+
+        <div class="inline">
+            <mat-card-title i18n>Predefine an answer</mat-card-title>
+            <mat-checkbox color="primary" i18n (change)="update($event.checked)"></mat-checkbox>
+        </div>
+        @if (predefine){
+        <mat-card-title i18n class="pad">Answer: </mat-card-title>
+        <mat-form-field class="long">
+            <input matInput type="text" [formControl]="predefined_answer">
+        </mat-form-field>
+        }
+
+        <mat-card-actions>
+            <button mat-fab extended color="primary" (click)="submitQuestion()"
+                [disabled]="!title.value || title.value.length === 0">
+                <mat-icon>send</mat-icon>
+                <mat-card-title i18n>Submit</mat-card-title>
+
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>
