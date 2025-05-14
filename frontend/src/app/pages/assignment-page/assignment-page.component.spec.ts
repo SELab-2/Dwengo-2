@@ -81,6 +81,7 @@ describe('AssignmentPageComponent', () => {
   });
 
   it('should retrieve and set assignment details correctly', () => {
+    component.isStudent = true;
     component.ngOnInit();
 
     // Verifying if the assignment was set correctly
@@ -90,6 +91,8 @@ describe('AssignmentPageComponent', () => {
   });
 
   it('should retrieve progress and set step and maxStep correctly', () => {
+    component.isStudent = true;
+    fixture.detectChanges();
     component.ngOnInit();
 
     // Verifying if progress was retrieved and set

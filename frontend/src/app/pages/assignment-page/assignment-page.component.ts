@@ -155,7 +155,7 @@ export class AssignmentPageComponent implements OnInit {
           console.log(res)
           this._assignment = res;
           this.learningPathId = res.learningPathId;
-          if (res && this.isStudent) {
+          if (this._assignment && this.isStudent) {
             this.getProgress();
           } else if (!this.isStudent) {
             this.setupTeacher();

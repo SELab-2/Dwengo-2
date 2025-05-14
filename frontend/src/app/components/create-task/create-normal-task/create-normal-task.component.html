@@ -8,6 +8,15 @@
             <mat-form-field class="long">
                 <input matInput type="text" [formControl]="title">
             </mat-form-field>
+            @if(edit){
+            <button mat-icon-button i18n-matTooltip matTooltip="Mark as ready" color="primary" (click)="ready()">
+                <mat-icon>checks</mat-icon>
+            </button>
+            } @else {
+            <button mat-icon-button i18n-matTooltip matTooltip="Edit Question" color="primary" (click)="setEdit()">
+                <mat-icon>edit</mat-icon>
+            </button>
+            }
         </div>
 
         <div class="inline">
@@ -17,7 +26,7 @@
         @if (predefine){
         <mat-card-title i18n class="pad">Answer: </mat-card-title>
         <mat-form-field class="long">
-            <input matInput type="text" [formControl]="predefined_answer">
+            <input matInput id="pred_input" type="text" [formControl]="predefined_answer">
         </mat-form-field>
         }
 

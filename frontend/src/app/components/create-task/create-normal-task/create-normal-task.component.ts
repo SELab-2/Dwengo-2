@@ -7,9 +7,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { NormalQuestion } from '../../../interfaces/assignment/tasks';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-create-normal-task',
-  imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReactiveFormsModule, MatCheckbox],
+  imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReactiveFormsModule, MatCheckbox, MatTooltipModule],
   templateUrl: './create-normal-task.component.html',
   styleUrl: './create-normal-task.component.less'
 })
@@ -18,9 +19,19 @@ export class CreateNormalTaskComponent {
   title = new FormControl('')
   predefined_answer = new FormControl('')
   predefine: boolean = false;
+  edit: boolean = true;
 
   constructor() { }
   @Output() taskCreated: EventEmitter<NormalQuestion> = new EventEmitter<NormalQuestion>();
+
+  ready() {
+    this.edit = false;
+    this.title.disable();
+  }
+  setEdit() {
+    this.edit = true;
+    this.title.enable();
+  }
 
 
   submitQuestion(): void {

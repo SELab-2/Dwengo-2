@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MultipleChoice } from '../../../interfaces/assignment/tasks';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatList } from '@angular/material/list';
+import { AuthenticationService } from '../../../services/authentication.service';
+import { UserType } from '../../../interfaces';
 @Component({
   selector: 'app-multiple-choice-submission',
   imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, MatCheckbox, MatList],
@@ -16,14 +18,11 @@ import { MatList } from '@angular/material/list';
 })
 export class MultipleChoiceSubmissionComponent {
   @Input() choiceObject!: MultipleChoice;
-
-  constructor() { }
+  isTeacher: boolean = false;
 
   @Output() submissionCreated: EventEmitter<MultipleChoice> = new EventEmitter<MultipleChoice>();
 
   update(checked: boolean, idx: number) {
-    console.log(this.choiceObject.selected)
-    console.log(checked, idx)
     if (!checked) {
       // Box goes from true to false: get it out of our list
       this.choiceObject.selected.splice(this.choiceObject.selected.indexOf(idx), 1)
@@ -31,8 +30,6 @@ export class MultipleChoiceSubmissionComponent {
       // Now we know we can simply add the index
       this.choiceObject.selected.push(idx);
     }
-    console.log(this.choiceObject.selected)
-    console.log(checked, idx)
   }
 
   submitAnswer() {
