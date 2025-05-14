@@ -1823,7 +1823,7 @@ paths:
           schema:
             type: string
             format: uuid
-        responses:
+      responses:
         '200':
           $ref: '#/components/responses/CompletionOK'
         '401':
