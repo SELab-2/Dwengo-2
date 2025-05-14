@@ -2,11 +2,14 @@ import { repositories as repos } from "./repositories";
 import * as AssignmentServices from "../core/services/assignment";
 import * as ClassServices from "../core/services/class";
 import * as GroupServices from "../core/services/group";
+import * as JoinCodeServices from "../core/services/joinCode";
 import * as JoinRequestServices from "../core/services/joinRequest";
 import * as LearningObjectServices from "../core/services/learningObject";
 import * as LearningPathServices from "../core/services/learningPath";
 import * as MessageServices from "../core/services/message";
 import * as ProgressServices from "../core/services/progress";
+import { GetClassCompletion } from "../core/services/progress/getClassCompletion";
+import { GetSubmissionActivity } from "../core/services/progress/getSubmissionActivity";
 import * as QuestionThreadServices from "../core/services/questionThread";
 import * as SubmissionServices from "../core/services/submission";
 import * as UserServices from "../core/services/user";
@@ -39,6 +42,13 @@ export const services = {
         create: new GroupServices.CreateGroup(repos.group),
         getUserGroups: new GroupServices.GetUserGroups(repos.group),
         getAssignmentGroups: new GroupServices.GetAssignmentGroups(repos.group),
+    },
+    joinCode: {
+        get: new JoinCodeServices.GetJoinCode(repos.joinCode),
+        update: new JoinCodeServices.UpdateJoinCode(repos.joinCode),
+        remove: new JoinCodeServices.DeleteJoinCode(repos.joinCode),
+        create: new JoinCodeServices.CreateJoinCode(repos.joinCode),
+        getClassJoinCodes: new JoinCodeServices.GetClassJoinCodes(repos.joinCode),
     },
     joinRequest: {
         get: new JoinRequestServices.GetJoinRequest(repos.joinRequest),
@@ -84,6 +94,13 @@ export const services = {
             repos.learningPath,
         ),
         get: new ProgressServices.GetUserAssignmentProgress(repos.submission, repos.assignment, repos.learningPath),
+        getClassCompletion: new GetClassCompletion(
+            repos.submission,
+            repos.student,
+            repos.assignment,
+            repos.learningPath,
+        ),
+        getSubmissionActivity: new GetSubmissionActivity(repos.submission),
     },
     user: {
         get: new UserServices.GetUser(repos.user),

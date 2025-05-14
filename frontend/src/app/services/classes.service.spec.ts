@@ -7,6 +7,7 @@ import { ClassesReponse } from "../interfaces/classes/classesResponse";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
 import { UserService } from "./user.service";
+import { UsersOfClass } from "../interfaces/user/usersOfClass";
 
 describe('ClassesService', () => {
     let http: jasmine.SpyObj<HttpClient>;
@@ -54,7 +55,7 @@ describe('ClassesService', () => {
             userId: teacherId,
             token: teacherToken,
         });
-        
+
         // Mock the return values of the ErrorService methods
         errorService.pipeHandler.and.callFake(() => (source) => source);
         errorService.retrieveError.and.returnValue("mockError");
@@ -68,9 +69,9 @@ describe('ClassesService', () => {
     it('should respond with classes', () => {
         /* eslint-disable  @typescript-eslint/no-explicit-any */
         http.get.and.callFake((url: string): Observable<any> => {
-            if(url.includes('/users')) {
+            if (url.includes('/users')) {
                 return of(_classesResponse);
-            } else if(url.includes('/classes')) {
+            } else if (url.includes('/classes')) {
                 return of(_class);
             }
             return of(null);
@@ -79,6 +80,28 @@ describe('ClassesService', () => {
         service.classesOfUser().subscribe((response: Class[]) => {
             expect(response).toEqual([_class]);
         });
+    });
+
+    it('should return the correct amount of users in the class', () => {
+        const mockResponse = {
+            students: ['testid', 'otherid'],
+            teachers: ['teacherid']
+        } as UsersOfClass;
+
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
+        http.get.and.callFake((url: string): Observable<any> => {
+            if (url.includes(`/classes/${id}/users`)) {
+                return of(mockResponse);
+            }
+            return of(null);
+        });
+
+        service.usersInClass(id).subscribe((response) => {
+            expect(response.students.length).toBe(2);
+            expect(response.teachers.length).toBe(1);
+            expect(response.students).toEqual(mockResponse.students);
+        });
+
     });
 
     it('should respond class with id', () => {
@@ -98,7 +121,7 @@ describe('ClassesService', () => {
     });
 
     it('should delete a class', () => {
-        http.delete.and.returnValue(of({status: 204}));
+        http.delete.and.returnValue(of({ status: 204 }));
 
         service.deleteClass(id).subscribe((response: boolean) => {
             expect(response).toBeTrue();
@@ -106,7 +129,7 @@ describe('ClassesService', () => {
     });
 
     it('should update a class', () => {
-        http.patch.and.returnValue(of({status: 204}));
+        http.patch.and.returnValue(of({ status: 204 }));
 
         service.updateClass(_class).subscribe((response: boolean) => {
             expect(response).toBeTrue();

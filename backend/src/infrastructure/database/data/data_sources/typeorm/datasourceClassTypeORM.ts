@@ -108,7 +108,7 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
 
         const joinCodeModel: JoinCodeTypeORM | null = await datasource
             .getRepository(JoinCodeTypeORM)
-            .findOne({ where: { code: code } });
+            .findOne({ where: { code: code }, relations: ["class"] });
 
         if (!joinCodeModel) {
             throw new EntityNotFoundError(`Join code ${code} not found.`);

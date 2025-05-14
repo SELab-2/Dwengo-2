@@ -1,0 +1,17 @@
+<div class="card-container">
+    <mat-card class="submission-card">
+        <mat-card-title>Question teacher can add</mat-card-title>
+        <mat-card-content>
+            <mat-form-field>
+                <mat-label>Answer:</mat-label>
+                <input matInput [(ngModel)]="answer" placeholder=""/>
+            </mat-form-field>    
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-fab color="primary" (click)="create()">
+                <mat-icon>send</mat-icon>
+            </button>
+        </mat-card-actions>
+    </mat-card>
+   
+</div>

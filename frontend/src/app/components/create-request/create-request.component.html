@@ -1,8 +1,8 @@
 <div class="create-request">
-    <h2 i18n>Join a class</h2>
+    <h2 i18n="@@joinRequestTitle">Join a class</h2>
     <form [formGroup]="requestForm" (ngSubmit)="create()" class="create-request-form">
         <mat-form-field>
-            <mat-label for="class" i18n>Class code</mat-label>
+            <mat-label for="class" i18n="@@classCodeLabel">Class code</mat-label>
             <input
                 matInput
                 name="class"
@@ -11,7 +11,7 @@
                 required>
         </mat-form-field>
         <br>
-        <button mat-raised-button type="submit" [disabled]="requestForm.invalid" i18n>
+        <button mat-raised-button type="submit" [disabled]="requestForm.invalid" i18n="@@requestJoinSubmit">
             Request
         </button>
     </form>

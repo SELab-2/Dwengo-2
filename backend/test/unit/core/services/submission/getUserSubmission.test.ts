@@ -29,7 +29,7 @@ describe('GetUserSubmissions', () => {
     const service = createService();
     const result = await service.execute({ idParent: 'user123' });
 
-    expect(result).toEqual({ submisisons: ['sub1'] });
+    expect(result).toEqual({ submissions: ['sub1'] });
     expect(mockSubmissionRepo.getByStudentId).toHaveBeenCalledWith('user123');
   });
 
@@ -42,7 +42,7 @@ describe('GetUserSubmissions', () => {
       assignmentId: 'assign456',
     });
 
-    expect(result).toEqual({ submisisons: ['sub1'] });
+    expect(result).toEqual({ submissions: ['sub1'] });
     expect(mockSubmissionRepo.getAllForStudentInAssignment).toHaveBeenCalledWith('user123', 'assign456');
   });
 
@@ -56,7 +56,7 @@ describe('GetUserSubmissions', () => {
       learningObjectId: 'step789',
     });
 
-    expect(result).toEqual({ submisisons: ['sub1'] });
+    expect(result).toEqual({ submissions: ['sub1'] });
     expect(mockSubmissionRepo.getAllForStudentInAssignmentStep).toHaveBeenCalledWith('user123', 'assign456', 'step789');
   });
 

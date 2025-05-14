@@ -32,6 +32,10 @@ export class QuestionThreadService {
     private assignmentService: AssignmentService
   ) {}
 
+  private questionThreadMessage = $localize `:@@questionThread:question thread`;
+  private questionThreadsMessage = $localize `:@@questionThreads:question threads`;
+  private questionMessage = $localize `:@@question:question`;
+
   /**
    * Retrieve a single question thread by ID
    */
@@ -45,7 +49,7 @@ export class QuestionThreadService {
       // tap(() => console.log('Retrieving question thread with ID:', id)),
       // tap(response => console.log('Question thread response:', response)),
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize `question thread`)
+        this.errorService.retrieveError(this.questionThreadMessage)
       )
     );
   }
@@ -61,7 +65,7 @@ export class QuestionThreadService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize `question threads`)
+        this.errorService.retrieveError(this.questionThreadsMessage)
       ),
       switchMap(response => {
         // console.log('Question threads response:', response);
@@ -149,7 +153,7 @@ export class QuestionThreadService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.createError($localize `question thread`)
+        this.errorService.createError(this.questionThreadMessage)
       ),
       switchMap(response => of({
         ...questionThread,
@@ -172,7 +176,7 @@ export class QuestionThreadService {
     ).pipe(
       tap(() => console.log('[PATCH] Question updated successfully')),
       this.errorService.pipeHandler(
-        this.errorService.updateError($localize`question`)
+        this.errorService.updateError(this.questionMessage)
       ),
       switchMap(() => {
         return of(question);
@@ -200,7 +204,7 @@ export class QuestionThreadService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.deleteError($localize `question`)
+        this.errorService.deleteError(this.questionMessage)
       ),
       switchMap(() => of(true))
     );

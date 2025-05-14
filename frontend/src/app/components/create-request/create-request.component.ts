@@ -29,7 +29,7 @@ export class CreateRequestComponent {
   private readonly snackBar = inject(MatSnackBar);
 
   // Message for the snackbar
-  private readonly requestedMessage = $localize `Requested!`;
+  private readonly requestedMessage = $localize `:@@createRequested:Requested!`;
 
   public constructor(
     private formBuilder: FormBuilder,
