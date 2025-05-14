@@ -27,7 +27,6 @@ export class UserService {
             `${this.API_URL}/users/${id}`, {
                 ...headers,
                 params: {
-                    'id': userId || '',
                     'userType': this.authService.retrieveUserType()?.toString() || ''
                 }
             }
@@ -44,7 +43,6 @@ export class UserService {
             `${this.API_URL}/users/${id}`, {
                 ...headers,
                 params: {
-                    'id': userId || '',
                     'userType': userType.toString()
                 }
             }

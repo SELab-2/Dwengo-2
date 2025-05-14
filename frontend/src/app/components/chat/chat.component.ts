@@ -18,6 +18,7 @@ import { QuestionThread, VisibilityType } from '../../interfaces/questionThread'
 import { QuestionThreadService } from '../../services/questionThread.service';
 import { interval, Observable, Subscription, switchMap } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { UserType } from '../../interfaces';
 
 @Component({
     selector: 'app-chat',
@@ -139,7 +140,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
             const uniqueUserIds = [...new Set(sortedMessages.map(m => m.senderId))];
             uniqueUserIds.forEach(id => {
               if (this.usernamesMap[id]) return;
-              this.userService.userWithId(id).subscribe(user => {
+              this.userService.userWithIdAndType(id, UserType.TEACHER).subscribe(user => {
                 this.usernamesMap[id] = `${user.firstName} ${user.familyName}`;
               });
             });

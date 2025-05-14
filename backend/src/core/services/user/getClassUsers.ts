@@ -5,15 +5,13 @@ import { Service } from "../../../config/service";
 import { Student } from "../../entities/student";
 import { Teacher } from "../../entities/teacher";
 import { tryRepoEntityOperation } from "../../helpers";
-import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
-import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type GetClassUsersInput = z.infer<typeof getClassUsersSchema>;
 
 export class GetClassUsers implements Service<GetClassUsersInput> {
     constructor(
-        private studentRepository: IStudentRepository,
-        private teacherRepository: ITeacherRepository,
+        private userRepository: IUserRepository,
     ) {}
 
     /**
@@ -24,13 +22,13 @@ export class GetClassUsers implements Service<GetClassUsersInput> {
      */
     async execute(input: GetClassUsersInput): Promise<object> {
         const students: Student[] = await tryRepoEntityOperation(
-            this.studentRepository.getByClassId(input.idParent),
+            this.userRepository.getStudentsByClassId(input.idParent),
             "Class",
             input.idParent,
             true,
         );
         const teachers: Teacher[] = await tryRepoEntityOperation(
-            this.teacherRepository.getByClassId(input.idParent),
+            this.userRepository.getTeachersByClassId(input.idParent),
             "Class",
             input.idParent,
             true,

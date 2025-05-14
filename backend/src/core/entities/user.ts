@@ -5,32 +5,35 @@ export enum UserType {
     TEACHER = "teacher",
 }
 
-export abstract class User {
+export class User {
+    private _email: string;
+
     constructor(
-        protected readonly _email: string,
-        protected _firstName: string,
-        protected _familyName: string,
-        protected readonly _passwordHash: string,
-        protected _schoolName: string,
-        protected _id?: string,
+        email: string,
+        private _firstName: string,
+        private _familyName: string,
+        private readonly _passwordHash: string,
+        private _schoolName: string,
+        private _userType: UserType,
+        private _id?: string,
     ) {
-        if (!_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_email)) {
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             throw {
                 code: ErrorCode.BAD_REQUEST,
                 message: "Email invalid.",
             } as ApiError;
         }
         // Convert email to lowercase
-        this._email = _email.toLowerCase();
+        this._email = email.toLowerCase();
+    }
+
+    public get email(): string {
+        return this._email;
     }
 
     // Getters
     public get id(): string | undefined {
         return this._id;
-    }
-
-    public get email(): string {
-        return this._email;
     }
 
     public get firstName(): string {
@@ -47,6 +50,10 @@ export abstract class User {
 
     public get schoolName(): string {
         return this._schoolName;
+    }
+
+    public get userType(): string {
+        return this._userType;
     }
 
     // Setters

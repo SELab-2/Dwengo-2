@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User, UserType } from "./user";
 
 export class Student extends User {
     public constructor(
@@ -9,6 +9,6 @@ export class Student extends User {
         schoolName: string,
         id?: string,
     ) {
-        super(email, firstName, familyName, passwordHash, schoolName, id);
+        super(email, firstName, familyName, passwordHash, schoolName, UserType.STUDENT, id);
     }
 }

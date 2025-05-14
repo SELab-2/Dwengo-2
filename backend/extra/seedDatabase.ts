@@ -27,7 +27,7 @@ import { Assignment } from "../src/core/entities/assignment";
 import { Group } from '../src/core/entities/group'
 import { QuestionThread } from "../src/core/entities/questionThread";
 import { Message } from "../src/core/entities/message";
-import { StudentRepositoryTypeORM } from "../src/infrastructure/repositories/studentRepositoryTypeORM";
+import { StudentRepositoryTypeORM } from "../src/infrastructure/repositories/userRepositoryTypeORM";
 import { TeacherRepositoryTypeORM } from "../src/infrastructure/repositories/teacherRepositoryTypeORM";
 import { ClassRepositoryTypeORM } from "../src/infrastructure/repositories/classRepositoryTypeORM";
 import { AssignmentRepositoryTypeORM } from "../src/infrastructure/repositories/assignmentRepositoryTypeORM";

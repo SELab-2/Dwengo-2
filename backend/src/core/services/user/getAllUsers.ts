@@ -1,15 +1,13 @@
 import { z } from "zod";
 import { getAllUsersSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
-import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
-import { ITeacherRepository } from "../../repositories/teacherRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type GetAllUsersInput = z.infer<typeof getAllUsersSchema>;
 
 export class GetAllUsers implements Service<GetAllUsersInput> {
     constructor(
-        private studentRepository: IStudentRepository,
-        private teacherRepository: ITeacherRepository,
+        private userRepository: IUserRepository,
     ) {}
 
     /**
@@ -19,8 +17,8 @@ export class GetAllUsers implements Service<GetAllUsersInput> {
      * @throws {Error} If something went wrong.
      */
     async execute(): Promise<object> {
-        const studentIds = (await this.studentRepository.getAll()).map(student => student.id);
-        const teacherIds = (await this.teacherRepository.getAll()).map(teacher => teacher.id);
+        const studentIds = (await this.userRepository.getAllStudents()).map(student => student.id);
+        const teacherIds = (await this.userRepository.getAllTeachers()).map(teacher => teacher.id);
         return { students: studentIds, teachers: teacherIds };
     }
 }

@@ -101,12 +101,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - in: query
-          name: userType
-          required: true
-          schema:
-            type: string
-            enum: [student, teacher]
       responses:
         '200':
           $ref: '#/components/responses/UserOK'
@@ -159,12 +153,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - in: query
-          name: userType
-          required: false
-          schema:
-            type: string
-            enum: [student, teacher]
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -214,13 +202,7 @@ paths:
           required: true
           schema:
             type: string
-            format: uuidµ
-        - in: query
-          name: userType
-          required: true
-          schema:
-            type: string
-            enum: [student, teacher]
+            format: uuid
               
       responses:
         '204':
@@ -298,12 +280,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - in: query
-          name: userType
-          required: true
-          schema:
-            type: string
-            enum: [student, teacher]
       responses:
         '204':
           $ref: '#/components/responses/NoContent'

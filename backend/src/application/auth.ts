@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { AuthenticationTokenPayload, TokenResponse } from "./types";
-import { User, UserType } from "../core/entities/user";
+import { User } from "../core/entities/user";
 import { GetUser, GetUserInput } from "../core/services/user";
 
 // TODO - Consider allowing only one active token per user (probably not)
@@ -41,28 +41,21 @@ export class AuthenticationManager {
             }
         }
 
-        const userTypes = Object.values(UserType);
-        for (const userType of userTypes) {
-            const input: GetUserInput = { email: email, userType: userType as UserType };
-            try {
-                const user = (await this.getUserService.execute(input)) as User;
-                if (user && (await bcrypt.compare(password, user.passwordHash))) {
-                    return this.generateTokens(user.id!, userType);
-                }
-            } catch (error) {
-                continue;
-            }
+        const input: GetUserInput = { email: email };
+        const user = (await this.getUserService.execute(input)) as User;
+        if (user && (await bcrypt.compare(password, user.passwordHash))) {
+            return this.generateTokens(user.id!);
         }
 
         return null;
     }
 
-    private generateTokens(userId: string, userType: UserType): TokenResponse {
-        const accessToken = jwt.sign({ id: userId, userType }, this.secretKey, {
+    private generateTokens(userId: string): TokenResponse {
+        const accessToken = jwt.sign({ id: userId }, this.secretKey, {
             expiresIn: this.expiresIn,
         } as jwt.SignOptions);
         const refreshToken = jwt.sign(
-            { id: userId, userType, jti: Math.random().toString(36).substring(2) },
+            { id: userId, jti: Math.random().toString(36).substring(2) },
             this.refreshSecretKey,
             { expiresIn: this.refreshExpiresIn } as jwt.SignOptions,
         );
@@ -94,9 +87,7 @@ export class AuthenticationManager {
             const decoded = jwt.verify(refreshToken, this.refreshSecretKey) as jwt.JwtPayload;
             if (
                 !decoded?.id ||
-                !decoded?.userType ||
-                typeof decoded.id !== "string" ||
-                typeof decoded.userType !== "string"
+                typeof decoded.id !== "string"
             ) {
                 return null;
             }
@@ -114,7 +105,7 @@ export class AuthenticationManager {
                 );
             }
 
-            return this.generateTokens(decoded.id, decoded.userType as UserType);
+            return this.generateTokens(decoded.id);
         } catch (error) {
             return null;
         }
