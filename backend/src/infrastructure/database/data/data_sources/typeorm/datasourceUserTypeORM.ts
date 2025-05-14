@@ -41,9 +41,13 @@ export class DatasourceUserTypeORM extends DatasourceTypeORM {
     public async getUserByEmail(email: string): Promise<User> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
+        console.log("getting user by email" + email);
+
         const userModel: UserTypeORM | null = await datasource
             .getRepository(UserTypeORM)
             .findOne({ where: { email: email } });
+
+        console.log(userModel);
 
         if (!userModel) {
             throw new EntityNotFoundError(`User with email ${email} not found`);
@@ -78,7 +82,7 @@ export class DatasourceUserTypeORM extends DatasourceTypeORM {
         if (!userModel) {
             throw new EntityNotFoundError(`User with last name ${last_name} not found`);
         }
-        return userModel.role == UserType.STUDENT
+        return userModel.role === UserType.STUDENT
             ? (userModel.toEntity() as Student)
             : (userModel.toEntity() as Teacher);
     }

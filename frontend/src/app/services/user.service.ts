@@ -20,35 +20,14 @@ export class UserService {
     ) {}
 
     public userWithId(id: string): Observable<User> {
-        const userId = this.authService.retrieveUserId();
         const headers = this.authService.retrieveAuthenticationHeaders();
         
         return this.http.get<User>(
             `${this.API_URL}/users/${id}`, {
-                ...headers,
-                params: {
-                    'userType': this.authService.retrieveUserType()?.toString() || ''
-                }
+                ...headers
             }
         ).pipe(
             this.errorService.pipeHandler()
         );
     }
-
-    public userWithIdAndType(id: string, userType: UserType): Observable<User> {
-        const userId = this.authService.retrieveUserId();
-        const headers = this.authService.retrieveAuthenticationHeaders();
-        
-        return this.http.get<User>(
-            `${this.API_URL}/users/${id}`, {
-                ...headers,
-                params: {
-                    'userType': userType.toString()
-                }
-            }
-        ).pipe(
-            this.errorService.pipeHandler()
-        );
-    }
-
 }

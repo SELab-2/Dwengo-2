@@ -126,7 +126,7 @@ export class ClassesService {
             switchMap(response => 
                 forkJoin<User[]>(
                     response.students.map(studentId => 
-                        this.userService.userWithIdAndType(studentId, UserType.STUDENT)
+                        this.userService.userWithId(studentId)
                     )
                 )
             )

@@ -140,7 +140,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
             const uniqueUserIds = [...new Set(sortedMessages.map(m => m.senderId))];
             uniqueUserIds.forEach(id => {
               if (this.usernamesMap[id]) return;
-              this.userService.userWithIdAndType(id, UserType.TEACHER).subscribe(user => {
+              this.userService.userWithId(id).subscribe(user => {
                 this.usernamesMap[id] = `${user.firstName} ${user.familyName}`;
               });
             });
