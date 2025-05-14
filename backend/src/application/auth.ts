@@ -1,8 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { AuthenticationTokenPayload, TokenResponse } from "./types";
+import { AuthenticationTokenPayload, ErrorCode, TokenResponse } from "./types";
 import { User } from "../core/entities/user";
 import { GetUser, GetUserInput } from "../core/services/user";
+import { ApiError } from "./types";
 
 // TODO - Consider allowing only one active token per user (probably not)
 
@@ -43,7 +44,12 @@ export class AuthenticationManager {
         console.log("got here")
         const input: GetUserInput = { email: email };
         console.log(input);
-        const user = (await this.getUserService.execute(input)) as User;
+        let user = undefined;
+        try {
+            user = (await this.getUserService.execute(input)) as User;
+        } catch (e) {
+            return null;
+        }
         console.log(user);
         if (user && (await bcrypt.compare(password, user.passwordHash))) {
             console.log("got here 2")
