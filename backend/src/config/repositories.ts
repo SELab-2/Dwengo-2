@@ -1,6 +1,7 @@
 import { AssignmentRepositoryTypeORM } from "../infrastructure/repositories/assignmentRepositoryTypeORM";
 import { ClassRepositoryTypeORM } from "../infrastructure/repositories/classRepositoryTypeORM";
 import { GroupRepositoryTypeORM } from "../infrastructure/repositories/groupRepositoryTypeORM";
+import { JoinCodeRepositoryTypeORM } from "../infrastructure/repositories/joinCodeRepositoryTypeORM";
 import { JoinRequestRepositoryTypeORM } from "../infrastructure/repositories/joinRequestRepositoryTypeORM";
 import { LearningObjectRepository } from "../infrastructure/repositories/learningObjectRepository";
 import { LearningPathRepository } from "../infrastructure/repositories/learningPathRepository";
@@ -16,6 +17,7 @@ export const repositories = {
     assignment: new AssignmentRepositoryTypeORM(),
     class: new ClassRepositoryTypeORM(),
     group: new GroupRepositoryTypeORM(),
+    joinCode: new JoinCodeRepositoryTypeORM(),
     joinRequest: new JoinRequestRepositoryTypeORM(),
     message: new MessageRepositoryTypeORM(),
     questionThread: new ThreadRepositoryTypeORM(),

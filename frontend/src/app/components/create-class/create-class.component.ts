@@ -10,8 +10,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent } from '@angular/material/card'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
-import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-create-class',
@@ -35,14 +33,13 @@ export class CreateClassComponent {
   private readonly snackBar = inject(MatSnackBar);
 
   // Snackbar messages
-  private readonly errorMessage = $localize `An error occured, please try again.`;
-  private readonly createSuccesMessage = $localize `Class created succesfully!`;
+  private readonly errorMessage = $localize `:@@createClassErrorOccured:An error occured, please try again.`;
+  private readonly createSuccesMessage = $localize `:@@createClassSuccesfull:Class created succesfully!`;
 
   // The form used to create a class
   public createForm: FormGroup;
   
   public constructor(
-    private router: Router,
     private formBuilder: FormBuilder,
     private classesService: ClassesService,
     private authService: AuthenticationService

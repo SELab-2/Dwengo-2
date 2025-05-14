@@ -33,12 +33,13 @@ jest.mock("../../../src/config/controllers", () => ({
         authentication: {},
         class: {},
         group: {},
+        joinCode: {},
         joinRequest: {},
         message: {},
         questionThread: {},
         submission: {},
         user: {},
-        learningObject: {}
+        learningObject: {},
     },
 }));
 
@@ -92,6 +93,7 @@ const routeFunctions = {
     authenticationRoutes: Resources.authenticationRoutes,
     classRoutes: Resources.classRoutes,
     groupRoutes: Resources.groupRoutes,
+    joinCodeRoutes: Resources.JoinCodeRoutes,
     joinRequestRoutes: Resources.joinRequestRoutes,
     messageRoutes: Resources.messageRoutes,
     questionThreadRoutes: Resources.questionThreadRoutes,
@@ -283,6 +285,53 @@ const routeConfigs: Record<
             hasController: true,
             request: {
                 pathParams: { idParent: "assignment-1" },
+            },
+        },
+    ],
+    joinCodeRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/codes/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "code-1" },
+            },
+        },
+        {
+            method: HttpMethod.PATCH,
+            path: "/codes/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "code-1" },
+                body: {
+                    expired: true,
+                },
+            },
+        },
+        {
+            method: HttpMethod.DELETE,
+            path: "/codes/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "code-1" },
+            },
+        },
+        {
+            method: HttpMethod.POST,
+            path: "/codes",
+            hasController: true,
+            request: {
+                body: {
+                    classId: "class-1",
+                },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/classes/:idParent/codes",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "class-1" },
             },
         },
     ],
@@ -512,6 +561,22 @@ const routeConfigs: Record<
             hasController: true,
             request: {
                 pathParams: { userId: "user-1", assignmentId: "assignment-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/classes/:idParent/completion",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "class-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/classes/:idParent/activity",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "class-1" },
             },
         },
     ],

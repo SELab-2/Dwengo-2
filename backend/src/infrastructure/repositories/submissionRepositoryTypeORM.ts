@@ -10,6 +10,10 @@ export class SubmissionRepositoryTypeORM extends ISubmissionRepository {
         this.datasourceSubmission = new DatasourceSubmissionTypeORM();
     }
 
+    public async getMonthlySubmissionCounts(classId: string): Promise<number[]> {
+        return await this.datasourceSubmission.getMonthlySubmissionCounts(classId);
+    }
+
     public async create(submission: Submission): Promise<string> {
         return await this.datasourceSubmission.create(submission);
     }
