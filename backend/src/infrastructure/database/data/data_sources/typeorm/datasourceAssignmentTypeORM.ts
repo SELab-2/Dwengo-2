@@ -78,7 +78,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
         const assignmentsJoinResult = await datasource
             .getRepository(StudentOfGroupTypeORM)
             .createQueryBuilder()
-            .where("StudentOfGroupTypeORM.student = :id", { id: studentOrTeacherId })
+            .where("StudentOfGroupTypeORM.user = :id", { id: userId })
             // Join StudentOfGroup
             .leftJoinAndSelect("StudentOfGroupTypeORM.group", "group") // Last one is alias
             // Join Group to AssignmentGroup
