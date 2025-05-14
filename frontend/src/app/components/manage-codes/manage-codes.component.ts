@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { ClassCodePopupComponent } from '../class-code-popup/class-code-popup.component';
+import { ClassCodeService } from '../../services/class-codes.service';
 
 @Component({
   selector: 'app-manage-codes',
@@ -20,20 +21,7 @@ import { ClassCodePopupComponent } from '../class-code-popup/class-code-popup.co
 })
 export class ManageCodesComponent implements OnInit {
 
-  private _codes: Code[] = [
-    {
-      classId: "123456",
-      createdAt: new Date(),
-      code: "ABC123",
-      expired: false
-    },
-    {
-      classId: "123456",
-      createdAt: new Date(),
-      code: "DEF456",
-      expired: true
-    },
-  ];
+  private _codes: Code[] = [];
   private _classId?: string;
 
   // Class code popup
@@ -41,13 +29,23 @@ export class ManageCodesComponent implements OnInit {
 
   public constructor(
     private activeRoute: ActivatedRoute,
+    private classCodeService: ClassCodeService
   ) {}
 
   public ngOnInit(): void {
     const id: string | null = this.activeRoute.snapshot.paramMap.get('id');
+
+    console.log(id);
+
     if(id) this._classId = id;
-    
-    // TODO: fetch class codes
+
+    if(this._classId) {
+      this.classCodeService.getClassCodes(this._classId)
+        .subscribe((codes: Code[]) => {
+          this._codes = codes;
+        });
+    }
+    // TODO: else
   }
 
   /**
@@ -60,15 +58,18 @@ export class ManageCodesComponent implements OnInit {
   }
 
   public expireClassCode(code: Code): void {
-    // TODO
+    this.classCodeService.expireClassCode(code)
+      .subscribe(response => {});
   }
 
   public deleteClassCode(code: Code): void {
-    // TODO
+    this.classCodeService.deleteClassCode(code)
+      .subscribe(response => {});
   }
 
   public createClassCode(): void {
-    // TODO
+    if(this._classId) this.classCodeService.createClassCode(this._classId)
+        .subscribe(response => {});
   }
 
   public activeOrExpired(code: Code): string {
