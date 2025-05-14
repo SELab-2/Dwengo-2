@@ -69,7 +69,7 @@ export class ClassesService {
             headers
         ).pipe(
             this.errorService.pipeHandler(
-                this.errorService.retrieveError($localize`class`)
+                this.errorService.retrieveError($localize`:@@class:class`)
             ),
         );
     }

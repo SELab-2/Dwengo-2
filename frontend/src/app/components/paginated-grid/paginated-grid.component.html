@@ -3,7 +3,7 @@
         @for (item of pagedItems; track item.id) {
             <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: item }"></ng-container>
         } @empty {
-            <p i18n>No items found.</p>
+            <p i18n="@@paginatedNoItems">No items found.</p>
         }
     </div>
   

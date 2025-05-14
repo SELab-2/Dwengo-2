@@ -27,8 +27,8 @@ export class ClassPendingRequestsComponent implements OnInit {
   public joinRequests: JoinRequestWithUser[] = [];
 
   // Messages for the snackbar
-  private readonly acceptedMessage: string = $localize `Accepted!`;
-  private readonly rejectedMessage: string = $localize `Rejected!`;
+  private readonly acceptedMessage: string = $localize `:@@accepted:Accepted!`;
+  private readonly rejectedMessage: string = $localize `:@@rejected:Rejected!`;
 
   // Snackbar
   private readonly snackBar = inject(MatSnackBar);

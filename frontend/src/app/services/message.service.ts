@@ -21,6 +21,8 @@ export class MessageService {
     private errorService: ErrorService
   ) {}
 
+  private messageMessage = $localize`message`;
+
   /**
    * Retrieve a single message by ID
    */
@@ -32,7 +34,7 @@ export class MessageService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize`message`)
+        this.errorService.retrieveError(this.messageMessage)
       )
     );
   }
@@ -72,7 +74,7 @@ export class MessageService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.createError($localize`message`)
+        this.errorService.createError(this.messageMessage)
       ),
       switchMap(response => of({
         ...message,
@@ -94,7 +96,7 @@ export class MessageService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.updateError($localize`message`)
+        this.errorService.updateError(this.messageMessage)
       ),
       switchMap(() => of(update))
     );
@@ -111,7 +113,7 @@ export class MessageService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.deleteError($localize`message`)
+        this.errorService.deleteError(this.messageMessage)
       ),
       switchMap(() => of(true))
     );

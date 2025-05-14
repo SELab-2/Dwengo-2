@@ -12,7 +12,9 @@ export class LanguageSelectorComponent implements OnInit {
   currentLocale: string = "en-US";
   localeToFlag: Record<string, string> = {
     "en-US": "us",
-    "nl-BE": "be"
+    "nl-BE": "be",
+    "fr-FR": "fr",
+    "de-DE": "de",
   }
   currentFlag: string = "us";
 
