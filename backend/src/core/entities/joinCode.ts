@@ -45,6 +45,7 @@ export class JoinCode {
             classId: this._classId,
             createdAt: this._createdAt,
             code: this._code,
+            expired: this._isExpired,
         };
     }
 }
