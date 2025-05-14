@@ -32,17 +32,20 @@ export class GraphBuilderService {
             objectMap.set(key, obj);
         }
 
+        let initial = true;
         // Initialize all nodes
         for (const shallow of directions) {
             const key = makeKey(shallow.hruid, shallow.version, shallow.language);
             const full = objectMap.get(key);
 
-            // We once again assume both list contain the same learning objects
+            // We once again assume both lists contain the same learning objects
             const node = graph.addNode(full!);
             nodeMap.set(key, node);
 
-            if (shallow.startNode) {
+            if (initial) {
+                // Set the root of the graph
                 graph.root = node;
+                initial = false;
             }
         }
 
