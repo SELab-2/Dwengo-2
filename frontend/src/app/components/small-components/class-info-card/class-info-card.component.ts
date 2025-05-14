@@ -21,6 +21,10 @@ export class ClassInfoCardComponent {
     @Input() completionPercentage!: number;
     @Input() classId!: string;
 
+    getClassName(): string {
+        return this.className.length > 75 ? this.className.slice(0, 75) + "..." : this.className;
+    }
+
     getProgressColor(): string {
         if (this.completionPercentage < 30) {
             return 'progress-red';
