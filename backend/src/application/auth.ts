@@ -41,7 +41,7 @@ export class AuthenticationManager {
                 return refreshResult;
             }
         }
-        console.log("got here")
+        console.log("got here");
         const input: GetUserInput = { email: email };
         console.log(input);
         let user = undefined;
@@ -52,10 +52,10 @@ export class AuthenticationManager {
         }
         console.log(user);
         if (user && (await bcrypt.compare(password, user.passwordHash))) {
-            console.log("got here 2")
+            console.log("got here 2");
             return this.generateTokens(user.id!);
         }
-        console.log("not supposed to be here")
+        console.log("not supposed to be here");
         return null;
     }
 

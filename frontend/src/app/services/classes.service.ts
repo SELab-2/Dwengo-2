@@ -9,7 +9,7 @@ import { ClassesReponse } from "../interfaces/classes/classesResponse";
 import { environment } from "../../environments/environment";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
-import { User, UserType } from "../interfaces";
+import { User } from "../interfaces";
 import { UserService } from "./user.service";
 import { ClassMembersInterface } from "../interfaces/classes/classMembersResponse";
 import { UsersOfClass } from "../interfaces/user/usersOfClass";

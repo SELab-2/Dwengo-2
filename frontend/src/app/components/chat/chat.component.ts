@@ -18,7 +18,6 @@ import { QuestionThread, VisibilityType } from '../../interfaces/questionThread'
 import { QuestionThreadService } from '../../services/questionThread.service';
 import { interval, Observable, Subscription, switchMap } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
-import { UserType } from '../../interfaces';
 
 @Component({
     selector: 'app-chat',
