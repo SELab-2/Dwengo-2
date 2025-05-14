@@ -1,6 +1,7 @@
 import { Entity, PrimaryColumn, Column, ManyToOne, CreateDateColumn } from "typeorm";
 import { BeforeInsert } from "typeorm/decorator/listeners/BeforeInsert"; // Important to specify the exact path here
 import { ClassTypeORM } from "./classTypeorm";
+import { JoinCode } from "../../../../core/entities/joinCode";
 
 @Entity()
 export class JoinCodeTypeORM {
@@ -23,4 +24,17 @@ export class JoinCodeTypeORM {
 
     @Column({ type: "boolean" })
     isExpired!: boolean;
+
+    public static createTypeORM(joinCode: JoinCode, classModel: ClassTypeORM): JoinCodeTypeORM {
+        const codeTypeORM: JoinCodeTypeORM = new JoinCodeTypeORM();
+        codeTypeORM.class = classModel;
+        codeTypeORM.code = joinCode.code ? joinCode.code : codeTypeORM.code;
+        codeTypeORM.createdAt = joinCode.createdAt ? joinCode.createdAt : codeTypeORM.createdAt;
+        codeTypeORM.isExpired = joinCode.isExpired ? joinCode.isExpired : false;
+        return codeTypeORM;
+    }
+
+    public toEntity(): JoinCode {
+        return new JoinCode(this.class.id, this.createdAt, this.code, this.isExpired);
+    }
 }
