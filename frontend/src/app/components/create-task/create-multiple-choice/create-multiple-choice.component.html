@@ -36,6 +36,18 @@
                     <button mat-icon-button color="primary" (click)="deleteOption(idx)">
                         <mat-icon>delete</mat-icon>
                     </button>
+                    @if(correctAnswers[idx]){
+                    <button mat-icon-button i18n-matTooltip matTooltip="Delete this option" color="primary"
+                        (click)="selectIncorrect(idx)">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    }
+                    @else {
+                    <button mat-icon-button i18n-matTooltip matTooltip="Select as Correct answer" color="primary"
+                        (click)="selectCorrect(idx)">
+                        <mat-icon>checks</mat-icon>
+                    </button>
+                    }
                 </div>
                 } @empty {
                 <span class="center" i18n>No items yet</span>

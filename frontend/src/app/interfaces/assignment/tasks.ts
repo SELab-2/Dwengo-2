@@ -1,6 +1,9 @@
+import { TaskType } from "../../components/create-task/create-task-component/create-task.component";
+
 export interface MultipleChoice extends AssignmentTask {
     options: string[];
     allowMultipleAnswers: boolean
+    coorectAnswers: number[];
     selected: number[]; // Number of the selected answer or empty
 }
 
@@ -11,4 +14,21 @@ export interface NormalQuestion extends AssignmentTask {
 
 export interface AssignmentTask {
     question: string;
+}
+
+export interface MultipleChoiceRequest extends AssignmentTask {
+    type: TaskType;
+    options: string[];
+    allowMultipleAnswers: boolean;
+    correctAnsers: number[];
+}
+
+export interface NormalQuestionRequest extends AssignmentTask {
+    type: TaskType;
+    predefined_answer: string | null;
+}
+
+export interface AssignmentTaskResponse {
+    type: TaskType;
+    taskObject: AssignmentTask;
 }

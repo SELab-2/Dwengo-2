@@ -8,9 +8,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MultipleChoice } from '../../../interfaces/assignment/tasks';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-create-multiple-choice',
-  imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReactiveFormsModule, MatListItem, MatList, MatCheckbox],
+  imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReactiveFormsModule, MatListItem, MatList, MatCheckbox, MatTooltipModule],
   templateUrl: './create-multiple-choice.component.html',
   styleUrl: './create-multiple-choice.component.less'
 })
@@ -20,6 +21,7 @@ export class CreateMultipleChoiceComponent {
   newOption = new FormControl('')
   allowMultipleOptions: boolean = false;
   options: string[] = [];
+  correctAnswers: boolean[] = [];
 
   constructor() { }
   @Output() taskCreated: EventEmitter<MultipleChoice> = new EventEmitter<MultipleChoice>();
@@ -30,6 +32,7 @@ export class CreateMultipleChoiceComponent {
       const trimmed = val.trim();
       if (trimmed) {
         this.options.push(trimmed);
+        this.correctAnswers.push(false);
         this.newOption.setValue('');
       }
     }
@@ -37,7 +40,14 @@ export class CreateMultipleChoiceComponent {
 
   deleteOption(idx: number) {
     this.options.splice(idx, 1);
+    this.correctAnswers.splice(idx, 1);
+  }
 
+  selectCorrect(idx: number) {
+    this.correctAnswers[idx] = true;
+  }
+  selectIncorrect(idx: number) {
+    this.correctAnswers[idx] = false;
   }
 
   update(change: boolean): void {
@@ -52,6 +62,7 @@ export class CreateMultipleChoiceComponent {
       allowMultipleAnswers: this.allowMultipleOptions,
       options: this.options,
       selected: [],
+      coorectAnswers: []
 
     } as MultipleChoice;
     this.taskCreated.emit(obj)
