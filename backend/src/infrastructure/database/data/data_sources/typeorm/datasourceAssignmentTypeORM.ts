@@ -4,8 +4,6 @@ import { Assignment } from "../../../../../core/entities/assignment";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { TeacherOfClassTypeORM } from "../../data_models/teacherOfClassTypeorm";
-import { TeacherTypeORM } from "../../data_models/teacherTypeorm";
 
 export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     //TODO: classId can be removed
@@ -55,26 +53,9 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
         return assignmentModels.map((assignmentModel: AssignmentTypeORM) => assignmentModel.toAssignmentEntity());
     }
 
-    public async getAssignmentsByUserId(studentOrTeacherId: string): Promise<Assignment[]> {
+    public async getAssignmentsByUserId(userId: string): Promise<Assignment[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const teacherModel: TeacherTypeORM | null = await datasource.getRepository(TeacherTypeORM).findOne({
-            where: { id: studentOrTeacherId },
-        });
-
-        if (teacherModel) {
-            // The user is a teacher
-            const assignmentsJoinResult = await datasource
-                .getRepository(AssignmentTypeORM)
-                .createQueryBuilder("assignment")
-                .innerJoinAndSelect("assignment.class", "class")
-                .innerJoin(TeacherOfClassTypeORM, "teacherOfClass", "teacherOfClass.class_id = class.id")
-                .where("teacherOfClass.teacher = :id", { id: studentOrTeacherId })
-                .getMany();
-            return assignmentsJoinResult.map(assigmentJoinResult => assigmentJoinResult.toAssignmentEntity());
-        }
-
-        // The user is a student
         const assignmentsJoinResult = await datasource
             .getRepository(StudentOfGroupTypeORM)
             .createQueryBuilder()
@@ -86,6 +67,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
             // Join Assignment to Class
             .leftJoinAndSelect("assignment.class", "class")
             .getMany();
+
         return assignmentsJoinResult.map(assignmentJoinResult => {
             return assignmentJoinResult.group.assignment.toAssignmentEntity();
         });
