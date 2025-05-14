@@ -48,7 +48,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
 
         const submissionModel: SubmissionTypeORM | null = await datasource.getRepository(SubmissionTypeORM).findOne({
             where: { id: id },
-            relations: ["student", "assignment"],
+            relations: ["user", "assignment"],
         });
 
         if (!submissionModel) {
@@ -165,7 +165,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         // Now get all the student's submissions for any assignment and step
         const submissionModels: SubmissionTypeORM[] = await submissionRepository.find({
             where: { user: studentModel },
-            relations: ["user"],
+            relations: ["user", "assignment"],
         });
         // Return the submissions as entities
         return submissionModels.map(model => model.toEntity());
