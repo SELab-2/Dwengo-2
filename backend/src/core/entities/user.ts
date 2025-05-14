@@ -83,6 +83,7 @@ export class User {
             familyName: this._familyName,
             schoolName: this._schoolName,
             passwordHash: this._passwordHash,
+            userType: this._userType,
         };
     }
 }

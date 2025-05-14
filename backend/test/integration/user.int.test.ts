@@ -103,7 +103,7 @@ describe("Test user API endpoints", () => {
         describe("/user/{studentId}", () => {
             it("should return a student with status 200", async () => {
                 const response = await request(app)
-                    .get("/users/" + studentAuthDetails.id + "?userType=student")
+                    .get("/users/" + studentAuthDetails.id)
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + studentAuthDetails.token)
 
@@ -114,7 +114,8 @@ describe("Test user API endpoints", () => {
                     "firstName": "Jan",
                     "familyName": "De nul",
                     "passwordHash": expect.any(String),
-                    "schoolName": "Yale"
+                    "schoolName": "Yale",
+                    "userType": "student"
                 });
                 expect(await bcript.compare(studentAuthDetails.password, response.body.passwordHash)).toBe(true);
             });
@@ -123,7 +124,7 @@ describe("Test user API endpoints", () => {
         describe("/user/{teacherId}", () => {
             it("should return a teacher with status 200", async () => {
                 const response = await request(app)
-                    .get("/users/" + teacherAuthDetails.id + "?userType=teacher")
+                    .get("/users/" + teacherAuthDetails.id)
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + teacherAuthDetails.token)
 
@@ -134,7 +135,8 @@ describe("Test user API endpoints", () => {
                     "firstName": "Jan",
                     "familyName": "De nul",
                     "passwordHash": expect.any(String),
-                    "schoolName": "Yale"
+                    "schoolName": "Yale",
+                    "userType": "teacher"
                 });
                 expect(await bcript.compare(teacherAuthDetails.password, response.body.passwordHash)).toBe(true);
             });
@@ -188,7 +190,6 @@ describe("Test user API endpoints", () => {
         let updatedUser: object;
 
         beforeEach(async () => {
-            //TODO: do we need to have a method that converts a student to a teacher or vice versa?
             updatedUser = {
                 "email": "user@example.com",
                 "firstName": "string",
@@ -220,7 +221,8 @@ describe("Test user API endpoints", () => {
                     "firstName": "string",
                     "familyName": "string",
                     "passwordHash": expect.any(String),
-                    "schoolName": "string"
+                    "schoolName": "string",
+                    "userType": "student"
                 });
                 //TODO: comparing hash with updated password fails
         });
@@ -230,14 +232,14 @@ describe("Test user API endpoints", () => {
         describe("/users/{id}", () => {
             it("should delete an user with status 204", async () => {
                 const response = await request(app)
-                    .delete("/users/" + studentAuthDetails.id + "?userType=student")
+                    .delete("/users/" + studentAuthDetails.id)
                     .set("Authorization", "Bearer " + studentAuthDetails.token);
 
                 expect(response.status).toBe(204);
                 expect(response.body).toEqual({});
 
                 const checkResponse = await request(app)
-                    .get("/users/" + studentAuthDetails.id + "?userType=student")
+                    .get("/users/" + studentAuthDetails.id)
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + studentAuthDetails.token)
 
@@ -252,7 +254,7 @@ describe("Test user API endpoints", () => {
         describe("/classes/{idParent}/users", () => {
             it("should delete an user from a class with status 204", async () => {
                 const response = await request(app)
-                    .delete("/classes/" + classId + "/users/" + studentAuthDetails.id +"?userType=student")
+                    .delete("/classes/" + classId + "/users/" + studentAuthDetails.id)
                     .set("Authorization", "Bearer " + teacherAuthDetails.token);
                 
                 expect(response.status).toBe(204);
@@ -263,7 +265,7 @@ describe("Test user API endpoints", () => {
         describe("/groups/{idParent}/users", () => {
             it("should delete an user from a group with status 204", async () => {
                 const response = await request(app)
-                    .delete("/groups/" + groupId + "/users/" + studentAuthDetails.id + "?userType=student") //TODO: shouldn't be needed to specify userType
+                    .delete("/groups/" + groupId + "/users/" + studentAuthDetails.id)
                     .set("Authorization", "Bearer " + teacherAuthDetails.token);
                 
                 expect(response.status).toBe(204);

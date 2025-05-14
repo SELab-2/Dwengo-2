@@ -6,8 +6,8 @@ import { LearningObjectRepository } from "../infrastructure/repositories/learnin
 import { LearningPathRepository } from "../infrastructure/repositories/learningPathRepository";
 import { MessageRepositoryTypeORM } from "../infrastructure/repositories/messageRepositoryTypeORM";
 import { ThreadRepositoryTypeORM } from "../infrastructure/repositories/questionThreadRepositoryTypeORM";
-import { UserRepositoryTypeORM } from "../infrastructure/repositories/userRepositoryTypeORM";
 import { SubmissionRepositoryTypeORM } from "../infrastructure/repositories/submissionRepositoryTypeORM";
+import { UserRepositoryTypeORM } from "../infrastructure/repositories/userRepositoryTypeORM";
 
 /**
  * The repositories needed for the Dwengo-2 backend application.

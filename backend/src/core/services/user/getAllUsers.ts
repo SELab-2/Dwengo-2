@@ -6,9 +6,7 @@ import { IUserRepository } from "../../repositories/userRepositoryInterface";
 export type GetAllUsersInput = z.infer<typeof getAllUsersSchema>;
 
 export class GetAllUsers implements Service<GetAllUsersInput> {
-    constructor(
-        private userRepository: IUserRepository,
-    ) {}
+    constructor(private userRepository: IUserRepository) {}
 
     /**
      * Executes the all users get process.

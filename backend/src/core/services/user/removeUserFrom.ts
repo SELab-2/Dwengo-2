@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { removeUserFromSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
-import { UserType } from "../../entities/user";
 import { tryRepoEntityOperation } from "../../helpers";
 
 export type RemoveUserFromInput = z.infer<typeof removeUserFromSchema>;

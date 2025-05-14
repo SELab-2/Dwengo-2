@@ -7,8 +7,8 @@ import { User } from "../../entities/user";
 import { tryRepoEntityOperation } from "../../helpers";
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
 import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
-import { IUserRepository } from "../../repositories/userRepositoryInterface";
 import { ISubmissionRepository } from "../../repositories/submissionRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type GetProgressInput = z.infer<typeof getProgressSchema>;
 

@@ -85,10 +85,7 @@ export class AuthenticationManager {
 
         try {
             const decoded = jwt.verify(refreshToken, this.refreshSecretKey) as jwt.JwtPayload;
-            if (
-                !decoded?.id ||
-                typeof decoded.id !== "string"
-            ) {
+            if (!decoded?.id || typeof decoded.id !== "string") {
                 return null;
             }
             this.usedRefreshTokens.add(refreshToken);

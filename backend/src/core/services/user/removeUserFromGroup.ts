@@ -2,7 +2,6 @@ import { RemoveUserFrom } from "./removeUserFrom";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { UserType } from "../../entities/user";
 import { IUserRepository } from "../../repositories/userRepositoryInterface";
-import { tryRepoEntityOperation } from "../../helpers";
 
 /**
  * Service for removing a user from a group.
@@ -24,7 +23,7 @@ export class RemoveUserFromGroup extends RemoveUserFrom {
      */
     public async removeUser(id: string, idParent: string): Promise<void> {
         const user = await this.userRepository.getById(id);
-        
+
         if (user.userType == UserType.STUDENT) {
             await this.userRepository.removeFromGroup(id, idParent);
         } else {

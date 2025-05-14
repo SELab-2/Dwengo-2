@@ -18,9 +18,9 @@ export class DatasourceUserTypeORM extends DatasourceTypeORM {
             .getRepository(UserTypeORM)
             .save(UserTypeORM.createUserTypeORM(user));
 
-            return userModel.role == UserType.STUDENT 
-            ? userModel.toEntity() as Student
-            : userModel.toEntity() as Teacher;
+        return userModel.role == UserType.STUDENT
+            ? (userModel.toEntity() as Student)
+            : (userModel.toEntity() as Teacher);
     }
 
     public async getUserById(id: string): Promise<User> {
@@ -33,10 +33,9 @@ export class DatasourceUserTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError(`User with id ${id} not found`);
         }
 
-
-        return userModel.role == UserType.STUDENT 
-            ? userModel.toEntity() as Student
-            : userModel.toEntity() as Teacher;
+        return userModel.role == UserType.STUDENT
+            ? (userModel.toEntity() as Student)
+            : (userModel.toEntity() as Teacher);
     }
 
     public async getUserByEmail(email: string): Promise<User> {
@@ -49,9 +48,9 @@ export class DatasourceUserTypeORM extends DatasourceTypeORM {
         if (!userModel) {
             throw new EntityNotFoundError(`User with email ${email} not found`);
         }
-        return userModel.role == UserType.STUDENT 
-            ? userModel.toEntity() as Student
-            : userModel.toEntity() as Teacher;
+        return userModel.role == UserType.STUDENT
+            ? (userModel.toEntity() as Student)
+            : (userModel.toEntity() as Teacher);
     }
 
     public async getUserByFirstName(first_name: string): Promise<User> {
@@ -64,9 +63,9 @@ export class DatasourceUserTypeORM extends DatasourceTypeORM {
         if (!userModel) {
             throw new EntityNotFoundError(`User with first name ${first_name} not found`);
         }
-        return userModel.role == UserType.STUDENT 
-            ? userModel.toEntity() as Student
-            : userModel.toEntity() as Teacher;
+        return userModel.role == UserType.STUDENT
+            ? (userModel.toEntity() as Student)
+            : (userModel.toEntity() as Teacher);
     }
 
     public async getUserByLastName(last_name: string): Promise<User> {
@@ -79,9 +78,9 @@ export class DatasourceUserTypeORM extends DatasourceTypeORM {
         if (!userModel) {
             throw new EntityNotFoundError(`User with last name ${last_name} not found`);
         }
-        return userModel.role == UserType.STUDENT 
-            ? userModel.toEntity() as Student
-            : userModel.toEntity() as Teacher;
+        return userModel.role == UserType.STUDENT
+            ? (userModel.toEntity() as Student)
+            : (userModel.toEntity() as Teacher);
     }
 
     public async getAllStudents(): Promise<Student[]> {
@@ -104,7 +103,7 @@ export class DatasourceUserTypeORM extends DatasourceTypeORM {
         return teacherModels.map((teacherModel: UserTypeORM) => teacherModel.toEntity() as Teacher);
     }
 
-    public async updateUser (user: User): Promise<User> {
+    public async updateUser(user: User): Promise<User> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const userModel: UserTypeORM | null = await datasource.getRepository(UserTypeORM).findOne({

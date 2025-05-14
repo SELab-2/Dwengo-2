@@ -1,9 +1,9 @@
 /*Here comes the interface for the repository for User entity -> Get's implemented in infrastructure/repositories*/
 
 import { AbstractRepository } from "./abstractRepository";
-import { User } from "../entities/user";
 import { Student } from "../entities/student";
 import { Teacher } from "../entities/teacher";
+import { User } from "../entities/user";
 
 export abstract class IUserRepository extends AbstractRepository {
     /**

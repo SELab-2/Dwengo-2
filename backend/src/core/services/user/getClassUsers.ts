@@ -10,9 +10,7 @@ import { IUserRepository } from "../../repositories/userRepositoryInterface";
 export type GetClassUsersInput = z.infer<typeof getClassUsersSchema>;
 
 export class GetClassUsers implements Service<GetClassUsersInput> {
-    constructor(
-        private userRepository: IUserRepository,
-    ) {}
+    constructor(private userRepository: IUserRepository) {}
 
     /**
      * Executes the class users get process.

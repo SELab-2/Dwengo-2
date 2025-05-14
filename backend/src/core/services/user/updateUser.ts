@@ -2,9 +2,7 @@ import { z } from "zod";
 import { updateUserSchema } from "../../../application/schemas/userSchemas";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { Service } from "../../../config/service";
-import { Student } from "../../entities/student";
-import { Teacher } from "../../entities/teacher";
-import { User, UserType } from "../../entities/user";
+import { User } from "../../entities/user";
 import { tryRepoEntityOperation } from "../../helpers";
 import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
@@ -16,9 +14,7 @@ export type UpdateUserInput = z.infer<typeof updateUserSchema>;
  * @param teacherRepository - Repository for teacher data.
  */
 export class UpdateUser implements Service<UpdateUserInput> {
-    constructor(
-        private userRepository: IUserRepository
-    ) {}
+    constructor(private userRepository: IUserRepository) {}
 
     /**
      * Executes the user update process.
@@ -59,15 +55,15 @@ export class UpdateUser implements Service<UpdateUserInput> {
 
         // Create updated user object
         const updatedUser = new User(
-                input.email ?? oldUser.email,
-                input.firstName ?? oldUser.firstName,
-                input.familyName ?? oldUser.familyName,
-                input.passwordHash ?? oldUser.passwordHash,
-                input.schoolName ?? oldUser.schoolName,
-                input.userType,
-                input.id,
-            );
-            
+            input.email ?? oldUser.email,
+            input.firstName ?? oldUser.firstName,
+            input.familyName ?? oldUser.familyName,
+            input.passwordHash ?? oldUser.passwordHash,
+            input.schoolName ?? oldUser.schoolName,
+            input.userType,
+            input.id,
+        );
+
         await tryRepoEntityOperation(this.userRepository.update(updatedUser), "User", "", false);
 
         return {};

@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { getUserSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
-import { UserType } from "../../entities/user";
 import { tryRepoEntityOperation } from "../../helpers";
 import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
@@ -12,9 +11,7 @@ export type GetUserInput = z.infer<typeof getUserSchema>;
  * @param {IUserRepository} userRepository - The student repository.
  */
 export class GetUser implements Service<GetUserInput> {
-    constructor(
-        private userRepository: IUserRepository,
-    ) {}
+    constructor(private userRepository: IUserRepository) {}
 
     /**
      * Executes the user get process.

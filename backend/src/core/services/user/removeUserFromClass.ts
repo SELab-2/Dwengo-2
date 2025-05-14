@@ -6,9 +6,7 @@ import { IUserRepository } from "../../repositories/userRepositoryInterface";
  * @param userRepository - Repository for user data.
  */
 export class RemoveUserFromClass extends RemoveUserFrom {
-    constructor(
-        private userRepository: IUserRepository,
-    ) {
+    constructor(private userRepository: IUserRepository) {
         super();
     }
 

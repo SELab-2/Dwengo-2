@@ -2326,6 +2326,7 @@ components:
         - familyName
         - schoolName
         - passwordHash
+        - userType
       additionalProperties: false
       properties:
         id:
@@ -2353,6 +2354,10 @@ components:
           description: User's school name.
         passwordHash:
           type: string
+        userType:
+          type: string
+          enum: [student, teacher]
+          description: User's type in the system. 
     UserCreate:
       type: object
       required:

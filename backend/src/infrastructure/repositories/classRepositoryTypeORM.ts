@@ -1,5 +1,4 @@
 import { Class } from "../../core/entities/class";
-import { JoinRequestType } from "../../core/entities/joinRequest";
 import { IClassRepository } from "../../core/repositories/classRepositoryInterface";
 import { DatasourceClassTypeORM } from "../database/data/data_sources/typeorm/datasourceClassTypeORM";
 
@@ -47,7 +46,7 @@ export class ClassRepositoryTypeORM extends IClassRepository {
         return await this.getByUserId(studentId);
     }
 
-    public async addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void> {
-        await this.datasourceClass.addUserToClass(classId, userId, userType);
+    public async addUserToClass(classId: string, userId: string): Promise<void> {
+        await this.datasourceClass.addUserToClass(classId, userId);
     }
 }
