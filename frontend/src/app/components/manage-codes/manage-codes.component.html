@@ -1,0 +1,28 @@
+<div class="manage-codes">
+    <h2 i18n>Class codes</h2>
+    <div class="codes">
+        @for(code of codes; track code.code) {
+            <div class="code-item">
+                <p>{{ code.code }}</p>
+                <p>{{ activeOrExpired(code) }}</p>
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_horiz</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    @if(!code.expired) {
+                        <button mat-menu-item (click)="showClassCode(code)">Show</button>
+                        <button mat-menu-item (click)="expireClassCode(code)">Expire</button>    
+                    }
+                    <button mat-menu-item (click)="deleteClassCode(code)">Delete</button>
+                </mat-menu>
+            </div>
+        }
+    </div>
+
+    <button 
+        mat-raised-button 
+        (click)="createClassCode()">
+        <p>New code</p>
+    </button>
+
+</div>
