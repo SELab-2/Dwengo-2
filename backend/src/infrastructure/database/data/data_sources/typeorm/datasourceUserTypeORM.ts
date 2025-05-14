@@ -41,13 +41,9 @@ export class DatasourceUserTypeORM extends DatasourceTypeORM {
     public async getUserByEmail(email: string): Promise<User> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        console.log("getting user by email" + email);
-
         const userModel: UserTypeORM | null = await datasource
             .getRepository(UserTypeORM)
             .findOne({ where: { email: email } });
-
-        console.log(userModel);
 
         if (!userModel) {
             throw new EntityNotFoundError(`User with email ${email} not found`);

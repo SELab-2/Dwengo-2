@@ -185,10 +185,10 @@ describe("loginMiddleware", () => {
         // eslint-disable-next-line prettier/prettier
         await check(() => {req.body = { email: "s@example.com" };}, true, { code: ErrorCode.BAD_REQUEST, message: "Email and password or refresh token are required" });
     });
-    /*it("rejects invalid credentials", async () => {
+    it("rejects invalid credentials", async () => {
         // eslint-disable-next-line prettier/prettier
         await check(() => {req.body = { email: "wrong@example.com", password: "wrong" };}, true, { code: ErrorCode.UNAUTHORIZED, message: "Invalid credentials" });
-    });*/ //TODO: @Adrien can you take al look at this?
+    });
     it("accepts valid email/password and returns tokens", async () => {
         // eslint-disable-next-line prettier/prettier
         await check(() => {req.body = { email: mockUsers.user.email, password: "pass" };}, true, undefined,

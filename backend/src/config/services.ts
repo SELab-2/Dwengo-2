@@ -96,7 +96,7 @@ export const services = {
         get: new ProgressServices.GetUserAssignmentProgress(repos.submission, repos.assignment, repos.learningPath),
         getClassCompletion: new GetClassCompletion(
             repos.submission,
-            repos.student,
+            repos.user,
             repos.assignment,
             repos.learningPath,
         ),

@@ -25,8 +25,6 @@ export class GetUser implements Service<GetUserInput> {
             getByEmail: (email: string) => this.userRepository.getByEmail(email),
         };
 
-        console.log("executing: " + input.email);
-
         return (
             await tryRepoEntityOperation(
                 input.id ? getById(input.id) : getByEmail(input.email?.toLowerCase() as string),
