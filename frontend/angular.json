@@ -112,6 +112,15 @@
               "sourceMap": true,
               "outputHashing": "media",
               "localize": ["de-DE"]
+            },
+            "e2e": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.e2e.ts"
+                }
+              ],
+              "outputHashing": "media"
             }
           },
           "defaultConfiguration": "production"
@@ -136,6 +145,9 @@
             },
             "development-de-DE": {
               "buildTarget": "frontend:build:development-de-DE"
+            },
+            "e2e": {
+              "buildTarget": "frontend:build:e2e"
             }
           },
           "defaultConfiguration": "development"
@@ -175,8 +187,16 @@
               "src/**/*.html"
             ]
           }
+        },
+        "e2e": {
+          "builder": "@nightwatch/angular:nightwatch",
+          "options": {
+            "config": "./nightwatch.conf.js",
+            "devServerTarget": "frontend:serve:e2e"
+          }
         }
       }
+      
     }
   },
   "cli": {
