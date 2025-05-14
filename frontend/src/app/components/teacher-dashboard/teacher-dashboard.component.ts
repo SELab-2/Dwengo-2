@@ -17,7 +17,7 @@ import { MockServices } from './mock-services';
 import { ClassOverviewWidgetComponent } from '../small-components/class-overview-widget/class-overview-widget.component';
 import { DeadlinesWidgetComponent } from '../small-components/upcoming-deadlines-widget/deadlines-widget.component';
 import { Assignment } from '../../interfaces/assignment';
-import { catchError, defaultIfEmpty, forkJoin, of } from 'rxjs';
+import { catchError, defaultIfEmpty, forkJoin, map, of, switchMap } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 
 
@@ -63,29 +63,44 @@ export class TeacherDashboardComponent implements OnInit {
   private retrieveData(): void {
     forkJoin({
       classes: this.classesService.classesOfUser().pipe(
-        catchError(() => of([])), // Empty array when error occured
-        defaultIfEmpty([]) // Also empty error when there's no reaction
+        catchError(() => of([])),
+        defaultIfEmpty([])
       ),
       assignments: this.assignmentsService.retrieveAssignments().pipe(
         catchError(() => of([])),
         defaultIfEmpty([])
       )
-    }).subscribe(({ classes, assignments }) => {
-      this.classes = classes.map(cls => ({
-        ...cls,
-        assignments: assignments
-          .filter(a => a.classId === cls.id)
-          .map(a => ({
-            ...a,
-            name: a.name ?? $localize`:@@unnamed:Unnamed`,
-            deadline: a.deadline ?? $localize`:@@noDeadline:No deadline found`,
-            className: cls.name ?? $localize`:@@unnamed:Unnamed`,
-          }))
-      }));
-      // Assignment array is needed in components like "upcoming-deadlines-widget"
+    }).pipe(
+      // Combine both requests
+      switchMap(({ classes, assignments }) => {
+        // Still need to put the amount of students in
+        const enrichedClasses = classes.map(cls =>
+          this.classesService.usersInClass(cls.id).pipe(
+            // Map the pipe-response, add studentcount and assignment
+            map(usrs => ({
+              ...cls,
+              studentCount: usrs.students.length,
+              assignments: assignments
+                .filter(a => a.classId === cls.id)
+                .map(a => ({
+                  ...a,
+                  name: a.name ?? $localize`:@@unnamed:Unnamed`,
+                  deadline: a.deadline ?? $localize`:@@noDeadline:No deadline found`,
+                  className: cls.name ?? $localize`:@@unnamed:Unnamed`,
+                }))
+            }))
+          )
+        );
+
+        // After every call is done, return these classes
+        return forkJoin(enrichedClasses);
+      })
+    ).subscribe(enrichedClasses => {
+      // Assign the classes and assignments properly
+      this.classes = enrichedClasses;
       this.assignments = this.classes.map(cls => cls.assignments!).flat();
 
-      // Use this data to fill the charts
+      // With this data we can display analytics (if possible)
       this.fillCharts();
     });
   }
