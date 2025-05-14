@@ -1,9 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { AuthenticationTokenPayload, ErrorCode, TokenResponse } from "./types";
+import { AuthenticationTokenPayload, TokenResponse } from "./types";
 import { User } from "../core/entities/user";
 import { GetUser, GetUserInput } from "../core/services/user";
-import { ApiError } from "./types";
 
 // TODO - Consider allowing only one active token per user (probably not)
 
