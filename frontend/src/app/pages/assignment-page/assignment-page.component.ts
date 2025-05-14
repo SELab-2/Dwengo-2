@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
 import { LearningPathComponent } from '../../components/learning-path/learning-path.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Assignment } from '../../interfaces/assignment';
 import { AssignmentService } from '../../services/assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,8 +17,8 @@ import { LoadingComponent } from '../../components/loading/loading.component';
 import { UserType } from '../../interfaces';
 import { LearningPathService } from '../../services/learningPath.service';
 import { SpecificLearningPathRequest } from '../../interfaces/learning-path';
-import { CreateTaskComponent } from '../../components/create-task/create-task-component/create-task.component';
-import { AssignmentTask } from '../../interfaces/assignment/tasks';
+import { CreateTaskComponent, TaskType } from '../../components/create-task/create-task-component/create-task.component';
+import { AssignmentTask, MultipleChoice } from '../../interfaces/assignment/tasks';
 
 @Component({
   selector: 'app-assignment-page',
@@ -28,6 +28,7 @@ import { AssignmentTask } from '../../interfaces/assignment/tasks';
 })
 export class AssignmentPageComponent implements OnInit {
   @ViewChild(LearningPathComponent) learningPathComponent!: LearningPathComponent;
+
   // The current activated route
   private readonly route = inject(ActivatedRoute);
 
@@ -35,6 +36,10 @@ export class AssignmentPageComponent implements OnInit {
   private readonly invalidURLMessage = $localize`Invalid URL`;
   private readonly closeMessage = $localize`Close`;
   public loading = true;
+  public taskFetched = false;
+
+  public taskObject!: AssignmentTask;
+  public taskType!: TaskType;
 
   private _assignment?: Assignment;
   public progress!: Progress;
@@ -43,6 +48,7 @@ export class AssignmentPageComponent implements OnInit {
   public language = "nl";
   public currentLearningObjectId!: string;
   public step: number = 0;
+  public furthestStep: number = 0; // This is the furthest progress point achieved
   public maxStep: number = 1;
 
   public isStudent!: boolean;
@@ -69,7 +75,6 @@ export class AssignmentPageComponent implements OnInit {
     if (node) {
       this.currentLearningObjectId = node.value.metadata.hruid!;
     }
-
   }
 
   onSubmissionCreated(): void {
@@ -79,6 +84,7 @@ export class AssignmentPageComponent implements OnInit {
 
   onTaskCreated(task: AssignmentTask): void {
     // Implement and call the services to create this task
+    // Link this with the current step
     this.openSnackBar($localize`Task Succesfully Created!`);
     console.log(task);
   }
@@ -94,13 +100,14 @@ export class AssignmentPageComponent implements OnInit {
         console.log(res)
         this.progress = res;
         this.step = this.progress.step;
+        this.furthestStep = this.progress.step; // furthest step is always returned by progress
         this.maxStep = this.progress.maxStep;
         this.loading = false;
       }
     )
   }
 
-  private setupTeacher(res: Assignment): void {
+  private setupTeacher(): void {
     // Let the teacher always start at the beginning
     this.step = 0;
     this.loading = false;
@@ -110,6 +117,24 @@ export class AssignmentPageComponent implements OnInit {
         this.maxStep = path.numNodes
       }
     )
+  }
+
+  // TODO: implement
+  private setupSubmission(): void {
+    // only show submission when its created
+    this.taskType = TaskType.MultipleChoice;
+    this.taskObject = {
+      question: "Test Question",
+      allowMultipleAnswers: true,
+      options: ["Test answer 1", "Some longer test answer to check if this is actually a good format and all that, because maybe it is not.", "Test answer 3"],
+      selected: [],
+    } as MultipleChoice
+    // this.taskObject = {
+    //   question: "What is 1 + 1",
+    //   predefined_answer: "2",
+    // } as NormalQuestion; // Cast the AssignmentTask to what we need
+
+    this.taskFetched = true;
   }
 
   public ngOnInit(): void {
@@ -132,8 +157,9 @@ export class AssignmentPageComponent implements OnInit {
           if (res && this.isStudent) {
             this.getProgress();
           } else if (!this.isStudent) {
-            this.setupTeacher(res);
+            this.setupTeacher();
           }
+          this.setupSubmission();
         }
       )
     } else {

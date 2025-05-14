@@ -5,12 +5,11 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatList, MatListItem } from '@angular/material/list';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { MultipleChoice, NormalQuestion } from '../../../interfaces/assignment/tasks';
+import { NormalQuestion } from '../../../interfaces/assignment/tasks';
 @Component({
   selector: 'app-create-normal-task',
-  imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReactiveFormsModule, MatListItem, MatList, MatCheckbox],
+  imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReactiveFormsModule, MatCheckbox],
   templateUrl: './create-normal-task.component.html',
   styleUrl: './create-normal-task.component.less'
 })

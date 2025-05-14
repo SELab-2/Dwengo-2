@@ -7,8 +7,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { inject } from '@angular/core';
 import { MultipleChoice } from '../../../interfaces/assignment/tasks';
 @Component({
   selector: 'app-create-multiple-choice',

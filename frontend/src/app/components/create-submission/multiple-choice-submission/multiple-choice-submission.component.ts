@@ -1,57 +1,45 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MultipleChoice } from '../../../interfaces/assignment/tasks';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatList } from '@angular/material/list';
 @Component({
   selector: 'app-multiple-choice-submission',
-  imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule],
+  imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, MatCheckbox, MatList],
   templateUrl: './multiple-choice-submission.component.html',
   styleUrl: './multiple-choice-submission.component.less'
 })
-export class MultipleChoiceSubmissionComponent implements OnInit {
+export class MultipleChoiceSubmissionComponent {
   @Input() choiceObject!: MultipleChoice;
-
-  // Content of the input field
-  optionStates: boolean[] = [];
-  allowMultipleAnswers: boolean = false;
-
-  // Emit an event when the submission is created
-  private readonly snackBar = inject(MatSnackBar);
-  private readonly errorMessage = $localize`An error occured, please try again.`;
-  private readonly createSuccesMessage = $localize`Submission created succesfully!`;
 
   constructor() { }
 
-  public ngOnInit(): void {
-    this.optionStates = this.choiceObject.options.map(() => false);
-  }
+  @Output() submissionCreated: EventEmitter<MultipleChoice> = new EventEmitter<MultipleChoice>();
 
-
-  onCheckboxChange(selectedIndex: number) {
-    if (this.allowMultipleAnswers) {
-      // Just change one box, don't care about the rest
-      this.optionStates[selectedIndex] = !this.optionStates[selectedIndex];
+  update(checked: boolean, idx: number) {
+    console.log(this.choiceObject.selected)
+    console.log(checked, idx)
+    if (!checked) {
+      // Box goes from true to false: get it out of our list
+      this.choiceObject.selected.splice(this.choiceObject.selected.indexOf(idx), 1)
     } else {
-      // Only one selected allowed: assert this
-      this.optionStates = this.optionStates.map((_, i) => i === selectedIndex);
+      // Now we know we can simply add the index
+      this.choiceObject.selected.push(idx);
     }
+    console.log(this.choiceObject.selected)
+    console.log(checked, idx)
   }
 
-  submitAnswers() {
-    // Collect the selected indices
-    this.optionStates.filter((bool, i) => {
-      if (bool) this.choiceObject.selected.push(i)
-    });
+  submitAnswer() {
+    // Pass the object trough
+    this.submissionCreated.emit(
+      this.choiceObject
+    );
   }
 
-  private openSnackBar(message: string, action: string = "Ok") {
-    this.snackBar.open(message, action, {
-      duration: 2500
-    });
-  }
 }

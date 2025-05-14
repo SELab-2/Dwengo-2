@@ -1,17 +1,16 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AssignmentTask, MultipleChoice } from '../../../interfaces/assignment/tasks';
+import { AssignmentTask } from '../../../interfaces/assignment/tasks';
 import { CreateMultipleChoiceComponent } from '../create-multiple-choice/create-multiple-choice.component';
 import { CreateNormalTaskComponent } from '../create-normal-task/create-normal-task.component';
 
 
-enum TaskType {
+export enum TaskType {
   MultipleChoice = "multiple-choice",
   NormalQuestion = "normal-question",
 };
@@ -46,6 +45,7 @@ export class CreateTaskComponent {
   public onTaskCreated(task: AssignmentTask): void {
     // This component should just pass through the object
     this.ready = false;
+    this.selected = undefined;
     this.taskCreated.emit(task);
   }
 }
