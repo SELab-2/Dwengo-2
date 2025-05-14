@@ -1,6 +1,5 @@
 import { AbstractRepository } from "./abstractRepository";
 import { Class } from "../entities/class";
-import { JoinRequestType } from "../entities/joinRequest";
 
 /**
  * Interface for a class repository.
