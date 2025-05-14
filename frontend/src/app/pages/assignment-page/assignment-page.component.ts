@@ -128,7 +128,7 @@ export class AssignmentPageComponent implements OnInit {
       allowMultipleAnswers: true,
       options: ["Test answer 1", "Some longer test answer to check if this is actually a good format and all that, because maybe it is not.", "Test answer 3"],
       selected: [],
-      coorectAnswers: [0, 2]
+      correctAnswers: [0, 2]
     } as MultipleChoice
     // this.taskObject = {
     //   question: "What is 1 + 1",

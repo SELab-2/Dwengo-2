@@ -3,7 +3,7 @@ import { TaskType } from "../../components/create-task/create-task-component/cre
 export interface MultipleChoice extends AssignmentTask {
     options: string[];
     allowMultipleAnswers: boolean
-    coorectAnswers: number[];
+    correctAnswers: number[];
     selected: number[]; // Number of the selected answer or empty
 }
 

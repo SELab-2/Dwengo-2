@@ -57,12 +57,16 @@ export class CreateMultipleChoiceComponent {
 
   submitQuestion(): void {
     // This one does not make any calls, it just returns the multiple-choice object
+    let l = this.correctAnswers.map((b, i) => {
+      if (b) return i;
+      return null;
+    });
     const obj = {
       question: this.title.value,
       allowMultipleAnswers: this.allowMultipleOptions,
       options: this.options,
       selected: [],
-      coorectAnswers: []
+      correctAnswers: l.filter(o => Number.isInteger(o))
 
     } as MultipleChoice;
     this.taskCreated.emit(obj)
