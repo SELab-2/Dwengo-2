@@ -61,6 +61,8 @@ export const controllers = {
         services.progress.getAssignmentProgress,
         services.progress.getGroupProgress,
         services.progress.get,
+        services.progress.getClassCompletion,
+        services.progress.getSubmissionActivity,
     ),
     learningObject: new Resources.LearningObjectController(services.learningObject.get, services.learningObject.getAll),
     learningPath: new Resources.LearningPathController(services.learningPath.get, services.learningPath.getAll),

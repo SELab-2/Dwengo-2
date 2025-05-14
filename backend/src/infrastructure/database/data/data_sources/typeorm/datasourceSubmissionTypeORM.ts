@@ -3,6 +3,7 @@ import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
 import { Submission } from "../../../../../core/entities/submission";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
+import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
 import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
 
@@ -165,5 +166,49 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         });
         // Return the submissions as entities
         return submissionModels.map(model => model.toEntity());
+    }
+
+    public async getMonthlySubmissionCounts(classId: string): Promise<number[]> {
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const classRepository = datasource.getRepository(ClassTypeORM);
+        const existingClass = await classRepository.findOne({ where: { id: classId } });
+
+        if (!existingClass) {
+            throw new EntityNotFoundError(`Class with id ${classId} does not exist.`);
+        }
+
+        // Construct the querybuilder
+        const qb = datasource
+            .getRepository(SubmissionTypeORM)
+            .createQueryBuilder("submission")
+            .innerJoin("submission.assignment", "assignment")
+            .innerJoin("assignment.class", "class");
+
+        // Get the count of submissions in the last 12 months
+        const result = await qb
+            .select(`TO_CHAR(DATE_TRUNC('month', submission.time), 'YYYY-MM')`, "month")
+            .addSelect("COUNT(*)", "count")
+            .where("class.id = :classId", { classId })
+            .andWhere("submission.time >= NOW() - INTERVAL '12 months'")
+            .groupBy("month")
+            .orderBy("month", "ASC")
+            .getRawMany();
+
+        const resultMap = new Map<string, number>();
+        result.forEach((row: { month: string; count: string }) => {
+            resultMap.set(row.month, parseInt(row.count));
+        });
+
+        // Vul alle 12 maanden aan met 0 indien geen resultaat
+        const now = new Date();
+        const monthlyCounts: number[] = [];
+        for (let i = 11; i >= 0; i--) {
+            const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            const key = date.toISOString().slice(0, 7); // "YYYY-MM"
+            monthlyCounts.push(resultMap.get(key) ?? 0);
+        }
+
+        return monthlyCounts;
     }
 }
