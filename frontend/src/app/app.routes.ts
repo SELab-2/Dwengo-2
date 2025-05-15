@@ -19,6 +19,7 @@ import { AuthorizedGuard } from './guards/authorized.guard';
 import { LearningPathPageComponent } from './pages/learning-path-page/learning-path-page.component';
 import { CreateGroupComponent } from './components/create-group/create-group.component';
 import { AssignmentPageComponent } from './pages/assignment-page/assignment-page.component';
+import { CreateAssignmentPageComponent } from './pages/create-assignment-page/create-assignment-page.component';
 
 /**
  * Routing of our frontend.
@@ -36,6 +37,7 @@ export const routes: Routes = [
     { path: 'student/chat/:id', component: ChatPageComponent, title: "Chat", canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'student/groups/:id', component: GroupComponent },
     { path: 'teacher/assignments/:id', component: AssignmentPageComponent, title: "Assignment", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
+    { path: 'teacher/assignments/:id/:id', component: CreateAssignmentPageComponent, title: "Assignment", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'student/assignments', component: AssignmentsPageComponent, title: "My Assignments", canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'teacher/assignments', component: AssignmentsPageComponent, title: "My Assignments", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'student/assignments/:id', component: AssignmentPageComponent, title: "Assignment", canActivate: [UserTypeGuard], data: { userType: 'student' } },
