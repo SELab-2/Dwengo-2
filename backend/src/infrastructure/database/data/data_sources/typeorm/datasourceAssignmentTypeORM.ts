@@ -4,9 +4,8 @@ import { Assignment } from "../../../../../core/entities/assignment";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
 import { UserOfClassTypeORM } from "../../data_models/userOfClassTypeorm";
-import { SimpleConsoleLogger } from "typeorm";
+import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     //TODO: classId can be removed
@@ -59,20 +58,17 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     public async getAssignmentsByUserId(userId: string): Promise<Assignment[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const userModel: UserTypeORM | null = await datasource
-            .getRepository(UserTypeORM)
-            .findOne({
-                where: { id: userId },
-            });
+        const userModel: UserTypeORM | null = await datasource.getRepository(UserTypeORM).findOne({
+            where: { id: userId },
+        });
 
-        console
+        console;
 
-        if(!userModel) {
+        if (!userModel) {
             throw new EntityNotFoundError(`User with id ${userId} not found`);
         }
 
-
-        if(userModel.role === UserType.STUDENT){
+        if (userModel.role === UserType.STUDENT) {
             const assignmentsJoinResult = await datasource
                 .getRepository(StudentOfGroupTypeORM)
                 .createQueryBuilder()
@@ -98,8 +94,6 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
             .where("userOfClass.user = :id", { id: userId })
             .getMany();
 
-        console.log(assignments);
-        
         return assignments.map(assignment => {
             return assignment.toAssignmentEntity();
         });
