@@ -112,7 +112,8 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const classModel: ClassTypeORM | null = await datasource.getRepository(ClassTypeORM).findOne({
-            where: { id: classId }, relations: { members: true },
+            where: { id: classId },
+            relations: { members: true },
         });
 
         if (!classModel) {
@@ -140,7 +141,7 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
 
     public async removeStudentFromGroup(studentId: string, groupId: string): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
-        const groupRepository = datasource.getRepository(GroupTypeORM)
+        const groupRepository = datasource.getRepository(GroupTypeORM);
 
         const studentModel: UserTypeORM | null = await datasource.getRepository(UserTypeORM).findOne({
             where: { id: studentId, role: UserType.STUDENT },
@@ -150,18 +151,17 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError(`Student with id ${studentId} not found`);
         }
 
-        const groupModel: GroupTypeORM | null = await groupRepository
-            .findOne({
-                where: { id: groupId },
-                relations: ['students']
-            });
+        const groupModel: GroupTypeORM | null = await groupRepository.findOne({
+            where: { id: groupId },
+            relations: ["students"],
+        });
 
         if (!groupModel) {
             throw new EntityNotFoundError(`Group with id ${groupId} not found`);
         }
 
         const groupSize = groupModel.students.length;
-        
+
         // Filter out the student with studentId
         groupModel.students = groupModel.students.filter(studentModel => studentModel.id != studentId);
 
@@ -176,11 +176,10 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
         const groupRepository = datasource.getRepository(GroupTypeORM);
 
-        const groupModel: GroupTypeORM | null = await groupRepository
-            .findOne({
-                where: { id: groupId },
-                relations: ['students']
-            });
+        const groupModel: GroupTypeORM | null = await groupRepository.findOne({
+            where: { id: groupId },
+            relations: ["students"],
+        });
 
         if (!groupModel) {
             throw new EntityNotFoundError(`Group with id ${groupId} not found`);
@@ -209,15 +208,16 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const classModel = await datasource.getRepository(ClassTypeORM).findOne({
-            where: { id: classId }, relations: { members: true },
-        })
+            where: { id: classId },
+            relations: { members: true },
+        });
 
         if (!classModel) {
             throw new EntityNotFoundError(`Class with id ${classId} not found`);
         }
 
         // Only return the students of the class.
-        const studentModels: UserTypeORM[] = classModel.members.filter(userModel => userModel.role == UserType.STUDENT)
+        const studentModels: UserTypeORM[] = classModel.members.filter(userModel => userModel.role == UserType.STUDENT);
         return studentModels.map(studentModel => studentModel.toEntity());
     }
 
@@ -240,12 +240,11 @@ export class DatasourceStudentTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
         const groupRepository = datasource.getRepository(GroupTypeORM);
 
-        const groupModel: GroupTypeORM | null = await groupRepository
-            .findOne({
-                where: { id: groupId },
-                relations: ['students']
-            });
-        
+        const groupModel: GroupTypeORM | null = await groupRepository.findOne({
+            where: { id: groupId },
+            relations: ["students"],
+        });
+
         if (!groupModel) {
             throw new EntityNotFoundError(`Group with id ${groupId} not found`);
         }

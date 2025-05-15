@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
-import { ManyToMany } from "typeorm/decorator/relations/ManyToMany"; // Important to specify the exact path here
 import { JoinTable } from "typeorm/decorator/relations/JoinTable"; // Important to specify the exact path here
-
+import { ManyToMany } from "typeorm/decorator/relations/ManyToMany"; // Important to specify the exact path here
 import { AssignmentTypeORM } from "./assignmentTypeorm";
 import { UserTypeORM } from "./userTypeorm";
 import { Group } from "../../../../core/entities/group";
@@ -17,7 +16,7 @@ export class GroupTypeORM {
 
     @ManyToMany(() => UserTypeORM)
     @JoinTable()
-    students!: UserTypeORM[]
+    students!: UserTypeORM[];
 
     public toEntity(): Group {
         const studentIds: string[] = this.students.map((userModel: UserTypeORM) => userModel.id);

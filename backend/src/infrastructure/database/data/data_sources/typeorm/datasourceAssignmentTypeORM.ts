@@ -54,19 +54,18 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     }
 
     public async getAssignmentsByUserId(userId: string): Promise<Assignment[]> {
-
         const datasource = await DatasourceTypeORM.datasourcePromise;
         const groupRepository = datasource.getRepository(GroupTypeORM);
-            
+
         const groupModels: GroupTypeORM[] = await groupRepository.find({
             where: {
                 students: {
-                    id: userId
-                }
+                    id: userId,
+                },
             },
             relations: {
-                assignment: true
-            }
+                assignment: true,
+            },
         });
 
         return groupModels.map(model => model.assignment.toAssignmentEntity());

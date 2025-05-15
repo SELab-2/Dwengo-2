@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { EntityNotFoundError } from "../../../../config/error";
-import { ManyToMany } from "typeorm/decorator/relations/ManyToMany"; // Important to specify the exact path here
 import { JoinTable } from "typeorm/decorator/relations/JoinTable"; // Important to specify the exact path here
-import { Class } from "../../../../core/entities/class";
+import { ManyToMany } from "typeorm/decorator/relations/ManyToMany"; // Important to specify the exact path here
 import { UserType, UserTypeORM } from "./userTypeorm";
+import { EntityNotFoundError } from "../../../../config/error";
+import { Class } from "../../../../core/entities/class";
 
 @Entity()
 export class ClassTypeORM {
@@ -21,7 +21,7 @@ export class ClassTypeORM {
 
     @ManyToMany(() => UserTypeORM)
     @JoinTable()
-    members!: UserTypeORM[]
+    members!: UserTypeORM[];
 
     public static createClassTypeORM(newClass: Class): ClassTypeORM {
         const classTypeORM: ClassTypeORM = new ClassTypeORM();

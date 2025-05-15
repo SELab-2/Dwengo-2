@@ -36,7 +36,7 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
         // find the class model with classId
         const classModel: ClassTypeORM | null = await datasource
             .getRepository(ClassTypeORM)
-            .findOne({ where: { id: classId }, relations: { members: true }});
+            .findOne({ where: { id: classId }, relations: { members: true } });
 
         // if not found, error
         if (!classModel) {
@@ -58,15 +58,17 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
         const classModel: ClassTypeORM | null = await datasource
             .getRepository(ClassTypeORM)
-            .findOne({ where: { id: id }, relations: { members: true }});
+            .findOne({ where: { id: id }, relations: { members: true } });
 
         if (!classModel) {
             throw new EntityNotFoundError(`Class with id ${id} not found`);
         }
 
-        const teacher: UserTypeORM | undefined = classModel.members.find(userModel => userModel.role == UserType.TEACHER);
+        const teacher: UserTypeORM | undefined = classModel.members.find(
+            userModel => userModel.role == UserType.TEACHER,
+        );
 
-        if (!teacher){
+        if (!teacher) {
             throw new EntityNotFoundError(`No teacher found for class with id ${id}`);
         }
 
@@ -78,15 +80,17 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
 
         const classModel: ClassTypeORM | null = await datasource
             .getRepository(ClassTypeORM)
-            .findOne({ where: { name: name }, relations: { members: true }});
+            .findOne({ where: { name: name }, relations: { members: true } });
 
         if (!classModel) {
             throw new EntityNotFoundError(`Class with name ${name} not found`);
         }
 
-        const teacher: UserTypeORM | undefined = classModel.members.find(userModel => userModel.role == UserType.TEACHER);
+        const teacher: UserTypeORM | undefined = classModel.members.find(
+            userModel => userModel.role == UserType.TEACHER,
+        );
 
-        if (!teacher){
+        if (!teacher) {
             throw new EntityNotFoundError(`No teacher found for class with name ${name}`);
         }
 
@@ -126,9 +130,11 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
     public async getAllClasses(): Promise<Class[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const classModels: ClassTypeORM[] = await datasource.getRepository(ClassTypeORM).find({ relations: { members: true } });
+        const classModels: ClassTypeORM[] = await datasource
+            .getRepository(ClassTypeORM)
+            .find({ relations: { members: true } });
 
-        return classModels.map(classModel => classModel.toClassEntity())
+        return classModels.map(classModel => classModel.toClassEntity());
     }
 
     public async deleteClassById(id: string): Promise<void> {
@@ -152,14 +158,14 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
             where: {
                 members: {
                     id: id,
-                }
+                },
             },
             relations: {
-                members: true
-            }
-        })
+                members: true,
+            },
+        });
 
-        return classModels.map(classModel => classModel.toClassEntity())
+        return classModels.map(classModel => classModel.toClassEntity());
     }
 
     /**
@@ -171,7 +177,8 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const classModel = await datasource.getRepository(ClassTypeORM).findOne({
-            where: { id: classId }, relations: { members: true },
+            where: { id: classId },
+            relations: { members: true },
         });
         if (!classModel) {
             throw new EntityNotFoundError(`Class with id ${classId} not found.`);
@@ -184,7 +191,6 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError(`User with id ${userId} not found.`);
         }
         classModel.members.push(user);
-
 
         await datasource.getRepository(ClassTypeORM).save(classModel);
     }

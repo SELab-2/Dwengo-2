@@ -124,14 +124,14 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const groupRepository = datasource.getRepository(GroupTypeORM);
-    
+
         const groupModels: GroupTypeORM[] = await groupRepository.find({
             where: {
                 students: {
-                    id: userId
-                }
+                    id: userId,
+                },
             },
-            relations: ['students', 'assignment']
+            relations: ["students", "assignment"],
         });
 
         return groupModels.map(model => model.toEntity());
@@ -141,14 +141,14 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const groupRepository = datasource.getRepository(GroupTypeORM);
-    
+
         const groupModels: GroupTypeORM[] = await groupRepository.find({
             where: {
                 assignment: {
-                    id: assignmentId
-                }
+                    id: assignmentId,
+                },
             },
-            relations: ['students', 'assignment']
+            relations: ["students", "assignment"],
         });
 
         return groupModels.map(model => model.toEntity());

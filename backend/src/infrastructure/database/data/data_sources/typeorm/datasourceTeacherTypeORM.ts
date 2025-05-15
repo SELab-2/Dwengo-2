@@ -1,8 +1,6 @@
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
-import { Student } from "../../../../../core/entities/student";
 import { Teacher } from "../../../../../core/entities/teacher";
-import { User } from "../../../../../core/entities/user";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
 
@@ -142,15 +140,16 @@ export class DatasourceTeacherTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const classModel = await datasource.getRepository(ClassTypeORM).findOne({
-            where: { id: classId }, relations: { members: true },
-        })
+            where: { id: classId },
+            relations: { members: true },
+        });
 
         if (!classModel) {
             throw new EntityNotFoundError(`Class with id ${classId} not found`);
         }
 
         // Only return the teachers of the class.
-        const studentModels: UserTypeORM[] = classModel.members.filter(userModel => userModel.role == UserType.TEACHER)
+        const studentModels: UserTypeORM[] = classModel.members.filter(userModel => userModel.role == UserType.TEACHER);
         return studentModels.map(studentModel => studentModel.toEntity());
     }
 }
