@@ -1,0 +1,61 @@
+/* Basis shimmer animatie */
+@keyframes shimmer {
+  0% {
+    background-position: -500px 0;
+  }
+  100% {
+    background-position: 500px 0;
+  }
+}
+
+/* Skeleton card stijl */
+.skeleton-card {
+  padding: 16px;
+  border-radius: 8px;
+  animation: pulse 1.5s infinite;
+}
+
+/* Skeleton elementen */
+.skeleton-header,
+.skeleton-line,
+.skeleton-content,
+.skeleton-avatar {
+  background: linear-gradient(
+    to right,
+    #eeeeee 0%,
+    #dddddd 20%,
+    #eeeeee 40%,
+    #eeeeee 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.skeleton-header {
+  height: 20px;
+  width: 60%;
+}
+
+.skeleton-line {
+  height: 14px;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.skeleton-line.short {
+  width: 70%;
+}
+
+.skeleton-line.header {
+  width: 25%;
+  height: 22px;
+}
+
+.skeleton-avatar {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}

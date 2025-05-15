@@ -6,7 +6,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ProgressService } from './progress.service';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
-import { Progress } from '../interfaces/progress/Progress';
+import { Progress } from '../interfaces/progress/progress';
 
 describe('ProgressService', () => {
   let service: ProgressService;

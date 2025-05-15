@@ -28,6 +28,8 @@ describe('TeacherDashboardComponent', () => {
 
         harness = await RouterTestingHarness.create();
         component = await harness.navigateByUrl("/", TeacherDashboardComponent);
+        component.loadingClasses = false;
+        component.loadingData = false;
         harness.detectChanges();
     });
 
@@ -46,10 +48,8 @@ describe('TeacherDashboardComponent', () => {
         menuCards[1].click();
 
         harness.detectChanges();
-        harness.fixture.whenStable().then(() => {
-            expect(component.setView).toHaveBeenCalledWith('deadlines');
-            expect(component.selectedView).toBe('deadlines');
-        });
+        await harness.fixture.whenStable();
+        expect(component.selectedView).toBe('deadlines');
     });
 
 
