@@ -48,8 +48,10 @@ describe('TeacherDashboardComponent', () => {
         menuCards[1].click();
 
         harness.detectChanges();
-        await harness.fixture.whenStable();
-        expect(component.selectedView).toBe('deadlines');
+        harness.fixture.whenStable().then(() => {
+            expect(component.setView).toHaveBeenCalledWith('deadlines');
+            expect(component.selectedView).toBe('deadlines');
+        });
     });
 
 
