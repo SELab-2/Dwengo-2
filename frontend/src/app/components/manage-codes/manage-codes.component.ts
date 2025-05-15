@@ -7,6 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { ClassCodePopupComponent } from '../class-code-popup/class-code-popup.component';
 import { ClassCodeService } from '../../services/class-codes.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manage-codes',
@@ -26,6 +27,9 @@ export class ManageCodesComponent implements OnInit {
 
   // Class code popup
   readonly classCodePopup = inject(MatDialog);
+
+  // Snackbar
+  private readonly snackBar = inject(MatSnackBar);
 
   public constructor(
     private activeRoute: ActivatedRoute,
@@ -59,17 +63,26 @@ export class ManageCodesComponent implements OnInit {
 
   public expireClassCode(code: Code): void {
     this.classCodeService.expireClassCode(code)
-      .subscribe(response => {});
+      .subscribe(response => {
+        if(!response) this.openSnackBar($localize`Could not expire code`);
+        else this.openSnackBar($localize`Code expired successfully`);
+      });
   }
 
   public deleteClassCode(code: Code): void {
     this.classCodeService.deleteClassCode(code)
-      .subscribe(response => {});
+      .subscribe(response => {
+        if(!response) this.openSnackBar($localize`Could not delete code`);
+        else this.openSnackBar($localize`Code deleted successfully`);
+      });
   }
 
   public createClassCode(): void {
     if(this._classId) this.classCodeService.createClassCode(this._classId)
-        .subscribe(response => {});
+        .subscribe(response => {
+          if(!response) this.openSnackBar($localize`Could not create code`);
+          else this.openSnackBar($localize`Code created successfully`);
+      });
   }
 
   public activeOrExpired(code: Code): string {
@@ -78,6 +91,16 @@ export class ManageCodesComponent implements OnInit {
 
   public get codes() {
     return this._codes;
+  }
+
+  public set codes(codes: Code[]) {
+    this._codes = codes;
+  }
+
+  private openSnackBar(message: string, action: string="Ok") {
+    this.snackBar.open(message, action, {
+        duration: 2500
+    });
   }
 
 }

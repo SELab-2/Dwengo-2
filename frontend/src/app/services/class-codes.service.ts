@@ -23,8 +23,6 @@ export class ClassCodeService {
     public createClassCode(classId: string): Observable<boolean> {
         const headers = this.authService.retrieveAuthenticationHeaders();
 
-        console.log(classId);
-
         return this.http.post(
             `${this.API_URL}/codes`,
             { "classId": classId },

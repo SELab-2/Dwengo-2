@@ -49,7 +49,7 @@ describe('JoinRequestService', () => {
 
         const newJoinRequest: NewJoinRequest = {
             requester: '123',
-            class: '1234',
+            code: '1234',
             userType: 'student'
         };
 
