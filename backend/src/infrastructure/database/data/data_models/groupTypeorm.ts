@@ -15,7 +15,7 @@ export class GroupTypeORM {
     @JoinColumn({ name: "assignment" })
     assignment!: AssignmentTypeORM;
 
-    @ManyToMany(() => UserTypeORM, { cascade: true, onDelete: "CASCADE" })
+    @ManyToMany(() => UserTypeORM)
     @JoinTable()
     students!: UserTypeORM[]
 
