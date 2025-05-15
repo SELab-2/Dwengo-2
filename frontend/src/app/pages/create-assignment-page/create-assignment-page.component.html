@@ -1,0 +1,14 @@
+<app-authenticated-header></app-authenticated-header>
+<div class="wrap">
+    <mat-card class="base">
+        @if(showLearningPath){
+        <app-learning-path [hruid]="learningPathId" [language]="language" [assignment]="false"></app-learning-path>
+
+        }
+        <div class="right-side">
+            <mat-card-title i18n>Create your Assignment</mat-card-title>
+            <app-create-assignment (showGroups)="showGroups()"></app-create-assignment>
+        </div>
+
+    </mat-card>
+</div>
