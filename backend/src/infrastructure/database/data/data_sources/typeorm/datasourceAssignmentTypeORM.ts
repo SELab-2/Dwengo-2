@@ -61,7 +61,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
 
         const userModel: UserTypeORM | null = await datasource.getRepository(UserTypeORM).findOne({
             where: { id: userId },
-        })
+        });
 
         if (!userModel) {
             throw new EntityNotFoundError(`User with id ${userId} not found`);
@@ -77,7 +77,7 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
                     },
                 },
                 relations: {
-                    assignment: { class: true } // Important that the class is also loaded, as this is needed to convert the assignment to an entity
+                    assignment: { class: true }, // Important that the class is also loaded, as this is needed to convert the assignment to an entity
                 },
             });
 
@@ -90,10 +90,10 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
                 class: {
                     members: {
                         id: userId,
-                    }
-                }
-            }
-        })
+                    },
+                },
+            },
+        });
         return assignmentModels.map(assignmentModel => assignmentModel.toAssignmentEntity());
     }
 
