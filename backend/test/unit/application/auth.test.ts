@@ -3,11 +3,10 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { AuthenticationManager } from "../../../src/application/auth";
 import { UserType } from "../../../src/core/entities/user";
-import { IStudentRepository } from "../../../src/core/repositories/studentRepositoryInterface";
-import { ITeacherRepository } from "../../../src/core/repositories/teacherRepositoryInterface";
+import { IUserRepository } from "../../../src/core/repositories/userRepositoryInterface";
 import { GetUser } from "../../../src/core/services/user";
 
-type mockUser = { id: string; email: string; passwordHash: string; userType: UserType };
+type mockUser = { id: string; email: string; passwordHash: string };
 
 async function generatePasswordHash(password: string, saltRounds: number = 10): Promise<string> {
     return await bcrypt.hash(password, saltRounds);
@@ -15,7 +14,7 @@ async function generatePasswordHash(password: string, saltRounds: number = 10): 
 
 function mockRepoConstructor(userData: mockUser) {
     const responseFn = () => ({ ...userData, toObject: () => ({ ...userData }) });
-    const queryFn = (m: any, s: () => any, f: () => any) => (q: any) => (q === m ? s() : f());
+    const queryFn = (m: any, u: () => any, f: () => any) => (q: any) => (q === m ? u() : f());
     return {
         // eslint-disable-next-line prettier/prettier
         getById: jest.fn(queryFn(userData.id, () => Promise.resolve(responseFn()), () => Promise.reject(new Error("User not found")))),
@@ -24,32 +23,25 @@ function mockRepoConstructor(userData: mockUser) {
     };
 }
 
-jest.mock("../../../src/infrastructure/repositories/studentRepositoryTypeORM", () => ({
-    StudentRepositoryTypeORM: jest.fn(
-        (userData: mockUser) => mockRepoConstructor(userData) as unknown as jest.Mocked<IStudentRepository>,
-    ),
-}));
-jest.mock("../../../src/infrastructure/repositories/teacherRepositoryTypeORM", () => ({
-    TeacherRepositoryTypeORM: jest.fn(
-        (userData: mockUser) => mockRepoConstructor(userData) as unknown as jest.Mocked<ITeacherRepository>,
+jest.mock("../../../src/infrastructure/repositories/userRepositoryTypeORM", () => ({
+    UserRepositoryTypeORM: jest.fn(
+        (userData: mockUser) => mockRepoConstructor(userData) as unknown as jest.Mocked<IUserRepository>,
     ),
 }));
 
-const { StudentRepositoryTypeORM } = jest.requireMock("../../../src/infrastructure/repositories/studentRepositoryTypeORM");
-const { TeacherRepositoryTypeORM } = jest.requireMock("../../../src/infrastructure/repositories/teacherRepositoryTypeORM");
+
+const { UserRepositoryTypeORM } = jest.requireMock("../../../src/infrastructure/repositories/userRepositoryTypeORM");
 
 const mockUsers = {
-    student: { id: "s123", email: "s@example.com", passwordHash: "", userType: UserType.STUDENT },
-    teacher: { id: "t123", email: "t@example.com", passwordHash: "", userType: UserType.TEACHER },
+    user: { id: "u123", email: "u@example.com", passwordHash: "" },
 };
 
 let authManager: AuthenticationManager;
 
 async function setup() {
-    mockUsers.student.passwordHash = await generatePasswordHash("pass");
-    mockUsers.teacher.passwordHash = await generatePasswordHash("pass");
+    mockUsers.user.passwordHash = await generatePasswordHash("pass");
     authManager = new AuthenticationManager(
-        new GetUser(StudentRepositoryTypeORM(mockUsers.student), TeacherRepositoryTypeORM(mockUsers.teacher)),
+        new GetUser(UserRepositoryTypeORM(mockUsers.user)),
         "secret",
         "1h",
         "refresh",
@@ -65,52 +57,51 @@ describe("AuthenticationManager", () => {
     });
 
     it("authenticates with email/pass", async () => {
-        const tokens = await authManager.authenticate("s@example.com", "pass");
+        const tokens = await authManager.authenticate("u@example.com", "pass");
         expect(tokens).not.toBeNull();
         expect(tokens!.accessToken).toBeDefined();
         expect(tokens!.refreshToken).toBeDefined();
         const payload = authManager.verifyToken(tokens!.accessToken);
-        expect(payload!.id).toBe("s123");
-        expect(payload!.userType).toBe(UserType.STUDENT);
+        expect(payload!.id).toBe("u123");
     });
     it("fails bad creds", async () => {
-        const tokens = await authManager.authenticate("s@example.com", "wrong");
+        const tokens = await authManager.authenticate("u@example.com", "wrong");
         expect(tokens).toBeNull();
     });
     it("verifies good token", async () => {
-        const token = jwt.sign({ id: "s123", userType: UserType.STUDENT }, "secret", { expiresIn: "1h" });
+        const token = jwt.sign({ id: "u123" }, "secret", { expiresIn: "1h" });
         const payload = authManager.verifyToken(token);
         expect(payload).not.toBeNull();
-        expect({ id: payload!.id, userType: payload!.userType }).toEqual({ id: "s123", userType: UserType.STUDENT });
+        expect({ id: payload!.id }).toEqual({ id: "u123" });
     });
     it("rejects bad token", async () => {
         const payload = authManager.verifyToken("garbage");
         expect(payload).toBeNull();
     });
     it("refreshes token", async () => {
-        const oldTokens = await authManager.authenticate("t@example.com", "pass");
+        const oldTokens = await authManager.authenticate("u@example.com", "pass");
         await new Promise(resolve => setTimeout(resolve, 1100));
         const newTokens = authManager.refreshAccessToken(oldTokens!.refreshToken);
         expect(newTokens).not.toBeNull();
         expect(newTokens!.accessToken).not.toBe(oldTokens!.accessToken);
         const payload = authManager.verifyToken(newTokens!.accessToken);
-        expect(payload!.id).toBe("t123");
+        expect(payload!.id).toBe("u123");
     });
     it("blocks used refresh token", async () => {
-        const tokens = await authManager.authenticate("t@example.com", "pass");
+        const tokens = await authManager.authenticate("u@example.com", "pass");
         authManager.refreshAccessToken(tokens!.refreshToken);
         const retry = authManager.refreshAccessToken(tokens!.refreshToken);
         expect(retry).toBeNull();
     });
     it("cleans up used tokens after expiry", async () => {
         const authShort = new AuthenticationManager(
-            { execute: async (input: any) => mockUsers.student } as any,
+            { execute: async (input: any) => mockUsers.user } as any,
             "secret",
             "1h",
             "refresh",
             "1s",
         );
-        const tokens = await authShort.authenticate("s@example.com", "pass");
+        const tokens = await authShort.authenticate("u@example.com", "pass");
         authShort.refreshAccessToken(tokens!.refreshToken);
         await new Promise(resolve => setTimeout(resolve, 1100));
         expect((authShort as any).usedRefreshTokens.size).toBe(0);

@@ -3,7 +3,7 @@
  * when requesting a list of questions by user or by assignment.
  */
 export interface QuestionThreadResponse {
-    questionThreads: string[];
+    threads?: string[];
 }
 
 /**

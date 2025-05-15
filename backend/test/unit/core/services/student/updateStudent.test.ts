@@ -1,26 +1,21 @@
 import { ErrorCode } from "../../../../../src/application/types";
 import { Student } from "../../../../../src/core/entities/student";
 import { UserType } from "../../../../../src/core/entities/user";
-import { IStudentRepository } from "../../../../../src/core/repositories/studentRepositoryInterface";
-import { ITeacherRepository } from "../../../../../src/core/repositories/teacherRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { UpdateUser } from "../../../../../src/core/services/user";
 
 describe("UpdateStudent Service", () => {
-    let studentRepository: jest.Mocked<IStudentRepository>;
-    let teacherRepository: jest.Mocked<ITeacherRepository>;
+    let userRepository: jest.Mocked<IUserRepository>;
     let updateStudent: UpdateUser;
 
     beforeEach(() => {
-        studentRepository = {
+        userRepository = {
             getById: jest.fn(),
             checkByEmail: jest.fn(),
             update: jest.fn(),
-        } as unknown as jest.Mocked<IStudentRepository>;
-        teacherRepository = {
-            checkByEmail: jest.fn(),
-        } as unknown as jest.Mocked<ITeacherRepository>;
+        } as unknown as jest.Mocked<IUserRepository>;
 
-        updateStudent = new UpdateUser(studentRepository, teacherRepository);
+        updateStudent = new UpdateUser(userRepository);
     });
 
     it("should update student info successfully", async () => {
@@ -32,9 +27,9 @@ describe("UpdateStudent Service", () => {
             "oldSchool",
             "1",
         );
-        studentRepository.getById.mockResolvedValue(student);
-        studentRepository.update.mockResolvedValue(student);
-        studentRepository.checkByEmail.mockResolvedValue(false);
+        userRepository.getById.mockResolvedValue(student);
+        userRepository.update.mockResolvedValue(student);
+        userRepository.checkByEmail.mockResolvedValue(false);
 
         const params = {
             id: "1",
@@ -48,10 +43,10 @@ describe("UpdateStudent Service", () => {
 
         const result = await updateStudent.execute(params);
 
-        expect(studentRepository.getById).toHaveBeenCalledWith("1");
-        expect(studentRepository.checkByEmail).toHaveBeenCalledWith("newemail@example.com");
-        expect(teacherRepository.checkByEmail).toHaveBeenCalledWith("newemail@example.com");
-        expect(studentRepository.update).toHaveBeenCalledWith(
+        expect(userRepository.getById).toHaveBeenCalledWith("1");
+        expect(userRepository.checkByEmail).toHaveBeenCalledWith("newemail@example.com");
+        expect(userRepository.checkByEmail).toHaveBeenCalledWith("newemail@example.com");
+        expect(userRepository.update).toHaveBeenCalledWith(
             expect.objectContaining({
                 id: "1",
                 email: "newemail@example.com",
@@ -73,9 +68,9 @@ describe("UpdateStudent Service", () => {
             "oldSchool",
             "1",
         );
-        studentRepository.getById.mockResolvedValue(student);
-        studentRepository.update.mockResolvedValue(student);
-        studentRepository.checkByEmail.mockResolvedValue(false);
+        userRepository.getById.mockResolvedValue(student);
+        userRepository.update.mockResolvedValue(student);
+        userRepository.checkByEmail.mockResolvedValue(false);
 
         const params = {
             id: "1",
@@ -85,10 +80,10 @@ describe("UpdateStudent Service", () => {
 
         const result = await updateStudent.execute(params);
 
-        expect(studentRepository.getById).toHaveBeenCalledWith("1");
-        expect(studentRepository.checkByEmail).toHaveBeenCalledWith("newemail@example.com");
-        expect(teacherRepository.checkByEmail).toHaveBeenCalledWith("newemail@example.com");
-        expect(studentRepository.update).toHaveBeenCalledWith(
+        expect(userRepository.getById).toHaveBeenCalledWith("1");
+        expect(userRepository.checkByEmail).toHaveBeenCalledWith("newemail@example.com");
+        expect(userRepository.checkByEmail).toHaveBeenCalledWith("newemail@example.com");
+        expect(userRepository.update).toHaveBeenCalledWith(
             expect.objectContaining({
                 id: "1",
                 email: "newemail@example.com",
@@ -103,8 +98,8 @@ describe("UpdateStudent Service", () => {
 
     it("should throw error if email is the same as old one", async () => {
         const student = new Student("sameemail@example.com", "FirstName", "FamilyName", "passwordhash", "School", "1");
-        studentRepository.getById.mockResolvedValue(student);
-        studentRepository.update.mockResolvedValue(student);
+        userRepository.getById.mockResolvedValue(student);
+        userRepository.update.mockResolvedValue(student);
 
         const params = {
             id: "1",
@@ -124,9 +119,9 @@ describe("UpdateStudent Service", () => {
 
     it("should throw error if email is already in use", async () => {
         const student = new Student("oldemail@example.com", "FirstName", "FamilyName", "passwordhash", "school", "1");
-        studentRepository.getById.mockResolvedValue(student);
-        studentRepository.update.mockResolvedValue(student);
-        studentRepository.checkByEmail.mockResolvedValue(true);
+        userRepository.getById.mockResolvedValue(student);
+        userRepository.update.mockResolvedValue(student);
+        userRepository.checkByEmail.mockResolvedValue(true);
 
         const params = {
             id: "1",
@@ -153,8 +148,8 @@ describe("UpdateStudent Service", () => {
             "school",
             "1",
         );
-        studentRepository.getById.mockResolvedValue(student);
-        studentRepository.update.mockResolvedValue(student);
+        userRepository.getById.mockResolvedValue(student);
+        userRepository.update.mockResolvedValue(student);
 
         const params = {
             id: "1",

@@ -2,22 +2,19 @@ import { ApiError, ErrorCode } from "../../../../../src/application/types";
 import { EntityNotFoundError } from "../../../../../src/config/error";
 import { Student } from "../../../../../src/core/entities/student";
 import { UserType } from "../../../../../src/core/entities/user";
-import { IStudentRepository } from "../../../../../src/core/repositories/studentRepositoryInterface";
-import { ITeacherRepository } from "../../../../../src/core/repositories/teacherRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { GetUser } from "../../../../../src/core/services/user/getUser";
 
 describe("getStudent Service", () => {
     let getStudentService: GetUser;
-    let mockStudentRepository: jest.Mocked<IStudentRepository>;
-    let mockTeacherRepository: jest.Mocked<ITeacherRepository>;
+    let userRepository: jest.Mocked<IUserRepository>;
 
     beforeEach(() => {
-        mockStudentRepository = {
-            getById: jest.fn(), // Mock DB function
-        } as unknown as jest.Mocked<IStudentRepository>;
-        mockTeacherRepository = {} as unknown as jest.Mocked<ITeacherRepository>;
+        userRepository = {
+            getById: jest.fn()
+        } as unknown as jest.Mocked<IUserRepository>;
 
-        getStudentService = new GetUser(mockStudentRepository, mockTeacherRepository);
+        getStudentService = new GetUser(userRepository);
     });
 
     test("Should return student if found", async () => {
@@ -25,21 +22,21 @@ describe("getStudent Service", () => {
 
         const params = { id: "1", userType: UserType.STUDENT };
 
-        mockStudentRepository.getById.mockResolvedValue(student);
+        userRepository.getById.mockResolvedValue(student);
         const result = await getStudentService.execute(params);
 
         expect(result).toEqual(student.toObject());
-        expect(mockStudentRepository.getById).toHaveBeenCalledWith("1");
+        expect(userRepository.getById).toHaveBeenCalledWith("1");
     });
 
     test("Should throw error", async () => {
-        mockStudentRepository.getById.mockRejectedValue(new EntityNotFoundError("Student not found"));
+        userRepository.getById.mockRejectedValue(new EntityNotFoundError("Student not found"));
 
         const params = { id: "999", userType: UserType.STUDENT };
 
         await expect(getStudentService.execute(params)).rejects.toMatchObject({
             code: ErrorCode.NOT_FOUND,
         });
-        expect(mockStudentRepository.getById).toHaveBeenCalledWith("999");
+        expect(userRepository.getById).toHaveBeenCalledWith("999");
     });
 });

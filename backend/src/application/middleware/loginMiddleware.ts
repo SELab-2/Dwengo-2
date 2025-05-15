@@ -54,7 +54,6 @@ export function loginMiddleware(
                 token: tokens.accessToken,
                 refreshToken: tokens.refreshToken,
                 id: payload.id,
-                userType: payload.userType,
                 message: "Authentication successful",
             });
             responseToExpress(response, res);

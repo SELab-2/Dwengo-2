@@ -6,22 +6,22 @@ import { tryRepoEntityOperation } from "../../helpers";
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
 import { IGroupRepository } from "../../repositories/groupRepositoryInterface";
 import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
-import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ISubmissionRepository } from "../../repositories/submissionRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export class GetGroupProgress extends GetProgress {
     public constructor(
         private _groupRepository: IGroupRepository,
-        studentRepository: IStudentRepository,
+        userRepository: IUserRepository,
         submissionRepository: ISubmissionRepository,
         assignmentRepository: IAssignmentRepository,
         learningPathRepository: ILearningPathRepository,
     ) {
-        super(studentRepository, submissionRepository, assignmentRepository, learningPathRepository);
+        super(userRepository, submissionRepository, assignmentRepository, learningPathRepository);
     }
 
     public async getUsers(id: string): Promise<User[]> {
-        return await tryRepoEntityOperation(this.studentRepository.getByGroupId(id), "Group", id, true);
+        return await tryRepoEntityOperation(this.userRepository.getByGroupId(id), "Group", id, true);
     }
 
     public async getAssignment(id: string): Promise<Assignment> {

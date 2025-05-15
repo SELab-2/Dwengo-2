@@ -103,12 +103,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - in: query
-          name: userType
-          required: true
-          schema:
-            type: string
-            enum: [student, teacher]
       responses:
         '200':
           $ref: '#/components/responses/UserOK'
@@ -161,12 +155,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - in: query
-          name: userType
-          required: false
-          schema:
-            type: string
-            enum: [student, teacher]
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -216,14 +204,7 @@ paths:
           required: true
           schema:
             type: string
-            format: uuidµ
-        - in: query
-          name: userType
-          required: true
-          schema:
-            type: string
-            enum: [student, teacher]
-
+            format: uuid
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -300,12 +281,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - in: query
-          name: userType
-          required: true
-          schema:
-            type: string
-            enum: [student, teacher]
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -2544,6 +2519,7 @@ components:
         - familyName
         - schoolName
         - passwordHash
+        - userType
       additionalProperties: false
       properties:
         id:
@@ -2571,6 +2547,10 @@ components:
           description: User's school name.
         passwordHash:
           type: string
+        userType:
+          type: string
+          enum: [student, teacher]
+          description: User's type in the system. 
     UserCreate:
       type: object
       required:
