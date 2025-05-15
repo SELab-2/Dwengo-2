@@ -57,7 +57,7 @@ export class CreateMultipleChoiceComponent {
 
   submitQuestion(): void {
     // This one does not make any calls, it just returns the multiple-choice object
-    let l = this.correctAnswers.map((b, i) => {
+    const l = this.correctAnswers.map((b, i) => {
       if (b) return i;
       return null;
     });

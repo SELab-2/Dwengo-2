@@ -85,6 +85,7 @@ export class AssignmentPageComponent implements OnInit {
   onTaskCreated(task: AssignmentTask): void {
     // Implement and call the services to create this task
     // Link this with the current step
+    console.log(task);
     this.openSnackBar($localize`Task Succesfully Created!`);
   }
 
