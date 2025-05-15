@@ -20,6 +20,10 @@ export class QuestionThreadService {
     private errorService: ErrorService,
   ) {}
 
+  private questionThreadMessage = $localize `:@@questionThread:question thread`;
+  private questionThreadsMessage = $localize `:@@questionThreads:question threads`;
+  private questionMessage = $localize `:@@question:question`;
+
   /**
    * Retrieve a single question thread by ID
    */
@@ -31,7 +35,7 @@ export class QuestionThreadService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize `question thread`)
+        this.errorService.retrieveError(this.questionThreadMessage)
       )
     );
   }
@@ -47,7 +51,7 @@ export class QuestionThreadService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize `question threads`)
+        this.errorService.retrieveError(this.questionThreadsMessage)
       ),
       switchMap(response => 
         forkJoin(
@@ -71,7 +75,7 @@ export class QuestionThreadService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.createError($localize `question thread`)
+        this.errorService.createError(this.questionThreadMessage)
       ),
       switchMap(response => of({
         ...questionThread,
@@ -92,7 +96,7 @@ export class QuestionThreadService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.updateError($localize `question`)
+        this.errorService.updateError(this.questionMessage)
       ),
       switchMap(() => of(question))
     );
@@ -109,7 +113,7 @@ export class QuestionThreadService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.deleteError($localize `question`)
+        this.errorService.deleteError(this.questionMessage)
       ),
       switchMap(() => of(true))
     );

@@ -36,13 +36,10 @@ export class CreateGroupComponent {
   private snackbar = inject(MatSnackBar);
 
   // The assignment id to which the group belongs
-  @Input() assignmentId?: string = "123";
+  @Input() assignmentId?: string = "";
 
   // The members of the class that need to be devided into groups
-  @Input() members: User[] = [
-    { id: '1', email: 'alice@gmail.com', firstName: 'Alice', familyName: 'Smith', schoolName: 'Aur Naur', passwordHash: '123' },
-    { id: '2', email: 'bob@gmail.com', firstName: 'Bob', familyName: 'Johnson', schoolName: 'Aur Naur', passwordHash: '123' },
-  ];
+  @Input() members: User[] = [];
 
   // The groups
   private _groups: User[][] = [];
@@ -113,15 +110,17 @@ export class CreateGroupComponent {
    */
   public createGroups(): void {
     if (this.members.length > 0) {
-      this.openSnackBar("There are still members not in a group.");
+      this.openSnackBar($localize`There are still members not assigned to a group.`);
     } else {
-      this.groupService.createGroups(this.groups, this.assignmentId!)
+      const nonEmptyGroups = this.groups.filter(group => group.length > 0);
+
+      this.groupService.createGroups(nonEmptyGroups, this.assignmentId!)
         .subscribe((response) => {
           if(response) {
-            this.openSnackBar("Groups created successfully.");
-            // TODO: redirects? empty lists?
+            this.openSnackBar($localize`Groups created successfully.`);
+            location.reload();
           } else {
-            this.openSnackBar("Failed to create groups.");
+            this.openSnackBar($localize`Failed to create groups.`);
           }
         })
     }
@@ -140,6 +139,13 @@ export class CreateGroupComponent {
    */
   public get emptyGroup(): User[] {
     return [];
+  }
+
+  public partitionMembers(): void {
+    this.members.forEach((member) => {
+      this._groups.push([member]);
+    });
+    this.members = [];
   }
 
   private openSnackBar(message: string, action: string="Ok") {

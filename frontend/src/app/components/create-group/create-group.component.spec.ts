@@ -79,4 +79,9 @@ describe('CreateGroupComponent', () => {
         expect(newGroupDroplist).toBeTruthy();
     });
 
+    it('should have an assign all button', () => {
+        const assignAllButton = fixture.nativeElement.querySelector('button[id="assign-all-button"]');
+        expect(assignAllButton).toBeTruthy();
+    });
+
 });

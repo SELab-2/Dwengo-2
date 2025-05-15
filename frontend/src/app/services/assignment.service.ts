@@ -28,25 +28,30 @@ export class AssignmentService {
     const userId = this.authenticationService.retrieveUserId();
     const headers = this.authenticationService.retrieveAuthenticationHeaders();
 
+    console.log(userId);
+
     return this.http.get<AssignmentResponse>(
       `${this.API_URL}/users/${userId}/assignments`,
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize `assignments`)
+        this.errorService.retrieveError($localize `:@@assignmentsServicesTestAssignments:assignments`)
       ),
-      switchMap(response => 
-        forkJoin(
+      switchMap(response => {
+        console.log(response);
+        return forkJoin(
           response.assignments.map(id => 
             this.http.get<Assignment>(
               `${this.API_URL}/assignments/${id}`,
               headers
             )
           )
-        )
-      )
+        );
+      })
     );
   }
+
+  private assignmentMessage = $localize `:@@assignmentsServicesTestAssignment:assignment`;
 
   /**
    * Retrieve a single assignment by its ID
@@ -59,7 +64,7 @@ export class AssignmentService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize `assignment`)
+        this.errorService.retrieveError(this.assignmentMessage)
       )
     ); 
   }
@@ -78,7 +83,7 @@ export class AssignmentService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.createError($localize `assignment`)
+        this.errorService.createError(this.assignmentMessage)
       ),
       switchMap(response => of({
           ...assignment,
@@ -102,7 +107,7 @@ export class AssignmentService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.updateError($localize `assignment`)
+        this.errorService.updateError(this.assignmentMessage)
       ),
       switchMap(() => of(assignment)) // return the updated assignment
     );
@@ -121,7 +126,7 @@ export class AssignmentService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.deleteError($localize `assignment`)
+        this.errorService.deleteError(this.assignmentMessage)
       ),
       switchMap(() => of(true)) // return true if the assignment was deleted
     );

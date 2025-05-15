@@ -39,11 +39,20 @@ export class LearningPathService {
             { ...headers, params }
         ).pipe(
             this.errorService.pipeHandler(
-                this.errorService.retrieveError($localize`learning paths`)
+                this.errorService.retrieveError($localize`:@@learningPathServiceLearningPaths:learning paths`)
             ),
         );
     }
 
+    /**
+     * Retrieve all learning paths that are made available from our backend
+     */
+    retrieveAll(): Observable<LearningPathResponse> {
+        // if we want to retrieve all learning paths
+        // our backend asks that the 'all' parameter is set to an empty string
+        return this.retrieveLearningPathsByQuery({ all: ''});
+    }
+    
     retrieveOneLearningPath(query: SpecificLearningPathRequest): Observable<LearningPath> {
         const headers = this.authenticationService.retrieveAuthenticationHeaders();
         let params = new HttpParams();
@@ -55,7 +64,7 @@ export class LearningPathService {
             { ...headers, params }
         ).pipe(
             this.errorService.pipeHandler(
-                this.errorService.retrieveError($localize`a learning path`)
+                this.errorService.retrieveError($localize`:@@learningPathServiceLearningPath:a learning path`)
             )
         )
     }

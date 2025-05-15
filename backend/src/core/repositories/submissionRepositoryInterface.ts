@@ -56,4 +56,12 @@ export abstract class ISubmissionRepository extends AbstractRepository {
      * @returns A promise that resolves to the retrieved submissions.
      */
     public abstract getByStudentId(studentId: string): Promise<Submission[]>;
+
+    /**
+     * Get the amount of submissions for a class from the last 12 monts
+     * @param classId The id of the class
+     * @throws EntityNotFoundError when the class is not found
+     * @returns A promise that resolves to an array containing the amount of submissions
+     */
+    public abstract getMonthlySubmissionCounts(classId: string): Promise<number[]>;
 }

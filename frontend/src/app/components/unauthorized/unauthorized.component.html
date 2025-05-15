@@ -1,13 +1,13 @@
 <mat-card class="unauthorized">
     <span class="unauthorized__logo">
-        <img i18n-alt src="assets/dwengo-groen-zwart.svg" alt="Dwengo logo" />
+        <img i18n-alt="@@unauthorizedDwengoLogo" src="assets/dwengo-groen-zwart.svg" alt="Dwengo logo" />
     </span>
 
-    <h1 mat-typography i18n>STOP RIGHT THERE</h1>
-    <p mat-typography i18n>YOU ARE IN VIOLATION OF THIS SITE'S ROUTING PROTOCOLS</p>
+    <h1 mat-typography i18n="@@stopMessage">STOP RIGHT THERE</h1>
+    <p mat-typography i18n="@@violatingMessage">YOU ARE IN VIOLATION OF THIS SITE'S ROUTING PROTOCOLS</p>
 
     <span class="unauthorized__buttons">
-        <button mat-raised-button color="primary" name="home-button" i18n routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="authenticationService.logout()">
+        <button mat-raised-button color="primary" name="home-button" i18n="@@unauthorizedGoBack" routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="authenticationService.logout()">
         Go back to login
         </button>
     </span>
