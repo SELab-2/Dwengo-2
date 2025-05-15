@@ -86,7 +86,6 @@ export class AssignmentPageComponent implements OnInit {
     // Implement and call the services to create this task
     // Link this with the current step
     this.openSnackBar($localize`Task Succesfully Created!`);
-    console.log(task);
   }
 
   // Get the users progress for this assignment
@@ -97,7 +96,6 @@ export class AssignmentPageComponent implements OnInit {
     )
     progressObservable.subscribe(
       (res) => {
-        console.log(res)
         this.progress = res;
         this.step = this.progress.step;
         this.furthestStep = this.progress.step; // furthest step is always returned by progress
@@ -152,7 +150,6 @@ export class AssignmentPageComponent implements OnInit {
       const assignmentObservable = this.assignmentService.retrieveAssignmentById(this.assignmentId);
       assignmentObservable.subscribe(
         (res) => {
-          console.log(res)
           this._assignment = res;
           this.learningPathId = res.learningPathId;
           if (this._assignment && this.isStudent) {

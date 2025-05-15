@@ -53,7 +53,6 @@ export class CreateSubmissionComponent implements OnInit {
       this.loadMultipleChoice(this.taskObject as MultipleChoice);
     }
     if (this.type === TaskType.NormalQuestion) {
-      console.log('called')
       this.loadNormalTask(this.taskObject as NormalQuestion);
     }
   }
