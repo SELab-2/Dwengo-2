@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -41,13 +41,16 @@ export class CreateGroupComponent {
   // The members of the class that need to be devided into groups
   @Input() members: User[] = [];
 
+  // We will let subscribers know when the groups are succesfully created.
+  @Output() groupsCreated: EventEmitter<void> = new EventEmitter<void>();
+
   // The groups
   private _groups: User[][] = [];
 
   // Injected services
   public constructor(
     private groupService: GroupService
-  ) {}
+  ) { }
 
   public get groups() {
     return this._groups;
@@ -82,7 +85,7 @@ export class CreateGroupComponent {
   public drop(event: CdkDragDrop<User[]>) {
     const from: CdkDropList<User[]> = event.previousContainer;
     const to: CdkDropList<User[]> = event.container;
-  
+
     if (to.id === "new-group") {
       // Make a new group by dragging and dropping
       const memberIndex: number = event.previousIndex;
@@ -90,7 +93,7 @@ export class CreateGroupComponent {
 
       // Delete from old list
       from.data.splice(memberIndex, 1);
-  
+
       this._groups.push(newGroup);
     }
     else if (from === to) {
@@ -116,9 +119,9 @@ export class CreateGroupComponent {
 
       this.groupService.createGroups(nonEmptyGroups, this.assignmentId!)
         .subscribe((response) => {
-          if(response) {
+          if (response) {
             this.openSnackBar($localize`Groups created successfully.`);
-            location.reload();
+            this.groupsCreated.emit();
           } else {
             this.openSnackBar($localize`Failed to create groups.`);
           }
@@ -148,9 +151,9 @@ export class CreateGroupComponent {
     this.members = [];
   }
 
-  private openSnackBar(message: string, action: string="Ok") {
+  private openSnackBar(message: string, action: string = "Ok") {
     this.snackbar.open(message, action, {
-        duration: 2500
+      duration: 2500
     });
   }
 
