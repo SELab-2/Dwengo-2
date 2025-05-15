@@ -3,7 +3,7 @@ import { EntityNotFoundError } from "../../../../../config/error";
 import { Assignment } from "../../../../../core/entities/assignment";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
-import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
+import { GroupTypeORM } from "../../data_models/groupTypeorm";
 
 export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     //TODO: classId can be removed
@@ -54,23 +54,22 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     }
 
     public async getAssignmentsByUserId(userId: string): Promise<Assignment[]> {
+
         const datasource = await DatasourceTypeORM.datasourcePromise;
-
-        const assignmentsJoinResult = await datasource
-            .getRepository(StudentOfGroupTypeORM)
-            .createQueryBuilder()
-            .where("StudentOfGroupTypeORM.user = :id", { id: userId })
-            // Join StudentOfGroup
-            .leftJoinAndSelect("StudentOfGroupTypeORM.group", "group") // Last one is alias
-            // Join Group to AssignmentGroup
-            .leftJoinAndSelect("group.assignment", "assignment")
-            // Join Assignment to Class
-            .leftJoinAndSelect("assignment.class", "class")
-            .getMany();
-
-        return assignmentsJoinResult.map(assignmentJoinResult => {
-            return assignmentJoinResult.group.assignment.toAssignmentEntity();
+        const groupRepository = datasource.getRepository(GroupTypeORM);
+            
+        const groupModels: GroupTypeORM[] = await groupRepository.find({
+            where: {
+                students: {
+                    id: userId
+                }
+            },
+            relations: {
+                assignment: true
+            }
         });
+
+        return groupModels.map(model => model.assignment.toAssignmentEntity());
     }
 
     public async getAssignmentsByLearningPathId(learningPathId: string): Promise<Assignment[]> {

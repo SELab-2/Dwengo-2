@@ -3,7 +3,6 @@ import { EntityNotFoundError } from "../../../../../config/error";
 import { Group } from "../../../../../core/entities/group";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
-import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceGroupTypeORM extends DatasourceTypeORM {
@@ -11,7 +10,6 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const groupRepository = datasource.getRepository(GroupTypeORM);
-        const studentOfGroupRepository = datasource.getRepository(StudentOfGroupTypeORM);
         const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
 
         const groupModel = new GroupTypeORM();
@@ -28,19 +26,13 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         }
         groupModel.assignment = assignmentModel;
 
-        // Save the group
-        const savedGroup = await groupRepository.save(groupModel);
-
         // Link students to the group
-        const studentsOfGroup = entity.memberIds.map(memberId => {
-            // TODO: check if the users are actually all students, now teachers can be added to groups too.
-            const studentOfGroup = new StudentOfGroupTypeORM();
-            studentOfGroup.user = { id: memberId } as UserTypeORM;
-            studentOfGroup.group = savedGroup;
-            return studentOfGroup;
+        groupModel.students = entity.memberIds.map(memberId => {
+            return { id: memberId } as UserTypeORM;
         });
 
-        await studentOfGroupRepository.save(studentsOfGroup);
+        // Save the group
+        const savedGroup = await groupRepository.save(groupModel);
 
         return new Group(entity.memberIds, entity.assignmentId, savedGroup.id);
     }
@@ -51,30 +43,20 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
         // Fetch the group model
         const groupModel: GroupTypeORM | null = await datasource.getRepository(GroupTypeORM).findOne({
             where: { id: id },
-            relations: ["assignment"],
+            relations: ["assignment", "students"],
         });
 
         if (!groupModel) {
             throw new EntityNotFoundError(`Group with id ${id} not found`);
         }
 
-        // Fetch all students in that group
-        const studentOfGroups: StudentOfGroupTypeORM[] = await datasource.getRepository(StudentOfGroupTypeORM).find({
-            where: { group: groupModel },
-            relations: ["user"],
-        });
-
-        // Extract UserTypeORM models
-        const studentModels: UserTypeORM[] = studentOfGroups.map(entry => entry.user);
-
-        return groupModel.toEntity(studentModels);
+        return groupModel.toEntity();
     }
 
     public async update(group: Group): Promise<Group> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const groupRepository = datasource.getRepository(GroupTypeORM);
-        const studentOfGroupRepository = datasource.getRepository(StudentOfGroupTypeORM);
 
         let groupModel: GroupTypeORM | null = null;
 
@@ -88,21 +70,12 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError(`Group with id: ${group.id} not found`);
         }
 
-        // Save updated group
-        await groupRepository.save(groupModel);
-
-        // Update students (delete old links and add new ones)
-        await studentOfGroupRepository.delete({ group: groupModel });
-
-        const studentOfGroups = group.memberIds.map(memberId => {
-            // TODO: check if the users are actually all students, now teachers can be added to groups too.
-            const studentOfGroup = new StudentOfGroupTypeORM();
-            studentOfGroup.user = { id: memberId } as UserTypeORM;
-            studentOfGroup.group = groupModel as GroupTypeORM;
-            return studentOfGroup;
+        groupModel.students = group.memberIds.map(memberId => {
+            return { id: memberId } as UserTypeORM;
         });
 
-        await studentOfGroupRepository.save(studentOfGroups);
+        // Save updated group
+        await groupRepository.save(groupModel);
 
         return group;
     }
@@ -150,40 +123,34 @@ export class DatasourceGroupTypeORM extends DatasourceTypeORM {
     public async getByUserId(userId: string): Promise<Group[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const groupsJoinResult = await datasource
-            .getRepository(StudentOfGroupTypeORM)
-            .createQueryBuilder("studentOfGroup")
-            .where("studentOfGroup.user.id = :id", { id: userId })
-            .leftJoinAndSelect("studentOfGroup.group", "group")
-            .getMany();
+        const groupRepository = datasource.getRepository(GroupTypeORM);
+    
+        const groupModels: GroupTypeORM[] = await groupRepository.find({
+            where: {
+                students: {
+                    id: userId
+                }
+            },
+            relations: ['students', 'assignment']
+        });
 
-        const groups = await Promise.all(
-            groupsJoinResult.map(async groupJoinResult => {
-                const group: GroupTypeORM = groupJoinResult.group;
-                const datasourceGroup = new DatasourceGroupTypeORM();
-                return await datasourceGroup.getById(group.id);
-            }),
-        );
-
-        return groups.filter((group): group is Group => group !== null);
+        return groupModels.map(model => model.toEntity());
     }
 
     public async getByAssignmentId(assignmentId: string): Promise<Group[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
-        const groupsJoinResult = await datasource
-            .getRepository(GroupTypeORM)
-            .createQueryBuilder("group")
-            .where("group.assignment.id = :id", { id: assignmentId })
-            .getMany();
+        const groupRepository = datasource.getRepository(GroupTypeORM);
+    
+        const groupModels: GroupTypeORM[] = await groupRepository.find({
+            where: {
+                assignment: {
+                    id: assignmentId
+                }
+            },
+            relations: ['students', 'assignment']
+        });
 
-        const groups = await Promise.all(
-            groupsJoinResult.map(async group => {
-                const datasourceGroup = new DatasourceGroupTypeORM();
-                return await datasourceGroup.getById(group.id);
-            }),
-        );
-
-        return groups.filter((group): group is Group => group !== null);
+        return groupModels.map(model => model.toEntity());
     }
 }
