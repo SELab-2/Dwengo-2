@@ -43,7 +43,7 @@ export class ClassCodeService {
 
         return this.http.patch(
             `${this.API_URL}/codes/${code.code}`,
-            null, // No body
+            { expired: true }, 
             {
                 ...headers,
                 observe: 'response'
