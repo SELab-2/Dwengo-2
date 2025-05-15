@@ -92,7 +92,6 @@ export class TeacherDashboardComponent implements OnInit {
         this.classes = classes;
         // Collect all the assignments of the class
         const localizedAssignments: Assignment[] = [];
-        console.log(assignments)
         classes.forEach(cls => localizedAssignments.push(
           ...assignments
           .filter(a => a.classId === cls.id)
