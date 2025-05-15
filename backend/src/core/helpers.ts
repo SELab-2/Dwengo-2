@@ -1,5 +1,5 @@
 import { ApiError, ErrorCode } from "../application/types";
-import { EntityNotFoundError } from "../config/error";
+import { EntityNotFoundError, ExpiredError } from "../config/error";
 
 /**
  * @description Tiny helper to wrap repo calls and handle errors.
@@ -23,6 +23,12 @@ export async function tryRepoEntityOperation<T>(
             throw {
                 code: ErrorCode.NOT_FOUND,
                 message: `${entity} with ${idBased ? "ID" : "key"} ${identifier} not found`,
+            } as ApiError;
+        }
+        if (e instanceof ExpiredError) {
+            throw {
+                code: ErrorCode.FORBIDDEN,
+                message: `Dependency required for this request is expired`,
             } as ApiError;
         }
         throw e;
