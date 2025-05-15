@@ -7,10 +7,12 @@ import { JoinCode } from "../../../../core/entities/joinCode";
 export class JoinCodeTypeORM {
     @BeforeInsert()
     generateShortId() {
-        // Convert a random number to its base 36 representation. (uses 0-9 and a-z)
-        const base36String = Math.random().toString(36);
-        // Skip the "0.", use the decimals to make the id
-        this.code = base36String.substring(2, 8);
+        if (!this.code) {
+            // Convert a random number to its base 36 representation (uses 0-9 and a-z)
+            const base36String = Math.random().toString(36);
+            // Skip the "0.", use the decimals to make the id
+            this.code = base36String.substring(2, 8);
+        }
     }
 
     @PrimaryColumn({ unique: true })
