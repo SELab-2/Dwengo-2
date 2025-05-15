@@ -1,5 +1,7 @@
 <div class="create-assignment">
-    <mat-card>
+
+    @if(!showCreateGroup) {
+        <mat-card class="form-card">
         <mat-card-content>
             <form [formGroup]="createForm" (ngSubmit)="create()" class="create-assignment-form">
                 <mat-form-field>
@@ -52,5 +54,13 @@
                 </button>
             </form>
         </mat-card-content>
-    </mat-card>
+        </mat-card>
+    }
+
+    @if(showCreateGroup) {
+        <app-create-group
+            [assignmentId]="assignmentId"
+            [members]="classMembers">
+        </app-create-group>
+    }
 </div>

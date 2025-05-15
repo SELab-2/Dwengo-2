@@ -1,24 +1,18 @@
 import { ErrorCode } from "../../../../../src/application/types";
 import { UserType } from "../../../../../src/core/entities/user";
-import { IStudentRepository } from "../../../../../src/core/repositories/studentRepositoryInterface";
-import { ITeacherRepository } from "../../../../../src/core/repositories/teacherRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { CreateUser } from "../../../../../src/core/services/user";
 
-const mockStudentRepository = {
+const mockUserRepository = {
     checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
     create: jest.fn().mockResolvedValue(null), // Simulate student
-} as unknown as jest.Mocked<IStudentRepository>;
-
-const mockTeacherRepository = {
-    checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
-    create: jest.fn().mockResolvedValue(null), // Simulate teacher
-} as unknown as jest.Mocked<ITeacherRepository>;
+} as unknown as jest.Mocked<IUserRepository>;
 
 describe("CreateTeacher service", () => {
     let createTeacher: CreateUser;
 
     beforeEach(() => {
-        createTeacher = new CreateUser(mockStudentRepository as any, mockTeacherRepository as any);
+        createTeacher = new CreateUser(mockUserRepository as any);
     });
 
     test("Should throw error because of invalid email", async () => {
@@ -37,7 +31,7 @@ describe("CreateTeacher service", () => {
     });
 
     test("Should throw error if email is already in use by teacher", async () => {
-        mockTeacherRepository.checkByEmail.mockResolvedValue(true);
+        mockUserRepository.checkByEmail.mockResolvedValue(true);
         const params = {
             email: "test@example.com",
             firstName: "John",
@@ -52,11 +46,11 @@ describe("CreateTeacher service", () => {
         });
 
         // Control if checkByEmail is correctly called
-        expect(mockTeacherRepository.checkByEmail).toHaveBeenCalledWith("test@example.com");
+        expect(mockUserRepository.checkByEmail).toHaveBeenCalledWith("test@example.com");
     });
 
     test("Should throw error if email is already in use by teacher", async () => {
-        mockTeacherRepository.checkByEmail.mockResolvedValue(true);
+        mockUserRepository.checkByEmail.mockResolvedValue(true);
         const params = {
             email: "test@example.com",
             firstName: "John",
@@ -71,6 +65,6 @@ describe("CreateTeacher service", () => {
         });
 
         // Control if checkByEmail is correctly called
-        expect(mockTeacherRepository.checkByEmail).toHaveBeenCalledWith("test@example.com");
+        expect(mockUserRepository.checkByEmail).toHaveBeenCalledWith("test@example.com");
     });
 });

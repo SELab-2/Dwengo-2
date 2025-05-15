@@ -51,7 +51,7 @@ export class CreateRequestComponent {
     if(userId && userType) {
       const newRequest: NewJoinRequest = {
         requester: userId,
-        class: classCode,
+        code: classCode,
         userType: userType
       };
 
@@ -64,12 +64,12 @@ export class CreateRequestComponent {
   }
 
   private extractRequestFormValues(): string {
-    return this.requestForm.value.class;
+    return this.requestForm.value.code;
   }
 
   private buildRequestForm(): FormGroup {
     return this.formBuilder.group({
-      class: ['', Validators.required]
+      code: ['', Validators.required]
     });
   }
 

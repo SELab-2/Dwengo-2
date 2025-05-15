@@ -77,7 +77,6 @@ export interface ApiError {
 
 export interface AuthenticationTokenPayload {
     id: string;
-    userType: string;
 }
 
 export interface TokenResponse {

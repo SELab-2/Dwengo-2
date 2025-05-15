@@ -52,7 +52,6 @@ describe("Test authentication API endpoints", () => {
                 "refreshToken": expect.any(String),
                 "token": expect.any(String),
                 "message": "Authentication successful",
-                "userType": "student"
             })
         });
     });
