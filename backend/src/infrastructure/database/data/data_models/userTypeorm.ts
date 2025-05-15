@@ -43,14 +43,9 @@ export class UserTypeORM {
         userTypeORM.last_name = user.familyName;
         if (user.schoolName) userTypeORM.school_name = user.schoolName;
         userTypeORM.password_hash = user.passwordHash;
-        // Set the role of the user by checking the class of the object.
-        if (user instanceof Teacher) {
-            userTypeORM.role = UserType.TEACHER;
-        } else if (user instanceof Student) {
-            userTypeORM.role = UserType.STUDENT;
-        } else {
-            throw new Error("The user provided was neither a student or a teacher");
-        }
+        user.userType === UserType.STUDENT
+            ? (userTypeORM.role = UserType.STUDENT)
+            : (userTypeORM.role = UserType.TEACHER);
         return userTypeORM;
     }
 

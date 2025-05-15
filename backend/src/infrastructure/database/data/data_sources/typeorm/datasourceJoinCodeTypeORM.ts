@@ -57,12 +57,10 @@ export class DatasourceJoinCodeTypeORM extends DatasourceTypeORM {
         }
 
         const updatedJoinCode = JoinCodeTypeORM.createTypeORM(joinCode, joinCodeModel.class);
-        updatedJoinCode.class = joinCodeModel.class;
+        await joinCodeRepository.delete(joinCodeModel.code);
+        const savedJoinCodeModel = await joinCodeRepository.save(updatedJoinCode);
 
-        joinCodeRepository.delete(joinCodeModel.code);
-        joinCodeRepository.save(updatedJoinCode);
-
-        return updatedJoinCode.toEntity();
+        return savedJoinCodeModel.toEntity();
     }
 
     public async delete(code: string): Promise<void> {

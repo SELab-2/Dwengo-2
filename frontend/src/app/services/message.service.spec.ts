@@ -10,18 +10,17 @@ import { MessageResponseSingle } from '../interfaces/message/messageResponse';
 describe('MessageService', () => {
   const message: Message = {
     id: 'message-id',
-    creatorId: 'user-id',
-    questionId: 'question-id',
+    senderId: 'user-id',
+    threadId: 'question-id',
     content: 'Test message content',
     createdAt: new Date(),
-    isInstructor: false
   };
 
   const newMessage: NewMessage = {
-    creatorId: 'user-id',
-    questionId: 'question-id',
+    senderId: 'user-id',
+    threadId: 'question-id',
+    createdAt: new Date(),
     content: 'Test message content',
-    isInstructor: false
   };
 
   const messageResponseSingle: MessageResponseSingle = {
@@ -65,12 +64,12 @@ describe('MessageService', () => {
     const messageId = 'message-id';
     const message = {
       id: messageId,
-      creatorId: 'user-id',
-      questionId: 'question-id',
+      senderId: 'user-id',
+      threadId: 'question-id',
       content: 'Test message content',
       createdAt: new Date(),
       isInstructor: false,
-    };
+    } as Message;
   
     // First call: /questions/:id/messages → returns message IDs
     http.get.withArgs(jasmine.stringMatching(/\/questions\/.*\/messages/), jasmine.any(Object))
@@ -89,10 +88,7 @@ describe('MessageService', () => {
   it('should create a message', () => {
     http.post.and.returnValue(of(messageResponseSingle));
     service.createMessage(newMessage).subscribe(result => {
-      expect(result).toEqual(jasmine.objectContaining({
-        ...newMessage,
-        id: message.id
-      }));
+      expect(result).toEqual(message.id);
     });
   });
 

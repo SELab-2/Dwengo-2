@@ -1,6 +1,5 @@
 import { AbstractRepository } from "./abstractRepository";
 import { Class } from "../entities/class";
-import { JoinRequestType } from "../entities/joinRequest";
 
 /**
  * Interface for a class repository.
@@ -88,7 +87,6 @@ export abstract class IClassRepository extends AbstractRepository {
      * Add a student/teacher to a class.
      * @param classId id of the class.
      * @param userId id of the user to add to the class.
-     * @param userType type of the user (student/teacher)
      */
-    public abstract addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void>;
+    public abstract addUserToClass(classId: string, userId: string): Promise<void>;
 }

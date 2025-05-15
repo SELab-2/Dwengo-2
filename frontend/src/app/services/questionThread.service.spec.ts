@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { QuestionThreadService } from './questionThread.service';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
+import { AssignmentService } from './assignment.service';
 import { of } from 'rxjs';
 import { QuestionThread, NewQuestionThread, VisibilityType } from '../interfaces/questionThread';
 import { QuestionThreadUpdate } from '../interfaces/questionThread/questionThreadUpdate';
@@ -32,7 +33,7 @@ describe('QuestionThreadService', () => {
   };
 
   const questionThreadResponse: QuestionThreadResponse = {
-    questionThreads: [questionThread.id],
+    threads: [questionThread.id],
   };
 
   const questionThreadResponseSingle: QuestionThreadResponseSingle = {
@@ -42,6 +43,7 @@ describe('QuestionThreadService', () => {
   let http: jasmine.SpyObj<HttpClient>;
   let authenticationService: jasmine.SpyObj<AuthenticationService>;
   let errorService: jasmine.SpyObj<ErrorService>;
+  let assignmentService: jasmine.SpyObj<AssignmentService>;
   let service: QuestionThreadService;
 
   beforeEach(() => {
@@ -53,8 +55,9 @@ describe('QuestionThreadService', () => {
     authenticationService.retrieveAuthenticationHeaders.and.returnValue({
       headers: new HttpHeaders().append('Authorization', `Bearer token`).append('Content-Type', 'application/json'),
     });
+    assignmentService = jasmine.createSpyObj('AssignmentService', ['retrieveAssignmentById']);
 
-    service = new QuestionThreadService(http, authenticationService, errorService);
+    service = new QuestionThreadService(http, authenticationService, errorService, assignmentService);
   });
 
   it('should be created', () => {
@@ -94,14 +97,14 @@ describe('QuestionThreadService', () => {
 
   it('should update a question thread', () => {
     http.patch.and.returnValue(of({}));
-    service.updateQuestion(questionThread.id, updatedQuestionThread).subscribe(result => {
+    service.updateQuestionThread(questionThread.id, updatedQuestionThread).subscribe(result => {
       expect(result).toEqual(updatedQuestionThread);
     });
   });
 
   it('should delete a question thread', () => {
     http.delete.and.returnValue(of({}));
-    service.deleteQuestion(questionThread.id).subscribe(result => {
+    service.deleteQuestionThread(questionThread.id).subscribe(result => {
       expect(result).toBeTrue();
     });
   });

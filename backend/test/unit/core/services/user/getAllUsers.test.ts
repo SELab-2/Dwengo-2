@@ -1,18 +1,18 @@
 import { User } from "../../../../../src/core/entities/user";
-import { IStudentRepository } from "../../../../../src/core/repositories/studentRepositoryInterface";
-import { ITeacherRepository } from "../../../../../src/core/repositories/teacherRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { GetAllUsers } from "../../../../../src/core/services/user";
 
 describe("GetAllUsers Service", () => {
-    let studentRepository: jest.Mocked<IStudentRepository>;
-    let teacherRepository: jest.Mocked<ITeacherRepository>;
+    let userRepository: jest.Mocked<IUserRepository>;
     let getAllUsers: GetAllUsers;
 
     beforeEach(() => {
-        studentRepository = { getAll: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
-        teacherRepository = { getAll: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
+        userRepository = { 
+            getAllStudents: jest.fn(),
+            getAllTeachers: jest.fn()
+        } as unknown as jest.Mocked<IUserRepository>;
 
-        getAllUsers = new GetAllUsers(studentRepository, teacherRepository);
+        getAllUsers = new GetAllUsers(userRepository);
     });
 
     it("should return all students and teachers as objects", async () => {
@@ -48,8 +48,8 @@ describe("GetAllUsers Service", () => {
             schoolName: "School B",
         });
 
-        studentRepository.getAll.mockResolvedValue([mockStudent as unknown as User]);
-        teacherRepository.getAll.mockResolvedValue([mockTeacher as unknown as User]);
+        userRepository.getAllStudents.mockResolvedValue([mockStudent as unknown as User]);
+        userRepository.getAllTeachers.mockResolvedValue([mockTeacher as unknown as User]);
 
         const result = await getAllUsers.execute();
 
@@ -58,13 +58,13 @@ describe("GetAllUsers Service", () => {
             teachers: ["t1"],
         });
 
-        expect(studentRepository.getAll).toHaveBeenCalledTimes(1);
-        expect(teacherRepository.getAll).toHaveBeenCalledTimes(1);
+        expect(userRepository.getAllStudents).toHaveBeenCalledTimes(1);
+        expect(userRepository.getAllTeachers).toHaveBeenCalledTimes(1);
     });
 
     it("should return empty lists if no students or teachers exist", async () => {
-        studentRepository.getAll.mockResolvedValue([]);
-        teacherRepository.getAll.mockResolvedValue([]);
+        userRepository.getAllStudents.mockResolvedValue([]);
+        userRepository.getAllTeachers.mockResolvedValue([]);
 
         const result = await getAllUsers.execute();
 

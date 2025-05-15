@@ -1,0 +1,50 @@
+<div class="chat-container">
+    <mat-toolbar color="primary" class="chat-toolbar">
+        <span>Thread</span>
+        <span class="spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="visibilityMenu" aria-label="Change visibility">
+            <mat-icon class="white-icon">more_vert</mat-icon>
+        </button>
+        <mat-menu #visibilityMenu="matMenu">
+            <button mat-menu-item 
+                    (click)="updateVisibility(VisibilityType.PRIVATE)"
+                    [class.selected]="currentThread.visibility === VisibilityType.PRIVATE">
+                <mat-icon>{{ currentThread.visibility === VisibilityType.PRIVATE ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+                <span>Private</span>
+            </button>
+            <button mat-menu-item 
+                    (click)="updateVisibility(VisibilityType.GROUP)"
+                    [class.selected]="currentThread.visibility === VisibilityType.GROUP">
+                <mat-icon>{{ currentThread.visibility === VisibilityType.GROUP ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+                <span>Group</span>
+            </button>
+            <button mat-menu-item 
+                    (click)="updateVisibility(VisibilityType.PUBLIC)"
+                    [class.selected]="currentThread.visibility === VisibilityType.PUBLIC">
+                <mat-icon>{{ currentThread.visibility === VisibilityType.PUBLIC ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+                <span>Public</span>
+            </button>
+        </mat-menu>
+    </mat-toolbar>
+    
+    <div class="messages-container" #messagesContainer>
+        @for (msg of messages; track msg.id) {
+            <mat-card class="message-card" [class.user-message]="isUserMessage(msg)">
+                <mat-card-title>
+                    {{ usernamesMap[msg.senderId] || 'User' }}
+                    <span class="timestamp">{{ msg.createdAt | date: 'short' }}</span>
+                </mat-card-title>
+                <mat-card-content>{{ msg.content }}</mat-card-content>
+            </mat-card>
+        }
+    </div>
+
+    <form (ngSubmit)="sendMessage()" class="message-input">
+        <mat-form-field appearance="outline" class="input-field">
+            <input matInput [(ngModel)]="newMessageContent" name="message" placeholder="Type your message..." />
+        </mat-form-field>
+        <button mat-icon-button color="primary" type="submit">
+            <mat-icon>send</mat-icon>
+        </button>
+    </form>
+</div>

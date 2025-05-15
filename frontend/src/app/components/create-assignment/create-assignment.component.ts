@@ -13,13 +13,18 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { NewAssignment } from '../../interfaces/assignment';
 import { AssignmentService } from '../../services/assignment.service';
+import { User } from '../../interfaces';
+import { CreateGroupComponent } from '../create-group/create-group.component';
 
 @Component({
   selector: 'app-create-assignment',
   imports: [
+    ReactiveFormsModule,
+    CreateGroupComponent,
+
+    // Angular material
     MatCardModule,
     MatFormFieldModule,
-    ReactiveFormsModule,
     MatSelectModule,
     MatDatepickerModule,
     MatDateRangePicker,
@@ -37,6 +42,10 @@ export class CreateAssignmentComponent implements OnInit {
 
   public classes: Class[] = [];
   public paths: LearningPath[] = [];
+
+  public showCreateGroup: boolean = false;
+  public assignmentId: string = '';
+  public classMembers: User[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -56,12 +65,16 @@ export class CreateAssignmentComponent implements OnInit {
   create(): void {
     const newAssignment: NewAssignment | null = this.extractFormValues();
 
-    console.log(`new assignment: ${JSON.stringify(newAssignment)}`);
-
     if (newAssignment) {
       this.assignmentService.createAssignment(newAssignment).subscribe((response) => {
-        console.log(`Assignment created: ${JSON.stringify(response)}`);
-      })
+
+        // Prepare making the groups for this class
+        this.classesService.classStudents(newAssignment.classId).subscribe((students) => {
+          this.classMembers = students;
+          this.assignmentId = response.id;
+          this.showCreateGroup = true;
+        });
+      });
     }
   }
 

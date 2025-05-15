@@ -1,37 +1,44 @@
 import { ErrorCode } from "../../../../../src/application/types";
+import { Student } from "../../../../../src/core/entities/student";
+import { Teacher } from "../../../../../src/core/entities/teacher";
 import { UserType } from "../../../../../src/core/entities/user";
-import { IStudentRepository } from "../../../../../src/core/repositories/studentRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { RemoveUserFromGroup } from "../../../../../src/core/services/user";
 
 describe("RemoveStudentFromGroup", () => {
-    let mockStudentRepository: jest.Mocked<IStudentRepository>;
+    let userRepository: jest.Mocked<IUserRepository>;
     let removeStudentFromGroup: RemoveUserFromGroup;
 
     beforeEach(() => {
-        mockStudentRepository = {
-            removeFromGroup: jest.fn(),
-        } as unknown as jest.Mocked<IStudentRepository>;
-        removeStudentFromGroup = new RemoveUserFromGroup(mockStudentRepository);
+        userRepository = {
+            getById: jest.fn(),
+            removeFromGroup: jest.fn()
+        } as unknown as jest.Mocked<IUserRepository>;
+        removeStudentFromGroup = new RemoveUserFromGroup(userRepository);
     });
 
     it("should call removeStudentFromGroup on the repository with correct parameters", async () => {
         const id = "123";
         const idParent = "456";
-        const userType = UserType.STUDENT;
-        const params = { id, idParent, userType };
+        const params = { id, idParent };
+        const student = new Student("student@gmail.com", "student", "test", "hash", "ugent", "123");
+
+        userRepository.getById.mockResolvedValue(student);
 
         await removeStudentFromGroup.execute(params);
 
-        expect(mockStudentRepository.removeFromGroup).toHaveBeenCalledWith(id, idParent);
-        expect(mockStudentRepository.removeFromGroup).toHaveBeenCalledTimes(1);
+        expect(userRepository.removeFromGroup).toHaveBeenCalledWith(id, idParent);
+        expect(userRepository.removeFromGroup).toHaveBeenCalledTimes(1);
     });
 
     it("should throw error when trying to remove a teacher from a group", async () => {
-        mockStudentRepository.removeFromGroup.mockRejectedValue(new Error("Student not found"));
+        userRepository.removeFromGroup.mockRejectedValue(new Error("Student not found"));
         const id = "123";
         const idParent = "456";
-        const userType = UserType.TEACHER;
-        const params = { id, idParent, userType };
+        const params = { id, idParent };
+        const teacher = new Teacher("teacher@gmail.com", "teacher", "test", "hash", "ugent", "123");
+
+        userRepository.getById.mockResolvedValue(teacher);
 
         await expect(removeStudentFromGroup.execute(params)).rejects.toEqual({
             code: ErrorCode.BAD_REQUEST,
@@ -40,11 +47,13 @@ describe("RemoveStudentFromGroup", () => {
     });
 
     it("should handle errors thrown by the repository", async () => {
-        mockStudentRepository.removeFromGroup.mockRejectedValue(new Error("Student not found"));
+        userRepository.removeFromGroup.mockRejectedValue(new Error("Student not found"));
         const id = "123";
         const idParent = "456";
-        const userType = UserType.STUDENT;
-        const params = { id, idParent, userType };
+        const params = { id, idParent };
+        const student = new Student("student@gmail.com", "student", "test", "hash", "ugent", "123");
+
+        userRepository.getById.mockResolvedValue(student);
 
         await expect(removeStudentFromGroup.execute(params)).rejects.toThrow("Student not found");
     });

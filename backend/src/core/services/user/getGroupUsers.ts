@@ -3,12 +3,12 @@ import { getGroupUsersSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
 import { Student } from "../../entities/student";
 import { tryRepoEntityOperation } from "../../helpers";
-import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type GetGroupUsersInput = z.infer<typeof getGroupUsersSchema>;
 
 export class GetGroupUsers implements Service<GetGroupUsersInput> {
-    constructor(private studentRepository: IStudentRepository) {}
+    constructor(private userRepository: IUserRepository) {}
 
     /**
      * Executes the group users get process.
@@ -18,7 +18,7 @@ export class GetGroupUsers implements Service<GetGroupUsersInput> {
      */
     async execute(input: GetGroupUsersInput): Promise<object> {
         const students: Student[] = await tryRepoEntityOperation(
-            this.studentRepository.getByGroupId(input.idParent),
+            this.userRepository.getByGroupId(input.idParent),
             "Group",
             input.idParent,
             true,
