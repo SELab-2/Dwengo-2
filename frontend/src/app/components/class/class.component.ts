@@ -14,12 +14,8 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { ClassMembersListComponent } from '../class-members-list/class-members-list.component';
 import { ClassPendingRequestsComponent } from '../class-pending-requests/class-pending-requests.component';
 import { UserType } from '../../interfaces';
-import { ClassCodePopupComponent } from '../class-code-popup/class-code-popup.component';
-
-import {
-  MatDialog,
-} from '@angular/material/dialog';
 import { AuthenticatedHeaderComponent } from '../authenticated-header/authenticated-header.component';
+import { ManageCodesComponent } from '../manage-codes/manage-codes.component';
 
 
 @Component({
@@ -32,6 +28,7 @@ import { AuthenticatedHeaderComponent } from '../authenticated-header/authentica
     ClassMembersListComponent,
     ClassPendingRequestsComponent,
     AuthenticatedHeaderComponent,
+    ManageCodesComponent,
 
     // Angular material
     MatFormFieldModule,
@@ -65,8 +62,7 @@ export class ClassComponent implements OnInit {
   // The form used to update the class
   public updateForm: FormGroup;
 
-  // Class code popup
-  readonly classCodePopup = inject(MatDialog);
+  
 
   public constructor(
     private router: Router,
@@ -194,18 +190,6 @@ export class ClassComponent implements OnInit {
   private openSnackBar(message: string, action: string="Ok") {
     this.snackBar.open(message, action, {
         duration: 2500
-    });
-  }
-
-  /**
-   * Displays a popup with the class code (uses ClassCodePopupComponent).
-   */
-  public showClassCode(): void {
-    this.classCodePopup.open(ClassCodePopupComponent, {
-      data: {
-        // TODO: class code from BACKEND (https://github.com/SELab-2/Dwengo-2/pull/436)
-        classCode: this._class!.id
-      }
     });
   }
 

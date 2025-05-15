@@ -92,4 +92,9 @@ describe('ClassComponent', () => {
     expect(classPendingRequestsList).toBeDefined();
   });
 
+  it('should have a class code managing section', () => {
+    const classCodeManagingSection = harness.fixture.nativeElement.querySelector('app-manage-codes');
+    expect(classCodeManagingSection).toBeDefined();
+  })
+
 });

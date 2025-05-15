@@ -78,14 +78,8 @@
 
         @if(isTeacher()) {
             <div id="class-requests">
-                <div>
-                    <app-class-pending-requests [_class]="_class"></app-class-pending-requests>
-                </div>
-                <div>
-                    <button mat-raised-button (click)="showClassCode()" i18n="@@showClassCode">
-                        Show class code
-                    </button>
-                </div>
+                <app-manage-codes></app-manage-codes>
+                <app-class-pending-requests [_class]="_class"></app-class-pending-requests>
             </div>
         }    
         
