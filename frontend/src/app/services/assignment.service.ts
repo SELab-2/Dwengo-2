@@ -28,6 +28,8 @@ export class AssignmentService {
     const userId = this.authenticationService.retrieveUserId();
     const headers = this.authenticationService.retrieveAuthenticationHeaders();
 
+    console.log(userId);
+
     return this.http.get<AssignmentResponse>(
       `${this.API_URL}/users/${userId}/assignments`,
       headers
@@ -35,16 +37,17 @@ export class AssignmentService {
       this.errorService.pipeHandler(
         this.errorService.retrieveError($localize `:@@assignmentsServicesTestAssignments:assignments`)
       ),
-      switchMap(response => 
-        forkJoin(
+      switchMap(response => {
+        console.log(response);
+        return forkJoin(
           response.assignments.map(id => 
             this.http.get<Assignment>(
               `${this.API_URL}/assignments/${id}`,
               headers
             )
           )
-        )
-      )
+        );
+      })
     );
   }
 
