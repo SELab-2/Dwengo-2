@@ -4,6 +4,7 @@ import { Assignment } from "../../../../../core/entities/assignment";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { GroupTypeORM } from "../../data_models/groupTypeorm";
+import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     //TODO: classId can be removed
@@ -56,19 +57,44 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
     public async getAssignmentsByUserId(userId: string): Promise<Assignment[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
         const groupRepository = datasource.getRepository(GroupTypeORM);
+        const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
 
-        const groupModels: GroupTypeORM[] = await groupRepository.find({
-            where: {
-                students: {
-                    id: userId,
+        const userModel: UserTypeORM | null = await datasource.getRepository(UserTypeORM).findOne({
+            where: { id: userId },
+        })
+
+        if (!userModel) {
+            throw new EntityNotFoundError(`User with id ${userId} not found`);
+        }
+
+        if (userModel.role == UserType.STUDENT) {
+            // The user is a student
+            // Get all the assignments for each group the student is in
+            const groupModels: GroupTypeORM[] = await groupRepository.find({
+                where: {
+                    students: {
+                        id: userId,
+                    },
                 },
-            },
-            relations: {
-                assignment: true,
-            },
-        });
+                relations: {
+                    assignment: { class: true } // Important that the class is also loaded, as this is needed to convert the assignment to an entity
+                },
+            });
 
-        return groupModels.map(model => model.assignment.toAssignmentEntity());
+            return groupModels.map(model => model.assignment.toAssignmentEntity());
+        }
+        // The user is a teacher
+        // Get all the assignments for which the teacher is in the class
+        const assignmentModels: AssignmentTypeORM[] = await assignmentRepository.find({
+            where: {
+                class: {
+                    members: {
+                        id: userId,
+                    }
+                }
+            }
+        })
+        return assignmentModels.map(assignmentModel => assignmentModel.toAssignmentEntity());
     }
 
     public async getAssignmentsByLearningPathId(learningPathId: string): Promise<Assignment[]> {
