@@ -2,16 +2,16 @@ import { z } from "zod";
 import { assignStudentToGroupSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
 import { tryRepoEntityOperation } from "../../helpers";
-import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type AssignStudentToGroupInput = z.infer<typeof assignStudentToGroupSchema>;
 
 export class AssignStudentToGroup implements Service<AssignStudentToGroupInput> {
-    constructor(private studentRepository: IStudentRepository) {}
+    constructor(private userRepository: IUserRepository) {}
 
     async execute(input: AssignStudentToGroupInput): Promise<object> {
         await tryRepoEntityOperation(
-            this.studentRepository.assignToGroup(input.id, input.idParent),
+            this.userRepository.assignToGroup(input.id, input.idParent),
             "Student | Group",
             `${input.id} | ${input.idParent}`,
             true,

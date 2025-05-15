@@ -1,18 +1,18 @@
 import { User } from "../../../../../src/core/entities/user";
-import { IStudentRepository } from "../../../../../src/core/repositories/studentRepositoryInterface";
-import { ITeacherRepository } from "../../../../../src/core/repositories/teacherRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { GetClassUsers } from "../../../../../src/core/services/user";
 
 describe("GetClassUsers Service", () => {
-    let studentRepository: jest.Mocked<IStudentRepository>;
-    let teacherRepository: jest.Mocked<ITeacherRepository>;
+    let userRepository: jest.Mocked<IUserRepository>;
     let getClassUsers: GetClassUsers;
 
     beforeEach(() => {
-        studentRepository = { getByClassId: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
-        teacherRepository = { getByClassId: jest.fn() } as unknown as jest.Mocked<ITeacherRepository>;
+        userRepository = { 
+            getStudentsByClassId: jest.fn(),
+            getTeachersByClassId: jest.fn()
+         } as unknown as jest.Mocked<IUserRepository>;
 
-        getClassUsers = new GetClassUsers(studentRepository, teacherRepository);
+        getClassUsers = new GetClassUsers(userRepository);
     });
 
     it("should return students and teachers as objects", async () => {
@@ -27,8 +27,8 @@ describe("GetClassUsers Service", () => {
             toObject: jest.fn().mockReturnValue({ id: "t1", email: "teacher@example.com" }),
         };
 
-        studentRepository.getByClassId.mockResolvedValue([mockStudent as unknown as User]);
-        teacherRepository.getByClassId.mockResolvedValue([mockTeacher as unknown as User]);
+        userRepository.getStudentsByClassId.mockResolvedValue([mockStudent as unknown as User]);
+        userRepository.getTeachersByClassId.mockResolvedValue([mockTeacher as unknown as User]);
 
         const idParent = "class-123";
         const result = await getClassUsers.execute({ idParent });
@@ -38,13 +38,13 @@ describe("GetClassUsers Service", () => {
             students: ["s1"],
         });
 
-        expect(studentRepository.getByClassId).toHaveBeenCalledWith(idParent);
-        expect(teacherRepository.getByClassId).toHaveBeenCalledWith(idParent);
+        expect(userRepository.getStudentsByClassId).toHaveBeenCalledWith(idParent);
+        expect(userRepository.getTeachersByClassId).toHaveBeenCalledWith(idParent);
     });
 
     it("should return empty arrays if no users found", async () => {
-        studentRepository.getByClassId.mockResolvedValue([]);
-        teacherRepository.getByClassId.mockResolvedValue([]);
+        userRepository.getStudentsByClassId.mockResolvedValue([]);
+        userRepository.getTeachersByClassId.mockResolvedValue([]);
 
         const idParent = "class-456";
         const result = await getClassUsers.execute({ idParent });

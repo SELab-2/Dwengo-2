@@ -5,7 +5,7 @@ import { Submission } from "../../../../../src/core/entities/submission";
 import { IAssignmentRepository } from "../../../../../src/core/repositories/assignmentRepositoryInterface";
 import { IClassRepository } from "../../../../../src/core/repositories/classRepositoryInterface";
 import { ILearningPathRepository } from "../../../../../src/core/repositories/learningPathRepositoryInterface";
-import { IStudentRepository } from "../../../../../src/core/repositories/studentRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { ISubmissionRepository } from "../../../../../src/core/repositories/submissionRepositoryInterface";
 import { GetClassCompletion } from "../../../../../src/core/services/progress/getClassCompletion";
 
@@ -14,7 +14,7 @@ const mockSubmissionRepository: jest.Mocked<ISubmissionRepository> = {
     getAllForStudentInAssignment: jest.fn()
 } as any;
 
-const mockStudentRepository: jest.Mocked<IStudentRepository> = {
+const mockStudentRepository: jest.Mocked<IUserRepository> = {
     getByAssignmentId: jest.fn()
 } as any;
 

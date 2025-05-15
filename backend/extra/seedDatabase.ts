@@ -27,8 +27,7 @@ import { Assignment } from "../src/core/entities/assignment";
 import { Group } from '../src/core/entities/group'
 import { QuestionThread } from "../src/core/entities/questionThread";
 import { Message } from "../src/core/entities/message";
-import { StudentRepositoryTypeORM } from "../src/infrastructure/repositories/studentRepositoryTypeORM";
-import { TeacherRepositoryTypeORM } from "../src/infrastructure/repositories/teacherRepositoryTypeORM";
+import { UserRepositoryTypeORM } from "../src/infrastructure/repositories/userRepositoryTypeORM";
 import { ClassRepositoryTypeORM } from "../src/infrastructure/repositories/classRepositoryTypeORM";
 import { AssignmentRepositoryTypeORM } from "../src/infrastructure/repositories/assignmentRepositoryTypeORM";
 import { GroupRepositoryTypeORM } from "../src/infrastructure/repositories/groupRepositoryTypeORM";
@@ -39,8 +38,7 @@ import { VisibilityType } from "../src/core/entities/questionThread";
 
 export async function seedDatabase(): Promise<void> {
   const classRep = new ClassRepositoryTypeORM();
-  const studentRep = new StudentRepositoryTypeORM();
-  const teacherRep = new TeacherRepositoryTypeORM();
+  const userRep = new UserRepositoryTypeORM();
   const assignmentRep = new AssignmentRepositoryTypeORM();
   const groupRep = new GroupRepositoryTypeORM();
   const threadRep = new ThreadRepositoryTypeORM();
@@ -68,7 +66,7 @@ export async function seedDatabase(): Promise<void> {
         schoolName,
       )
 
-      const savedTeacher = (await teacherRep.create(teacherInput)) as { id: string };
+      const savedTeacher = (await userRep.create(teacherInput)) as { id: string };
       teacherIds.push(savedTeacher.id);
     }
 
@@ -101,7 +99,7 @@ export async function seedDatabase(): Promise<void> {
         schoolName,
       )
 
-      const savedStudent = (await studentRep.create(studentInput)) as { id: string };
+      const savedStudent = (await userRep.create(studentInput)) as { id: string };
       studentIds.push(savedStudent.id);
       // console.log(`Created student: ${firstName} ${lastName} email: ${email} with ID: ${savedStudent.id}`);
     }
@@ -113,7 +111,7 @@ export async function seedDatabase(): Promise<void> {
       const selectedStudents = faker.helpers.arrayElements(studentIds, 7);
       // console.log(`Adding students to class ID ${classId}:`, selectedStudents);
       for (const studentId of selectedStudents) {
-        await classRep.addUserToClass(classId, studentId, JoinRequestType.STUDENT);
+        await classRep.addUserToClass(classId, studentId);
         // console.log(`Added student ID ${studentId} to class ID ${classId}`);
       }
     }
@@ -146,7 +144,7 @@ export async function seedDatabase(): Promise<void> {
 
     // ── 6. Add Groups to Assignments ──
     for (const { id: assignmentId, classId } of assignments) {
-      const students = await studentRep.getByClassId(classId);
+      const students = await userRep.getByClassId(classId);
       const studentIds = students.map((s: any) => s.id);
       const shuffled = faker.helpers.shuffle(studentIds);
     
@@ -176,8 +174,8 @@ export async function seedDatabase(): Promise<void> {
     ];
 
     for (const { id: assignmentId, classId } of assignments) {
-      const students = await studentRep.getByClassId(classId);
-      const teachers = await teacherRep.getByClassId(classId);
+      const students = await userRep.getByClassId(classId);
+      const teachers = await userRep.getByClassId(classId);
       const teacherIds = teachers.map(t => t.id);
     
       // Select 5–6 students for threads

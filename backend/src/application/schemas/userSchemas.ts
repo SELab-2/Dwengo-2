@@ -21,7 +21,6 @@ export const createUserSchema = z.object({
 
 export const deleteUserSchema = z.object({
     id: z.string(),
-    userType: z.nativeEnum(UserType),
 });
 
 export const getAllUsersSchema = z.object({});
@@ -40,7 +39,6 @@ export const getGroupUsersSchema = z.object({
 
 export const getUserSchema = z
     .object({
-        userType: z.nativeEnum(UserType),
         id: z.string().optional(),
         email: z.string().email().optional(),
     })
@@ -52,7 +50,6 @@ export const getUserSchema = z
 export const removeUserFromSchema = z.object({
     id: z.string(),
     idParent: z.string(),
-    userType: z.nativeEnum(UserType),
 });
 
 export const updateUserSchema = z.object({

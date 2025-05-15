@@ -8,15 +8,15 @@ import { Submission } from "../../entities/submission";
 import { tryRepoEntityOperation } from "../../helpers";
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
 import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
-import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ISubmissionRepository } from "../../repositories/submissionRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type GetClassCompletionInput = z.infer<typeof getProgressSchema>;
 
 export class GetClassCompletion implements Service<GetClassCompletionInput> {
     constructor(
         private _submissionRepository: ISubmissionRepository,
-        private _studentRepository: IStudentRepository,
+        private _userRepository: IUserRepository,
         private _assignmentRepository: IAssignmentRepository,
         private _learningPathRepository: ILearningPathRepository,
     ) {}
@@ -49,7 +49,7 @@ export class GetClassCompletion implements Service<GetClassCompletionInput> {
             );
             // For all students in this assignment get which step they are on
             const students: Student[] = await tryRepoEntityOperation(
-                this._studentRepository.getByAssignmentId(assignment.id!),
+                this._userRepository.getByAssignmentId(assignment.id!),
                 "Assignment",
                 assignment.id!,
                 true,

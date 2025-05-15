@@ -1,19 +1,16 @@
 import { UserType } from "../../../../../src/core/entities/user";
-import { IStudentRepository } from "../../../../../src/core/repositories/studentRepositoryInterface";
-import { ITeacherRepository } from "../../../../../src/core/repositories/teacherRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { RemoveUserFromClass } from "../../../../../src/core/services/user";
 
 describe("RemoveStudentFromClass", () => {
-    let studentRepository: IStudentRepository;
-    let teacherRepository: ITeacherRepository;
+    let userRepository: IUserRepository;
     let removeStudentFromClass: RemoveUserFromClass;
 
     beforeEach(() => {
-        studentRepository = {
+        userRepository = {
             removeFromClass: jest.fn(),
-        } as unknown as jest.Mocked<IStudentRepository>;
-        teacherRepository = {} as unknown as jest.Mocked<ITeacherRepository>;
-        removeStudentFromClass = new RemoveUserFromClass(studentRepository, teacherRepository);
+        } as unknown as jest.Mocked<IUserRepository>;
+        removeStudentFromClass = new RemoveUserFromClass(userRepository);
     });
 
     it("should remove a student from a class", async () => {
@@ -21,9 +18,9 @@ describe("RemoveStudentFromClass", () => {
         const idParent = "class456";
         const userType = UserType.STUDENT;
 
-        await removeStudentFromClass.execute({ id, idParent, userType });
+        await removeStudentFromClass.execute({ id, idParent });
 
-        expect(studentRepository.removeFromClass).toHaveBeenCalledWith(id, idParent);
+        expect(userRepository.removeFromClass).toHaveBeenCalledWith(id, idParent);
     });
 
     it("should return an empty object after removing a student", async () => {

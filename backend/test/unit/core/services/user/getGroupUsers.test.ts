@@ -1,14 +1,14 @@
 import { User } from "../../../../../src/core/entities/user";
-import { IStudentRepository } from "../../../../../src/core/repositories/studentRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { GetGroupUsers } from "../../../../../src/core/services/user";
 
 describe("GetGroupUsers Service", () => {
-    let studentRepository: jest.Mocked<IStudentRepository>;
+    let userRepository: jest.Mocked<IUserRepository>;
     let getGroupUsers: GetGroupUsers;
 
     beforeEach(() => {
-        studentRepository = { getByGroupId: jest.fn() } as unknown as jest.Mocked<IStudentRepository>;
-        getGroupUsers = new GetGroupUsers(studentRepository);
+        userRepository = { getByGroupId: jest.fn() } as unknown as jest.Mocked<IUserRepository>;
+        getGroupUsers = new GetGroupUsers(userRepository);
     });
 
     it("should return students and teachers as objects", async () => {
@@ -18,7 +18,7 @@ describe("GetGroupUsers Service", () => {
             toObject: jest.fn().mockReturnValue({ id: "s2", email: "student2@example.com" }),
         };
 
-        studentRepository.getByGroupId.mockResolvedValue([mockStudent as unknown as User]);
+        userRepository.getByGroupId.mockResolvedValue([mockStudent as unknown as User]);
 
         const idParent = "group-123";
         const result = await getGroupUsers.execute({ idParent });
@@ -27,11 +27,11 @@ describe("GetGroupUsers Service", () => {
             students: ["s2"],
         });
 
-        expect(studentRepository.getByGroupId).toHaveBeenCalledWith(idParent);
+        expect(userRepository.getByGroupId).toHaveBeenCalledWith(idParent);
     });
 
     it("should return empty arrays if no users found", async () => {
-        studentRepository.getByGroupId.mockResolvedValue([]);
+        userRepository.getByGroupId.mockResolvedValue([]);
 
         const idParent = "group-456";
         const result = await getGroupUsers.execute({ idParent });
