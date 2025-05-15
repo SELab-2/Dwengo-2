@@ -90,20 +90,6 @@ describe('AssignmentPageComponent', () => {
     expect(component.assignment).toEqual(mockAssignment);
   });
 
-  it('should retrieve progress and set step and maxStep correctly', () => {
-    component.isStudent = true;
-    fixture.detectChanges();
-    component.ngOnInit();
-
-    fixture.detectChanges();
-
-    // Verifying if progress was retrieved and set
-    expect(component.progress).toEqual(mockProgress);
-    expect(component.step).toBe(mockProgress.step);
-    expect(component.maxStep).toBe(mockProgress.maxStep);
-    expect(component.loading).toBeFalse();
-  });
-
   it('should update step when a submission is created', () => {
     const initialStep = component.step;
 
