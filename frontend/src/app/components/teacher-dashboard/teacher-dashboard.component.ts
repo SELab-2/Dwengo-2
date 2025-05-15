@@ -186,7 +186,6 @@ export class TeacherDashboardComponent implements OnInit {
   public activityChartData: ActivityChartData[] = [];
 
   setView(view: string) {
-    console.log(view)
     this.selectedView = view;
   }
 

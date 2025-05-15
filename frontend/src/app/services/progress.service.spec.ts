@@ -7,6 +7,8 @@ import { ProgressService } from './progress.service';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { Progress } from '../interfaces/progress/progress';
+import { ClassActivity } from '../interfaces/progress/activity';
+import { ClassCompletion } from '../interfaces/progress/completion';
 
 describe('ProgressService', () => {
   let service: ProgressService;
@@ -73,4 +75,43 @@ describe('ProgressService', () => {
 
     req.flush(mockProgress);
   });
+
+  it('should fetch class activity for given classId', () => {
+  const classId = 'abc123';
+  const mockActivity: ClassActivity = {
+    activity: [5, 10, 15, 20]
+  };
+
+  service.getClassActivity(classId).subscribe((result) => {
+    expect(result).toEqual(mockActivity);
+  });
+
+  const req = httpMock.expectOne(
+    `${service['API_URL']}/classes/${classId}/activity`
+  );
+  expect(req.request.method).toBe('GET');
+  expect(req.request.headers.get('Authorization')).toBe('Bearer fake-token');
+
+  req.flush(mockActivity);
+});
+
+it('should fetch class completion for given classId', () => {
+  const classId = 'abc123';
+  const mockCompletion: ClassCompletion = {
+    percentage: 85
+  };
+
+  service.getClassCompletion(classId).subscribe((result) => {
+    expect(result).toEqual(mockCompletion);
+  });
+
+  const req = httpMock.expectOne(
+    `${service['API_URL']}/classes/${classId}/completion`
+  );
+  expect(req.request.method).toBe('GET');
+  expect(req.request.headers.get('Authorization')).toBe('Bearer fake-token');
+
+  req.flush(mockCompletion);
+});
+
 });
