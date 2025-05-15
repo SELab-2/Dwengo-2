@@ -2,12 +2,12 @@
     <h2 i18n="@@joinRequestTitle">Join a class</h2>
     <form [formGroup]="requestForm" (ngSubmit)="create()" class="create-request-form">
         <mat-form-field>
-            <mat-label for="class" i18n="@@classCodeLabel">Class code</mat-label>
+            <mat-label for="code" i18n="@@classCodeLabel">Class code</mat-label>
             <input
                 matInput
-                name="class"
-                id="class"
-                formControlName="class"
+                name="code"
+                id="code"
+                formControlName="code"
                 required>
         </mat-form-field>
         <br>
