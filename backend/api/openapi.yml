@@ -31,6 +31,8 @@ tags:
     description: Create and manage assignments, including deadlines, instructions and submissions
   - name: submissions
     description: Create, manage and get submissions for an assignment.
+  - name: tasks
+    description: Create, manage and get tasks for an assignment.
   - name: questions
     description: Handle Q&A interactions between students and teachers, including asking and answering questions
   - name: learningPath
@@ -1933,8 +1935,105 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-
-      
+  '/assignments/{idParent}/tasks':
+    post: 
+      tags:
+      - tasks
+      summary: Create new task
+      description: |
+        Create a task in an assignment
+      parameters:
+        - in: path
+          name: idParent
+          description: The id of the assignment of the task
+          required: true
+          schema: 
+            type: string
+            format: uuid
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/EntityCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      tags:
+      - tasks
+      summary: Get all tasks for assignment
+      description: |
+        Retrieve a list of all tasks associated with a specific assignment.
+      parameters:
+        - in: path
+          name: idParent
+          description: The id of the assignment of the task
+          required: true
+          schema: 
+            type: string
+            format: uuid
+        - in: query
+          name: step
+          description: The number of step in learningPath
+          required: false
+          schema:
+            type: number
+      responses:
+        '200':
+          $ref: '#/components/responses/TasksOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/tasks/{id}':
+    get: 
+      tags:
+      - tasks
+      summary: Get task by ID
+      description: |
+        Get a task in an assignment by ID
+      parameters:
+        - in: path
+          name: idParent
+          description: The id of the assignment of the task
+          required: true
+          schema: 
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/TaskOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - tasks
+      summary: Delete task
+      description: Permanently delete a task using its unique identifier.
+      operationId: deleteTask
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    
 components:
   securitySchemes:
     apiKeyAuth:
@@ -2291,11 +2390,28 @@ components:
                 type: array
                 items:
                   type: number
-                example: [0,0,0,20,26,45,75,94,10,0,12,20]
-                
-                   
+                example: [0,0,0,20,26,45,75,94,10,0,12,20] 
     NoContent:
       description: Resource deleted successfully
+    TasksOK:
+      description: List of Task getted successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tasks: 
+                type: array
+                items:
+                  type: string
+                  format: uuid
+    TaskOK:
+      description: Task getted successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Task'
+
   schemas:
     EmptyObject:
       type: object
@@ -3290,3 +3406,94 @@ components:
           type: string
           enum: [ACCEPTED, NOT_ACCEPTED]
           description: Current status of the submission. Defaults to NOT_ACCEPTED if no explicit status is given.
+    TaskCreate:
+      type: object
+      required:
+      - step
+      - question
+      - type
+      - details
+      additionalProperties: true
+      properties:
+        step:
+          type: number
+          description: Step number.
+        question:
+          type: string
+          description: Question asked for task
+        type:
+          type: string
+          enum: ['NORMALQUESTION', 'MULTIPLECHOICE']
+          description: What kind of task
+        details:
+          oneOf:
+            - $ref: '#/components/schemas/NormalQuestionDetails'
+            - $ref: '#/components/schemas/MultipleChoiceDetails'
+          discriminator:
+            propertyName: type
+            mapping:
+              NORMALQUESTION: '#/components/schemas/NormalQuestionDetails'
+              MULTIPLECHOICE: '#/components/schemas/MultipleChoiceDetails'
+    NormalQuestionDetails:
+      type: object
+      properties:
+        predefined_answer:
+          type: string
+          description: The predefined answer for the question.
+    MultipleChoiceDetails:
+      type: object
+      required:
+        - options
+        - correctAnswers
+      properties:
+        options:
+          type: array
+          items:
+            type: string
+          description: The answer options.
+        correctAnswers:
+          type: array
+          items:
+            type: integer
+          description: The indices of the correct answers.
+        allowMultipleAnswers:
+          type: boolean
+          default: false
+          description: Whether multiple answers are allowed.
+    Task: 
+      type: object
+      required:
+        - id
+        - assignmentId
+        - step
+        - question
+        - type
+        - details
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the task.
+        assignmentId:
+          type: string
+          format: uuid
+          description: Unique identifier for the assignment.
+        step:
+          type: number
+          description: Step number.
+        question:
+          type: string
+          description: Question asked for task
+        type:
+          type: string
+          enum: ['NORMALQUESTION', 'MULTIPLECHOICE']
+          description: What kind of task
+        details:
+          oneOf:
+            - $ref: '#/components/schemas/NormalQuestionDetails'
+            - $ref: '#/components/schemas/MultipleChoiceDetails'
+          discriminator:
+            propertyName: type
+            mapping:
+              NORMALQUESTION: '#/components/schemas/NormalQuestionDetails'
+              MULTIPLECHOICE: '#/components/schemas/MultipleChoiceDetails'
