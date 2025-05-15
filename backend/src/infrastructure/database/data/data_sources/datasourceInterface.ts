@@ -1,5 +1,5 @@
 /**
  * Interface representing a data source.
  */
-//eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IDatasource {}
+//eslint-disable-next-line
+export interface IDatasource { }
