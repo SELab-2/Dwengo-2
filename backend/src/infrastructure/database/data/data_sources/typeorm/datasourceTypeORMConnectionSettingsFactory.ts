@@ -42,7 +42,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
         synchronize: boolean = false,
         logging: boolean = false,
         host: string = "database",
-        dropschema: boolean = false, // Never set this to true in production
+        dropschema: boolean = true, // Never set this to true in production
         poolSize: number = 15,
 
         // Next any[] is not possible to replace with a more specific type

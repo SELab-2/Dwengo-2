@@ -3,7 +3,7 @@ import { Submission } from "../../../../../src/core/entities/submission";
 import { User } from "../../../../../src/core/entities/user";
 import { IAssignmentRepository } from "../../../../../src/core/repositories/assignmentRepositoryInterface";
 import { ILearningPathRepository } from "../../../../../src/core/repositories/learningPathRepositoryInterface";
-import { IStudentRepository } from "../../../../../src/core/repositories/studentRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { ISubmissionRepository } from "../../../../../src/core/repositories/submissionRepositoryInterface";
 import { GetAssignmentProgress } from "../../../../../src/core/services/progress";
 
@@ -50,7 +50,7 @@ const mockSubmissions: Submission[] = [
 ] as Submission[];
 
 // Mocks
-const studentRepository: jest.Mocked<IStudentRepository> = {
+const studentRepository: jest.Mocked<IUserRepository> = {
   getByAssignmentId: jest.fn().mockResolvedValue(mockUsers),
 } as any;
 

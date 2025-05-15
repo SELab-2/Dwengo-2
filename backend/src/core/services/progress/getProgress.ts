@@ -7,14 +7,14 @@ import { User } from "../../entities/user";
 import { tryRepoEntityOperation } from "../../helpers";
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
 import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
-import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ISubmissionRepository } from "../../repositories/submissionRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type GetProgressInput = z.infer<typeof getProgressSchema>;
 
 export abstract class GetProgress extends ProgressBaseService<GetProgressInput> {
     constructor(
-        protected studentRepository: IStudentRepository,
+        protected userRepository: IUserRepository,
         submissionRepository: ISubmissionRepository,
         assignmentRepository: IAssignmentRepository,
         learningPathRepository: ILearningPathRepository,
@@ -31,7 +31,6 @@ export abstract class GetProgress extends ProgressBaseService<GetProgressInput> 
     public async execute(input: GetProgressInput): Promise<object> {
         // Get all users for the assignment
         const students: User[] = await this.getUsers(input.idParent);
-
         // Get the corresponding learningPath
         const assignment: Assignment = await this.getAssignment(input.idParent);
         const learningPath = await this.learningPathRepository.getLearningPath(assignment.learningPathId, true);
@@ -41,7 +40,7 @@ export abstract class GetProgress extends ProgressBaseService<GetProgressInput> 
         const latestSubmissions: Submission[] = Array(students.length).fill(null);
         for (let i = 0; i < students.length; i++) {
             const submissions: Submission[] = await tryRepoEntityOperation(
-                this.submissionRepository.getAllForStudentInAssignment(students[i].id!, input.idParent),
+                this.submissionRepository.getAllForStudentInAssignment(students[i].id!, assignment.id!),
                 "Assignment or User",
                 input.idParent + " - " + students[i].id!,
                 true,

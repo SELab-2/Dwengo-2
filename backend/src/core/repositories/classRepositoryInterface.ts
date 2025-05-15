@@ -1,6 +1,5 @@
 import { AbstractRepository } from "./abstractRepository";
 import { Class } from "../entities/class";
-import { JoinRequestType } from "../entities/joinRequest";
 
 /**
  * Interface for a class repository.
@@ -30,6 +29,14 @@ export abstract class IClassRepository extends AbstractRepository {
      * @returns A promise that resolves to the class with the given id or null if no results are found.
      */
     public abstract getById(id: string): Promise<Class>;
+
+    /**
+     * Get a class by its code.
+     * @param id The code of the class.
+     * @throws EntityNotFoundError when code wan't found or expired.
+     * @returns A promise that resolves to the class corresponding to the code.
+     */
+    public abstract getByCode(code: string): Promise<Class>;
 
     /**
      * Get a class by its name.
@@ -80,7 +87,6 @@ export abstract class IClassRepository extends AbstractRepository {
      * Add a student/teacher to a class.
      * @param classId id of the class.
      * @param userId id of the user to add to the class.
-     * @param userType type of the user (student/teacher)
      */
-    public abstract addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void>;
+    public abstract addUserToClass(classId: string, userId: string): Promise<void>;
 }

@@ -1,7 +1,6 @@
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError, ExpiredError } from "../../../../../config/error";
 import { Class } from "../../../../../core/entities/class";
-import { JoinRequestType } from "../../../../../core/entities/joinRequest";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { JoinCodeTypeORM } from "../../data_models/joinCodeTypeorm";
 import { UserOfClassTypeORM } from "../../data_models/userOfClassTypeorm";
@@ -109,7 +108,7 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
 
         const joinCodeModel: JoinCodeTypeORM | null = await datasource
             .getRepository(JoinCodeTypeORM)
-            .findOne({ where: { code: code } });
+            .findOne({ where: { code: code }, relations: ["class"] });
 
         if (!joinCodeModel) {
             throw new EntityNotFoundError(`Join code ${code} not found.`);
@@ -180,7 +179,7 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
      * @param classId The identifier of the class to join.
      * @param userId The id of the user that will join the class.
      */
-    public async addUserToClass(classId: string, userId: string, userType: JoinRequestType): Promise<void> {
+    public async addUserToClass(classId: string, userId: string): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const classModel = await datasource.getRepository(ClassTypeORM).findOne({

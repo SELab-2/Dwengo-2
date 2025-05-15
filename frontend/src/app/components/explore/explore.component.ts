@@ -23,11 +23,11 @@ enum ExploreSetting {
 
 // These are the categories and their respective titles.
 const CATEGORY_CONFIGS: { key: string; title: string }[] = [
-    { key: "maths", title: $localize`Maths` },
-    { key: "climate-bio-microsc", title: $localize`Climate` },
-    { key: "robot", title: $localize`Robotics` },
-    { key: "AI", title: $localize`AI & Machine Learning` },
-    { key: "elek", title: $localize`Electronics` },
+    { key: "maths", title: $localize `:@@Maths:Maths` },
+    { key: "climate-bio-microsc", title: $localize `:@@Climate:Climate` },
+    { key: "robot", title: $localize `:@@Robotics:Robotics` },
+    { key: "AI", title: $localize `:@@AIML:AI & Machine Learning` },
+    { key: "elek", title: $localize `:@@Electronics:Electronics` },
 ];
 
 /**

@@ -29,7 +29,7 @@ export class CreateRequestComponent {
   private readonly snackBar = inject(MatSnackBar);
 
   // Message for the snackbar
-  private readonly requestedMessage = $localize `Requested!`;
+  private readonly requestedMessage = $localize `:@@createRequested:Requested!`;
 
   public constructor(
     private formBuilder: FormBuilder,
@@ -51,7 +51,7 @@ export class CreateRequestComponent {
     if(userId && userType) {
       const newRequest: NewJoinRequest = {
         requester: userId,
-        class: classCode,
+        code: classCode,
         userType: userType
       };
 
@@ -64,12 +64,12 @@ export class CreateRequestComponent {
   }
 
   private extractRequestFormValues(): string {
-    return this.requestForm.value.class;
+    return this.requestForm.value.code;
   }
 
   private buildRequestForm(): FormGroup {
     return this.formBuilder.group({
-      class: ['', Validators.required]
+      code: ['', Validators.required]
     });
   }
 

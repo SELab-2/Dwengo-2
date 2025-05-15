@@ -21,6 +21,8 @@ export class MessageService {
     private errorService: ErrorService
   ) {}
 
+  private messageMessage = $localize`message`;
+
   /**
    * Retrieve a single message by ID
    */
@@ -32,7 +34,7 @@ export class MessageService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize`message`)
+        this.errorService.retrieveError(this.messageMessage)
       )
     );
   }
@@ -63,7 +65,7 @@ export class MessageService {
   /**
    * Create a new message
    */
-  createMessage(message: NewMessage): Observable<Message> {
+  createMessage(message: NewMessage): Observable<string> {
     const headers = this.authService.retrieveAuthenticationHeaders();
 
     return this.http.post<MessageResponseSingle>(
@@ -72,13 +74,11 @@ export class MessageService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.createError($localize`message`)
+        this.errorService.createError(this.messageMessage)
       ),
-      switchMap(response => of({
-        ...message,
-        id: response.id,
-        createdAt: new Date()
-      }))
+      switchMap(response => of(
+        response.id
+      ))
     );
   }
 
@@ -94,7 +94,7 @@ export class MessageService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.updateError($localize`message`)
+        this.errorService.updateError(this.messageMessage)
       ),
       switchMap(() => of(update))
     );
@@ -111,7 +111,7 @@ export class MessageService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.deleteError($localize`message`)
+        this.errorService.deleteError(this.messageMessage)
       ),
       switchMap(() => of(true))
     );

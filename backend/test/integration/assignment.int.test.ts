@@ -66,7 +66,7 @@ describe("Test assignment API Endpoints", () => {
         });
 
         describe("/assignments/{id}", () => {
-            it("should return an assignment with status 200", async () => {
+            it("should return an assignment with status 200 (student)", async () => {
                 const response = await request(app)
                     .get("/assignments/" + assignmentId)
                     .set("Accept", "application/json")
@@ -92,11 +92,23 @@ describe("Test assignment API Endpoints", () => {
                     .set("Authorization", "Bearer " + teacherAuthDetails.token);
             });
 
-            it("should return a list of assignments of user with status 200", async () => {
+            it("should return a list of assignments of user with status 200 (student)", async () => {
                 const response = await request(app)
                     .get("/users/" + studentAuthDetails.id + "/assignments")
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + studentAuthDetails.token);
+
+                expect(response.status).toBe(200);
+                expect(response.body).toEqual({
+                    "assignments": [assignmentId]
+                });
+            });
+
+            it("should return a list of assignments of user with status 200 (teacher)", async () => {
+                const response = await request(app)
+                    .get("/users/" + teacherAuthDetails.id + "/assignments")
+                    .set("Accept", "application/json")
+                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
 
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({

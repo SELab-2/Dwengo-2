@@ -5,5 +5,5 @@ interface Environment {
 
 export const environment: Environment = {
     production: false,
-    API_URL: 'http://localhost:3001',
+    API_URL: 'http://localhost:3001'
 }

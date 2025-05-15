@@ -1,14 +1,14 @@
-<app-authenticated-header></app-authenticated-header>
 <div class="create-group">
     <!-- Members Section -->
     <div class="members-container">
-        <h1 i18n>Create groups</h1>
-        <p i18n>
+        <h1 i18n="@@createGroupsHeader">Create groups</h1>
+        <p i18n="@@createGroupsDescription">
             Here you can divide the members of your class into groups. 
             Drag a member into an existing group or onto the new group.
         </p>
+
         <span style="display: flex; align-items: center;">
-            <h2 i18n>Members</h2>
+            <h2 i18n="@@createGroupMembers">Members</h2>
             <button 
                 mat-raised-button 
                 (click)="partitionMembers()" 
@@ -17,6 +17,7 @@
                 <p>Assign all</p>
             </button>
         </span>
+
         <div
             id="members-list"
             class="members-list"
@@ -27,13 +28,15 @@
             @for (user of members; track user.id) {
                 <app-mini-user [user]="user" cdkDrag></app-mini-user>
             } @empty {
-                <p i18n>No members left</p>
+                <p i18n="@@noMembersLeft">No members left</p>
             }
         </div>
+
         <br>
+
         <button mat-fab extended (click)="createGroups()" id="create-group-button">
             <mat-icon>add</mat-icon>
-            <p i18n>Create groups</p>
+            <p i18n="@@createGroupsButton">Create groups</p>
         </button>
     </div>
 
@@ -44,7 +47,7 @@
                 <div>
                     <!-- Group List -->
                     <span style="display: flex; justify-content: space-between;">
-                        <h3 i18n>Group {{i+1}}</h3>
+                        <h3 i18n="@@groupNumberLabel">Group {{i+1}}</h3>
                         <button mat-mini-fab color="warn" (click)="deleteGroupList(i)">
                             <mat-icon>delete</mat-icon>
                         </button>
@@ -62,8 +65,9 @@
                     </div>
                 </div>
             }
+
             <div>
-                <h3 i18n>New group</h3>
+                <h3 i18n="@@newGroupLabel">New group</h3>
                 <div 
                     class="group-list" 
                     (click)="newGroupList()"
