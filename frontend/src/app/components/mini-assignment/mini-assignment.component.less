@@ -1,0 +1,116 @@
+.mini-assignment {
+    // Make it appear clickable
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: space-evenly;
+    justify-content: space-evenly;
+    padding: 20px 20px 5px 20px;
+    height: 100%;
+    width: 100%;
+}
+
+.header {
+    align-items: center;
+    justify-content: space-between;
+}
+
+// Overwrite padding
+mat-card-header,
+mat-card-content {
+    padding: 0px;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.right-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.members-label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    h4 {
+        padding: 0px 5px 0px 5px;
+        margin: 0px;
+    }
+}
+
+.mini-assignment:hover {
+    background-color: rgb(250, 250, 250);
+}
+
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.dialog-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.progress {
+    width: 100%;
+    height: 8px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+
+.progress-container {
+    height: auto;
+    padding: 8px 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row-reverse;
+    h5 {
+        padding: 0px 10px 0px 0px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+}
+
+.badge {
+    padding: 10px;
+    border-radius: 100%;
+}
+
+.check {
+    color: #43b732;
+}
+
+.high {
+    color: #D02625;
+}
+
+.medium {
+    color: #fab63c;
+}
+
+.low {
+    color: #43b732;
+}

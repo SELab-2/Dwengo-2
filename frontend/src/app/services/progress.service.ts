@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
-import { Progress } from "../interfaces/progress/Progress";
+import { Progress } from "../interfaces/progress/progress";
 
 @Injectable({
     providedIn: 'root'

@@ -1,0 +1,19 @@
+<div class="group-container">
+    <h3 class="title">
+        Members: {{data.members.length}}
+    </h3>
+    <div class="card-content">
+        @if (data.members) {
+            <mat-list role="list">
+                @for(member of data.members; track member.id) {
+                    <app-mini-user [user]="member"></app-mini-user>
+                }
+            </mat-list>
+        } @else {
+            <p i18n>There are no users in this group</p>
+        }
+        <button (click)="exit()" color="primary" mat-fab>
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
