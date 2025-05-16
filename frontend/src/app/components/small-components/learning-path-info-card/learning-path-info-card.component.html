@@ -1,4 +1,4 @@
-<mat-card class="class-widget" [routerLink]="['/paths', path.hruid, path.language]">
+<mat-card class="class-widget" (click)="emit()">
     <div class=" card-header-with-button">
         <mat-card-title>{{ path.title }}</mat-card-title>
         @if (isTeacher) {
