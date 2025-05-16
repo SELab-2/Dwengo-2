@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
@@ -17,12 +17,18 @@ export class LearningPathInfoCardComponent implements OnInit {
     @Input() path!: LearningPath;
     @Input() isTeacher: boolean = false;
 
+    @Output() showPopup: EventEmitter<LearningPath> = new EventEmitter<LearningPath>();
+
     ngOnInit(): void {
         this.checkDescriptionLength()
     }
 
     checkDescriptionLength = (): void => {
         this.path.description = this.path.description.length > 100 ? this.path.description.substring(0, 100) + "..." : this.path.description;
+    }
+
+    emit(): void {
+        this.showPopup.emit(this.path);
     }
 
 }

@@ -23,27 +23,33 @@
         </mat-card>
     </div>
     @if (visualize === "BASIC"){
-        <div class="result-list">
-            @if (loading) {
-                @for (pair of categoryConfigs; track pair) {
-                    <app-card-skeleton-loader [title]="pair.title"></app-card-skeleton-loader>
-                }
-            } @else {
-                @for (pair of categoryConfigs; track pair; let idx = $index) {
-                    <app-learning-path-list [learningPaths]="getLearningPathsByCategory(pair.key)" [isTeacher]="isTeacher"
-                        [title]="pair.title"></app-learning-path-list>
-                }
-            }
-        </div>
-        
+    <div class="result-list">
+        @if (loading) {
+        @for (pair of categoryConfigs; track pair) {
+        <app-card-skeleton-loader [title]="pair.title"></app-card-skeleton-loader>
+        }
+        } @else {
+        @for (pair of categoryConfigs; track pair; let idx = $index) {
+        <app-learning-path-list [learningPaths]="getLearningPathsByCategory(pair.key)" [isTeacher]="isTeacher"
+            [title]="pair.title" (showPopup)="showPopup($event)"></app-learning-path-list>
+        }
+        }
+    </div>
+
     }
 
     @if (visualize === "CUSTOM") {
-        @if (loading) {
-            <app-card-skeleton-loader title="Your results"></app-card-skeleton-loader>
-        } @else {
-            <app-learning-path-list [learningPaths]="data" [isTeacher]="isTeacher" i18n-title
-                title="Your Results"></app-learning-path-list>
-        }
+    @if (loading) {
+    <app-card-skeleton-loader title="Your results"></app-card-skeleton-loader>
+    } @else {
+    <app-learning-path-list [learningPaths]="data" [isTeacher]="isTeacher" i18n-title
+        title="Your Results"></app-learning-path-list>
+    }
+    }
+    @if (detail && detailPath) {
+    <div class="popup">
+        <app-learning-path [hruid]="detailPath.hruid" [language]="detailPath.language" [popup]="true"
+            (back)="hidePopup()"></app-learning-path>
+    </div>
     }
 </div>
