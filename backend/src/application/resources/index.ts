@@ -6,6 +6,7 @@ export * from "./joinCodeResource";
 export * from "./joinRequestResource";
 export * from "./messageResource";
 export * from "./questionThreadResource";
+export * from "./stepResource";
 export * from "./submissionResource";
 export * from "./userResource";
 export * from "./learningObjectResource";

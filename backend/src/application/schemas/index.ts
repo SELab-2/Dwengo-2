@@ -5,6 +5,7 @@ export * from "./joinCodeSchemas";
 export * from "./joinRequestSchemas";
 export * from "./messageSchemas";
 export * from "./questionThreadSchemas";
+export * from "./stepSchemas";
 export * from "./submissionSchemas";
 export * from "./userSchemas";
 export * from "./learningObjectSchemas";
