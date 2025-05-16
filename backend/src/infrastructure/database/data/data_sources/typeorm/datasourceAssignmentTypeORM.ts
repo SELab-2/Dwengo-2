@@ -62,8 +62,6 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
             where: { id: userId },
         });
 
-        console;
-
         if (!userModel) {
             throw new EntityNotFoundError(`User with id ${userId} not found`);
         }

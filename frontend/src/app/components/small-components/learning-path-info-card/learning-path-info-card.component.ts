@@ -18,11 +18,12 @@ export class LearningPathInfoCardComponent implements OnInit {
     @Input() isTeacher: boolean = false;
 
     ngOnInit(): void {
-        this.checkDescriptionLength()
+        this.checkLengths();
     }
 
-    checkDescriptionLength = (): void => {
+    checkLengths = (): void => {
         this.path.description = this.path.description.length > 100 ? this.path.description.substring(0, 100) + "..." : this.path.description;
+        this.path.title = this.path.title.length > 40 ? this.path.title.substring(0, 40) + "..." : this.path.title;
     }
 
 }
