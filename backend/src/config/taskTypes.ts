@@ -14,4 +14,3 @@ export interface NormalQuestionDetails {
 }
 
 export type TaskDetails = MultipleChoiceDetails | NormalQuestionDetails;
-

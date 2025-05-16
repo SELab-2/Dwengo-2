@@ -35,7 +35,7 @@ export class GetUserSubmissions extends SubmissionBaseService<GetUserSubmissions
      */
     async execute(input: GetUserSubmissionsInput): Promise<object> {
         let submissions: Submission[];
-        // Check when learninObjectId is provided the assignmentId is also provided
+        // Check when taskId is provided the assignmentId is also provided
         if (!input.assignmentId && input.taskId) {
             throw {
                 code: ErrorCode.BAD_REQUEST,

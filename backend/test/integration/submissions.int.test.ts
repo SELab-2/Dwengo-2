@@ -62,6 +62,7 @@ describe('Test submission API endpoints', () => {
             studentId: studentDetails.id,
             assignmentId: assignmentId,
             taskId: taskId,
+            learningObjectId: 'org-dwengo-elevator-riddle-question',
             time: new Date().toISOString(),
             contents: Buffer.from('Hello World').toString('base64'),
             status: StatusType.ACCEPTED,
@@ -83,6 +84,7 @@ describe('Test submission API endpoints', () => {
                 studentId: studentDetails.id,
                 assignmentId: assignmentId,
                 taskId: taskId,
+                learningObjectId: 'org-dwengo-elevator-riddle-question',
                 time: new Date().toISOString(),
                 contents: Buffer.from('Hello World').toString('base64'),
                 status: StatusType.ACCEPTED,
@@ -112,6 +114,7 @@ describe('Test submission API endpoints', () => {
             expect(res.body).toHaveProperty('time');
             expect(res.body).toHaveProperty('contents');
             expect(res.body).toHaveProperty('status');
+            expect(res.body).toHaveProperty('learningObjectId');
         });
 
         it('should return 404 if submission does not exist', async () => {

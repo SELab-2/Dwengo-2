@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, CreateDateColumn, ManyToOne } from "typeorm";
 import { AssignmentTypeORM } from "./assignmentTypeorm";
+import { TaskTypeORM } from "./taskTypeORM";
 import { UserTypeORM } from "./userTypeorm";
 import { StatusType, Submission } from "../../../../core/entities/submission";
-import { TaskTypeORM } from "./taskTypeORM";
 
 export enum SubmissionStatus {
     NOT_ACCEPTED = "not_accepted",

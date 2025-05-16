@@ -15,7 +15,7 @@ export class Submission {
         private _contents: Buffer, // can be a photo, a string, whatever. In the database this is bytea.
         private _status: StatusType,
         private _id?: string,
-    ) { }
+    ) {}
 
     // Getters
     public get studentId(): string {
@@ -68,6 +68,7 @@ export class Submission {
             studentId: this._studentId,
             assignmentId: this._assignmentId,
             taskId: this._taskId,
+            learningObjectId: this.learningObjectId,
             time: this._time,
             contents: this._contents,
             status: this._status,

@@ -5,9 +5,8 @@ import { Submission } from "../../../../../core/entities/submission";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
-import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
-import { TaskType } from "../../../../../config/taskTypes";
 import { TaskTypeORM } from "../../data_models/taskTypeORM";
+import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     public async create(submission: Submission): Promise<string> {
@@ -37,7 +36,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         }
 
         const taskModel: TaskTypeORM | null = await taskRepository.findOne({
-            where: { id: submission.taskId }
+            where: { id: submission.taskId },
         });
 
         if (!taskModel) {
@@ -110,7 +109,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         studentId: string,
         assignmentId: string,
         taskId?: string,
-        learningObjectId?: string
+        learningObjectId?: string,
     ): Promise<Submission[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
@@ -146,7 +145,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
 
         if (taskId) {
             const taskModel: TaskTypeORM | null = await taskRepository.findOne({
-                where: { id: taskId }
+                where: { id: taskId },
             });
 
             if (!taskModel) {

@@ -3370,6 +3370,9 @@ components:
         taskId:
           type: string
           example: "task789"
+        learningObjectId:
+          type: string
+          example: "object111"
         time:
           type: string
           format: date-time
@@ -3393,6 +3396,7 @@ components:
         - studentId
         - assignmentId
         - taskId
+        - learningObjectId
         - time
         - contents
         - status
@@ -3407,6 +3411,10 @@ components:
           format: uuid
           description: Unique identifier for the assignment.
         taskId:
+          type: string
+          format: uuid
+          description: Unique identifier for the task.
+        learningObjectId:
           type: string
           format: uuid
           description: Unique identifier for the learning object (hruid).
