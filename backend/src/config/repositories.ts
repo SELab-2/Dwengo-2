@@ -7,6 +7,7 @@ import { LearningObjectRepository } from "../infrastructure/repositories/learnin
 import { LearningPathRepository } from "../infrastructure/repositories/learningPathRepository";
 import { MessageRepositoryTypeORM } from "../infrastructure/repositories/messageRepositoryTypeORM";
 import { ThreadRepositoryTypeORM } from "../infrastructure/repositories/questionThreadRepositoryTypeORM";
+import { StepRepositoryTypeORM } from "../infrastructure/repositories/stepRepositoryTypeORM";
 import { StudentRepositoryTypeORM } from "../infrastructure/repositories/studentRepositoryTypeORM";
 import { SubmissionRepositoryTypeORM } from "../infrastructure/repositories/submissionRepositoryTypeORM";
 import { TeacherRepositoryTypeORM } from "../infrastructure/repositories/teacherRepositoryTypeORM";
@@ -22,6 +23,7 @@ export const repositories = {
     joinRequest: new JoinRequestRepositoryTypeORM(),
     message: new MessageRepositoryTypeORM(),
     questionThread: new ThreadRepositoryTypeORM(),
+    step: new StepRepositoryTypeORM(),
     submission: new SubmissionRepositoryTypeORM(),
     student: new StudentRepositoryTypeORM(),
     teacher: new TeacherRepositoryTypeORM(),

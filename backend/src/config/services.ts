@@ -9,6 +9,7 @@ import * as LearningPathServices from "../core/services/learningPath";
 import * as MessageServices from "../core/services/message";
 import * as ProgressServices from "../core/services/progress";
 import * as QuestionThreadServices from "../core/services/questionThread";
+import * as StepServices from "../core/services/step";
 import * as SubmissionServices from "../core/services/submission";
 import * as UserServices from "../core/services/user";
 
@@ -69,6 +70,13 @@ export const services = {
         remove: new QuestionThreadServices.DeleteQuestionThread(repos.questionThread),
         create: new QuestionThreadServices.CreateQuestionThread(repos.questionThread),
         getAssignmentQuestionThreads: new QuestionThreadServices.GetAssignmentQuestionThreads(repos.questionThread),
+    },
+    step: {
+        get: new StepServices.GetStep(repos.step),
+        update: new StepServices.UpdateStep(repos.step, repos.learningObject),
+        remove: new StepServices.DeleteStep(repos.step),
+        create: new StepServices.CreateStep(repos.step, repos.learningObject),
+        getAssignmentSteps: new StepServices.GetAssignmentSteps(repos.step),
     },
     submission: {
         get: new SubmissionServices.GetSubmission(repos.submission),

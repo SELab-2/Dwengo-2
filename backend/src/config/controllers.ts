@@ -57,6 +57,13 @@ export const controllers = {
         services.questionThread.create,
         services.questionThread.getAssignmentQuestionThreads,
     ),
+    step: new Resources.StepController(
+        services.step.get,
+        services.step.update,
+        services.step.remove,
+        services.step.create,
+        services.step.getAssignmentSteps,
+    ),
     submission: new Resources.SubmissionController(
         services.submission.get,
         services.submission.remove,
