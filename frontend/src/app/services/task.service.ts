@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
-import { switchMap, of, forkJoin } from 'rxjs';
+import { switchMap, of, forkJoin, map } from 'rxjs';
 import { CreateTaskResponse, GetTasksResponse, Task } from "../interfaces/tasks";
 
 @Injectable({
@@ -147,7 +147,7 @@ export class TaskService {
             headers
         ).pipe(
             this.errorService.pipeHandler(),
-            switchMap(res => res.id)
+            map(res => res.id)
         )
     }
 }

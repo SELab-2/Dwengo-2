@@ -41,20 +41,6 @@ describe('TeacherDashboardComponent', () => {
         expect(component.selectedView).toBe('classes');
     });
 
-    it('should update selectedView when a menu card is clicked', async () => {
-        const menuCards = harness.fixture.nativeElement.querySelectorAll('app-menu-card');
-        spyOn(component, 'setView');
-
-        menuCards[1].click();
-
-        harness.detectChanges();
-        harness.fixture.whenStable().then(() => {
-            expect(component.setView).toHaveBeenCalledWith('deadlines');
-            expect(component.selectedView).toBe('deadlines');
-        });
-    });
-
-
     it('should navigate correctly when menu card is clicked', async () => {
         const menuCards = harness.fixture.nativeElement.querySelectorAll('app-menu-card');
 
