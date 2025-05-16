@@ -1,29 +1,24 @@
 <app-authenticated-header></app-authenticated-header>
 <div class="assignments">
-    
-    @if (isTeacher && !showCreate) {
-        <div class="tool-container">
-            <button mat-fab extended (click)="createAssignment()">
-                <mat-icon>add</mat-icon>
-                <p i18n>Create</p>
-            </button>
-        </div>
+
+    @if (isTeacher) {
+    <div class="tool-container">
+        <button mat-fab extended routerLink="/explore">
+            <mat-icon>add</mat-icon>
+            <p i18n>Create</p>
+        </button>
+    </div>
     }
 
-    @if (showCreate) {
-        <div class="tool-container">
-            <button mat-fab extended (click)="cancelCreate()">
-                <mat-icon>close</mat-icon>
-                <p i18n>Cancel</p>
-            </button>
-        </div>
+    <div class="center-container">
+        <h2 i18n>Your assignments</h2>
 
-        <app-create-assignment></app-create-assignment>
-    }
-
-    @if (!showCreate) {
-        <div class="center-container">
-            <h2 i18n>Your assignments</h2>
+        <mat-form-field>
+            <mat-label i18n>Filter before deadline</mat-label>
+            <input matInput [matDatepicker]="picker" (dateChange)="filterByDeadline($event.value)">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
 
             <mat-form-field>
                 <mat-label i18n>Filter before deadline</mat-label>
@@ -47,5 +42,18 @@
             </mat-list>
         </div>
     }
+        <mat-list id="assignments-list">
+            @for (assignment of filteredAssignments; track assignment.id) {
+            <li>
+                <h3>{{ assignment.name }}</h3>
+                <p>
+                    <strong i18n>Due date:</strong>
+                    {{ assignment.deadline }}
+            </li>
+            } @empty {
+            <p i18n>No assignments found</p>
+            }
+        </mat-list>
+    </div>
 
 </div>

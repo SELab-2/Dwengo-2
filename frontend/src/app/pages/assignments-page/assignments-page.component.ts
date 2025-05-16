@@ -12,6 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { CreateAssignmentComponent } from '../../components/create-assignment/create-assignment.component';
+import { RouterLink } from '@angular/router';
 
 type AssignmentDateFilter = (assignment: Assignment) => boolean;
 
@@ -30,7 +31,8 @@ type AssignmentDateFilter = (assignment: Assignment) => boolean;
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    CreateAssignmentComponent
+    CreateAssignmentComponent,
+    RouterLink
   ],
   templateUrl: './assignments-page.component.html',
   styleUrl: './assignments-page.component.less'
@@ -40,7 +42,7 @@ export class AssignmentsPageComponent implements OnInit {
   constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly assignmentsService: AssignmentService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.assignmentsService.retrieveAssignments().subscribe({
@@ -53,17 +55,17 @@ export class AssignmentsPageComponent implements OnInit {
   /**
    * The assignments of the currently logged in user
    */
-  
+
   private _assignments: Assignment[] = [];
 
   get assignments(): Assignment[] {
     return this._assignments;
   }
-  
+
   get filteredAssignments(): Assignment[] {
     return this._assignments.filter(this.filter);
   }
-  
+
   set assignments(assignments: Assignment[]) {
     this._assignments = assignments;
   }
@@ -90,12 +92,4 @@ export class AssignmentsPageComponent implements OnInit {
 
   showCreate: boolean = false;
 
-  createAssignment(): void {
-    this.showCreate = true;
-  }
-
-  cancelCreate(): void {
-    this.showCreate = false;
-  }
-  
 }
