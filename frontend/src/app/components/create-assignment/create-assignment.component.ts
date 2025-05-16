@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,6 +15,7 @@ import { NewAssignment } from '../../interfaces/assignment';
 import { AssignmentService } from '../../services/assignment.service';
 import { User } from '../../interfaces';
 import { CreateGroupComponent } from '../create-group/create-group.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-assignment',
@@ -38,6 +39,14 @@ import { CreateGroupComponent } from '../create-group/create-group.component';
   standalone: true
 })
 export class CreateAssignmentComponent implements OnInit {
+
+  @Output() showGroups: EventEmitter<void> = new EventEmitter<void>
+
+  private readonly route = inject(ActivatedRoute);
+
+  public learningPathId: string = "";
+  public language: string = "nl";
+
   public createForm: FormGroup;
 
   public classes: Class[] = [];
@@ -51,15 +60,21 @@ export class CreateAssignmentComponent implements OnInit {
     private formBuilder: FormBuilder,
     private classesService: ClassesService,
     private learningPathService: LearningPathService,
-    private assignmentService: AssignmentService
+    private assignmentService: AssignmentService,
+    private router: Router,
   ) {
     this.createForm = this.buildCreateForm();
   }
 
   ngOnInit(): void {
+    this.route.url.subscribe((segment) => {
+      this.learningPathId = segment[2].path ? segment[2].path : "";
+      this.language = segment[3].path ? segment[3].path : "nl";
+    });
     this.createForm = this.buildCreateForm();
     this.getClasses();
     this.getLearningPaths();
+
   }
 
   create(): void {
@@ -72,6 +87,7 @@ export class CreateAssignmentComponent implements OnInit {
         this.classesService.classStudents(newAssignment.classId).subscribe((students) => {
           this.classMembers = students;
           this.assignmentId = response.id;
+          this.showGroups.emit();
           this.showCreateGroup = true;
         });
       });
@@ -83,7 +99,7 @@ export class CreateAssignmentComponent implements OnInit {
       this.classes = response;
     });
   }
-  
+
   private getLearningPaths(): void {
     this.learningPathService.retrieveAll().subscribe((response: LearningPathResponse) => {
       this.paths = response.learningPaths;
@@ -94,7 +110,6 @@ export class CreateAssignmentComponent implements OnInit {
     return this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
       classId: ['', Validators.required],
-      learningPathId: ['', Validators.required],
       startDate: [new Date(), Validators.required],
       deadline: [new Date(), Validators.required],
       extraInstructions: ['', Validators.minLength(10)],
@@ -104,15 +119,14 @@ export class CreateAssignmentComponent implements OnInit {
   private extractFormValues(): NewAssignment | null {
     const name = this.createForm.get('name')?.value;
     const classId = this.createForm.get('classId')?.value;
-    const learningPathId = this.createForm.get('learningPathId')?.value;
     const startDate = this.createForm.get('startDate')?.value;
     const deadline = this.createForm.get('deadline')?.value;
     const extraInstructions = this.createForm.get('extraInstructions')?.value;
 
-    if (classId && learningPathId && startDate && deadline) {
+    if (classId && startDate && deadline) {
       return {
         classId,
-        learningPathId: learningPathId,
+        learningPathId: this.learningPathId,
         startDate,
         deadline,
         extraInstructions,
@@ -121,5 +135,10 @@ export class CreateAssignmentComponent implements OnInit {
     }
 
     return null;
+  }
+
+  groupsCreated() {
+    // we can redirect to assignments page
+    this.router.navigate(['/teacher/assignments']);
   }
 }
