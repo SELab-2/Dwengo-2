@@ -126,7 +126,7 @@ export class StudentDashboardComponent implements OnInit {
   public get assignmentsWithGroup(): {assignment: Assignment, group: Group, id: string}[] {
     const now = new Date();
 
-    const combined = this.assignments.map((assignment, i) => {
+    const combined = this.assignments.map((assignment) => {
       const progress = this._assignmentToProgress[assignment.id];
       const group = this._assignmentToGroup[assignment.id];
       return { assignment, group, progress, id: assignment.id };
