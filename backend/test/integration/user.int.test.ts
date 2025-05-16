@@ -97,6 +97,40 @@ describe("Test user API endpoints", () => {
                     ]
                 });
         })
+
+        it("should not add a user twice to a group", async () => {
+            // Add the student once
+            await request(app)
+                .post("/groups/" + groupId + "/users")
+                .send({
+                    "id": extraStudentAuthDetails.id
+                })
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+            
+            // Add the same student again
+            await request(app)
+                .post("/groups/" + groupId + "/users")
+                .send({
+                    "id": extraStudentAuthDetails.id
+                })
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            // Confirm that the user is in the group only once
+            const checkResponse = await request(app)
+                    .get("/groups/" + groupId + "/users")
+                    .set("Accept", "application/json")
+                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
+                
+                expect(checkResponse.status).toBe(200);
+                expect(checkResponse.body).toEqual({
+                    "students": [
+                        studentAuthDetails.id,
+                        extraStudentAuthDetails.id
+                    ]
+                });
+        })
     });
 
     describe("GET", () => {

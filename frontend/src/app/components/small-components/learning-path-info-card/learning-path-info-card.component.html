@@ -1,12 +1,12 @@
-<mat-card class="class-widget" [routerLink]="['/paths', path.hruid, path.language]">
+<mat-card class="class-widget" (click)="emit()">
     <div class=" card-header-with-button">
         <mat-card-title>{{ path.title }}</mat-card-title>
         @if (isTeacher) {
-            <button mat-icon-button color="primary" matTooltip="Create assignment"
-                i18n-matTooltip="@@createAssignmentTooltip" [routerLink]="'/teacher/assignments/create'"
-                (click)="$event.stopPropagation()">
-                <mat-icon>add</mat-icon>
-            </button>
+        <button mat-icon-button color="primary" matTooltip="Create assignment"
+            i18n-matTooltip="@@createAssignmentTooltip"
+            [routerLink]="['/teacher/assignments', path.hruid, path.language]" (click)="$event.stopPropagation()">
+            <mat-icon>add</mat-icon>
+        </button>
         }
     </div>
 

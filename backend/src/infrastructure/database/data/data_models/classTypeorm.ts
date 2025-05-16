@@ -1,4 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { JoinTable } from "typeorm/decorator/relations/JoinTable"; // Important to specify the exact path here
+import { ManyToMany } from "typeorm/decorator/relations/ManyToMany"; // Important to specify the exact path here
+import { UserType, UserTypeORM } from "./userTypeorm";
+import { EntityNotFoundError } from "../../../../config/error";
 import { Class } from "../../../../core/entities/class";
 
 @Entity()
@@ -15,6 +19,10 @@ export class ClassTypeORM {
     @Column({ type: "text" })
     targetAudience!: string;
 
+    @ManyToMany(() => UserTypeORM)
+    @JoinTable()
+    members!: UserTypeORM[];
+
     public static createClassTypeORM(newClass: Class): ClassTypeORM {
         const classTypeORM: ClassTypeORM = new ClassTypeORM();
         classTypeORM.name = newClass.name;
@@ -23,8 +31,13 @@ export class ClassTypeORM {
         return classTypeORM;
     }
 
-    public toClassEntity(teacherId: string): Class {
-        return new Class(this.name, this.description, this.targetAudience, teacherId, this.id);
+    public toClassEntity(): Class {
+        // First find a teacher in the class
+        const teacher: UserTypeORM | undefined = this.members.find(userModel => userModel.role == UserType.TEACHER);
+        if (!teacher) {
+            throw new EntityNotFoundError(`No teacher found in the class`);
+        }
+        return new Class(this.name, this.description, this.targetAudience, teacher.id, this.id);
     }
 
     public fromPartialClassEntity(partialClass: Partial<Class>): Partial<ClassTypeORM> {

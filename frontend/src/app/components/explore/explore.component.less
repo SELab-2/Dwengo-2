@@ -9,20 +9,38 @@
 .explore-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 24px;
-    padding: 16px;
+    gap: 50px;
+    margin-bottom: 25px;
 }
 
-.intro-card {
-    margin: 20px;
+.result-list {
+    gap: 25px;
+    display: flex;
+    flex-direction: column;
 }
 
 .intro-card,
 .filter-card {
-    flex: 1 1 45%;
+    flex: 1 1;
     min-width: 300px;
+    justify-content: space-between;
 }
 
 .results-section {
     margin-top: 32px;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 80%;
+    transform: translate(-50%, -50%);
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    padding: 2rem;
+    overflow: auto;
+    border-radius: 1rem;
 }

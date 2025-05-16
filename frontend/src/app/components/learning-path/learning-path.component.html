@@ -1,39 +1,45 @@
 <!-- learning-path-viewer.component.html -->
 <div class="card-container">
   <mat-card class="learning-path-card">
+    @if(popup) {
+    <button class="back" color="primary" mat-mini-fab i18n (click)="back.emit()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    }
+
     @if (path) {
-      <mat-card-header>
-        <mat-card-title i18n="@@learningPathComponentTitle">Learning Path: {{path.title}}</mat-card-title>
-      </mat-card-header>
-    } 
-    
+    <mat-card-header>
+      <mat-card-title i18n="@@learningPathComponentTitle">Learning Path: {{path.title}}</mat-card-title>
+    </mat-card-header>
+    }
+
     <mat-card-content>
       @if(!loading) {
-        @if(!assignment) {
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label i18n="@@selectLearningObject">Select Learning Object</mat-label>
-            <mat-select [(value)]="selectedNode" (selectionChange)="onNodeSelected()">
-              @for(node of trajectoryGraph!.nodes; track node) {
-                <mat-option [value]="node">
-                  {{ node.value.metadata.title }} ({{ node.value.metadata.language }})
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        } @else {
-          <h2>{{ selectedNode!.value.metadata.title }} ({{ selectedNode!.value.metadata.language }})</h2>
-        }
-      
-        @if (selectedNode) {
-        <div class="iframe-wrapper">
-          <iframe class="learning-object-frame" [srcdoc]="selectedNode!.value.htmlContent" frameborder="0" width="100%"
-            height="600px"></iframe>
-        </div>
-        }
+      @if(!assignment) {
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label i18n="@@selectLearningObject">Select Learning Object</mat-label>
+        <mat-select [(value)]="selectedNode" (selectionChange)="onNodeSelected()">
+          @for(node of trajectoryGraph!.nodes; track node) {
+          <mat-option [value]="node">
+            {{ node.value.metadata.title }} ({{ node.value.metadata.language }})
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
       } @else {
-        <div class="loading-container">
-          <app-loading></app-loading>
-        </div>
+      <h2>{{ selectedNode!.value.metadata.title }} ({{ selectedNode!.value.metadata.language }})</h2>
+      }
+
+      @if (selectedNode) {
+      <div class="iframe-wrapper">
+        <iframe class="learning-object-frame" [srcdoc]="selectedNode!.value.htmlContent" frameborder="0" width="100%"
+          height="600px"></iframe>
+      </div>
+      }
+      } @else {
+      <div class="loading-container">
+        <app-loading></app-loading>
+      </div>
       }
     </mat-card-content>
   </mat-card>

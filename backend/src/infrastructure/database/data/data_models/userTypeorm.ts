@@ -41,9 +41,11 @@ export class UserTypeORM {
         userTypeORM.last_name = user.familyName;
         if (user.schoolName) userTypeORM.school_name = user.schoolName;
         userTypeORM.password_hash = user.passwordHash;
-        user.userType === UserType.STUDENT
-            ? (userTypeORM.role = UserType.STUDENT)
-            : (userTypeORM.role = UserType.TEACHER);
+        if (user.userType === UserType.STUDENT) {
+            userTypeORM.role = UserType.STUDENT;
+        } else {
+            userTypeORM.role = UserType.TEACHER;
+        }
         return userTypeORM;
     }
 

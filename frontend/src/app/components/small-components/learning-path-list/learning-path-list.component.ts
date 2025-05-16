@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { LearningPath } from '../../../interfaces/learning-path/learningPath';
@@ -15,4 +15,10 @@ export class LearningPathListComponent {
     @Input() learningPaths: LearningPath[] = [];
     @Input() isTeacher: boolean = false;
     @Input() title: string = 'Learning Paths';
+
+    @Output() showPopup: EventEmitter<LearningPath> = new EventEmitter<LearningPath>();
+
+    emit(path: LearningPath): void {
+        this.showPopup.emit(path);
+    }
 }

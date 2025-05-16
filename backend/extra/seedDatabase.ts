@@ -35,6 +35,9 @@ import { ThreadRepositoryTypeORM } from "../src/infrastructure/repositories/ques
 import { MessageRepositoryTypeORM } from "../src/infrastructure/repositories/messageRepositoryTypeORM";
 import { JoinRequestType } from "../src/core/entities/joinRequest";
 import { VisibilityType } from "../src/core/entities/questionThread";
+import { StatusType, Submission } from '../src/core/entities/submission';
+import { SubmissionTypeORM } from '../src/infrastructure/database/data/data_models/submissionTypeorm';
+import { SubmissionRepositoryTypeORM } from '../src/infrastructure/repositories/submissionRepositoryTypeORM';
 
 export async function seedDatabase(): Promise<void> {
   const classRep = new ClassRepositoryTypeORM();
@@ -43,11 +46,23 @@ export async function seedDatabase(): Promise<void> {
   const groupRep = new GroupRepositoryTypeORM();
   const threadRep = new ThreadRepositoryTypeORM();
   const messageRep = new MessageRepositoryTypeORM();
+  const submissionRep = new SubmissionRepositoryTypeORM();
 
   const teacherIds: string[] = [];
   const classIds: string[] = [];
   const studentIds: string[] = [];
   const assignments: { id: string, classId: string }[] = [];
+  const learningPathIds: string[] = [];
+
+  // Some random learningPath hruids from dwengo
+  const learningPaths: string[] = ["sr2", "anm3", "cb2_sentimentanalyse"];
+  
+  // Learningpaths mapped to some random objects from within that path
+  const pathToObjects: Record<string,string[]> = {
+    "sr2": ["sr2_module2", "sr2_brainstorm_vb", "g_inleiding_lkr", "sr2_uploaden"],
+    "anm3": ["org-dwengo-elevator-riddle-analyzing-1", "org-dwengo-elevator-riddle-brute-force-2", "org-dwengo-elevator-riddle-brute-force-4"],
+    "cb2_sentimentanalyse": ["pn_sa_inleiding", "pn_programmeerstructuren", "pn_sentimentanalyse"],
+  }
 
   try {
     // ── 1. Create Teachers ──
@@ -119,7 +134,8 @@ export async function seedDatabase(): Promise<void> {
     // ── 5. Create Assignments for Each Class ──
     for (const classId of classIds) {
       for (let i = 0; i < 3; i++) {
-        const learningPathId = "TODO"; // Replace with actual learning path ID once supported
+        const learningPathId = faker.helpers.arrayElement(learningPaths);
+        learningPathIds.push(learningPathId)
         // Choose a start date in the next 7 days
         const startDate = faker.date.soon({ days: 7 });
         // Deadline is sometime 1 to 14 days after startDate
@@ -162,6 +178,25 @@ export async function seedDatabase(): Promise<void> {
           const group = new Group(members, assignmentId);
           await groupRep.create(group);
         }
+      }
+    }
+
+    // ── 6. Create submissions for Assignments ──
+    for (let i = 0 ; i < assignments.length; i++) {
+      const assignment: {id: string, classId: string} = assignments[i];
+      const students = await studentRep.getByClassId(assignment.classId);
+      const studentIds = students.map((s: any) => s.id);
+    
+      for(const id of studentIds){
+        const submission = new Submission(
+          id,
+          assignment.id,
+          faker.helpers.arrayElement(pathToObjects[learningPathIds[i]]), // Get random learningObject for the path in the assignment
+          faker.date.past({years: 1}), // Generate date in the last year, is before the deadline so not logical. But is used so we can see the analytics
+          Buffer.from(""),
+          StatusType.NOT_ACCEPTED
+        )
+        await submissionRep.create(submission)
       }
     }
     

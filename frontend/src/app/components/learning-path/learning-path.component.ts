@@ -14,15 +14,17 @@ import { LoadingComponent } from "../loading/loading.component";
 import { MatCardModule } from "@angular/material/card";
 import { GraphBuilderService } from "../../services/graph-builder.service";
 import { Router } from "@angular/router";
-import { Progress } from "../../interfaces/progress/Progress";
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { Progress } from "../../interfaces/progress/progress";
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
     selector: "app-learning-path",
     templateUrl: "learning-path.component.html",
     styleUrl: "learning-path.component.less",
     standalone: true,
-    imports: [MatFormFieldModule, MatSelectModule, MatOptionModule, LoadingComponent, MatCardModule, MatProgressBarModule],
+    imports: [MatFormFieldModule, MatSelectModule, MatOptionModule, LoadingComponent, MatCardModule, MatProgressBarModule, MatButtonModule, MatIconModule],
 })
 export class LearningPathComponent implements OnInit {
     // The learning path this whole page is about (to be fetched)
@@ -33,9 +35,13 @@ export class LearningPathComponent implements OnInit {
     @Input() hruid!: string;
     @Input() assignment: boolean = false;
     @Input() progress?: Progress;
+    @Input() popup?: boolean = false; // extra back button if component is used as popup
 
     // Emit an event including the new node we navigated to, used when in an assignment 
     @Output() selectedNodeChanged = new EventEmitter<Node<LearningObject> | null>();
+
+    // Specific for explore page, let know when popup needs to go back
+    @Output() back = new EventEmitter<void>();
 
     loading: boolean = true;
     isTeacher: boolean = false;
@@ -113,13 +119,13 @@ export class LearningPathComponent implements OnInit {
 
         const nextNode = this.trajectoryGraph.getNeighbors(this.selectedNode.value)[0];
         if (nextNode) {
-          this.selectedNode = nextNode;
-          this.selectedNodeChanged.emit(nextNode);
+            this.selectedNode = nextNode;
+            this.selectedNodeChanged.emit(nextNode);
         } else {
             // Last node, navigate back to assignments
             this.router.navigateByUrl('/student/assignments')
         }
-  }
+    }
 
     onNodeSelected(): void {
         // TODO
