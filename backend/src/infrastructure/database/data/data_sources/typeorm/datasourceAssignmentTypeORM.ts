@@ -3,8 +3,7 @@ import { EntityNotFoundError } from "../../../../../config/error";
 import { Assignment } from "../../../../../core/entities/assignment";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
-import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
-import { UserOfClassTypeORM } from "../../data_models/userOfClassTypeorm";
+import { GroupTypeORM } from "../../data_models/groupTypeorm";
 import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
@@ -57,6 +56,8 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
 
     public async getAssignmentsByUserId(userId: string): Promise<Assignment[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
+        const groupRepository = datasource.getRepository(GroupTypeORM);
+        const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
 
         const userModel: UserTypeORM | null = await datasource.getRepository(UserTypeORM).findOne({
             where: { id: userId },
@@ -66,35 +67,37 @@ export class DatasourceAssignmentTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError(`User with id ${userId} not found`);
         }
 
-        if (userModel.role === UserType.STUDENT) {
-            const assignmentsJoinResult = await datasource
-                .getRepository(StudentOfGroupTypeORM)
-                .createQueryBuilder()
-                .where("StudentOfGroupTypeORM.user = :id", { id: userId })
-                // Join StudentOfGroup
-                .leftJoinAndSelect("StudentOfGroupTypeORM.group", "group") // Last one is alias
-                // Join Group to AssignmentGroup
-                .leftJoinAndSelect("group.assignment", "assignment")
-                // Join Assignment to Class
-                .leftJoinAndSelect("assignment.class", "class")
-                .getMany();
-
-            return assignmentsJoinResult.map(assignmentJoinResult => {
-                return assignmentJoinResult.group.assignment.toAssignmentEntity();
+        if (userModel.role == UserType.STUDENT) {
+            // The user is a student
+            // Get all the assignments for each group the student is in
+            const groupModels: GroupTypeORM[] = await groupRepository.find({
+                where: {
+                    students: {
+                        id: userId,
+                    },
+                },
+                relations: {
+                    assignment: { class: true }, // Important that the class is also loaded, as this is needed to convert the assignment to an entity
+                },
             });
+
+            return groupModels.map(model => model.assignment.toAssignmentEntity());
         }
-
-        const assignments = await datasource
-            .getRepository(AssignmentTypeORM)
-            .createQueryBuilder("assignment")
-            .leftJoinAndSelect("assignment.class", "class")
-            .leftJoin(UserOfClassTypeORM, "userOfClass", "userOfClass.class = class.id")
-            .where("userOfClass.user = :id", { id: userId })
-            .getMany();
-
-        return assignments.map(assignment => {
-            return assignment.toAssignmentEntity();
+        // The user is a teacher
+        // Get all the assignments for which the teacher is in the class
+        const assignmentModels: AssignmentTypeORM[] = await assignmentRepository.find({
+            where: {
+                class: {
+                    members: {
+                        id: userId,
+                    },
+                },
+            },
+            relations: {
+                class: true, // Important that the class is also loaded, as this is needed to convert the assignment to an entity
+            },
         });
+        return assignmentModels.map(assignmentModel => assignmentModel.toAssignmentEntity());
     }
 
     public async getAssignmentsByLearningPathId(learningPathId: string): Promise<Assignment[]> {

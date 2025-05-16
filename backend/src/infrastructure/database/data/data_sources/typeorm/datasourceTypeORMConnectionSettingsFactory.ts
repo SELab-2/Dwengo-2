@@ -6,9 +6,7 @@ import { JoinCodeTypeORM } from "../../data_models/joinCodeTypeorm";
 import { JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
-import { StudentOfGroupTypeORM } from "../../data_models/studentOfGroupTypeorm";
 import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
-import { UserOfClassTypeORM } from "../../data_models/userOfClassTypeorm";
 import { UserTypeORM } from "../../data_models/userTypeorm";
 
 /**
@@ -52,9 +50,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             JoinCodeTypeORM,
             JoinRequestTypeORM,
             ClassTypeORM,
-            UserOfClassTypeORM,
             GroupTypeORM,
-            StudentOfGroupTypeORM,
             AssignmentTypeORM,
             QuestionThreadTypeORM,
             MessageTypeORM,
