@@ -1863,7 +1863,7 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
-  "/users/:idParent/submissions":
+  "/users/{idParent}/submissions":
     get:
       tags:
         - submissions
@@ -1898,7 +1898,7 @@ paths:
           $ref: "#/components/responses/SubmissionsOK"
         "401":
           $ref: "#/components/responses/Unauthorized"
-  "/classes/:idParent/completion":
+  "/classes/{idParent}/completion":
     get:
       tags:
         - progress
@@ -1922,7 +1922,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
-  "/classes/:idParent/activity":
+  "/classes/{idParent}/activity":
     get:
       tags:
         - progress
@@ -1940,55 +1940,6 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/ActivityOK"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-  "/tasks":
-    post:
-      tags:
-        - tasks
-      summary: Create new task
-      description: |
-        Create a task in an assignment
-      operationId: createTask
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TaskCreate"
-      responses:
-        "201":
-          $ref: "#/components/responses/EntityCreated"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-  "/assignments/{idParent}/tasks":
-    get:
-      tags:
-        - tasks
-      summary: Get all tasks for assignment
-      description: |
-        Retrieve a list of all tasks associated with a specific assignment.
-      parameters:
-        - in: path
-          name: idParent
-          description: The id of the assignment of the task
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - in: query
-          name: step
-          description: The number of step in learningPath
-          required: false
-          schema:
-            type: number
-      responses:
-        "200":
-          $ref: "#/components/responses/TasksOK"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "404":
@@ -2059,6 +2010,55 @@ paths:
       responses:
         "204":
           $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/tasks":
+    post:
+      tags:
+        - tasks
+      summary: Create new task
+      description: |
+        Create a task in an assignment
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreate"
+      responses:
+        "201":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/assignments/{idParent}/tasks":
+    get:
+      tags:
+        - tasks
+      summary: Get all tasks for assignment
+      description: |
+        Retrieve a list of all tasks associated with a specific assignment.
+      parameters:
+        - in: path
+          name: idParent
+          description: The id of the assignment of the task
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: step
+          description: The number of step in learningPath
+          required: false
+          schema:
+            type: number
+      responses:
+        "200":
+          $ref: "#/components/responses/TasksOK"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "404":
