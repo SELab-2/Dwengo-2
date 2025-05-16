@@ -10,10 +10,10 @@
                 {{ assignment.name }}
             </mat-card-title>
             @if(progress.step === progress.maxStep) {
-                <mat-icon matTooltip="You finished this assignment!" class="check badge">check</mat-icon>
+                <mat-icon i18n-matTooltip="@@assignmentFinished" class="check badge">check</mat-icon>
             } @else {
                 @if (upcoming) {
-                    <mat-icon matTooltip="Assignment not started yet" class="badge low">pending_actions</mat-icon>
+                    <mat-icon i18n-matTooltip="@@assignmentNotStarted" class="badge low">pending_actions</mat-icon>
                 } @else {
                     <mat-icon [matTooltip]="toolTip" class="badge" [ngClass]="urgence">alarm</mat-icon>
                 }

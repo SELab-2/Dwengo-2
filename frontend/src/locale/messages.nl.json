@@ -188,6 +188,8 @@
     "learningPathServiceLearningPaths": "leertrajecten",
     "learningPathServiceLearningPath": "een leertraject",
     "showMembersBtnText": "Toon leden",
-    "groupMembersCount": "Leden"
+    "groupMembersCount": "Leden",
+    "assignmentFinished": "Opdracht voltooid",
+    "assignmentNotStarted": "Opdracht nog niet begonnen"
   }
 }

@@ -188,6 +188,8 @@
     "learningPathServiceLearningPaths": "learning paths",
     "learningPathServiceLearningPath": "a learning path",
     "showMembersBtnText": "Show members",
-    "groupMembersCount": "Members"
+    "groupMembersCount": "Members",
+    "assignmentFinished": "You finished this assignment",
+    "assignmentNotStarted": "Assignment not started yet"
   }
 }
