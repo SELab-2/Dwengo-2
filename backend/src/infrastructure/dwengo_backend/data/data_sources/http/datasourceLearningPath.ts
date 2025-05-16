@@ -30,8 +30,8 @@ export class DatasourceLearningPath extends DatasourceDwengo {
     public async getLearningPath(hruid: string, includeNodes: boolean, language?: string): Promise<LearningPath> {
         // Fetch from dwengo or get from cache
         const data = await this.getAllLearningPathsCached();
-        const matching = data.filter((path) => path.hruid === hruid);
-        console.log(matching)
+        const matching = data.filter(path => path.hruid === hruid);
+        console.log(matching);
 
         if (matching.length === 0) {
             throw { code: ErrorCode.NOT_FOUND, message: `No learningPath exists with this hruid.` } as ApiError;

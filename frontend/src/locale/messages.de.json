@@ -190,6 +190,7 @@
     "showMembersBtnText": "Mitglieder anzeigen",
     "groupMembersCount": "Mitglieder",
     "assignmentFinished": "Aufgabe abgeschlossen",
-    "assignmentNotStarted": "Aufgabe noch nicht begonnen"
+    "assignmentNotStarted": "Aufgabe noch nicht begonnen",
+    "joinClass": "Treten Sie einer neuen Klasse bei"
   }
 }

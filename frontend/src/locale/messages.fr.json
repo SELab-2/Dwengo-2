@@ -190,6 +190,7 @@
     "showMembersBtnText": "Afficher les membres",
     "groupMembersCount": "Membres",
     "assignmentFinished": "Devoir terminé",
-    "assignmentNotStarted": "Devoir pas encore commencé"
+    "assignmentNotStarted": "Devoir pas encore commencé",
+    "joinClass": "rejoindre une nouvelle classe"
   }
 }

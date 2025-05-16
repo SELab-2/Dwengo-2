@@ -1,6 +1,6 @@
 <div class="group-container">
     <h3 class="title" i18n="@@groupMembersCount">
-        Members: {{data.members.length}}
+        {{ data.members ? `Members: ${data.members.length}` : "No members"}}
     </h3>
     <div class="card-content">
         @if (data.members) {
@@ -9,8 +9,6 @@
                     <app-mini-user [user]="member"></app-mini-user>
                 }
             </mat-accordion>
-        } @else {
-            <p i18n>There are no users in this group</p>
         }
         <button style="padding: 10px;" (click)="exit()" color="primary" mat-fab>
             <mat-icon>close</mat-icon>

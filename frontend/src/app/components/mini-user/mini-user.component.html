@@ -1,7 +1,7 @@
 <mat-expansion-panel class="list-card" role="listitem">
     <mat-expansion-panel-header>
        <mat-card-title>
-           <mat-panel-title>
+           <mat-panel-title id="user-name">
                {{ user.firstName }} {{ user.familyName }}
            </mat-panel-title>
            
@@ -10,11 +10,11 @@
     
     <div class="item">
         <mat-icon i18n-matTooltip="@@membersListStudentsEmail" class="icon">email</mat-icon>
-        <p>{{ user.email }}</p>
+        <p id="mail">{{ user.email }}</p>
     </div>
     <mat-divider></mat-divider>
     <div class="item">
         <mat-icon i18n-matTooltip="@@membersListStudentsSchool" class="icon">school</mat-icon>
-        <p>{{ user.schoolName }}</p>
+        <p id="school">{{ user.schoolName }}</p>
     </div>                      
 </mat-expansion-panel>
