@@ -36,6 +36,8 @@ export const routes: Routes = [
     { path: 'student/classes/:id', component: ClassComponent, title: "Class", canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'student/chat/:id', component: ChatPageComponent, title: "Chat", canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'student/groups/:id', component: GroupComponent },
+    { path: 'teacher/assignments/:id', component: AssignmentPageComponent, title: "Assignment", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
+    { path: 'teacher/assignments/:id/:id', component: CreateAssignmentPageComponent, title: "Assignment", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'student/assignments', component: AssignmentsPageComponent, title: "My Assignments", canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'teacher/assignments', component: AssignmentsPageComponent, title: "My Assignments", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'student/assignments/:id', component: AssignmentPageComponent, title: "Assignment", canActivate: [UserTypeGuard], data: { userType: 'student' } },

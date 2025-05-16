@@ -1,0 +1,38 @@
+<div class="card-container">
+    @if(!ready){
+    <button mat-fab extended color="primary" (click)="start()">
+        <mat-icon>add</mat-icon>
+        <span i18n="@@createTask">Create a Task</span>
+    </button>
+    } @else {
+    <mat-card class="selection-menu">
+        <div class="menu-head">
+            <button class="back" color="primary" mat-mini-fab i18n (click)="back()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            @if(selected === undefined){
+            <mat-card-title i18n>Choose your Option</mat-card-title>
+            }
+        </div>
+        @if(selected === undefined){
+        <div class="options">
+            <mat-card class="option" (click)="select('multiple-choice')">
+                <mat-icon>done_all</mat-icon>
+                <mat-card-title i18n>Multiple Choice Question</mat-card-title>
+            </mat-card>
+            <mat-card class="option" (click)="select('normal-question')">
+                <mat-icon>question_mark</mat-icon>
+                <mat-card-title i18n>Normal Question</mat-card-title>
+            </mat-card>
+        </div>
+        }
+        @if(selected !== undefined && selected.toString() === 'multiple-choice'){
+        <app-create-multiple-choice (taskCreated)="onTaskCreated($event)"></app-create-multiple-choice>
+        }
+        @if(selected !== undefined && selected.toString() === 'normal-question'){
+        <app-create-normal-task (taskCreated)="onTaskCreated($event)"></app-create-normal-task>
+        }
+
+    </mat-card>
+    }
+</div>

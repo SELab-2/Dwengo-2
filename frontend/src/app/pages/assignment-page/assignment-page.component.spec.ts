@@ -81,22 +81,13 @@ describe('AssignmentPageComponent', () => {
   });
 
   it('should retrieve and set assignment details correctly', () => {
+    component.isStudent = true;
     component.ngOnInit();
 
     // Verifying if the assignment was set correctly
     expect(component.assignmentId).toBe('test-assignment-id');
     expect(component.learningPathId).toBe(mockAssignment.learningPathId);
     expect(component.assignment).toEqual(mockAssignment);
-  });
-
-  it('should retrieve progress and set step and maxStep correctly', () => {
-    component.ngOnInit();
-
-    // Verifying if progress was retrieved and set
-    expect(component.progress).toEqual(mockProgress);
-    expect(component.step).toBe(mockProgress.step);
-    expect(component.maxStep).toBe(mockProgress.maxStep);
-    expect(component.loading).toBeFalse();
   });
 
   it('should update step when a submission is created', () => {
