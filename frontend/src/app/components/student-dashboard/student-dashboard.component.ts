@@ -81,7 +81,10 @@ export class StudentDashboardComponent implements OnInit {
 
     this.assignmentService.retrieveAssignments().subscribe({
       next: (assignments: Assignment[]) => {
-        this._assignments = assignments;
+        // Remove assignments where deadline is in past
+        this._assignments = assignments.filter(a => {
+            return new Date(a.deadline) >= new Date()
+        });
         this._assignments.forEach((assignment) => {
           const classId = assignment.classId;
           const className = this.classesService.classWithId(classId);
@@ -121,9 +124,44 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   public get assignmentsWithGroup(): {assignment: Assignment, group: Group, id: string}[] {
-    return this.assignments.map((val, i) => (
-      {assignment: val, group: this._assignmentToGroup[val.id], progress: this._progress[i], id: val.id}
-    ))
+    const now = new Date();
+
+    const combined = this.assignments.map((assignment, i) => {
+      const progress = this._progress[i];
+      const group = this._assignmentToGroup[assignment.id];
+      return { assignment, group, progress, id: assignment.id };
+    });
+
+    // Predicate to check if assignment is finished
+    const isFinished = (progress: Progress) =>
+      progress && progress.step >= progress.maxStep;
+
+    const parseDate = (date: string | Date) => new Date(date).getTime();
+
+    // Sort finished assignments according to first upcoming deadline
+    const finished = combined
+      .filter(item => isFinished(item.progress))
+      .sort((a, b) => parseDate(a.assignment.deadline) - parseDate(b.assignment.deadline));
+    
+    const notFinished = combined
+    .filter(item => !isFinished(item.progress))
+    .sort((a, b) => {
+      const aStart = parseDate(a.assignment.startDate);
+      const bStart = parseDate(b.assignment.startDate);
+      const aDeadline = parseDate(a.assignment.deadline);
+      const bDeadline = parseDate(b.assignment.deadline);
+
+      const aStarted = aStart <= now.getTime();
+      const bStarted = bStart <= now.getTime();
+
+      // Started first > not started
+      if (aStarted && !bStarted) return -1;
+      if (!aStarted && bStarted) return 1;
+
+      // Same status: sort on deadline
+      return aDeadline - bDeadline;
+    });
+    return [...notFinished, ...finished];
   }
 
   public get classes(): Class[] {

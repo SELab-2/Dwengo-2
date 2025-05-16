@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Assignment } from '../../interfaces/assignment/assignment';
 import { CommonModule } from '@angular/common'
 import { MatCardModule } from '@angular/material/card'
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { GroupDialogComponent } from '../group-dialog/group-dialog.component';
 import { Group } from '../../interfaces/group/group';
@@ -44,19 +44,33 @@ export class MiniAssignmentComponent {
   @Input() assignment!: Assignment;
   @Input() group!: Group;
   @Input() progress!: Progress;
+  today: Date = new Date();
 
   constructor(
     private dialog: MatDialog,
     private progressService: ProgressService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private router: Router
   ) {}
     
+  onCardClick(): void {
+    if (!this.upcoming) {
+      this.router.navigate(['/', this._type, 'assignments', this.assignment.id]);
+    }
+  }
+
+
   // Give event as param, so routerlink to assignment is not taken
   openDialog(event: MouseEvent) {
     event.stopPropagation();
     this.dialog.open(GroupDialogComponent, {
-      data: this.group
+      data: this.group,
+      minWidth: "25vw"
     })
+  }
+
+  get upcoming(): boolean {
+    return new Date(this.assignment.startDate) > this.today
   }
 
   get progressPercentage(): number {

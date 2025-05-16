@@ -186,6 +186,8 @@
     "deleteError": "Une erreur est survenue lors de la suppression",
     "learningObjectServiceLearningPathError": "parcours d'apprentissage",
     "learningPathServiceLearningPaths": "parcours d'apprentissage",
-    "learningPathServiceLearningPath": "un parcours d'apprentissage"
+    "learningPathServiceLearningPath": "un parcours d'apprentissage",
+    "showMembersBtnText": "Afficher les membres",
+    "groupMembersCount": "Membres"
   }
 }

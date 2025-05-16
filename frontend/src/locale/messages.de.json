@@ -186,6 +186,8 @@
     "deleteError": "Ein Fehler ist beim Löschen aufgetreten",
     "learningObjectServiceLearningPathError": "Lernpfade",
     "learningPathServiceLearningPaths": "Lernpfade",
-    "learningPathServiceLearningPath": "ein Lernpfad"
+    "learningPathServiceLearningPath": "ein Lernpfad",
+    "showMembersBtnText": "Mitglieder anzeigen",
+    "groupMembersCount": "Mitglieder"
   }
 }

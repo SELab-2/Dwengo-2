@@ -1,45 +1,60 @@
-<mat-card routerLink="/{{_type}}/assignments/{{assignment.id}}" class="mini-assignment" appearance="outlined">
-    <mat-card-header class="header">
-        <mat-card-title id="assignment-title">
-            {{ assignment.name }}
-        </mat-card-title>
-        @if(progress.step === progress.maxStep) {
-            <mat-icon matTooltip="You finished this assignment!" class="check badge">check</mat-icon>
-        } @else {
-            <mat-icon [matTooltip]="toolTip" class="badge" [ngClass]="urgence">alarm</mat-icon>
-        }
-        
-    </mat-card-header>
-    <div class="main-container">
-        <div class="left-container">
-            <mat-card-content>
-                <p id="assignment-class">Class: {{ assignment.className }}</p>
-                <p id="assignment-startDate">Start: {{ assignment.startDate }}</p>
-                <p id="assignment-deadline">Deadline: {{ assignment.deadline }}</p>
-            </mat-card-content>
-        </div>
-    
-        <div class="right-container">
-            <div class="members-label">
-                <h4>{{ group.members.length }}</h4>
-                <mat-icon>groups</mat-icon>
+<mat-card
+    [class.disabled]="upcoming"
+    class="mini-assignment"
+    appearance="outlined"
+    (click)="onCardClick()"
+    >
+    <div class="dim-content">
+        <mat-card-header class="header">
+            <mat-card-title id="assignment-title">
+                {{ assignment.name }}
+            </mat-card-title>
+            @if(progress.step === progress.maxStep) {
+                <mat-icon matTooltip="You finished this assignment!" class="check badge">check</mat-icon>
+            } @else {
+                @if (upcoming) {
+                    <mat-icon matTooltip="Assignment not started yet" class="badge low">pending_actions</mat-icon>
+                } @else {
+                    <mat-icon [matTooltip]="toolTip" class="badge" [ngClass]="urgence">alarm</mat-icon>
+                }
+
+            }
+        </mat-card-header>
+        <div class="main-container">
+            <div class="left-container">
+                <mat-card-content>
+                    <p id="assignment-class" i18n="@@class">Class: {{ assignment.className }}</p>
+                    <p id="assignment-startDate" i18n>Start: {{ assignment.startDate | date: "longDate" }}</p>
+                    <p id="assignment-deadline" i18n>Deadline: {{ assignment.deadline | date: "longDate" }}</p>
+                </mat-card-content>
             </div>
-            <mat-card-actions>
-                <button class="dialog-button" color="primary" mat-fab extended (click)="openDialog($event)">
-                    Show members
-                </button>
-            </mat-card-actions>
-        </div>
         
+            <div class="right-container">
+                <div class="members-label">
+                    <h4>{{ group.members.length }}</h4>
+                    <mat-icon>groups</mat-icon>
+                </div>
+                <mat-card-actions>
+                    <button i18n="@@showMembersBtnText" class="dialog-button" color="primary" mat-fab extended (click)="openDialog($event)">
+                        Show members
+                    </button>
+                </mat-card-actions>
+            </div>
+
+        </div>
     </div>
-    <div class="progress-container">
-        <mat-progress-bar
-            mode="determinate"
-            [value]="progressPercentage"
-            color="primary"
-            class="progress"
-        ></mat-progress-bar>
-        <h5>{{progress.step}}/{{progress.maxStep}}</h5>
-    </div>
+    
+    @if (!upcoming) {
+        <div class="progress-container">
+            <mat-progress-bar
+                mode="determinate"
+                [value]="progressPercentage"
+                color="primary"
+                class="progress"
+            ></mat-progress-bar>
+            <h5>{{progress.step}}/{{progress.maxStep}}</h5>
+        </div>
+    }
+    
     
 </mat-card>

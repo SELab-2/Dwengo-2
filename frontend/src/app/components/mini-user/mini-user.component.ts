@@ -1,6 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { User } from '../../interfaces';
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card'
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatDivider } from '@angular/material/divider';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-mini-user',
@@ -10,7 +14,12 @@ import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/m
     MatCard,
     MatCardHeader,
     MatCardTitle,
-    MatCardContent
+    MatCardContent,
+    MatIcon,
+    MatTooltip,
+    MatDivider,
+    MatExpansionModule
+    
   ],
   templateUrl: './mini-user.component.html',
   styleUrl: './mini-user.component.less'

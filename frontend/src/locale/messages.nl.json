@@ -186,6 +186,8 @@
     "deleteError": "Er is een fout opgetreden tijdens het verwijderen",
     "learningObjectServiceLearningPathError": "leertrajecten",
     "learningPathServiceLearningPaths": "leertrajecten",
-    "learningPathServiceLearningPath": "een leertraject"
+    "learningPathServiceLearningPath": "een leertraject",
+    "showMembersBtnText": "Toon leden",
+    "groupMembersCount": "Leden"
   }
 }

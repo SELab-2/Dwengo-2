@@ -1,8 +1,20 @@
-<mat-card class="list-card" role="listitem">
-    <mat-card-title>
-        {{ user.firstName }} {{ user.familyName }}
-    </mat-card-title>
-    <mat-card-content>
-        {{ user.email }} - {{ user.schoolName }}
-    </mat-card-content>                        
-</mat-card>
+<mat-expansion-panel class="list-card" role="listitem">
+    <mat-expansion-panel-header>
+       <mat-card-title>
+           <mat-panel-title>
+               {{ user.firstName }} {{ user.familyName }}
+           </mat-panel-title>
+           
+       </mat-card-title>
+    </mat-expansion-panel-header>
+    
+    <div class="item">
+        <mat-icon i18n-matTooltip="@@membersListStudentsEmail" class="icon">email</mat-icon>
+        <p>{{ user.email }}</p>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="item">
+        <mat-icon i18n-matTooltip="@@membersListStudentsSchool" class="icon">school</mat-icon>
+        <p>{{ user.schoolName }}</p>
+    </div>                      
+</mat-expansion-panel>

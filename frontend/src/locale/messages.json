@@ -186,6 +186,8 @@
     "deleteError": "An error occured whilst deleting",
     "learningObjectServiceLearningPathError": "learning paths",
     "learningPathServiceLearningPaths": "learning paths",
-    "learningPathServiceLearningPath": "a learning path"
+    "learningPathServiceLearningPath": "a learning path",
+    "showMembersBtnText": "Show members",
+    "groupMembersCount": "Members"
   }
 }

@@ -5,10 +5,11 @@ import { MiniUserComponent } from '../mini-user/mini-user.component';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-group-dialog',
-  imports: [MatCardModule, MiniUserComponent, MatListModule, MatButtonModule, MatIcon],
+  imports: [MatCardModule, MiniUserComponent, MatListModule, MatButtonModule, MatIcon, MatAccordion],
   templateUrl: './group-dialog.component.html',
   styleUrl: './group-dialog.component.less'
 })

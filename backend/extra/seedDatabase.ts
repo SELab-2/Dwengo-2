@@ -33,10 +33,8 @@ import { AssignmentRepositoryTypeORM } from "../src/infrastructure/repositories/
 import { GroupRepositoryTypeORM } from "../src/infrastructure/repositories/groupRepositoryTypeORM";
 import { ThreadRepositoryTypeORM } from "../src/infrastructure/repositories/questionThreadRepositoryTypeORM";
 import { MessageRepositoryTypeORM } from "../src/infrastructure/repositories/messageRepositoryTypeORM";
-import { JoinRequestType } from "../src/core/entities/joinRequest";
 import { VisibilityType } from "../src/core/entities/questionThread";
 import { StatusType, Submission } from '../src/core/entities/submission';
-import { SubmissionTypeORM } from '../src/infrastructure/database/data/data_models/submissionTypeorm';
 import { SubmissionRepositoryTypeORM } from '../src/infrastructure/repositories/submissionRepositoryTypeORM';
 
 export async function seedDatabase(): Promise<void> {
@@ -137,9 +135,9 @@ export async function seedDatabase(): Promise<void> {
         const learningPathId = faker.helpers.arrayElement(learningPaths);
         learningPathIds.push(learningPathId)
         // Choose a start date in the next 7 days
-        const startDate = faker.date.soon({ days: 7 });
+        const startDate = faker.date.soon();
         // Deadline is sometime 1 to 14 days after startDate
-        const additionalDays = faker.number.int({ min: 1, max: 14 });
+        const additionalDays = faker.number.int({ min: 0, max: 14 });
         const deadline = new Date(startDate.getTime() + additionalDays * 24 * 60 * 60 * 1000);
         const name = faker.lorem.sentence(3); // Random name for the assignment
         const extraInstructions = faker.lorem.sentence();
@@ -184,7 +182,7 @@ export async function seedDatabase(): Promise<void> {
     // ── 6. Create submissions for Assignments ──
     for (let i = 0 ; i < assignments.length; i++) {
       const assignment: {id: string, classId: string} = assignments[i];
-      const students = await studentRep.getByClassId(assignment.classId);
+      const students = await userRep.getByClassId(assignment.classId);
       const studentIds = students.map((s: any) => s.id);
     
       for(const id of studentIds){
