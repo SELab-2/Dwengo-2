@@ -6,7 +6,7 @@
     <div class="main-info">
 
         @if (selectedView === 'classes'){
-            <app-class-overview-widget class="dynamic-section overview" [classes]="classes"></app-class-overview-widget>
+            <app-class-overview-widget class="dynamic-section overview" [loadingData]="loadingData" [loadingClasses]="loadingClasses" [classes]="classes"></app-class-overview-widget>
         }
 
         @if (selectedView === 'deadlines'){
@@ -45,7 +45,17 @@
     </div>
 
     <div class="charts">
-        <app-class-chart [classChartData]="classChartData" [displayContent]="displayClassChart"></app-class-chart>
-        <app-activity-chart [activityChartData]="activityChartData" [displayContent]="displayActivityChart"></app-activity-chart>
+        @if (loadingData) {
+            <app-card-skeleton-loader title=""></app-card-skeleton-loader>
+        } @else {
+            <app-class-chart [classChartData]="classChartData" [displayContent]="displayClassChart"></app-class-chart>
+        }
+        
+        @if (loadingData) {
+            <app-card-skeleton-loader title="Timeline"></app-card-skeleton-loader>
+        } @else {
+            <app-activity-chart [activityChartData]="activityChartData" [displayContent]="displayActivityChart"></app-activity-chart>
+        }
+        
     </div>
 </main>

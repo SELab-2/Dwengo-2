@@ -14,7 +14,7 @@ import { LoadingComponent } from "../loading/loading.component";
 import { MatCardModule } from "@angular/material/card";
 import { GraphBuilderService } from "../../services/graph-builder.service";
 import { Router } from "@angular/router";
-import { Progress } from "../../interfaces/progress/Progress";
+import { Progress } from "../../interfaces/progress/progress";
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @Component({

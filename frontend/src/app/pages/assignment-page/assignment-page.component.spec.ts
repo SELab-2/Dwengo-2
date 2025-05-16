@@ -8,7 +8,7 @@ import { AssignmentService } from '../../services/assignment.service';
 import { ProgressService } from '../../services/progress.service';
 import { of } from 'rxjs';
 import { Assignment } from '../../interfaces/assignment';
-import { Progress } from '../../interfaces/progress/Progress';
+import { Progress } from '../../interfaces/progress/progress';
 
 // Mock data voor Assignment en Progress
 const mockAssignment: Assignment = {

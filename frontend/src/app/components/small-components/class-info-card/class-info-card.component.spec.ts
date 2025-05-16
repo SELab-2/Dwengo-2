@@ -33,7 +33,7 @@ describe('ClassInfoCardComponent', () => {
         component.targetGroup = 'Grade 10';
         component.completionPercentage = 50;
         component.classId = '123';
-
+        component.loadingData = false;
         // Trigger change detection
         fixture.detectChanges();
     });
