@@ -5,6 +5,7 @@ import { Submission } from "../../../../../core/entities/submission";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
+import { TaskTypeORM } from "../../data_models/taskTypeORM";
 import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
 
 export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
@@ -14,6 +15,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
         const userRepository = datasource.getRepository(UserTypeORM);
         const submissionRepository = datasource.getRepository(SubmissionTypeORM);
+        const taskRepository = datasource.getRepository(TaskTypeORM);
 
         // Check if the assignment exists
         const assignmentModel: AssignmentTypeORM | null = await assignmentRepository.findOne({
@@ -33,10 +35,19 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError(`Student with id ${submission.studentId} not found`);
         }
 
+        const taskModel: TaskTypeORM | null = await taskRepository.findOne({
+            where: { id: submission.taskId },
+        });
+
+        if (!taskModel) {
+            throw new EntityNotFoundError(`Task with id ${submission.taskId} not found`);
+        }
+
         const submissionModel: SubmissionTypeORM = SubmissionTypeORM.createTypeORM(
             submission,
             studentModel,
             assignmentModel,
+            taskModel,
         );
 
         const returnSubmission: SubmissionTypeORM = await submissionRepository.save(submissionModel);
@@ -49,7 +60,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
 
         const submissionModel: SubmissionTypeORM | null = await datasource.getRepository(SubmissionTypeORM).findOne({
             where: { id: id },
-            relations: ["user", "assignment"],
+            relations: ["user", "assignment", "task"],
         });
 
         if (!submissionModel) {
@@ -75,6 +86,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
             submission,
             submissionModel.user,
             submissionModel.assignment,
+            submissionModel.task,
         );
         updatedSubmission.id = submissionModel.id;
 
@@ -96,6 +108,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     private async getSubmissions(
         studentId: string,
         assignmentId: string,
+        taskId?: string,
         learningObjectId?: string,
     ): Promise<Submission[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
@@ -103,6 +116,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         const studentRepository = datasource.getRepository(UserTypeORM);
         const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
         const submissionRepository = datasource.getRepository(SubmissionTypeORM);
+        const taskRepository = datasource.getRepository(TaskTypeORM);
 
         // First get the student
         const studentModel: UserTypeORM | null = await studentRepository.findOne({
@@ -129,10 +143,21 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
             whereCondition.learning_object_id = learningObjectId;
         }
 
+        if (taskId) {
+            const taskModel: TaskTypeORM | null = await taskRepository.findOne({
+                where: { id: taskId },
+            });
+
+            if (!taskModel) {
+                throw new EntityNotFoundError(`Task with id ${taskId} not found`);
+            }
+            whereCondition.task = taskModel;
+        }
+
         // Get the submissions
         const submissionModels: SubmissionTypeORM[] = await submissionRepository.find({
             where: whereCondition,
-            relations: ["user", "assignment"],
+            relations: ["user", "assignment", "task"],
         });
 
         // Return the submissions as entities
@@ -146,9 +171,9 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
     public async getAllForStudentInAssignmentStep(
         studentId: string,
         assignmentId: string,
-        learningObjectId: string,
+        taskId: string,
     ): Promise<Submission[]> {
-        return this.getSubmissions(studentId, assignmentId, learningObjectId);
+        return this.getSubmissions(studentId, assignmentId, taskId);
     }
 
     public async getByStudentId(studentId: string): Promise<Submission[]> {
@@ -166,7 +191,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         // Now get all the student's submissions for any assignment and step
         const submissionModels: SubmissionTypeORM[] = await submissionRepository.find({
             where: { user: studentModel },
-            relations: ["user", "assignment"],
+            relations: ["user", "assignment", "task"],
         });
         // Return the submissions as entities
         return submissionModels.map(model => model.toEntity());

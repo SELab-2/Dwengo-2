@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, CreateDateColumn, ManyToOne } from "typeorm";
 import { AssignmentTypeORM } from "./assignmentTypeorm";
+import { TaskTypeORM } from "./taskTypeORM";
 import { UserTypeORM } from "./userTypeorm";
 import { StatusType, Submission } from "../../../../core/entities/submission";
 
@@ -20,6 +21,10 @@ export class SubmissionTypeORM {
     @ManyToOne(() => AssignmentTypeORM, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "assignment_id" })
     assignment!: AssignmentTypeORM;
+
+    @ManyToOne(() => TaskTypeORM, { cascade: true, onDelete: "CASCADE" })
+    @JoinColumn({ name: "task_id" })
+    task!: TaskTypeORM;
 
     @Column({ type: "varchar" }) // In the Dwengo API docs a uuid is a string
     learning_object_id!: string; // uuid of corresponding learning object
@@ -47,6 +52,7 @@ export class SubmissionTypeORM {
         return new Submission(
             this.user.id,
             this.assignment.id,
+            this.task.id,
             this.learning_object_id,
             this.time,
             this.contents,
@@ -59,6 +65,7 @@ export class SubmissionTypeORM {
         submission: Submission,
         userModel: UserTypeORM,
         assignmentModel: AssignmentTypeORM,
+        taskModel: TaskTypeORM,
     ): SubmissionTypeORM {
         const submissionModel: SubmissionTypeORM = new SubmissionTypeORM();
 
@@ -71,6 +78,7 @@ export class SubmissionTypeORM {
 
         submissionModel.user = userModel;
         submissionModel.assignment = assignmentModel;
+        submissionModel.task = taskModel;
         submissionModel.learning_object_id = submission.learningObjectId;
         submissionModel.time = submission.time;
         submissionModel.contents = submission.contents;

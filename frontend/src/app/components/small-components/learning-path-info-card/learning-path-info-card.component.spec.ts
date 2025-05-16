@@ -57,7 +57,7 @@ describe('LearningPathInfoCardComponent', () => {
         component.path.learningPathId = 'abc123';
         component.isTeacher = false;
 
-        component.checkDescriptionLength();
+        component.checkLengths();
 
         fixture.detectChanges();
 

@@ -11,3 +11,4 @@ export * from "./userResource";
 export * from "./learningObjectResource";
 export * from "./learningPathResource";
 export * from "./progressResource";
+export * from "./taskResource";

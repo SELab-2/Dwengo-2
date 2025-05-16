@@ -10,3 +10,4 @@ export * from "./userSchemas";
 export * from "./learningObjectSchemas";
 export * from "./learningPathSchemas";
 export * from "./progressSchemas";
+export * from "./taskSchemas";

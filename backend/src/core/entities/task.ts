@@ -7,7 +7,7 @@ export class Task {
         private _question: string,
         private _type: TaskType,
         private _details: TaskDetails,
-        private _id?: string
+        private _id?: string,
     ) {}
 
     public get id(): string | undefined {
@@ -56,7 +56,7 @@ export class Task {
             step: this._step,
             question: this._question,
             type: this._type,
-            ...this._details
+            details: this._details,
         };
     }
 }

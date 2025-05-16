@@ -1,6 +1,7 @@
 export enum TaskType {
-    NormalQuestion,
-    MultipleChoice,
+    NormalQuestion = "NORMALQUESTION",
+    MultipleChoice = "MULTIPLECHOICE",
+    Other = "OTHER",
 }
 
 export interface MultipleChoiceDetails {
@@ -13,4 +14,6 @@ export interface NormalQuestionDetails {
     predefined_answer?: string;
 }
 
-export type TaskDetails = MultipleChoiceDetails | NormalQuestionDetails;
+export interface OtherDetails {}
+
+export type TaskDetails = MultipleChoiceDetails | NormalQuestionDetails | OtherDetails;

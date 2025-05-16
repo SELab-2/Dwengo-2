@@ -5,13 +5,10 @@
 
     <div class="widget-container">
         @for(data of learningPaths; track data){
-            <app-learning-path-info-card
-                [path]="data" 
-                [isTeacher]="isTeacher"
-            >
-            </app-learning-path-info-card>
+        <app-learning-path-info-card [path]="data" [isTeacher]="isTeacher" (showPopup)="emit($event)">
+        </app-learning-path-info-card>
         } @empty {
-            <p i18n="@@noLearningPaths">There are no learning paths available for this category</p>
+        <p i18n="@@noLearningPaths">There are no learning paths available for this category</p>
         }
     </div>
 </mat-card>

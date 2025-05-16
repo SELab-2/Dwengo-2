@@ -8,6 +8,7 @@ import { LearningPathRepository } from "../infrastructure/repositories/learningP
 import { MessageRepositoryTypeORM } from "../infrastructure/repositories/messageRepositoryTypeORM";
 import { ThreadRepositoryTypeORM } from "../infrastructure/repositories/questionThreadRepositoryTypeORM";
 import { SubmissionRepositoryTypeORM } from "../infrastructure/repositories/submissionRepositoryTypeORM";
+import { TaskRepository } from "../infrastructure/repositories/taskRepositoryTypeORM";
 import { UserRepositoryTypeORM } from "../infrastructure/repositories/userRepositoryTypeORM";
 
 /**
@@ -25,4 +26,5 @@ export const repositories = {
     user: new UserRepositoryTypeORM(),
     learningObject: new LearningObjectRepository(),
     learningPath: new LearningPathRepository(),
+    task: new TaskRepository(),
 };

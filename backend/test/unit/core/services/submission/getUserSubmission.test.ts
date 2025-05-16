@@ -53,7 +53,7 @@ describe('GetUserSubmissions', () => {
     const result = await service.execute({
       idParent: 'user123',
       assignmentId: 'assign456',
-      learningObjectId: 'step789',
+      taskId: 'step789',
     });
 
     expect(result).toEqual({ submissions: ['sub1'] });
@@ -65,7 +65,7 @@ describe('GetUserSubmissions', () => {
 
     await expect(service.execute({
       idParent: 'user123',
-      learningObjectId: 'step789',
+      taskId: 'step789',
     })).rejects.toMatchObject({
       code: ErrorCode.BAD_REQUEST,
       message: "Can only request submissions for a user inside of an assignment.",

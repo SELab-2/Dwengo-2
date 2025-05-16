@@ -5,12 +5,12 @@ info:
   description: |
     The Dwengo API facilitates user authentication, management of users, classes, groups, learning objects, learning paths, assignments, and interactive Q&A features for the Dwengo learning platform.
   contact:
-    url: 'https://github.com/SELab-2/Dwengo-2'
+    url: "https://github.com/SELab-2/Dwengo-2"
   license:
     name: MIT
-    url: 'https://mit-license.org/'
+    url: "https://mit-license.org/"
 servers:
-  - url: 'https://sel2-2.ugent.be'
+  - url: "https://sel2-2.ugent.be"
     description: Production server
 tags:
   - name: authentication
@@ -59,14 +59,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterRequest'
+              $ref: "#/components/schemas/RegisterRequest"
       responses:
-        '201':
-          $ref: '#/components/responses/EntityCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '409':
-          $ref: '#/components/responses/Conflict'
+        "201":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          $ref: "#/components/responses/Conflict"
   /login:
     post:
       tags:
@@ -82,16 +82,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: "#/components/schemas/LoginRequest"
       responses:
-        '200':
-          $ref: '#/components/responses/LoginResponseOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/LoginResponseOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
-  '/users/{id}':
+  "/users/{id}":
     get:
       tags:
         - users
@@ -106,12 +106,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/UserOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/UserOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       tags:
         - users
@@ -136,14 +136,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserUpdate'
+              $ref: "#/components/schemas/UserUpdate"
       responses:
-        '204':
-          $ref: '#/components/responses/UpdateOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/UpdateOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       tags:
         - users
@@ -158,13 +158,13 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/classes/{idParent}/users':
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/classes/{idParent}/users":
     get:
       tags:
         - users
@@ -178,16 +178,16 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/AllUsers'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/classes/{idParent}/users/{id}':
+        "200":
+          $ref: "#/components/responses/AllUsers"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/classes/{idParent}/users/{id}":
     delete:
       tags:
         - users
@@ -208,13 +208,13 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/groups/{idParent}/users':
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/groups/{idParent}/users":
     get:
       tags:
         - users
@@ -228,15 +228,15 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/AllStudents'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/AllStudents"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     post:
       tags:
         - users
@@ -255,15 +255,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CollectionUserCreate'
+              $ref: "#/components/schemas/CollectionUserCreate"
       responses:
-        '201':
-          $ref: '#/components/responses/CreateOK'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/groups/{idParent}/users/{id}':
+        "201":
+          $ref: "#/components/responses/CreateOK"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/groups/{idParent}/users/{id}":
     delete:
       tags:
         - users
@@ -284,13 +284,13 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/assignments/{idParent}/users':
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/assignments/{idParent}/users":
     get:
       tags:
         - users
@@ -304,15 +304,15 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/AllStudents'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/AllStudents"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /users:
     get:
       tags:
@@ -321,15 +321,15 @@ paths:
       description: Retrieve a list of all users in the system. Only accessible by administrators.
       operationId: getUsers
       parameters:
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/AllUsers'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "200":
+          $ref: "#/components/responses/AllUsers"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
-  '/requests/{id}':
+  "/requests/{id}":
     get:
       tags:
         - requests
@@ -344,12 +344,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/JoinRequestOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/JoinRequestOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       tags:
         - requests
@@ -364,12 +364,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/UpdateOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/UpdateOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       tags:
         - requests
@@ -384,12 +384,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /requests:
     post:
       tags:
@@ -402,15 +402,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JoinRequestCreate'
+              $ref: "#/components/schemas/JoinRequestCreate"
       responses:
-        '201':
-          $ref: '#/components/responses/EntityCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/users/{idParent}/requests':
+        "201":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/users/{idParent}/requests":
     get:
       tags:
         - requests
@@ -424,15 +424,15 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/RequestsOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "200":
+          $ref: "#/components/responses/RequestsOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
-  '/codes/{id}':
+  "/codes/{id}":
     get:
       tags:
         - codes
@@ -447,12 +447,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/JoinCodeOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/JoinCodeOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       tags:
         - codes
@@ -467,12 +467,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/UpdateOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/UpdateOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       tags:
         - codes
@@ -487,12 +487,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /codes:
     post:
       tags:
@@ -505,15 +505,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JoinCodeCreate'
+              $ref: "#/components/schemas/JoinCodeCreate"
       responses:
-        '201':
-          $ref: '#/components/responses/EntityCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/classes/{idParent}/codes':
+        "201":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/classes/{idParent}/codes":
     get:
       tags:
         - codes
@@ -527,15 +527,15 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/CodesOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "200":
+          $ref: "#/components/responses/CodesOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
-  '/classes/{id}':
+  "/classes/{id}":
     get:
       tags:
         - classes
@@ -550,12 +550,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/ClassOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/ClassOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       tags:
         - classes
@@ -574,16 +574,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClassUpdate'
+              $ref: "#/components/schemas/ClassUpdate"
       responses:
-        '204':
-          $ref: '#/components/responses/UpdateOK'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/UpdateOK"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       tags:
         - classes
@@ -598,12 +598,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /classes:
     post:
       tags:
@@ -616,15 +616,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClassCreate'
+              $ref: "#/components/schemas/ClassCreate"
       responses:
-        '201':
-          $ref: '#/components/responses/EntityCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/users/{idParent}/classes':
+        "201":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/users/{idParent}/classes":
     get:
       tags:
         - classes
@@ -638,15 +638,15 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/ClassesOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "200":
+          $ref: "#/components/responses/ClassesOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
-  '/groups/{id}':
+  "/groups/{id}":
     get:
       tags:
         - groups
@@ -661,12 +661,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/GroupOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/GroupOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       tags:
         - groups
@@ -685,17 +685,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GroupUpdate'
+              $ref: "#/components/schemas/GroupUpdate"
 
       responses:
-        '204':
-          $ref: '#/components/responses/UpdateOK'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/UpdateOK"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       tags:
         - groups
@@ -710,12 +710,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /groups:
     post:
       tags:
@@ -728,15 +728,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GroupCreate'
+              $ref: "#/components/schemas/GroupCreate"
       responses:
-        '201':
-          $ref: '#/components/responses/EntityCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/users/{idParent}/groups':
+        "201":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/users/{idParent}/groups":
     get:
       tags:
         - groups
@@ -750,16 +750,16 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/GroupsOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/assignments/{idParent}/groups':
+        "200":
+          $ref: "#/components/responses/GroupsOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/assignments/{idParent}/groups":
     get:
       tags:
         - groups
@@ -773,17 +773,17 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/GroupsOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/GroupsOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
-  '/learningPath':
+  "/learningPath":
     get:
       tags:
         - learningPath
@@ -825,15 +825,14 @@ paths:
             type: boolean
           description: Whether or not to include the nodes of the learningPath
       responses:
-        '200':
-          $ref: '#/components/responses/PathSearchOK'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "200":
+          $ref: "#/components/responses/PathSearchOK"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
-
-  '/learningPath/{id}':
+  "/learningPath/{id}":
     get:
       tags:
         - learningPath
@@ -856,109 +855,109 @@ paths:
             type: boolean
           description: Whether or not to include the nodes of the learningPath
       responses:
-        '200':
-          $ref: '#/components/responses/LearningPathOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/LearningPathOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
-# TODO  '/paths/{idParent}/objects/{id}':
-#    get:
-#      tags:
-#        - objects
-#      summary: Get learning object from path by ID
-#      description: Retrieve detailed information about a specific learning object within a learning path by their unique identifiers.
-#      operationId: getPathObjectById
-#      parameters:
-#        - in: path
-#          name: id
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#        - in: path
-#          name: idParent
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#      responses:
-#        '200':
-#          $ref: '#/components/responses/LearningObjectOK'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#  '/paths/{idParent}/objects':
-#    get:
-#      tags:
-#        - objects
-#      summary: Get all learning objects from path
-#      description: Retrieve a list of all learning objects associated with a specific learning path.
-#      operationId: getPathObjects
-#      parameters:
-#        - in: path
-#          name: idParent
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#        - $ref: '#/components/parameters/PageParam'
-#        - $ref: '#/components/parameters/PageSizeParam'
-#      responses:
-#        '200':
-#          $ref: '#/components/responses/LearningObjectsOK'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#  '/objects/{id}':
-#    patch:
-#      tags:
-#        - objects
-#      summary: Update learning object
-#      description: Modify an existing learning object's properties.
-#      operationId: updateObject
-#      parameters:
-#        - in: path
-#          name: id
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/LearningObjectUpdate'
-#      responses:
-#        '204':
-#          $ref: '#/components/responses/UpdateOK'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#    delete:
-#      tags:
-#        - objects
-#      summary: Delete learning object
-#      description: Permanently delete a learning object by its unique identifier.
-#      operationId: deleteObject
-#      parameters:
-#        - in: path
-#          name: id
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#      responses:
-#        '204':
-#          $ref: '#/components/responses/NoContent'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-  '/learningObject':
+  # TODO  '/paths/{idParent}/objects/{id}':
+  #    get:
+  #      tags:
+  #        - objects
+  #      summary: Get learning object from path by ID
+  #      description: Retrieve detailed information about a specific learning object within a learning path by their unique identifiers.
+  #      operationId: getPathObjectById
+  #      parameters:
+  #        - in: path
+  #          name: id
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #        - in: path
+  #          name: idParent
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #      responses:
+  #        '200':
+  #          $ref: '#/components/responses/LearningObjectOK'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #  '/paths/{idParent}/objects':
+  #    get:
+  #      tags:
+  #        - objects
+  #      summary: Get all learning objects from path
+  #      description: Retrieve a list of all learning objects associated with a specific learning path.
+  #      operationId: getPathObjects
+  #      parameters:
+  #        - in: path
+  #          name: idParent
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #        - $ref: '#/components/parameters/PageParam'
+  #        - $ref: '#/components/parameters/PageSizeParam'
+  #      responses:
+  #        '200':
+  #          $ref: '#/components/responses/LearningObjectsOK'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #  '/objects/{id}':
+  #    patch:
+  #      tags:
+  #        - objects
+  #      summary: Update learning object
+  #      description: Modify an existing learning object's properties.
+  #      operationId: updateObject
+  #      parameters:
+  #        - in: path
+  #          name: id
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #      requestBody:
+  #        required: true
+  #        content:
+  #          application/json:
+  #            schema:
+  #              $ref: '#/components/schemas/LearningObjectUpdate'
+  #      responses:
+  #        '204':
+  #          $ref: '#/components/responses/UpdateOK'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #    delete:
+  #      tags:
+  #        - objects
+  #      summary: Delete learning object
+  #      description: Permanently delete a learning object by its unique identifier.
+  #      operationId: deleteObject
+  #      parameters:
+  #        - in: path
+  #          name: id
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #      responses:
+  #        '204':
+  #          $ref: '#/components/responses/NoContent'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  "/learningObject":
     get:
       tags:
         - learningObject
@@ -995,7 +994,17 @@ paths:
           description: Search for a specific dwengo content type
           schema:
             type: string
-            enum: ["text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly"]
+            enum:
+              [
+                "text/plain",
+                "text/markdown",
+                "image/image-block",
+                "image/image",
+                "audio/mpeg",
+                "application/pdf",
+                "extern",
+                "blockly",
+              ]
         - name: available
           in: query
           description: Filter search on (un)available learning objects
@@ -1063,14 +1072,14 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
-          $ref: '#/components/responses/ObjectSearchOK'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "200":
+          $ref: "#/components/responses/ObjectSearchOK"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
-  '/learningObject/{id}':
+  "/learningObject/{id}":
     get:
       description: |
         Get a learningObject by it's hruid, the learningObject is made of the metadata + the html in raw or wrapped format.
@@ -1101,12 +1110,12 @@ paths:
       tags:
         - learningObject
       responses:
-        '200':
-          $ref: '#/components/responses/LearningObjectOK'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "200":
+          $ref: "#/components/responses/LearningObjectOK"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
     # post:
     #   tags:
@@ -1128,109 +1137,109 @@ paths:
     #     '401':
     #       $ref: '#/components/responses/Unauthorized'
 
-# TODO  '/paths/{id}':
-#    get:
-#      tags:
-#        - paths
-#      summary: Get learning path details
-#      description: Retrieve detailed information about a specific learning path, including its objects and metadata.
-#      operationId: getPathById
-#      parameters:
-#        - in: path
-#          name: id
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#      responses:
-#        '200':
-#          $ref: '#/components/responses/LearningPathOK'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#    patch:
-#      tags:
-#        - paths
-#      summary: Update learning path properties
-#      description: Modify a learning path's properties such as name, description, and object sequence.
-#      operationId: updatePath
-#      parameters:
-#        - in: path
-#          name: id
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/LearningPathUpdate'
-#      responses:
-#        '204':
-#          $ref: '#/components/responses/UpdateOK'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#    delete:
-#      tags:
-#        - paths
-#      summary: Delete learning path permanently
-#      description: Permanently remove a learning path and its associations by its unique identifier.
-#      operationId: deletePath
-#      parameters:
-#        - in: path
-#          name: id
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#      responses:
-#        '204':
-#          $ref: '#/components/responses/NoContent'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#  /paths:
-#    get:
-#      tags:
-#        - paths
-#      summary: List all learning paths
-#      description: Retrieve a paginated list of all learning paths with their basic information.
-#      operationId: getPaths
-#      parameters:
-#        - $ref: '#/components/parameters/PageParam'
-#        - $ref: '#/components/parameters/PageSizeParam'
-#      responses:
-#        '200':
-#          $ref: '#/components/responses/LearningPathsOK'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#    post:
-#      tags:
-#        - paths
-#      summary: Create learning path
-#      description: Create a new learning path with specified name, description and sequence of learning objects.
-#      operationId: createPath
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/LearningPathCreate'
-#      responses:
-#        '201':
-#          $ref: '#/components/responses/EntityCreated'
-#        '400':
-#          $ref: '#/components/responses/BadRequest'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
+  # TODO  '/paths/{id}':
+  #    get:
+  #      tags:
+  #        - paths
+  #      summary: Get learning path details
+  #      description: Retrieve detailed information about a specific learning path, including its objects and metadata.
+  #      operationId: getPathById
+  #      parameters:
+  #        - in: path
+  #          name: id
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #      responses:
+  #        '200':
+  #          $ref: '#/components/responses/LearningPathOK'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #    patch:
+  #      tags:
+  #        - paths
+  #      summary: Update learning path properties
+  #      description: Modify a learning path's properties such as name, description, and object sequence.
+  #      operationId: updatePath
+  #      parameters:
+  #        - in: path
+  #          name: id
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #      requestBody:
+  #        required: true
+  #        content:
+  #          application/json:
+  #            schema:
+  #              $ref: '#/components/schemas/LearningPathUpdate'
+  #      responses:
+  #        '204':
+  #          $ref: '#/components/responses/UpdateOK'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #    delete:
+  #      tags:
+  #        - paths
+  #      summary: Delete learning path permanently
+  #      description: Permanently remove a learning path and its associations by its unique identifier.
+  #      operationId: deletePath
+  #      parameters:
+  #        - in: path
+  #          name: id
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #      responses:
+  #        '204':
+  #          $ref: '#/components/responses/NoContent'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #  /paths:
+  #    get:
+  #      tags:
+  #        - paths
+  #      summary: List all learning paths
+  #      description: Retrieve a paginated list of all learning paths with their basic information.
+  #      operationId: getPaths
+  #      parameters:
+  #        - $ref: '#/components/parameters/PageParam'
+  #        - $ref: '#/components/parameters/PageSizeParam'
+  #      responses:
+  #        '200':
+  #          $ref: '#/components/responses/LearningPathsOK'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #    post:
+  #      tags:
+  #        - paths
+  #      summary: Create learning path
+  #      description: Create a new learning path with specified name, description and sequence of learning objects.
+  #      operationId: createPath
+  #      requestBody:
+  #        required: true
+  #        content:
+  #          application/json:
+  #            schema:
+  #              $ref: '#/components/schemas/LearningPathCreate'
+  #      responses:
+  #        '201':
+  #          $ref: '#/components/responses/EntityCreated'
+  #        '400':
+  #          $ref: '#/components/responses/BadRequest'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
 
-  '/assignments/{id}':
+  "/assignments/{id}":
     get:
       tags:
         - assignments
@@ -1245,12 +1254,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/AssignmentOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/AssignmentOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       tags:
         - assignments
@@ -1269,14 +1278,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AssignmentUpdate'
+              $ref: "#/components/schemas/AssignmentUpdate"
       responses:
-        '204':
-          $ref: '#/components/responses/UpdateOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/UpdateOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       tags:
         - assignments
@@ -1291,12 +1300,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /assignments:
     post:
       tags:
@@ -1309,15 +1318,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AssignmentCreate'
+              $ref: "#/components/schemas/AssignmentCreate"
       responses:
-        '201':
-          $ref: '#/components/responses/EntityCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/users/{idParent}/assignments':
+        "201":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/users/{idParent}/assignments":
     get:
       tags:
         - assignments
@@ -1331,15 +1340,15 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/AssignmentsOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "200":
+          $ref: "#/components/responses/AssignmentsOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
-  '/users/{userId}/assignments/{assignmentId}/progress':
+  "/users/{userId}/assignments/{assignmentId}/progress":
     get:
       tags:
         - progress
@@ -1362,13 +1371,13 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/ProgressOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/users/{idParent}/progress':
+        "200":
+          $ref: "#/components/responses/ProgressOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/users/{idParent}/progress":
     get:
       tags:
         - progress
@@ -1383,13 +1392,13 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/ProgressesOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/assignments/{idParent}/progress':
+        "200":
+          $ref: "#/components/responses/ProgressesOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/assignments/{idParent}/progress":
     get:
       tags:
         - progress
@@ -1404,13 +1413,13 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/ProgressesOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/groups/{idParent}/progress':
+        "200":
+          $ref: "#/components/responses/ProgressesOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/groups/{idParent}/progress":
     get:
       tags:
         - progress
@@ -1425,159 +1434,159 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/ProgressesOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-#  '/users/{idParent}/progresses':
-#    get:
-#      tags:
-#        - progresses
-#      summary: Get all user progresses
-#      description: Retrieve a list of all progress entries for a specific user.
-#      operationId: getUserProgresses
-#      parameters:
-#        - in: path
-#          name: idParent
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#        - $ref: '#/components/parameters/PageParam'
-#        - $ref: '#/components/parameters/PageSizeParam'
-#      responses:
-#        '200':
-#          $ref: '#/components/responses/ProgressesOK'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#  '/users-assignments/{idParent}/progresses/{id}':
-#    get:
-#      tags:
-#        - progresses
-#      summary: Get user assignment progress by ID
-#      description: Retrieve detailed information about a specific progress entry for a user assignment by their unique identifiers.
-#      operationId: getUserAssignmentProgressById
-#      parameters:
-#        - in: path
-#          name: id
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#        - in: path
-#          name: idParent
-#          required: true
-#          schema:
-#            type: string
-#            pattern: '^u[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}-a[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
-#          description: Compound identifier in format 'u{userUuid}-a{assignmentUuid}'
-#      responses:
-#        '200':
-#          $ref: '#/components/responses/ProgressOK'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#  '/users-assignments/{idParent}/progresses':
-#    get:
-#      tags:
-#        - progresses
-#      summary: Get all user asignment progresses
-#      description: Retrieve a list of all progress entries for a specific user asignment.
-#      operationId: getUserAssignmentProgresses
-#      parameters:
-#        - in: path
-#          name: idParent
-#          required: true
-#          schema:
-#            type: string
-#            pattern: '^u[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}-a[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
-#          description: Compound identifier in format 'u{userUuid}-a{assignmentUuid}'
-#        - $ref: '#/components/parameters/PageParam'
-#        - $ref: '#/components/parameters/PageSizeParam'
-#      responses:
-#        '200':
-#          $ref: '#/components/responses/ProgressesOK'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#  '/progresses/{id}':
-#    patch:
-#      tags:
-#        - progresses
-#      summary: Update progress status
-#      description: 'Modify progress information including status, answers and completion details.'
-#      operationId: updateProgress
-#      parameters:
-#        - in: path
-#          name: id
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              type: object
-#              required:
-#                - data
-#              properties:
-#                data:
-#                  $ref: '#/components/schemas/ProgressUpdate'
-#      responses:
-#        '204':
-#          $ref: '#/components/responses/UpdateOK'
-#        '400':
-#          $ref: '#/components/responses/BadRequest'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#    delete:
-#      tags:
-#        - progresses
-#      summary: Delete progress entry
-#      description: Permanently delete a progress entry and its associated data by its unique identifier.
-#      operationId: deleteProgress
-#      parameters:
-#        - in: path
-#          name: id
-#          required: true
-#          schema:
-#            type: string
-#            format: uuid
-#      responses:
-#        '204':
-#          $ref: '#/components/responses/NoContent'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
-#        '404':
-#          $ref: '#/components/responses/NotFound'
-#  /progresses:
-#    post:
-#      tags:
-#        - progresses
-#      summary: Create new progress entry
-#      description: Create a new progress entry for tracking user advancement through learning content.
-#      operationId: createProgress
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/ProgressCreate'
-#      responses:
-#        '201':
-#          $ref: '#/components/responses/EntityCreated'
-#        '400':
-#          $ref: '#/components/responses/BadRequest'
-#        '401':
-#          $ref: '#/components/responses/Unauthorized'
+        "200":
+          $ref: "#/components/responses/ProgressesOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  #  '/users/{idParent}/progresses':
+  #    get:
+  #      tags:
+  #        - progresses
+  #      summary: Get all user progresses
+  #      description: Retrieve a list of all progress entries for a specific user.
+  #      operationId: getUserProgresses
+  #      parameters:
+  #        - in: path
+  #          name: idParent
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #        - $ref: '#/components/parameters/PageParam'
+  #        - $ref: '#/components/parameters/PageSizeParam'
+  #      responses:
+  #        '200':
+  #          $ref: '#/components/responses/ProgressesOK'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #  '/users-assignments/{idParent}/progresses/{id}':
+  #    get:
+  #      tags:
+  #        - progresses
+  #      summary: Get user assignment progress by ID
+  #      description: Retrieve detailed information about a specific progress entry for a user assignment by their unique identifiers.
+  #      operationId: getUserAssignmentProgressById
+  #      parameters:
+  #        - in: path
+  #          name: id
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #        - in: path
+  #          name: idParent
+  #          required: true
+  #          schema:
+  #            type: string
+  #            pattern: '^u[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}-a[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+  #          description: Compound identifier in format 'u{userUuid}-a{assignmentUuid}'
+  #      responses:
+  #        '200':
+  #          $ref: '#/components/responses/ProgressOK'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #  '/users-assignments/{idParent}/progresses':
+  #    get:
+  #      tags:
+  #        - progresses
+  #      summary: Get all user asignment progresses
+  #      description: Retrieve a list of all progress entries for a specific user asignment.
+  #      operationId: getUserAssignmentProgresses
+  #      parameters:
+  #        - in: path
+  #          name: idParent
+  #          required: true
+  #          schema:
+  #            type: string
+  #            pattern: '^u[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}-a[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+  #          description: Compound identifier in format 'u{userUuid}-a{assignmentUuid}'
+  #        - $ref: '#/components/parameters/PageParam'
+  #        - $ref: '#/components/parameters/PageSizeParam'
+  #      responses:
+  #        '200':
+  #          $ref: '#/components/responses/ProgressesOK'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #  '/progresses/{id}':
+  #    patch:
+  #      tags:
+  #        - progresses
+  #      summary: Update progress status
+  #      description: 'Modify progress information including status, answers and completion details.'
+  #      operationId: updateProgress
+  #      parameters:
+  #        - in: path
+  #          name: id
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #      requestBody:
+  #        required: true
+  #        content:
+  #          application/json:
+  #            schema:
+  #              type: object
+  #              required:
+  #                - data
+  #              properties:
+  #                data:
+  #                  $ref: '#/components/schemas/ProgressUpdate'
+  #      responses:
+  #        '204':
+  #          $ref: '#/components/responses/UpdateOK'
+  #        '400':
+  #          $ref: '#/components/responses/BadRequest'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #    delete:
+  #      tags:
+  #        - progresses
+  #      summary: Delete progress entry
+  #      description: Permanently delete a progress entry and its associated data by its unique identifier.
+  #      operationId: deleteProgress
+  #      parameters:
+  #        - in: path
+  #          name: id
+  #          required: true
+  #          schema:
+  #            type: string
+  #            format: uuid
+  #      responses:
+  #        '204':
+  #          $ref: '#/components/responses/NoContent'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
+  #        '404':
+  #          $ref: '#/components/responses/NotFound'
+  #  /progresses:
+  #    post:
+  #      tags:
+  #        - progresses
+  #      summary: Create new progress entry
+  #      description: Create a new progress entry for tracking user advancement through learning content.
+  #      operationId: createProgress
+  #      requestBody:
+  #        required: true
+  #        content:
+  #          application/json:
+  #            schema:
+  #              $ref: '#/components/schemas/ProgressCreate'
+  #      responses:
+  #        '201':
+  #          $ref: '#/components/responses/EntityCreated'
+  #        '400':
+  #          $ref: '#/components/responses/BadRequest'
+  #        '401':
+  #          $ref: '#/components/responses/Unauthorized'
 
-  '/questions/{id}':
+  "/questions/{id}":
     get:
       tags:
         - questions
@@ -1592,12 +1601,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/QuestionOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/QuestionOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       tags:
         - questions
@@ -1616,14 +1625,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/QuestionUpdate'
+              $ref: "#/components/schemas/QuestionUpdate"
       responses:
-        '204':
-          $ref: '#/components/responses/UpdateOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/UpdateOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       tags:
         - questions
@@ -1638,12 +1647,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /questions:
     post:
       tags:
@@ -1656,15 +1665,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/QuestionCreate'
+              $ref: "#/components/schemas/QuestionCreate"
       responses:
-        '201':
-          $ref: '#/components/responses/EntityCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/assignments/{idParent}/questions':
+        "201":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/assignments/{idParent}/questions":
     get:
       tags:
         - questions
@@ -1678,15 +1687,15 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/QuestionsOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "200":
+          $ref: "#/components/responses/QuestionsOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
-  '/messages/{id}':
+  "/messages/{id}":
     get:
       tags:
         - messages
@@ -1701,12 +1710,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/MessageOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/MessageOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     patch:
       tags:
         - messages
@@ -1725,14 +1734,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MessageUpdate'
+              $ref: "#/components/schemas/MessageUpdate"
       responses:
-        '204':
-          $ref: '#/components/responses/UpdateOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/UpdateOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       tags:
         - messages
@@ -1747,12 +1756,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /messages:
     post:
       tags:
@@ -1765,15 +1774,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MessageCreate'
+              $ref: "#/components/schemas/MessageCreate"
       responses:
-        '201':
-          $ref: '#/components/responses/EntityCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/questions/{idParent}/messages':
+        "201":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/questions/{idParent}/messages":
     get:
       tags:
         - messages
@@ -1787,14 +1796,14 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
       responses:
-        '200':
-          $ref: '#/components/responses/MessagesOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/submissions/{id}':
+        "200":
+          $ref: "#/components/responses/MessagesOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/submissions/{id}":
     get:
       tags:
         - submissions
@@ -1808,12 +1817,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/SubmissionOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/SubmissionOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       tags:
         - submissions
@@ -1828,13 +1837,13 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/submissions':
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/submissions":
     post:
       tags:
         - submissions
@@ -1846,15 +1855,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SubmissionCreate'
+              $ref: "#/components/schemas/SubmissionCreate"
       responses:
-        '201':
-          $ref: '#/components/responses/EntityCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/users/:idParent/submissions':
+        "201":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/users/{idParent}/submissions":
     get:
       tags:
         - submissions
@@ -1868,8 +1877,8 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: '#/components/parameters/PageParam'
-        - $ref: '#/components/parameters/PageSizeParam'
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
         - in: query
           name: asssignmentId
           description: Optional param to get the user's submission for a certain assignment.
@@ -1885,11 +1894,11 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/SubmissionsOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-  '/classes/:idParent/completion':
+        "200":
+          $ref: "#/components/responses/SubmissionsOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/classes/{idParent}/completion":
     get:
       tags:
         - progress
@@ -1906,17 +1915,17 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/CompletionOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-          
-  '/classes/:idParent/activity':
+        "200":
+          $ref: "#/components/responses/CompletionOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  "/classes/{idParent}/activity":
     get:
       tags:
-      - progress
+        - progress
       summary: Get the activity in the last 12 months of a class
       description: |
         The amount of submissions for a class in the last month
@@ -1929,72 +1938,16 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/ActivityOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/assignments/{idParent}/tasks':
-    post: 
-      tags:
-      - tasks
-      summary: Create new task
-      description: |
-        Create a task in an assignment
-      parameters:
-        - in: path
-          name: idParent
-          description: The id of the assignment of the task
-          required: true
-          schema: 
-            type: string
-            format: uuid
-      operationId: createTask
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TaskCreate'
-      responses:
-        '201':
-          $ref: '#/components/responses/EntityCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "200":
+          $ref: "#/components/responses/ActivityOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/tasks/{id}":
     get:
       tags:
-      - tasks
-      summary: Get all tasks for assignment
-      description: |
-        Retrieve a list of all tasks associated with a specific assignment.
-      parameters:
-        - in: path
-          name: idParent
-          description: The id of the assignment of the task
-          required: true
-          schema: 
-            type: string
-            format: uuid
-        - in: query
-          name: step
-          description: The number of step in learningPath
-          required: false
-          schema:
-            type: number
-      responses:
-        '200':
-          $ref: '#/components/responses/TasksOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-  '/tasks/{id}':
-    get: 
-      tags:
-      - tasks
+        - tasks
       summary: Get task by ID
       description: |
         Get a task in an assignment by ID
@@ -2003,16 +1956,44 @@ paths:
           name: idParent
           description: The id of the assignment of the task
           required: true
-          schema: 
+          schema:
             type: string
             format: uuid
       responses:
-        '200':
-          $ref: '#/components/responses/TaskOK'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "200":
+          $ref: "#/components/responses/TaskOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags:
+        - tasks
+      summary: Update a task
+      description: |
+        Update a task in an assignment
+      parameters:
+        - in: path
+          name: id
+          description: The id of the task
+          required: true
+          schema:
+            type: string
+            format: uuid
+      operationId: updateTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreate"
+      responses:
+        "204":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
     delete:
       tags:
         - tasks
@@ -2027,13 +2008,62 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-    
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/tasks":
+    post:
+      tags:
+        - tasks
+      summary: Create new task
+      description: |
+        Create a task in an assignment
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreate"
+      responses:
+        "201":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  "/assignments/{idParent}/tasks":
+    get:
+      tags:
+        - tasks
+      summary: Get all tasks for assignment
+      description: |
+        Retrieve a list of all tasks associated with a specific assignment.
+      parameters:
+        - in: path
+          name: idParent
+          description: The id of the assignment of the task
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: step
+          description: The number of step in learningPath
+          required: false
+          schema:
+            type: number
+      responses:
+        "200":
+          $ref: "#/components/responses/TasksOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
 components:
   securitySchemes:
     apiKeyAuth:
@@ -2067,25 +2097,25 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     BadRequest:
       description: Invalid request data
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     Conflict:
       description: Resource already exists
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     Unauthorized:
       description: Authentication required
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     UpdateOK:
       description: Update on entity successful.
     CreateOK: # Creation with empty return, so no ID
@@ -2095,37 +2125,37 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UserPublic'
+            $ref: "#/components/schemas/UserPublic"
     JoinRequestOK:
       description: Invite request completed successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/JoinRequest'
+            $ref: "#/components/schemas/JoinRequest"
     JoinCodeOK:
       description: Join-code completed successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/JoinCode'
+            $ref: "#/components/schemas/JoinCode"
     ClassOK:
       description: Class request completed successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Class'
+            $ref: "#/components/schemas/Class"
     GroupOK:
       description: Group request completed successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Group'
+            $ref: "#/components/schemas/Group"
     LearningObjectOK:
       description: Learning object request completed successfully
       content:
         application/json:
           schema:
-            $ref: '#components/schemas/LearningObject'
+            $ref: "#components/schemas/LearningObject"
     ObjectSearchOK:
       description: Learning object search request completed sucessfully
       content:
@@ -2142,7 +2172,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Metadata'
+            $ref: "#/components/schemas/Metadata"
     PathSearchOK:
       description: Learning path search request completed sucessfully
       content:
@@ -2159,19 +2189,19 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/LearningPath'
+            $ref: "#/components/schemas/LearningPath"
     AssignmentOK:
       description: Assignment request completed successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Assignment'
+            $ref: "#/components/schemas/Assignment"
     ProgressOK:
       description: Progress request completed successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Progress'
+            $ref: "#/components/schemas/Progress"
     ProgressesOK:
       description: Progress request completed successfully
       content:
@@ -2182,13 +2212,13 @@ components:
               progresses:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Progress'
+                  $ref: "#/components/schemas/Progress"
     QuestionOK:
       description: Question request completed successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Question'
+            $ref: "#/components/schemas/Question"
     MessageOK:
       description: Message collection request completed successfully
       content:
@@ -2196,19 +2226,19 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/Message'
+              $ref: "#/components/schemas/Message"
     LoginResponseOK:
       description: Login request completed successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/LoginResponse'
+            $ref: "#/components/schemas/LoginResponse"
     SubmissionOK:
       description: Submission request completed successfully
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Submission'
+            $ref: "#/components/schemas/Submission"
     UsersOK:
       description: Users collection request completed successfully
       content:
@@ -2216,7 +2246,7 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/UserPublic'
+              $ref: "#/components/schemas/UserPublic"
     AllUsers:
       description: User collection  request completed successfully
       content:
@@ -2301,7 +2331,7 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/Metadata'
+              $ref: "#/components/schemas/Metadata"
     LearningPathsOK:
       description: Learning paths collection request completed successfully
       content:
@@ -2309,7 +2339,7 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/LearningPath'
+              $ref: "#/components/schemas/LearningPath"
     AssignmentsOK:
       description: Assignments collection request completed successfully
       content:
@@ -2378,7 +2408,7 @@ components:
             properties:
               percentage:
                 type: number
-                description: null if no assignments are present for class 
+                description: null if no assignments are present for class
     ActivityOK:
       description: Class activity request completed sucessfully.
       content:
@@ -2390,7 +2420,7 @@ components:
                 type: array
                 items:
                   type: number
-                example: [0,0,0,20,26,45,75,94,10,0,12,20] 
+                example: [0, 0, 0, 20, 26, 45, 75, 94, 10, 0, 12, 20]
     NoContent:
       description: Resource deleted successfully
     TasksOK:
@@ -2400,7 +2430,7 @@ components:
           schema:
             type: object
             properties:
-              tasks: 
+              tasks:
                 type: array
                 items:
                   type: string
@@ -2410,7 +2440,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Task'
+            $ref: "#/components/schemas/Task"
 
   schemas:
     EmptyObject:
@@ -2549,8 +2579,7 @@ components:
         nodes:
           type: array
           items:
-            $ref: '#/components/schemas/LearningPathObject'
-
+            $ref: "#/components/schemas/LearningPathObject"
 
     LearningPathObject:
       type: object
@@ -2569,7 +2598,7 @@ components:
           type: array
           minItems: 1
           items:
-            $ref: '#/components/schemas/BaseLearningObject'
+            $ref: "#/components/schemas/BaseLearningObject"
 
     BaseLearningObject:
       type: object
@@ -2582,7 +2611,6 @@ components:
           type: number
         language:
           type: string
-
 
     LearningPathUpdate:
       type: object
@@ -2666,7 +2694,7 @@ components:
         userType:
           type: string
           enum: [student, teacher]
-          description: User's type in the system. 
+          description: User's type in the system.
     UserCreate:
       type: object
       required:
@@ -2926,11 +2954,11 @@ components:
         - members
       additionalProperties: false
       properties:
-         assignment:
+        assignment:
           type: string
           format: uuid
           description: Unique identifier for the group's assignment.
-         members:
+        members:
           type: array
           items:
             type: string
@@ -3136,7 +3164,7 @@ components:
           description: ID of the user.
         status:
           type: string
-          enum: ['PENDING', 'STARTED', 'COMPLETED']
+          enum: ["PENDING", "STARTED", "COMPLETED"]
           description: Current status of the progress.
     ProgressUpdate:
       type: object
@@ -3153,7 +3181,7 @@ components:
           description: ID of the question.
         status:
           type: string
-          enum: ['PENDING', 'STARTED', 'COMPLETED']
+          enum: ["PENDING", "STARTED", "COMPLETED"]
           description: Current status of the progress.
 
     Question:
@@ -3306,7 +3334,7 @@ components:
       properties:
         metadata:
           type: object
-          $ref: '#/components/schemas/Metadata'
+          $ref: "#/components/schemas/Metadata"
           description: The metadata containing info about the learnign object
         content:
           type: string
@@ -3338,7 +3366,17 @@ components:
           description: Long description of the learning object.
         contentType:
           type: string
-          enum: ["text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly"]
+          enum:
+            [
+              "text/plain",
+              "text/markdown",
+              "image/image-block",
+              "image/image",
+              "audio/mpeg",
+              "application/pdf",
+              "extern",
+              "blockly",
+            ]
           description: One of the following content types -> "text/plain", "text/markdown", "image/image-block", "image/image", "audio/mpeg", "application/pdf", "extern", "blockly".
     Submission:
       type: object
@@ -3349,9 +3387,12 @@ components:
         assignmentId:
           type: string
           example: "assignment456"
+        taskId:
+          type: string
+          example: "task789"
         learningObjectId:
           type: string
-          example: "object789"
+          example: "object111"
         time:
           type: string
           format: date-time
@@ -3374,6 +3415,7 @@ components:
       required:
         - studentId
         - assignmentId
+        - taskId
         - learningObjectId
         - time
         - contents
@@ -3388,6 +3430,10 @@ components:
           type: string
           format: uuid
           description: Unique identifier for the assignment.
+        taskId:
+          type: string
+          format: uuid
+          description: Unique identifier for the task.
         learningObjectId:
           type: string
           format: uuid
@@ -3409,12 +3455,17 @@ components:
     TaskCreate:
       type: object
       required:
-      - step
-      - question
-      - type
-      - details
-      additionalProperties: true
+        - assignmentId
+        - step
+        - question
+        - type
+        - details
+      additionalProperties: false
       properties:
+        assignmentId:
+          type: string
+          format: uuid
+          description: ID of assignment of task
         step:
           type: number
           description: Step number.
@@ -3423,17 +3474,19 @@ components:
           description: Question asked for task
         type:
           type: string
-          enum: ['NORMALQUESTION', 'MULTIPLECHOICE']
+          enum: ["NORMALQUESTION", "MULTIPLECHOICE"]
           description: What kind of task
         details:
           oneOf:
-            - $ref: '#/components/schemas/NormalQuestionDetails'
-            - $ref: '#/components/schemas/MultipleChoiceDetails'
+            - $ref: "#/components/schemas/NormalQuestionDetails"
+            - $ref: "#/components/schemas/MultipleChoiceDetails"
+            - $ref: "#/components/schemas/Other"
           discriminator:
             propertyName: type
             mapping:
-              NORMALQUESTION: '#/components/schemas/NormalQuestionDetails'
-              MULTIPLECHOICE: '#/components/schemas/MultipleChoiceDetails'
+              NORMALQUESTION: "#/components/schemas/NormalQuestionDetails"
+              MULTIPLECHOICE: "#/components/schemas/MultipleChoiceDetails"
+              OTHER: "#/components/schemas/Other"
     NormalQuestionDetails:
       type: object
       properties:
@@ -3460,7 +3513,9 @@ components:
           type: boolean
           default: false
           description: Whether multiple answers are allowed.
-    Task: 
+    Other:
+      type: object
+    Task:
       type: object
       required:
         - id
@@ -3486,14 +3541,15 @@ components:
           description: Question asked for task
         type:
           type: string
-          enum: ['NORMALQUESTION', 'MULTIPLECHOICE']
+          enum: ["NORMALQUESTION", "MULTIPLECHOICE", "OTHER"]
           description: What kind of task
         details:
           oneOf:
-            - $ref: '#/components/schemas/NormalQuestionDetails'
-            - $ref: '#/components/schemas/MultipleChoiceDetails'
+            - $ref: "#/components/schemas/NormalQuestionDetails"
+            - $ref: "#/components/schemas/MultipleChoiceDetails"
+            - $ref: "#/components/schemas/MultipleChoiceDetails"
           discriminator:
             propertyName: type
             mapping:
-              NORMALQUESTION: '#/components/schemas/NormalQuestionDetails'
-              MULTIPLECHOICE: '#/components/schemas/MultipleChoiceDetails'
+              NORMALQUESTION: "#/components/schemas/NormalQuestionDetails"
+              MULTIPLECHOICE: "#/components/schemas/MultipleChoiceDetails"
