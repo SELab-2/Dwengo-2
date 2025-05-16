@@ -10,7 +10,7 @@ import { LearningObject } from '../../interfaces/learning-object';
 import { Node } from "../../datastructures/directed-graph";
 import { ProgressService } from '../../services/progress.service';
 import { AuthenticationService } from '../../services/authentication.service';
-import { Progress } from '../../interfaces/progress/Progress';
+import { Progress } from '../../interfaces/progress/progress';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
 import { LoadingComponent } from '../../components/loading/loading.component';

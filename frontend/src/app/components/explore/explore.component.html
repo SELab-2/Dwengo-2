@@ -23,19 +23,24 @@
         </mat-card>
     </div>
     @if (visualize === "BASIC"){
-        @if (loading) {
-            <app-loading></app-loading>
-        } @else {
-            @for (pair of categoryConfigs; track pair; let idx = $index) {
-                <app-learning-path-list [learningPaths]="getLearningPathsByCategory(pair.key)" [isTeacher]="isTeacher"
-                    [title]="pair.title"></app-learning-path-list>
+        <div class="result-list">
+            @if (loading) {
+                @for (pair of categoryConfigs; track pair) {
+                    <app-card-skeleton-loader [title]="pair.title"></app-card-skeleton-loader>
+                }
+            } @else {
+                @for (pair of categoryConfigs; track pair; let idx = $index) {
+                    <app-learning-path-list [learningPaths]="getLearningPathsByCategory(pair.key)" [isTeacher]="isTeacher"
+                        [title]="pair.title"></app-learning-path-list>
+                }
             }
-        }
+        </div>
+        
     }
 
     @if (visualize === "CUSTOM") {
         @if (loading) {
-            <app-loading></app-loading>
+            <app-card-skeleton-loader title="Your results"></app-card-skeleton-loader>
         } @else {
             <app-learning-path-list [learningPaths]="data" [isTeacher]="isTeacher" i18n-title
                 title="Your Results"></app-learning-path-list>

@@ -8,17 +8,23 @@
         </button>
     </div>
 
-    <div class="widget-container">
+    @if (loadingClasses) {
+        <app-loading></app-loading>
+    } @else {
+        <div class="widget-container">
         @for(classData of classes; track classData){
             <app-class-info-card [className]="classData.name"
                 [studentCount]="classData.studentCount ? classData.studentCount : 0"
                 [assignmentCount]="classData.assignments ? classData.assignments.length : 0"
                 [targetGroup]="classData.targetAudience"
                 [completionPercentage]="classData.completionPercentage ? classData.completionPercentage : 0"
-                [classId]="classData.id">
+                [classId]="classData.id"
+                [loadingData]="loadingData"
+            >
             </app-class-info-card>
         } @empty {
             <p i18n="@@noClasses">No classes found. Let's get teachin'!</p>
         }
     </div>
+    }
 </mat-card>

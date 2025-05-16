@@ -3,4 +3,5 @@
 /**
  * Interface representing a data source.
  */
-export interface IDatasource {}
+//eslint-disable-next-line
+export interface IDatasource { }
