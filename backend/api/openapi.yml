@@ -395,7 +395,9 @@ paths:
       tags:
         - requests
       summary: Create a new joinrequest.
-      description: Create a new request for a user to join a class.
+      description: |
+        Create a new request for a user to join a class.
+        You should use either a class id or code (class id has higher priority).
       operationId: createRequest
       requestBody:
         required: true
@@ -466,6 +468,12 @@ paths:
           schema:
             type: string
             format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JoinCodeUpdate'
       responses:
         "204":
           $ref: "#/components/responses/UpdateOK"
@@ -2809,6 +2817,14 @@ components:
           type: string
           format: uuid
           description: ID of the class.
+    JoinCodeUpdate:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        expired:
+          type: boolean
+          description: Can only be set to true and expires the code.
     JoinRequest:
       type: object
       required:
@@ -2839,6 +2855,7 @@ components:
       required:
         - requester
         - class
+        - code
         - userType
       additionalProperties: false
       properties:
@@ -2850,6 +2867,10 @@ components:
           type: string
           format: uuid
           description: ID of the class.
+        code:
+          type: string
+          format: uuid
+          description: Code for the class can be used as an alternative to the class id.
         userType:
           type: string
           enum: [student, teacher]
