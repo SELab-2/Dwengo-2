@@ -20,6 +20,7 @@ import * as TaskSchemas from "../schemas/taskSchemas";
 
 const extractors = {
     createTask: deps.createZodParamsExtractor(TaskSchemas.createTaskSchema),
+    updateTask: deps.createZodParamsExtractor(TaskSchemas.updateTaskSchema),
     getTask: deps.createZodParamsExtractor(TaskSchemas.getTaskSchema),
     getTasks: deps.createZodParamsExtractor(TaskSchemas.getTasksSchema),
     deleteTask: deps.createZodParamsExtractor(TaskSchemas.deleteTaskSchema),
@@ -30,12 +31,14 @@ const extractors = {
 export class TaskController extends deps.Controller {
     constructor(
         get: TaskServices.GetTask,
+        update: TaskServices.UpdateTask,
         remove: TaskServices.DeleteTask,
         create: TaskServices.CreateTask,
         getTasks: TaskServices.GetTasks,
     ) {
         super({
             get,
+            update,
             remove,
             create,
             getTasks,
@@ -59,6 +62,15 @@ export function taskRoutes(
                 controller,
                 extractor: extractors.createTask,
                 handler: (req, data) => controller.create(req, data),
+                middleware,
+            },
+            {
+                app,
+                method: deps.HttpMethod.PATCH,
+                urlPattern: "/tasks/:id",
+                controller,
+                extractor: extractors.updateTask,
+                handler: (req, data) => controller.update(req, data),
                 middleware,
             },
             {

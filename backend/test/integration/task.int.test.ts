@@ -166,6 +166,40 @@ describe("Test task API Endpoints", () => {
         });
     });
 
+    describe("PATCH /tasks/{id}", () => {
+        let normalQuestionId: string;
+
+        beforeEach(async () => {
+            const taskResponse = await request(app)
+                .post("/tasks")
+                .send(mockNormalQuestion)
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            normalQuestionId = taskResponse.body.id;
+        });
+
+        it("should update a task with status 204", async () => {
+            const response = await request(app)
+                .patch("/tasks/" + normalQuestionId)
+                .send({
+                    question: "new_question",
+                })
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(response.status).toBe(204);
+            expect(response.body).toEqual({});
+
+            const checkResponse = await request(app)
+                .get("/tasks/" + normalQuestionId)
+                .set("Accept", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(checkResponse.body.question).toBe("new_question");
+        });
+    })
+
     describe("DELETE /tasks/{id}", () => {
         let normalQuestionId: string;
 

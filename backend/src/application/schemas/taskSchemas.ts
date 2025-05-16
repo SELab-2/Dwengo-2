@@ -15,6 +15,14 @@ const NormalQuestionDetailsSchema = z.object({
     predefined_answer: z.string().optional(),
 });
 
+const OtherSchema = z.object({});
+
+const detailsSchemaMap = {
+    [TaskType.MultipleChoice]: MultipleChoiceDetailsSchema,
+    [TaskType.NormalQuestion]: NormalQuestionDetailsSchema,
+    [TaskType.Other]: OtherSchema,
+};
+
 export const createTaskSchema = z
     .object({
         assignmentId: z.string(),
@@ -24,13 +32,9 @@ export const createTaskSchema = z
         details: z.unknown(),
     })
     .superRefine((data, ctx) => {
-        if (data.type === TaskType.MultipleChoice) {
-            const result = MultipleChoiceDetailsSchema.safeParse(data.details);
-            if (!result.success) {
-                result.error.issues.forEach(issue => ctx.addIssue(issue));
-            }
-        } else if (data.type === TaskType.NormalQuestion) {
-            const result = NormalQuestionDetailsSchema.safeParse(data.details);
+        const schema = detailsSchemaMap[data.type as TaskType];
+        if (schema) {
+            const result = schema.safeParse(data.details);
             if (!result.success) {
                 result.error.issues.forEach(issue => ctx.addIssue(issue));
             }
@@ -39,6 +43,33 @@ export const createTaskSchema = z
                 code: z.ZodIssueCode.custom,
                 message: "Unknown task type for details validation.",
             });
+        }
+    });
+
+export const updateTaskSchema = z
+    .object({
+        id: z.string(),
+        assignmentId: z.string().optional(),
+        step: z.number().optional(),
+        question: z.string().optional(),
+        type: z.nativeEnum(TaskType).optional(),
+        details: z.unknown().optional(), // details is now always optional
+    })
+    .superRefine((data, ctx) => {
+        // Only validate details if it is present
+        if (data.details !== undefined && data.type !== undefined) {
+            const schema = detailsSchemaMap[data.type as TaskType];
+            if (schema) {
+                const result = schema.safeParse(data.details);
+                if (!result.success) {
+                    result.error.issues.forEach(issue => ctx.addIssue(issue));
+                }
+            } else {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "Unknown task type for details validation.",
+                });
+            }
         }
     });
 

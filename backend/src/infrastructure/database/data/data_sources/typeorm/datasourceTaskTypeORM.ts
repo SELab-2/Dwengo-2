@@ -63,6 +63,30 @@ export class DatasourceTaskTypeORM extends DatasourceTypeORM {
         return taskModels.map(taskModel => taskModel.toEntity());
     }
 
+    public async update(task: Task): Promise<void> {
+        const datasource = await DatasourceTaskTypeORM.datasourcePromise;
+
+        const assignmentModel = await datasource.getRepository(AssignmentTypeORM).findOne({
+            where: { id: task.assignmentId },
+        });
+
+        if (!assignmentModel) {
+            throw new EntityNotFoundError(`Assignment with id ${task.assignmentId} not found`);
+        }
+
+        const taskModel: TaskTypeORM | null = await datasource.getRepository(TaskTypeORM).findOne({
+            where: { id: task.id },
+        });
+
+        if (!taskModel) {
+            throw new EntityNotFoundError(`Task with id ${task.id} not found`);
+        }
+
+        await datasource
+            .getRepository(TaskTypeORM)
+            .update(taskModel.id!, TaskTypeORM.createTaskTypeORM(task, assignmentModel));
+    }
+
     public async delete(id: string): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 

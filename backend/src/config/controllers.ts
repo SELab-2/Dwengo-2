@@ -87,6 +87,7 @@ export const controllers = {
     ),
     task: new Resources.TaskController(
         services.task.get,
+        services.task.update,
         services.task.remove,
         services.task.create,
         services.task.getTasks,

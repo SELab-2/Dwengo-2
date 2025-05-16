@@ -8,5 +8,7 @@ export abstract class ITaskRepository extends AbstractRepository {
 
     public abstract getByAssignmentId(id: string, step?: number): Promise<Task[]>;
 
+    public abstract update(task: Task): Promise<void>;
+
     public abstract delete(id: string): Promise<void>;
 }

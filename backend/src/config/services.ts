@@ -123,5 +123,6 @@ export const services = {
         get: new TaskServices.GetTask(repos.task),
         getTasks: new TaskServices.GetTasks(repos.task),
         remove: new TaskServices.DeleteTask(repos.task),
+        update: new TaskServices.UpdateTask(repos.task),
     },
 };

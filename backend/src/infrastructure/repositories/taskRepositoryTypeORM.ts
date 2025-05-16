@@ -19,6 +19,10 @@ export class TaskRepository extends ITaskRepository {
     public async getByAssignmentId(id: string, step?: number): Promise<Task[]> {
         return await this.datasourceTask.getByAssignmentId(id, step);
     }
+
+    public async update(task: Task): Promise<void> {
+        return await this.datasourceTask.update(task);
+    }
     public async delete(id: string): Promise<void> {
         await this.datasourceTask.delete(id);
     }

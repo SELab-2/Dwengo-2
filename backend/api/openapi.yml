@@ -1951,14 +1951,6 @@ paths:
       summary: Create new task
       description: |
         Create a task in an assignment
-      parameters:
-        - in: path
-          name: idParent
-          description: The id of the assignment of the task
-          required: true
-          schema:
-            type: string
-            format: uuid
       operationId: createTask
       requestBody:
         required: true
@@ -2023,6 +2015,34 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "404":
           $ref: "#/components/responses/NotFound"
+    patch:
+      tags:
+        - tasks
+      summary: Update a task
+      description: |
+        Update a task in an assignment
+      parameters:
+        - in: path
+          name: id
+          description: The id of the task
+          required: true
+          schema:
+            type: string
+            format: uuid
+      operationId: updateTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreate"
+      responses:
+        "204":
+          $ref: "#/components/responses/EntityCreated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
     delete:
       tags:
         - tasks
@@ -3460,11 +3480,13 @@ components:
           oneOf:
             - $ref: "#/components/schemas/NormalQuestionDetails"
             - $ref: "#/components/schemas/MultipleChoiceDetails"
+            - $ref: "#/components/schemas/Other"
           discriminator:
             propertyName: type
             mapping:
               NORMALQUESTION: "#/components/schemas/NormalQuestionDetails"
               MULTIPLECHOICE: "#/components/schemas/MultipleChoiceDetails"
+              OTHER: "#/components/schemas/Other"
     NormalQuestionDetails:
       type: object
       properties:
@@ -3491,6 +3513,8 @@ components:
           type: boolean
           default: false
           description: Whether multiple answers are allowed.
+    Other:
+      type: object
     Task:
       type: object
       required:
@@ -3517,11 +3541,12 @@ components:
           description: Question asked for task
         type:
           type: string
-          enum: ["NORMALQUESTION", "MULTIPLECHOICE"]
+          enum: ["NORMALQUESTION", "MULTIPLECHOICE", "OTHER"]
           description: What kind of task
         details:
           oneOf:
             - $ref: "#/components/schemas/NormalQuestionDetails"
+            - $ref: "#/components/schemas/MultipleChoiceDetails"
             - $ref: "#/components/schemas/MultipleChoiceDetails"
           discriminator:
             propertyName: type
