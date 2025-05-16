@@ -15,34 +15,36 @@ const NormalQuestionDetailsSchema = z.object({
     predefined_answer: z.string().optional(),
 });
 
-export const createTaskSchema = z.object({
-    assignmentId: z.string(),
-    step: z.number(),
-    question: z.string(),
-    type: z.nativeEnum(TaskType),
-    details: z.unknown(),
-}).superRefine((data, ctx) => {
-    if (data.type === TaskType.MultipleChoice) {
-        const result = MultipleChoiceDetailsSchema.safeParse(data.details);
-        if (!result.success) {
-            result.error.issues.forEach(issue => ctx.addIssue(issue));
+export const createTaskSchema = z
+    .object({
+        assignmentId: z.string(),
+        step: z.number(),
+        question: z.string(),
+        type: z.nativeEnum(TaskType),
+        details: z.unknown(),
+    })
+    .superRefine((data, ctx) => {
+        if (data.type === TaskType.MultipleChoice) {
+            const result = MultipleChoiceDetailsSchema.safeParse(data.details);
+            if (!result.success) {
+                result.error.issues.forEach(issue => ctx.addIssue(issue));
+            }
+        } else if (data.type === TaskType.NormalQuestion) {
+            const result = NormalQuestionDetailsSchema.safeParse(data.details);
+            if (!result.success) {
+                result.error.issues.forEach(issue => ctx.addIssue(issue));
+            }
+        } else {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Unknown task type for details validation.",
+            });
         }
-    } else if (data.type === TaskType.NormalQuestion) {
-        const result = NormalQuestionDetailsSchema.safeParse(data.details);
-        if (!result.success) {
-            result.error.issues.forEach(issue => ctx.addIssue(issue));
-        }
-    } else {
-        ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Unknown task type for details validation."
-        });
-    }
-});
+    });
 
 export const getTasksSchema = z.object({
-    assignmentId: z.string(),
-    step: z.number().optional(),
+    idParent: z.string(),
+    step: z.preprocess(val => (val === undefined ? undefined : Number(val)), z.number().optional()),
 });
 
 export const getTaskSchema = z.object({
@@ -51,4 +53,4 @@ export const getTaskSchema = z.object({
 
 export const deleteTaskSchema = z.object({
     id: z.string(),
-})
+});

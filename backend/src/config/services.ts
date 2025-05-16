@@ -12,6 +12,7 @@ import { GetClassCompletion } from "../core/services/progress/getClassCompletion
 import { GetSubmissionActivity } from "../core/services/progress/getSubmissionActivity";
 import * as QuestionThreadServices from "../core/services/questionThread";
 import * as SubmissionServices from "../core/services/submission";
+import * as TaskServices from "../core/services/task";
 import * as UserServices from "../core/services/user";
 
 /**
@@ -116,5 +117,11 @@ export const services = {
     learningPath: {
         get: new LearningPathServices.GetLearningPath(repos.learningPath),
         getAll: new LearningPathServices.GetAllLearningPaths(repos.learningPath),
+    },
+    task: {
+        create: new TaskServices.CreateTask(repos.task),
+        get: new TaskServices.GetTask(repos.task),
+        getTasks: new TaskServices.GetTasks(repos.task),
+        remove: new TaskServices.DeleteTask(repos.task),
     },
 };

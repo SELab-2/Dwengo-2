@@ -23,7 +23,8 @@ describe("GetSubmission", () => {
         const submission = new Submission(
             "student-456",
             "assignment-789",
-            "learningObj-101",
+            "task-101",
+            "learningObject-202",
             new Date("2025-03-11T12:00:00Z"),
             Buffer.from("submission data"),
             StatusType.NOT_ACCEPTED,

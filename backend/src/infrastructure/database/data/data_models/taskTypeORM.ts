@@ -38,14 +38,6 @@ export class TaskTypeORM {
     }
 
     public toEntity(): Task {
-        return new Task(
-            this.assignment.id,
-            this.step,
-            this.question,
-            this.type,
-            this.details,
-            this.id
-        );
+        return new Task(this.assignment.id, this.step, this.question, this.type, this.details, this.id);
     }
 }
-

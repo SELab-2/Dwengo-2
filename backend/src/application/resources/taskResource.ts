@@ -22,23 +22,23 @@ const extractors = {
     createTask: deps.createZodParamsExtractor(TaskSchemas.createTaskSchema),
     getTask: deps.createZodParamsExtractor(TaskSchemas.getTaskSchema),
     getTasks: deps.createZodParamsExtractor(TaskSchemas.getTasksSchema),
-    deleteTask: deps.createZodParamsExtractor(TaskSchemas.deleteTaskSchema)
+    deleteTask: deps.createZodParamsExtractor(TaskSchemas.deleteTaskSchema),
 };
 
 /* ************* Controller ************* */
 
 export class TaskController extends deps.Controller {
     constructor(
-        createTask: TaskServices.CreateTask,
-        getTask: TaskServices.GetTask,
+        get: TaskServices.GetTask,
+        remove: TaskServices.DeleteTask,
+        create: TaskServices.CreateTask,
         getTasks: TaskServices.GetTasks,
-        deleteTask: TaskServices.DeleteTask
     ) {
         super({
-            createTask,
-            getTask,
+            get,
+            remove,
+            create,
             getTasks,
-            deleteTask
         });
     }
 }
@@ -55,7 +55,7 @@ export function taskRoutes(
             {
                 app,
                 method: deps.HttpMethod.POST,
-                urlPattern: "/assignments/:idParent/tasks",
+                urlPattern: "/tasks",
                 controller,
                 extractor: extractors.createTask,
                 handler: (req, data) => controller.create(req, data),
@@ -64,18 +64,18 @@ export function taskRoutes(
             {
                 app,
                 method: deps.HttpMethod.GET,
-                urlPattern: "task/:id",
+                urlPattern: "/tasks/:id",
                 controller,
                 extractor: extractors.getTask,
-                handler: (req, data) => controller.getOne(req, data)
+                handler: (req, data) => controller.getOne(req, data),
             },
             {
                 app,
                 method: deps.HttpMethod.DELETE,
-                urlPattern: "task/:id",
+                urlPattern: "/tasks/:id",
                 controller,
                 extractor: extractors.getTask,
-                handler: (req, data) => controller.delete(req, data)
+                handler: (req, data) => controller.delete(req, data),
             },
             {
                 app,
@@ -83,7 +83,7 @@ export function taskRoutes(
                 urlPattern: "/assignments/:idParent/tasks",
                 controller,
                 extractor: extractors.getTasks,
-                handler: (req, data) => controller.getChildren(req, data, controller.services.getTasks)
+                handler: (req, data) => controller.getChildren(req, data, controller.services.getTasks),
             },
         ],
         deps.DEFAULT_METHOD_MAP,

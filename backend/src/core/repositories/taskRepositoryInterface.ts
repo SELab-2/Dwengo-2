@@ -1,5 +1,5 @@
-import { Task } from "../entities/task";
 import { AbstractRepository } from "./abstractRepository";
+import { Task } from "../entities/task";
 
 export abstract class ITaskRepository extends AbstractRepository {
     public abstract create(task: Task): Promise<Task>;

@@ -1,6 +1,6 @@
 export enum TaskType {
-    NormalQuestion,
-    MultipleChoice,
+    NormalQuestion = "NORMALQUESTION",
+    MultipleChoice = "MULTIPLECHOICE",
 }
 
 export interface MultipleChoiceDetails {
@@ -14,3 +14,4 @@ export interface NormalQuestionDetails {
 }
 
 export type TaskDetails = MultipleChoiceDetails | NormalQuestionDetails;
+

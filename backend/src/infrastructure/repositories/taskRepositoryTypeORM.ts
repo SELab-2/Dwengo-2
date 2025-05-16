@@ -22,5 +22,4 @@ export class TaskRepository extends ITaskRepository {
     public async delete(id: string): Promise<void> {
         await this.datasourceTask.delete(id);
     }
-
 }

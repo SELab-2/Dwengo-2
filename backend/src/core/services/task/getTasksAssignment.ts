@@ -1,20 +1,19 @@
+import { z } from "zod";
 import { TaskService } from "./taskService";
 import { getTasksSchema } from "../../../application/schemas/taskSchemas";
-import { z } from "zod";
 import { tryRepoEntityOperation } from "../../helpers";
 
-export type GetTasksInput = z.infer<typeof getTasksSchema>
+export type GetTasksInput = z.infer<typeof getTasksSchema>;
 
 export class GetTasks extends TaskService<GetTasksInput> {
-
     public async execute(input: GetTasksInput): Promise<object> {
         const tasks = await tryRepoEntityOperation(
-            this.taskRepository.getByAssignmentId(input.assignmentId, input.step)
-            , "Assignment | Step"
-            , `${input.assignmentId} | ${input.step}`
-            , true
+            this.taskRepository.getByAssignmentId(input.idParent, input.step),
+            "Assignment | Step",
+            `${input.idParent} | ${input.step}`,
+            true,
         );
 
         return { tasks: tasks.map(task => task.id) };
-    };
+    }
 }
