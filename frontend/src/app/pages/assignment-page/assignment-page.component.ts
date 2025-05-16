@@ -17,8 +17,10 @@ import { LoadingComponent } from '../../components/loading/loading.component';
 import { UserType } from '../../interfaces';
 import { LearningPathService } from '../../services/learningPath.service';
 import { SpecificLearningPathRequest } from '../../interfaces/learning-path';
-import { CreateTaskComponent, TaskType } from '../../components/create-task/create-task-component/create-task.component';
-import { AssignmentTask, MultipleChoice } from '../../interfaces/assignment/tasks';
+import { CreateTaskComponent } from '../../components/create-task/create-task-component/create-task.component';
+import { AssignmentTask, MultipleChoice, NormalQuestion } from '../../interfaces/assignment/tasks';
+import { TaskService } from '../../services/task.service';
+import { MultipleChoiceTask, NormalQuestionTask, Task, TaskType } from '../../interfaces/tasks';
 
 @Component({
   selector: 'app-assignment-page',
@@ -38,9 +40,6 @@ export class AssignmentPageComponent implements OnInit {
   public loading = true;
   public taskFetched = false;
 
-  public taskObject!: AssignmentTask;
-  public taskType!: TaskType;
-
   private _assignment?: Assignment;
   public progress!: Progress;
   public assignmentId!: string;
@@ -53,12 +52,17 @@ export class AssignmentPageComponent implements OnInit {
 
   public isStudent!: boolean;
 
+  public task!: Task | null;
+  public taskType!: TaskType;
+  public taskId!: string | null;
+  public taskObject!: AssignmentTask;
 
   public constructor(
     private assignmentService: AssignmentService,
     private progressService: ProgressService,
     private authService: AuthenticationService,
     private learningPathService: LearningPathService,
+    private taskService: TaskService,
   ) { }
 
 
@@ -82,11 +86,39 @@ export class AssignmentPageComponent implements OnInit {
     this.step = Math.min(this.step + 1, this.maxStep) // Update step
   }
 
-  onTaskCreated(task: AssignmentTask): void {
-    // Implement and call the services to create this task
-    // Link this with the current step
-    console.log(task);
-    this.openSnackBar($localize`Task Succesfully Created!`);
+  onTaskCreated(taskData: AssignmentTask): void {
+    // You should only be in able to have one task for each assignment (for now)
+    if (this.taskId === null) return;
+
+    // Determine what kind of task this is, and set the detailed part ready
+    let casted, details;
+    if (taskData.type === TaskType.NORMALQUESTION) {
+      casted = taskData as NormalQuestion;
+      details = { predefined_answer: casted.predefined_answer } as NormalQuestionTask;
+    } else {
+      casted = taskData as MultipleChoice;
+      details = {
+        options: casted.options,
+        correctAnswers: casted.correctAnswers,
+        allowMultipleAnswers: casted.allowMultipleAnswers,
+      } as MultipleChoiceTask
+    }
+
+    // Define task
+    const task: Task = {
+      assignmentId: this.assignmentId,
+      step: this.step,
+      question: taskData.question,
+      type: taskData.type,
+      details: details
+    }
+
+    this.taskService.createTask(task).subscribe(
+      (id) => {
+        this.taskId = id;
+        this.openSnackBar($localize`Task Succesfully Created!`);
+      }
+    )
   }
 
   // Get the users progress for this assignment
@@ -118,23 +150,23 @@ export class AssignmentPageComponent implements OnInit {
     )
   }
 
-  // TODO: implement
-  private setupSubmission(): void {
-    // only show submission when its created
-    this.taskType = TaskType.MultipleChoice;
-    this.taskObject = {
-      question: "Test Question",
-      allowMultipleAnswers: true,
-      options: ["Test answer 1", "Some longer test answer to check if this is actually a good format and all that, because maybe it is not.", "Test answer 3"],
-      selected: [],
-      correctAnswers: [0, 2]
-    } as MultipleChoice
-    // this.taskObject = {
-    //   question: "What is 1 + 1",
-    //   predefined_answer: "2",
-    // } as NormalQuestion; // Cast the AssignmentTask to what we need
 
-    this.taskFetched = true;
+  private fetchTask() {
+    // See if there are any tasks already created
+    this.taskService.getSpecificTaskOfAssignment(this.assignmentId, this.step).subscribe(
+      (task) => {
+        if (task) {
+          this.task = task;
+          this.taskType = task.type;
+
+          // Our internal components work with another object format
+          this.taskObject = this.taskService.responseToObject(task);
+          this.taskFetched = true;
+        } else {
+          this.task = null;
+        }
+      }
+    )
   }
 
   public ngOnInit(): void {
@@ -158,7 +190,7 @@ export class AssignmentPageComponent implements OnInit {
           } else if (!this.isStudent) {
             this.setupTeacher();
           }
-          this.setupSubmission();
+          this.fetchTask();
         }
       )
     } else {

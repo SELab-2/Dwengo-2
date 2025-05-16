@@ -9,6 +9,7 @@ import { MatList, MatListItem } from '@angular/material/list';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MultipleChoice } from '../../../interfaces/assignment/tasks';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TaskType } from '../../../interfaces/tasks';
 @Component({
   selector: 'app-create-multiple-choice',
   imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReactiveFormsModule, MatListItem, MatList, MatCheckbox, MatTooltipModule],
@@ -66,8 +67,8 @@ export class CreateMultipleChoiceComponent {
       allowMultipleAnswers: this.allowMultipleOptions,
       options: this.options,
       selected: [],
-      correctAnswers: l.filter(o => Number.isInteger(o))
-
+      correctAnswers: l.filter(o => Number.isInteger(o)),
+      type: TaskType.MULTIPLECHOICE,
     } as MultipleChoice;
     this.taskCreated.emit(obj)
   }

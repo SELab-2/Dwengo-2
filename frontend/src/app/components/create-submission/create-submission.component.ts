@@ -18,8 +18,8 @@ import { MatInputModule } from '@angular/material/input';
 import { UserType } from '../../interfaces';
 import { AssignmentTask, MultipleChoice, NormalQuestion } from '../../interfaces/assignment/tasks';
 import { MultipleChoiceSubmissionComponent } from './multiple-choice-submission/multiple-choice-submission.component';
-import { TaskType } from '../create-task/create-task-component/create-task.component';
 import { NormalTaskSubmissionComponent } from './normal-task-submission/normal-task-submission.component';
+import { TaskType } from '../../interfaces/tasks';
 @Component({
   selector: 'app-create-submission',
   imports: [MatButtonModule, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule],
@@ -49,10 +49,11 @@ export class CreateSubmissionComponent implements OnInit {
   constructor(private submissionService: SubmissionService, private authService: AuthenticationService) { }
 
   public ngOnInit(): void {
-    if (this.type === TaskType.MultipleChoice) {
+    console.log("called", this.type)
+    if (this.type === TaskType.MULTIPLECHOICE) {
       this.loadMultipleChoice(this.taskObject as MultipleChoice);
     }
-    if (this.type === TaskType.NormalQuestion) {
+    if (this.type === TaskType.NORMALQUESTION) {
       this.loadNormalTask(this.taskObject as NormalQuestion);
     }
   }
@@ -100,7 +101,7 @@ export class CreateSubmissionComponent implements OnInit {
   loadMultipleChoice(choiceObject: MultipleChoice) {
     this.container.clear();
 
-    if (this.type === TaskType.MultipleChoice) {
+    if (this.type === TaskType.MULTIPLECHOICE) {
       const componentRef: ComponentRef<MultipleChoiceSubmissionComponent> =
         this.container.createComponent(MultipleChoiceSubmissionComponent);
 
@@ -112,9 +113,10 @@ export class CreateSubmissionComponent implements OnInit {
   }
 
   loadNormalTask(testObject: NormalQuestion) {
+    console.log(testObject)
     this.container.clear();
 
-    if (this.type === TaskType.NormalQuestion) {
+    if (this.type === TaskType.NORMALQUESTION) {
       const componentRef: ComponentRef<NormalTaskSubmissionComponent> =
         this.container.createComponent(NormalTaskSubmissionComponent);
 

@@ -4,7 +4,8 @@ import { environment } from '../../environments/environment';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { switchMap, of, forkJoin, map } from 'rxjs';
-import { CreateTaskResponse, GetTasksResponse, Task } from "../interfaces/tasks";
+import { CreateTaskResponse, GetTasksResponse, MultipleChoiceTask, NormalQuestionTask, Task, TaskType } from "../interfaces/tasks";
+import { AssignmentTask, MultipleChoice, NormalQuestion } from "../interfaces/assignment/tasks";
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,32 @@ export class TaskService {
         private authService: AuthenticationService,
         private errorService: ErrorService,
     ) { }
+
+    /**
+     * Function to convert a task to the NormalQuestion or MultipleChoice objects
+     */
+    public responseToObject(task: Task): AssignmentTask {
+        if (task.type === TaskType.NORMALQUESTION) {
+            const detailed = task.details as NormalQuestionTask
+            return {
+                question: task.question,
+                answer: "",
+                predefined_answer: detailed.predefined_answer,
+                type: task.type,
+            } as NormalQuestion
+        }
+        const detailed = task.details as MultipleChoiceTask
+        return {
+            question: task.question,
+            type: task.type,
+            options: detailed.options,
+            correctAnswers: detailed.correctAnswers,
+            allowMultipleAnswers: detailed.allowMultipleAnswers,
+            selected: [],
+        } as MultipleChoice
+    }
+
+
 
     /**
      * Function to create a task (multiple choice or normal question) within an assignment step
