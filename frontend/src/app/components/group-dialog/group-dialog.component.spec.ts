@@ -16,8 +16,8 @@ describe('GroupDialogComponent', () => {
 
   const mockDataWithMembers = {
     members: [
-      { id: 1, name: 'Alice' },
-      { id: 2, name: 'Bob' }
+      { id: 1, firstName: 'Alice', familyName: 'test', email: "test@test.com", schoolName: "test" },
+      { id: 2, name: 'Bob', familyName: 'test', email: "test@test.com", schoolName: "test" }
     ]
   };
 

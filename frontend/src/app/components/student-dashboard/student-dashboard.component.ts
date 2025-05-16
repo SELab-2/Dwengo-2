@@ -43,7 +43,7 @@ export class StudentDashboardComponent implements OnInit {
   private _assignments: Assignment[] = [];
   private _classes: Class[] = [];
   private _groups: Group[] = [];
-  private _progress: Progress[] = [];
+  private _assignmentToProgress: Record<string, Progress> = {};
   private _assignmentToGroup: Record<string,Group> = {};
 
   public pagedAssignments: Assignment[] = [];
@@ -98,7 +98,7 @@ export class StudentDashboardComponent implements OnInit {
             this.progressService.getUserAssignmentProgress(
               userId, a.id
             ).subscribe(
-              res => this._progress.push(res)
+              res => this._assignmentToProgress[a.id] = res
             )
           })
           this.groupService.getAllGroupsFromUser(userId)
@@ -127,7 +127,7 @@ export class StudentDashboardComponent implements OnInit {
     const now = new Date();
 
     const combined = this.assignments.map((assignment, i) => {
-      const progress = this._progress[i];
+      const progress = this._assignmentToProgress[assignment.id];
       const group = this._assignmentToGroup[assignment.id];
       return { assignment, group, progress, id: assignment.id };
     });
