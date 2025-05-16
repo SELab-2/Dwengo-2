@@ -27,8 +27,7 @@ import { Assignment } from "../src/core/entities/assignment";
 import { Group } from '../src/core/entities/group'
 import { QuestionThread } from "../src/core/entities/questionThread";
 import { Message } from "../src/core/entities/message";
-import { StudentRepositoryTypeORM } from "../src/infrastructure/repositories/studentRepositoryTypeORM";
-import { TeacherRepositoryTypeORM } from "../src/infrastructure/repositories/teacherRepositoryTypeORM";
+import { UserRepositoryTypeORM } from "../src/infrastructure/repositories/userRepositoryTypeORM";
 import { ClassRepositoryTypeORM } from "../src/infrastructure/repositories/classRepositoryTypeORM";
 import { AssignmentRepositoryTypeORM } from "../src/infrastructure/repositories/assignmentRepositoryTypeORM";
 import { GroupRepositoryTypeORM } from "../src/infrastructure/repositories/groupRepositoryTypeORM";
@@ -36,20 +35,34 @@ import { ThreadRepositoryTypeORM } from "../src/infrastructure/repositories/ques
 import { MessageRepositoryTypeORM } from "../src/infrastructure/repositories/messageRepositoryTypeORM";
 import { JoinRequestType } from "../src/core/entities/joinRequest";
 import { VisibilityType } from "../src/core/entities/questionThread";
+import { StatusType, Submission } from '../src/core/entities/submission';
+import { SubmissionTypeORM } from '../src/infrastructure/database/data/data_models/submissionTypeorm';
+import { SubmissionRepositoryTypeORM } from '../src/infrastructure/repositories/submissionRepositoryTypeORM';
 
 export async function seedDatabase(): Promise<void> {
   const classRep = new ClassRepositoryTypeORM();
-  const studentRep = new StudentRepositoryTypeORM();
-  const teacherRep = new TeacherRepositoryTypeORM();
+  const userRep = new UserRepositoryTypeORM();
   const assignmentRep = new AssignmentRepositoryTypeORM();
   const groupRep = new GroupRepositoryTypeORM();
   const threadRep = new ThreadRepositoryTypeORM();
   const messageRep = new MessageRepositoryTypeORM();
+  const submissionRep = new SubmissionRepositoryTypeORM();
 
   const teacherIds: string[] = [];
   const classIds: string[] = [];
   const studentIds: string[] = [];
   const assignments: { id: string, classId: string }[] = [];
+  const learningPathIds: string[] = [];
+
+  // Some random learningPath hruids from dwengo
+  const learningPaths: string[] = ["sr2", "anm3", "cb2_sentimentanalyse"];
+  
+  // Learningpaths mapped to some random objects from within that path
+  const pathToObjects: Record<string,string[]> = {
+    "sr2": ["sr2_module2", "sr2_brainstorm_vb", "g_inleiding_lkr", "sr2_uploaden"],
+    "anm3": ["org-dwengo-elevator-riddle-analyzing-1", "org-dwengo-elevator-riddle-brute-force-2", "org-dwengo-elevator-riddle-brute-force-4"],
+    "cb2_sentimentanalyse": ["pn_sa_inleiding", "pn_programmeerstructuren", "pn_sentimentanalyse"],
+  }
 
   try {
     // ── 1. Create Teachers ──
@@ -68,7 +81,7 @@ export async function seedDatabase(): Promise<void> {
         schoolName,
       )
 
-      const savedTeacher = (await teacherRep.create(teacherInput)) as { id: string };
+      const savedTeacher = (await userRep.create(teacherInput)) as { id: string };
       teacherIds.push(savedTeacher.id);
     }
 
@@ -101,7 +114,7 @@ export async function seedDatabase(): Promise<void> {
         schoolName,
       )
 
-      const savedStudent = (await studentRep.create(studentInput)) as { id: string };
+      const savedStudent = (await userRep.create(studentInput)) as { id: string };
       studentIds.push(savedStudent.id);
       // console.log(`Created student: ${firstName} ${lastName} email: ${email} with ID: ${savedStudent.id}`);
     }
@@ -113,7 +126,7 @@ export async function seedDatabase(): Promise<void> {
       const selectedStudents = faker.helpers.arrayElements(studentIds, 7);
       // console.log(`Adding students to class ID ${classId}:`, selectedStudents);
       for (const studentId of selectedStudents) {
-        await classRep.addUserToClass(classId, studentId, JoinRequestType.STUDENT);
+        await classRep.addUserToClass(classId, studentId);
         // console.log(`Added student ID ${studentId} to class ID ${classId}`);
       }
     }
@@ -121,7 +134,8 @@ export async function seedDatabase(): Promise<void> {
     // ── 5. Create Assignments for Each Class ──
     for (const classId of classIds) {
       for (let i = 0; i < 3; i++) {
-        const learningPathId = "TODO"; // Replace with actual learning path ID once supported
+        const learningPathId = faker.helpers.arrayElement(learningPaths);
+        learningPathIds.push(learningPathId)
         // Choose a start date in the next 7 days
         const startDate = faker.date.soon({ days: 7 });
         // Deadline is sometime 1 to 14 days after startDate
@@ -146,7 +160,7 @@ export async function seedDatabase(): Promise<void> {
 
     // ── 6. Add Groups to Assignments ──
     for (const { id: assignmentId, classId } of assignments) {
-      const students = await studentRep.getByClassId(classId);
+      const students = await userRep.getByClassId(classId);
       const studentIds = students.map((s: any) => s.id);
       const shuffled = faker.helpers.shuffle(studentIds);
     
@@ -166,6 +180,25 @@ export async function seedDatabase(): Promise<void> {
         }
       }
     }
+
+    // ── 6. Create submissions for Assignments ──
+    for (let i = 0 ; i < assignments.length; i++) {
+      const assignment: {id: string, classId: string} = assignments[i];
+      const students = await studentRep.getByClassId(assignment.classId);
+      const studentIds = students.map((s: any) => s.id);
+    
+      for(const id of studentIds){
+        const submission = new Submission(
+          id,
+          assignment.id,
+          faker.helpers.arrayElement(pathToObjects[learningPathIds[i]]), // Get random learningObject for the path in the assignment
+          faker.date.past({years: 1}), // Generate date in the last year, is before the deadline so not logical. But is used so we can see the analytics
+          Buffer.from(""),
+          StatusType.NOT_ACCEPTED
+        )
+        await submissionRep.create(submission)
+      }
+    }
     
 
     // ── 7. Create Threads and Messages for Learning Steps ──
@@ -176,8 +209,8 @@ export async function seedDatabase(): Promise<void> {
     ];
 
     for (const { id: assignmentId, classId } of assignments) {
-      const students = await studentRep.getByClassId(classId);
-      const teachers = await teacherRep.getByClassId(classId);
+      const students = await userRep.getByClassId(classId);
+      const teachers = await userRep.getByClassId(classId);
       const teacherIds = teachers.map(t => t.id);
     
       // Select 5–6 students for threads
