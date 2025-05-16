@@ -28,6 +28,8 @@ describe('TeacherDashboardComponent', () => {
 
         harness = await RouterTestingHarness.create();
         component = await harness.navigateByUrl("/", TeacherDashboardComponent);
+        component.loadingClasses = false;
+        component.loadingData = false;
         harness.detectChanges();
     });
 

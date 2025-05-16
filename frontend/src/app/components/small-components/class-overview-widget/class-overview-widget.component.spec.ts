@@ -53,6 +53,8 @@ describe('ClassOverviewWidgetComponent', () => {
             },
         ];
         component.classes = mockClasses;
+        component.loadingClasses = false
+        component.loadingData = false
 
         // Trigger change detection
         fixture.detectChanges();
