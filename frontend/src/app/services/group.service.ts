@@ -31,7 +31,7 @@ export class GroupService {
         const headers = this.authService.retrieveAuthenticationHeaders();
 
         return this.http.get<Groups>(
-            `${this.API_URL}/user/${userId}/groups`,
+            `${this.API_URL}/users/${userId}/groups`,
             headers
         ).pipe(
             this.errorService.pipeHandler(),

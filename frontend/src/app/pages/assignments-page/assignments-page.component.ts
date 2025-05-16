@@ -47,7 +47,6 @@ export class AssignmentsPageComponent implements OnInit {
   ngOnInit(): void {
     this.assignmentsService.retrieveAssignments().subscribe({
       next: (assignments) => {
-        console.log(assignments);
         this.assignments = assignments;
       },
     });

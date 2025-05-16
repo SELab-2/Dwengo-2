@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
-import { ClassActivity } from "../interfaces/progress/activity";
 import { Progress } from "../interfaces/progress/progress";
 import { Observable } from "rxjs";
+import { ClassActivity } from "../interfaces/progress/activity";
 import { ClassCompletion } from "../interfaces/progress/completion";
 
 @Injectable({

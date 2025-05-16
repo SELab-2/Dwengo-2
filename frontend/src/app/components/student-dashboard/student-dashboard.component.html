@@ -1,21 +1,37 @@
 <main class="main-container">
-    <div class="main-title centered-title">
-        <h1 i18n="@@studentDashboardHome">Home</h1>
-    </div>
-
     <div class="assignments">
         <div class="center-container">
             <h2 i18n="@@studentDashboardAssignmentsOverview">Your assignments</h2>
         </div>
 
-        <app-paginated-grid
-            [items]="assignments"
-            [itemTemplate]="assignmentCard">
-        </app-paginated-grid>
+        @if (loadingAssignments) {
+            <app-paginated-grid
+                [items]="LOADINGDATA"
+                [pageSize]="6"
+                [itemTemplate]="skeletonCard">
+            </app-paginated-grid>
+            <ng-template #skeletonCard let-card>
+                <app-card-skeleton-loader class="skeleton-loader">
 
-        <ng-template #assignmentCard let-assignment>
-            <app-mini-assignment [_assignment]="assignment"></app-mini-assignment>
-        </ng-template>
+                </app-card-skeleton-loader>
+            </ng-template>  
+        } @else {
+            <app-paginated-grid
+                [items]="assignmentsWithGroup"
+                [pageSize]="6"
+                [itemTemplate]="assignmentCard">
+            </app-paginated-grid>
+
+            <ng-template #assignmentCard let-data>
+                <app-mini-assignment
+                    [assignment]="data.assignment" 
+                    [group]="data.group"
+                    [progress]="data.progress" 
+                >
+                </app-mini-assignment>
+            </ng-template>
+        }
+        
     </div>
 
     <div class="classes">
@@ -24,32 +40,28 @@
             <a routerLink="/student/classes" i18n="@@studentDashboardViewAll">View all</a>
         </div>
 
-        <app-paginated-grid
-            [items]="classes"
-            [pageSize]="6"
-            [itemTemplate]="classCard"
-            [showPagination]="false">
-        </app-paginated-grid>
+        @if (loadingClasses) {
+            <app-paginated-grid
+                [items]="LOADINGDATA"
+                [pageSize]="6"
+                [itemTemplate]="skeletonCard">
+            </app-paginated-grid>
+            <ng-template #skeletonCard let-card>
+                <app-card-skeleton-loader class="skeleton-loader">
 
-        <ng-template #classCard let-class>
-            <app-mini-class [_class]="class" _type="student"></app-mini-class>
-        </ng-template>
-    </div>
+                </app-card-skeleton-loader>
+            </ng-template>
+        } @else {
+            <app-paginated-grid
+                [items]="classes"
+                [pageSize]="6"
+                [itemTemplate]="classCard"
+                [showPagination]="false">
+            </app-paginated-grid>
 
-    <div class="groups">
-        <div class="header-container">
-            <h2 i18n="@@studentDashboardGroups">Your groups</h2>
-        </div>
-
-        <app-paginated-grid
-            [items]="groups"
-            [pageSize]="6"
-            [itemTemplate]="groupCard"
-            [showPagination]="false">
-        </app-paginated-grid>
-        
-        <ng-template #groupCard let-group>
-            <app-group-card [group]="group"></app-group-card>
-        </ng-template>
+            <ng-template #classCard let-class>
+                <app-mini-class [_class]="class" _type="student"></app-mini-class>
+            </ng-template>
+        }
     </div>
 </main>

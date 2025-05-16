@@ -1,5 +1,6 @@
 import { Assignment } from "../../interfaces/assignment";
 import { Class } from "../../interfaces/classes/class";
+import { Progress } from "../../interfaces/progress/progress";
 
 export class MockServices {
     public static getClasses = () => {
@@ -62,13 +63,19 @@ export class MockServices {
         ] as Class[];
     }
     public static getAssignments = () => {
+        const now = new Date();
+        const addDays = (days: number) => {
+            const result = new Date(now);
+            result.setDate(result.getDate() + days);
+            return result;
+        };
         return [
             {
                 id: "1",
                 name: "Hoofdstuk 1 Oefeningen",
                 classId: "202",
-                startDate: new Date("2025-04-01"),
-                deadline: new Date("2025-04-10"),
+                startDate: addDays(-1),
+                deadline: addDays(5),
                 extraInstructions: "Lees hoofdstuk 1 en maak de oefeningen.",
                 learningPathId: "LP2001",
             },
@@ -76,8 +83,8 @@ export class MockServices {
                 id: "2",
                 name: "Video over Natuurkunde",
                 classId: "203",
-                startDate: new Date("2025-04-05"),
-                deadline: new Date("2025-04-15"),
+                startDate: addDays(-1),
+                deadline: addDays(5),
                 extraInstructions: "Bekijk de video over natuurkunde.",
                 learningPathId: "LP2002",
             },
@@ -85,8 +92,8 @@ export class MockServices {
                 id: "3",
                 name: "Onderzoekspresentatie",
                 classId: "203",
-                startDate: new Date("2025-04-07"),
-                deadline: new Date("2025-04-17"),
+                startDate: addDays(-1),
+                deadline: addDays(5),
                 extraInstructions: "Doe onderzoek naar het onderwerp en presenteer het.",
                 learningPathId: "LP2003",
             },
@@ -94,8 +101,8 @@ export class MockServices {
                 id: "4",
                 name: "Artikel en Vragen",
                 classId: "203",
-                startDate: new Date("2025-04-08"),
-                deadline: new Date("2025-04-18"),
+                startDate: addDays(-1),
+                deadline: addDays(5),
                 extraInstructions: "Lees het artikel en beantwoord de vragen.",
                 learningPathId: "LP2003",
             },
@@ -103,8 +110,8 @@ export class MockServices {
                 id: "5",
                 name: "Samenvatting Hoofdstuk 5",
                 classId: "203",
-                startDate: new Date("2025-04-09"),
-                deadline: new Date("2025-04-19"),
+                startDate: addDays(-1),
+                deadline: addDays(5),
                 extraInstructions: "Maak een samenvatting van hoofdstuk 5.",
                 learningPathId: "LP2003",
             },
@@ -112,8 +119,8 @@ export class MockServices {
                 id: "6",
                 name: "Cijferanalyse Programma",
                 classId: "205",
-                startDate: new Date("2025-05-01"),
-                deadline: new Date("2025-05-10"),
+                startDate: addDays(-1),
+                deadline: addDays(5),
                 extraInstructions: "Schrijf een programma om cijfers te analyseren.",
                 learningPathId: "LP2004",
             },
@@ -121,8 +128,8 @@ export class MockServices {
                 id: "7",
                 name: "Zoekproblemen Algoritme",
                 classId: "205",
-                startDate: new Date("2025-05-11"),
-                deadline: new Date("2025-05-20"),
+                startDate: addDays(-1),
+                deadline: addDays(5),
                 extraInstructions: "Maak een algoritme voor zoekproblemen.",
                 learningPathId: "LP2005",
             },
@@ -130,8 +137,8 @@ export class MockServices {
                 id: "8",
                 name: "Boekenbibliotheek Database",
                 classId: "205",
-                startDate: new Date("2025-05-21"),
-                deadline: new Date("2025-05-30"),
+                startDate: addDays(-1),
+                deadline: addDays(5),
                 extraInstructions: "Ontwerp een database voor een boekenbibliotheek.",
                 learningPathId: "LP2006",
             },
@@ -139,14 +146,44 @@ export class MockServices {
                 id: "9",
                 name: "Principes van AI",
                 classId: "205",
-                startDate: new Date("2025-06-01"),
-                deadline: new Date("2025-06-10"),
+                startDate: addDays(-1),
+                deadline: addDays(5),
                 extraInstructions: "Onderzoek de principes van kunstmatige intelligentie.",
                 learningPathId: "LP2007",
             },
         ] as Assignment[];
-
     }
+    public static getProgress = (): Progress[] => {
+      return [
+        {
+          id: 'p1',
+          studentId: 's1',
+          assignmentId: '1',
+          learningObjectId: 'lo1',
+          step: 3,
+          maxStep: 5,
+          time: new Date().toISOString(),
+        },
+        {
+          id: 'p2',
+          studentId: 's2',
+          assignmentId: '2',
+          learningObjectId: 'lo2',
+          step: 1,
+          maxStep: 4,
+          time: new Date().toISOString(),
+        },
+        {
+          id: 'p3',
+          studentId: 's1',
+          assignmentId: '3',
+          learningObjectId: 'lo3',
+          step: 5,
+          maxStep: 5,
+          time: new Date().toISOString(),
+        }
+      ];
+    };
     public static getGroups = () => {
         return [{
             id: '1234',

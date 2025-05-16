@@ -10,30 +10,20 @@
     </div>
     }
 
-
     <div class="center-container">
-        <h2 i18n>Your assignments</h2>
-
-        <mat-form-field>
-            <mat-label i18n>Filter before deadline</mat-label>
-            <input matInput [matDatepicker]="picker" (dateChange)="filterByDeadline($event.value)">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-
-        <mat-list id="assignments-list">
-            @for (assignment of filteredAssignments; track assignment.id) {
-            <li>
-                <h3>{{ assignment.name }}</h3>
-                <p>
-                    <strong i18n>Due date:</strong>
-                    {{ assignment.deadline }}
-            </li>
-            } @empty {
-            <p i18n>No assignments found</p>
-            }
-        </mat-list>
+        <h2 i18n>Your assignments</h2>            
+            <mat-list class="grid" id="assignments-list">
+                @for (assignment of filteredAssignments; track assignment.id) {
+                    <li>
+                        <h3>{{ assignment.name }}</h3>
+                        <p>
+                            <strong i18n>Due date:</strong>
+                            {{ assignment.deadline }}
+                    </li>
+                } @empty {
+                    <p i18n>No assignments found</p>
+                }
+            </mat-list>
     </div>
 
 </div>

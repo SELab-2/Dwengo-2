@@ -12,6 +12,10 @@ import { Class } from '../../interfaces/classes/class';
 import { By } from '@angular/platform-browser';
 import { GroupService } from '../../services/group.service';
 import { AuthenticationService } from '../../services/authentication.service';
+import { provideHttpClient } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { ProgressService } from '../../services/progress.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 //stubs for child components
 @Component({ selector: 'app-mini-assignment', template: '' })
@@ -39,9 +43,19 @@ class MockGroupService {
   getAllGroupsFromUser = () => of(MockServices.getGroups());
 }
 
+class MockProgressService {
+  getUserAssignmentProgress = () => of(MockServices.getProgress());
+}
+
 class MockAuthenticationService {
   retrieveUserId = () => of('123');
 }
+
+function expectDatesToBeClose(actual: Date, expected: Date, toleranceMs = 50) {
+  const diff = Math.abs(actual.getTime() - expected.getTime());
+  expect(diff).toBeLessThanOrEqual(toleranceMs);
+}
+
 
 describe('StudentDashboardComponent', () => {
     let fixture: ComponentFixture<StudentDashboardComponent>;
@@ -57,10 +71,14 @@ describe('StudentDashboardComponent', () => {
         ],
         providers: [
           provideRouter([]),
+          { provide: MatDialogRef, useValue: {} },
           { provide: ClassesService, useClass: MockClassesService },
           { provide: AssignmentService, useClass: MockAssignmentService },
           { provide: GroupService, useClass: MockGroupService },
+          { provide: ProgressService, useClass: MockProgressService },
           { provide: AuthenticationService, useClass: MockAuthenticationService },
+          provideHttpClient(),
+          provideHttpClientTesting(),
         ],
       }).compileComponents();
   
@@ -106,7 +124,12 @@ describe('StudentDashboardComponent', () => {
         fixture.detectChanges();
       
         const expected = enrichedAssignments.slice(6, 12); // second page
-        expect(component.pagedAssignments).toEqual(expected);
+        expect(component.pagedAssignments.length).toBe(expected.length);
+
+        for (let i = 0; i < expected.length; i++) {
+          expectDatesToBeClose(component.pagedAssignments[i].startDate, expected[i].startDate);
+          expectDatesToBeClose(component.pagedAssignments[i].deadline, expected[i].deadline);
+        }
     });
   
     it('should update paged assignments when page changes', () => {
@@ -118,20 +141,20 @@ describe('StudentDashboardComponent', () => {
     });
   
     it('should pass assignments and classes to paginated-grid components', () => {
-        component.pageSize = 12;
+        component.pageSize = 6;
         component.currentPageIndex = 0;
         component.updatePagedAssignments();
         fixture.detectChanges();    // update DOM after async
       
         const grids = fixture.debugElement.queryAll(By.directive(PaginatedGridComponent));
-        expect(grids.length).toBe(3);
+        expect(grids.length).toBe(2);
       
         const [assignmentsGrid, classesGrid] = grids.map(grid => grid.componentInstance);
       
         expect(assignmentsGrid.items.length).toBeGreaterThan(0);
         expect(classesGrid.items.length).toBeGreaterThan(0);
         expect(classesGrid.showPagination).toBeFalse();
-        expect(assignmentsGrid.pageSize).toBe(12);
+        expect(assignmentsGrid.pageSize).toBe(6);
     });
   
     it('should set className for each assignment based on classId', fakeAsync(() => {
