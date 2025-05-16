@@ -17,6 +17,8 @@ tags:
     description: Endpoints for user registration and authentication, including login and token management
   - name: users
     description: User account management operations including profile updates and user information retrieval
+  - name: codes
+    description: Manage invitations and join codes for classes
   - name: requests
     description: Manage invitations and join requests for classes, including sending, accepting and rejecting requests
   - name: progress
@@ -101,12 +103,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - in: query
-          name: userType
-          required: true
-          schema:
-            type: string
-            enum: [student, teacher]
       responses:
         '200':
           $ref: '#/components/responses/UserOK'
@@ -159,12 +155,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - in: query
-          name: userType
-          required: false
-          schema:
-            type: string
-            enum: [student, teacher]
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -214,14 +204,7 @@ paths:
           required: true
           schema:
             type: string
-            format: uuidµ
-        - in: query
-          name: userType
-          required: true
-          schema:
-            type: string
-            enum: [student, teacher]
-              
+            format: uuid
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -298,12 +281,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - in: query
-          name: userType
-          required: true
-          schema:
-            type: string
-            enum: [student, teacher]
       responses:
         '204':
           $ref: '#/components/responses/NoContent'
@@ -450,6 +427,109 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/RequestsOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  '/codes/{id}':
+    get:
+      tags:
+        - codes
+      summary: Get code by ID
+      description: Retrieves detailed information about a specific code using its unique identifier.
+      operationId: getCodeById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/JoinCodeOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags:
+        - codes
+      summary: Expire a code
+      description: Update a code by its unique identifier (expire).
+      operationId: updateCode
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/UpdateOK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - codes
+      summary: Delete a code
+      description: Permanently delete a code by its unique identifier.
+      operationId: deleteCode
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /codes:
+    post:
+      tags:
+        - codes
+      summary: Create a new code.
+      description: Create a new code for a user to join a class.
+      operationId: createCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JoinCodeCreate'
+      responses:
+        '201':
+          $ref: '#/components/responses/EntityCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  '/classes/{idParent}/codes':
+    get:
+      tags:
+        - codes
+      summary: Get all class codes
+      description: Retrieve a list of all codes belonging to a specific class.
+      operationId: getClassCodes
+      parameters:
+        - in: path
+          name: idParent
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/CodesOK'
         '401':
           $ref: '#/components/responses/Unauthorized'
 
@@ -604,7 +684,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/GroupUpdate'
-                  
+
       responses:
         '204':
           $ref: '#/components/responses/UpdateOK'
@@ -710,7 +790,7 @@ paths:
       parameters:
         - name: all
           in: query
-          description: | 
+          description: |
             This parameter takes a string as a value and searches all learning paths
             for which the value occurs in the title, description, or hruid.
             (This can have an empty string as a parameter which matches all descriptions and titles)
@@ -749,7 +829,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-        
+
 
   '/learningPath/{id}':
     get:
@@ -759,7 +839,7 @@ paths:
       parameters:
         - in: path
           name: id
-          required: true 
+          required: true
           schema:
             type: string
           description: The hruid of the learningPath
@@ -987,7 +1067,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-        
+
   '/learningObject/{id}':
     get:
       description: |
@@ -1001,19 +1081,19 @@ paths:
           required: true
           description: The hruid of the learningobject
           schema:
-            type: string 
+            type: string
         - in: query
           name: type
           required: true
           schema:
             type: string
-            enum: [wrapped, raw]       
+            enum: [wrapped, raw]
         - in: query
           name: language
           schema:
             type: string
         - in: query
-          name: version 
+          name: version
           schema:
             type: number
       tags:
@@ -1752,7 +1832,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
-  '/submissions':    
+  '/submissions':
     post:
       tags:
         - submissions
@@ -1776,7 +1856,7 @@ paths:
     get:
       tags:
         - submissions
-      summary: Get all submission of a user, can be filtered with assignment and step. 
+      summary: Get all submission of a user, can be filtered with assignment and step.
       description: Retrieve a list of all submissions associated with a specific user.
       operationId: getAssignmentSubmissions
       parameters:
@@ -1823,7 +1903,7 @@ paths:
           schema:
             type: string
             format: uuid
-        responses:
+      responses:
         '200':
           $ref: '#/components/responses/CompletionOK'
         '401':
@@ -1923,6 +2003,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/JoinRequest'
+    JoinCodeOK:
+      description: Join-code completed successfully
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/JoinCode'
     ClassOK:
       description: Class request completed successfully
       content:
@@ -2073,6 +2159,18 @@ components:
                 items:
                   type: string
                   format: uuid
+    CodesOK:
+      description: Requests codes request completed successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              codes:
+                type: array
+                items:
+                  type: string
+                  format: uuid
     ClassesOK:
       description: Classes collection request completed successfully
       content:
@@ -2119,7 +2217,7 @@ components:
         application/json:
           schema:
             type: object
-            properties: 
+            properties:
               assignments:
                 type: array
                 items:
@@ -2336,8 +2434,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LearningPathObject'
-        
-        
+
+
     LearningPathObject:
       type: object
       properties:
@@ -2356,7 +2454,7 @@ components:
           minItems: 1
           items:
             $ref: '#/components/schemas/BaseLearningObject'
-        
+
     BaseLearningObject:
       type: object
       properties:
@@ -2369,7 +2467,7 @@ components:
         language:
           type: string
 
-        
+
     LearningPathUpdate:
       type: object
     LearningPathCreate:
@@ -2421,6 +2519,7 @@ components:
         - familyName
         - schoolName
         - passwordHash
+        - userType
       additionalProperties: false
       properties:
         id:
@@ -2448,6 +2547,10 @@ components:
           description: User's school name.
         passwordHash:
           type: string
+        userType:
+          type: string
+          enum: [student, teacher]
+          description: User's type in the system. 
     UserCreate:
       type: object
       required:
@@ -2528,6 +2631,40 @@ components:
           format: uuid
           description: Unique identifier for the user.
 
+    JoinCode:
+      type: object
+      required:
+        - classId
+        - createdAt
+        - code
+        - expired
+      properties:
+        classId:
+          type: string
+          format: uuid
+          description: ID of the class.
+        createdAt:
+          type: string
+          format: date
+          description: Date of creation.
+        code:
+          type: string
+          format: uuid
+          description: Join-code.
+        expired:
+          type: string
+          format: boolean
+          description: State of the join-code.
+    JoinCodeCreate:
+      type: object
+      required:
+        - classId
+      additionalProperties: false
+      properties:
+        classId:
+          type: string
+          format: uuid
+          description: ID of the class.
     JoinRequest:
       type: object
       required:
@@ -2691,7 +2828,7 @@ components:
       properties:
         members:
           type: array
-          items: 
+          items:
             type: string
             format: uuid
             description: The new members of the group.
@@ -2848,7 +2985,7 @@ components:
           description: |
             The time this step was completed.
             Can be undefined if the user hasn't started yet.
-        
+
     ProgressCreate:
       type: object
       required:
@@ -2933,7 +3070,7 @@ components:
           type: string
           format: uuid
           readOnly: true
-          description: Unique identifier for the learning object linked to the QT.          
+          description: Unique identifier for the learning object linked to the QT.
         isClosed:
           type: boolean
           default: false
@@ -2965,7 +3102,7 @@ components:
         learningObjectId:
           type: string
           format: uuid
-          description: Unique identifier for the learning object linked to the QT.          
+          description: Unique identifier for the learning object linked to the QT.
         isClosed:
           type: boolean
           default: false
@@ -3013,7 +3150,7 @@ components:
         createdAt:
           type: string
           format: date
-        
+
     MessageCreate:
       type: object
       required:
@@ -3146,7 +3283,7 @@ components:
         contents:
           type: string
           format: buffer
-          description: | 
+          description: |
             The content of the submission (buffer), empty if there was no question asked
             but student proceeded to next step (used to keep progress in an assignment).
         status:

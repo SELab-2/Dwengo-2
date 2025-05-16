@@ -10,6 +10,7 @@ import { LearningPathFilterComponent } from '../small-components/learning-path-f
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { UserType } from '../../interfaces';
+import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-loader/card-skeleton-loader.component';
 
 interface CategorizedLearningPath extends LearningPath {
     category: string;
@@ -23,11 +24,11 @@ enum ExploreSetting {
 
 // These are the categories and their respective titles.
 const CATEGORY_CONFIGS: { key: string; title: string }[] = [
-    { key: "maths", title: $localize`Maths` },
-    { key: "climate-bio-microsc", title: $localize`Climate` },
-    { key: "robot", title: $localize`Robotics` },
-    { key: "AI", title: $localize`AI & Machine Learning` },
-    { key: "elek", title: $localize`Electronics` },
+    { key: "maths", title: $localize `:@@Maths:Maths` },
+    { key: "climate-bio-microsc", title: $localize `:@@Climate:Climate` },
+    { key: "robot", title: $localize `:@@Robotics:Robotics` },
+    { key: "AI", title: $localize `:@@AIML:AI & Machine Learning` },
+    { key: "elek", title: $localize `:@@Electronics:Electronics` },
 ];
 
 /**
@@ -38,7 +39,7 @@ const CATEGORY_CONFIGS: { key: string; title: string }[] = [
 @Component({
     selector: 'app-explore',
     standalone: true,
-    imports: [LearningPathListComponent, LoadingComponent, FormsModule, LearningPathFilterComponent, MatCardModule, MatButtonModule],
+    imports: [LearningPathListComponent, LoadingComponent, FormsModule, LearningPathFilterComponent, MatCardModule, MatButtonModule, CardSkeletonLoaderComponent],
     templateUrl: './explore.component.html',
     styleUrl: './explore.component.less'
 })

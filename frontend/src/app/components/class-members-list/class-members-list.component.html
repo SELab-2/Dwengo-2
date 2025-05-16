@@ -3,7 +3,7 @@
 
         @if(_class) {
             <span>
-                <h2 i18n>Students</h2>
+                <h2 i18n="@@membersListStudentsTitle">Students</h2>
             
                 <table mat-table [dataSource]="members">
                     <!--
@@ -13,7 +13,7 @@
 
                     <!-- Name Column -->
                     <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef i18n>
+                        <th mat-header-cell *matHeaderCellDef i18n="@@membersListStudentsName">
                             Name
                         </th>
                         <td mat-cell *matCellDef="let element">
@@ -23,7 +23,7 @@
 
                     <!-- Email Column -->
                     <ng-container matColumnDef="email">
-                        <th mat-header-cell *matHeaderCellDef i18n>
+                        <th mat-header-cell *matHeaderCellDef i18n="@@membersListStudentsEmail">
                             Email
                         </th>
                         <td mat-cell *matCellDef="let element">
@@ -33,7 +33,7 @@
 
                     <!-- School Name Column -->
                     <ng-container matColumnDef="schoolName">
-                        <th mat-header-cell *matHeaderCellDef i18n>
+                        <th mat-header-cell *matHeaderCellDef i18n="@@membersListStudentsSchool">
                             School
                         </th>
                         <td mat-cell *matCellDef="let element">

@@ -62,8 +62,8 @@ describe('DeadlinesWidgetComponent', () => {
 
     it('should display the correct due dates', () => {
         const deadlineContents = fixture.debugElement.queryAll(By.css('.deadline-item mat-card-content p:first-child'));
-        expect(deadlineContents[0].nativeElement.textContent.trim()).toBe('Deadline: 10 Apr 2025');
-        expect(deadlineContents[1].nativeElement.textContent.trim()).toBe('Deadline: 15 Apr 2025');
+        expect(deadlineContents[0].nativeElement.textContent.trim()).toBe('Deadline: Apr 10, 2025');
+        expect(deadlineContents[1].nativeElement.textContent.trim()).toBe('Deadline: Apr 15, 2025');
     });
 
     it('should display the correct class names', () => {
@@ -87,6 +87,6 @@ describe('DeadlinesWidgetComponent', () => {
 
         const emptyMessage = fixture.debugElement.query(By.css('.deadline-list'));
         expect(emptyMessage).toBeTruthy();
-        expect(emptyMessage.nativeElement.textContent.trim()).toBe('There\'s not a lot of work in here!');
+        expect(emptyMessage.nativeElement.textContent.trim()).toBe('No deadlines (yet?)');
     });
 });

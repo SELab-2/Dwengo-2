@@ -11,6 +11,7 @@ import { UserTypeGuard } from './guards/usertype.guard';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { UnauthorizedGuard } from './guards/unauthorized.guard';
 import { AlreadyAuthenticatedComponent } from './components/already-authenticated/already-authenticated.component';
+import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { AssignmentsPageComponent } from './pages/assignments-page/assignments-page.component';
 import { ExplorePageComponent } from './pages/explore-page/explore-page.component';
 import { GroupComponent } from './components/group/group.component';
@@ -28,9 +29,11 @@ export const routes: Routes = [
     { path: 'teacher/dashboard', component: TeacherDashboardPageComponent, canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'teacher/classes', component: ClassesPageComponent, title: "My Classes", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'teacher/classes/:id', component: ClassComponent, title: "Class", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
+    { path: 'teacher/chat/:id', component: ChatPageComponent, title: "Chat", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },
     { path: 'student/dashboard', component: StudentDashboardPageComponent, canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'student/classes', component: ClassesPageComponent, title: "My Classes", canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'student/classes/:id', component: ClassComponent, title: "Class", canActivate: [UserTypeGuard], data: { userType: 'student' } },
+    { path: 'student/chat/:id', component: ChatPageComponent, title: "Chat", canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'student/groups/:id', component: GroupComponent },
     { path: 'student/assignments', component: AssignmentsPageComponent, title: "My Assignments", canActivate: [UserTypeGuard], data: { userType: 'student' } },
     { path: 'teacher/assignments', component: AssignmentsPageComponent, title: "My Assignments", canActivate: [UserTypeGuard], data: { userType: 'teacher' } },

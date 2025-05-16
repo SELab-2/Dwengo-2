@@ -39,7 +39,7 @@ export class AcceptJoinRequest extends JoinRequestService<AcceptJoinRequestInput
 
         // Add the user to the class
         await tryRepoEntityOperation(
-            this._classRepository.addUserToClass(joinRequest.classId, joinRequest.requester, joinRequest.type),
+            this._classRepository.addUserToClass(joinRequest.classId, joinRequest.requester),
             "Class | User",
             `${joinRequest.classId} | ${joinRequest.requester}`,
             true,

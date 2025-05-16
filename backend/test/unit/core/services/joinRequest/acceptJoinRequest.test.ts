@@ -47,8 +47,7 @@ describe("AcceptJoinRequest Service", () => {
         expect(mockJoinRequestRepository.getById).toHaveBeenCalledWith(params.id);
         expect(mockClassRepository.addUserToClass).toHaveBeenCalledWith(
             joinRequest.classId,
-            joinRequest.requester,
-            joinRequest.type,
+            joinRequest.requester
         );
         expect(mockJoinRequestRepository.delete).toHaveBeenCalledWith(params.id);
     });

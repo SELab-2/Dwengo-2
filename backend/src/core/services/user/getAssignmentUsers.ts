@@ -3,12 +3,12 @@ import { getAssignmentUsersSchema } from "../../../application/schemas/userSchem
 import { Service } from "../../../config/service";
 import { Student } from "../../entities/student";
 import { tryRepoEntityOperation } from "../../helpers";
-import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type GetAssignmentUsersInput = z.infer<typeof getAssignmentUsersSchema>;
 
 export class GetAssignmentUsers implements Service<GetAssignmentUsersInput> {
-    constructor(private studentRepository: IStudentRepository) {}
+    constructor(private userRepository: IUserRepository) {}
 
     /**
      * Executes the assignment users get process.
@@ -18,7 +18,7 @@ export class GetAssignmentUsers implements Service<GetAssignmentUsersInput> {
      */
     async execute(input: GetAssignmentUsersInput): Promise<object> {
         const students: Student[] = await tryRepoEntityOperation(
-            this.studentRepository.getByAssignmentId(input.idParent),
+            this.userRepository.getByAssignmentId(input.idParent),
             "Assignment",
             input.idParent,
             true,

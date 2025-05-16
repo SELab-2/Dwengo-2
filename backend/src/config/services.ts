@@ -2,6 +2,7 @@ import { repositories as repos } from "./repositories";
 import * as AssignmentServices from "../core/services/assignment";
 import * as ClassServices from "../core/services/class";
 import * as GroupServices from "../core/services/group";
+import * as JoinCodeServices from "../core/services/joinCode";
 import * as JoinRequestServices from "../core/services/joinRequest";
 import * as LearningObjectServices from "../core/services/learningObject";
 import * as LearningPathServices from "../core/services/learningPath";
@@ -25,7 +26,7 @@ export const services = {
         getUserAssignments: new AssignmentServices.GetUserAssignments(repos.assignment),
     },
     authentication: {
-        register: new UserServices.CreateUser(repos.student, repos.teacher),
+        register: new UserServices.CreateUser(repos.user),
     },
     class: {
         get: new ClassServices.GetClass(repos.class),
@@ -41,6 +42,13 @@ export const services = {
         create: new GroupServices.CreateGroup(repos.group),
         getUserGroups: new GroupServices.GetUserGroups(repos.group),
         getAssignmentGroups: new GroupServices.GetAssignmentGroups(repos.group),
+    },
+    joinCode: {
+        get: new JoinCodeServices.GetJoinCode(repos.joinCode),
+        update: new JoinCodeServices.UpdateJoinCode(repos.joinCode),
+        remove: new JoinCodeServices.DeleteJoinCode(repos.joinCode),
+        create: new JoinCodeServices.CreateJoinCode(repos.joinCode),
+        getClassJoinCodes: new JoinCodeServices.GetClassJoinCodes(repos.joinCode),
     },
     joinRequest: {
         get: new JoinRequestServices.GetJoinRequest(repos.joinRequest),
@@ -73,38 +81,33 @@ export const services = {
     progress: {
         getUserProgress: new ProgressServices.GetUserProgress(repos.submission, repos.assignment, repos.learningPath),
         getAssignmentProgress: new ProgressServices.GetAssignmentProgress(
-            repos.student,
+            repos.user,
             repos.submission,
             repos.assignment,
             repos.learningPath,
         ),
         getGroupProgress: new ProgressServices.GetGroupProgress(
             repos.group,
-            repos.student,
+            repos.user,
             repos.submission,
             repos.assignment,
             repos.learningPath,
         ),
         get: new ProgressServices.GetUserAssignmentProgress(repos.submission, repos.assignment, repos.learningPath),
-        getClassCompletion: new GetClassCompletion(
-            repos.submission,
-            repos.student,
-            repos.assignment,
-            repos.learningPath,
-        ),
+        getClassCompletion: new GetClassCompletion(repos.submission, repos.user, repos.assignment, repos.learningPath),
         getSubmissionActivity: new GetSubmissionActivity(repos.submission),
     },
     user: {
-        get: new UserServices.GetUser(repos.student, repos.teacher),
-        update: new UserServices.UpdateUser(repos.student, repos.teacher),
-        remove: new UserServices.DeleteUser(repos.student, repos.teacher),
-        getClassUsers: new UserServices.GetClassUsers(repos.student, repos.teacher),
-        removeUserFromClass: new UserServices.RemoveUserFromClass(repos.student, repos.teacher),
-        getGroupUsers: new UserServices.GetGroupUsers(repos.student),
-        assignStudentToGroup: new UserServices.AssignStudentToGroup(repos.student),
-        removeUserFromGroup: new UserServices.RemoveUserFromGroup(repos.student),
-        getAssignmentUsers: new UserServices.GetAssignmentUsers(repos.student),
-        getAll: new UserServices.GetAllUsers(repos.student, repos.teacher),
+        get: new UserServices.GetUser(repos.user),
+        update: new UserServices.UpdateUser(repos.user),
+        remove: new UserServices.DeleteUser(repos.user),
+        getClassUsers: new UserServices.GetClassUsers(repos.user),
+        removeUserFromClass: new UserServices.RemoveUserFromClass(repos.user),
+        getGroupUsers: new UserServices.GetGroupUsers(repos.user),
+        assignStudentToGroup: new UserServices.AssignStudentToGroup(repos.user),
+        removeUserFromGroup: new UserServices.RemoveUserFromGroup(repos.user),
+        getAssignmentUsers: new UserServices.GetAssignmentUsers(repos.user),
+        getAll: new UserServices.GetAllUsers(repos.user),
     },
     learningObject: {
         get: new LearningObjectServices.GetLearningObject(repos.learningObject),

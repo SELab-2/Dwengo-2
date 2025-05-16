@@ -7,14 +7,14 @@ import { User } from "../../entities/user";
 import { tryRepoEntityOperation } from "../../helpers";
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
 import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
-import { IStudentRepository } from "../../repositories/studentRepositoryInterface";
 import { ISubmissionRepository } from "../../repositories/submissionRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type GetProgressInput = z.infer<typeof getProgressSchema>;
 
 export abstract class GetProgress extends ProgressBaseService<GetProgressInput> {
     constructor(
-        protected studentRepository: IStudentRepository,
+        protected userRepository: IUserRepository,
         submissionRepository: ISubmissionRepository,
         assignmentRepository: IAssignmentRepository,
         learningPathRepository: ILearningPathRepository,

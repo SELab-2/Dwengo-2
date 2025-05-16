@@ -4,20 +4,20 @@
         @if (isTeacher && !showCreate) {
             <button mat-fab extended (click)="createClass()">
                 <mat-icon>add</mat-icon>
-                <p i18n>Create</p>
+                <p i18n="@@createClassToggle">Create</p>
             </button>
         }
 
         @if (showCreate) {
             <button mat-fab extended (click)="cancelCreate()">
                 <mat-icon>close</mat-icon>
-                <p i18n>Cancel</p>
+                <p i18n="@@cancelCreateClass">Cancel</p>
             </button>
         }
 
         @if (!showCreate) {
             <mat-form-field>
-                <mat-label i18n>Name</mat-label>
+                <mat-label i18n="@@className">Name</mat-label>
                 <input
                     matInput
                     #nameFilter
@@ -32,7 +32,7 @@
     @if (showCreate) {
         <div class="center-container">
             <span>
-                <h2 i18n>Create a class</h2>    
+                <h2 i18n="@@createClassAction">Create a class</h2>    
                 <app-create-class></app-create-class>
             </span>            
         </div>
@@ -40,7 +40,7 @@
 
     @if (!showCreate) {
         <div class="center-container">
-            <h2 i18n>Your classes</h2>
+            <h2 i18n="@@classesOverview">Your classes</h2>
         </div>
 
         <div class="center-container">
@@ -50,7 +50,7 @@
                         <app-mini-class [_class]="class" [_type]="_type.toString()"></app-mini-class>
                     </li>
                 } @empty {
-                    <p i18n>No classes found</p>
+                    <p i18n="@@noClassesFound">No classes found</p>
                 }
             </mat-list>
         </div>

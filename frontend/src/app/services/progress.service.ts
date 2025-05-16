@@ -18,13 +18,35 @@ export class ProgressService {
     ) {}
 
     getUserAssignmentProgress(userId: string, assignmentId: string) {
-            const headers = this.authService.retrieveAuthenticationHeaders();
-            const url: string = `${this.API_URL}/users/${userId}/assignments/${assignmentId}/progress`;
-            return this.http.get<Progress>(
-                url,
-                headers
-            ).pipe(
-                this.errorService.pipeHandler(),
-            )
+        const headers = this.authService.retrieveAuthenticationHeaders();
+        const url: string = `${this.API_URL}/users/${userId}/assignments/${assignmentId}/progress`;
+        return this.http.get<Progress>(
+            url,
+            headers
+        ).pipe(
+            this.errorService.pipeHandler(),
+        )
+    }
+
+    getClassActivity(classId: string): Observable<ClassActivity> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+        const url: string = `${this.API_URL}/classes/${classId}/activity`;
+        return this.http.get<ClassActivity>(
+            url,
+            headers
+        ).pipe(
+            this.errorService.pipeHandler(),
+        )
+    }
+
+    getClassCompletion(classId: string): Observable<ClassCompletion> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+        const url: string = `${this.API_URL}/classes/${classId}/completion`;
+        return this.http.get<ClassCompletion>(
+            url,
+            headers
+        ).pipe(
+            this.errorService.pipeHandler(),
+        )
     }
 }

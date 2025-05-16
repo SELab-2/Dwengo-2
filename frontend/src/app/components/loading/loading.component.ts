@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 /**
@@ -15,5 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './loading.component.less'
 })
 export class LoadingComponent {
+  // Default the diameter to 100px
+  @Input() size: number = 100;
 
 }

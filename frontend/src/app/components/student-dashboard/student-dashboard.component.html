@@ -1,7 +1,7 @@
 <main class="main-container">
     <div class="assignments">
         <div class="center-container">
-            <h2 i18n>Your assignments</h2>
+            <h2 i18n="@@studentDashboardAssignmentsOverview">Your assignments</h2>
         </div>
 
         @if (loadingAssignments) {
@@ -36,8 +36,8 @@
 
     <div class="classes">
         <div class="header-container">
-            <h2 i18n>Your classes</h2>
-            <a routerLink="/student/classes" i18n>See all</a>
+            <h2 i18n="@@studentDashboardClassOverview">Your classes</h2>
+            <a routerLink="/student/classes" i18n="@@studentDashboardViewAll">View all</a>
         </div>
 
         @if (loadingClasses) {
