@@ -34,7 +34,7 @@ export class UserTypeORM {
     })
     role!: UserType;
 
-    public createUserTypeORM(user: User): UserTypeORM {
+    public static createUserTypeORM(user: User): UserTypeORM {
         const userTypeORM: UserTypeORM = new UserTypeORM();
         userTypeORM.email = user.email;
         userTypeORM.first_name = user.firstName;
