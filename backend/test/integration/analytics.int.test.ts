@@ -1,4 +1,4 @@
-import {app} from "../../src/app";
+import { app } from "../../src/app";
 import request from "supertest";
 import { AuthDetails, initializeUser } from "./helpers";
 import { StatusType } from "../../src/core/entities/submission";
@@ -9,7 +9,8 @@ describe("Test analytics endpoints", () => {
     let classId: string = "";
     let groupId: string = "";
     let assignmentId: string = "";
-    
+    let taskId: string = "";
+
     beforeEach(async () => {
         teacherDetails = await initializeUser("teacher", app);
         studentDetails = await initializeUser("student", app, "jan13@gmail.com");
@@ -42,12 +43,28 @@ describe("Test analytics endpoints", () => {
             .set('Content-Type', 'application/json')
             .set("Authorization", "Bearer " + studentDetails.token);
         assignmentId = assignmentRes.body.id; // save for later tests
+
+        const task = {
+            assignmentId: assignmentId,
+            step: 1,
+            question: "test-question",
+            type: "NORMALQUESTION",
+            details: {
+                predefined_answer: "answer"
+            }
+        };
+        const taskRes = await request(app)
+            .post('/tasks')
+            .send(task)
+            .set('Content-Type', 'application/json')
+            .set("Authorization", "Bearer " + teacherDetails.token);
+        taskId = taskRes.body.id;
     })
 
     describe('GET /classes/:idParent/completion', () => {
         const firstStep: string = "org-dwengo-elevator-riddle-question"
         const lastStep: string = "org-dwengo-elevator-riddle-extending-the-problem"
-        
+
         // Make sure student is in class
         beforeEach(async () => {
             // Create joinRequest for the student to join the class
@@ -61,7 +78,7 @@ describe("Test analytics endpoints", () => {
                 .send(joinRequest)
                 .set('Content-Type', 'application/json')
                 .set("Authorization", "Bearer " + teacherDetails.token);
-            
+
             expect(joinRequestRes.status).toBe(201);
             // Accept the joinRequest
             const acceptJoinRequest = await request(app)
@@ -76,12 +93,13 @@ describe("Test analytics endpoints", () => {
             const submission = {
                 studentId: studentDetails.id,
                 assignmentId: assignmentId,
+                taskId: taskId,
                 learningObjectId: lastStep,
                 time: new Date(),
                 contents: Buffer.from(`Hello World}`).toString('base64'),
                 status: StatusType.ACCEPTED,
             };
-                
+
             const submissionRes = await request(app)
                 .post('/submissions')
                 .send(submission)
@@ -114,7 +132,7 @@ describe("Test analytics endpoints", () => {
                 .send(joinRequest)
                 .set('Content-Type', 'application/json')
                 .set("Authorization", "Bearer " + teacherDetails.token);
-            
+
             expect(joinRequestRes.status).toBe(201);
             // Accept the joinRequest
             const acceptJoinRequest = await request(app)
@@ -127,30 +145,32 @@ describe("Test analytics endpoints", () => {
             const submission = {
                 studentId: studentDetails.id,
                 assignmentId: assignmentId,
+                taskId: taskId,
                 learningObjectId: firstStep,
                 time: new Date(),
                 contents: Buffer.from(`Hello World}`).toString('base64'),
                 status: StatusType.ACCEPTED,
             };
-                
+
             const submissionRes = await request(app)
                 .post('/submissions')
                 .send(submission)
                 .set('Content-Type', 'application/json')
                 .set("Authorization", "Bearer " + studentDetails.token);
-    
+
             expect(submissionRes.status).toBe(201);
-            
+
             // Create submission for second user
             const secondSubmission = {
                 studentId: secondStudentId,
                 assignmentId: assignmentId,
+                taskId: taskId,
                 learningObjectId: lastStep,
                 time: new Date(),
                 contents: Buffer.from(`Hello World}`).toString('base64'),
                 status: StatusType.ACCEPTED,
             };
-                
+
             const secondSubmissionRes = await request(app)
                 .post('/submissions')
                 .send(secondSubmission)
@@ -171,12 +191,13 @@ describe("Test analytics endpoints", () => {
             const submission = {
                 studentId: studentDetails.id,
                 assignmentId: assignmentId,
+                taskId: taskId,
                 learningObjectId: firstStep,
                 time: new Date(),
                 contents: Buffer.from(`Hello World}`).toString('base64'),
                 status: StatusType.ACCEPTED,
             };
-                
+
             const submissionRes = await request(app)
                 .post('/submissions')
                 .send(submission)
@@ -208,17 +229,18 @@ describe("Test analytics endpoints", () => {
     //    const amounts: number[] = [
     //        5,3,4,2,7,8,4,9,4,0,4,10 // 12 months
     //    ]
-//
+    //
     //    beforeEach(async () => {
     //        const now: Date = new Date();
     //        for (let i = 0; i < amounts.length; i++) {
     //            const count = amounts[i];
     //            const monthDate = new Date(now.getFullYear(), now.getMonth() - (11 - i), 15); // middle of the month
-//
+    //
     //            for (let j = 0; j < count; j++) {
     //                const submission = {
     //                    studentId: studentDetails.id,
     //                    assignmentId: assignmentId,
+    //                    taskId: taskId,
     //                    learningObjectId: 'org-dwengo-elevator-riddle-question',
     //                    time: monthDate.toISOString(),
     //                    contents: Buffer.from(`Hello World ${i}-${j}`).toString('base64'),
@@ -233,7 +255,7 @@ describe("Test analytics endpoints", () => {
     //            }
     //        }
     //    })
-//
+    //
     //    it("Should get correct amount of submissions in the last 12 months for a class",async () => {
     //        const res = await request(app)
     //            .get(`/classes/${classId}/activity`)

@@ -7,6 +7,7 @@ import { JoinRequestTypeORM } from "../../data_models/joinRequestTypeorm";
 import { MessageTypeORM } from "../../data_models/messageTypeorm";
 import { QuestionThreadTypeORM } from "../../data_models/questionThreadTypeorm";
 import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
+import { TaskTypeORM } from "../../data_models/taskTypeORM";
 import { UserTypeORM } from "../../data_models/userTypeorm";
 
 /**
@@ -55,6 +56,7 @@ export class DatasourceTypeORMConnectionSettingsFactory {
             QuestionThreadTypeORM,
             MessageTypeORM,
             SubmissionTypeORM,
+            TaskTypeORM,
         ],
     ): DatasourceTypeORMConnectionSettings {
         return new DatasourceTypeORMConnectionSettings(

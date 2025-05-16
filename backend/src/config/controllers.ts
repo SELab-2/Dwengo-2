@@ -85,4 +85,11 @@ export const controllers = {
         services.user.getAssignmentUsers,
         services.user.getAll,
     ),
+    task: new Resources.TaskController(
+        services.task.get,
+        services.task.update,
+        services.task.remove,
+        services.task.create,
+        services.task.getTasks,
+    ),
 };

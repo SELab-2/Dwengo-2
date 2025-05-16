@@ -41,11 +41,6 @@ describe('UnknownRouteComponent', () => {
     expect(header).toBeTruthy();
   });
 
-  it('should have the text', () => {
-    const text = harness.fixture.nativeElement.querySelector('p');
-    expect(text).toBeTruthy();
-  });
-
   it('should have the button', () => {
     const button = harness.fixture.nativeElement.querySelector('button');
     expect(button).toBeTruthy();

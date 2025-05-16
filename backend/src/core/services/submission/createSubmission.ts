@@ -17,6 +17,7 @@ export class CreateSubmission extends SubmissionBaseService<CreateSubmissionInpu
         const submission = new Submission(
             input.studentId,
             input.assignmentId,
+            input.taskId,
             input.learningObjectId,
             input.time,
             Buffer.from(input.contents, "utf8"),
@@ -25,8 +26,8 @@ export class CreateSubmission extends SubmissionBaseService<CreateSubmissionInpu
 
         const createdSubmission = await tryRepoEntityOperation(
             this.submissionRepository.create(submission),
-            "Student | Assignment | LearningObject",
-            `${submission.studentId} | ${submission.assignmentId} | ${submission.learningObjectId}`,
+            "Student | Assignment | Task | LearningObject",
+            `${submission.studentId} | ${submission.assignmentId} | ${submission.taskId} | ${submission.learningObjectId}`,
             true,
         );
 

@@ -12,6 +12,7 @@ describe('Test progress API endpoints', () => {
     let groupId: string = "";
     let assignmentId: string = "";
     let submissionId: string = "";
+    let taskId: string = "";
 
     beforeEach(async () => {
         teacherDetails = await initializeUser("teacher", app);
@@ -45,15 +46,32 @@ describe('Test progress API endpoints', () => {
             .set("Authorization", "Bearer " + studentDetails.token);
         assignmentId = assignmentRes.body.id; // save for later tests
 
+        const task = {
+            assignmentId: assignmentId,
+            step: 1,
+            question: "test-question",
+            type: "NORMALQUESTION",
+            details: {
+                predefined_answer: "answer"
+            }
+        };
+        const taskRes = await request(app)
+            .post('/tasks')
+            .send(task)
+            .set('Content-Type', 'application/json')
+            .set("Authorization", "Bearer " + teacherDetails.token);
+        taskId = taskRes.body.id;
+
         const submission = {
             studentId: studentDetails.id,
             assignmentId: assignmentId,
+            taskId: taskId,
             learningObjectId: 'org-dwengo-elevator-riddle-question',
             time: new Date().toISOString(),
             contents: Buffer.from('Hello World').toString('base64'),
             status: StatusType.ACCEPTED,
         };
-  
+
         const res = await request(app)
             .post('/submissions')
             .send(submission)
@@ -63,7 +81,7 @@ describe('Test progress API endpoints', () => {
         expect(res.body).toHaveProperty('id');
         submissionId = res.body.id; // save for later tests
     });
-    
+
     describe('GET /groups/:idParent/progress', () => {
         beforeEach(async () => {
             // Create a group

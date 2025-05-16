@@ -34,8 +34,6 @@ export class UserTypeORM {
     })
     role!: UserType;
 
-    // Since multiple constructors isn't supported by Typescript
-    // https://stackoverflow.com/questions/12702548/constructor-overload-in-typescript
     public static createUserTypeORM(user: User): UserTypeORM {
         const userTypeORM: UserTypeORM = new UserTypeORM();
         userTypeORM.email = user.email;

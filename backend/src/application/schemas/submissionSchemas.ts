@@ -16,6 +16,7 @@ export const deleteSubmissionSchema = z.object({
 export const createSubmissionSchema = z.object({
     studentId: z.string(),
     assignmentId: z.string(),
+    taskId: z.string(),
     learningObjectId: z.string(),
     time: z
         .string()
@@ -28,5 +29,5 @@ export const createSubmissionSchema = z.object({
 export const getUserSubmissionsSchema = z.object({
     idParent: z.string(),
     assignmentId: z.string().optional(),
-    learningObjectId: z.string().optional(),
+    taskId: z.string().optional(),
 });
