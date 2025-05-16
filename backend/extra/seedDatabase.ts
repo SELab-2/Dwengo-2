@@ -50,6 +50,8 @@ export async function seedDatabase(): Promise<void> {
   const classIds: string[] = [];
   const studentIds: string[] = [];
   const assignments: { id: string, classId: string }[] = [];
+  // Assignments for which the startdate is in the past
+  const onGoingAssignments: { id: string, classId: string }[] = [];
   const learningPathIds: string[] = [];
 
   // Some random learningPath hruids from dwengo
@@ -134,9 +136,14 @@ export async function seedDatabase(): Promise<void> {
       for (let i = 0; i < 3; i++) {
         const learningPathId = faker.helpers.arrayElement(learningPaths);
         learningPathIds.push(learningPathId)
-        // Choose a start date in the next 7 days
-        const startDate = faker.date.soon();
-        // Deadline is sometime 1 to 14 days after startDate
+
+        // Choose a start date between 24h ago and 24h in the future
+        const now = new Date();
+        const past = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        const future = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+        const startDate = faker.date.between({ from: past, to: future });
+
+        // Deadline is sometime 0 to 14 days after startDate
         const additionalDays = faker.number.int({ min: 0, max: 14 });
         const deadline = new Date(startDate.getTime() + additionalDays * 24 * 60 * 60 * 1000);
         const name = faker.lorem.sentence(3); // Random name for the assignment
@@ -152,6 +159,9 @@ export async function seedDatabase(): Promise<void> {
         );
 
         const savedAssignment = await assignmentRep.create(assignment) as { id: string };
+        if (startDate < new Date()) {
+          onGoingAssignments.push({ id: savedAssignment.id, classId })
+        }
         assignments.push({ id: savedAssignment.id, classId });
       }
     }
@@ -179,9 +189,9 @@ export async function seedDatabase(): Promise<void> {
       }
     }
 
-    // ── 6. Create submissions for Assignments ──
-    for (let i = 0 ; i < assignments.length; i++) {
-      const assignment: {id: string, classId: string} = assignments[i];
+    // ── 7. Create submissions for Assignments that have started ──
+    for (let i = 0 ; i < onGoingAssignments.length; i++) {
+      const assignment: {id: string, classId: string} = onGoingAssignments[i];
       const students = await userRep.getByClassId(assignment.classId);
       const studentIds = students.map((s: any) => s.id);
     
@@ -199,7 +209,7 @@ export async function seedDatabase(): Promise<void> {
     }
     
 
-    // ── 7. Create Threads and Messages for Learning Steps ──
+    // ── 8. Create Threads and Messages for Learning Steps ──
     const visibilityOptions = [
       VisibilityType.PRIVATE,
       VisibilityType.GROUP,
