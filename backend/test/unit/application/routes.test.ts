@@ -37,6 +37,7 @@ jest.mock("../../../src/config/controllers", () => ({
         joinRequest: {},
         message: {},
         questionThread: {},
+        step: {},
         submission: {},
         user: {},
         learningObject: {},
@@ -97,6 +98,7 @@ const routeFunctions = {
     joinRequestRoutes: Resources.joinRequestRoutes,
     messageRoutes: Resources.messageRoutes,
     questionThreadRoutes: Resources.questionThreadRoutes,
+    stepRoutes: Resources.stepRoutes,
     submissionRoutes: Resources.submissionRoutes,
     progressRoutes: Resources.progressRoutes,
     userRoutes: Resources.userRoutes,
@@ -488,6 +490,57 @@ const routeConfigs: Record<
             hasController: true,
             request: {
                 pathParams: { idParent: "assignment-1" },
+            },
+        },
+    ],
+    stepRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/steps/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "step-1" },
+            },
+        },
+        {
+            method: HttpMethod.PATCH,
+            path: "/steps/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "step-1" },
+                body: {
+                    form: "Updated form content",
+                },
+            },
+        },
+        {
+            method: HttpMethod.DELETE,
+            path: "/steps/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "step-1" },
+            },
+        },
+        {
+            method: HttpMethod.POST,
+            path: "/steps",
+            hasController: true,
+            request: {
+                body: {
+                    assignmentId: "assignment-1",
+                    learningObjectId: "obj-1",
+                    type: "multiple_choice",
+                    form: "New step form",
+                },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/assignment/:idParent/steps",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "assignment-1" },
+                queryParams: { learningObjectId: "obj-1" },
             },
         },
     ],
