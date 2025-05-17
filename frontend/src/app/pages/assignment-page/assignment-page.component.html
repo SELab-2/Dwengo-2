@@ -6,10 +6,14 @@
 <app-create-task (taskCreated)="onTaskCreated($event)"></app-create-task>
 }
 <app-learning-path [hruid]="learningPathId" [language]="language" [assignment]="true" [progress]="progress"
-  [step]="step" (selectedNodeChanged)="onSelectedNodeChanged($event)" (emitGraph)="retrieveGraph($event)">
+  [step]="furthestStep" (selectedNodeChanged)="onSelectedNodeChanged($event)" (emitGraph)="retrieveGraph($event)">
 </app-learning-path>
-@if (taskFetched){
-<app-create-submission [assignmentId]="assignmentId" [taskObject]="taskObject" [type]="taskType"
+@if (taskFetched && isStudent){
+<app-create-submission [assignmentId]="assignmentId" [taskObject]="taskObject" [type]="taskType" [taskId]="taskId!"
+  [learningObjectId]="currentLearningObjectId" (submissionCreated)="onSubmissionCreated()"></app-create-submission>
+}
+@if(noTask && isStudent) {
+<app-create-submission [assignmentId]="assignmentId" [taskObject]="taskObject"
   [learningObjectId]="currentLearningObjectId" (submissionCreated)="onSubmissionCreated()"></app-create-submission>
 }
 <div class="progress-container">

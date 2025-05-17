@@ -7,4 +7,5 @@ export interface NewSubmission {
     learningObjectId: string,
     time: Date,
     contents: string,
+    taskId: string,
 }

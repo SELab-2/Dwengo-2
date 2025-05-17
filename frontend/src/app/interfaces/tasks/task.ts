@@ -16,6 +16,7 @@ export interface MultipleChoiceTask extends TaskDetails {
 }
 
 export interface Task {
+    id?: string;
     assignmentId: string;
     step: number;
     question: string;

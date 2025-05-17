@@ -57,6 +57,7 @@ export class AssignmentPageComponent implements OnInit {
 
   public isStudent!: boolean;
 
+  public noTask!: boolean;
   public task!: Task | null;
   public taskType!: TaskType;
   public taskId!: string | null;
@@ -80,14 +81,12 @@ export class AssignmentPageComponent implements OnInit {
     return (this.step / this.maxStep) * 100;
   }
 
-  onSelectedNodeChanged(node: Node<LearningObject> | null) {
-    if (node) {
-      this.currentLearningObjectId = node.value.metadata.hruid!;
-    }
-  }
+  onSelectedNodeChanged(node: Node<LearningObject>) {
+    this.currentLearningObjectId = node.value.metadata.hruid!;
+    this.step = node.value.metadata.step!;
 
-  onNodeSelected() {
-    console.log(this.selectedNode)
+    this.taskFetched = false;
+    this.fetchTask();
   }
 
   retrieveGraph(graph: DirectedGraph<LearningObject>) {
@@ -96,8 +95,8 @@ export class AssignmentPageComponent implements OnInit {
   }
 
   onSubmissionCreated(): void {
+    this.openSnackBar($localize`Submission created!`)
     this.learningPathComponent.goToNextNode();  // Execute goToNextNode in LearningPathComponent
-    this.step = Math.min(this.step + 1, this.maxStep) // Update step
   }
 
   onTaskCreated(taskData: AssignmentTask): void {
@@ -167,18 +166,20 @@ export class AssignmentPageComponent implements OnInit {
 
 
   private fetchTask() {
-    console.log(this.assignmentId, this.step)
     // See if there are any tasks already created
     this.taskService.getSpecificTaskOfAssignment(this.assignmentId, this.step).subscribe(
       (task) => {
         if (task) {
+          this.noTask = false;
           this.task = task;
           this.taskType = task.type;
+          this.taskId = task.id!;
 
           // Our internal components work with another object format
           this.taskObject = this.taskService.responseToObject(task);
           this.taskFetched = true;
         } else {
+          this.noTask = true;
           this.task = null;
         }
       }
