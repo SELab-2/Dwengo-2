@@ -117,11 +117,12 @@ export class AssignmentComponent implements OnInit {
         allowMultipleAnswers: casted.allowMultipleAnswers,
       } as MultipleChoiceTask
     }
-
+    console.log("Created task step", this.step)
     // Define task
     const task: Task = {
       assignmentId: this.assignmentId,
-      step: this.step,
+      // We use index, backend uses position
+      step: this.step + 1,
       question: taskData.question,
       type: taskData.type,
       details: details
@@ -167,8 +168,8 @@ export class AssignmentComponent implements OnInit {
 
 
   private fetchTask() {
-    // See if there are any tasks already created
-    this.taskService.getSpecificTaskOfAssignment(this.assignmentId, this.step).subscribe(
+    // See if there are any tasks already created. Use step + 1: backend uses position, we use index
+    this.taskService.getSpecificTaskOfAssignment(this.assignmentId, this.step + 1).subscribe(
       (task) => {
         if (task) {
           this.noTask = false;

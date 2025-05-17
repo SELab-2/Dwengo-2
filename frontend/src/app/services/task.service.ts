@@ -188,6 +188,11 @@ export class TaskService {
     }
 
 
+    /**
+     * Create an empty task for all non initialized steps!
+     * @param assignmentId 
+     * @returns nothing really, if you call this you just need to subscribe to check if it succeeds
+     */
     fillRestWithEmptyTasks(assignmentId: string): Observable<void> {
 
         // Fetch the total assignment, we need learningPathId
@@ -212,7 +217,7 @@ export class TaskService {
             // We use this info to create a task for every uninitialized step
             switchMap(({ steps, existingSteps }) => {
                 const calls = [];
-                for (let i = 0; i < steps; i++) {
+                for (let i = 1; i <= steps; i++) {
                     if (!existingSteps.includes(i)) {
                         calls.push(
                             this.createTask({

@@ -53,7 +53,7 @@ export class CreateSubmissionComponent implements OnInit {
     }
     else if (this.type === TaskType.NORMALQUESTION) {
       this.loadNormalTask(this.taskObject as NormalQuestion);
-    } else {
+    } else if (this.type === TaskType.Other) {
       this.loadEmpty();
     }
   }
@@ -65,7 +65,7 @@ export class CreateSubmissionComponent implements OnInit {
       assignmentId: this.assignmentId,
       learningObjectId: this.learningObjectId,
       time: new Date(),
-      taskId: "",
+      taskId: this.taskId,
       // Empty contents
       contents: ""
     }
