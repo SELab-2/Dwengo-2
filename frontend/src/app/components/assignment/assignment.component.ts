@@ -53,7 +53,7 @@ export class AssignmentComponent implements OnInit {
   public currentLearningObjectId!: string;
   public selectedNode: Node<LearningObject> | undefined;
   public step: number = 0;
-  public furthestStep: number = 0; // This is the furthest progress point achieved
+  public furthestStep: number = 0; // This is the furthest reachable object
   public maxStep: number = 1;
 
   public isStudent!: boolean;
@@ -86,8 +86,8 @@ export class AssignmentComponent implements OnInit {
   onSelectedNodeChanged(node: Node<LearningObject>) {
     this.currentLearningObjectId = node.value.metadata.hruid!;
     this.step = node.value.metadata.step!;
-    this.alreadySubmitted = this.step < this.furthestStep
-    console.log(this.step)
+    this.alreadySubmitted = this.step < this.furthestStep;
+    console.log(this.step, this.furthestStep)
     this.taskFetched = false;
     this.fetchTask();
   }
@@ -99,7 +99,8 @@ export class AssignmentComponent implements OnInit {
 
   onSubmissionCreated(): void {
     this.openSnackBar($localize`Submission created!`)
-    this.learningPathComponent.goToNextNode();  // Execute goToNextNode in LearningPathComponent
+    this.furthestStep = this.step + 1;
+    this.learningPathComponent.goToNextNode();  // Execute goToNextNode in LearningPathComponent, this will call our onSelectedNodeChanged
   }
 
   onTaskCreated(taskData: AssignmentTask): void {

@@ -9,16 +9,16 @@
     [progress]="progress" [step]="furthestStep" (selectedNodeChanged)="onSelectedNodeChanged($event)"
     (emitGraph)="retrieveGraph($event)">
   </app-learning-path>
-  @if(!alreadySubmitted){
-  @if (taskFetched && isStudent){
+  @if(!alreadySubmitted && isStudent){
+  @if (taskFetched ){
   <app-create-submission [assignmentId]="assignmentId" [taskObject]="taskObject" [type]="taskType" [taskId]="taskId!"
     [learningObjectId]="currentLearningObjectId" (submissionCreated)="onSubmissionCreated()"></app-create-submission>
   }
-  @if(noTask && isStudent) {
+  @if(noTask) {
   <app-create-submission [assignmentId]="assignmentId" [taskObject]="taskObject"
     [learningObjectId]="currentLearningObjectId" (submissionCreated)="onSubmissionCreated()"></app-create-submission>
   }
-  }@else {
+  }@else if(isStudent) {
   <h2 i18n>Already Submitted</h2>
   }
 
