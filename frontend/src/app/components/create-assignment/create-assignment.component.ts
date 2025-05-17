@@ -18,6 +18,7 @@ import { CreateGroupComponent } from '../create-group/create-group.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentComponent } from '../assignment/assignment.component';
 import { MatIconModule } from '@angular/material/icon';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-create-assignment',
@@ -66,6 +67,7 @@ export class CreateAssignmentComponent implements OnInit {
     private classesService: ClassesService,
     private learningPathService: LearningPathService,
     private assignmentService: AssignmentService,
+    private taskService: TaskService,
     private router: Router,
   ) {
     this.createForm = this.buildCreateForm();
@@ -148,6 +150,18 @@ export class CreateAssignmentComponent implements OnInit {
   }
 
   tasksInitialized() {
+    // Initialize all empty tasks with an 'other'-type task without details
+    this.taskService.fillRestWithEmptyTasks(this.assignmentId).subscribe({
+      next: () => {
+        console.log('Alle ontbrekende taken zijn aangemaakt');
+      },
+      error: (err) => {
+        console.error('Er is iets misgelopen bij het aanmaken van taken', err);
+      }
+    });
+
+
+
     // we can redirect to assignments page
     this.router.navigate(['/teacher/assignments']);
   }

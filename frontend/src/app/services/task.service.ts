@@ -3,9 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
-import { switchMap, of, forkJoin, map } from 'rxjs';
+import { switchMap, of, forkJoin, map, Observable, catchError } from 'rxjs';
 import { CreateTaskResponse, GetTasksResponse, MultipleChoiceTask, NormalQuestionTask, Task, TaskType } from "../interfaces/tasks";
 import { AssignmentTask, MultipleChoice, NormalQuestion } from "../interfaces/assignment/tasks";
+import { LearningPathService } from "./learningPath.service";
+import { AssignmentService } from "./assignment.service";
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +19,8 @@ export class TaskService {
         private http: HttpClient,
         private authService: AuthenticationService,
         private errorService: ErrorService,
+        private learningPathService: LearningPathService,
+        private assignmentService: AssignmentService,
     ) { }
 
     /**
@@ -181,5 +185,55 @@ export class TaskService {
             this.errorService.pipeHandler(),
             map(res => res.id)
         )
+    }
+
+
+    fillRestWithEmptyTasks(assignmentId: string): Observable<void> {
+
+        // Fetch the total assignment, we need learningPathId
+        return this.assignmentService.retrieveAssignmentById(assignmentId).pipe(
+            // Fetch the learning path
+            switchMap(ass =>
+                this.learningPathService.retrieveOneLearningPath({ hruid: ass.learningPathId })
+            ),
+            // retrieve the amount of steps
+            map(path => path.numNodes),
+
+            // Now we fetch all existing tasks and keep track of their step number
+            switchMap(steps =>
+                this.getAllAssignmentTasks(assignmentId).pipe(
+                    map(tasks => ({
+                        steps,
+                        existingSteps: tasks.map(t => t.step)
+                    }))
+                )
+            ),
+
+            // We use this info to create a task for every uninitialized step
+            switchMap(({ steps, existingSteps }) => {
+                const calls = [];
+                for (let i = 0; i < steps; i++) {
+                    if (!existingSteps.includes(i)) {
+                        calls.push(
+                            this.createTask({
+                                assignmentId,
+                                step: i,
+                                type: TaskType.Other,
+                                question: '',
+                                details: {}
+                            }).pipe(
+                                this.errorService.pipeHandler(),
+                                catchError(() => of(null)) // skip an error
+                            )
+                        );
+                    }
+                }
+                if (calls.length === 0) {
+                    return of(void 0);  // no calls === everything initialized === gtfo
+                }
+                // execute the calls, create the tasks
+                return forkJoin(calls).pipe(map(() => void 0));
+            })
+        );
     }
 }
