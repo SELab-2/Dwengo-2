@@ -52,6 +52,29 @@
     }
 
     @if(initializeTasks) {
-    <p>Initialize Tasks!</p>
+    <mat-card class="row">
+        <mat-card class="inline">
+            <div>
+                <mat-card-title i18n>Create Tasks for your Assignment!</mat-card-title>
+                <p style="padding-left:  2em;" i18n>You can't add tasks later on!</p>
+            </div>
+
+            <mat-card-actions>
+                <button mat-fab extended color="primary" (click)="tasksInitialized()">
+                    <mat-icon>send</mat-icon>
+                    <mat-card-title i18n>Finish Assignment</mat-card-title>
+
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card-content>
+            <app-assignment [assignmentId]="assignmentId" [initializeTasks]="true"></app-assignment>
+
+        </mat-card-content>
+
+
+    </mat-card>
+
     }
 </div>

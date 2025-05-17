@@ -1,2 +1,4 @@
 <app-authenticated-header></app-authenticated-header>
-<app-assignment></app-assignment>
+@if(assignmentId){
+<app-assignment [assignmentId]="assignmentId"></app-assignment>
+}

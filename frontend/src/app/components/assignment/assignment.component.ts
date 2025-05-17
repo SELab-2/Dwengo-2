@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { LearningPathComponent } from '../learning-path/learning-path.component';
 import { ActivatedRoute } from '@angular/router';
 import { Assignment } from '../../interfaces/assignment';
@@ -33,6 +33,9 @@ import { MatSelectModule } from '@angular/material/select';
 export class AssignmentComponent implements OnInit {
   @ViewChild(LearningPathComponent) learningPathComponent!: LearningPathComponent;
 
+  @Input() assignmentId!: string;
+  @Input() initializeTasks: boolean = false;
+
   // The current activated route
   private readonly route = inject(ActivatedRoute);
 
@@ -45,7 +48,6 @@ export class AssignmentComponent implements OnInit {
   private _assignment?: Assignment;
   public graph: DirectedGraph<LearningObject> | undefined
   public progress!: Progress;
-  public assignmentId!: string;
   public learningPathId: string = "";
   public language = "nl";
   public currentLearningObjectId!: string;
@@ -192,10 +194,8 @@ export class AssignmentComponent implements OnInit {
     const locale: string = window.location.pathname.split("/")[1];
     this.language = locale.split("-")[0]
 
-    const assignmentId = this.route.snapshot.paramMap.get('id');
-
-    if (assignmentId) {
-      this.assignmentId = assignmentId;
+    console.log("in assignment", this.assignmentId)
+    if (this.assignmentId) {
       const assignmentObservable = this.assignmentService.retrieveAssignmentById(this.assignmentId);
       assignmentObservable.subscribe(
         (res) => {

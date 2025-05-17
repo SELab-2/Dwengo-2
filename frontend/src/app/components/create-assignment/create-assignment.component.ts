@@ -16,15 +16,19 @@ import { AssignmentService } from '../../services/assignment.service';
 import { User } from '../../interfaces';
 import { CreateGroupComponent } from '../create-group/create-group.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AssignmentComponent } from '../assignment/assignment.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-create-assignment',
   imports: [
     ReactiveFormsModule,
     CreateGroupComponent,
+    AssignmentComponent,
 
     // Angular material
     MatCardModule,
+    MatIconModule,
     MatFormFieldModule,
     MatSelectModule,
     MatDatepickerModule,
@@ -139,6 +143,7 @@ export class CreateAssignmentComponent implements OnInit {
   }
 
   groupsCreated() {
+    console.log(this.assignmentId)
     this.initializeTasks = true;
   }
 

@@ -1,7 +1,7 @@
 @if (loading) {
 <app-loading></app-loading>
 } @else {
-@if (!isStudent && task === null){
+@if (!isStudent && task === null && initializeTasks){
 <app-create-task (taskCreated)="onTaskCreated($event)"></app-create-task>
 }
 <app-learning-path [hruid]="learningPathId" [language]="language" [assignment]="true" [progress]="progress"
