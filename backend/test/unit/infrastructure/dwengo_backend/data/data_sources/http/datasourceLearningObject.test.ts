@@ -19,15 +19,16 @@ describe("DatasourceLearningObject", () => {
     });
 
     test("getVersions should return an array of versions", async () => {
+        const mockData = [{ hruid, language, version, title: "Test Title" }, { hruid, language, version: 2, title: "Test Title" }];
         global.fetch = jest.fn().mockResolvedValueOnce(
-            new Response(JSON.stringify([{ version: "1.0" }, { version: "2.0" }]), {
+            new Response(JSON.stringify(mockData), {
                 status: 200,
                 headers: { "Content-Type": "application/json" },
             })
         );
 
         const versions = await datasource.getVersions(hruid);
-        expect(versions).toEqual(["1.0", "2.0"]);
+        expect(versions).toEqual(["1", "2"]);
     });
 
     test("getVersions should throw an error if fetch fails", async () => {
@@ -42,8 +43,9 @@ describe("DatasourceLearningObject", () => {
     });
 
     test("getLanguages should return an array of languages", async () => {
+        const mockData = [{ hruid, language, version, title: "Test Title" }, { hruid, language: "nl", version, title: "Test Title" }];
         global.fetch = jest.fn().mockResolvedValueOnce(
-            new Response(JSON.stringify([{ language: "en" }, { language: "nl" }]), {
+            new Response(JSON.stringify(mockData), {
                 status: 200,
                 headers: { "Content-Type": "application/json" },
             })
@@ -54,7 +56,7 @@ describe("DatasourceLearningObject", () => {
     });
 
     test("getMetaData should return a LearningObject", async () => {
-        const mockData = { hruid, language, version, title: "Test Title" };
+        const mockData = [{ hruid, language, version, title: "Test Title" }];
         global.fetch = jest.fn().mockResolvedValueOnce(
             new Response(JSON.stringify(mockData), {
                 status: 200,
@@ -63,11 +65,11 @@ describe("DatasourceLearningObject", () => {
         );
 
         const result = await datasource.getMetaData(hruid, language, version);
-        expect(result).toEqual(expect.objectContaining(mockData));
+        expect(result).toEqual(expect.objectContaining(mockData[0]));
     });
 
     test("getRawLearningObject should return a LearningObject with raw HTML content", async () => {
-        const mockData = { hruid, language, version, title: "Test Title" };
+        const mockData = [{ hruid, language, version, title: "Test Title" }];
         global.fetch = jest.fn()
             .mockResolvedValueOnce(
                 new Response(JSON.stringify(mockData), {
