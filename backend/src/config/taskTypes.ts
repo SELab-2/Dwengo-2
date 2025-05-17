@@ -10,11 +10,11 @@ export interface MultipleChoiceDetails {
     allowMultipleAnswers?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface NormalQuestionDetails {
     predefined_answer?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface OtherDetails {}
 
 export type TaskDetails = MultipleChoiceDetails | NormalQuestionDetails | OtherDetails;
