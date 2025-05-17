@@ -52,6 +52,7 @@ export class CreateAssignmentComponent implements OnInit {
   public classes: Class[] = [];
   public paths: LearningPath[] = [];
 
+  public initializeTasks: boolean = false; // Initialize tasks after group creation
   public showCreateGroup: boolean = false;
   public assignmentId: string = '';
   public classMembers: User[] = [];
@@ -138,6 +139,10 @@ export class CreateAssignmentComponent implements OnInit {
   }
 
   groupsCreated() {
+    this.initializeTasks = true;
+  }
+
+  tasksInitialized() {
     // we can redirect to assignments page
     this.router.navigate(['/teacher/assignments']);
   }

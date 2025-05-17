@@ -1,6 +1,6 @@
 <div class="create-assignment">
 
-    @if(!showCreateGroup) {
+    @if(!showCreateGroup && !initializeTasks) {
     <mat-card class="form-card">
         <mat-card-content>
             <form [formGroup]="createForm" (ngSubmit)="create()" class="create-assignment-form">
@@ -46,8 +46,12 @@
     </mat-card>
     }
 
-    @if(showCreateGroup) {
+    @if(showCreateGroup && !initializeTasks) {
     <app-create-group [assignmentId]="assignmentId" [members]="classMembers" (groupsCreated)="groupsCreated()">
     </app-create-group>
+    }
+
+    @if(initializeTasks) {
+    <p>Initialize Tasks!</p>
     }
 </div>
