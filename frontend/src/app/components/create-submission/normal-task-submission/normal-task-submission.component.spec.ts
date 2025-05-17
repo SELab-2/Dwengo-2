@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { By } from '@angular/platform-browser';
+import { TaskType } from '../../../interfaces/tasks';
 
 
 describe('CreateSubmissionComponent', () => {
@@ -31,6 +32,7 @@ describe('CreateSubmissionComponent', () => {
             question: 'Test Question?',
             predefined_answer: 'Test Answer',
             answer: '',
+            type: TaskType.NORMALQUESTION,
         }
         fixture.detectChanges();
     });
@@ -40,7 +42,7 @@ describe('CreateSubmissionComponent', () => {
     });
 
     it('should enable the Submit button when an answer is provided', () => {
-        component.taskObject.answer = ('Test Answer');
+        component.answer.setValue('Test Answer');
         fixture.detectChanges();
         const button = fixture.debugElement.query(By.css('button[mat-fab]')).nativeElement;
         expect(button.disabled).toBeFalse();

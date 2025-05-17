@@ -9,6 +9,7 @@ import { By } from '@angular/platform-browser';
 import { MultipleChoice } from '../../../interfaces/assignment/tasks';
 import { CreateMultipleChoiceComponent } from './create-multiple-choice.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { TaskType } from '../../../interfaces/tasks';
 
 describe('CreateNormalTaskComponent', () => {
     let component: CreateMultipleChoiceComponent;
@@ -69,7 +70,8 @@ describe('CreateNormalTaskComponent', () => {
             options: ["Option1", "Option2"],
             allowMultipleAnswers: false,
             correctAnswers: [1],
-            selected: []
+            selected: [],
+            type: TaskType.MULTIPLECHOICE
         } as MultipleChoice);
     });
 

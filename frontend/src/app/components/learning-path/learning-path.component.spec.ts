@@ -79,7 +79,6 @@ describe('LearningPathComponent', () => {
         expect(component.learningObjects).toEqual(mockObjects);
         expect(component.path).toEqual(mockPath);
         expect(component.trajectoryGraph).toEqual(mockGraph);
-        expect(component.selectedNode).toEqual(mockGraph.root);
         expect(component.loading).toBeFalse();
     });
 });

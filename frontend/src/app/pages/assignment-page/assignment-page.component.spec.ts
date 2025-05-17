@@ -90,13 +90,13 @@ describe('AssignmentPageComponent', () => {
     expect(component.assignment).toEqual(mockAssignment);
   });
 
-  it('should update step when a submission is created', () => {
+  it('should not directly update step when a submission is created, the learning path component will do this automatically', () => {
     const initialStep = component.step;
 
     // Triggering onSubmissionCreated
     component.onSubmissionCreated();
 
     // Verifying that step increases correctly
-    expect(component.step).toBe(initialStep + 1);
+    expect(component.step).toBe(initialStep);
   });
 });
