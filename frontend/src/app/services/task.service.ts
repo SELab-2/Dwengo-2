@@ -152,7 +152,6 @@ export class TaskService {
         );
     }
 
-
     /**
      * Delete the task with this task ID.
      * 
@@ -186,7 +185,6 @@ export class TaskService {
             map(res => res.id)
         )
     }
-
 
     fillRestWithEmptyTasks(assignmentId: string): Observable<void> {
 
