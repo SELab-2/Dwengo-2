@@ -63,6 +63,7 @@ export class AssignmentComponent implements OnInit {
   public taskType!: TaskType;
   public taskId!: string | null;
   public taskObject!: AssignmentTask;
+  public alreadySubmitted: boolean = true;
 
   public constructor(
     private assignmentService: AssignmentService,
@@ -85,7 +86,8 @@ export class AssignmentComponent implements OnInit {
   onSelectedNodeChanged(node: Node<LearningObject>) {
     this.currentLearningObjectId = node.value.metadata.hruid!;
     this.step = node.value.metadata.step!;
-
+    this.alreadySubmitted = this.step < this.furthestStep
+    console.log(this.step)
     this.taskFetched = false;
     this.fetchTask();
   }
