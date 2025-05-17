@@ -67,7 +67,7 @@
 
         <mat-card-actions>
             <button mat-fab extended color="primary" (click)="submitQuestion()"
-                [disabled]="options.length <= 1 && (!title.value || title.value.length === 0)">
+                [disabled]="options.length === 0 || (!title.value || title.value.length === 0)">
                 <mat-icon>send</mat-icon>
                 <mat-card-title i18n>Submit</mat-card-title>
 

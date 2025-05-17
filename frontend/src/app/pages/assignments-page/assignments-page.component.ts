@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { AssignmentCardComponent } from '../../components/small-components/assignment-card/assignment-card.component';
 
 type AssignmentDateFilter = (assignment: Assignment) => boolean;
 
@@ -24,6 +25,7 @@ type AssignmentDateFilter = (assignment: Assignment) => boolean;
   ],
   imports: [
     AuthenticatedHeaderComponent,
+    AssignmentCardComponent,
     MatListModule,
     MatIconModule,
     MatButtonModule,

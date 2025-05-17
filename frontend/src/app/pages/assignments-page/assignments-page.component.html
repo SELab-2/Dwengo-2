@@ -15,12 +15,15 @@
         <mat-list class="grid" id="assignments-list">
             @for (assignment of filteredAssignments; track assignment.id) {
             <li>
-                <mat-card (click)="onAssignmentClick(assignment.id)">
+                <!-- <mat-card (click)="onAssignmentClick(assignment.id)">
                     <h3>{{ assignment.name }}</h3>
                     <p>
                         <strong i18n>Due date:</strong>
                         {{ assignment.deadline }}
-                </mat-card>
+                </mat-card> -->
+                <app-assignment-card [assignment]="assignment"
+                    (clicked)="onAssignmentClick($event)"></app-assignment-card>
+
             </li>
             } @empty {
             <p i18n>No assignments found</p>

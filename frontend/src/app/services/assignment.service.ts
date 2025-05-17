@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
-import { forkJoin, Observable, of, switchMap } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { Assignment, NewAssignment } from '../interfaces/assignment';
 import { AssignmentResponse, AssignmentResponseSingle } from '../interfaces/assignment/assignmentResponse';
 
@@ -18,7 +18,7 @@ export class AssignmentService {
     private http: HttpClient,
     private authenticationService: AuthenticationService,
     private errorService: ErrorService,
-  ) {}
+  ) { }
 
   /**
    * Retrieve the assignments of the currently logged in user
@@ -34,11 +34,11 @@ export class AssignmentService {
       headers
     ).pipe(
       this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize `:@@assignmentsServicesTestAssignments:assignments`)
+        this.errorService.retrieveError($localize`:@@assignmentsServicesTestAssignments:assignments`)
       ),
       switchMap(response => {
         return forkJoin(
-          response.assignments.map(id => 
+          response.assignments.map(id =>
             this.http.get<Assignment>(
               `${this.API_URL}/assignments/${id}`,
               headers
@@ -49,7 +49,7 @@ export class AssignmentService {
     );
   }
 
-  private assignmentMessage = $localize `:@@assignmentsServicesTestAssignment:assignment`;
+  private assignmentMessage = $localize`:@@assignmentsServicesTestAssignment:assignment`;
 
   /**
    * Retrieve a single assignment by its ID
@@ -64,9 +64,9 @@ export class AssignmentService {
       this.errorService.pipeHandler(
         this.errorService.retrieveError(this.assignmentMessage)
       )
-    ); 
+    );
   }
-  
+
   /**
    * Create a new assignment
    * @param assignment The assignment to create
@@ -84,9 +84,9 @@ export class AssignmentService {
         this.errorService.createError(this.assignmentMessage)
       ),
       switchMap(response => of({
-          ...assignment,
-          id: response.id
-        })
+        ...assignment,
+        id: response.id
+      })
       )
     );
   }
@@ -119,14 +119,9 @@ export class AssignmentService {
   deleteAssignment(assignment: Assignment): Observable<boolean> {
     const headers = this.authenticationService.retrieveAuthenticationHeaders();
 
-    return this.http.delete<void>(
-      `${this.API_URL}/assignments/${assignment.id}`,
-      headers
-    ).pipe(
-      this.errorService.pipeHandler(
-        this.errorService.deleteError(this.assignmentMessage)
-      ),
-      switchMap(() => of(true)) // return true if the assignment was deleted
+    return this.http.delete<void>(`${this.API_URL}/assignments/${assignment.id}`, headers).pipe(
+      map(() => true), // succesvolle delete geeft gewoon true terug
+      this.errorService.pipeHandler<boolean>()
     );
   }
 }
