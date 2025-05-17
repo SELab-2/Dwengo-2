@@ -53,22 +53,22 @@ export class DatasourceLearningObject extends DatasourceDwengo {
 
     private async fallback(url: string, hruid: string): Promise<LearningObjectData[]> {
         // Fallback to fetch if cache is empty and data needed
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw {
-                    code: ErrorCode.BAD_REQUEST,
-                    message: `Error fetching from dwengo api: ${response.status}, ${response.statusText}`,
-                } as ApiError;
-            }
-            const fallbackCandidates: LearningObjectData[] = await response.json();
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw {
+                code: ErrorCode.BAD_REQUEST,
+                message: `Error fetching from dwengo api: ${response.status}, ${response.statusText}`,
+            } as ApiError;
+        }
+        const fallbackCandidates: LearningObjectData[] = await response.json();
 
-            if (!fallbackCandidates) {
-                throw {
-                    code: ErrorCode.NOT_FOUND,
-                    message: `LearningObject with hruid ${hruid} not found.`,
-                } as ApiError;
-            }
-            return fallbackCandidates
+        if (!fallbackCandidates) {
+            throw {
+                code: ErrorCode.NOT_FOUND,
+                message: `LearningObject with hruid ${hruid} not found.`,
+            } as ApiError;
+        }
+        return fallbackCandidates;
     }
 
     /**
@@ -83,7 +83,7 @@ export class DatasourceLearningObject extends DatasourceDwengo {
 
         // async refresh without await, make sure first user filling cache doesn't have to wait on the whole cache
         if (shouldUpdateCache) {
-            this.refreshMetaDataCache(); 
+            this.refreshMetaDataCache();
         }
 
         // If there is no outdated cache that we can use, first ever request
@@ -112,7 +112,7 @@ export class DatasourceLearningObject extends DatasourceDwengo {
 
         // async refresh without await, make sure first user filling cache doesn't have to wait on the whole cache
         if (shouldUpdateCache) {
-            this.refreshMetaDataCache(); 
+            this.refreshMetaDataCache();
         }
 
         // If there is no outdated cache that we can use, first ever request
@@ -149,7 +149,7 @@ export class DatasourceLearningObject extends DatasourceDwengo {
 
         // async refresh without await, make sure first user filling cache doesn't have to wait on the whole cache
         if (shouldUpdateCache) {
-            this.refreshMetaDataCache(); 
+            this.refreshMetaDataCache();
         }
 
         // If there is no outdated cache that we can use, first ever request
@@ -158,7 +158,7 @@ export class DatasourceLearningObject extends DatasourceDwengo {
             const fallbackCandidates: LearningObjectData[] = await this.fallback(url, hruid);
             // Extra check
             const match = fallbackCandidates.find(
-                lo => lo.language === language && lo.version === version && lo.hruid == hruid
+                lo => lo.language === language && lo.version === version && lo.hruid == hruid,
             );
             if (!match) {
                 throw {
