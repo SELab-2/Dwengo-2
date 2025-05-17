@@ -16,20 +16,20 @@
         </div>
         @if(selected === undefined){
         <div class="options">
-            <mat-card class="option" (click)="select('multiple-choice')">
+            <mat-card class="option" (click)="select('MULTIPLECHOICE')">
                 <mat-icon>done_all</mat-icon>
                 <mat-card-title i18n>Multiple Choice Question</mat-card-title>
             </mat-card>
-            <mat-card class="option" (click)="select('normal-question')">
+            <mat-card class="option" (click)="select('NORMALQUESTION')">
                 <mat-icon>question_mark</mat-icon>
                 <mat-card-title i18n>Normal Question</mat-card-title>
             </mat-card>
         </div>
         }
-        @if(selected !== undefined && selected.toString() === 'multiple-choice'){
+        @if(selected !== undefined && selected.toString() === 'MULTIPLECHOICE'){
         <app-create-multiple-choice (taskCreated)="onTaskCreated($event)"></app-create-multiple-choice>
         }
-        @if(selected !== undefined && selected.toString() === 'normal-question'){
+        @if(selected !== undefined && selected.toString() === 'NORMALQUESTION'){
         <app-create-normal-task (taskCreated)="onTaskCreated($event)"></app-create-normal-task>
         }
 

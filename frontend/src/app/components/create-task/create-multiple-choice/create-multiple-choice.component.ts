@@ -9,6 +9,7 @@ import { MatList, MatListItem } from '@angular/material/list';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MultipleChoice } from '../../../interfaces/assignment/tasks';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TaskType } from '../../../interfaces/tasks';
 @Component({
   selector: 'app-create-multiple-choice',
   imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReactiveFormsModule, MatListItem, MatList, MatCheckbox, MatTooltipModule],
@@ -22,6 +23,7 @@ export class CreateMultipleChoiceComponent {
   allowMultipleOptions: boolean = false;
   options: string[] = [];
   correctAnswers: boolean[] = [];
+  edit: boolean = true;
 
   constructor() { }
   @Output() taskCreated: EventEmitter<MultipleChoice> = new EventEmitter<MultipleChoice>();
@@ -32,7 +34,7 @@ export class CreateMultipleChoiceComponent {
       const trimmed = val.trim();
       if (trimmed) {
         this.options.push(trimmed);
-        this.correctAnswers.push(false);
+        this.correctAnswers.push(true);
         this.newOption.setValue('');
       }
     }
@@ -55,6 +57,15 @@ export class CreateMultipleChoiceComponent {
 
   }
 
+  ready() {
+    this.edit = false;
+    this.title.disable();
+  }
+  setEdit() {
+    this.edit = true;
+    this.title.enable();
+  }
+
   submitQuestion(): void {
     // This one does not make any calls, it just returns the multiple-choice object
     const l = this.correctAnswers.map((b, i) => {
@@ -66,8 +77,8 @@ export class CreateMultipleChoiceComponent {
       allowMultipleAnswers: this.allowMultipleOptions,
       options: this.options,
       selected: [],
-      correctAnswers: l.filter(o => Number.isInteger(o))
-
+      correctAnswers: l.filter(o => Number.isInteger(o)),
+      type: TaskType.MULTIPLECHOICE,
     } as MultipleChoice;
     this.taskCreated.emit(obj)
   }

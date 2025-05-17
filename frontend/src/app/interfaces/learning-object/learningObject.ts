@@ -9,6 +9,7 @@ export interface LearningObject {
         title: string,
         description: string,
         contentType: string,
+        step?: number;
     };
     // This is the object itself. The Dwengo server wraps it in for us.
     htmlContent: string;

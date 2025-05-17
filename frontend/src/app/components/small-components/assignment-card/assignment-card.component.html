@@ -1,0 +1,18 @@
+<mat-card class="menu-card" matRipple (click)="onClick()">
+    <div>
+        <h3>{{ assignment.name }}</h3>
+        <p>
+            <strong i18n>Due date:</strong>
+            {{ assignment.deadline }}
+        </p>
+    </div>
+    @if(isTeacher){
+    <div>
+        <button mat-icon-button i18n-matTooltip matTooltip="Delete Assignment" color="primary"
+            (click)="onDelete(); $event.stopPropagation()">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+    }
+
+</mat-card>

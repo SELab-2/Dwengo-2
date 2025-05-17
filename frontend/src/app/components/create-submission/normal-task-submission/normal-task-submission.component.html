@@ -14,7 +14,7 @@
 
         <mat-card-actions>
             <button mat-fab extended color="primary" (click)="submitAnswer()"
-                [disabled]="taskObject.answer === null || (taskObject.answer && taskObject.answer.length === 0)">
+                [disabled]="answer.value === null || (answer.value && answer.value.length === 0)">
                 <mat-icon>send</mat-icon>
                 <mat-card-title i18n>Submit</mat-card-title>
 

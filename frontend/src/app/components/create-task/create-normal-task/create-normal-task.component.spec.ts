@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { NormalQuestion } from '../../../interfaces/assignment/tasks';
+import { TaskType } from '../../../interfaces/tasks';
 
 describe('CreateNormalTaskComponent', () => {
     let component: CreateNormalTaskComponent;
@@ -59,6 +60,7 @@ describe('CreateNormalTaskComponent', () => {
         expect(component.taskCreated.emit).toHaveBeenCalledWith({
             question: 'Wat is 2 + 2?',
             predefined_answer: '4',
+            type: TaskType.NORMALQUESTION
         } as NormalQuestion);
     });
 

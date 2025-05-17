@@ -6,7 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
-import { CreateTaskComponent, TaskType } from './create-task.component';
+import { CreateTaskComponent } from './create-task.component';
+import { TaskType } from '../../../interfaces/tasks';
 
 describe('CreateNormalTaskComponent', () => {
     let component: CreateTaskComponent;
@@ -42,16 +43,16 @@ describe('CreateNormalTaskComponent', () => {
 
     it('should show multiple choice when selected', () => {
         component.start();
-        component.select('multiple-choice');
+        component.select('MULTIPLECHOICE');
         fixture.detectChanges();
 
         expect(component.ready).toBeTrue();
-        expect(component.selected).toBe(TaskType.MultipleChoice);
+        expect(component.selected).toBe(TaskType.MULTIPLECHOICE);
     });
 
     it('should go back when back-button is pressed', () => {
         component.start();
-        component.select('multiple-choice');
+        component.select('MULTIPLECHOICE');
         component.back();
 
         fixture.detectChanges();

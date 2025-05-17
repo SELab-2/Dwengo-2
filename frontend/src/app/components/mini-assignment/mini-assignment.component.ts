@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Assignment } from '../../interfaces/assignment/assignment';
 import { CommonModule } from '@angular/common'
 import { MatCardModule } from '@angular/material/card'
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { GroupDialogComponent } from '../group-dialog/group-dialog.component';
 import { Group } from '../../interfaces/group/group';
@@ -24,7 +24,6 @@ enum Urgence {
   selector: 'app-mini-assignment',
   imports: [
     CommonModule,
-    RouterLink,
 
     // Material design
     MatCardModule,
@@ -51,8 +50,8 @@ export class MiniAssignmentComponent {
     private progressService: ProgressService,
     private authService: AuthenticationService,
     private router: Router
-  ) {}
-    
+  ) { }
+
   onCardClick(): void {
     if (!this.upcoming) {
       this.router.navigate(['/', this._type, 'assignments', this.assignment.id]);
@@ -74,13 +73,13 @@ export class MiniAssignmentComponent {
   }
 
   get progressPercentage(): number {
-    return Math.round((this.progress.step / this.progress.maxStep) * 1000)/10
+    return Math.round((this.progress.step / this.progress.maxStep) * 1000) / 10
   }
 
   get toolTip(): string {
     const now: Date = new Date();
     const diff = new Date(this.assignment.deadline).getTime() - now.getTime()
-    
+
     const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
     const diffHours = Math.floor((diff / (1000 * 60 * 60)) % 24);
 
@@ -95,9 +94,9 @@ export class MiniAssignmentComponent {
     const now: Date = new Date();
     const diff = new Date(this.assignment.deadline).getTime() - now.getTime()
     // Deadline in 24 hours, urgent 
-    if ( diff > 0 && diff <= 24 * 60 * 60 * 1000) {
+    if (diff > 0 && diff <= 24 * 60 * 60 * 1000) {
       return Urgence.HIGH
-    } else if (diff > 0 && diff <= 7 * 24 * 60 * 60 * 1000 ) {
+    } else if (diff > 0 && diff <= 7 * 24 * 60 * 60 * 1000) {
       // Deadline in 7 days, medium urgence 
       return Urgence.MEDIUM
     }

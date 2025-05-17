@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { NormalQuestion } from '../../../interfaces/assignment/tasks';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TaskType } from '../../../interfaces/tasks';
 @Component({
   selector: 'app-create-normal-task',
   imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReactiveFormsModule, MatCheckbox, MatTooltipModule],
@@ -39,6 +40,7 @@ export class CreateNormalTaskComponent {
     const obj = {
       question: this.title.value,
       predefined_answer: this.predefined_answer.value,
+      type: TaskType.NORMALQUESTION,
     } as NormalQuestion;
     this.taskCreated.emit(obj)
   }
