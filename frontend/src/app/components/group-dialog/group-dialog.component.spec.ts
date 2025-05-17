@@ -49,13 +49,19 @@ describe('GroupDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  /**
+   * The following 2 tests fail sometimes and succeed sometimes
+   * Because of this unpredictable behaviour these tests are commented out,
+   * otherwise they mess with the CI.
+   */
+
   /*
     it('should display the correct members count', async () => {
       await fixture.whenStable()
       const title = fixture.debugElement.query(By.css('.title')).nativeElement;
       expect(title.textContent).toContain('Members: 2');
     });
-  
+
     it('should render mini-user components for each member', async () => {
       await fixture.whenStable()
       const miniUsers = fixture.debugElement.queryAll(By.css('app-mini-user'));
