@@ -7,7 +7,7 @@ import { AssignmentService } from '../../services/assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CreateSubmissionComponent } from '../../components/create-submission/create-submission.component';
 import { LearningObject } from '../../interfaces/learning-object';
-import { Node } from "../../datastructures/directed-graph";
+import { DirectedGraph, Node } from "../../datastructures/directed-graph";
 import { ProgressService } from '../../services/progress.service';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Progress } from '../../interfaces/progress/progress';
@@ -21,10 +21,13 @@ import { CreateTaskComponent } from '../../components/create-task/create-task-co
 import { AssignmentTask, MultipleChoice, NormalQuestion } from '../../interfaces/assignment/tasks';
 import { TaskService } from '../../services/task.service';
 import { MultipleChoiceTask, NormalQuestionTask, Task, TaskType } from '../../interfaces/tasks';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-assignment-page',
-  imports: [AuthenticatedHeaderComponent, LearningPathComponent, CreateSubmissionComponent, MatProgressBar, MatCardModule, LoadingComponent, CreateTaskComponent],
+  imports: [AuthenticatedHeaderComponent, LearningPathComponent, MatSelectModule, MatFormFieldModule, MatOptionModule, CreateSubmissionComponent, MatProgressBar, MatCardModule, LoadingComponent, CreateTaskComponent],
   templateUrl: './assignment-page.component.html',
   styleUrl: './assignment-page.component.less'
 })
@@ -41,11 +44,13 @@ export class AssignmentPageComponent implements OnInit {
   public taskFetched = false;
 
   private _assignment?: Assignment;
+  public graph: DirectedGraph<LearningObject> | undefined
   public progress!: Progress;
   public assignmentId!: string;
   public learningPathId: string = "";
   public language = "nl";
   public currentLearningObjectId!: string;
+  public selectedNode: Node<LearningObject> | undefined;
   public step: number = 0;
   public furthestStep: number = 0; // This is the furthest progress point achieved
   public maxStep: number = 1;
@@ -79,6 +84,15 @@ export class AssignmentPageComponent implements OnInit {
     if (node) {
       this.currentLearningObjectId = node.value.metadata.hruid!;
     }
+  }
+
+  onNodeSelected() {
+    console.log(this.selectedNode)
+  }
+
+  retrieveGraph(graph: DirectedGraph<LearningObject>) {
+    this.graph = graph;
+    this.selectedNode = graph.nodes[this.step];
   }
 
   onSubmissionCreated(): void {
@@ -117,6 +131,7 @@ export class AssignmentPageComponent implements OnInit {
       (id) => {
         this.taskId = id;
         this.openSnackBar($localize`Task Succesfully Created!`);
+        this.fetchTask();
       }
     )
   }
@@ -152,6 +167,7 @@ export class AssignmentPageComponent implements OnInit {
 
 
   private fetchTask() {
+    console.log(this.assignmentId, this.step)
     // See if there are any tasks already created
     this.taskService.getSpecificTaskOfAssignment(this.assignmentId, this.step).subscribe(
       (task) => {

@@ -23,6 +23,7 @@ export class CreateMultipleChoiceComponent {
   allowMultipleOptions: boolean = false;
   options: string[] = [];
   correctAnswers: boolean[] = [];
+  edit: boolean = true;
 
   constructor() { }
   @Output() taskCreated: EventEmitter<MultipleChoice> = new EventEmitter<MultipleChoice>();
@@ -33,7 +34,7 @@ export class CreateMultipleChoiceComponent {
       const trimmed = val.trim();
       if (trimmed) {
         this.options.push(trimmed);
-        this.correctAnswers.push(false);
+        this.correctAnswers.push(true);
         this.newOption.setValue('');
       }
     }
@@ -54,6 +55,15 @@ export class CreateMultipleChoiceComponent {
   update(change: boolean): void {
     this.allowMultipleOptions = change;
 
+  }
+
+  ready() {
+    this.edit = false;
+    this.title.disable();
+  }
+  setEdit() {
+    this.edit = true;
+    this.title.enable();
   }
 
   submitQuestion(): void {

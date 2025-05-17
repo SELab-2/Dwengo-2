@@ -36,12 +36,16 @@ export class LearningPathComponent implements OnInit {
     @Input() assignment: boolean = false;
     @Input() progress?: Progress;
     @Input() popup?: boolean = false; // extra back button if component is used as popup
+    @Input() step: number = 0;
 
     // Emit an event including the new node we navigated to, used when in an assignment 
     @Output() selectedNodeChanged = new EventEmitter<Node<LearningObject> | null>();
 
     // Specific for explore page, let know when popup needs to go back
     @Output() back = new EventEmitter<void>();
+
+    // Emit the graph when we built is, this way assignment can use it without rebuilding
+    @Output() emitGraph = new EventEmitter<DirectedGraph<LearningObject>>();
 
     loading: boolean = true;
     isTeacher: boolean = false;
@@ -85,6 +89,7 @@ export class LearningPathComponent implements OnInit {
                 // Build trajectory when we're done
                 if (this.path.nodes && this.learningObjects) {
                     this.trajectoryGraph = this.graphBuilderService.buildTrajectoryGraph(this.path.nodes, this.learningObjects);
+                    this.emitGraph.emit(this.trajectoryGraph);
                     // If there is progress, start the assignment from that node
                     if (this.progress) {
                         const learningObject: LearningObject | undefined = objects.find(

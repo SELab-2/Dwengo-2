@@ -6,7 +6,7 @@
 <app-create-task (taskCreated)="onTaskCreated($event)"></app-create-task>
 }
 <app-learning-path [hruid]="learningPathId" [language]="language" [assignment]="true" [progress]="progress"
-  (selectedNodeChanged)="onSelectedNodeChanged($event)">
+  [step]="step" (selectedNodeChanged)="onSelectedNodeChanged($event)" (emitGraph)="retrieveGraph($event)">
 </app-learning-path>
 @if (taskFetched){
 <app-create-submission [assignmentId]="assignmentId" [taskObject]="taskObject" [type]="taskType"

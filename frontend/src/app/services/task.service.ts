@@ -135,14 +135,19 @@ export class TaskService {
             headers
         ).pipe(
             this.errorService.pipeHandler(),
-            switchMap(res =>
-                this.http.get<Task>(
-                    `${this.API_URL}/tasks/${res.tasks[0]}`,
+            switchMap(res => {
+                const taskId = res?.tasks?.[0];
+                if (!taskId) {
+                    return of(null);
+                }
+                return this.http.get<Task>(
+                    `${this.API_URL}/tasks/${taskId}`,
                     headers
-                )
-            )
-        )
+                );
+            })
+        );
     }
+
 
     /**
      * Delete the task with this task ID.
