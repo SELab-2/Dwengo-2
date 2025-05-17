@@ -4,7 +4,7 @@
             <h2 i18n="@@studentDashboardAssignmentsOverview">Your assignments</h2>
         </div>
 
-        @if (loadingAssignments) {
+        @if (loadingProgress || loadingGroups) {
             <app-paginated-grid
                 [items]="LOADINGDATA"
                 [pageSize]="6"

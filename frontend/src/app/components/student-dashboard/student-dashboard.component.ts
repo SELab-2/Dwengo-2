@@ -19,6 +19,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-loader/card-skeleton-loader.component';
 import { Progress } from '../../interfaces/progress/progress';
 import { ProgressService } from '../../services/progress.service';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -49,7 +50,8 @@ export class StudentDashboardComponent implements OnInit {
   public pagedAssignments: Assignment[] = [];
   // Array with useless info to render skeleton loaders 
   public LOADINGDATA: {id: number}[] = Array(6).fill(0).map((v, i) => ({id: i}))
-  public loadingAssignments: boolean = true; 
+  public loadingProgress: boolean = true; 
+  public loadingGroups: boolean = true; 
   public loadingClasses: boolean = true;
 
   pageSize = 12;
@@ -94,29 +96,29 @@ export class StudentDashboardComponent implements OnInit {
         });
         this.updatePagedAssignments();
         if(userId) {
-          this.assignments.forEach(a => {
-            this.progressService.getUserAssignmentProgress(
-              userId, a.id
-            ).subscribe(
-              res => this._assignmentToProgress[a.id] = res
-            )
-          })
+          const progressObservables = this.assignments.map(a =>
+            this.progressService.getUserAssignmentProgress(userId, a.id)
+          );
+          forkJoin(progressObservables).subscribe({
+            next: (results: Progress[]) => {
+              results.forEach((progress, index) => {
+                this._assignmentToProgress[this.assignments[index].id] = progress;
+              });
+              this.loadingProgress = false;
+            }
+          });
           this.groupService.getAllGroupsFromUser(userId)
             .subscribe(response => {
               response.forEach(g => {
                 this._assignmentToGroup[g.assignment.id] = g
               })
-              this.loadingAssignments = false;
+              this.loadingGroups = false;
             });
         }
       }
     });
 
     const userId: string | null = this.authService.retrieveUserId();
-
-
-    
-    
   }
 
   public get assignments(): Assignment[] {
