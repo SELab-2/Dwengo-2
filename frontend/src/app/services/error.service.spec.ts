@@ -1,5 +1,5 @@
 import { of, throwError } from "rxjs";
-import { ErrorService } from "./error.service";
+import { ErrorMiddleware, ErrorService } from "./error.service";
 import { TestBed } from "@angular/core/testing";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -36,13 +36,13 @@ describe('ErrorService', () => {
 
     it('should call handleHttpError and return null when an HttpErrorResponse occurs', (done) => {
         spyOn(service, 'handleHttpError').and.callThrough();
-        
+
         const errorMessage = 'An error occurred';
         const httpError = new HttpErrorResponse({
             status: 500,
             statusText: 'Internal Server Error',
         });
-        
+
         const source$ = throwError(() => httpError);
 
         // Use the pipeHandler
@@ -60,4 +60,44 @@ describe('ErrorService', () => {
         });
     });
 
+    it('should register middleware', () => {
+        const middleware: ErrorMiddleware = () => {};
+        service.registerMiddleware(middleware);
+        expect((service as any).middlewares).toContain(middleware);
+    });
+
+    it('should apply middleware and stop if middleware does not call next', (done) => {
+        const middleware: ErrorMiddleware = jasmine.createSpy('middleware', (_, next) => {}).and.callThrough();
+        service.registerMiddleware(middleware);
+
+        const httpError = new HttpErrorResponse({ status: 500 });
+        const source$ = throwError(() => httpError);
+
+        spyOn(service, 'handleHttpError');
+
+        source$.pipe(service.pipeHandler()).subscribe({
+            complete: () => {
+                expect(middleware).toHaveBeenCalled();
+                expect(service.handleHttpError).not.toHaveBeenCalled();
+                done();
+            }
+        });
+    });
+
+    it('should apply middleware and call handleHttpError if next is called', (done) => {
+        const middleware: ErrorMiddleware = (_, next) => next(_);
+        service.registerMiddleware(middleware);
+
+        const httpError = new HttpErrorResponse({ status: 500 });
+        const source$ = throwError(() => httpError);
+
+        spyOn(service, 'handleHttpError').and.callThrough();
+
+        source$.pipe(service.pipeHandler('Test error')).subscribe({
+            complete: () => {
+                expect(service.handleHttpError).toHaveBeenCalledWith(httpError, 'Test error');
+                done();
+            }
+        });
+    });
 });
