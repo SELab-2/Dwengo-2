@@ -188,6 +188,7 @@ export class AssignmentComponent implements OnInit {
 
   private fetchTask(): Promise<void> {
     return new Promise((resolve, reject) => {
+      this.taskFetched = false;
       this.taskService.getSpecificTaskOfAssignment(this.assignmentId, this.step + 1).subscribe(
         (task) => {
           if (task) {
@@ -239,6 +240,7 @@ export class AssignmentComponent implements OnInit {
         }
       }
     );
+    console.log(this.submissionsForStep);
     this.submissionsForStep = submissionForStep;
     this.submissionStatsReady = true;
   }
