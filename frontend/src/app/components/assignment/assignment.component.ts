@@ -23,10 +23,15 @@ import { MultipleChoiceTask, NormalQuestionTask, Task, TaskType } from '../../in
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { AssignmentStatsComponent } from '../assignment-stats/assignment-stats.component';
+import { SubmissionService } from '../../services/submission.service';
+import { UserService } from '../../services/user.service';
+import { forkJoin, switchMap } from 'rxjs';
+import { Submission } from '../../interfaces/submissions';
 
 @Component({
   selector: 'app-assignment',
-  imports: [LearningPathComponent, MatSelectModule, MatFormFieldModule, MatOptionModule, CreateSubmissionComponent, MatProgressBar, MatCardModule, LoadingComponent, CreateTaskComponent],
+  imports: [LearningPathComponent, MatSelectModule, MatFormFieldModule, MatOptionModule, CreateSubmissionComponent, MatProgressBar, MatCardModule, LoadingComponent, CreateTaskComponent, AssignmentStatsComponent],
   templateUrl: './assignment.component.html',
   styleUrl: './assignment.component.less'
 })
@@ -63,13 +68,18 @@ export class AssignmentComponent implements OnInit {
   public taskType!: TaskType;
   public taskId!: string | null;
   public taskObject!: AssignmentTask;
-  public alreadySubmitted: boolean = true;
+  public alreadySubmitted!: boolean;
+
+  // A list for each User: every list is the list of submissions with index corresponding to assignment step
+  public fullSubmissionData: Submission[][] = [];
 
   public constructor(
     private assignmentService: AssignmentService,
     private progressService: ProgressService,
     private authService: AuthenticationService,
     private learningPathService: LearningPathService,
+    private submissionService: SubmissionService,
+    private userService: UserService,
     private taskService: TaskService,
   ) { }
 
@@ -149,8 +159,10 @@ export class AssignmentComponent implements OnInit {
     progressObservable.subscribe(
       (res) => {
         this.progress = res;
-        this.step = this.progress.step;
+        this.step = 0;
         this.furthestStep = this.progress.step; // furthest step is always returned by progress
+        this.alreadySubmitted = this.step < this.furthestStep
+        console.log(this.alreadySubmitted, this.furthestStep, "test", this.isStudent)
         this.maxStep = this.progress.maxStep;
         this.loading = false;
       }
@@ -179,6 +191,7 @@ export class AssignmentComponent implements OnInit {
           this.task = task;
           this.taskType = task.type;
           this.taskId = task.id!;
+          console.log(this.taskId)
 
           // Our internal components work with another object format
           this.taskObject = this.taskService.responseToObject(task);
@@ -186,6 +199,40 @@ export class AssignmentComponent implements OnInit {
         } else {
           this.noTask = true;
           this.task = null;
+        }
+      }
+    )
+  }
+
+  private fetchSubmissions() {
+    // Retrieve all submissions for this step
+    this.userService.assignmentUserIds(this.assignmentId).pipe(
+      switchMap(
+        response => forkJoin(response.map(
+          id => this.submissionService.getSubmissionsForUserInAssignment(id, this.assignmentId)
+        ))
+      )
+    ).subscribe(
+      result => {
+        this.fullSubmissionData = result;
+        this.submissionsForCurrentStep();
+      }
+    )
+  }
+
+  private submissionsForCurrentStep() {
+    // If we could use the API call for each step seperately, we would not need this function
+
+    // Collect a list of submissions for each user
+    let lazyStudents: string[] = [];
+    let submissionForStep: Submission[] = [];
+    this.fullSubmissionData.map(
+      userSubmissions => {
+        // If a submission exists, add it to the submission object
+        if (userSubmissions.length >= this.step) {
+          submissionForStep.push(userSubmissions[this.step]);
+        } else {
+          // If the student did not make an assignment, keep note of that
         }
       }
     )
@@ -211,11 +258,13 @@ export class AssignmentComponent implements OnInit {
             this.setupTeacher();
           }
           this.fetchTask();
+          this.fetchSubmissions();
         }
       )
     } else {
       this.openSnackBar(this.invalidURLMessage, this.closeMessage);
     }
+    console.log(this.taskFetched)
   }
 
   private openSnackBar(message: string, action: string = "Ok") {

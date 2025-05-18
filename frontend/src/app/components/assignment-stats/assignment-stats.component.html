@@ -1,0 +1,44 @@
+<div class="card-container">
+    <mat-card class="multiple-choice-card">
+        <h2 class="title" i18n>Review Submissions for Step</h2>
+
+        <mat-card-content>
+            @for(submission of submissions;track submission.id){
+            <div class="submission-list">
+                <mat-divider></mat-divider>
+
+                <div class="submission-entry">
+                    <div class="student-name">
+                        <strong>{{ submission.studentName }}</strong>
+                    </div>
+
+                    <div class="submission-answer">
+                        @if(submission.type === 'open') {
+                        <p><strong i18n>Answer:</strong> {{ submission.answer }}</p>
+                        }
+                        @if(submission.type === 'multiple-choice'){
+                        <p><strong i18n>Chosen Option:</strong> {{ submission.answer }}</p>
+                        }
+                        @if(submission.correctAnswer){
+                        <mat-icon color="primary">check_circle</mat-icon>
+                        <span><strong i18n>Correct Answer:</strong> {{ submission.correctAnswer }}</span>
+                        }
+                    </div>
+
+                    <div class="submission-actions">
+                        <button mat-icon-button color="primary" (click)="approveSubmission(submission)" i18n-matTooltip
+                            matTooltip="Approve">
+                            <mat-icon>check</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="rejectSubmission(submission)" i18n-matTooltip
+                            matTooltip="Reject">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            }
+
+        </mat-card-content>
+    </mat-card>
+</div>

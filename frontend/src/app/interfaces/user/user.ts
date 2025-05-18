@@ -14,3 +14,7 @@ export interface User {
     schoolName: string;
     passwordHash: string;
 }
+
+export interface UsersResponse {
+    students: string[];
+}

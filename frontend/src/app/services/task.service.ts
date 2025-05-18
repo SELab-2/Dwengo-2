@@ -113,8 +113,14 @@ export class TaskService {
             headers
         ).pipe(
             this.errorService.pipeHandler(),
-            switchMap(response =>
-                forkJoin(
+            switchMap(response => {
+                const ids = response?.tasks ?? [];
+
+                if (ids.length === 0) {
+                    return of([]);
+                }
+
+                return forkJoin(
                     response.tasks.map(id =>
                         this.http.get<Task>(
                             `${this.API_URL}/tasks/${id}`,
@@ -122,6 +128,8 @@ export class TaskService {
                         )
                     )
                 )
+            }
+
             )
         )
     }
@@ -206,6 +214,7 @@ export class TaskService {
             // Now we fetch all existing tasks and keep track of their step number
             switchMap(steps =>
                 this.getAllAssignmentTasks(assignmentId).pipe(
+                    catchError(() => of([])),
                     map(tasks => ({
                         steps,
                         existingSteps: tasks.map(t => t.step)

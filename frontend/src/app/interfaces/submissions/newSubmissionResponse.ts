@@ -4,3 +4,7 @@
 export interface NewSubmissionResponse {
     id: string
 }
+
+export interface GetSubmissionsResponse {
+    submissions: string[];
+}
