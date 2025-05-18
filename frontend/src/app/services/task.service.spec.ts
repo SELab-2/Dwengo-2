@@ -66,8 +66,7 @@ describe('TaskService', () => {
     });
 
     it('should retrieve a specific task from an assignment', () => {
-        //eslint-disable-next-line
-        http.get.and.callFake((url: string, _?: any) => {
+        http.get.and.callFake((url: string) => {
             if (url.endsWith('/assignments/assignment-id/tasks?step=1')) {
                 return of(getTasksResponse);
             }
@@ -75,7 +74,7 @@ describe('TaskService', () => {
                 return of(task);
             }
             // voor de zekerheid
-            //eslint-disable-next-line
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return of(null as any);
         });
 

@@ -38,6 +38,7 @@ describe("SubmissionRepositoryTypeORM", () => {
             new Date("01/04/2025"),
             new Buffer("OAPFOJIHUHZDOJDJ"),
             StatusType.NOT_ACCEPTED,
+            "submissionId"
         );
 
     });
@@ -61,12 +62,10 @@ describe("SubmissionRepositoryTypeORM", () => {
 
     test("update", async () => {
         // Call function from repository
-        submission.status = StatusType.ACCEPTED;
-        const updatedSubmission: Submission = await datasourceSubmission.update(submission);
+        await datasourceSubmission.update(submission.id!);
 
         expect(datasourceSubmission.update).toHaveBeenCalledTimes(1);
-        expect(datasourceSubmission.update).toHaveBeenCalledWith(submission);
-        expect(updatedSubmission.status).toEqual(submission.status);
+        expect(datasourceSubmission.update).toHaveBeenCalledWith(submission.id);
     });
 
     test("delete", async () => {
