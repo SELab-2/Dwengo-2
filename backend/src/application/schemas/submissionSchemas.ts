@@ -9,6 +9,10 @@ export const getSubmissionSchema = z.object({
     id: z.string(),
 });
 
+export const updateSubmissionSchema = z.object({
+    id: z.string(),
+});
+
 export const deleteSubmissionSchema = z.object({
     id: z.string(),
 });

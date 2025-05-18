@@ -75,6 +75,7 @@ export const services = {
     },
     submission: {
         get: new SubmissionServices.GetSubmission(repos.submission),
+        update: new SubmissionServices.UpdateSubmission(repos.submission),
         remove: new SubmissionServices.DeleteSubmission(repos.submission),
         create: new SubmissionServices.CreateSubmission(repos.submission),
         getUserSubmissions: new SubmissionServices.GetUserSubmissions(repos.submission),

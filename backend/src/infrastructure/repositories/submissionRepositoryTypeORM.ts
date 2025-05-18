@@ -22,8 +22,8 @@ export class SubmissionRepositoryTypeORM extends ISubmissionRepository {
         return await this.datasourceSubmission.getById(id);
     }
 
-    public async update(submission: Submission): Promise<Submission> {
-        return await this.datasourceSubmission.update(submission);
+    public async update(id: string): Promise<void> {
+        return await this.datasourceSubmission.update(id);
     }
 
     public async delete(submissionId: string): Promise<void> {

@@ -1831,6 +1831,26 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "404":
           $ref: "#/components/responses/NotFound"
+    patch:
+      tags:
+        - submissions
+      summary: Update submission
+      description: Change status type, from not_accepted to accepted and vice versa, of a submission using its unique identifier.
+      operationId: updateSubmission
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
     delete:
       tags:
         - submissions
@@ -1883,7 +1903,7 @@ paths:
           name: idParent
           required: true
           schema:
-            type: string
+            type: stringj
             format: uuid
         - $ref: "#/components/parameters/PageParam"
         - $ref: "#/components/parameters/PageSizeParam"
@@ -1894,9 +1914,9 @@ paths:
             type: string
             format: uuid
         - in: query
-          name: learningObjectId
+          name: taskId
           description: |
-            Optional param to get the user's submission for a certain step in an assignment.
+            Optional param to get the user's submission for a certain task in an assignment.
             assignmentId is required otherwise this will not work.
           schema:
             type: string
