@@ -1,8 +1,9 @@
-import { catchError, filter, mergeMap, Observable, Observer, of, OperatorFunction } from "rxjs";
+import { catchError, filter, Observer, of, OperatorFunction } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ErrorMiddleware = (error: HttpErrorResponse, next: (err: HttpErrorResponse) => any) => any;
 
 @Injectable({

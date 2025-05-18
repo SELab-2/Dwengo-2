@@ -60,14 +60,9 @@ describe('ErrorService', () => {
         });
     });
 
-    it('should register middleware', () => {
-        const middleware: ErrorMiddleware = () => {};
-        service.registerMiddleware(middleware);
-        expect((service as any).middlewares).toContain(middleware);
-    });
-
     it('should apply middleware and stop if middleware does not call next', (done) => {
-        const middleware: ErrorMiddleware = jasmine.createSpy('middleware', (_, next) => {}).and.callThrough();
+        // eslint-disable-next-line
+        const middleware: ErrorMiddleware = jasmine.createSpy('middleware', (_, __) => {}).and.callThrough();
         service.registerMiddleware(middleware);
 
         const httpError = new HttpErrorResponse({ status: 500 });

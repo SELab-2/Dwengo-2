@@ -37,6 +37,7 @@ describe('ErrorAuthHandlerService', () => {
         authServiceSpy.retrieveRefreshToken.and.returnValue('valid-token');
         authServiceSpy.refresh.and.returnValue(undefined); // Simulate successful refresh
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let registeredMiddleware: any;
         errorServiceSpy.registerMiddleware.and.callFake((middleware) => registeredMiddleware = middleware);
 
@@ -61,6 +62,7 @@ describe('ErrorAuthHandlerService', () => {
         authServiceSpy.retrieveRefreshToken.and.returnValue('valid-token');
         authServiceSpy.refresh.and.throwError('Refresh failed');
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let registeredMiddleware: any;
         errorServiceSpy.registerMiddleware.and.callFake((middleware) => registeredMiddleware = middleware);
 
@@ -82,6 +84,7 @@ describe('ErrorAuthHandlerService', () => {
     it('should call next for 401 without refresh token', (done) => {
         authServiceSpy.retrieveRefreshToken.and.returnValue(null);
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let registeredMiddleware: any;
         errorServiceSpy.registerMiddleware.and.callFake((middleware) => registeredMiddleware = middleware);
 
@@ -101,6 +104,7 @@ describe('ErrorAuthHandlerService', () => {
     });
 
     it('should call next for non-401 errors', (done) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let registeredMiddleware: any;
         errorServiceSpy.registerMiddleware.and.callFake((middleware) => registeredMiddleware = middleware);
 
