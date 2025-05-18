@@ -1,4 +1,3 @@
-import { TaskType } from "./taskType";
 
 export interface GetTasksRequest {
     assignmentId: string;
