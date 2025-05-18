@@ -20,6 +20,7 @@ import * as SubmissionSchemas from "../schemas/submissionSchemas";
 
 const extractors = {
     getSubmission: deps.createZodParamsExtractor(SubmissionSchemas.getSubmissionSchema),
+    updateSubmission: deps.createZodParamsExtractor(SubmissionSchemas.updateSubmissionSchema),
     deleteSubmission: deps.createZodParamsExtractor(SubmissionSchemas.deleteSubmissionSchema),
     createSubmission: deps.createZodParamsExtractor(SubmissionSchemas.createSubmissionSchema),
     getUserSubmissions: deps.createZodParamsExtractor(SubmissionSchemas.getUserSubmissionsSchema),
@@ -30,11 +31,12 @@ const extractors = {
 export class SubmissionController extends deps.Controller {
     constructor(
         get: SubmissionServices.GetSubmission,
+        update: SubmissionServices.UpdateSubmission,
         remove: SubmissionServices.DeleteSubmission,
         create: SubmissionServices.CreateSubmission,
         getUserSubmissions: SubmissionServices.GetUserSubmissions,
     ) {
-        super({ get, remove, create, getUserSubmissions });
+        super({ get, update, remove, create, getUserSubmissions });
     }
 }
 
@@ -54,6 +56,15 @@ export function submissionRoutes(
                 controller,
                 extractor: extractors.getSubmission,
                 handler: (req, data) => controller.getOne(req, data),
+                middleware,
+            },
+            {
+                app,
+                method: deps.HttpMethod.PATCH,
+                urlPattern: "/submissions/:id",
+                controller,
+                extractor: extractors.updateSubmission,
+                handler: (req, data) => controller.update(req, data),
                 middleware,
             },
             {

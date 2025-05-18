@@ -2,7 +2,6 @@ import { app } from "../../src/app";
 import request from "supertest";
 import { initializeUser, AuthDetails } from "./helpers";
 import { StatusType } from "../../src/core/entities/submission";
-let createdSubmissionId: string;
 
 describe('Test submission API endpoints', () => {
     let studentDetails: AuthDetails;
@@ -127,6 +126,25 @@ describe('Test submission API endpoints', () => {
         });
     });
 
+    describe('PATCH /submissions/:id', () => {
+        it('should update the submission', async () => {
+            const res = await request(app)
+                .patch(`/submissions/${createdSubmissionId}`)
+                .set('Content-Type', 'application/json')
+                .set("Authorization", "Bearer " + studentDetails.token);
+
+            expect(res.status).toBe(204);
+
+            const res2 = await request(app)
+                .get(`/submissions/${createdSubmissionId}`)
+                .set('Content-Type', 'application/json')
+                .set("Authorization", "Bearer " + studentDetails.token);
+
+            expect(res2.status).toBe(200);
+            expect(res2.body.status).toBe("not_accepted");
+        });
+    });
+
     describe('DELETE /submissions/:id', () => {
         it('should delete the submission', async () => {
             const res = await request(app)
@@ -149,6 +167,17 @@ describe('Test submission API endpoints', () => {
         it('should retrieve submissions of a user', async () => {
             const res = await request(app)
                 .get(`/users/${studentDetails.id}/submissions`)
+                .set('Content-Type', 'application/json')
+                .set("Authorization", "Bearer " + studentDetails.token);
+
+            expect(res.status).toBe(200);
+            expect(res.body).toHaveProperty('submissions');
+            expect(Array.isArray(res.body.submissions)).toBe(true);
+        });
+
+        it('should retrieve submissions of a user with query params', async () => {
+            const res = await request(app)
+                .get(`/users/${studentDetails.id}/submissions?assignmentId=` + assignmentId + `&taskId=` + taskId)
                 .set('Content-Type', 'application/json')
                 .set("Authorization", "Bearer " + studentDetails.token);
 

@@ -59,6 +59,7 @@ export const controllers = {
     ),
     submission: new Resources.SubmissionController(
         services.submission.get,
+        services.submission.update,
         services.submission.remove,
         services.submission.create,
         services.submission.getUserSubmissions,
