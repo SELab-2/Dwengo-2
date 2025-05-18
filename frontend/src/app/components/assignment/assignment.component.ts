@@ -72,6 +72,8 @@ export class AssignmentComponent implements OnInit {
 
   // A list for each User: every list is the list of submissions with index corresponding to assignment step
   public fullSubmissionData: Submission[][] = [];
+  public submissionsForStep: Submission[] = [];
+  public submissionStatsReady: boolean = false;
 
   public constructor(
     private assignmentService: AssignmentService,
@@ -93,13 +95,15 @@ export class AssignmentComponent implements OnInit {
     return (this.step / this.maxStep) * 100;
   }
 
-  onSelectedNodeChanged(node: Node<LearningObject>) {
+  async onSelectedNodeChanged(node: Node<LearningObject>) {
+    console.log("called")
+    this.submissionStatsReady = false;
     this.currentLearningObjectId = node.value.metadata.hruid!;
     this.step = node.value.metadata.step!;
     this.alreadySubmitted = this.step < this.furthestStep;
     console.log(this.step, this.furthestStep)
-    this.taskFetched = false;
-    this.fetchTask();
+    await this.fetchTask();
+    this.submissionsForCurrentStep();
   }
 
   retrieveGraph(graph: DirectedGraph<LearningObject>) {
@@ -182,26 +186,26 @@ export class AssignmentComponent implements OnInit {
   }
 
 
-  private fetchTask() {
-    // See if there are any tasks already created. Use step + 1: backend uses position, we use index
-    this.taskService.getSpecificTaskOfAssignment(this.assignmentId, this.step + 1).subscribe(
-      (task) => {
-        if (task) {
-          this.noTask = false;
-          this.task = task;
-          this.taskType = task.type;
-          this.taskId = task.id!;
-          console.log(this.taskId)
-
-          // Our internal components work with another object format
-          this.taskObject = this.taskService.responseToObject(task);
-          this.taskFetched = true;
-        } else {
-          this.noTask = true;
-          this.task = null;
-        }
-      }
-    )
+  private fetchTask(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.taskService.getSpecificTaskOfAssignment(this.assignmentId, this.step + 1).subscribe(
+        (task) => {
+          if (task) {
+            this.noTask = false;
+            this.task = task;
+            this.taskType = task.type;
+            this.taskId = task.id!;
+            this.taskObject = this.taskService.responseToObject(task);
+            this.taskFetched = true;
+          } else {
+            this.noTask = true;
+            this.task = null;
+          }
+          resolve();
+        },
+        (error) => reject(error)
+      );
+    });
   }
 
   private fetchSubmissions() {
@@ -224,7 +228,6 @@ export class AssignmentComponent implements OnInit {
     // If we could use the API call for each step seperately, we would not need this function
 
     // Collect a list of submissions for each user
-    let lazyStudents: string[] = [];
     let submissionForStep: Submission[] = [];
     this.fullSubmissionData.map(
       userSubmissions => {
@@ -232,10 +235,12 @@ export class AssignmentComponent implements OnInit {
         if (userSubmissions.length >= this.step) {
           submissionForStep.push(userSubmissions[this.step]);
         } else {
-          // If the student did not make an assignment, keep note of that
+          // TODO: If the student did not make an assignment, keep note of that
         }
       }
-    )
+    );
+    this.submissionsForStep = submissionForStep;
+    this.submissionStatsReady = true;
   }
 
   public ngOnInit(): void {
@@ -249,7 +254,7 @@ export class AssignmentComponent implements OnInit {
     if (this.assignmentId) {
       const assignmentObservable = this.assignmentService.retrieveAssignmentById(this.assignmentId);
       assignmentObservable.subscribe(
-        (res) => {
+        async (res) => {
           this._assignment = res;
           this.learningPathId = res.learningPathId;
           if (this._assignment && this.isStudent) {
@@ -257,14 +262,13 @@ export class AssignmentComponent implements OnInit {
           } else if (!this.isStudent) {
             this.setupTeacher();
           }
-          this.fetchTask();
+          await this.fetchTask();
           this.fetchSubmissions();
         }
       )
     } else {
       this.openSnackBar(this.invalidURLMessage, this.closeMessage);
     }
-    console.log(this.taskFetched)
   }
 
   private openSnackBar(message: string, action: string = "Ok") {

@@ -16,8 +16,8 @@
   }
   }@else if(isStudent) {
   <h2 i18n>Already Submitted</h2>
-  } @else if(!isStudent && !initializeTasks) {
-  <app-assignment-stats class="stats"></app-assignment-stats>
+  } @else if(!isStudent && !initializeTasks && submissionStatsReady) {
+  <app-assignment-stats class="stats" [submissions]="submissionsForStep" [task]="task!"></app-assignment-stats>
   }
 
   <div class="progress-container">

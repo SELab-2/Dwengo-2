@@ -1,28 +1,34 @@
 <div class="card-container">
     <mat-card class="multiple-choice-card">
+        @if(type !== 'empty'){
         <h2 class="title" i18n>Review Submissions for Step</h2>
 
         <mat-card-content>
-            @for(submission of submissions;track submission.id){
+            @for(submission of fullSubmission;track submission.id){
             <div class="submission-list">
                 <mat-divider></mat-divider>
 
                 <div class="submission-entry">
                     <div class="student-name">
-                        <strong>{{ submission.studentName }}</strong>
+                        <strong>{{ submission.name }}</strong>
                     </div>
 
                     <div class="submission-answer">
-                        @if(submission.type === 'open') {
-                        <p><strong i18n>Answer:</strong> {{ submission.answer }}</p>
-                        }
-                        @if(submission.type === 'multiple-choice'){
-                        <p><strong i18n>Chosen Option:</strong> {{ submission.answer }}</p>
-                        }
-                        @if(submission.correctAnswer){
+                        @if(type === 'norm') {
+                        <p><strong i18n>Answer:</strong> {{ submission.contents }}</p>
+                        @if(answer !== ""){
                         <mat-icon color="primary">check_circle</mat-icon>
-                        <span><strong i18n>Correct Answer:</strong> {{ submission.correctAnswer }}</span>
+                        <span><strong i18n>Correct Answer:</strong> {{ answer }}</span>
                         }
+                        }
+                        @if(type === 'mult'){
+                        <p><strong i18n>Chosen Option:</strong> {{ submission.contents }}</p>
+                        @if(correctAnswers !== []){
+                        <mat-icon color="primary">check_circle</mat-icon>
+                        <span><strong i18n>Correct Answer:</strong> {{ correctAnswers[0] }}</span>
+                        }
+                        }
+
                     </div>
 
                     <div class="submission-actions">
@@ -37,8 +43,13 @@
                     </div>
                 </div>
             </div>
+            } @empty {
+            <p i18n>No submissions for this task yet</p>
             }
 
         </mat-card-content>
+        } @else {
+        <h2 i18n>There's no task here!</h2>
+        }
     </mat-card>
 </div>
