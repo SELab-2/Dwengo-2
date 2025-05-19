@@ -113,8 +113,8 @@ export class QuestionThreadService {
   * Load and filter question threads for the authenticated user or current learning object
   */
   loadSideBarQuestionThreads(
-    currentLearningObjectId: string,
-    showPublicChats: boolean
+    currentAssignmentId: string,
+    showOtherChats: boolean
   ): Observable<QuestionThread[]> {
     return this.assignmentService.retrieveAssignments().pipe(
       switchMap(assignments => {
@@ -140,7 +140,7 @@ export class QuestionThreadService {
       map(threadArrays => threadArrays.flat()),
       map(allThreads => {
         const userId = this.authService.retrieveUserId() || '';
-        return this.filterThreads(allThreads, userId, currentLearningObjectId, showPublicChats);
+        return this.filterThreads(allThreads, userId, currentAssignmentId, showOtherChats);
       }),
       this.errorService.pipeHandler(
         this.errorService.retrieveError($localize`loading user threads`)
@@ -154,8 +154,8 @@ export class QuestionThreadService {
   filterThreads(
     allThreads: QuestionThread[],
     userId: string,
-    currentLearningObjectId: string,
-    showPublicChats: boolean
+    currentAssignmentId: string,
+    showOtherChats: boolean
   ): QuestionThread[] {
     const sortByLatestMessage = (a: QuestionThread, b: QuestionThread) => {
       const dateA = new Date(a.lastMessageDate || 0).getTime();
@@ -163,13 +163,21 @@ export class QuestionThreadService {
       return dateB - dateA; // descending order
     };
 
-    if (showPublicChats) {
-      return allThreads
-        .filter(t =>
-          t.learningObjectId === currentLearningObjectId &&
-          (t.visibility === VisibilityType.GROUP || t.visibility === VisibilityType.PUBLIC)
-        )
-        .sort(sortByLatestMessage);
+    if (showOtherChats) {
+      if (this.authService.retrieveUserType() === 'student') {
+        return allThreads
+          .filter(t =>
+            // t.learningObjectId === currentLearningObjectId &&
+            (t.visibility === VisibilityType.GROUP)
+          )
+          .sort(sortByLatestMessage);
+      } else {
+        return allThreads
+          .filter(t =>
+            t.assignmentId === currentAssignmentId
+          )
+          .sort(sortByLatestMessage);
+      }
     } else {
       if (this.authService.retrieveUserType() === 'student') {
         return allThreads

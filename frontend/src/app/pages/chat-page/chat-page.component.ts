@@ -33,14 +33,15 @@ export class ChatPageComponent implements OnInit {
     public validChatId: boolean = false;
     public questionThreads: QuestionThread[] = [];
     public showOtherChats = false;
-    public currentLearningObjectId: string | null = null;
+    // public currentLearningObjectId: string | null = null;
+    public currentAssignmentId: string | null = null;
     public VisibilityType = VisibilityType; // For template binding
     public userType: string = this.authService.retrieveUserType() === UserType.STUDENT? 'student' : 'teacher';
     
     readonly USER_CHATS = $localize`:@@userChats:Show my chats`;
-    readonly OTHER_CHATS = $localize`:@@otherChats:Show chats for current assignment`;
+    readonly ASSIGNMENT_CHATS = $localize`:@@otherChats:Show chats for current assignment`;
     readonly GROUP_CHATS = $localize`:@@otherChats:Show group chats`;
-    readonly UNNAMED_CHAT = $localize`:@@unnamedChatFallback:Unnamed Chat`;
+    readonly OTHER_CHATS: string = this.userType === 'teacher' ? this.ASSIGNMENT_CHATS : this.GROUP_CHATS;
     readonly INVALID_CHAT_ID = $localize`:@@invalidChatId:Select a chat`;
 
     constructor(
@@ -55,7 +56,8 @@ export class ChatPageComponent implements OnInit {
         // Watch for route changes to get current thread's learning object ID
         this.route.paramMap.subscribe(params => {
             this.chatId = params.get('id') || '';
-            this.updateCurrentLearningObjectId();
+            // this.updateCurrentLearningObjectId();
+            this.updateCurrentAssignmentId();
         });
 
         this.threadService.threadUpdate$.subscribe(threadUpdate => {
@@ -74,21 +76,21 @@ export class ChatPageComponent implements OnInit {
     private loadChats(): void {
         const userId = this.authService.retrieveUserId();
         this.threadService.loadSideBarQuestionThreads(
-          this.currentLearningObjectId || '',
+          this.currentAssignmentId || '',
           this.showOtherChats
         ).subscribe({
           next: threads => {
             this.questionThreads = threads;
-            this.updateCurrentLearningObjectId();
+            this.updateCurrentAssignmentId();
             // console.log('Loaded question threads:', this.questionThreads);
           },
         });
     }
 
-    private updateCurrentLearningObjectId(): void {
+    private updateCurrentAssignmentId(): void {
         if (this.chatId) {
             const currentThread = this.questionThreads.find(t => t.id === this.chatId);
-            this.currentLearningObjectId = currentThread?.learningObjectId || null;
+            this.currentAssignmentId = currentThread?.assignmentId || null;
         }
         this.validChatId = this.questionThreads.some(t => t.id === this.chatId);
     }
