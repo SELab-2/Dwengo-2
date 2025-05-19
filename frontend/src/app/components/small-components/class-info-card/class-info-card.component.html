@@ -21,13 +21,13 @@
     </mat-card-content>
 
     @if (loadingData) {
-        <app-loading [size]="75"></app-loading>
+    <app-loading [size]="75"></app-loading>
     } @else {
-        <mat-card-actions class="progress-container">
-            <mat-progress-spinner mode="determinate" [value]="completionPercentage" diameter="100"
-                [ngClass]="getProgressColor()">
-            </mat-progress-spinner>
-            <span class="progress-text">{{ completionPercentage }}%</span>
-        </mat-card-actions>
+    <mat-card-actions class="progress-container">
+        <mat-progress-spinner mode="determinate" [value]="completionPercentage" diameter="100"
+            [ngClass]="getProgressColor()">
+        </mat-progress-spinner>
+        <span class="progress-text">{{ completionPercentage }}%</span>
+    </mat-card-actions>
     }
 </mat-card>
