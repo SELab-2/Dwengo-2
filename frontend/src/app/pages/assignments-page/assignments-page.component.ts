@@ -11,7 +11,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { AssignmentCardComponent } from '../../components/small-components/assignment-card/assignment-card.component';
 
 type AssignmentDateFilter = (assignment: Assignment) => boolean;
 
@@ -23,6 +25,7 @@ type AssignmentDateFilter = (assignment: Assignment) => boolean;
   ],
   imports: [
     AuthenticatedHeaderComponent,
+    AssignmentCardComponent,
     MatListModule,
     MatIconModule,
     MatButtonModule,
@@ -30,7 +33,8 @@ type AssignmentDateFilter = (assignment: Assignment) => boolean;
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    RouterLink
+    RouterLink,
+    MatCardModule
   ],
   templateUrl: './assignments-page.component.html',
   styleUrl: './assignments-page.component.less'
@@ -40,6 +44,7 @@ export class AssignmentsPageComponent implements OnInit {
   constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly assignmentsService: AssignmentService,
+    private readonly router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -89,5 +94,10 @@ export class AssignmentsPageComponent implements OnInit {
    */
 
   showCreate: boolean = false;
+
+  onAssignmentClick(id: string): void {
+    const role = this.isTeacher ? "teacher" : "student";
+    this.router.navigateByUrl(`${role}/assignments/${id}`);
+  }
 
 }

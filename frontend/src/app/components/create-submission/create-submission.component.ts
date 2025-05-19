@@ -10,16 +10,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SubmissionService } from '../../services/submission.service';
 import { NewSubmission } from '../../interfaces/submissions/newSubmission';
 import { AuthenticationService } from '../../services/authentication.service';
-import { Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { UserType } from '../../interfaces';
 import { AssignmentTask, MultipleChoice, NormalQuestion } from '../../interfaces/assignment/tasks';
 import { MultipleChoiceSubmissionComponent } from './multiple-choice-submission/multiple-choice-submission.component';
-import { TaskType } from '../create-task/create-task-component/create-task.component';
 import { NormalTaskSubmissionComponent } from './normal-task-submission/normal-task-submission.component';
+import { TaskType } from '../../interfaces/tasks';
+import { EmptySubmissionComponent } from './empty-submission/empty-submission.component';
 @Component({
   selector: 'app-create-submission',
   imports: [MatButtonModule, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule],
@@ -35,13 +34,13 @@ export class CreateSubmissionComponent implements OnInit {
   @Input() learningObjectId!: string;
   @Input() taskObject!: AssignmentTask;
   @Input() type!: TaskType;
+  @Input() taskId!: string;
 
-  // Content of the input field
-  public answer: string = '';
 
 
   // Emit an event when the submission is created
   @Output() submissionCreated: EventEmitter<void> = new EventEmitter<void>();
+
   private readonly snackBar = inject(MatSnackBar);
   private readonly errorMessage = $localize`An error occured, please try again.`;
   private readonly createSuccesMessage = $localize`Submission created succesfully!`;
@@ -49,58 +48,57 @@ export class CreateSubmissionComponent implements OnInit {
   constructor(private submissionService: SubmissionService, private authService: AuthenticationService) { }
 
   public ngOnInit(): void {
-    if (this.type === TaskType.MultipleChoice) {
+    if (this.type === TaskType.MULTIPLECHOICE) {
       this.loadMultipleChoice(this.taskObject as MultipleChoice);
     }
-    if (this.type === TaskType.NormalQuestion) {
+    else if (this.type === TaskType.NORMALQUESTION) {
       this.loadNormalTask(this.taskObject as NormalQuestion);
+    } else if (this.type === TaskType.Other) {
+      this.loadEmpty();
     }
   }
 
-  /**
-     * Create a submission
-     * Make a request to the API to create a submission
-     * Notify the user of the result
-     */
-  public create() {
-    if (this.authService.retrieveUserType() === UserType.TEACHER) {
-      this.submissionCreated.emit();
-    } else {
-      // Create a new submission
-      const newSubmission: NewSubmission = {
-        studentId: this.authService.retrieveUserId()!,
-        assignmentId: this.assignmentId,
-        learningObjectId: this.learningObjectId,
-        contents: this.answer,
-        time: new Date()
-      }
-      if (newSubmission) {
-        const idObservable: Observable<string> = this.submissionService.createSubmission(
-          newSubmission
-        );
-
-        idObservable.pipe().subscribe(() => {
-          this.openSnackBar(this.createSuccesMessage);
-          // Emit the event that submission was created
-          this.submissionCreated.emit();
-          // Clear form field
-          this.answer = "";
-        });
-      } else {
-        this.openSnackBar(this.errorMessage);
-      }
+  public emptySubmission() {
+    // Implement logic to submit the answer based on the type of question
+    const submission: NewSubmission = {
+      studentId: this.authService.retrieveUserId()!,
+      assignmentId: this.assignmentId,
+      learningObjectId: this.learningObjectId,
+      time: new Date(),
+      taskId: this.taskId,
+      // Empty contents
+      contents: ""
     }
+
+    this.submissionService.createSubmission(submission).subscribe(
+      value => value ? this.submissionCreated.emit() : this.openSnackBar(this.errorMessage)
+    )
   }
 
   public onSubmissionCreated(obj: AssignmentTask): void {
     // Implement logic to submit the answer based on the type of question
-    console.log(obj);
+    const submission: NewSubmission = {
+      studentId: this.authService.retrieveUserId()!,
+      assignmentId: this.assignmentId,
+      learningObjectId: this.learningObjectId,
+      time: new Date(),
+      taskId: this.taskId,
+
+      // Set the answers
+      contents: obj.type === TaskType.NORMALQUESTION ?
+        (obj as NormalQuestion).answer! :
+        (obj as MultipleChoice).selected.toString()
+    }
+
+    this.submissionService.createSubmission(submission).subscribe(
+      value => value ? this.submissionCreated.emit() : this.openSnackBar(this.errorMessage)
+    )
   }
 
   loadMultipleChoice(choiceObject: MultipleChoice) {
     this.container.clear();
 
-    if (this.type === TaskType.MultipleChoice) {
+    if (this.type === TaskType.MULTIPLECHOICE) {
       const componentRef: ComponentRef<MultipleChoiceSubmissionComponent> =
         this.container.createComponent(MultipleChoiceSubmissionComponent);
 
@@ -114,7 +112,7 @@ export class CreateSubmissionComponent implements OnInit {
   loadNormalTask(testObject: NormalQuestion) {
     this.container.clear();
 
-    if (this.type === TaskType.NormalQuestion) {
+    if (this.type === TaskType.NORMALQUESTION) {
       const componentRef: ComponentRef<NormalTaskSubmissionComponent> =
         this.container.createComponent(NormalTaskSubmissionComponent);
 
@@ -124,6 +122,15 @@ export class CreateSubmissionComponent implements OnInit {
       });
     }
   }
+
+  loadEmpty() {
+    this.container.clear();
+    const componentRef: ComponentRef<EmptySubmissionComponent> = this.container.createComponent(EmptySubmissionComponent);
+    componentRef.instance.submissionCreated.subscribe(() => {
+      this.emptySubmission();
+    });
+  }
+
   private openSnackBar(message: string, action: string = "Ok") {
     this.snackBar.open(message, action, {
       duration: 2500

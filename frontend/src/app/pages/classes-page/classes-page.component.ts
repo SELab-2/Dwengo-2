@@ -61,7 +61,7 @@ export class ClassesPageComponent implements OnInit {
     private authService: AuthenticationService,
     private classesService: ClassesService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   /**
    * We fetch the classes here since Angular getters shouldn't be async.

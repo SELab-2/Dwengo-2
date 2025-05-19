@@ -1,4 +1,4 @@
-import { TaskType } from "../../components/create-task/create-task-component/create-task.component";
+import { TaskType } from "../tasks";
 
 export interface MultipleChoice extends AssignmentTask {
     options: string[];
@@ -12,8 +12,10 @@ export interface NormalQuestion extends AssignmentTask {
     answer: string | null; // When an answer to the question is given, it is displayed here
 }
 
+
 export interface AssignmentTask {
     question: string;
+    type: TaskType;
 }
 
 export interface MultipleChoiceRequest extends AssignmentTask {

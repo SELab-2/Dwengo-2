@@ -5,15 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AssignmentTask } from '../../../interfaces/assignment/tasks';
 import { CreateMultipleChoiceComponent } from '../create-multiple-choice/create-multiple-choice.component';
 import { CreateNormalTaskComponent } from '../create-normal-task/create-normal-task.component';
-
-
-export enum TaskType {
-  MultipleChoice = "multiple-choice",
-  NormalQuestion = "normal-question",
-};
+import { TaskType } from '../../../interfaces/tasks';
+import { AssignmentTask } from '../../../interfaces/assignment/tasks';
 
 @Component({
   selector: 'app-create-task',
@@ -40,7 +35,7 @@ export class CreateTaskComponent {
   }
 
   public select(type: string) {
-    this.selected = TaskType.MultipleChoice === type ? TaskType.MultipleChoice : TaskType.NormalQuestion;
+    this.selected = TaskType.MULTIPLECHOICE === type ? TaskType.MULTIPLECHOICE : TaskType.NORMALQUESTION;
   }
   public onTaskCreated(task: AssignmentTask): void {
     // This component should just pass through the object

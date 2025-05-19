@@ -1,4 +1,3 @@
-
 export interface GetTasksRequest {
     assignmentId: string;
     step?: number; // The number of the object in the list, should be in query
