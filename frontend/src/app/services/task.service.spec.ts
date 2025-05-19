@@ -35,16 +35,18 @@ describe('TaskService', () => {
         http = jasmine.createSpyObj('HttpClient', ['get', 'post', 'patch', 'delete']);
         errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler']);
         errorService.pipeHandler.and.callFake(() => (source) => source);
+
         authService = jasmine.createSpyObj('AuthenticationService', ['retrieveAuthenticationHeaders']);
         authService.retrieveAuthenticationHeaders.and.returnValue({
             headers: new HttpHeaders().append('Authorization', 'Bearer token').append('Content-Type', 'application/json'),
         });
-        learningPathService = jasmine.createSpyObj('LearningPathService', []);
-        assignmentService = jasmine.createSpyObj('AssignmentService', []);
 
+        learningPathService = jasmine.createSpyObj('LearningPathService', ['retrieveOneLearningPath']);
+        assignmentService = jasmine.createSpyObj('AssignmentService', ['retrieveAssignmentById']);
 
         service = new TaskService(http, authService, errorService, learningPathService, assignmentService);
     });
+
 
     it('should be created', () => {
         expect(service).toBeTruthy();

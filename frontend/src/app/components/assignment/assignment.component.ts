@@ -112,7 +112,9 @@ export class AssignmentComponent implements OnInit {
   onSubmissionCreated(): void {
     this.openSnackBar($localize`Submission created!`)
     this.furthestStep = this.step + 1;
-    this.learningPathComponent.goToNextNode();  // Execute goToNextNode in LearningPathComponent, this will call our onSelectedNodeChanged
+    if (this.learningPathComponent) {
+      this.learningPathComponent.goToNextNode();
+    }  // Execute goToNextNode in LearningPathComponent, this will call our onSelectedNodeChanged
   }
 
   reloadStats() {
