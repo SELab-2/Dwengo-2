@@ -39,17 +39,19 @@
     }
 
     @if (visualize === "CUSTOM") {
-    @if (loading) {
-    <app-card-skeleton-loader title="Your results"></app-card-skeleton-loader>
-    } @else {
-    <app-learning-path-list [learningPaths]="data" [isTeacher]="isTeacher" i18n-title title="Your Results"
-        (showPopup)="showPopup($event)"></app-learning-path-list>
-    }
+        @if (loading) {
+            <app-card-skeleton-loader title="Your results"></app-card-skeleton-loader>
+        } @else {
+        <app-learning-path-list [learningPaths]="data" [isTeacher]="isTeacher" i18n-title title="Your Results"
+            (showPopup)="showPopup($event)"></app-learning-path-list>
+        }
     }
     @if (detail && detailPath) {
-    <div class="popup">
-        <app-learning-path [hruid]="detailPath.hruid" [language]="detailPath.language" [popup]="true"
-            (back)="hidePopup()"></app-learning-path>
-    </div>
+        <div class="popup">
+            <button class="back" color="primary" mat-mini-fab i18n (click)="hidePopup()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <app-learning-path [hruid]="detailPath.hruid" [language]="detailPath.language"></app-learning-path>
+        </div>
     }
 </div>
