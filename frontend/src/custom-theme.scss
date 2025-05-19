@@ -4,13 +4,12 @@
 @use '_theme-colors.scss' as colors;
 
 html {
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: colors.$primary-palette,
-      tertiary: colors.$tertiary-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme((color: (theme-type: light,
+        primary: colors.$primary-palette,
+        tertiary: colors.$tertiary-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    ));
+
 }
