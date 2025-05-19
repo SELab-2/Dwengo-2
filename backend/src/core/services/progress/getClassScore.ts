@@ -47,7 +47,7 @@ export class GetClassScore implements Service<GetClassScoreInput> {
             ).length
         }
 
-        // No submissions => return null to avoid NaN
+        // No submissions/assignments => return null to avoid NaN
         if (total === 0) {
             return {score: null}
         }
