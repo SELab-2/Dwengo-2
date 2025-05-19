@@ -1,23 +1,13 @@
 <app-authenticated-header></app-authenticated-header>
 <div class="classes">
-    <div class="tool-container">
-        @if (isTeacher && !showCreate) {
-            <button mat-fab extended (click)="createClass()">
-                <mat-icon>add</mat-icon>
-                <p i18n="@@createClassToggle">Create</p>
-            </button>
-        }
+    @if (!showCreate) {
+        <div class="center-container">
+            <h2 i18n="@@classesOverview">Your classes</h2>
+        </div>
 
-        @if (showCreate) {
-            <button mat-fab extended (click)="cancelCreate()">
-                <mat-icon>close</mat-icon>
-                <p i18n="@@cancelCreateClass">Cancel</p>
-            </button>
-        }
-
-        @if (!showCreate) {
+        <div class="tool-container">
             <mat-form-field>
-                <mat-label i18n="@@className">Name</mat-label>
+                <mat-label i18n="@@className">Filter by name</mat-label>
                 <input
                     matInput
                     #nameFilter
@@ -27,28 +17,10 @@
                     id="nameFilterInput" />
                     <mat-icon matSuffix>search</mat-icon>
             </mat-form-field>
-        }
-    </div>
-    
-    @if (showCreate) {
-        <div class="center-container">
-            <span>
-                <h2 i18n="@@createClassAction">Create a class</h2>    
-                <app-create-class></app-create-class>
-            </span>            
-        </div>
-    }
 
-    @if (!showCreate) {
-        <div class="center-container">
-            <h2 i18n="@@classesOverview">Your classes</h2>
-        </div>
-
-        <div class="center-container">
             <button (click)="openRequestModal()" color="primary" mat-raised-button i18n="@@joinClass">
                 Join a new class
             </button>
-            
         </div>
 
         <div class="center-container">
@@ -62,5 +34,20 @@
                 }
             </mat-list>
         </div>
+    }
+
+    @if (isTeacher && !showCreate) {
+        <button mat-fab extended (click)="createClass()">
+            <mat-icon>add</mat-icon>
+            <p i18n="@@createClassToggle">Create</p>
+        </button>
+    }
+    
+    @if (showCreate) {   
+        <app-create-class></app-create-class>
+        <button mat-fab extended (click)="cancelCreate()">
+            <mat-icon>close</mat-icon>
+            <p i18n="@@cancelCreateClass">Cancel</p>
+        </button>
     }
 </div>
