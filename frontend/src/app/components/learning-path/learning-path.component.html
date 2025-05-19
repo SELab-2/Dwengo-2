@@ -1,12 +1,6 @@
 <!-- learning-path-viewer.component.html -->
 <div class="card-container">
   <mat-card class="learning-path-card">
-    @if(popup) {
-    <button class="back" color="primary" mat-mini-fab i18n (click)="back.emit()">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    }
-
     @if (path) {
     <mat-card-header>
       <mat-card-title i18n="@@learningPathComponentTitle">Learning Path: {{path.title}}</mat-card-title>
@@ -28,7 +22,7 @@
 
       @if (selectedNode) {
       <div class="iframe-wrapper">
-        <iframe class="learning-object-frame" [srcdoc]="selectedNode!.value.htmlContent" frameborder="0" width="100%"
+        <iframe class="learning-object-frame" [srcdoc]="getCleanHTML()" frameborder="0" width="100%"
           height="600px"></iframe>
       </div>
       }

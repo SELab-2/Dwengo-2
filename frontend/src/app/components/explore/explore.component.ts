@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { UserType } from '../../interfaces';
 import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-loader/card-skeleton-loader.component';
 import { LearningPathComponent } from '../learning-path/learning-path.component';
+import { MatIcon } from '@angular/material/icon';
 
 interface CategorizedLearningPath extends LearningPath {
     category: string;
@@ -48,7 +49,8 @@ const CATEGORY_CONFIGS: { key: string; title: string }[] = [
         
         // Angular material
         MatCardModule, 
-        MatButtonModule
+        MatButtonModule,
+        MatIcon
     ],
     templateUrl: './explore.component.html',
     styleUrl: './explore.component.less'
