@@ -35,14 +35,10 @@ export class LearningPathComponent implements OnInit {
     @Input() hruid!: string;
     @Input() assignment: boolean = false;
     @Input() progress?: Progress;
-    @Input() popup?: boolean = false; // extra back button if component is used as popup
     @Input() step: number = 0;
 
     // Emit an event including the new node we navigated to, used when in an assignment 
     @Output() selectedNodeChanged = new EventEmitter<Node<LearningObject>>();
-
-    // Specific for explore page, let know when popup needs to go back
-    @Output() back = new EventEmitter<void>();
 
     // Emit the graph when we built is, this way assignment can use it without rebuilding
     @Output() emitGraph = new EventEmitter<DirectedGraph<LearningObject>>();
@@ -120,6 +116,30 @@ export class LearningPathComponent implements OnInit {
                 this.loading = false;
             }
         });
+    }
+
+    // Helper function to remove the dwengo header
+    getCleanHTML(): string {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(this.selectedNode!.value.htmlContent, 'text/html');
+
+        // Remvoe all <nav> elements
+        doc.querySelectorAll('nav').forEach(nav => nav.remove());
+
+        const cleanedHtml = doc.body.innerHTML;
+        return `
+            <html>
+              <head>
+                <style>
+                  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+                  body { font-family: 'Roboto', sans-serif; }
+                </style>
+              </head>
+              <body>
+                ${cleanedHtml}
+              </body>
+            </html>
+        `;
     }
 
     // Navigate to the next node

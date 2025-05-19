@@ -48,8 +48,10 @@
     }
     @if (detail && detailPath) {
     <div class="popup">
-        <app-learning-path [hruid]="detailPath.hruid" [language]="detailPath.language" [popup]="true"
-            (back)="hidePopup()"></app-learning-path>
+        <button class="back" color="primary" mat-mini-fab i18n (click)="hidePopup()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <app-learning-path [hruid]="detailPath.hruid" [language]="detailPath.language" [popup]="true"></app-learning-path>
     </div>
     }
 </div>
