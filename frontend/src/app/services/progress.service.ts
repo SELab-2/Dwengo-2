@@ -3,10 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment";
 import { AuthenticationService } from "./authentication.service";
 import { ErrorService } from "./error.service";
-import { Progress } from "../interfaces/progress/progress";
+import { Progress, ClassActivity, ClassCompletion, ClassScore } from "../interfaces/progress/";
 import { Observable } from "rxjs";
-import { ClassActivity } from "../interfaces/progress/activity";
-import { ClassCompletion } from "../interfaces/progress/completion";
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +16,7 @@ export class ProgressService {
         private http: HttpClient,
         private authService: AuthenticationService,
         private errorService: ErrorService,
-    ) {}
+    ) { }
 
     getUserAssignmentProgress(userId: string, assignmentId: string) {
         const headers = this.authService.retrieveAuthenticationHeaders();
@@ -47,6 +45,16 @@ export class ProgressService {
         const url: string = `${this.API_URL}/classes/${classId}/completion`;
         return this.http.get<ClassCompletion>(
             url,
+            headers
+        ).pipe(
+            this.errorService.pipeHandler(),
+        )
+    }
+
+    getClassScore(classId: string): Observable<ClassScore> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+        return this.http.get<ClassScore>(
+            `${this.API_URL}/classes/${classId}/score`,
             headers
         ).pipe(
             this.errorService.pipeHandler(),
