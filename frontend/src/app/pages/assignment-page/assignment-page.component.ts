@@ -4,19 +4,13 @@ import { AssignmentComponent } from '../../components/assignment/assignment.comp
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserType } from '../../interfaces';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-assignment-page',
   imports: [
     AuthenticatedHeaderComponent,
     AssignmentComponent,
-    LearningPathComponent, 
-    CreateSubmissionComponent, 
-    LoadingComponent, 
-    CreateTaskComponent,
-
-    // Angular material
-    MatProgressBar, 
     MatCardModule
   ],
   templateUrl: './assignment-page.component.html',
