@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Overlay } from '@angular/cdk/overlay';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { QuestionThreadService } from '../../services/questionThread.service';
 import { ChatComponent } from '../../components/chat/chat.component';
 import { TemplateRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat-popup',
@@ -20,21 +21,35 @@ import { TemplateRef } from '@angular/core';
   templateUrl: './chat-popup.component.html',
   styleUrls: ['./chat-popup.component.less']
 })
-export class ChatPopupComponent {
+export class ChatPopupComponent implements OnDestroy {
   @Input() assignmentId!: string;
   @Input() currentLearningObjectId!: string;
   @Output() chatToggled = new EventEmitter<boolean>();
 
   @ViewChild('chatDialog') chatDialogTemplate!: TemplateRef<unknown>;
-
-  private readonly chatService = inject(QuestionThreadService);
-  private readonly dialog = inject(MatDialog);
-  private readonly overlay = inject(Overlay);
-  private readonly router = inject(Router);
+  private routerSubscription: Subscription;
+  private chatDialogRef?: MatDialogRef<unknown>;
 
   public currentThreadId: string = "";
   public isOpen = false;
-  private chatDialogRef?: MatDialogRef<unknown>;
+
+  constructor(
+    private chatService: QuestionThreadService,
+    private dialog: MatDialog,
+    private overlay: Overlay,
+    private router: Router
+  ) {
+    // Subscribe to router events to close chat on navigation
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart && this.isOpen) {
+        this.close();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.routerSubscription.unsubscribe();
+  }
 
   async open() {
     if (this.isOpen) {
@@ -71,7 +86,6 @@ export class ChatPopupComponent {
   }
 
   navigateToFullChat() {
-    this.close();
     this.router.navigate(['/student/chat', this.currentThreadId]);
   }
 
