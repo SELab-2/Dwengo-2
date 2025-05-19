@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { BehaviorSubject, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 import { QuestionThread, NewQuestionThread, QuestionThreadUpdate, VisibilityType } from '../interfaces/questionThread';
 import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
+import { ClassesService } from './classes.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,8 @@ export class QuestionThreadService {
     private authService: AuthenticationService,
     private errorService: ErrorService,
     private assignmentService: AssignmentService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private classService: ClassesService
   ) {}
 
   private questionThreadMessage = $localize `:@@questionThread:question thread`;
@@ -155,45 +157,81 @@ export class QuestionThreadService {
     currentLearningObjectId: string,
     showPublicChats: boolean
   ): QuestionThread[] {
+    const sortByLatestMessage = (a: QuestionThread, b: QuestionThread) => {
+      const dateA = new Date(a.lastMessageDate || 0).getTime();
+      const dateB = new Date(b.lastMessageDate || 0).getTime();
+      return dateB - dateA; // descending order
+    };
+
     if (showPublicChats) {
       return allThreads
         .filter(t =>
           t.learningObjectId === currentLearningObjectId &&
           (t.visibility === VisibilityType.GROUP || t.visibility === VisibilityType.PUBLIC)
         )
-        .sort((a, b) => {
-          if (a.visibility === VisibilityType.GROUP && b.visibility !== VisibilityType.GROUP) return -1;
-          if (b.visibility === VisibilityType.GROUP && a.visibility !== VisibilityType.GROUP) return 1;
-          return 0;
-        });
+        .sort(sortByLatestMessage);
     } else {
       if (this.authService.retrieveUserType() === 'student') {
-        return allThreads.filter(t => t.creatorId === userId);
+        return allThreads
+          .filter(t => t.creatorId === userId)
+          .sort(sortByLatestMessage);
       } else {
         return allThreads
+          .sort(sortByLatestMessage);
       }
     }
   }
 
-  private getThreadNameWithTimestamp(thread: QuestionThread, assignmentName: string): Observable<string> {
-    // If no messages, just return basic name
-    if (!thread.messageIds || thread.messageIds.length === 0) {
-      return of(`${assignmentName} - ${thread.id}`);
-    }
-
-    // Get the first message's creation date
-    return this.messageService.retrieveMessageById(thread.messageIds[0]).pipe(
-      map(message => {
-        const dateStr = message.createdAt ? 
-          new Date(message.createdAt).toLocaleDateString() : 
-          '';
-        return `${dateStr} - ${assignmentName} - ${thread.id}`;
-      }),
-      this.errorService.pipeHandler(
-        this.errorService.retrieveError(this.questionMessage)
-      )
+  getThreadTitle(thread: QuestionThread): Observable<string> {
+    return this.assignmentService.retrieveAssignmentById(thread.assignmentId).pipe(
+      switchMap(assignment => {
+        if (!assignment) {
+          return of('The spiders are back.'); // this should never happen
+        }
+        
+        // If assignment has className, use it directly
+        if (assignment.className) {
+          return of(`${assignment.className} : ${assignment.name}`);
+        }
+        
+        // Otherwise fetch class name from classesService
+        return this.classService.classWithId(assignment.classId).pipe(
+          map(classInfo => {
+            return `${classInfo?.name + ' - ' || ""} ${assignment.name}`; //prepends class name if possible
+          }),
+          this.errorService.pipeHandler(
+            this.errorService.retrieveError(this.questionMessage)
+          )
+        );
+      })
     );
   }
+
+  private getThreadNameWithTimestamp(thread: QuestionThread, assignmentName: string): Observable<string> {
+  // If no messages, just return basic name
+  if (!thread.messageIds || thread.messageIds.length === 0) {
+    return of(`${assignmentName} - ${thread.id}`);
+  }
+
+  // Retrieve all messages and find the latest one
+  return forkJoin(thread.messageIds.map(id => this.messageService.retrieveMessageById(id))).pipe(
+    map(messages => {
+      const latestMessage = messages.reduce((latest, current) => {
+        const latestDate = new Date(latest.createdAt || 0);
+        const currentDate = new Date(current.createdAt || 0);
+        return currentDate > latestDate ? current : latest;
+      });
+      thread.lastMessageDate = latestMessage.createdAt;
+      const dateStr = latestMessage.createdAt ? 
+        new Date(latestMessage.createdAt).toLocaleDateString() : 
+        '';
+      return `${dateStr} - ${assignmentName} - ${thread.id}`;
+    }),
+    this.errorService.pipeHandler(
+      this.errorService.retrieveError(this.questionMessage)
+    )
+  );
+}
 
   /**
    * Create a new question thread

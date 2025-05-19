@@ -51,6 +51,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
 
     public messages: Message[] = [];
     public newMessageContent = '';
+    public title = '';
     public currentUserId: string = '';
     public usernamesMap: { [id: string]: string } = {};
     public currentThread: QuestionThread = {} as QuestionThread;
@@ -72,7 +73,6 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
         if (!this.currentUserId) {
             console.error('ChatComponent: Could not retrieve user ID');
         }
-        console.log("ChatComponent ngOnInit - initial questionThreadId:", this.questionThreadId, "assignmentId:", this.assignmentId, "learningObjectId:", this.learningObjectId);
 
         this.prepareInitialData();
 
@@ -82,9 +82,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log("ChatComponent ngOnChanges:", changes);
         if (changes['questionThreadId'] || changes['assignmentId'] || changes['learningObjectId']) {
-            console.log("ChatComponent ngOnChanges - new questionThreadId:", this.questionThreadId, "assignmentId:", this.assignmentId, "learningObjectId:", this.learningObjectId);
             this.prepareInitialData();
             if (this.pollingSubscription) {
                 this.pollingSubscription.unsubscribe();
@@ -129,6 +127,9 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
         this.threadService.retrieveQuestionThreadById(this.questionThreadId)
             .subscribe(thread => {
                 this.currentThread = thread;
+                this.threadService.getThreadTitle(thread).subscribe(title => {
+                    this.title = title;
+                });
             });
     }
 

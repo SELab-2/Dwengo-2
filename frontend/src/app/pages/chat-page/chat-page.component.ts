@@ -11,6 +11,7 @@ import { AuthenticatedHeaderComponent } from '../../components/authenticated-hea
 import { AuthenticationService } from '../../services/authentication.service';
 import { VisibilityType } from '../../interfaces/questionThread/questionThread';
 import { UserType } from '../../interfaces';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-chat-page',
@@ -22,6 +23,7 @@ import { UserType } from '../../interfaces';
     RouterModule,
     ChatComponent,
     AuthenticatedHeaderComponent,
+    MatToolbarModule
   ],
   templateUrl: './chat-page.component.html',
   styleUrls: ['./chat-page.component.less']
@@ -30,15 +32,16 @@ export class ChatPageComponent implements OnInit {
     public chatId: string = '';
     public validChatId: boolean = false;
     public questionThreads: QuestionThread[] = [];
-    public showPublicChats = false;
+    public showOtherChats = false;
     public currentLearningObjectId: string | null = null;
     public VisibilityType = VisibilityType; // For template binding
     public userType: string = this.authService.retrieveUserType() === UserType.STUDENT? 'student' : 'teacher';
     
     readonly USER_CHATS = $localize`:@@userChats:Show my chats`;
-    readonly OTHER_CHATS = $localize`:@@otherChats:Show other chats for this step`;
+    readonly OTHER_CHATS = $localize`:@@otherChats:Show chats for current assignment`;
+    readonly GROUP_CHATS = $localize`:@@otherChats:Show group chats`;
     readonly UNNAMED_CHAT = $localize`:@@unnamedChatFallback:Unnamed Chat`;
-    readonly INVALID_CHAT_ID = $localize`:@@invalidChatId:No chat selected.`;
+    readonly INVALID_CHAT_ID = $localize`:@@invalidChatId:Select a chat`;
 
     constructor(
         private route: ActivatedRoute,
@@ -72,7 +75,7 @@ export class ChatPageComponent implements OnInit {
         const userId = this.authService.retrieveUserId();
         this.threadService.loadSideBarQuestionThreads(
           this.currentLearningObjectId || '',
-          this.showPublicChats
+          this.showOtherChats
         ).subscribe({
           next: threads => {
             this.questionThreads = threads;
@@ -91,7 +94,7 @@ export class ChatPageComponent implements OnInit {
     }
 
     toggleChatVisibility(): void {
-        this.showPublicChats = !this.showPublicChats;
+        this.showOtherChats = !this.showOtherChats;
         this.loadChats(); // Reload chats with new filter
     }
 }

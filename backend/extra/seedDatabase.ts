@@ -80,7 +80,7 @@ export async function seedDatabase(): Promise<void> {
       const teacherInput: Teacher = new Teacher(
         email,
         firstName,
-        lastName,
+        'T. '+lastName,
         passwordHash,
         schoolName,
       )
@@ -113,7 +113,7 @@ export async function seedDatabase(): Promise<void> {
       const studentInput: Student = new Student(
         email,
         firstName,
-        lastName,
+        'S. '+lastName,
         passwordHash,
         schoolName,
       )

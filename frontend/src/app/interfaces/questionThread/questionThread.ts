@@ -17,6 +17,7 @@ export interface QuestionThread {
     visibility: VisibilityType,
     messageIds?: string[],
     name?: string,
+    lastMessageDate?: Date,
 }
 
 /**
