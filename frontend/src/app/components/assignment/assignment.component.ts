@@ -28,10 +28,23 @@ import { SubmissionService } from '../../services/submission.service';
 import { UserService } from '../../services/user.service';
 import { forkJoin, of, switchMap } from 'rxjs';
 import { Submission } from '../../interfaces/submissions';
+import { ChatPopupComponent } from '../chat-popup/chat-popup.component';
 
 @Component({
   selector: 'app-assignment',
-  imports: [LearningPathComponent, MatSelectModule, MatFormFieldModule, MatOptionModule, CreateSubmissionComponent, MatProgressBar, MatCardModule, LoadingComponent, CreateTaskComponent, AssignmentStatsComponent],
+  imports: [
+    LearningPathComponent,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    CreateSubmissionComponent,
+    MatProgressBar,
+    MatCardModule,
+    LoadingComponent,
+    CreateTaskComponent,
+    AssignmentStatsComponent,
+    ChatPopupComponent,
+  ],
   templateUrl: './assignment.component.html',
   styleUrl: './assignment.component.less'
 })

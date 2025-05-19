@@ -25,6 +25,13 @@
     (patched)="reloadStats()"></app-assignment-stats>
   }
 
+  @if (isStudent){
+    <app-chat-popup 
+      [assignmentId]="assignmentId" 
+      [currentLearningObjectId]="currentLearningObjectId">
+    </app-chat-popup>
+  }
+
   <div class="progress-container">
     <mat-card class="progress-card">
       <mat-card-content>
@@ -34,7 +41,6 @@
       <mat-card-title>{{step}}/{{maxStep}}</mat-card-title>
 
     </mat-card>
-
   </div>
 
   }
