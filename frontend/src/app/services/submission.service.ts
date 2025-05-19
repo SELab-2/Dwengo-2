@@ -32,6 +32,7 @@ export class SubmissionService {
         )
     }
 
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     handleContents(content: any): string {
         if (typeof content === 'string') {
             return content;

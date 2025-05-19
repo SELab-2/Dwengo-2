@@ -39,7 +39,7 @@ export class AssignmentStatsComponent implements OnInit {
     @Input() submissions!: Submission[];
     @Input() task!: Task | null;
 
-    @Output() onPatch = new EventEmitter<void>();
+    @Output() patched = new EventEmitter<void>();
 
     private snackBar = inject(MatSnackBar);
 
@@ -121,27 +121,27 @@ export class AssignmentStatsComponent implements OnInit {
         return `${item.id}-${item.status}`;
     }
 
-    approveSubmission(submission: SubmissionWithName, idx: number) {
+    approveSubmission(submission: SubmissionWithName) {
         this.submissionService.patchSubmission({ ...submission, status: SubmissionStatus.ACCEPTED }).subscribe({
             next: () => {
                 this.openSnackBar(this.patchSucceeded);
             },
             error: () => this.openSnackBar(this.patchFailed),
             complete: () => {
-                this.onPatch.emit();
+                this.patched.emit();
             }
         });
     }
 
 
-    rejectSubmission(submission: Submission, idx: number) {
+    rejectSubmission(submission: Submission) {
         this.submissionService.patchSubmission({ ...submission, status: SubmissionStatus.NOT_ACCEPTED }).subscribe({
             next: () => {
                 this.openSnackBar(this.patchSucceeded);
             },
             error: () => this.openSnackBar(this.patchFailed),
             complete: () => {
-                this.onPatch.emit();
+                this.patched.emit();
             }
         });
     }

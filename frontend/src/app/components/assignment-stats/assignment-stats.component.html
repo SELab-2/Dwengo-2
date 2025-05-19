@@ -38,8 +38,8 @@
 
                     <div class="submission-actions">
                         @if(submission.status === 'not_accepted'){
-                        <button mat-icon-button color="primary" (click)="approveSubmission(submission, idx)"
-                            i18n-matTooltip matTooltip="Approve">
+                        <button mat-icon-button color="primary" (click)="approveSubmission(submission)" i18n-matTooltip
+                            matTooltip="Approve">
                             <mat-icon>check</mat-icon>
                         </button>
                         }
@@ -48,7 +48,7 @@
                         }
 
                         <!-- There is no way to reject a submission yet.... -->
-                        <!-- <button mat-icon-button color="warn" (click)="rejectSubmission(submission, idx)" i18n-matTooltip
+                        <!-- <button mat-icon-button color="warn" (click)="rejectSubmission(submission)" i18n-matTooltip
                             matTooltip="Reject">
                             <mat-icon>close</mat-icon>
                         </button> -->

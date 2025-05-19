@@ -84,6 +84,8 @@ describe('AssignmentPageComponent', () => {
     component.isStudent = true;
     component.ngOnInit();
 
+    fixture.detectChanges();
+
     // Verifying if the assignment was set correctly
     expect(component.assignmentId).toBe('test-assignment-id');
     expect(component.learningPathId).toBe(mockAssignment.learningPathId);

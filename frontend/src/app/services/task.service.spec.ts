@@ -4,6 +4,8 @@ import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { of } from 'rxjs';
 import { Task, CreateTaskResponse, GetTasksResponse, TaskType } from '../interfaces/tasks';
+import { LearningPathService } from './learningPath.service';
+import { AssignmentService } from './assignment.service';
 
 describe('TaskService', () => {
     const task: Task = {
@@ -25,6 +27,8 @@ describe('TaskService', () => {
     let http: jasmine.SpyObj<HttpClient>;
     let authService: jasmine.SpyObj<AuthenticationService>;
     let errorService: jasmine.SpyObj<ErrorService>;
+    let learningPathService: jasmine.SpyObj<LearningPathService>;
+    let assignmentService: jasmine.SpyObj<AssignmentService>;
     let service: TaskService;
 
     beforeEach(() => {
@@ -35,8 +39,11 @@ describe('TaskService', () => {
         authService.retrieveAuthenticationHeaders.and.returnValue({
             headers: new HttpHeaders().append('Authorization', 'Bearer token').append('Content-Type', 'application/json'),
         });
+        learningPathService = jasmine.createSpyObj('LearningPathService', []);
+        assignmentService = jasmine.createSpyObj('AssignmentService', []);
 
-        service = new TaskService(http, authService, errorService);
+
+        service = new TaskService(http, authService, errorService, learningPathService, assignmentService);
     });
 
     it('should be created', () => {

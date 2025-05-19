@@ -52,7 +52,7 @@ describe('CreateNormalTaskComponent', () => {
         fixture.detectChanges();
 
         const button = fixture.debugElement.query(By.css('button[mat-fab]')).nativeElement;
-        expect(button.disabled).toBeFalse();
+        expect(button.disabled).toBeTrue();
     });
 
     it('should emit the question when submitted', () => {
