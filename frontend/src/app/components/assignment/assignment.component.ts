@@ -94,7 +94,7 @@ export class AssignmentComponent implements OnInit {
 
 
   getProgressPercentage(): number {
-    return (this.step / this.maxStep) * 100;
+    return ((this.step + 1) / this.maxStep) * 100;
   }
 
   onSelectedNodeChanged(node: Node<LearningObject>) {
