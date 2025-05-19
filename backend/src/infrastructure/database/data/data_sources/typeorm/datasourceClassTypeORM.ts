@@ -1,10 +1,10 @@
+import { In } from "typeorm";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError, ExpiredError } from "../../../../../config/error";
 import { Class } from "../../../../../core/entities/class";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
 import { JoinCodeTypeORM } from "../../data_models/joinCodeTypeorm";
 import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
-import { In } from "typeorm";
 
 export class DatasourceClassTypeORM extends DatasourceTypeORM {
     public async createClass(newClass: Class): Promise<Class> {
@@ -155,11 +155,11 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
         }
 
         // First find out what classes the user is in
-        let classModels: ClassTypeORM[] = await datasource.getRepository(ClassTypeORM).find({
+        const classModels: ClassTypeORM[] = await datasource.getRepository(ClassTypeORM).find({
             where: {
                 members: {
                     id: id, // Filters the members table. If we would load the members, only the member with this id is present
-                            // So that is why the members are fetched afterward
+                    // So that is why the members are fetched afterward
                 },
             },
             relations: {
