@@ -130,9 +130,9 @@ export class AssignmentStatsComponent implements OnInit {
 
 
     rejectSubmission(submission: Submission) {
-        this.submissionService.patchSubmission({ ...submission, status: SubmissionStatus.NOT_ACCEPTED }).subscribe({
+        this.submissionService.patchSubmission({ ...submission, status: SubmissionStatus.REJECTED }).subscribe({
             next: () => {
-                this.openSnackBar(this.patchSucceeded);
+                this.openSnackBar(this.patchFailed);
             },
             error: () => this.openSnackBar(this.patchFailed),
             complete: () => {

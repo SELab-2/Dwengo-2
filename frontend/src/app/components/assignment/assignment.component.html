@@ -19,7 +19,15 @@
     [learningObjectId]="currentLearningObjectId" (submissionCreated)="onSubmissionCreated()"></app-create-submission>
   }
   }@else if(isStudent) {
-  <h2 i18n>Already Submitted</h2>
+  @if(submissionType === 'accepted') {
+  <h2 i18n>Your submission is marked Correct!</h2>
+  }
+  @else if(submissionType === 'rejected'){
+  <h2 i18n>Your submission has been marked as Incorrect!</h2>
+  }
+  @else {
+  <h2 i18n>Already submitted!</h2>
+  }
   } @else if(!isStudent && !initializeTasks && submissionStatsReady) {
   <app-assignment-stats class="stats" [submissions]="submissionsForStep" [task]="task!"
     (patched)="reloadStats()"></app-assignment-stats>
