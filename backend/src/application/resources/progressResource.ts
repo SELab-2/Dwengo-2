@@ -1,5 +1,5 @@
 import * as deps from "./dependencies";
-import * as SubmissionServices from "../../core/services/progress";
+import * as ProgressServices from "../../core/services/progress";
 import * as ProgressSchemas from "../schemas/progressSchemas";
 
 /**
@@ -12,7 +12,8 @@ import * as ProgressSchemas from "../schemas/progressSchemas";
  * - GET /assignments/:idParent/progress - Get the progress of all users in an assignment
  * - GET /groups/:idParent/progress - Get the progress of all users in a group
  * - GET /users/:userId/assignment/:assignmentId/progress - Get the progress of a user for a specific assignment
- *   idParent := {userId-assignmentId}
+ * - GET /classes/:idParent/completion - Shows how much of the assignments for a class have been completed (on average)
+ * - GET /classes/:idParent/activity - Get an array with the amount of submissions for a class in the last 12 months (array of zero to twelve numbers)
  */
 
 /* ************* Extractors ************* */
@@ -22,18 +23,29 @@ const extractors = {
     getAssignmentProgress: deps.createZodParamsExtractor(ProgressSchemas.getProgressSchema),
     getGroupProgress: deps.createZodParamsExtractor(ProgressSchemas.getProgressSchema),
     getUserAssignmentProgress: deps.createZodParamsExtractor(ProgressSchemas.getUserAssignmentProgressSchema),
+    getClassCompletion: deps.createZodParamsExtractor(ProgressSchemas.getProgressSchema),
+    getSubmissionActivity: deps.createZodParamsExtractor(ProgressSchemas.getProgressSchema),
 };
 
 /* ************* Controller ************* */
 
 export class ProgressController extends deps.Controller {
     constructor(
-        getUserProgress: SubmissionServices.GetUserProgress,
-        getAssignmentProgress: SubmissionServices.GetAssignmentProgress,
-        getGroupProgress: SubmissionServices.GetGroupProgress,
-        get: SubmissionServices.GetUserAssignmentProgress,
+        getUserProgress: ProgressServices.GetUserProgress,
+        getAssignmentProgress: ProgressServices.GetAssignmentProgress,
+        getGroupProgress: ProgressServices.GetGroupProgress,
+        get: ProgressServices.GetUserAssignmentProgress,
+        getClassCompletion: ProgressServices.GetClassCompletion,
+        getSubmissionActivity: ProgressServices.GetSubmissionActivity,
     ) {
-        super({ getUserProgress, getAssignmentProgress, getGroupProgress, get });
+        super({
+            getUserProgress,
+            getAssignmentProgress,
+            getGroupProgress,
+            get,
+            getClassCompletion,
+            getSubmissionActivity,
+        });
     }
 }
 
@@ -80,6 +92,24 @@ export function progressRoutes(
                 controller,
                 extractor: extractors.getUserAssignmentProgress,
                 handler: (req, data) => controller.getOne(req, data),
+                middleware,
+            },
+            {
+                app,
+                method: deps.HttpMethod.GET,
+                urlPattern: "/classes/:idParent/completion",
+                controller,
+                extractor: extractors.getClassCompletion,
+                handler: (req, data) => controller.getChildren(req, data, controller.services.getClassCompletion),
+                middleware,
+            },
+            {
+                app,
+                method: deps.HttpMethod.GET,
+                urlPattern: "/classes/:idParent/activity",
+                controller,
+                extractor: extractors.getSubmissionActivity,
+                handler: (req, data) => controller.getChildren(req, data, controller.services.getSubmissionActivity),
                 middleware,
             },
         ],

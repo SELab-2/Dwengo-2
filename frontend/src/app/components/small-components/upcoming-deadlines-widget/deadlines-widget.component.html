@@ -1,17 +1,17 @@
 <mat-card class="deadlines-card">
-    <mat-card-title i18n>Upcoming Deadlines</mat-card-title>
+    <mat-card-title class="deadlines-title" i18n="@@upcomingDeadlinesTitle">Upcoming Deadlines</mat-card-title>
 
     <div class="deadline-list">
         @for(assignment of getSortedAssignments(); track assignment){
-        <mat-card class="deadline-item" routerLink="/teacher/assignments/{{assignment.id}}">
-            <mat-card-title>{{ assignment.name }}</mat-card-title>
-            <mat-card-content>
-                <p><strong i18n>Deadline:</strong> {{ formatDate(assignment.deadline) }}</p>
-                <p><strong i18n>Class:</strong> {{ assignment.className}}</p>
-            </mat-card-content>
-        </mat-card>
+            <mat-card class="deadline-item" routerLink="/teacher/assignments/{{assignment.id}}">
+                <mat-card-title>{{ assignment.name }}</mat-card-title>
+                <mat-card-content>
+                    <p><strong i18n="@@deadline">Deadline:</strong> {{ assignment.deadline | date }}</p>
+                    <p><strong i18n="@@deadlinesClass">Class:</strong> {{ assignment.className}}</p>
+                </mat-card-content>
+            </mat-card>
         } @empty {
-        <p i18n="@@noDeadlines">There's not a lot of work in here!</p>
+            <p i18n="@@noDeadlines">No deadlines (yet?)</p>
         }
     </div>
 </mat-card>

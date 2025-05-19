@@ -42,10 +42,12 @@ describe('MiniUserComponent', () => {
   });
 
   it('should have the user his email and school', () => {
-    const mailAndSchool = fixture.debugElement.nativeElement.querySelector('#mail-and-school');
-    expect(mailAndSchool).toBeDefined();
-    expect(mailAndSchool.textContent).toContain(user.email);
-    expect(mailAndSchool.textContent).toContain(user.schoolName);
+    const mail = fixture.debugElement.nativeElement.querySelector('#mail');
+    const school = fixture.debugElement.nativeElement.querySelector('#school');
+    expect(mail).toBeDefined();
+    expect(school).toBeDefined();
+    expect(mail.textContent).toContain(user.email);
+    expect(school.textContent).toContain(user.schoolName);
   });
 
 });

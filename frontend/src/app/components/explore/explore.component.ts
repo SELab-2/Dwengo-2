@@ -3,13 +3,14 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { LearningPath, LearningPathRequest } from '../../interfaces/learning-path';
 import { LearningPathListComponent } from '../small-components/learning-path-list/learning-path-list.component';
 import { LearningPathService } from '../../services/learningPath.service';
-import { LoadingComponent } from '../loading/loading.component';
 import { forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { LearningPathFilterComponent } from '../small-components/learning-path-filter/learning-path-filter.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { UserType } from '../../interfaces';
+import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-loader/card-skeleton-loader.component';
+import { LearningPathComponent } from '../learning-path/learning-path.component';
 
 interface CategorizedLearningPath extends LearningPath {
     category: string;
@@ -23,11 +24,11 @@ enum ExploreSetting {
 
 // These are the categories and their respective titles.
 const CATEGORY_CONFIGS: { key: string; title: string }[] = [
-    { key: "maths", title: $localize`Maths` },
-    { key: "climate-bio-microsc", title: $localize`Climate` },
-    { key: "robot", title: $localize`Robotics` },
-    { key: "AI", title: $localize`AI & Machine Learning` },
-    { key: "elek", title: $localize`Electronics` },
+    { key: "maths", title: $localize`:@@Maths:Maths` },
+    { key: "climate-bio-microsc", title: $localize`:@@Climate:Climate` },
+    { key: "robot", title: $localize`:@@Robotics:Robotics` },
+    { key: "AI", title: $localize`:@@AIML:AI & Machine Learning` },
+    { key: "elek", title: $localize`:@@Electronics:Electronics` },
 ];
 
 /**
@@ -38,7 +39,17 @@ const CATEGORY_CONFIGS: { key: string; title: string }[] = [
 @Component({
     selector: 'app-explore',
     standalone: true,
-    imports: [LearningPathListComponent, LoadingComponent, FormsModule, LearningPathFilterComponent, MatCardModule, MatButtonModule],
+    imports: [
+        LearningPathListComponent, 
+        LearningPathComponent, 
+        FormsModule, 
+        LearningPathFilterComponent,
+        CardSkeletonLoaderComponent,
+        
+        // Angular material
+        MatCardModule, 
+        MatButtonModule
+    ],
     templateUrl: './explore.component.html',
     styleUrl: './explore.component.less'
 })
@@ -46,6 +57,8 @@ export class ExploreComponent implements OnInit {
     @Input() isTeacher: boolean = false;
     learningPaths: LearningPath[] = [];
     loading: boolean = true;
+    detail: boolean = true;
+    detailPath: LearningPath | null = null;
 
     // This will display the selected visualization. It could be done by an enum, but this does the job.
     // Use "SELECT" when nothing is decided yet, "BASIC" for our suggested categories, "CUSTOM" to apply your own filters
@@ -74,6 +87,22 @@ export class ExploreComponent implements OnInit {
         this.loading = true;
         this.getRegularSelection();
         this.visualize = ExploreSetting.BASIC;
+    }
+
+    /**
+     * A card has been clicked, make sure to show it
+     */
+    showPopup(path: LearningPath) {
+        this.detailPath = path;
+        this.detail = true;
+    }
+
+    /**
+     * Take a guess
+     */
+    hidePopup() {
+        this.detailPath = null;
+        this.detail = false;
     }
 
     /**

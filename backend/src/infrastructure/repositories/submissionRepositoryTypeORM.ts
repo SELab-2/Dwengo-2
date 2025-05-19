@@ -1,4 +1,4 @@
-import { Submission } from "../../core/entities/submission";
+import { StatusType, Submission } from "../../core/entities/submission";
 import { ISubmissionRepository } from "../../core/repositories/submissionRepositoryInterface";
 import { DatasourceSubmissionTypeORM } from "../database/data/data_sources/typeorm/datasourceSubmissionTypeORM";
 
@@ -10,6 +10,10 @@ export class SubmissionRepositoryTypeORM extends ISubmissionRepository {
         this.datasourceSubmission = new DatasourceSubmissionTypeORM();
     }
 
+    public async getMonthlySubmissionCounts(classId: string): Promise<number[]> {
+        return await this.datasourceSubmission.getMonthlySubmissionCounts(classId);
+    }
+
     public async create(submission: Submission): Promise<string> {
         return await this.datasourceSubmission.create(submission);
     }
@@ -18,8 +22,8 @@ export class SubmissionRepositoryTypeORM extends ISubmissionRepository {
         return await this.datasourceSubmission.getById(id);
     }
 
-    public async update(submission: Submission): Promise<Submission> {
-        return await this.datasourceSubmission.update(submission);
+    public async update(id: string, status: StatusType): Promise<void> {
+        return await this.datasourceSubmission.update(id, status);
     }
 
     public async delete(submissionId: string): Promise<void> {
@@ -33,11 +37,11 @@ export class SubmissionRepositoryTypeORM extends ISubmissionRepository {
     public async getAllForStudentInAssignmentStep(
         studentId: string,
         assignmentId: string,
-        learningObjectId: string,
+        taskId: string,
     ): Promise<Submission[]> {
         return await (
             await this.datasourceSubmission
-        ).getAllForStudentInAssignmentStep(studentId, assignmentId, learningObjectId);
+        ).getAllForStudentInAssignmentStep(studentId, assignmentId, taskId);
     }
 
     public async getByStudentId(studentId: string): Promise<Submission[]> {

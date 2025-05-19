@@ -17,8 +17,13 @@ import { MockServices } from './mock-services';
 import { ClassOverviewWidgetComponent } from '../small-components/class-overview-widget/class-overview-widget.component';
 import { DeadlinesWidgetComponent } from '../small-components/upcoming-deadlines-widget/deadlines-widget.component';
 import { Assignment } from '../../interfaces/assignment';
-import { catchError, defaultIfEmpty, forkJoin, of } from 'rxjs';
+import { catchError, defaultIfEmpty, forkJoin, map, of, switchMap } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { ProgressService } from '../../services/progress.service';
+import { UsersOfClass } from '../../interfaces/user/usersOfClass';
+import { ClassActivity } from '../../interfaces/progress/activity';
+import { ClassCompletion } from '../../interfaces/progress/completion';
+import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-loader/card-skeleton-loader.component';
 
 
 
@@ -36,7 +41,9 @@ import { MatButtonModule } from '@angular/material/button';
     MenuCardComponent,
     ClassOverviewWidgetComponent,
     DeadlinesWidgetComponent,
-    MatButtonModule],
+    MatButtonModule,
+    CardSkeletonLoaderComponent
+  ],
   templateUrl: './teacher-dashboard.component.html',
   styleUrls: ['./teacher-dashboard.component.less']
 })
@@ -48,6 +55,8 @@ export class TeacherDashboardComponent implements OnInit {
   createClassLink: string = '/teacher/classes/';
 
   selectedView: string | null = "classes";
+  loadingData: boolean = true;
+  loadingClasses: boolean = true;
   displayClassChart: boolean = false;
   displayActivityChart: boolean = false;
   classes: Class[] = [];
@@ -55,38 +64,83 @@ export class TeacherDashboardComponent implements OnInit {
 
   // This is all mock data, awaiting some API functionality after refactor
   classesTitle: string = $localize`:@@viewClasses:View Classes`;
-  deadlinesTitle: string = $localize`:@@incomingDeadlines:Current Deadlines`;
+  deadlinesTitle: string = $localize`:@@incomingDeadlines:Upcoming Deadlines`;
   questionsTitle: string = $localize`:@@answerQuestions:Answer Questions`;
 
-  constructor(private classesService: ClassesService, private assignmentsService: AssignmentService) { }
+  constructor(
+    private classesService: ClassesService,
+    private assignmentsService: AssignmentService,
+    private progressService: ProgressService
+  ) { }
 
   private retrieveData(): void {
     forkJoin({
       classes: this.classesService.classesOfUser().pipe(
-        catchError(() => of([])), // Empty array when error occured
-        defaultIfEmpty([]) // Also empty error when there's no reaction
+        catchError(() => of([])),
+        defaultIfEmpty([])
       ),
       assignments: this.assignmentsService.retrieveAssignments().pipe(
         catchError(() => of([])),
         defaultIfEmpty([])
-      )
-    }).subscribe(({ classes, assignments }) => {
-      this.classes = classes.map(cls => ({
-        ...cls,
-        assignments: assignments
-          .filter(a => a.classId === cls.id)
-          .map(a => ({
-            ...a,
-            name: a.name ?? $localize`:@@unnamed:Unnamed`,
-            deadline: a.deadline ?? $localize`:@@noDeadline:No deadline found`,
-            className: cls.name ?? $localize`:@@unnamed:Unnamed`,
-          }))
-      }));
-      // Assignment array is needed in components like "upcoming-deadlines-widget"
-      this.assignments = this.classes.map(cls => cls.assignments!).flat();
+      ),
+    }).pipe(
+      // Combine both requests
+      switchMap(({ classes, assignments }) => {
+        // Classes and assignments are fetched update them
+        this.classes = classes;
+        // Collect all the assignments of the class
+        const localizedAssignments: Assignment[] = [];
+        classes.forEach(cls => localizedAssignments.push(
+          ...assignments
+            .filter(a => a.classId === cls.id)
+            .map(a => ({
+              ...a,
+              name: a.name ?? $localize`:@@unnamed:Unnamed`,
+              deadline: a.deadline ?? $localize`:@@noDeadline:No deadline found`,
+              className: cls.name ?? $localize`:@@unnamed:Unnamed`,
+            }))
+        ));
+        this.assignments = localizedAssignments
+        this.loadingClasses = false;
+        // Still need to put the amount of students + completion and activity
+        const enrichedClasses = classes.map(cls => {
+          return forkJoin({
+            users: this.classesService.usersInClass(cls.id).pipe(
+              catchError(() => of({ students: [], teachers: [] } as UsersOfClass)),
+              defaultIfEmpty({ students: [], teachers: [] } as UsersOfClass)
+            ),
+            classActivity: this.progressService.getClassActivity(cls.id).pipe(
+              catchError(() => of({ activity: [] } as ClassActivity)),
+              defaultIfEmpty({ activity: [] } as ClassActivity)
+            ),
+            classCompletion: this.progressService.getClassCompletion(cls.id).pipe(
+              catchError(() => of({ percentage: 0 } as ClassCompletion)), // Default percentage to zero
+              defaultIfEmpty({ percentage: 0 } as ClassCompletion)
+            ),
+          }).pipe(
+            // Map the pipe-response, add studentcount and assignment
+            map(({ users, classActivity, classCompletion }) => {
+              return {
+                ...cls,
+                studentCount: users.students.length,
+                assignments: this.assignments.filter(a => a.classId === cls.id),
+                submissionActivity: classActivity.activity,
+                completionPercentage: classCompletion.percentage
+              };
+            })
+          )
+        });
 
-      // Use this data to fill the charts
+        // After every call is done, return these classes
+        return forkJoin(enrichedClasses);
+      })
+    ).subscribe(enrichedClasses => {
+      // Update the classes with the extra data
+      this.classes = enrichedClasses;
+      // With this data we can display analytics (if possible)
       this.fillCharts();
+    }).add(() => {
+      this.loadingData = false
     });
   }
 
@@ -117,7 +171,7 @@ export class TeacherDashboardComponent implements OnInit {
   }
 
   fillCharts(): void {
-    this.classChartData = this.classes.filter(c => c.averageScore).map(c => new ClassGraphComponent(c.name, c.averageScore!));
+    this.classChartData = this.classes.filter((c: Class) => c.averageScore).map(c => new ClassGraphComponent(c.name, c.averageScore!));
     this.activityChartData = this.classes.filter(c => c.submissionActivity).map(c => new ActivityChartData(c.name, c.submissionActivity!));
     if (this.classChartData.length > 0) this.displayClassChart = true;
     if (this.activityChartData.length > 0) this.displayActivityChart = true;

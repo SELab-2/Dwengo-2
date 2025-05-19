@@ -1,24 +1,30 @@
 <mat-card class="overview-widget">
     <div class="header-row">
-        <mat-card-title i18n>Class Overview</mat-card-title>
+        <mat-card-title i18n="@@classOverviewTitle">Class Overview</mat-card-title>
 
-        <button mat-fab extended color="primary" routerLink="/teacher/classes">
+        <button mat-fab extended color="primary" routerLink="/teacher/classes" i18n="@@classOverviewClasses">
             <mat-icon>lists</mat-icon>
             View Classes
         </button>
     </div>
 
-    <div class="widget-container">
+    @if (loadingClasses) {
+        <app-loading></app-loading>
+    } @else {
+        <div class="widget-container">
         @for(classData of classes; track classData){
-        <app-class-info-card [className]="classData.name"
-            [studentCount]="classData.studentCount ? classData.studentCount : 0"
-            [assignmentCount]="classData.assignments ? classData.assignments.length : 0"
-            [targetGroup]="classData.targetAudience"
-            [completionPercentage]="classData.completionPercentage ? classData.completionPercentage : 0"
-            [classId]="classData.id">
-        </app-class-info-card>
+            <app-class-info-card [className]="classData.name"
+                [studentCount]="classData.studentCount ? classData.studentCount : 0"
+                [assignmentCount]="classData.assignments ? classData.assignments.length : 0"
+                [targetGroup]="classData.targetAudience"
+                [completionPercentage]="classData.completionPercentage ? classData.completionPercentage : 0"
+                [classId]="classData.id"
+                [loadingData]="loadingData"
+            >
+            </app-class-info-card>
         } @empty {
-        <p i18n="@@noClasses">You might want to make some classes, teacher</p>
+            <p i18n="@@noClasses">No classes found. Let's get teachin'!</p>
         }
     </div>
+    }
 </mat-card>

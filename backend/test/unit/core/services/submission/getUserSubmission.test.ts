@@ -29,7 +29,7 @@ describe('GetUserSubmissions', () => {
     const service = createService();
     const result = await service.execute({ idParent: 'user123' });
 
-    expect(result).toEqual({ submisisons: ['sub1'] });
+    expect(result).toEqual({ submissions: ['sub1'] });
     expect(mockSubmissionRepo.getByStudentId).toHaveBeenCalledWith('user123');
   });
 
@@ -42,7 +42,7 @@ describe('GetUserSubmissions', () => {
       assignmentId: 'assign456',
     });
 
-    expect(result).toEqual({ submisisons: ['sub1'] });
+    expect(result).toEqual({ submissions: ['sub1'] });
     expect(mockSubmissionRepo.getAllForStudentInAssignment).toHaveBeenCalledWith('user123', 'assign456');
   });
 
@@ -53,10 +53,10 @@ describe('GetUserSubmissions', () => {
     const result = await service.execute({
       idParent: 'user123',
       assignmentId: 'assign456',
-      learningObjectId: 'step789',
+      taskId: 'step789',
     });
 
-    expect(result).toEqual({ submisisons: ['sub1'] });
+    expect(result).toEqual({ submissions: ['sub1'] });
     expect(mockSubmissionRepo.getAllForStudentInAssignmentStep).toHaveBeenCalledWith('user123', 'assign456', 'step789');
   });
 
@@ -65,7 +65,7 @@ describe('GetUserSubmissions', () => {
 
     await expect(service.execute({
       idParent: 'user123',
-      learningObjectId: 'step789',
+      taskId: 'step789',
     })).rejects.toMatchObject({
       code: ErrorCode.BAD_REQUEST,
       message: "Can only request submissions for a user inside of an assignment.",

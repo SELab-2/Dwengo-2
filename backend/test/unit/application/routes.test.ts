@@ -33,12 +33,13 @@ jest.mock("../../../src/config/controllers", () => ({
         authentication: {},
         class: {},
         group: {},
+        joinCode: {},
         joinRequest: {},
         message: {},
         questionThread: {},
         submission: {},
         user: {},
-        learningObject: {}
+        learningObject: {},
     },
 }));
 
@@ -92,6 +93,7 @@ const routeFunctions = {
     authenticationRoutes: Resources.authenticationRoutes,
     classRoutes: Resources.classRoutes,
     groupRoutes: Resources.groupRoutes,
+    joinCodeRoutes: Resources.JoinCodeRoutes,
     joinRequestRoutes: Resources.joinRequestRoutes,
     messageRoutes: Resources.messageRoutes,
     questionThreadRoutes: Resources.questionThreadRoutes,
@@ -286,6 +288,53 @@ const routeConfigs: Record<
             },
         },
     ],
+    joinCodeRoutes: [
+        {
+            method: HttpMethod.GET,
+            path: "/codes/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "code-1" },
+            },
+        },
+        {
+            method: HttpMethod.PATCH,
+            path: "/codes/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "code-1" },
+                body: {
+                    expired: true,
+                },
+            },
+        },
+        {
+            method: HttpMethod.DELETE,
+            path: "/codes/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "code-1" },
+            },
+        },
+        {
+            method: HttpMethod.POST,
+            path: "/codes",
+            hasController: true,
+            request: {
+                body: {
+                    classId: "class-1",
+                },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/classes/:idParent/codes",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "class-1" },
+            },
+        },
+    ],
     joinRequestRoutes: [
         {
             method: HttpMethod.GET,
@@ -452,6 +501,14 @@ const routeConfigs: Record<
             },
         },
         {
+            method: HttpMethod.PATCH,
+            path: "/submissions/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "submission-1" },
+            },
+        },
+        {
             method: HttpMethod.DELETE,
             path: "/submissions/:id",
             hasController: true,
@@ -512,6 +569,22 @@ const routeConfigs: Record<
             hasController: true,
             request: {
                 pathParams: { userId: "user-1", assignmentId: "assignment-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/classes/:idParent/completion",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "class-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
+            path: "/classes/:idParent/activity",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "class-1" },
             },
         },
     ],
@@ -616,7 +689,7 @@ const routeConfigs: Record<
             path: "/learningObject/:id",
             hasController: true,
             request: {
-                pathParams: {id: "ct08_05"},
+                pathParams: { id: "ct08_05" },
                 queryParams: { type: "raw" },
             },
         },
@@ -633,7 +706,7 @@ const routeConfigs: Record<
             path: "/learningPath/:id",
             hasController: true,
             request: {
-                pathParams: {id: "anm3"},
+                pathParams: { id: "anm3" },
                 queryParams: { type: "nl" },
             },
         },
@@ -696,19 +769,19 @@ const testRoutes = (
                 // Use route-specific request if provided, otherwise default
                 const req = request
                     ? {
-                          headers: {},
-                          method,
-                          body: request.body || {},
-                          pathParams: request.pathParams || {},
-                          queryParams: request.queryParams || {},
-                      }
+                        headers: {},
+                        method,
+                        body: request.body || {},
+                        pathParams: request.pathParams || {},
+                        queryParams: request.queryParams || {},
+                    }
                     : {
-                          headers: {},
-                          method,
-                          body: {},
-                          pathParams: { id: "test-id", idParent: "test-parent-id" },
-                          queryParams: {},
-                      };
+                        headers: {},
+                        method,
+                        body: {},
+                        pathParams: { id: "test-id", idParent: "test-parent-id" },
+                        queryParams: {},
+                    };
                 const res = { headers: {}, body: {}, status: 200 };
                 const next = jest.fn();
 

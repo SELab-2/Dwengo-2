@@ -1,16 +1,25 @@
 <!-- learning-path-viewer.component.html -->
 <div class="card-container">
   <mat-card class="learning-path-card">
+    @if(popup) {
+    <button class="back" color="primary" mat-mini-fab i18n (click)="back.emit()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    }
+
+    @if (path) {
     <mat-card-header>
-      <mat-card-title i18n>Learning Path: {{path.title}}</mat-card-title>
+      <mat-card-title i18n="@@learningPathComponentTitle">Learning Path: {{path.title}}</mat-card-title>
     </mat-card-header>
+    }
+
     <mat-card-content>
       @if(!loading) {
       <mat-form-field appearance="fill" class="full-width">
-        <mat-label i18n>Select Learning Object</mat-label>
+        <mat-label i18n="@@selectLearningObject">Select Learning Object</mat-label>
         <mat-select [(value)]="selectedNode" (selectionChange)="onNodeSelected()">
-          @for(node of trajectoryGraph!.nodes; track node) {
-          <mat-option [value]="node">
+          @for(node of trajectoryGraph!.nodes; track node; let idx = $index) {
+          <mat-option [value]="node" [disabled]="!isTeacher && idx > step && assignment">
             {{ node.value.metadata.title }} ({{ node.value.metadata.language }})
           </mat-option>
           }

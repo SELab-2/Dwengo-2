@@ -1,92 +1,76 @@
 <app-authenticated-header></app-authenticated-header>
 <div class="class">
     @if(_class) {
-        <div id="class-update-form">
-            <form [formGroup]="updateForm">
-                <div>
-                    <span>
-                        <h2 i18n>Class name</h2>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                name="name"
-                                id="name"
-                                formControlName="name"
-                                readonly="{{ !editing }}"
-                                required >
-                        </mat-form-field>   
-                    </span>
-                </div>
-                <div>
-                    <span>
-                        <h4 i18n>Description</h4>
-                        <mat-form-field>
-                            <textarea
-                                matInput
-                                name="description"
-                                id="description"
-                                formControlName="description"
-                                readonly="{{ !editing }}"
-                                required ></textarea>
-                        </mat-form-field>
-                    </span>
-                </div>
-                <div>
-                    <span>
-                        <h4 i18n>Target audience</h4>
-                        <mat-form-field>
-                            <input
-                                matInput
-                                name="target-audience"
-                                id="target-audience"
-                                formControlName="targetAudience"
-                                readonly="{{ !editing }}"
-                                required >
-                        </mat-form-field>
-                    </span>
-                </div>
-                <div>
-                    @if(isTeacher()) {
-                        <span>
-                            @if (editing) {
-                                <button mat-raised-button (click)="saveEdit()" [disabled]="!updateForm.valid" i18n>
-                                    Save
-                                </button>
-                                <button mat-raised-button (click)="cancelEdit()" i18n>
-                                    Cancel
-                                </button>
-                            } @else {
-                                <button mat-raised-button (click)="startEdit()" id="edit-button" i18n>
-                                    Edit
-                                </button>
-                            }
-                            <button mat-raised-button (click)="delete()" style="background-color: lightcoral;" i18n>
-                                Delete
-                            </button>
-                        </span>
-                    }
-                </div>
-            </form>
-        </div>
-        <div id="class-members-list">
+    <div id="class-update-form">
+        <form [formGroup]="updateForm">
             <div>
-                <app-class-members-list [_class]="_class"></app-class-members-list>
+                <span>
+                    <h2 i18n="@@classUpdateName">Class name</h2>
+                    <mat-form-field>
+                        <input matInput name="name" id="name" formControlName="name" readonly="{{ !editing }}" required>
+                    </mat-form-field>
+                </span>
             </div>
-        </div>   
-        @if(isTeacher()) {
-            <div id="class-requests">
-                <div>
-                    <app-class-pending-requests [_class]="_class"></app-class-pending-requests>
-                </div>
-                <div>
-                    <button mat-raised-button (click)="showClassCode()" i18n>
-                        Show class code
+            <div>
+                <span>
+                    <h4 i18n="@@classUpdateDescription">Description</h4>
+                    <mat-form-field>
+                        <textarea matInput name="description" id="description" formControlName="description"
+                            readonly="{{ !editing }}" required></textarea>
+                    </mat-form-field>
+                </span>
+            </div>
+            <div>
+                <span>
+                    <h4 i18n="@@classUpdateTargetAudience">Target audience</h4>
+                    <mat-form-field>
+                        <input matInput name="target-audience" id="target-audience" formControlName="targetAudience"
+                            readonly="{{ !editing }}" required>
+                    </mat-form-field>
+                </span>
+            </div>
+            <div>
+                @if(isTeacher()) {
+                <span>
+                    @if (editing) {
+                    <button mat-raised-button (click)="saveEdit()" [disabled]="!updateForm.valid"
+                        i18n="@@classUpdateSave">
+                        Save
                     </button>
-                </div>
+                    <button mat-raised-button (click)="cancelEdit()" i18n="@@classUpdateCancel">
+                        Cancel
+                    </button>
+                    } @else {
+                    <button mat-raised-button (click)="startEdit()" id="edit-button" i18n="@@classUpdateEdit">
+                        Edit
+                    </button>
+                    }
+
+                    <button mat-raised-button (click)="delete()" style="background-color: #c11711; color: whitesmoke;"
+                        i18n="@@classUpdateDelete">
+
+                        Delete
+                    </button>
+                </span>
+                }
             </div>
-        }     
-        
+        </form>
+    </div>
+
+    <div id="class-members-list">
+        <div>
+            <app-class-members-list [_class]="_class"></app-class-members-list>
+        </div>
+    </div>
+
+    @if(isTeacher()) {
+    <div id="class-requests">
+        <app-manage-codes></app-manage-codes>
+        <app-class-pending-requests [_class]="_class"></app-class-pending-requests>
+    </div>
+    }
+
     } @else {
-        <app-loading></app-loading>
+    <app-loading></app-loading>
     }
 </div>

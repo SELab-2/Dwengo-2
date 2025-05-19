@@ -1,0 +1,77 @@
+<div class="card-container">
+    <mat-card class="multiple-choice-card">
+        <mat-card-title i18n>Create a Multiple Choice Question</mat-card-title>
+        <mat-card-content>
+        </mat-card-content>
+        <div class="inline">
+            <mat-card-title i18n class="pad">Question: </mat-card-title>
+            <mat-form-field class="long">
+                <input matInput type="text" [formControl]="title">
+            </mat-form-field>
+            @if(edit){
+            <button mat-icon-button i18n-matTooltip matTooltip="Mark as ready" color="primary" (click)="ready()">
+                <mat-icon>checks</mat-icon>
+            </button>
+            } @else {
+            <button mat-icon-button i18n-matTooltip matTooltip="Edit Question" color="primary" (click)="setEdit()">
+                <mat-icon>edit</mat-icon>
+            </button>
+            }
+        </div>
+
+        <div class="inline">
+            <mat-card-title i18n>Allow multiple answers</mat-card-title>
+            <mat-checkbox color="primary" i18n (change)="update($event.checked)"></mat-checkbox>
+        </div>
+        <div class="option-section">
+            <div class="inline">
+                <mat-card-title i18n class="pad">Add Option: </mat-card-title>
+                <mat-form-field class="long" appearance="fill" class="option-input">
+                    <input matInput [formControl]="newOption" (keyup.enter)="addOption()">
+                </mat-form-field>
+                <button mat-icon-button color="primary" (click)="addOption()">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+
+            <mat-list class="list">
+                <mat-card-title i18n>Options:</mat-card-title>
+                @for (option of options; track idx; let idx = $index){
+                <div class="inline">
+                    <mat-list-item>
+                        <mat-icon matListIcon>check_box_outline_blank</mat-icon>
+                        <h4 matLine>{{ option }}</h4>
+                    </mat-list-item>
+                    <button mat-icon-button color="primary" i18n-matTooltip matTooltip="Delete this option"
+                        (click)="deleteOption(idx)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                    @if(correctAnswers[idx]){
+                    <button mat-icon-button i18n-matTooltip matTooltip="Deselect as correct answer" color="primary"
+                        (click)="selectIncorrect(idx)">
+                        <mat-icon>checks</mat-icon>
+                    </button>
+                    }
+                    @else {
+                    <button mat-icon-button i18n-matTooltip matTooltip="Select as Correct answer" color="primary"
+                        (click)="selectCorrect(idx)">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    }
+                </div>
+                } @empty {
+                <span class="center" i18n>No items yet</span>
+                }
+            </mat-list>
+        </div>
+
+        <mat-card-actions>
+            <button mat-fab extended color="primary" (click)="submitQuestion()"
+                [disabled]="options.length === 0 || (!title.value || title.value.length === 0) || (!allowMultipleOptions && amountSelected !== 1)">
+                <mat-icon>send</mat-icon>
+                <mat-card-title i18n>Submit</mat-card-title>
+
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

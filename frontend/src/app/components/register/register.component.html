@@ -1,40 +1,54 @@
 <form [formGroup]="registrationForm" (ngSubmit)="register()">
     <mat-form-field appearance="outline" class="full-width">
-        <mat-label i18n>First Name</mat-label>
-        <input matInput name="first-name" id="first-name" formControlName="firstName" required placeholder="Enter your first name">
+        <mat-label i18n="@@registerFirstName">First Name</mat-label>
+        <input matInput name="first-name" id="first-name" formControlName="firstName" required i18n-placeholder="@@registerFirstNamePlaceholder" placeholder="Enter your first name">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-        <mat-label i18n>Last Name</mat-label>
-        <input matInput name="last-name" id="last-name" formControlName="lastName" required placeholder="Enter your last name">
+        <mat-label i18n="@@registerLastName">Last Name</mat-label>
+        <input matInput name="last-name" id="last-name" formControlName="lastName" required i18n-placeholder="@@registerLastNamePlaceholder" placeholder="Enter your last name">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-        <mat-label i18n>Your School</mat-label>
-        <input matInput name="school-name" id="school-name" formControlName="school" required placeholder="Enter your school">
+        <mat-label i18n="@@registerSchool">Your School</mat-label>
+        <input matInput name="school-name" id="school-name" formControlName="school" required i18n-placeholder="@@registerSchoolPlaceholder" placeholder="Enter your school">
     </mat-form-field>
 
     <mat-checkbox formControlName="teacher" id="teacher">
-        <span i18n>I'm a teacher</span>
+        <span i18n="@@registerTeacher">I'm a teacher</span>
     </mat-checkbox>
 
     <mat-form-field appearance="outline" class="full-width">
-        <mat-label i18n>Email</mat-label>
-        <input matInput type="email" id="email" formControlName="email" required placeholder="Enter email address">
+        <mat-label i18n="@@registerEmail">Email</mat-label>
+        <input matInput type="email" id="email" formControlName="email" required i18n-placeholder="@@registerEmailPlaceholder" placeholder="Enter email address">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-        <mat-label i18n>Password</mat-label>
-        <input matInput type="password" id="password" formControlName="password" required placeholder="Create a password">
+        <mat-label i18n="@@registerPassword">Password</mat-label>
+        <input matInput [type]="passwordVisible ? 'text' : 'password'" id="password" formControlName="password" required i18n-placeholder="@@registerPasswordPlaceholder" placeholder="Create a password">
+        <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()"    >
+            <mat-icon>{{passwordVisible ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-        <mat-label i18n>Confirm Password</mat-label>
-        <input matInput type="password" id="confirmPassword" formControlName="confirmPassword" required placeholder="Confirm password">
+        <mat-label i18n="@@registerConfirmPassword">Confirm Password</mat-label>
+        <input matInput [type]="passwordVisible ? 'text' : 'password'" id="confirmPassword" formControlName="confirmPassword" required i18n-placeholder="@@registerConfirmPasswordPlaceholder" placeholder="Confirm password">
+        <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()">
+            <mat-icon>{{passwordVisible ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
     </mat-form-field>
 
     <div class="register-submit">
-        <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">
+        <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid" i18n="@@registerSumbit">
             Register
         </button>
     </div>

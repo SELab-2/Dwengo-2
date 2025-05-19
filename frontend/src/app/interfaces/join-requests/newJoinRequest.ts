@@ -3,6 +3,6 @@
  */
 export interface NewJoinRequest {
     requester: string,  // The id of the user making the request
-    class: string,      // The id of the class the user is requesting to join
+    code: string,      // The class code
     userType: string    // The type of the user
 }

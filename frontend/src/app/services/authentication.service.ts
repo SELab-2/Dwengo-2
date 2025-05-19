@@ -12,6 +12,7 @@ import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { ErrorService } from './error.service';
 import { UserCredentials } from '../interfaces/authentication/user-credentials';
+import { ErrorAuthHandlerService } from './errorAuthHandler.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,12 +26,15 @@ export class AuthenticationService {
   constructor(
     private router: Router,
     private http: HttpClient,
-    private errorService: ErrorService
-  ) { }
+    private errorService: ErrorService,
+    private errorAuthHandlerService: ErrorAuthHandlerService,
+  ) {
+    this.errorAuthHandlerService.register(errorService, this);
+  }
 
   register(user: UserRegistration): void {
     this.http.post<RegisterResponse>(this.registerUrl, user).pipe(
-      this.errorService.pipeHandler($localize`Registration failed`)
+      this.errorService.pipeHandler($localize`:@@registrationFailed:Registration failed`)
     ).subscribe((response) => {
       let url: string;
       if (user.userType === UserType.STUDENT) {
@@ -45,7 +49,7 @@ export class AuthenticationService {
       if (response) {
         this.router.navigateByUrl(url);
       } else {
-        window.alert($localize`Registration failed. Please try again.`);
+        window.alert($localize`:@@registrationFailedTryAgain:Registration failed. Please try again.`);
       }
 
     });
@@ -53,6 +57,32 @@ export class AuthenticationService {
 
   login(credentials: UserLoginCredentials, userType: UserType): void {
     this.http.post<LoginResponse>(this.loginUrl, credentials).pipe(
+      this.errorService.pipeHandler($localize`:@@loginFailed:Login failed`),
+    ).subscribe((response: LoginResponse | null) => {
+
+      let url: string;
+      if (userType === UserType.STUDENT) {
+        url = 'student/dashboard'
+      } else if (userType === UserType.TEACHER) {
+        url = 'teacher/dashboard'
+      } else {
+        url = 'placeholder'
+      }
+
+      if (response) {
+        this.storeToken(response.token);
+        this.storeRefreshToken(response.refreshToken);
+        this.storeUserId(response.id);
+        this.storeUserType(userType);
+        this.router.navigateByUrl(url);
+      }
+
+    });
+  }
+
+  refresh(): void {
+    const userType = this.retrieveUserType();
+    this.http.post<LoginResponse>(this.loginUrl, { refreshToken: this.retrieveRefreshToken() }).pipe(
       this.errorService.pipeHandler($localize`Login failed`),
     ).subscribe((response: LoginResponse | null) => {
       let url: string;
@@ -66,14 +96,18 @@ export class AuthenticationService {
 
       if (response) {
         this.storeToken(response.token);
+        this.storeRefreshToken(response.refreshToken);
         this.storeUserId(response.id);
-        this.storeUserType(userType);
         this.router.navigateByUrl(url);
+      } else {
+        // CLEAR stored credentials if refresh fails
+        this.removeToken();
+        this.removeUserId();
+        this.removeRefreshToken();
       }
 
     });
   }
-
 
   logout(): void {
     this.removeToken();

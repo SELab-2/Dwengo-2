@@ -1,0 +1,39 @@
+<div class="card-container">
+    <mat-card class="multiple-choice-card">
+        <mat-card-title i18n>Test your knowledge!</mat-card-title>
+        <mat-card-content>
+        </mat-card-content>
+        <mat-card-title i18n class="pad">{{choiceObject.question}}</mat-card-title>
+
+        <div class="option-section">
+            <mat-list class="list">
+                <mat-card-title i18n>Options:</mat-card-title>
+                @for (option of choiceObject.options; track idx; let idx = $index){
+                <div class="inline">
+                    <div class="inline">
+
+                        <div class="inline pad">
+                            <mat-checkbox class="list-checkbox" color="primary" i18n
+                                (change)="update($event.checked, idx)"></mat-checkbox>
+
+                            <span>{{ option }}</span>
+                        </div>
+                    </div>
+
+                </div>
+                } @empty {
+                <span class="center" i18n>Looks like something went wrong!</span>
+                }
+            </mat-list>
+        </div>
+
+        <mat-card-actions>
+            <button mat-fab extended color="primary" (click)="submitAnswer()"
+                [disabled]="(choiceObject.allowMultipleAnswers && choiceObject.selected.length === 0) || ( !choiceObject.allowMultipleAnswers && choiceObject.selected.length !== 1)">
+                <mat-icon>send</mat-icon>
+                <mat-card-title i18n>Submit</mat-card-title>
+
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

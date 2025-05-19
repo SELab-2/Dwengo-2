@@ -9,6 +9,12 @@
         "locales": {
           "nl-BE": {
             "translation": "src/locale/messages.nl.json"
+          },
+          "fr-FR": {
+            "translation": "src/locale/messages.fr.json"
+          },
+          "de-DE": {
+            "translation": "src/locale/messages.de.json"
           }
         }
       },
@@ -27,7 +33,9 @@
           "options": {
             "localize": [
               "en-US",
-              "nl-BE"
+              "nl-BE",
+              "fr-FR",
+              "de-DE"
             ],
             "outputPath": "dist/frontend",
             "index": "src/index.html",
@@ -43,8 +51,9 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/flag-icons/css/flag-icons.min.css",
               "src/custom-theme.scss",
-              "src/styles.less"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -73,7 +82,45 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "outputHashing": "media"
+            },
+            "development-en-US": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "outputHashing": "media",
+              "localize": ["en-US"]
+            },
+            "development-nl-BE": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "outputHashing": "media",
+              "localize": ["nl-BE"]
+            },
+            "development-fr-FR": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "outputHashing": "media",
+              "localize": ["fr-FR"]
+            },
+            "development-de-DE": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "outputHashing": "media",
+              "localize": ["de-DE"]
+            },
+            "e2e": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.e2e.ts"
+                }
+              ],
+              "outputHashing": "media"
             }
           },
           "defaultConfiguration": "production"
@@ -86,6 +133,21 @@
             },
             "development": {
               "buildTarget": "frontend:build:development"
+            },
+            "development-en-US": {
+              "buildTarget": "frontend:build:development-en-US"
+            },
+            "development-nl-BE": {
+              "buildTarget": "frontend:build:development-nl-BE"
+            },
+            "development-fr-FR": {
+              "buildTarget": "frontend:build:development-fr-FR"
+            },
+            "development-de-DE": {
+              "buildTarget": "frontend:build:development-de-DE"
+            },
+            "e2e": {
+              "buildTarget": "frontend:build:e2e"
             }
           },
           "defaultConfiguration": "development"
@@ -112,7 +174,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.scss"
             ],
             "scripts": []
           }
@@ -125,8 +187,16 @@
               "src/**/*.html"
             ]
           }
+        },
+        "e2e": {
+          "builder": "@nightwatch/angular:nightwatch",
+          "options": {
+            "config": "./nightwatch.conf.js",
+            "devServerTarget": "frontend:serve:e2e"
+          }
         }
       }
+      
     }
   },
   "cli": {

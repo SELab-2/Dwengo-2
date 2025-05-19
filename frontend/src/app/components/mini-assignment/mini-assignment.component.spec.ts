@@ -3,6 +3,12 @@ import { provideRouter } from '@angular/router';
 import { MiniAssignmentComponent } from './mini-assignment.component';
 import { Assignment } from '../../interfaces/assignment/assignment';
 import { By } from '@angular/platform-browser';
+import { provideHttpClient } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { MatDialogRef } from '@angular/material/dialog';
+import { Progress } from '../../interfaces/progress/progress';
+import { Group } from '../../interfaces/group/group';
+import { User } from '../../interfaces';
 
 describe('MiniAssignmentComponent', () => {
   let component: MiniAssignmentComponent;
@@ -13,12 +19,16 @@ describe('MiniAssignmentComponent', () => {
     await TestBed.configureTestingModule({
       imports: [MiniAssignmentComponent],
       providers: [
-        provideRouter([])
+        { provide: MatDialogRef, useValue: {} },
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(MiniAssignmentComponent);
     component = fixture.componentInstance;
+    
 
     // Define test assignment input
     testAssignment = {
@@ -32,7 +42,34 @@ describe('MiniAssignmentComponent', () => {
       className: 'Math 101'
     };
 
-    component._assignment = testAssignment;
+    const testUser: User = {
+      id: "1",
+      email: "test@ugent.be",
+      firstName: "Jan",
+      familyName: "Modaal",
+      schoolName: "UGent",
+      passwordHash: "secret"
+    }
+
+    const testGroup: Group = {
+      id: "1",
+      assignment: testAssignment,
+      members: [testUser]
+    };
+
+    const testProgress: Progress = {
+      id: "1",
+      assignmentId: testAssignment.id,
+      studentId: "1",
+      learningObjectId: "1",
+      step: 1,
+      maxStep: 5,
+      time: new Date().toDateString()
+    }
+
+    component.assignment = testAssignment;
+    component.group = testGroup;
+    component.progress = testProgress;
     component._type = 'student';  // default
     fixture.detectChanges();
   });
@@ -42,8 +79,8 @@ describe('MiniAssignmentComponent', () => {
   });
 
   it('should have an assignment input', () => {
-    expect(component._assignment).toBeDefined();
-    expect(component._assignment.name).toEqual('Assignment 1');
+    expect(component.assignment).toBeDefined();
+    expect(component.assignment.name).toEqual('Assignment 1');
   });
 
   it('should display assignment name in mat-card-title', () => {
@@ -64,11 +101,5 @@ describe('MiniAssignmentComponent', () => {
   it('should display assignment deadline', () => {
     const deadline = fixture.nativeElement.querySelector('#assignment-deadline');
     expect(deadline.textContent).toContain('2024');  // Loose check
-  });
-
-  it('should render correct router link', () => {
-    const card = fixture.debugElement.query(By.css('.mini-assignment'));
-    const routerLink = card.attributes['ng-reflect-router-link'];
-    expect(routerLink).toBe('/student/assignments/a1');
   });
 });

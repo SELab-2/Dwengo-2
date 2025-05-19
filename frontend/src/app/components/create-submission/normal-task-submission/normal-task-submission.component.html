@@ -1,0 +1,24 @@
+<div class="card-container">
+    <mat-card class="multiple-choice-card">
+        <mat-card-title i18n>Test your knowledge!</mat-card-title>
+        <mat-card-content>
+        </mat-card-content>
+        <mat-card-title i18n class="pad">{{taskObject.question}}</mat-card-title>
+
+        <div class="option-section">
+            <mat-card-title i18n class="pad">Answer: </mat-card-title>
+            <mat-form-field class="long">
+                <input matInput type="text" [formControl]="answer">
+            </mat-form-field>
+        </div>
+
+        <mat-card-actions>
+            <button mat-fab extended color="primary" (click)="submitAnswer()"
+                [disabled]="answer.value === null || (answer.value && answer.value.length === 0)">
+                <mat-icon>send</mat-icon>
+                <mat-card-title i18n>Submit</mat-card-title>
+
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

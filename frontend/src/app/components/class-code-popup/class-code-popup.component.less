@@ -1,6 +1,32 @@
-.center-container {
+.class-code-popup {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    background: #f9fafb;
+    border-radius: 30px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    padding: 2rem;
+  }
+  
+.center-container {
+    text-align: center;
 }
+
+mat-dialog-content h1 {
+    font-size: 3.5rem;
+    letter-spacing: 0.15em;
+    background: lightgray;
+    border-radius: 8px;
+    padding: 2rem 3rem;
+    margin: 1rem 0;
+    font-family: 'Fira Mono', 'Consolas', monospace;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+}
+
+mat-dialog-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+

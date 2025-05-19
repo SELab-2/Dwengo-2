@@ -3,8 +3,72 @@ import { ApiError, ErrorCode } from "../../../../../application/types";
 import { LearningObject, LearningObjectData } from "../../../../../core/entities/learningObject";
 
 export class DatasourceLearningObject extends DatasourceDwengo {
+    private learningType: string = "learningObject";
     public constructor(host?: string) {
-        super(host, "learningObject");
+        super(host);
+    }
+
+    private metaDataCache: Map<string, LearningObject[]> | null = null;
+    private cacheTimestamp: number = 0;
+    private isRefreshing: boolean = false;
+    private readonly CACHE_TTL = 12 * 60 * 60 * 1000; // 12u
+
+    private async fetchAllMetaData(): Promise<Map<string, LearningObject[]>> {
+        // Fetch all learningObjects from dwengo
+        const response = await fetch(`${this.host}/api/${this.learningType}/search`);
+        if (!response.ok) {
+            throw {
+                code: ErrorCode.BAD_REQUEST,
+                message: `Error fetching from dwengo api: ${response.status}, ${response.statusText}`,
+            } as ApiError;
+        }
+        const allData: LearningObjectData[] = await response.json();
+
+        // Fill the cache with the data
+        const newCache = new Map<string, LearningObject[]>();
+        for (const loData of allData) {
+            const lo = LearningObject.fromObject(loData);
+            const list = newCache.get(lo.hruid) ?? [];
+            list.push(lo);
+            newCache.set(lo.hruid, list);
+        }
+
+        return newCache;
+    }
+
+    private async refreshMetaDataCache(): Promise<void> {
+        // Make sure another function isn't refreshing the cache at this moment
+        if (this.isRefreshing) return;
+        this.isRefreshing = true;
+        try {
+            const freshCache = await this.fetchAllMetaData();
+            this.metaDataCache = freshCache;
+            this.cacheTimestamp = Date.now();
+        } catch (error) {
+            console.warn("Failed to refresh metadata cache:", error);
+        } finally {
+            this.isRefreshing = false;
+        }
+    }
+
+    private async fallback(url: string, hruid: string): Promise<LearningObjectData[]> {
+        // Fallback to fetch if cache is empty and data needed
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw {
+                code: ErrorCode.BAD_REQUEST,
+                message: `Error fetching from dwengo api: ${response.status}, ${response.statusText}`,
+            } as ApiError;
+        }
+        const fallbackCandidates: LearningObjectData[] = await response.json();
+
+        if (!fallbackCandidates) {
+            throw {
+                code: ErrorCode.NOT_FOUND,
+                message: `LearningObject with hruid ${hruid} not found.`,
+            } as ApiError;
+        }
+        return fallbackCandidates;
     }
 
     /**
@@ -14,22 +78,61 @@ export class DatasourceLearningObject extends DatasourceDwengo {
      * @returns a promise that resolves to an array of the available version.
      */
     public async getVersions(hruid: string): Promise<string[]> {
-        // Fetch from Dwengo
-        const response = await fetch(`${this.host}/api/${this.learningType}/search?hruid=${hruid}`);
-        if (!response.ok) {
+        const now = Date.now();
+        const shouldUpdateCache = now - this.cacheTimestamp > this.CACHE_TTL;
+
+        // async refresh without await, make sure first user filling cache doesn't have to wait on the whole cache
+        if (shouldUpdateCache) {
+            this.refreshMetaDataCache();
+        }
+
+        // If there is no outdated cache that we can use, first ever request
+        if (!this.metaDataCache) {
+            const url = `${this.host}/api/${this.learningType}/search?hruid=${hruid}`;
+            const fallbackCandidates: LearningObjectData[] = await this.fallback(url, hruid);
+            return fallbackCandidates.map(o => o.version + "");
+        }
+
+        // Use outdated cache while refreshing
+        const candidates = this.metaDataCache.get(hruid);
+        if (!candidates) {
             throw {
-                code: ErrorCode.BAD_REQUEST,
-                message: `Error fetching from dwengo api: ${response.status}, ${response.statusText}`,
+                code: ErrorCode.NOT_FOUND,
+                message: `LearningObject with hruid ${hruid} not found.`,
             } as ApiError;
         }
 
-        const data = await response.json();
-        if (data.length === 0) {
-            throw { code: ErrorCode.NOT_FOUND, message: `No objects exists with this hruid.` } as ApiError;
+        // Map the objects to their version
+        return candidates.map(o => o.version + "");
+    }
+
+    public async getLanguages(hruid: string): Promise<string[]> {
+        const now = Date.now();
+        const shouldUpdateCache = now - this.cacheTimestamp > this.CACHE_TTL;
+
+        // async refresh without await, make sure first user filling cache doesn't have to wait on the whole cache
+        if (shouldUpdateCache) {
+            this.refreshMetaDataCache();
         }
 
-        // Map each object to it's version
-        return data.map((d: { version: string }) => d.version);
+        // If there is no outdated cache that we can use, first ever request
+        if (!this.metaDataCache) {
+            const url = `${this.host}/api/${this.learningType}/search?hruid=${hruid}`;
+            const fallbackCandidates: LearningObjectData[] = await this.fallback(url, hruid);
+            return fallbackCandidates.map(o => o.language);
+        }
+
+        // Use outdated cache while refreshing
+        const candidates = this.metaDataCache.get(hruid);
+        if (!candidates || candidates.length === 0) {
+            throw {
+                code: ErrorCode.NOT_FOUND,
+                message: `LearningObject with hruid ${hruid} not found.`,
+            } as ApiError;
+        }
+
+        // Map learningObjects to their language
+        return candidates.map(o => o.language);
     }
 
     /**
@@ -41,18 +144,49 @@ export class DatasourceLearningObject extends DatasourceDwengo {
      * @returns a promise that resolved to a learningObject containing only metadata and no html-content
      */
     public async getMetaData(hruid: string, language: string, version: number): Promise<LearningObject> {
-        // Fetch from dwengo
-        const params = `hruid=${hruid}&language=${language}&version=${version}`;
-        const response = await fetch(`${this.host}/api/${this.learningType}/getMetaData?${params}`);
-        if (!response.ok) {
+        const now = Date.now();
+        const shouldUpdateCache = now - this.cacheTimestamp > this.CACHE_TTL;
+
+        // async refresh without await, make sure first user filling cache doesn't have to wait on the whole cache
+        if (shouldUpdateCache) {
+            this.refreshMetaDataCache();
+        }
+
+        // If there is no outdated cache that we can use, first ever request
+        if (!this.metaDataCache) {
+            const url = `${this.host}/api/${this.learningType}/search?hruid=${hruid}&language=${language}&version=${version}`;
+            const fallbackCandidates: LearningObjectData[] = await this.fallback(url, hruid);
+            // Extra check
+            const match = fallbackCandidates.find(
+                lo => lo.language === language && lo.version === version && lo.hruid == hruid,
+            );
+            if (!match) {
+                throw {
+                    code: ErrorCode.NOT_FOUND,
+                    message: `LearningObject ${hruid} (${language}, v${version}) not found.`,
+                } as ApiError;
+            }
+
+            return LearningObject.fromObject(match);
+        }
+
+        const candidates = this.metaDataCache.get(hruid);
+        if (!candidates) {
             throw {
-                code: ErrorCode.BAD_REQUEST,
-                message: `Error fetching from dwengo api: ${response.status}, ${response.statusText}`,
+                code: ErrorCode.NOT_FOUND,
+                message: `LearningObject with hruid ${hruid} not found.`,
             } as ApiError;
         }
 
-        const data: LearningObjectData = await response.json();
-        return LearningObject.fromObject(data);
+        const match = candidates.find(lo => lo.language === language && lo.version === version);
+        if (!match) {
+            throw {
+                code: ErrorCode.NOT_FOUND,
+                message: `LearningObject ${hruid} (${language}, v${version}) not found in cache.`,
+            } as ApiError;
+        }
+
+        return match;
     }
 
     /**
@@ -120,7 +254,6 @@ export class DatasourceLearningObject extends DatasourceDwengo {
      */
     public async getLearningObjects(params: string): Promise<LearningObject[]> {
         const response = await fetch(`${this.host}/api/${this.learningType}/search${params}`);
-
         // Map all objects to LearningObjects
         return (await response.json()).map((o: LearningObjectData) => LearningObject.fromObject(o));
     }

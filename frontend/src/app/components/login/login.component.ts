@@ -5,17 +5,28 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserLoginCredentials, UserType } from '../../interfaces';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [
+    ReactiveFormsModule, 
+
+    // Angular material
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatButtonModule,
+    MatIconModule
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.less'
 })
 export class LoginComponent {
   loginForm: FormGroup;
   userType = input<UserType>(UserType.STUDENT);
+
+  private _passwordVisible: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -24,7 +35,15 @@ export class LoginComponent {
     this.loginForm = this.buildLoginForm();
   }
 
-  login() {
+  public get passwordVisible(): boolean {
+    return this._passwordVisible;
+  }
+
+  public togglePasswordVisibility() {
+    this._passwordVisible = !this._passwordVisible;
+  }
+
+  public login() {
     if(this.loginForm.valid) {
       const loginData = this.extractLoginFormValues();
       this.sendLoginData(loginData);

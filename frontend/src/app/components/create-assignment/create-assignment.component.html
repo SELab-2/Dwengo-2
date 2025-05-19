@@ -1,0 +1,80 @@
+<div class="create-assignment">
+
+    @if(!showCreateGroup && !initializeTasks) {
+    <mat-card class="form-card">
+        <mat-card-content>
+            <form [formGroup]="createForm" (ngSubmit)="create()" class="create-assignment-form">
+                <mat-form-field>
+                    <mat-label i18n>Name</mat-label>
+                    <input matInput formControlName="name" placeholder="Name" />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label i18n>Start date to deadline</mat-label>
+
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate formControlName="startDate" placeholder="Start date" />
+                        <input matEndDate formControlName="deadline" placeholder="End date" />
+                    </mat-date-range-input>
+
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label i18n>Class</mat-label>
+                    <mat-select formControlName="classId">
+                        @for (class of classes; track class.id) {
+                        <mat-option [value]="class.id">
+                            {{ class.name }}
+                        </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label i18n>Extra instructions</mat-label>
+                    <textarea matInput formControlName="extraInstructions" placeholder="Extra instructions"></textarea>
+                </mat-form-field>
+
+                <button mat-raised-button type="submit" [disabled]="createForm.invalid" i18n>
+                    Create
+                </button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+    }
+
+    @if(showCreateGroup && !initializeTasks) {
+    <app-create-group [assignmentId]="assignmentId" [members]="classMembers" (groupsCreated)="groupsCreated()">
+    </app-create-group>
+    }
+
+    @if(initializeTasks) {
+    <mat-card class="row">
+        <mat-card class="inline">
+            <div>
+                <mat-card-title i18n>Create Tasks for your Assignment!</mat-card-title>
+                <p style="padding-left:  2em;" i18n>You can't add tasks later on!</p>
+            </div>
+
+            <mat-card-actions>
+                <button mat-fab extended color="primary" (click)="tasksInitialized()">
+                    <mat-icon>send</mat-icon>
+                    <mat-card-title i18n>Finish Assignment</mat-card-title>
+
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card-content class="content">
+            <app-assignment [assignmentId]="assignmentId" [initializeTasks]="true"></app-assignment>
+
+        </mat-card-content>
+
+
+    </mat-card>
+
+    }
+</div>

@@ -12,7 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserType } from '../../interfaces';
 import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
-import { CreateRequestComponent } from '../../components/create-request/create-request.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { RequestClassModalComponent } from '../../components/request-class-modal/request-class-modal.component';
 
 
 // Type alias
@@ -26,14 +27,14 @@ type classFilterType = (c: Class) => boolean;
     MiniClassComponent,
     CreateClassComponent,
     AuthenticatedHeaderComponent,
-    CreateRequestComponent,
 
     // Angular material
     MatList,
     MatIconModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatDialogModule
   ],
   templateUrl: './classes-page.component.html',
   styleUrl: './classes-page.component.less'
@@ -58,8 +59,9 @@ export class ClassesPageComponent implements OnInit {
 
   constructor(
     private authService: AuthenticationService,
-    private classesService: ClassesService
-  ) {}
+    private classesService: ClassesService,
+    private dialog: MatDialog
+  ) { }
 
   /**
    * We fetch the classes here since Angular getters shouldn't be async.
@@ -101,6 +103,12 @@ export class ClassesPageComponent implements OnInit {
       .name
       .toLowerCase()
       .includes(lowerCaseName);
+  }
+
+  public openRequestModal() {
+    this.dialog.open(RequestClassModalComponent, {
+      data: {}
+    })
   }
 
   /**

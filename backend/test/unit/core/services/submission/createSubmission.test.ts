@@ -18,7 +18,8 @@ describe("CreateSubmission", () => {
         input = {
             studentId: "student-123",
             assignmentId: "assignment-456",
-            learningObjectId: "learningObj-789",
+            taskId: "task-789",
+            learningObjectId: "learningObject-202",
             time: new Date(),
             contents: "submission contents",
             status: StatusType.NOT_ACCEPTED,
@@ -29,7 +30,8 @@ describe("CreateSubmission", () => {
         const createdSubmission = new Submission(
             "student-123",
             "assignment-456",
-            "learningObj-789",
+            "task-789",
+            "learningObject-202",
             input.time,
             Buffer.from(input.contents),
             input.status,

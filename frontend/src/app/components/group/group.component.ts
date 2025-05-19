@@ -41,7 +41,7 @@ export class GroupComponent implements OnInit {
       const group$ = this.groupService.getGroup(id);
       group$.subscribe(response => this._group = response);
     } else {
-      this.openSnackBar($localize`Cannot read group id from URL`);
+      this.openSnackBar($localize`:@@cannotOpenRead:Cannot read group id from URL`);
     }
   }
 

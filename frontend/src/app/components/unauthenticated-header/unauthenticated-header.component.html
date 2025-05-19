@@ -4,11 +4,12 @@
     </span>
 
     <span class="links">
-        <button mat-raised-button color="primary" i18n class="home-button" routerLink="/">Home</button>
+        <button mat-raised-button color="primary" i18n="@@unauthenticatedHome" class="home-button" routerLink="/">Home</button>
         @if (!isOnRegisterRoute()) {
-            <button mat-raised-button color="primary" i18n class="register-button" routerLink="/register">
+            <button mat-raised-button color="primary" i18n="@@unauthenticatedRegister" class="register-button" routerLink="/register">
                 Register
             </button>
         }
     </span>
+    <language-selector></language-selector>
 </header>

@@ -1,63 +1,62 @@
-.class-widget {
-    width: 260px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-radius: 8px;
-    box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.2s ease-in-out;
-
-}
-
-.class-widget:hover {
-    background-color: rgb(234, 236, 246);
-    cursor: pointer;
-}
-
-
-mat-list-item {
-    display: flex;
-    align-items: start;
-    gap: 8px;
-}
-
-span {
-    font-size: small;
-}
-
-.progress-container {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    gap: 8px;
-    margin-top: 12px;
-}
-
-.progress-text {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.icon {
-    margin-right: 10px;
-}
-
-
-::ng-deep .progress-red {
-    circle {
-        stroke: red !important;
+    .class-widget {
+        width: 260px;
+        height: 400px;
+        padding: 16px;
+        margin: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.2s ease-in-out;
     }
-}
 
-::ng-deep .progress-orange {
-    circle {
-        stroke: orange !important;
+    .class-widget:hover {
+        background-color: rgb(234, 236, 246);
+        cursor: pointer;
     }
-}
 
-::ng-deep .progress-green {
-    circle {
-        stroke: green !important;
+    mat-list-item {
+        display: flex;
+        align-items: start;
+        gap: 8px;
     }
-}
+
+    span {
+        font-size: small;
+    }
+
+    .progress-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .progress-text {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .icon {
+        margin-right: 10px;
+    }
+
+    ::ng-deep .progress-red {
+        circle {
+            stroke: red !important;
+        }
+    }
+
+    ::ng-deep .progress-orange {
+        circle {
+            stroke: orange !important;
+        }
+    }
+
+    ::ng-deep .progress-green {
+        circle {
+            stroke: green !important;
+        }
+    }

@@ -1,0 +1,28 @@
+<app-authenticated-header></app-authenticated-header>
+<div class="assignments">
+
+    <div class="center-container">
+        <h2 i18n>Your assignments</h2>
+        <mat-list class="grid" id="assignments-list">
+            @for (assignment of filteredAssignments; track assignment.id) {
+            <li>
+                <app-assignment-card [assignment]="assignment"
+                    (clicked)="onAssignmentClick($event)"></app-assignment-card>
+
+            </li>
+            } @empty {
+            <p i18n>No assignments found</p>
+            }
+        </mat-list>
+    </div>
+
+    @if (isTeacher) {
+    <div class="tool-container">
+        <button mat-fab extended routerLink="/explore">
+            <mat-icon>add</mat-icon>
+            <p i18n>Create</p>
+        </button>
+    </div>
+    }
+
+</div>

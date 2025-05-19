@@ -3,12 +3,14 @@ import { Buffer } from "buffer";
 export enum StatusType {
     NOT_ACCEPTED = "not_accepted",
     ACCEPTED = "accepted",
+    REJECTED = "rejected",
 }
 
 export class Submission {
     public constructor(
         private readonly _studentId: string,
         private readonly _assignmentId: string,
+        private readonly _taskId: string,
         private readonly _learningObjectId: string,
         private readonly _time: Date,
         private _contents: Buffer, // can be a photo, a string, whatever. In the database this is bytea.
@@ -23,6 +25,10 @@ export class Submission {
 
     public get assignmentId(): string {
         return this._assignmentId;
+    }
+
+    public get taskId(): string {
+        return this._taskId;
     }
 
     public get learningObjectId(): string {
@@ -62,7 +68,8 @@ export class Submission {
         return {
             studentId: this._studentId,
             assignmentId: this._assignmentId,
-            learningObjectId: this._learningObjectId,
+            taskId: this._taskId,
+            learningObjectId: this.learningObjectId,
             time: this._time,
             contents: this._contents,
             status: this._status,

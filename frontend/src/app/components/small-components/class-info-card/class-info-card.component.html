@@ -1,13 +1,13 @@
 <mat-card class="class-widget" routerLink="/teacher/classes/{{classId}}">
     <mat-card-header>
-        <mat-card-title>{{ className }}</mat-card-title>
+        <mat-card-title>{{ getClassName() }}</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
         <mat-list dense>
             <mat-list-item>
                 <mat-icon class="icon">groups</mat-icon>
-                <span i18n>Students: {{ studentCount }}</span>
+                <span i18n="@@studentNumber">Students: {{ studentCount }}</span>
             </mat-list-item>
             <mat-list-item>
                 <mat-icon class="icon">assignment</mat-icon>
@@ -20,11 +20,14 @@
         </mat-list>
     </mat-card-content>
 
+    @if (loadingData) {
+    <app-loading [size]="75"></app-loading>
+    } @else {
     <mat-card-actions class="progress-container">
         <mat-progress-spinner mode="determinate" [value]="completionPercentage" diameter="100"
             [ngClass]="getProgressColor()">
         </mat-progress-spinner>
-
         <span class="progress-text">{{ completionPercentage }}%</span>
     </mat-card-actions>
+    }
 </mat-card>

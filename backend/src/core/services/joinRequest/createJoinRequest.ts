@@ -24,8 +24,11 @@ export class CreateJoinRequest extends JoinRequestService<CreateJoinRequestInput
      * @throws {ApiError} If the join-request with the given id is not found or if the creation fails.
      */
     async execute(input: CreateJoinRequestInput): Promise<object> {
+        const createPromise = input.class
+            ? this.joinRequestRepository.create(await this.fromObject(input))
+            : this.joinRequestRepository.createUsingCode(input.code!, input.requester, input.userType);
         const joinRequest: JoinRequest = await tryRepoEntityOperation(
-            this.joinRequestRepository.create(await this.fromObject(input)),
+            createPromise,
             "Class | Requester",
             `${input.class} | ${input.requester}`,
         );
@@ -34,7 +37,7 @@ export class CreateJoinRequest extends JoinRequestService<CreateJoinRequestInput
 
     async fromObject(input: CreateJoinRequestInput): Promise<JoinRequest> {
         // Check if user hasn't already requested to join the class
-        const classRequests: JoinRequest[] = await this.joinRequestRepository.getByClassId(input.class);
+        const classRequests: JoinRequest[] = await this.joinRequestRepository.getByClassId(input.class!);
         for (const req of classRequests) {
             if (req.requester == input.requester) {
                 throw {
@@ -67,6 +70,6 @@ export class CreateJoinRequest extends JoinRequestService<CreateJoinRequestInput
             } as ApiError;
         } catch (EntityNotFoundError) {}
         */
-        return new JoinRequest(input.requester, input.class, input.userType);
+        return new JoinRequest(input.requester, input.class!, input.userType);
     }
 }

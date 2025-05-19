@@ -33,10 +33,12 @@ describe("SubmissionRepositoryTypeORM", () => {
         submission = new Submission(
             "studentId",
             "assignmentId",
+            "taskId",
             "learningObjectId",
             new Date("01/04/2025"),
             new Buffer("OAPFOJIHUHZDOJDJ"),
             StatusType.NOT_ACCEPTED,
+            "submissionId"
         );
 
     });
@@ -44,7 +46,7 @@ describe("SubmissionRepositoryTypeORM", () => {
     test("create", async () => {
         // Call function from repository
         await datasourceSubmission.create(submission);
-        
+
         expect(datasourceSubmission.create).toHaveBeenCalledTimes(1);
         expect(datasourceSubmission.create).toHaveBeenCalledWith(submission);
     });
@@ -60,21 +62,19 @@ describe("SubmissionRepositoryTypeORM", () => {
 
     test("update", async () => {
         // Call function from repository
-        submission.status = StatusType.ACCEPTED;
-        const updatedSubmission : Submission = await datasourceSubmission.update(submission);
+        await datasourceSubmission.update(submission.id!, submission.status);
 
         expect(datasourceSubmission.update).toHaveBeenCalledTimes(1);
-        expect(datasourceSubmission.update).toHaveBeenCalledWith(submission);
-        expect(updatedSubmission.status).toEqual(submission.status);
+        expect(datasourceSubmission.update).toHaveBeenCalledWith(submission.id, submission.status);
     });
 
     test("delete", async () => {
-            const createdSubmissionId: string = "123"
-            // Call function from repository
-            await datasourceSubmission.delete(createdSubmissionId);
-    
-            expect(datasourceSubmission.delete).toHaveBeenCalledTimes(1);
-            expect(datasourceSubmission.delete).toHaveBeenCalledWith(createdSubmissionId);
+        const createdSubmissionId: string = "123"
+        // Call function from repository
+        await datasourceSubmission.delete(createdSubmissionId);
+
+        expect(datasourceSubmission.delete).toHaveBeenCalledTimes(1);
+        expect(datasourceSubmission.delete).toHaveBeenCalledWith(createdSubmissionId);
     });
 
     test("getAllForStudentInAssignment", async () => {
@@ -102,14 +102,14 @@ describe("SubmissionRepositoryTypeORM", () => {
         const result: Submission[] = await datasourceSubmission.getAllForStudentInAssignmentStep(
             submission.studentId,
             submission.assignmentId,
-            submission.learningObjectId
+            submission.taskId
         );
 
         expect(datasourceSubmission.getAllForStudentInAssignmentStep).toHaveBeenCalledTimes(1);
         expect(datasourceSubmission.getAllForStudentInAssignmentStep).toHaveBeenCalledWith(
             submission.studentId,
             submission.assignmentId,
-            submission.learningObjectId
+            submission.taskId
         )
     });
 

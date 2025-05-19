@@ -1,23 +1,22 @@
 import { ErrorCode } from "../../../../../src/application/types";
 import { UserType } from "../../../../../src/core/entities/user";
-import { IStudentRepository } from "../../../../../src/core/repositories/studentRepositoryInterface";
-import { ITeacherRepository } from "../../../../../src/core/repositories/teacherRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { CreateUser } from "../../../../../src/core/services/user/createUser";
 
 const mockStudentRepository = {
     checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
     create: jest.fn().mockResolvedValue("mock-user-id"), // Simulate user
-} as unknown as jest.Mocked<IStudentRepository>;
+} as unknown as jest.Mocked<IUserRepository>;
 
 const mockTeacherRepository = {
     checkByEmail: jest.fn().mockResolvedValue(false), // Simulate that email is not in use
-} as unknown as jest.Mocked<ITeacherRepository>;
+} as unknown as jest.Mocked<IUserRepository>;
 
 describe("CreateStudent", () => {
     let createStudent: CreateUser;
 
     beforeEach(() => {
-        createStudent = new CreateUser(mockStudentRepository as any, mockTeacherRepository as any);
+        createStudent = new CreateUser(mockStudentRepository as any);
     });
 
     test("Should throw error because of invalid email", async () => {

@@ -1,0 +1,32 @@
+<mat-select
+  hideSingleSelectionIndicator="true"
+  panelWidth="" placeholder="en-US"
+  [(value)]="currentLocale"
+  (selectionChange)="switchLocale($event.value)"
+>
+  <mat-option value="en-US">
+    <span class="fi fi-us"></span>
+    EN
+  </mat-option>
+
+  <mat-option value="nl-BE">
+    <span class="fi fi-be"></span>
+    NL
+  </mat-option>
+
+  <mat-option value="fr-FR">
+    <span class="fi fi-fr"></span>
+    FR
+  </mat-option>
+
+  <mat-option value="de-DE">
+    <span class="fi fi-de"></span>
+    DE
+  </mat-option>
+
+  <mat-select-trigger>
+    <span class="fi fi-{{ currentFlag }}"></span>
+    {{ currentLocale.split("-")[0].toUpperCase() }}
+  </mat-select-trigger>
+</mat-select>
+  

@@ -51,7 +51,7 @@ describe("DatasourceLearningPath", () => {
 
             const result = await datasource.getLearningPath("test-path", true, "nl");
 
-            expect(fetch).toHaveBeenCalledWith("https://dwengo.api/api/learningPath/search?hruid=test-path");
+            expect(fetch).toHaveBeenCalledWith("https://dwengo.api/api/learningPath/search?all=");
             expect(result).toBeInstanceOf(LearningPath);
             expect(result.toObject(true)).toEqual({
                 id: "1",
@@ -107,7 +107,7 @@ describe("DatasourceLearningPath", () => {
 
             const result = await datasource.getLearningPath("test-path", true);
 
-            expect(fetch).toHaveBeenCalledWith("https://dwengo.api/api/learningPath/search?hruid=test-path");
+            expect(fetch).toHaveBeenCalledWith("https://dwengo.api/api/learningPath/search?all=");
             expect(result).toBeInstanceOf(LearningPath);
             expect(result.toObject(true)).toEqual({
                 id: "1",
@@ -173,7 +173,7 @@ describe("DatasourceLearningPath", () => {
 
             await expect(datasource.getLearningPath("test-path", true, "nl")).rejects.toEqual({
                 code: ErrorCode.NOT_FOUND,
-                message: "No learningPath exists with this hruid.",
+                message: "No learningPath exists in this language.",
             } as ApiError);
         });
     });

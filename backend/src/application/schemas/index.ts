@@ -1,6 +1,7 @@
 export * from "./assignmentSchemas";
 export * from "./classSchemas";
 export * from "./groupSchemas";
+export * from "./joinCodeSchemas";
 export * from "./joinRequestSchemas";
 export * from "./messageSchemas";
 export * from "./questionThreadSchemas";
@@ -9,3 +10,4 @@ export * from "./userSchemas";
 export * from "./learningObjectSchemas";
 export * from "./learningPathSchemas";
 export * from "./progressSchemas";
+export * from "./taskSchemas";

@@ -1,0 +1,17 @@
+<div class="group-container">
+    <h3 class="title" i18n="@@groupMembersCount">
+        {{ data.members ? `Members: ${data.members.length}` : "No members"}}
+    </h3>
+    <div class="card-content">
+        @if (data.members) {
+            <mat-accordion class="list">
+                @for(member of data.members; track member.id) {
+                    <app-mini-user [user]="member"></app-mini-user>
+                }
+            </mat-accordion>
+        }
+        <button style="padding: 10px;" (click)="exit()" color="primary" mat-fab>
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>

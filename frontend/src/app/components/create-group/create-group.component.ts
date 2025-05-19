@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -10,7 +10,6 @@ import { User } from '../../interfaces';
 import { MiniUserComponent } from '../mini-user/mini-user.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { AuthenticatedHeaderComponent } from '../authenticated-header/authenticated-header.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GroupService } from '../../services/group.service';
 
@@ -19,7 +18,6 @@ import { GroupService } from '../../services/group.service';
   selector: 'app-create-group',
   imports: [
     MiniUserComponent,
-    AuthenticatedHeaderComponent,
 
     // Angular material
     CdkDropList,
@@ -36,13 +34,13 @@ export class CreateGroupComponent {
   private snackbar = inject(MatSnackBar);
 
   // The assignment id to which the group belongs
-  @Input() assignmentId?: string = "123";
+  @Input() assignmentId?: string = "";
 
   // The members of the class that need to be devided into groups
-  @Input() members: User[] = [
-    { id: '1', email: 'alice@gmail.com', firstName: 'Alice', familyName: 'Smith', schoolName: 'Aur Naur', passwordHash: '123' },
-    { id: '2', email: 'bob@gmail.com', firstName: 'Bob', familyName: 'Johnson', schoolName: 'Aur Naur', passwordHash: '123' },
-  ];
+  @Input() members: User[] = [];
+
+  // We will let subscribers know when the groups are succesfully created.
+  @Output() groupsCreated: EventEmitter<void> = new EventEmitter<void>();
 
   // The groups
   private _groups: User[][] = [];
@@ -50,7 +48,7 @@ export class CreateGroupComponent {
   // Injected services
   public constructor(
     private groupService: GroupService
-  ) {}
+  ) { }
 
   public get groups() {
     return this._groups;
@@ -85,7 +83,7 @@ export class CreateGroupComponent {
   public drop(event: CdkDragDrop<User[]>) {
     const from: CdkDropList<User[]> = event.previousContainer;
     const to: CdkDropList<User[]> = event.container;
-  
+
     if (to.id === "new-group") {
       // Make a new group by dragging and dropping
       const memberIndex: number = event.previousIndex;
@@ -93,7 +91,7 @@ export class CreateGroupComponent {
 
       // Delete from old list
       from.data.splice(memberIndex, 1);
-  
+
       this._groups.push(newGroup);
     }
     else if (from === to) {
@@ -113,15 +111,17 @@ export class CreateGroupComponent {
    */
   public createGroups(): void {
     if (this.members.length > 0) {
-      this.openSnackBar("There are still members not in a group.");
+      this.openSnackBar($localize`There are still members not assigned to a group.`);
     } else {
-      this.groupService.createGroups(this.groups, this.assignmentId!)
+      const nonEmptyGroups = this.groups.filter(group => group.length > 0);
+
+      this.groupService.createGroups(nonEmptyGroups, this.assignmentId!)
         .subscribe((response) => {
-          if(response) {
-            this.openSnackBar("Groups created successfully.");
-            // TODO: redirects? empty lists?
+          if (response) {
+            this.openSnackBar($localize`Groups created successfully.`);
+            this.groupsCreated.emit();
           } else {
-            this.openSnackBar("Failed to create groups.");
+            this.openSnackBar($localize`Failed to create groups.`);
           }
         })
     }
@@ -142,9 +142,16 @@ export class CreateGroupComponent {
     return [];
   }
 
-  private openSnackBar(message: string, action: string="Ok") {
+  public partitionMembers(): void {
+    this.members.forEach((member) => {
+      this._groups.push([member]);
+    });
+    this.members = [];
+  }
+
+  private openSnackBar(message: string, action: string = "Ok") {
     this.snackbar.open(message, action, {
-        duration: 2500
+      duration: 2500
     });
   }
 

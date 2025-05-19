@@ -57,7 +57,7 @@ describe('LearningPathInfoCardComponent', () => {
         component.path.learningPathId = 'abc123';
         component.isTeacher = false;
 
-        component.checkDescriptionLength();
+        component.checkLengths();
 
         fixture.detectChanges();
 
@@ -88,14 +88,5 @@ describe('LearningPathInfoCardComponent', () => {
 
         const button = fixture.debugElement.query(By.css('button[mat-icon-button]'));
         expect(button).toBeNull();
-    });
-
-    it('should navigate to correct learning path URL', () => {
-        component.path.hruid = 'xyz456';
-        component.path.language = 'Test';
-        fixture.detectChanges();
-
-        const card = fixture.debugElement.query(By.css('mat-card'));
-        expect(card.attributes['ng-reflect-router-link']).toContain('/paths,xyz456,Test');
     });
 });

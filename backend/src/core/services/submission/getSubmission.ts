@@ -35,8 +35,8 @@ export class GetUserSubmissions extends SubmissionBaseService<GetUserSubmissions
      */
     async execute(input: GetUserSubmissionsInput): Promise<object> {
         let submissions: Submission[];
-        // Check when learninObjectId is provided the assignmentId is also provided
-        if (!input.assignmentId && input.learningObjectId) {
+        // Check when taskId is provided the assignmentId is also provided
+        if (!input.assignmentId && input.taskId) {
             throw {
                 code: ErrorCode.BAD_REQUEST,
                 message: "Can only request submissions for a user inside of an assignment.",
@@ -44,7 +44,7 @@ export class GetUserSubmissions extends SubmissionBaseService<GetUserSubmissions
         }
 
         if (input.assignmentId) {
-            if (!input.learningObjectId) {
+            if (!input.taskId) {
                 // Get the submissions for an assingment from a user
                 submissions = await tryRepoEntityOperation(
                     this.submissionRepository.getAllForStudentInAssignment(input.idParent, input.assignmentId),
@@ -58,10 +58,10 @@ export class GetUserSubmissions extends SubmissionBaseService<GetUserSubmissions
                     this.submissionRepository.getAllForStudentInAssignmentStep(
                         input.idParent,
                         input.assignmentId,
-                        input.learningObjectId,
+                        input.taskId,
                     ),
-                    "User | Assignment | LearningObject",
-                    `${input.idParent} | ${input.assignmentId} | ${input.learningObjectId}`,
+                    "User | Assignment | Task",
+                    `${input.idParent} | ${input.assignmentId} | ${input.taskId}`,
                     true,
                 );
             }
@@ -75,6 +75,6 @@ export class GetUserSubmissions extends SubmissionBaseService<GetUserSubmissions
             );
         }
 
-        return { submisisons: submissions.map(submission => submission.id!) };
+        return { submissions: submissions.map(submission => submission.id!) };
     }
 }
