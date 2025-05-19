@@ -64,7 +64,7 @@ describe('Test submission API endpoints', () => {
             learningObjectId: 'org-dwengo-elevator-riddle-question',
             time: new Date().toISOString(),
             contents: Buffer.from('Hello World').toString('base64'),
-            status: StatusType.ACCEPTED,
+            status: StatusType.NOT_ACCEPTED,
         };
 
         const res = await request(app)
@@ -128,20 +128,49 @@ describe('Test submission API endpoints', () => {
 
     describe('PATCH /submissions/:id', () => {
         it('should update the submission', async () => {
-            const res = await request(app)
-                .patch(`/submissions/${createdSubmissionId}`)
-                .set('Content-Type', 'application/json')
-                .set("Authorization", "Bearer " + studentDetails.token);
-
-            expect(res.status).toBe(204);
-
-            const res2 = await request(app)
+            const naRes = await request(app)
                 .get(`/submissions/${createdSubmissionId}`)
                 .set('Content-Type', 'application/json')
                 .set("Authorization", "Bearer " + studentDetails.token);
 
-            expect(res2.status).toBe(200);
-            expect(res2.body.status).toBe("not_accepted");
+            expect(naRes.status).toBe(200);
+            expect(naRes.body.status).toBe("not_accepted");
+
+            const update1 = await request(app)
+                .patch(`/submissions/${createdSubmissionId}`)
+                .send({
+                    status: "accepted",
+                })
+                .set('Content-Type', 'application/json')
+                .set("Authorization", "Bearer " + studentDetails.token);
+
+            expect(update1.status).toBe(204);
+
+            const aRes = await request(app)
+                .get(`/submissions/${createdSubmissionId}`)
+                .set('Content-Type', 'application/json')
+                .set("Authorization", "Bearer " + studentDetails.token);
+
+            expect(aRes.status).toBe(200);
+            expect(aRes.body.status).toBe("accepted");
+
+            const update2 = await request(app)
+                .patch(`/submissions/${createdSubmissionId}`)
+                .send({
+                    status: "rejected",
+                })
+                .set('Content-Type', 'application/json')
+                .set("Authorization", "Bearer " + studentDetails.token);
+
+            expect(update2.status).toBe(204);
+
+            const rRes = await request(app)
+                .get(`/submissions/${createdSubmissionId}`)
+                .set('Content-Type', 'application/json')
+                .set("Authorization", "Bearer " + studentDetails.token);
+
+            expect(rRes.status).toBe(200);
+            expect(rRes.body.status).toBe("rejected");
         });
     });
 

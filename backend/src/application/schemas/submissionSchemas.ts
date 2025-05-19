@@ -11,6 +11,7 @@ export const getSubmissionSchema = z.object({
 
 export const updateSubmissionSchema = z.object({
     id: z.string(),
+    status: z.nativeEnum(StatusType),
 });
 
 export const deleteSubmissionSchema = z.object({

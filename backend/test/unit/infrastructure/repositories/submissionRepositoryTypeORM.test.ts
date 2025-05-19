@@ -62,10 +62,10 @@ describe("SubmissionRepositoryTypeORM", () => {
 
     test("update", async () => {
         // Call function from repository
-        await datasourceSubmission.update(submission.id!);
+        await datasourceSubmission.update(submission.id!, submission.status);
 
         expect(datasourceSubmission.update).toHaveBeenCalledTimes(1);
-        expect(datasourceSubmission.update).toHaveBeenCalledWith(submission.id);
+        expect(datasourceSubmission.update).toHaveBeenCalledWith(submission.id, submission.status);
     });
 
     test("delete", async () => {

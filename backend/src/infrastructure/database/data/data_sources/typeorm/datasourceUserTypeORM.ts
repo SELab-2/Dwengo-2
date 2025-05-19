@@ -217,7 +217,7 @@ export class DatasourceUserTypeORM extends DatasourceTypeORM {
         }
 
         groupModel.students.push(studentModel);
-        console.log(groupModel.students);
+
         await groupRepository.save(groupModel);
     }
 

@@ -1,4 +1,4 @@
-import { Submission } from "../../core/entities/submission";
+import { StatusType, Submission } from "../../core/entities/submission";
 import { ISubmissionRepository } from "../../core/repositories/submissionRepositoryInterface";
 import { DatasourceSubmissionTypeORM } from "../database/data/data_sources/typeorm/datasourceSubmissionTypeORM";
 
@@ -22,8 +22,8 @@ export class SubmissionRepositoryTypeORM extends ISubmissionRepository {
         return await this.datasourceSubmission.getById(id);
     }
 
-    public async update(id: string): Promise<void> {
-        return await this.datasourceSubmission.update(id);
+    public async update(id: string, status: StatusType): Promise<void> {
+        return await this.datasourceSubmission.update(id, status);
     }
 
     public async delete(submissionId: string): Promise<void> {

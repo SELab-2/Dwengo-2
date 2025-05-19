@@ -1,3 +1,4 @@
+import { In } from "typeorm";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError, ExpiredError } from "../../../../../config/error";
 import { Class } from "../../../../../core/entities/class";
@@ -153,12 +154,24 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError(`User with id ${id} not found`);
         }
 
-        const classModels: ClassTypeORM[] = await datasource.getRepository(ClassTypeORM).find({
+        // First find out what classes the user is in
+        let classModels: ClassTypeORM[] = await datasource.getRepository(ClassTypeORM).find({
             where: {
                 members: {
-                    id: id,
+                    id: id, // Filters the members table. If we would load the members, only the member with this id is present
+                    // So that is why the members are fetched afterward
                 },
             },
+            relations: {
+                members: true,
+            },
+        });
+
+        const classIds = classModels.map(classModel => classModel.id);
+
+        // Then load those classes with all members
+        classModels = await datasource.getRepository(ClassTypeORM).find({
+            where: { id: In(classIds) },
             relations: {
                 members: true,
             },

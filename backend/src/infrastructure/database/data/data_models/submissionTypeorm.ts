@@ -4,11 +4,6 @@ import { TaskTypeORM } from "./taskTypeORM";
 import { UserTypeORM } from "./userTypeorm";
 import { StatusType, Submission } from "../../../../core/entities/submission";
 
-export enum SubmissionStatus {
-    NOT_ACCEPTED = "not_accepted",
-    ACCEPTED = "accepted",
-}
-
 @Entity()
 export class SubmissionTypeORM {
     @PrimaryGeneratedColumn("uuid")
@@ -37,18 +32,12 @@ export class SubmissionTypeORM {
 
     @Column({
         type: "enum",
-        enum: SubmissionStatus,
-        default: SubmissionStatus.ACCEPTED,
+        enum: StatusType,
+        default: StatusType.NOT_ACCEPTED,
     })
-    progress_status!: SubmissionStatus;
+    progress_status!: StatusType;
 
     public toEntity(): Submission {
-        let status: StatusType;
-        if (this.progress_status == SubmissionStatus.ACCEPTED) {
-            status = StatusType.ACCEPTED;
-        } else {
-            status = StatusType.NOT_ACCEPTED;
-        }
         return new Submission(
             this.user.id,
             this.assignment.id,
@@ -56,7 +45,7 @@ export class SubmissionTypeORM {
             this.learning_object_id,
             this.time,
             this.contents,
-            status,
+            this.progress_status,
             this.id,
         );
     }
@@ -68,21 +57,13 @@ export class SubmissionTypeORM {
         taskModel: TaskTypeORM,
     ): SubmissionTypeORM {
         const submissionModel: SubmissionTypeORM = new SubmissionTypeORM();
-
-        let status: SubmissionStatus;
-        if (submission.status == StatusType.ACCEPTED) {
-            status = SubmissionStatus.ACCEPTED;
-        } else {
-            status = SubmissionStatus.NOT_ACCEPTED;
-        }
-
         submissionModel.user = userModel;
         submissionModel.assignment = assignmentModel;
         submissionModel.task = taskModel;
         submissionModel.learning_object_id = submission.learningObjectId;
         submissionModel.time = submission.time;
         submissionModel.contents = submission.contents;
-        submissionModel.progress_status = status;
+        submissionModel.progress_status = submission.status;
 
         return submissionModel;
     }

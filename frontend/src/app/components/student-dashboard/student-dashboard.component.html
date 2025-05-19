@@ -1,4 +1,7 @@
 <main class="main-container">
+
+    <h1>Welcome</h1>
+
     <div class="assignments">
         <div class="center-container">
             <h2 i18n="@@studentDashboardAssignmentsOverview">Your assignments</h2>
@@ -19,7 +22,9 @@
             <app-paginated-grid
                 [items]="assignmentsWithGroup"
                 [pageSize]="6"
-                [itemTemplate]="assignmentCard">
+                [itemTemplate]="assignmentCard"
+                [showPagination]="assignmentsWithGroup.length > 6"
+                >
             </app-paginated-grid>
 
             <ng-template #assignmentCard let-data>

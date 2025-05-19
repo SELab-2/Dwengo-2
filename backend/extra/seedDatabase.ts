@@ -36,6 +36,9 @@ import { MessageRepositoryTypeORM } from "../src/infrastructure/repositories/mes
 import { VisibilityType } from "../src/core/entities/questionThread";
 import { StatusType, Submission } from '../src/core/entities/submission';
 import { SubmissionRepositoryTypeORM } from '../src/infrastructure/repositories/submissionRepositoryTypeORM';
+import { Task } from '../src/core/entities/task';
+import { TaskType } from '../src/config/taskTypes';
+import { TaskRepositoryTypeORM } from '../src/infrastructure/repositories/taskRepositoryTypeORM';
 
 export async function seedDatabase(): Promise<void> {
   const classRep = new ClassRepositoryTypeORM();
@@ -45,6 +48,7 @@ export async function seedDatabase(): Promise<void> {
   const threadRep = new ThreadRepositoryTypeORM();
   const messageRep = new MessageRepositoryTypeORM();
   const submissionRep = new SubmissionRepositoryTypeORM();
+  const taskRep = new TaskRepositoryTypeORM();
 
   const teacherIds: string[] = [];
   const classIds: string[] = [];
@@ -56,9 +60,9 @@ export async function seedDatabase(): Promise<void> {
 
   // Some random learningPath hruids from dwengo
   const learningPaths: string[] = ["sr2", "anm3", "cb2_sentimentanalyse"];
-  
+
   // Learningpaths mapped to some random objects from within that path
-  const pathToObjects: Record<string,string[]> = {
+  const pathToObjects: Record<string, string[]> = {
     "sr2": ["sr2_module2", "sr2_brainstorm_vb", "g_inleiding_lkr", "sr2_uploaden"],
     "anm3": ["org-dwengo-elevator-riddle-analyzing-1", "org-dwengo-elevator-riddle-brute-force-2", "org-dwengo-elevator-riddle-brute-force-4"],
     "cb2_sentimentanalyse": ["pn_sa_inleiding", "pn_programmeerstructuren", "pn_sentimentanalyse"],
@@ -171,9 +175,9 @@ export async function seedDatabase(): Promise<void> {
       const students = await userRep.getByClassId(classId);
       const studentIds = students.map((s: any) => s.id);
       const shuffled = faker.helpers.shuffle(studentIds);
-    
+
       const isSolo = faker.datatype.boolean(); // 50/50 solo vs group
-    
+
       if (isSolo) {
         for (const id of shuffled) {
           const group = new Group([id], assignmentId);
@@ -190,24 +194,38 @@ export async function seedDatabase(): Promise<void> {
     }
 
     // ── 7. Create submissions for Assignments that have started ──
-    for (let i = 0 ; i < onGoingAssignments.length; i++) {
-      const assignment: {id: string, classId: string} = onGoingAssignments[i];
+    for (let i = 0; i < onGoingAssignments.length; i++) {
+      const assignment: { id: string, classId: string } = onGoingAssignments[i];
       const students = await userRep.getByClassId(assignment.classId);
       const studentIds = students.map((s: any) => s.id);
-    
-      for(const id of studentIds){
-        const submission = new Submission(
-          id,
+      for (let j = 0; j < pathToObjects[learningPathIds[i]].length; j++) {
+        const task = new Task(
           assignment.id,
-          faker.helpers.arrayElement(pathToObjects[learningPathIds[i]]), // Get random learningObject for the path in the assignment
-          faker.date.past({years: 1}), // Generate date in the last year, is before the deadline so not logical. But is used so we can see the analytics
-          Buffer.from(""),
-          StatusType.NOT_ACCEPTED
-        )
-        await submissionRep.create(submission)
+          j,
+          "question",
+          TaskType.NormalQuestion,
+          {
+            predefined_answer: "answer",
+          }
+        );
+
+        const taskResponse = await taskRep.create(task);
+
+        for (const id of studentIds) {
+          const submission = new Submission(
+            id,
+            assignment.id,
+            taskResponse.id!,
+            faker.helpers.arrayElement(pathToObjects[learningPathIds[i]]), // Get random learningObject for the path in the assignment
+            faker.date.past({ years: 1 }), // Generate date in the last year, is before the deadline so not logical. But is used so we can see the analytics
+            Buffer.from(""),
+            StatusType.NOT_ACCEPTED
+          )
+          await submissionRep.create(submission)
+        }
       }
     }
-    
+
 
     // ── 8. Create Threads and Messages for Learning Steps ──
     const visibilityOptions = [
@@ -220,14 +238,14 @@ export async function seedDatabase(): Promise<void> {
       const students = await userRep.getByClassId(classId);
       const teachers = await userRep.getByClassId(classId);
       const teacherIds = teachers.map(t => t.id);
-    
+
       // Select 5–6 students for threads
       const selectedStudents = faker.helpers.arrayElements(students, { min: 5, max: 6 });
-    
+
       for (const student of selectedStudents) {
         const usedSteps = new Set<string>();
         const availableSteps = Array.from({ length: 5 }, (_, i) => `step-${i + 1}`)
-        .filter(stepId => !usedSteps.has(stepId));
+          .filter(stepId => !usedSteps.has(stepId));
 
         const threadCount = Math.min(
           faker.number.int({ min: 1, max: 3 }),
@@ -240,7 +258,7 @@ export async function seedDatabase(): Promise<void> {
 
           const visibility = faker.helpers.arrayElement(visibilityOptions);
 
-    
+
           const thread = new QuestionThread(
             student.id!,
             assignmentId,
@@ -249,9 +267,9 @@ export async function seedDatabase(): Promise<void> {
             visibility,
             []
           );
-    
+
           const savedThread = await threadRep.create(thread) as { id: string };
-    
+
           // Create 1–2 messages from student and teacher
           const studentMessage = new Message(
             student.id!,
@@ -265,12 +283,12 @@ export async function seedDatabase(): Promise<void> {
             savedThread.id!,
             faker.lorem.sentence()
           );
-    
+
           await messageRep.create(studentMessage);
           await messageRep.create(teacherMessage);
         }
       }
-    
+
       // Bonus: Add 2 public/global threads for this assignment
       for (let k = 0; k < 2; k++) {
         const globalThread = new QuestionThread(
@@ -282,7 +300,7 @@ export async function seedDatabase(): Promise<void> {
           []
         );
         const savedThread = await threadRep.create(globalThread) as { id: string };
-    
+
         const msg = new Message(
           faker.helpers.arrayElement(teacherIds)!,
           new Date(),

@@ -1,10 +1,10 @@
 import { FindOptionsWhere } from "typeorm";
 import { DatasourceTypeORM } from "./datasourceTypeORM";
 import { EntityNotFoundError } from "../../../../../config/error";
-import { Submission } from "../../../../../core/entities/submission";
+import { StatusType, Submission } from "../../../../../core/entities/submission";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
-import { SubmissionStatus, SubmissionTypeORM } from "../../data_models/submissionTypeorm";
+import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
 import { TaskTypeORM } from "../../data_models/taskTypeORM";
 import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
 
@@ -70,7 +70,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         return submissionModel.toEntity();
     }
 
-    public async update(id: string): Promise<void> {
+    public async update(id: string, status: StatusType): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const submissionRepository = datasource.getRepository(SubmissionTypeORM);
@@ -82,11 +82,7 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
             throw new EntityNotFoundError(`Submission with id ${id} not found`);
         }
 
-        if (submissionModel.progress_status === SubmissionStatus.NOT_ACCEPTED) {
-            submissionModel.progress_status = SubmissionStatus.ACCEPTED;
-        } else {
-            submissionModel.progress_status = SubmissionStatus.NOT_ACCEPTED;
-        }
+        submissionModel.progress_status = status;
 
         await submissionRepository.save(submissionModel);
     }

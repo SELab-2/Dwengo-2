@@ -25,12 +25,26 @@
 
     <mat-form-field appearance="outline" class="full-width">
         <mat-label i18n="@@registerPassword">Password</mat-label>
-        <input matInput type="password" id="password" formControlName="password" required i18n-placeholder="@@registerPasswordPlaceholder" placeholder="Create a password">
+        <input matInput [type]="passwordVisible ? 'text' : 'password'" id="password" formControlName="password" required i18n-placeholder="@@registerPasswordPlaceholder" placeholder="Create a password">
+        <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()"    >
+            <mat-icon>{{passwordVisible ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
         <mat-label i18n="@@registerConfirmPassword">Confirm Password</mat-label>
-        <input matInput type="password" id="confirmPassword" formControlName="confirmPassword" required i18n-placeholder="@@registerConfirmPasswordPlaceholder" placeholder="Confirm password">
+        <input matInput [type]="passwordVisible ? 'text' : 'password'" id="confirmPassword" formControlName="confirmPassword" required i18n-placeholder="@@registerConfirmPasswordPlaceholder" placeholder="Confirm password">
+        <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()">
+            <mat-icon>{{passwordVisible ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
     </mat-form-field>
 
     <div class="register-submit">
