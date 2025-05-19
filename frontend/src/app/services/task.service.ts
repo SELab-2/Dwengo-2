@@ -3,8 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
-import { switchMap, of, forkJoin, map } from 'rxjs';
-import { CreateTaskResponse, GetTasksResponse, Task } from "../interfaces/tasks";
+import { switchMap, of, forkJoin, map, Observable, catchError } from 'rxjs';
+import { CreateTaskResponse, GetTasksResponse, MultipleChoiceTask, NormalQuestionTask, Task, TaskType } from "../interfaces/tasks";
+import { AssignmentTask, MultipleChoice, NormalQuestion } from "../interfaces/assignment/tasks";
+import { LearningPathService } from "./learningPath.service";
+import { AssignmentService } from "./assignment.service";
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +19,35 @@ export class TaskService {
         private http: HttpClient,
         private authService: AuthenticationService,
         private errorService: ErrorService,
+        private learningPathService: LearningPathService,
+        private assignmentService: AssignmentService,
     ) { }
+
+    /**
+     * Function to convert a task to the NormalQuestion or MultipleChoice objects
+     */
+    public responseToObject(task: Task): AssignmentTask {
+        if (task.type === TaskType.NORMALQUESTION) {
+            const detailed = task.details as NormalQuestionTask
+            return {
+                question: task.question,
+                answer: "",
+                predefined_answer: detailed.predefined_answer,
+                type: task.type,
+            } as NormalQuestion
+        }
+        const detailed = task.details as MultipleChoiceTask
+        return {
+            question: task.question,
+            type: task.type,
+            options: detailed.options,
+            correctAnswers: detailed.correctAnswers,
+            allowMultipleAnswers: detailed.allowMultipleAnswers,
+            selected: [],
+        } as MultipleChoice
+    }
+
+
 
     /**
      * Function to create a task (multiple choice or normal question) within an assignment step
@@ -82,8 +113,14 @@ export class TaskService {
             headers
         ).pipe(
             this.errorService.pipeHandler(),
-            switchMap(response =>
-                forkJoin(
+            switchMap(response => {
+                const ids = response?.tasks ?? [];
+
+                if (ids.length === 0) {
+                    return of([]);
+                }
+
+                return forkJoin(
                     response.tasks.map(id =>
                         this.http.get<Task>(
                             `${this.API_URL}/tasks/${id}`,
@@ -91,6 +128,8 @@ export class TaskService {
                         )
                     )
                 )
+            }
+
             )
         )
     }
@@ -108,13 +147,17 @@ export class TaskService {
             headers
         ).pipe(
             this.errorService.pipeHandler(),
-            switchMap(res =>
-                this.http.get<Task>(
-                    `${this.API_URL}/tasks/${res.tasks[0]}`,
+            switchMap(res => {
+                const taskId = res?.tasks?.[0];
+                if (!taskId) {
+                    return of(null);
+                }
+                return this.http.get<Task>(
+                    `${this.API_URL}/tasks/${taskId}`,
                     headers
-                )
-            )
-        )
+                );
+            })
+        );
     }
 
     /**
@@ -149,5 +192,61 @@ export class TaskService {
             this.errorService.pipeHandler(),
             map(res => res.id)
         )
+    }
+
+
+    /**
+     * Create an empty task for all non initialized steps!
+     * @param assignmentId 
+     * @returns nothing really, if you call this you just need to subscribe to check if it succeeds
+     */
+    fillRestWithEmptyTasks(assignmentId: string): Observable<void> {
+
+        // Fetch the total assignment, we need learningPathId
+        return this.assignmentService.retrieveAssignmentById(assignmentId).pipe(
+            // Fetch the learning path
+            switchMap(ass =>
+                this.learningPathService.retrieveOneLearningPath({ hruid: ass.learningPathId })
+            ),
+            // retrieve the amount of steps
+            map(path => path.numNodes),
+
+            // Now we fetch all existing tasks and keep track of their step number
+            switchMap(steps =>
+                this.getAllAssignmentTasks(assignmentId).pipe(
+                    catchError(() => of([])),
+                    map(tasks => ({
+                        steps,
+                        existingSteps: tasks.map(t => t.step)
+                    }))
+                )
+            ),
+
+            // We use this info to create a task for every uninitialized step
+            switchMap(({ steps, existingSteps }) => {
+                const calls = [];
+                for (let i = 1; i <= steps; i++) {
+                    if (!existingSteps.includes(i)) {
+                        calls.push(
+                            this.createTask({
+                                assignmentId,
+                                step: i,
+                                type: TaskType.Other,
+                                question: '',
+                                details: {}
+                            }).pipe(
+                                this.errorService.pipeHandler(),
+                                catchError(() => of(null)) // skip an error
+                            )
+                        );
+                    }
+                }
+                if (calls.length === 0) {
+                    return of(void 0);  // no calls === everything initialized === gtfo
+                }
+                // execute the calls, create the tasks
+                return forkJoin(calls).pipe(map(() => void 0));
+            })
+        );
     }
 }

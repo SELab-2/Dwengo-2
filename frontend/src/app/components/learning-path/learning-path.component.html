@@ -15,20 +15,16 @@
 
     <mat-card-content>
       @if(!loading) {
-      @if(!assignment) {
       <mat-form-field appearance="fill" class="full-width">
         <mat-label i18n="@@selectLearningObject">Select Learning Object</mat-label>
         <mat-select [(value)]="selectedNode" (selectionChange)="onNodeSelected()">
-          @for(node of trajectoryGraph!.nodes; track node) {
-          <mat-option [value]="node">
+          @for(node of trajectoryGraph!.nodes; track node; let idx = $index) {
+          <mat-option [value]="node" [disabled]="!isTeacher && idx > step && assignment">
             {{ node.value.metadata.title }} ({{ node.value.metadata.language }})
           </mat-option>
           }
         </mat-select>
       </mat-form-field>
-      } @else {
-      <h2>{{ selectedNode!.value.metadata.title }} ({{ selectedNode!.value.metadata.language }})</h2>
-      }
 
       @if (selectedNode) {
       <div class="iframe-wrapper">

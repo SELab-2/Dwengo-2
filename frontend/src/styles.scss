@@ -1,4 +1,5 @@
-@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+// @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+@use 'custom-theme.scss';
 
 html, body { 
     height: 100vh; 

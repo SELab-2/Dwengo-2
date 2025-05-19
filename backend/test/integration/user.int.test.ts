@@ -13,62 +13,62 @@ describe("Test user API endpoints", () => {
         studentAuthDetails = await initializeUser("student", app);
         teacherAuthDetails = await initializeUser("teacher", app, "teacher@gmail.com");
         const classResponse = await request(app)
-                .post("/classes")
-                .send({
-                    "name": "class_123",
-                    "description": "string",
-                    "targetAudience": "string",
-                    "teacherId": teacherAuthDetails.id
-                })
-                .set("Content-Type", "application/json")
-                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+            .post("/classes")
+            .send({
+                "name": "class_123",
+                "description": "string",
+                "targetAudience": "string",
+                "teacherId": teacherAuthDetails.id
+            })
+            .set("Content-Type", "application/json")
+            .set("Authorization", "Bearer " + teacherAuthDetails.token);
 
-            classId = classResponse.body.id;
+        classId = classResponse.body.id;
 
-            const joinRequestResponse = await request(app)
-                .post("/requests")
-                .send({
-                    "requester": studentAuthDetails.id,
-                    "class": classId,
-                    "userType": "student"    
-                })
-                .set("Content-Type", "application/json")
-                .set("Authorization", "Bearer " + studentAuthDetails.token);
+        const joinRequestResponse = await request(app)
+            .post("/requests")
+            .send({
+                "requester": studentAuthDetails.id,
+                "class": classId,
+                "userType": "student"
+            })
+            .set("Content-Type", "application/json")
+            .set("Authorization", "Bearer " + studentAuthDetails.token);
 
-            await request(app)
-                .patch("/requests/" + joinRequestResponse.body.id)
-                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+        await request(app)
+            .patch("/requests/" + joinRequestResponse.body.id)
+            .set("Authorization", "Bearer " + teacherAuthDetails.token);
 
-            const assignmentResponse = await request(app)
-                .post("/assignments")
-                .send({
-                    "classId": classId,
-                    "learningPathId": "string",
-                    "startDate": "2025-04-10",
-                    "deadline": "2025-04-10",
-                    "name": "name",
-                    "extraInstructions": "extra_instructions"
-                })
-                .set("Content-Type", "application/json")
-                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+        const assignmentResponse = await request(app)
+            .post("/assignments")
+            .send({
+                "classId": classId,
+                "learningPathId": "string",
+                "startDate": "2025-04-10",
+                "deadline": "2025-04-10",
+                "name": "name",
+                "extraInstructions": "extra_instructions"
+            })
+            .set("Content-Type", "application/json")
+            .set("Authorization", "Bearer " + teacherAuthDetails.token);
 
-            assignmentId = assignmentResponse.body.id;
+        assignmentId = assignmentResponse.body.id;
 
-            const groupResponse = await request(app)
-                .post("/groups")
-                .send({
-                    "assignment": assignmentId,
-                    "members": [studentAuthDetails.id]
-                })
-                .set("Content-Type", "application/json")
-                .set("Authorization", "Bearer " + teacherAuthDetails.token);
-            
-            groupId = groupResponse.body.id;
+        const groupResponse = await request(app)
+            .post("/groups")
+            .send({
+                "assignment": assignmentId,
+                "members": [studentAuthDetails.id]
+            })
+            .set("Content-Type", "application/json")
+            .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+        groupId = groupResponse.body.id;
     });
 
     describe("POST /group/{idParent}/users", () => {
         let extraStudentAuthDetails: AuthDetails;
-        
+
         beforeEach(async () => {
             extraStudentAuthDetails = await initializeUser("student", app, "extra@gmail.com");
         });
@@ -85,17 +85,17 @@ describe("Test user API endpoints", () => {
             expect(response.status).toBe(201);
 
             const checkResponse = await request(app)
-                    .get("/groups/" + groupId + "/users")
-                    .set("Accept", "application/json")
-                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
-                expect(checkResponse.status).toBe(200);
-                expect(checkResponse.body).toEqual({
-                    "students": [
-                        studentAuthDetails.id,
-                        extraStudentAuthDetails.id
-                    ]
-                });
+                .get("/groups/" + groupId + "/users")
+                .set("Accept", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(checkResponse.status).toBe(200);
+            expect(checkResponse.body).toEqual({
+                "students": [
+                    studentAuthDetails.id,
+                    extraStudentAuthDetails.id
+                ]
+            });
         })
 
         it("should not add a user twice to a group", async () => {
@@ -107,7 +107,7 @@ describe("Test user API endpoints", () => {
                 })
                 .set("Content-Type", "application/json")
                 .set("Authorization", "Bearer " + teacherAuthDetails.token);
-            
+
             // Add the same student again
             await request(app)
                 .post("/groups/" + groupId + "/users")
@@ -119,17 +119,17 @@ describe("Test user API endpoints", () => {
 
             // Confirm that the user is in the group only once
             const checkResponse = await request(app)
-                    .get("/groups/" + groupId + "/users")
-                    .set("Accept", "application/json")
-                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
-                expect(checkResponse.status).toBe(200);
-                expect(checkResponse.body).toEqual({
-                    "students": [
-                        studentAuthDetails.id,
-                        extraStudentAuthDetails.id
-                    ]
-                });
+                .get("/groups/" + groupId + "/users")
+                .set("Accept", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(checkResponse.status).toBe(200);
+            expect(checkResponse.body).toEqual({
+                "students": [
+                    studentAuthDetails.id,
+                    extraStudentAuthDetails.id
+                ]
+            });
         })
     });
 
@@ -182,7 +182,7 @@ describe("Test user API endpoints", () => {
                     .get("/classes/" + classId + "/users")
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
+
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
                     "students": [studentAuthDetails.id],
@@ -197,7 +197,7 @@ describe("Test user API endpoints", () => {
                     .get("/assignments/" + assignmentId + "/users")
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
+
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
                     "students": [studentAuthDetails.id]
@@ -211,7 +211,7 @@ describe("Test user API endpoints", () => {
                     .get("/groups/" + groupId + "/users")
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
+
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
                     "students": [studentAuthDetails.id]
@@ -219,7 +219,7 @@ describe("Test user API endpoints", () => {
             });
         });
     });
-    
+
     describe("PATCH /users/{id}", () => {
         let updatedUser: object;
 
@@ -244,21 +244,21 @@ describe("Test user API endpoints", () => {
             expect(response.body).toEqual({});
 
             const checkResponse = await request(app)
-                    .get("/users/" + studentAuthDetails.id + "?userType=student")
-                    .set("Accept", "application/json")
-                    .set("Authorization", "Bearer " + studentAuthDetails.token)
+                .get("/users/" + studentAuthDetails.id + "?userType=student")
+                .set("Accept", "application/json")
+                .set("Authorization", "Bearer " + studentAuthDetails.token)
 
-                expect(checkResponse.status).toBe(200);
-                expect(checkResponse.body).toEqual({
-                    "id": studentAuthDetails.id,
-                    "email": "user@example.com",
-                    "firstName": "string",
-                    "familyName": "string",
-                    "passwordHash": expect.any(String),
-                    "schoolName": "string",
-                    "userType": "student"
-                });
-                //TODO: comparing hash with updated password fails
+            expect(checkResponse.status).toBe(200);
+            expect(checkResponse.body).toEqual({
+                "id": studentAuthDetails.id,
+                "email": "user@example.com",
+                "firstName": "string",
+                "familyName": "string",
+                "passwordHash": expect.any(String),
+                "schoolName": "string",
+                "userType": "student"
+            });
+            //TODO: comparing hash with updated password fails
         });
     });
 
@@ -280,8 +280,8 @@ describe("Test user API endpoints", () => {
                 expect(checkResponse.status).toBe(404);
                 expect(checkResponse.body).toEqual({
                     "code": "NOT_FOUND",
-                    "message": "User with ID " + studentAuthDetails.id +" not found",
-                });                
+                    "message": "User with ID " + studentAuthDetails.id + " not found",
+                });
             });
         });
 
@@ -290,7 +290,7 @@ describe("Test user API endpoints", () => {
                 const response = await request(app)
                     .delete("/classes/" + classId + "/users/" + studentAuthDetails.id)
                     .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
+
                 expect(response.status).toBe(204);
                 expect(response.body).toEqual({});
             });
@@ -301,7 +301,7 @@ describe("Test user API endpoints", () => {
                 const response = await request(app)
                     .delete("/groups/" + groupId + "/users/" + studentAuthDetails.id)
                     .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
+
                 expect(response.status).toBe(204);
                 expect(response.body).toEqual({});
             });

@@ -22,7 +22,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { ProgressService } from '../../services/progress.service';
 import { UsersOfClass } from '../../interfaces/user/usersOfClass';
 import { ClassActivity } from '../../interfaces/progress/activity';
-import { LoadingComponent } from '../loading/loading.component';
 import { ClassCompletion } from '../../interfaces/progress/completion';
 import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-loader/card-skeleton-loader.component';
 
@@ -43,7 +42,6 @@ import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-l
     ClassOverviewWidgetComponent,
     DeadlinesWidgetComponent,
     MatButtonModule,
-    LoadingComponent,
     CardSkeletonLoaderComponent
   ],
   templateUrl: './teacher-dashboard.component.html',
@@ -73,7 +71,7 @@ export class TeacherDashboardComponent implements OnInit {
     private classesService: ClassesService,
     private assignmentsService: AssignmentService,
     private progressService: ProgressService
-  ) {}
+  ) { }
 
   private retrieveData(): void {
     forkJoin({
@@ -94,13 +92,13 @@ export class TeacherDashboardComponent implements OnInit {
         const localizedAssignments: Assignment[] = [];
         classes.forEach(cls => localizedAssignments.push(
           ...assignments
-          .filter(a => a.classId === cls.id)
-          .map(a => ({
-            ...a,
-            name: a.name ?? $localize`:@@unnamed:Unnamed`,
-            deadline: a.deadline ?? $localize`:@@noDeadline:No deadline found`,
-            className: cls.name ?? $localize`:@@unnamed:Unnamed`,
-          }))
+            .filter(a => a.classId === cls.id)
+            .map(a => ({
+              ...a,
+              name: a.name ?? $localize`:@@unnamed:Unnamed`,
+              deadline: a.deadline ?? $localize`:@@noDeadline:No deadline found`,
+              className: cls.name ?? $localize`:@@unnamed:Unnamed`,
+            }))
         ));
         this.assignments = localizedAssignments
         this.loadingClasses = false;
@@ -108,21 +106,21 @@ export class TeacherDashboardComponent implements OnInit {
         const enrichedClasses = classes.map(cls => {
           return forkJoin({
             users: this.classesService.usersInClass(cls.id).pipe(
-              catchError(() => of({students: [], teachers: [] } as UsersOfClass)),
+              catchError(() => of({ students: [], teachers: [] } as UsersOfClass)),
               defaultIfEmpty({ students: [], teachers: [] } as UsersOfClass)
             ),
             classActivity: this.progressService.getClassActivity(cls.id).pipe(
-              catchError(() => of({activity: []} as ClassActivity)),
-              defaultIfEmpty({activity: []} as ClassActivity)
+              catchError(() => of({ activity: [] } as ClassActivity)),
+              defaultIfEmpty({ activity: [] } as ClassActivity)
             ),
             classCompletion: this.progressService.getClassCompletion(cls.id).pipe(
-              catchError(() => of({percentage: 0} as ClassCompletion)), // Default percentage to zero
-              defaultIfEmpty({percentage: 0} as ClassCompletion)
+              catchError(() => of({ percentage: 0 } as ClassCompletion)), // Default percentage to zero
+              defaultIfEmpty({ percentage: 0 } as ClassCompletion)
             ),
           }).pipe(
             // Map the pipe-response, add studentcount and assignment
-            map(({users, classActivity, classCompletion}) => {
-              return { 
+            map(({ users, classActivity, classCompletion }) => {
+              return {
                 ...cls,
                 studentCount: users.students.length,
                 assignments: this.assignments.filter(a => a.classId === cls.id),
@@ -131,7 +129,7 @@ export class TeacherDashboardComponent implements OnInit {
               };
             })
           )
-      });
+        });
 
         // After every call is done, return these classes
         return forkJoin(enrichedClasses);
@@ -139,9 +137,10 @@ export class TeacherDashboardComponent implements OnInit {
     ).subscribe(enrichedClasses => {
       // Update the classes with the extra data
       this.classes = enrichedClasses;
-      this.loadingData = false
       // With this data we can display analytics (if possible)
       this.fillCharts();
+    }).add(() => {
+      this.loadingData = false
     });
   }
 

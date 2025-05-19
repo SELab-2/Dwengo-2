@@ -18,7 +18,7 @@ describe('SubmissionService', () => {
     })
   };
 
-    let errorService: jasmine.SpyObj<ErrorService>;
+  let errorService: jasmine.SpyObj<ErrorService>;
 
 
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe('SubmissionService', () => {
     errorService.deleteError.and.returnValue("deleteError");
     errorService.updateError.and.returnValue("updateError");
     TestBed.configureTestingModule({
-      
+
       providers: [
         SubmissionService,
         { provide: AuthenticationService, useValue: mockAuthService },
@@ -58,6 +58,7 @@ describe('SubmissionService', () => {
       learningObjectId: 'lo-xyz',
       time: new Date('2025-05-13T10:00:00Z'),
       contents: 'Test submission contents',
+      taskId: "test"
     };
 
     const mockResponse: NewSubmissionResponse = {

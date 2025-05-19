@@ -1,7 +1,7 @@
 <!-- Main -->
 <main class="main-container">
 
-    <h1 class="main-title" i18n="@@teacherDashboardTitle">Dashboard</h1>
+    <h1 class="main-title" i18n="@@teacherDashboardTitle">Your Dashboard</h1>
 
     <div class="main-info">
 
@@ -22,15 +22,15 @@
 
         <div class="main-cards">
             <app-menu-card [title]="classesTitle" [count]="classes.length" icon="school"
-                [selected]="selectedView === 'classes'" color="blue" (cardClick)="setView('classes')">
+                [selected]="selectedView === 'classes'" color="green" (cardClick)="setView('classes')">
             </app-menu-card>
 
             <app-menu-card [title]="deadlinesTitle" [count]="assignments.length" icon="timer"
-                [selected]="selectedView === 'deadlines'" color="yellow" (cardClick)="setView('deadlines')">
+                [selected]="selectedView === 'deadlines'" color="red" (cardClick)="setView('deadlines')">
             </app-menu-card>
 
             <app-menu-card [title]="questionsTitle" [count]="0" icon="contact_support"
-                [selected]="selectedView === 'questions'" color="green" (cardClick)="setView('questions')">
+                [selected]="selectedView === 'questions'" color="yellow" (cardClick)="setView('questions')">
             </app-menu-card>
 
             <div class="button-widget">

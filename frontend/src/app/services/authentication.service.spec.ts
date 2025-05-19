@@ -5,12 +5,14 @@ import { LoginResponse, RegisterResponse, UserLoginCredentials, UserRegistration
 import { TestBed } from "@angular/core/testing";
 import { provideRouter, Router } from "@angular/router";
 import { ErrorService } from "./error.service";
+import { ErrorAuthHandlerService } from "./errorAuthHandler.service";
 
 describe('AuthenticationService', () => {
   let router: Router;
   let http: jasmine.SpyObj<HttpClient>;
   let service: AuthenticationService;
   let errorService: jasmine.SpyObj<ErrorService>;
+  let errorAuthHandlerService: jasmine.SpyObj<ErrorAuthHandlerService>;
 
   const email: string = "baldur@asgard.no";
   const password: string = "Thor sucks";
@@ -30,7 +32,7 @@ describe('AuthenticationService', () => {
   }
 
   const loginCredentials: UserLoginCredentials = {
-    email: email, 
+    email: email,
     password: password
   }
 
@@ -51,13 +53,14 @@ describe('AuthenticationService', () => {
     });
 
     errorService = jasmine.createSpyObj('ErrorService', ['pipeHandler', 'subscribeHandler']);
+    errorAuthHandlerService = jasmine.createSpyObj('ErrorAuthHandlerService', ['register']);
 
     // Mock return values
     errorService.pipeHandler.and.callFake(() => (source) => source);
-  
+
     http = TestBed.inject(HttpClient) as jasmine.SpyObj<HttpClient>;
     router = TestBed.inject(Router);
-    service = new AuthenticationService(router, http, errorService);
+    service = new AuthenticationService(router, http, errorService, errorAuthHandlerService);
   });
 
   it('should register', () => {
@@ -108,5 +111,37 @@ describe('AuthenticationService', () => {
 
     expect(headers.headers.get('Authorization')).toEqual(`Bearer ${token}`);
     expect(headers.headers.get('Content-Type')).toEqual('application/json');
+  });
+
+  it('should refresh token and navigate to correct dashboard', () => {
+    http.post.and.returnValue(of(loginResponse));
+    service.storeRefreshToken(token);
+    service.storeUserType(userDetails.userType);
+    spyOn(router, 'navigateByUrl');
+
+    service.refresh();
+
+    expect(http.post).toHaveBeenCalledWith(
+        `${service['apiUrl']}/login`,
+        { refreshToken: token }
+    );
+    expect(service.retrieveToken()).toEqual(token);
+    expect(service.retrieveRefreshToken()).toEqual(token);
+    expect(service.retrieveUserId()).toEqual(loginResponse.id);
+    expect(router.navigateByUrl).toHaveBeenCalledWith('student/dashboard');
+  });
+
+  it('should not navigate if refresh response is null', () => {
+    http.post.and.returnValue(of(null));
+    service.storeRefreshToken(token);
+    service.storeUserType(userDetails.userType);
+    spyOn(router, 'navigateByUrl');
+
+    service.refresh();
+
+    expect(http.post).toHaveBeenCalled();
+    expect(service.retrieveToken()).toBeNull();
+    expect(service.retrieveUserId()).toBeNull();
+    expect(router.navigateByUrl).not.toHaveBeenCalled();
   });
 });

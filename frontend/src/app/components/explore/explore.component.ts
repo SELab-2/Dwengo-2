@@ -3,7 +3,6 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { LearningPath, LearningPathRequest } from '../../interfaces/learning-path';
 import { LearningPathListComponent } from '../small-components/learning-path-list/learning-path-list.component';
 import { LearningPathService } from '../../services/learningPath.service';
-import { LoadingComponent } from '../loading/loading.component';
 import { forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { LearningPathFilterComponent } from '../small-components/learning-path-filter/learning-path-filter.component';
@@ -40,7 +39,17 @@ const CATEGORY_CONFIGS: { key: string; title: string }[] = [
 @Component({
     selector: 'app-explore',
     standalone: true,
-    imports: [LearningPathListComponent, LearningPathComponent, LoadingComponent, FormsModule, LearningPathFilterComponent, MatCardModule, MatButtonModule, CardSkeletonLoaderComponent],
+    imports: [
+        LearningPathListComponent, 
+        LearningPathComponent, 
+        FormsModule, 
+        LearningPathFilterComponent,
+        CardSkeletonLoaderComponent,
+        
+        // Angular material
+        MatCardModule, 
+        MatButtonModule
+    ],
     templateUrl: './explore.component.html',
     styleUrl: './explore.component.less'
 })

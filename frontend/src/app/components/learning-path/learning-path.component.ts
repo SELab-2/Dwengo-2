@@ -36,12 +36,16 @@ export class LearningPathComponent implements OnInit {
     @Input() assignment: boolean = false;
     @Input() progress?: Progress;
     @Input() popup?: boolean = false; // extra back button if component is used as popup
+    @Input() step: number = 0;
 
     // Emit an event including the new node we navigated to, used when in an assignment 
-    @Output() selectedNodeChanged = new EventEmitter<Node<LearningObject> | null>();
+    @Output() selectedNodeChanged = new EventEmitter<Node<LearningObject>>();
 
     // Specific for explore page, let know when popup needs to go back
     @Output() back = new EventEmitter<void>();
+
+    // Emit the graph when we built is, this way assignment can use it without rebuilding
+    @Output() emitGraph = new EventEmitter<DirectedGraph<LearningObject>>();
 
     loading: boolean = true;
     isTeacher: boolean = false;
@@ -85,6 +89,11 @@ export class LearningPathComponent implements OnInit {
                 // Build trajectory when we're done
                 if (this.path.nodes && this.learningObjects) {
                     this.trajectoryGraph = this.graphBuilderService.buildTrajectoryGraph(this.path.nodes, this.learningObjects);
+                    this.emitGraph.emit(this.trajectoryGraph);
+                    // Make sure every step is set
+                    this.trajectoryGraph.nodes.forEach((node, i) => {
+                        node.value.metadata.step = i;
+                    });
                     // If there is progress, start the assignment from that node
                     if (this.progress) {
                         const learningObject: LearningObject | undefined = objects.find(
@@ -103,7 +112,7 @@ export class LearningPathComponent implements OnInit {
                     // No progress yet, begin from start of
                     this.selectedNode = this.trajectoryGraph.root;
                     // Node was changed, emit event with node
-                    this.selectedNodeChanged.emit(this.selectedNode);
+                    this.selectedNodeChanged.emit(this.selectedNode!);
                 }
             },
             error: () => {
@@ -120,6 +129,7 @@ export class LearningPathComponent implements OnInit {
         const nextNode = this.trajectoryGraph.getNeighbors(this.selectedNode.value)[0];
         if (nextNode) {
             this.selectedNode = nextNode;
+            this.step = nextNode.value.metadata.step!;
             this.selectedNodeChanged.emit(nextNode);
         } else {
             // Last node, navigate back to assignments
@@ -128,7 +138,7 @@ export class LearningPathComponent implements OnInit {
     }
 
     onNodeSelected(): void {
-        // TODO
+        this.selectedNodeChanged.emit(this.selectedNode!);
     }
 
 }

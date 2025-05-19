@@ -4,46 +4,52 @@
         @if(_class) {
             <span>
                 <h2 i18n="@@membersListStudentsTitle">Students</h2>
-            
-                <table mat-table [dataSource]="members">
-                    <!--
-                        A bug i encountered here was that material table was reading 'template' from undefined.
-                        This was fixed by removing the @for directives since the material table does this internally.
-                    -->
 
-                    <!-- Name Column -->
+                <table mat-table [dataSource]="members">
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef i18n="@@membersListStudentsName">
                             Name
                         </th>
                         <td mat-cell *matCellDef="let element">
                             {{element.firstName}} {{element.familyName}}
-                        </td>    
+                        </td>
                     </ng-container>
 
-                    <!-- Email Column -->
                     <ng-container matColumnDef="email">
                         <th mat-header-cell *matHeaderCellDef i18n="@@membersListStudentsEmail">
                             Email
                         </th>
                         <td mat-cell *matCellDef="let element">
                             {{element.email}}
-                        </td>    
+                        </td>
                     </ng-container>
 
-                    <!-- School Name Column -->
                     <ng-container matColumnDef="schoolName">
                         <th mat-header-cell *matHeaderCellDef i18n="@@membersListStudentsSchool">
                             School
                         </th>
                         <td mat-cell *matCellDef="let element">
                             {{element.schoolName}}
-                        </td>    
+                        </td>
                     </ng-container>
 
-                    <!-- Header and Row Definitions -->
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <ng-container matColumnDef="delete">
+                        <th mat-header-cell *matHeaderCellDef>
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="warn" (click)="deleteMember(element)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    @if(this.isTeacher()) {
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsWithDelete"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsWithDelete;"></tr>
+                    } @else {
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    }
                 </table>
             </span>
         } @else {
