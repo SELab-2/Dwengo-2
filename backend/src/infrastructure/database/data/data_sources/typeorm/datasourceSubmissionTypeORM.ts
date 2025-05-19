@@ -4,7 +4,7 @@ import { EntityNotFoundError } from "../../../../../config/error";
 import { Submission } from "../../../../../core/entities/submission";
 import { AssignmentTypeORM } from "../../data_models/assignmentTypeorm";
 import { ClassTypeORM } from "../../data_models/classTypeorm";
-import { SubmissionTypeORM } from "../../data_models/submissionTypeorm";
+import { SubmissionStatus, SubmissionTypeORM } from "../../data_models/submissionTypeorm";
 import { TaskTypeORM } from "../../data_models/taskTypeORM";
 import { UserType, UserTypeORM } from "../../data_models/userTypeorm";
 
@@ -70,31 +70,25 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         return submissionModel.toEntity();
     }
 
-    public async update(submission: Submission): Promise<Submission> {
+    public async update(id: string): Promise<void> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
         const submissionRepository = datasource.getRepository(SubmissionTypeORM);
         const submissionModel: SubmissionTypeORM | null = await submissionRepository.findOne({
-            where: { id: submission.id },
+            where: { id: id },
         });
 
         if (!submissionModel) {
-            throw new EntityNotFoundError(`Submission with id ${submission.studentId} not found`);
+            throw new EntityNotFoundError(`Submission with id ${id} not found`);
         }
 
-        const updatedSubmission = SubmissionTypeORM.createTypeORM(
-            submission,
-            submissionModel.user,
-            submissionModel.assignment,
-            submissionModel.task,
-        );
-        updatedSubmission.id = submissionModel.id;
+        if (submissionModel.progress_status === SubmissionStatus.NOT_ACCEPTED) {
+            submissionModel.progress_status = SubmissionStatus.ACCEPTED;
+        } else {
+            submissionModel.progress_status = SubmissionStatus.NOT_ACCEPTED;
+        }
 
-        submissionRepository.delete(submissionModel.id);
-
-        submissionRepository.save(updatedSubmission);
-
-        return updatedSubmission.toEntity();
+        await submissionRepository.save(submissionModel);
     }
 
     public async delete(submission: string): Promise<void> {
@@ -151,7 +145,8 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
             if (!taskModel) {
                 throw new EntityNotFoundError(`Task with id ${taskId} not found`);
             }
-            whereCondition.task = taskModel;
+
+            whereCondition.task = { id: taskId };
         }
 
         // Get the submissions

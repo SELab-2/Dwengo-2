@@ -501,6 +501,14 @@ const routeConfigs: Record<
             },
         },
         {
+            method: HttpMethod.PATCH,
+            path: "/submissions/:id",
+            hasController: true,
+            request: {
+                pathParams: { id: "submission-1" },
+            },
+        },
+        {
             method: HttpMethod.DELETE,
             path: "/submissions/:id",
             hasController: true,
@@ -681,7 +689,7 @@ const routeConfigs: Record<
             path: "/learningObject/:id",
             hasController: true,
             request: {
-                pathParams: {id: "ct08_05"},
+                pathParams: { id: "ct08_05" },
                 queryParams: { type: "raw" },
             },
         },
@@ -698,7 +706,7 @@ const routeConfigs: Record<
             path: "/learningPath/:id",
             hasController: true,
             request: {
-                pathParams: {id: "anm3"},
+                pathParams: { id: "anm3" },
                 queryParams: { type: "nl" },
             },
         },
@@ -761,19 +769,19 @@ const testRoutes = (
                 // Use route-specific request if provided, otherwise default
                 const req = request
                     ? {
-                          headers: {},
-                          method,
-                          body: request.body || {},
-                          pathParams: request.pathParams || {},
-                          queryParams: request.queryParams || {},
-                      }
+                        headers: {},
+                        method,
+                        body: request.body || {},
+                        pathParams: request.pathParams || {},
+                        queryParams: request.queryParams || {},
+                    }
                     : {
-                          headers: {},
-                          method,
-                          body: {},
-                          pathParams: { id: "test-id", idParent: "test-parent-id" },
-                          queryParams: {},
-                      };
+                        headers: {},
+                        method,
+                        body: {},
+                        pathParams: { id: "test-id", idParent: "test-parent-id" },
+                        queryParams: {},
+                    };
                 const res = { headers: {}, body: {}, status: 200 };
                 const next = jest.fn();
 
