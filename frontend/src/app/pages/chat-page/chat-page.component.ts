@@ -34,6 +34,11 @@ export class ChatPageComponent implements OnInit {
     public currentLearningObjectId: string | null = null;
     public VisibilityType = VisibilityType; // For template binding
     public userType: string = this.authService.retrieveUserType() === UserType.STUDENT? 'student' : 'teacher';
+    
+    readonly USER_CHATS = $localize`:@@userChats:Show my chats`;
+    readonly OTHER_CHATS = $localize`:@@otherChats:Show other chats for this step`;
+    readonly UNNAMED_CHAT = $localize`:@@unnamedChatFallback:Unnamed Chat`;
+    readonly INVALID_CHAT_ID = $localize`:@@invalidChatId:No chat selected.`;
 
     constructor(
         private route: ActivatedRoute,
@@ -66,7 +71,6 @@ export class ChatPageComponent implements OnInit {
     private loadChats(): void {
         const userId = this.authService.retrieveUserId();
         this.threadService.loadSideBarQuestionThreads(
-          userId || '',
           this.currentLearningObjectId || '',
           this.showPublicChats
         ).subscribe({

@@ -24,4 +24,26 @@
 
 </div>
 
+<button mat-fab class="chat-fab" color="primary" (click)="openChat()">
+  <mat-icon>chat</mat-icon>
+</button>
+
+<ng-template #chatDialog>
+  <div class="chat-dialog">
+    <div class="chat-header">
+      <mat-toolbar color="primary" class="chat-custom-toolbar">
+        <span>Chat</span>
+        <span class="spacer"></span>
+        <button mat-icon-button (click)="navigateToFullChat()" matTooltip="Open full chat">
+          <mat-icon style="color: black;">open_in_new</mat-icon>
+        </button>
+        <button mat-icon-button (click)="closeChat()">
+          <mat-icon style="color: black;">close</mat-icon>
+        </button>
+      </mat-toolbar>
+    </div>
+    <app-chat [questionThreadId]="currentThreadId" [showHeader]="false" [assignmentId]="assignmentId" [learningObjectId]="currentLearningObjectId" ></app-chat>
+  </div>
+</ng-template>
+
 }

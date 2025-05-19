@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { AssignmentService } from './assignment.service';
+import { MessageService } from './message.service';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 import { QuestionThread, NewQuestionThread, QuestionThreadUpdate, VisibilityType } from '../interfaces/questionThread';
@@ -29,7 +30,8 @@ export class QuestionThreadService {
     private http: HttpClient,
     private authService: AuthenticationService,
     private errorService: ErrorService,
-    private assignmentService: AssignmentService
+    private assignmentService: AssignmentService,
+    private messageService: MessageService
   ) {}
 
   private questionThreadMessage = $localize `:@@questionThread:question thread`;
@@ -51,6 +53,29 @@ export class QuestionThreadService {
       this.errorService.pipeHandler(
         this.errorService.retrieveError(this.questionThreadMessage)
       )
+    );
+  }
+
+  retrieveQuestionThreadByStep(
+    assignmentId: string,
+    learningObjectId: string
+  ): Observable<QuestionThread | null> {
+    const userId = this.authService.retrieveUserId() || '';
+    return this.retrieveQuestionThreadsByAssignment(assignmentId).pipe(
+      switchMap(threads => {
+        if (!threads || threads.length === 0) {
+            return of(null);
+        }
+        const filteredThreads = threads.filter(thread =>
+            thread.learningObjectId === learningObjectId && thread.creatorId === userId
+        );
+        if (filteredThreads.length === 0) {
+            return of(null); // No specific thread found for this step/user
+        }
+        const foundThread = filteredThreads[0];
+        // If a thread object is found but has no ID, it's problematic; treat as not found for ID-based retrieval.
+        return foundThread.id ? of(foundThread) : of(null);
+      })
     );
   }
 
@@ -86,18 +111,27 @@ export class QuestionThreadService {
   * Load and filter question threads for the authenticated user or current learning object
   */
   loadSideBarQuestionThreads(
-    userId: string,
     currentLearningObjectId: string,
     showPublicChats: boolean
   ): Observable<QuestionThread[]> {
     return this.assignmentService.retrieveAssignments().pipe(
       switchMap(assignments => {
-        if (!assignments || !Array.isArray(assignments)) {
+        if (!assignments?.length) {
           return of([]);
         }
 
-        const threadRequests = assignments.map(a =>
-          this.retrieveQuestionThreadsByAssignment(a.id)
+        const threadRequests = assignments.map(a => 
+          this.retrieveQuestionThreadsByAssignment(a.id).pipe(
+            switchMap(threads => {
+              if (!threads.length) return of([]);
+              
+              const threadWithNames$ = threads.map(thread => 
+                this.getThreadNameWithTimestamp(thread, a.name).pipe(
+                  map(name => ({ ...thread, name }))
+              ));
+              return forkJoin(threadWithNames$);
+            })
+          )
         );
         return forkJoin(threadRequests);
       }),
@@ -139,6 +173,26 @@ export class QuestionThreadService {
         return allThreads
       }
     }
+  }
+
+  private getThreadNameWithTimestamp(thread: QuestionThread, assignmentName: string): Observable<string> {
+    // If no messages, just return basic name
+    if (!thread.messageIds || thread.messageIds.length === 0) {
+      return of(`${assignmentName} - ${thread.id}`);
+    }
+
+    // Get the first message's creation date
+    return this.messageService.retrieveMessageById(thread.messageIds[0]).pipe(
+      map(message => {
+        const dateStr = message.createdAt ? 
+          new Date(message.createdAt).toLocaleDateString() : 
+          '';
+        return `${dateStr} - ${assignmentName} - ${thread.id}`;
+      }),
+      this.errorService.pipeHandler(
+        this.errorService.retrieveError(this.questionMessage)
+      )
+    );
   }
 
   /**

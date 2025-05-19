@@ -189,24 +189,25 @@ export async function seedDatabase(): Promise<void> {
       }
     }
 
-    // ── 7. Create submissions for Assignments that have started ──
-    for (let i = 0 ; i < onGoingAssignments.length; i++) {
-      const assignment: {id: string, classId: string} = onGoingAssignments[i];
-      const students = await userRep.getByClassId(assignment.classId);
-      const studentIds = students.map((s: any) => s.id);
+    // // ── 7. Create submissions for Assignments that have started ──
+    // for (let i = 0 ; i < onGoingAssignments.length; i++) {
+    //   const assignment: {id: string, classId: string} = onGoingAssignments[i];
+    //   const students = await userRep.getByClassId(assignment.classId);
+    //   const studentIds = students.map((s: any) => s.id);
     
-      for(const id of studentIds){
-        const submission = new Submission(
-          id,
-          assignment.id,
-          faker.helpers.arrayElement(pathToObjects[learningPathIds[i]]), // Get random learningObject for the path in the assignment
-          faker.date.past({years: 1}), // Generate date in the last year, is before the deadline so not logical. But is used so we can see the analytics
-          Buffer.from(""),
-          StatusType.NOT_ACCEPTED
-        )
-        await submissionRep.create(submission)
-      }
-    }
+    //   for(const id of studentIds){
+    //     const submission = new Submission(
+    //       id,
+    //       assignment.id,
+    //       "1234",
+    //       faker.helpers.arrayElement(pathToObjects[learningPathIds[i]]), // Get random learningObject for the path in the assignment
+    //       faker.date.past({years: 1}), // Generate date in the last year, is before the deadline so not logical. But is used so we can see the analytics
+    //       Buffer.from(""),
+    //       StatusType.NOT_ACCEPTED
+    //     )
+    //     await submissionRep.create(submission)
+    //   }
+    // }
     
 
     // ── 8. Create Threads and Messages for Learning Steps ──

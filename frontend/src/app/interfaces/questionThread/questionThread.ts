@@ -16,6 +16,7 @@ export interface QuestionThread {
     isClosed: boolean,
     visibility: VisibilityType,
     messageIds?: string[],
+    name?: string,
 }
 
 /**

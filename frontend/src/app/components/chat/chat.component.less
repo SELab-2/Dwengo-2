@@ -1,15 +1,20 @@
 .chat-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 
     .chat-toolbar {
         height: 64px;
         flex-shrink: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .spacer {
+            flex: 1;
+        }
     }
 
     .white-icon {
@@ -38,7 +43,8 @@
     }
 
     .message-input {
-        height: 80px;
+        // min-height: 80px;
+        max-height: 300px;
         padding: 16px;
         background: white;
         border-top: 1px solid #eee;
@@ -46,9 +52,22 @@
         display: flex;
         align-items: center;
         gap: 8px;
+    }
 
-        mat-form-field {
-            flex: 1;
+    .input-field {
+        flex: 1;
+        
+        textarea {
+            resize: none;
+            overflow-y: auto !important;
+            max-height: 250px; /* Should be less than message-input max-height */
+            min-height: 20px;
+            line-height: 1.5;
+            padding: 8px 0;
+        }
+
+        .mat-form-field-flex {
+            align-items: flex-start; /* Align text to top when multi-line */
         }
     }
 

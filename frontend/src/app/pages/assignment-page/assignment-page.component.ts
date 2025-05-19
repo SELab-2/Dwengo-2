@@ -4,7 +4,11 @@ import { LearningPathComponent } from '../../components/learning-path/learning-p
 import { ActivatedRoute } from '@angular/router';
 import { Assignment } from '../../interfaces/assignment';
 import { AssignmentService } from '../../services/assignment.service';
+import { QuestionThreadService } from '../../services/questionThread.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { CreateSubmissionComponent } from '../../components/create-submission/create-submission.component';
 import { LearningObject } from '../../interfaces/learning-object';
 import { Node } from "../../datastructures/directed-graph";
@@ -19,15 +23,35 @@ import { LearningPathService } from '../../services/learningPath.service';
 import { SpecificLearningPathRequest } from '../../interfaces/learning-path';
 import { CreateTaskComponent, TaskType } from '../../components/create-task/create-task-component/create-task.component';
 import { AssignmentTask, MultipleChoice } from '../../interfaces/assignment/tasks';
+import { ChatComponent } from '../../components/chat/chat.component';
+import { TemplateRef } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { Overlay } from '@angular/cdk/overlay';
+import { Router } from '@angular/router';
+import { QuestionThread } from '../../interfaces/questionThread';
 
 @Component({
   selector: 'app-assignment-page',
-  imports: [AuthenticatedHeaderComponent, LearningPathComponent, CreateSubmissionComponent, MatProgressBar, MatCardModule, LoadingComponent, CreateTaskComponent],
+  standalone: true,
+  imports: [
+    AuthenticatedHeaderComponent,
+    LearningPathComponent,
+    CreateSubmissionComponent,
+    MatProgressBar,
+    MatCardModule,
+    LoadingComponent,
+    CreateTaskComponent,
+    ChatComponent,
+    MatIconModule,
+    MatDialogModule,
+    MatToolbarModule,
+  ],
   templateUrl: './assignment-page.component.html',
   styleUrl: './assignment-page.component.less'
 })
 export class AssignmentPageComponent implements OnInit {
   @ViewChild(LearningPathComponent) learningPathComponent!: LearningPathComponent;
+  @ViewChild('chatDialog') chatDialog!: TemplateRef<unknown>;
 
   // The current activated route
   private readonly route = inject(ActivatedRoute);
@@ -35,6 +59,7 @@ export class AssignmentPageComponent implements OnInit {
   private readonly snackBar = inject(MatSnackBar);
   private readonly invalidURLMessage = $localize`Invalid URL`;
   private readonly closeMessage = $localize`Close`;
+  private chatDialogRef?: MatDialogRef<unknown>;
   public loading = true;
   public taskFetched = false;
 
@@ -50,6 +75,8 @@ export class AssignmentPageComponent implements OnInit {
   public step: number = 0;
   public furthestStep: number = 0; // This is the furthest progress point achieved
   public maxStep: number = 1;
+  public currentThreadId: string = "";
+  public isChatOpen = false;
 
   public isStudent!: boolean;
 
@@ -59,6 +86,10 @@ export class AssignmentPageComponent implements OnInit {
     private progressService: ProgressService,
     private authService: AuthenticationService,
     private learningPathService: LearningPathService,
+    private chatService: QuestionThreadService,
+    private dialog: MatDialog,
+    private overlay: Overlay,
+    private router: Router,
   ) { }
 
 
@@ -135,6 +166,82 @@ export class AssignmentPageComponent implements OnInit {
     // } as NormalQuestion; // Cast the AssignmentTask to what we need
 
     this.taskFetched = true;
+  }
+
+  public async checkOrCreateThread() {
+    console.log("checkOrCreateThread called. assignmentId:", this.assignmentId, "currentLearningObjectId:", this.currentLearningObjectId);
+
+    if (!this.assignmentId) {
+        console.warn("Cannot check/create thread: assignmentId is missing.");
+        this.currentThreadId = "new"; // Default if essential ID is missing
+        return;
+    }
+
+    // If currentLearningObjectId is empty, it means we can't find a thread for a specific step.
+    // In this context, it should be treated as a "new" thread.
+    if (!this.currentLearningObjectId) {
+        console.warn("currentLearningObjectId is missing in checkOrCreateThread. Setting currentThreadId to 'new'.");
+        this.currentThreadId = "new";
+        return;
+    }
+
+    this.chatService.retrieveQuestionThreadByStep(
+        this.assignmentId,
+        this.currentLearningObjectId
+    ).subscribe({
+        next: (thread: QuestionThread | null) => { // Expect QuestionThread or null
+            console.log("Thread received from service in checkOrCreateThread:", thread);
+            if (thread && thread.id) {
+                this.currentThreadId = thread.id;
+            } else {
+                // Handles null response or thread object without an id
+                this.currentThreadId = "new";
+            }
+            console.log("currentThreadId in assignment page set to:", this.currentThreadId);
+        },
+        error: (err: any) => {
+            console.error("Error in retrieveQuestionThreadByStep subscription:", err);
+            this.currentThreadId = "new"; // Fallback on error
+            console.log("currentThreadId in assignment page set to 'new' due to error.");
+        }
+    });
+  }
+
+  async openChat() {
+    if (this.isChatOpen) {
+      this.closeChat();
+      return;
+    }
+
+    await this.checkOrCreateThread();
+
+    this.chatDialogRef = this.dialog.open(this.chatDialog, {
+      width: '400px',
+      height: '600px',
+      panelClass: 'chat-dialog-container',
+      position: { bottom: '80px', right: '20px' },
+      hasBackdrop: false,
+      disableClose: true, // Prevents closing by clicking outside
+      scrollStrategy: this.overlay.scrollStrategies.noop(),
+      autoFocus: false
+    });
+
+    this.isChatOpen = true;
+    
+    this.chatDialogRef.afterClosed().subscribe(() => {
+      this.isChatOpen = false;
+    });
+  }
+
+  closeChat() {
+    if (this.chatDialogRef) {
+      this.chatDialogRef.close();
+    }
+  }
+
+  navigateToFullChat() {
+    this.closeChat();
+    this.router.navigate(['/student/chat', this.currentThreadId]);
   }
 
   public ngOnInit(): void {

@@ -6,7 +6,7 @@
             <button mat-stroked-button 
                     class="toggle-button"
                     (click)="toggleChatVisibility()">
-                {{ showPublicChats ? 'Show My Chats' : 'Show Other Chats for This Step' }}
+                {{ showPublicChats ? USER_CHATS : OTHER_CHATS }}
             </button>
             
             <mat-nav-list>
@@ -20,7 +20,7 @@
                             [class.public]="thread.visibility === VisibilityType.PUBLIC">
                             {{ thread.visibility === VisibilityType.PRIVATE ? '💬' : (thread.visibility === VisibilityType.GROUP ? '👥' : '🌐') }}
                         </span>
-                        Chat {{ thread.id.slice(0, 12) }}...
+                        {{ thread.name?.slice(0, 50) || UNNAMED_CHAT }}
                     </a>
                 }
             </mat-nav-list>
@@ -28,7 +28,7 @@
     
         <div class="chatbox">
             @if (!validChatId) {
-                <div class="invalid-chat-message">Invalid chat ID</div>
+                <div class="invalid-chat-message">{{ INVALID_CHAT_ID }}</div>
             } @else {
                 <app-chat [questionThreadId]="chatId" />
             }
