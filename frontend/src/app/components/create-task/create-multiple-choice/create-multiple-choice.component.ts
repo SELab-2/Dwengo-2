@@ -24,6 +24,7 @@ export class CreateMultipleChoiceComponent {
   options: string[] = [];
   correctAnswers: boolean[] = [];
   edit: boolean = true;
+  amountSelected: number = 0;
 
   constructor() { }
   @Output() taskCreated: EventEmitter<MultipleChoice> = new EventEmitter<MultipleChoice>();
@@ -36,20 +37,24 @@ export class CreateMultipleChoiceComponent {
         this.options.push(trimmed);
         this.correctAnswers.push(true);
         this.newOption.setValue('');
+        this.amountSelected++;
       }
     }
   }
 
   deleteOption(idx: number) {
     this.options.splice(idx, 1);
+    if (this.correctAnswers[idx]) this.amountSelected--;
     this.correctAnswers.splice(idx, 1);
   }
 
   selectCorrect(idx: number) {
     this.correctAnswers[idx] = true;
+    this.amountSelected++;
   }
   selectIncorrect(idx: number) {
     this.correctAnswers[idx] = false;
+    this.amountSelected--;
   }
 
   update(change: boolean): void {

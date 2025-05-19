@@ -26,7 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { AssignmentStatsComponent } from '../assignment-stats/assignment-stats.component';
 import { SubmissionService } from '../../services/submission.service';
 import { UserService } from '../../services/user.service';
-import { forkJoin, switchMap } from 'rxjs';
+import { forkJoin, of, switchMap } from 'rxjs';
 import { Submission } from '../../interfaces/submissions';
 
 @Component({
@@ -37,6 +37,7 @@ import { Submission } from '../../interfaces/submissions';
 })
 export class AssignmentComponent implements OnInit {
   @ViewChild(LearningPathComponent) learningPathComponent!: LearningPathComponent;
+  @ViewChild(AssignmentStatsComponent) statsComponent!: AssignmentStatsComponent;
 
   @Input() assignmentId!: string;
   @Input() initializeTasks: boolean = false;
@@ -95,15 +96,12 @@ export class AssignmentComponent implements OnInit {
     return (this.step / this.maxStep) * 100;
   }
 
-  async onSelectedNodeChanged(node: Node<LearningObject>) {
-    console.log("called")
+  onSelectedNodeChanged(node: Node<LearningObject>) {
     this.submissionStatsReady = false;
     this.currentLearningObjectId = node.value.metadata.hruid!;
     this.step = node.value.metadata.step!;
     this.alreadySubmitted = this.step < this.furthestStep;
-    console.log(this.step, this.furthestStep)
-    await this.fetchTask();
-    this.submissionsForCurrentStep();
+    this.fetchTaskAndSubmissions();
   }
 
   retrieveGraph(graph: DirectedGraph<LearningObject>) {
@@ -115,6 +113,10 @@ export class AssignmentComponent implements OnInit {
     this.openSnackBar($localize`Submission created!`)
     this.furthestStep = this.step + 1;
     this.learningPathComponent.goToNextNode();  // Execute goToNextNode in LearningPathComponent, this will call our onSelectedNodeChanged
+  }
+
+  reloadStats() {
+    this.fetchTaskAndSubmissions();
   }
 
   onTaskCreated(taskData: AssignmentTask): void {
@@ -134,7 +136,6 @@ export class AssignmentComponent implements OnInit {
         allowMultipleAnswers: casted.allowMultipleAnswers,
       } as MultipleChoiceTask
     }
-    console.log("Created task step", this.step)
     // Define task
     const task: Task = {
       assignmentId: this.assignmentId,
@@ -144,12 +145,11 @@ export class AssignmentComponent implements OnInit {
       type: taskData.type,
       details: details
     }
-
     this.taskService.createTask(task).subscribe(
       (id) => {
         this.taskId = id;
         this.openSnackBar($localize`Task Succesfully Created!`);
-        this.fetchTask();
+        this.fetchTaskAndSubmissions();
       }
     )
   }
@@ -166,7 +166,6 @@ export class AssignmentComponent implements OnInit {
         this.step = 0;
         this.furthestStep = this.progress.step; // furthest step is always returned by progress
         this.alreadySubmitted = this.step < this.furthestStep
-        console.log(this.alreadySubmitted, this.furthestStep, "test", this.isStudent)
         this.maxStep = this.progress.maxStep;
         this.loading = false;
       }
@@ -186,63 +185,42 @@ export class AssignmentComponent implements OnInit {
   }
 
 
-  private fetchTask(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.taskFetched = false;
-      this.taskService.getSpecificTaskOfAssignment(this.assignmentId, this.step + 1).subscribe(
-        (task) => {
-          if (task) {
-            this.noTask = false;
-            this.task = task;
-            this.taskType = task.type;
-            this.taskId = task.id!;
-            this.taskObject = this.taskService.responseToObject(task);
-            this.taskFetched = true;
-          } else {
-            this.noTask = true;
-            this.task = null;
-          }
-          resolve();
-        },
-        (error) => reject(error)
-      );
-    });
-  }
+  private fetchTaskAndSubmissions() {
+    this.taskFetched = false;
+    this.submissionStatsReady = false;
 
-  private fetchSubmissions() {
-    // Retrieve all submissions for this step
-    this.userService.assignmentUserIds(this.assignmentId).pipe(
-      switchMap(
-        response => forkJoin(response.map(
-          id => this.submissionService.getSubmissionsForUserInAssignment(id, this.assignmentId)
-        ))
-      )
-    ).subscribe(
-      result => {
-        this.fullSubmissionData = result;
-        this.submissionsForCurrentStep();
-      }
-    )
-  }
-
-  private submissionsForCurrentStep() {
-    // If we could use the API call for each step seperately, we would not need this function
-
-    // Collect a list of submissions for each user
-    let submissionForStep: Submission[] = [];
-    this.fullSubmissionData.map(
-      userSubmissions => {
-        // If a submission exists, add it to the submission object
-        if (userSubmissions.length >= this.step) {
-          submissionForStep.push(userSubmissions[this.step]);
-        } else {
-          // TODO: If the student did not make an assignment, keep note of that
+    this.taskService.getSpecificTaskOfAssignment(this.assignmentId, this.step + 1).pipe(
+      switchMap(task => {
+        if (!task) {
+          this.noTask = true;
+          this.task = null;
+          return of([]);
         }
-      }
-    );
-    console.log(this.submissionsForStep);
-    this.submissionsForStep = submissionForStep;
-    this.submissionStatsReady = true;
+
+        this.noTask = false;
+        this.task = task;
+        this.taskType = task.type;
+        this.taskId = task.id!;
+        this.taskObject = this.taskService.responseToObject(task);
+        this.taskFetched = true;
+
+        console.log(this.assignmentId, this.taskId)
+
+        if (this.isStudent) return of([]); // Students will not see submissions of others
+
+        return this.userService.assignmentUserIds(this.assignmentId).pipe(
+          switchMap(userIds => forkJoin(
+            userIds.map(userId => {
+              return this.submissionService.userSubmissionForStep(userId, this.assignmentId, this.taskId!)
+            }
+            )
+          ))
+        );
+      })
+    ).subscribe(submissions => {
+      this.submissionsForStep = submissions.filter(s => s !== null);
+      this.submissionStatsReady = true;
+    });
   }
 
   public ngOnInit(): void {
@@ -264,8 +242,7 @@ export class AssignmentComponent implements OnInit {
           } else if (!this.isStudent) {
             this.setupTeacher();
           }
-          await this.fetchTask();
-          this.fetchSubmissions();
+          this.fetchTaskAndSubmissions();
         }
       )
     } else {

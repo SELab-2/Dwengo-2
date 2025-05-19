@@ -153,10 +153,10 @@ export class CreateAssignmentComponent implements OnInit {
     // Initialize all empty tasks with an 'other'-type task without details
     this.taskService.fillRestWithEmptyTasks(this.assignmentId).subscribe({
       next: () => {
-        console.log('Alle ontbrekende taken zijn aangemaakt');
+        console.log($localize`Assignment Created!`);
       },
       error: (err) => {
-        console.error('Er is iets misgelopen bij het aanmaken van taken', err);
+        console.error(err);
       }
     });
 

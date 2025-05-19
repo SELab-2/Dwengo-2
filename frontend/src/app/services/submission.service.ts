@@ -5,7 +5,7 @@ import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { NewSubmission, Submission } from '../interfaces/submissions/newSubmission';
 import { GetSubmissionsResponse, NewSubmissionResponse } from '../interfaces/submissions/newSubmissionResponse';
-import { switchMap, of, forkJoin, map } from 'rxjs';
+import { switchMap, of, forkJoin, map, Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +20,7 @@ export class SubmissionService {
     ) { }
 
     createSubmission(submission: NewSubmission) {
+        console.log("here1")
         const headers = this.authService.retrieveAuthenticationHeaders();
         return this.http.post<NewSubmissionResponse>(
             `${this.API_URL}/submissions`,
@@ -31,30 +32,25 @@ export class SubmissionService {
         )
     }
 
-    handleContents(content: Buffer | string): string {
-        // Als het al een string is, gewoon teruggeven
+    handleContents(content: any): string {
         if (typeof content === 'string') {
             return content;
         }
 
-        // Als het een object is met 'type' en 'data', behandelen als Buffer
-        if (
-            content &&
-            typeof content === 'object' &&
-            (content as any).type === 'Buffer' &&
-            Array.isArray((content as any).data)
-        ) {
-            const buffer = new Uint8Array((content as any).data);
-            return new TextDecoder().decode(buffer);
+        if (content && content.type === 'Buffer' && Array.isArray(content.data)) {
+            return String.fromCharCode(...content.data);
         }
 
-        // Als niets van bovenstaande klopt, geef een lege string of gooi een fout
-        console.warn('Onbekend content-formaat:', content);
+        console.warn('Unknown content format:', content);
         return '';
     }
 
 
+
+
     getOneSubmission(submId: string) {
+        console.log("here2", submId)
+
         const headers = this.authService.retrieveAuthenticationHeaders();
         return this.http.get<Submission>(
             `${this.API_URL}/submissions/${submId}`,
@@ -63,25 +59,36 @@ export class SubmissionService {
             this.errorService.pipeHandler(
                 this.errorService.retrieveError($localize`submission`),
             ),
-            map((subm) => ({ ...subm, contents: this.handleContents(subm.contents) }))
+            map((subm) => {
+                const parsed = this.handleContents(subm.contents);
+                return { ...subm, contents: parsed };
+            })
         )
     }
 
-    getSubmissionForUserInCertainStepOfAssignmentIKnowThisIsAVeryLongName(userId: string, assignmentId: string, taskId: string) {
+    userSubmissionForStep(userId: string, assignmentId: string, taskId: string): Observable<Submission | null> {
         const headers = this.authService.retrieveAuthenticationHeaders();
         return this.http.get<GetSubmissionsResponse>(
-            `${this.API_URL}/users/${userId}/submissions?asssignmentId=${assignmentId}&taskId=${taskId}`,
+            `${this.API_URL}/users/${userId}/submissions?assignmentId=${assignmentId}&taskId=${taskId}`,
             headers
         ).pipe(
             this.errorService.pipeHandler(
                 this.errorService.retrieveError($localize`submission`)
             ),
-            switchMap(response => this.getOneSubmission(response.submissions[0])
-            )
-        )
+            switchMap(response => {
+                const submission = response.submissions[0];
+                if (submission) {
+                    return this.getOneSubmission(submission);
+                } else {
+                    return of(null);
+                }
+            })
+        );
     }
 
     getSubmissionsForUserInAssignment(userId: string, assignmentId: string) {
+        console.log("here4")
+
         const headers = this.authService.retrieveAuthenticationHeaders();
         return this.http.get<GetSubmissionsResponse>(
             `${this.API_URL}/users/${userId}/submissions?assignmentId=${assignmentId}`,
@@ -93,5 +100,18 @@ export class SubmissionService {
             switchMap(response => forkJoin(response.submissions.map(id => this.getOneSubmission(id)))
             )
         )
+    }
+
+    patchSubmission(submission: Submission) {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+        return this.http.patch<void>(
+            `${this.API_URL}/submissions/${submission.id}`,
+            submission, //-> for when we actually use this, now its just a toggle function
+            headers
+        ).pipe(
+            this.errorService.pipeHandler(
+                this.errorService.updateError($localize`submission`)
+            )
+        );
     }
 }

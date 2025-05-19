@@ -10,6 +10,11 @@ export interface NewSubmission {
     taskId: string,
 }
 
+export enum SubmissionStatus {
+    ACCEPTED = "accepted",
+    NOT_ACCEPTED = "not_accepted"
+}
+
 export interface Submission {
     studentId: string,
     assignmentId: string,
@@ -18,4 +23,5 @@ export interface Submission {
     contents: string,
     taskId: string,
     id: string,
+    status: SubmissionStatus
 }

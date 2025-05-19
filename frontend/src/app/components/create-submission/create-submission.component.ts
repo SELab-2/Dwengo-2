@@ -83,9 +83,13 @@ export class CreateSubmissionComponent implements OnInit {
       learningObjectId: this.learningObjectId,
       time: new Date(),
       taskId: this.taskId,
-      // The options for multiple choice need to be altered! now there is only one choice sent trough awaiting backend support
-      contents: obj.type === TaskType.NORMALQUESTION ? (obj as NormalQuestion).answer! : (obj as MultipleChoice).options[(obj as MultipleChoice).selected[0]]
+
+      // Set the answers
+      contents: obj.type === TaskType.NORMALQUESTION ?
+        (obj as NormalQuestion).answer! :
+        (obj as MultipleChoice).selected.toString()
     }
+    console.log((obj as NormalQuestion).answer!);
 
     this.submissionService.createSubmission(submission).subscribe(
       value => value ? this.submissionCreated.emit() : this.openSnackBar(this.errorMessage)

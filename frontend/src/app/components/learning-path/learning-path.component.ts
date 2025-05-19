@@ -129,7 +129,7 @@ export class LearningPathComponent implements OnInit {
         const nextNode = this.trajectoryGraph.getNeighbors(this.selectedNode.value)[0];
         if (nextNode) {
             this.selectedNode = nextNode;
-            this.step++;
+            this.step = nextNode.value.metadata.step!;
             this.selectedNodeChanged.emit(nextNode);
         } else {
             // Last node, navigate back to assignments

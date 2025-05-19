@@ -21,7 +21,8 @@
   }@else if(isStudent) {
   <h2 i18n>Already Submitted</h2>
   } @else if(!isStudent && !initializeTasks && submissionStatsReady) {
-  <app-assignment-stats class="stats" [submissions]="submissionsForStep" [task]="task!"></app-assignment-stats>
+  <app-assignment-stats class="stats" [submissions]="submissionsForStep" [task]="task!"
+    (onPatch)="reloadStats()"></app-assignment-stats>
   }
 
   <div class="progress-container">
