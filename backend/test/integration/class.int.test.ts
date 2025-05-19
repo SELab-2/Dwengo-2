@@ -70,6 +70,35 @@ describe("Test class API endpoints", () => {
                     "classes": [classId]
                 });
             });
+
+            it("should return a list of classes for a student with status 200", async () => {
+                const studentAuthDetails = await initializeUser("student", app);
+                
+                const joinRequestResponse = await request(app)
+                    .post("/requests")
+                    .send({
+                        "requester": studentAuthDetails.id,
+                        "class": classId,
+                        "userType": "student"    
+                    })
+                    .set("Content-Type", "application/json")
+                    .set("Authorization", "Bearer " + studentAuthDetails.token);
+                
+                await request(app)
+                    .patch("/requests/" + joinRequestResponse.body.id)
+                    .set("Authorization", "Bearer " + authDetails.token);
+
+                // Get all classes for the student
+                const response = await request(app)
+                    .get("/users/" + studentAuthDetails.id + "/classes")
+                    .set("Accept", "application/json")
+                    .set("Authorization", "Bearer " + studentAuthDetails.token)
+    
+                expect(response.status).toBe(200);
+                expect(response.body).toEqual({
+                    "classes": [classId]
+                });
+            });
         });
     });
 

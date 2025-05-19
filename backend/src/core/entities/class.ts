@@ -3,7 +3,9 @@ export class Class {
         private _name: string,
         private _description: string,
         private _targetAudience: string, // Who is this class directed to (8th grade, home schooling, ...)
-        private _teacherId: string, // the ID of the teacher that created the class
+        private _teacherId: string, // TODO: remove this field,
+                                    // because in the database there is no main teacher for the class.
+                                    // So this is actually each time a random teacher of that class, which doesnt have a lot of meaning
         private _id?: string,
     ) {}
 
