@@ -43,7 +43,7 @@ export class StudentDashboardComponent implements OnInit {
   private _classes: Class[] = [];
   private _groups: Group[] = [];
   private _assignmentToProgress: Record<string, Progress> = {};
-  private _assignmentToGroup: Record<string,Group> = {};
+  private _assignmentToGroup: Record<string, Group> = {};
 
   public pagedAssignments: Assignment[] = [];
   // Array with useless info to render skeleton loaders 
@@ -63,7 +63,7 @@ export class StudentDashboardComponent implements OnInit {
     private groupService: GroupService,
     private authService: AuthenticationService,
     private progressService: ProgressService
-  ) {}
+  ) { }
 
   ngOnInit() {
     const storedPageSize = localStorage.getItem('dashboardPageSize');
@@ -84,7 +84,7 @@ export class StudentDashboardComponent implements OnInit {
       next: (assignments: Assignment[]) => {
         // Remove assignments where deadline is in past
         this._assignments = assignments.filter(a => {
-            return new Date(a.deadline) >= new Date()
+          return new Date(a.deadline) >= new Date()
         });
         this._assignments.forEach((assignment) => {
           const classId = assignment.classId;
@@ -140,7 +140,7 @@ export class StudentDashboardComponent implements OnInit {
     return this._assignments;
   }
 
-  public get assignmentsWithGroup(): {assignment: Assignment, group: Group, id: string}[] {
+  public get assignmentsWithGroup(): { assignment: Assignment, group: Group, id: string }[] {
     const now = new Date();
 
     const combined = this.assignments.map((assignment) => {
@@ -159,25 +159,25 @@ export class StudentDashboardComponent implements OnInit {
     const finished = combined
       .filter(item => isFinished(item.progress))
       .sort((a, b) => parseDate(a.assignment.deadline) - parseDate(b.assignment.deadline));
-    
+
     const notFinished = combined
-    .filter(item => !isFinished(item.progress))
-    .sort((a, b) => {
-      const aStart = parseDate(a.assignment.startDate);
-      const bStart = parseDate(b.assignment.startDate);
-      const aDeadline = parseDate(a.assignment.deadline);
-      const bDeadline = parseDate(b.assignment.deadline);
+      .filter(item => !isFinished(item.progress))
+      .sort((a, b) => {
+        const aStart = parseDate(a.assignment.startDate);
+        const bStart = parseDate(b.assignment.startDate);
+        const aDeadline = parseDate(a.assignment.deadline);
+        const bDeadline = parseDate(b.assignment.deadline);
 
-      const aStarted = aStart <= now.getTime();
-      const bStarted = bStart <= now.getTime();
+        const aStarted = aStart <= now.getTime();
+        const bStarted = bStart <= now.getTime();
 
-      // Started first > not started
-      if (aStarted && !bStarted) return -1;
-      if (!aStarted && bStarted) return 1;
+        // Started first > not started
+        if (aStarted && !bStarted) return -1;
+        if (!aStarted && bStarted) return 1;
 
-      // Same status: sort on deadline
-      return aDeadline - bDeadline;
-    });
+        // Same status: sort on deadline
+        return aDeadline - bDeadline;
+      });
     return [...notFinished, ...finished];
   }
 

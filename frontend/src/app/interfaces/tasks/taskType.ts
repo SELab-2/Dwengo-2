@@ -1,4 +1,5 @@
 export enum TaskType {
     NORMALQUESTION = "NORMALQUESTION",
     MULTIPLECHOICE = "MULTIPLECHOICE",
+    Other = "OTHER",
 }

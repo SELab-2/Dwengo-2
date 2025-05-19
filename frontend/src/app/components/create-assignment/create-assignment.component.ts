@@ -16,15 +16,20 @@ import { AssignmentService } from '../../services/assignment.service';
 import { User } from '../../interfaces';
 import { CreateGroupComponent } from '../create-group/create-group.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AssignmentComponent } from '../assignment/assignment.component';
+import { MatIconModule } from '@angular/material/icon';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-create-assignment',
   imports: [
     ReactiveFormsModule,
     CreateGroupComponent,
+    AssignmentComponent,
 
     // Angular material
     MatCardModule,
+    MatIconModule,
     MatFormFieldModule,
     MatSelectModule,
     MatDatepickerModule,
@@ -52,6 +57,7 @@ export class CreateAssignmentComponent implements OnInit {
   public classes: Class[] = [];
   public paths: LearningPath[] = [];
 
+  public initializeTasks: boolean = false; // Initialize tasks after group creation
   public showCreateGroup: boolean = false;
   public assignmentId: string = '';
   public classMembers: User[] = [];
@@ -61,6 +67,7 @@ export class CreateAssignmentComponent implements OnInit {
     private classesService: ClassesService,
     private learningPathService: LearningPathService,
     private assignmentService: AssignmentService,
+    private taskService: TaskService,
     private router: Router,
   ) {
     this.createForm = this.buildCreateForm();
@@ -138,6 +145,22 @@ export class CreateAssignmentComponent implements OnInit {
   }
 
   groupsCreated() {
+    this.initializeTasks = true;
+  }
+
+  tasksInitialized() {
+    // Initialize all empty tasks with an 'other'-type task without details
+    this.taskService.fillRestWithEmptyTasks(this.assignmentId).subscribe({
+      next: () => {
+        console.log($localize`Assignment Created!`);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+
+
+
     // we can redirect to assignments page
     this.router.navigate(['/teacher/assignments']);
   }

@@ -42,8 +42,8 @@
     @if (loading) {
     <app-card-skeleton-loader title="Your results"></app-card-skeleton-loader>
     } @else {
-    <app-learning-path-list [learningPaths]="data" [isTeacher]="isTeacher" i18n-title
-        title="Your Results"></app-learning-path-list>
+    <app-learning-path-list [learningPaths]="data" [isTeacher]="isTeacher" i18n-title title="Your Results"
+        (showPopup)="showPopup($event)"></app-learning-path-list>
     }
     }
     @if (detail && detailPath) {

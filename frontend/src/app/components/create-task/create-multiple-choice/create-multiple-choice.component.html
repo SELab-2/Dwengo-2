@@ -8,6 +8,15 @@
             <mat-form-field class="long">
                 <input matInput type="text" [formControl]="title">
             </mat-form-field>
+            @if(edit){
+            <button mat-icon-button i18n-matTooltip matTooltip="Mark as ready" color="primary" (click)="ready()">
+                <mat-icon>checks</mat-icon>
+            </button>
+            } @else {
+            <button mat-icon-button i18n-matTooltip matTooltip="Edit Question" color="primary" (click)="setEdit()">
+                <mat-icon>edit</mat-icon>
+            </button>
+            }
         </div>
 
         <div class="inline">
@@ -33,19 +42,20 @@
                         <mat-icon matListIcon>check_box_outline_blank</mat-icon>
                         <h4 matLine>{{ option }}</h4>
                     </mat-list-item>
-                    <button mat-icon-button color="primary" (click)="deleteOption(idx)">
+                    <button mat-icon-button color="primary" i18n-matTooltip matTooltip="Delete this option"
+                        (click)="deleteOption(idx)">
                         <mat-icon>delete</mat-icon>
                     </button>
                     @if(correctAnswers[idx]){
-                    <button mat-icon-button i18n-matTooltip matTooltip="Delete this option" color="primary"
+                    <button mat-icon-button i18n-matTooltip matTooltip="Deselect as correct answer" color="primary"
                         (click)="selectIncorrect(idx)">
-                        <mat-icon>remove</mat-icon>
+                        <mat-icon>checks</mat-icon>
                     </button>
                     }
                     @else {
                     <button mat-icon-button i18n-matTooltip matTooltip="Select as Correct answer" color="primary"
                         (click)="selectCorrect(idx)">
-                        <mat-icon>checks</mat-icon>
+                        <mat-icon>remove</mat-icon>
                     </button>
                     }
                 </div>
@@ -57,7 +67,7 @@
 
         <mat-card-actions>
             <button mat-fab extended color="primary" (click)="submitQuestion()"
-                [disabled]="options.length <= 1 && (!title.value || title.value.length === 0)">
+                [disabled]="options.length === 0 || (!title.value || title.value.length === 0) || (!allowMultipleOptions && amountSelected !== 1)">
                 <mat-icon>send</mat-icon>
                 <mat-card-title i18n>Submit</mat-card-title>
 
