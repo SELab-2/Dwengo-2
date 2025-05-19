@@ -155,7 +155,7 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
         }
 
         // First find out what classes the user is in
-        const classModels: ClassTypeORM[] = await datasource.getRepository(ClassTypeORM).find({
+        let classModels: ClassTypeORM[] = await datasource.getRepository(ClassTypeORM).find({
             where: {
                 members: {
                     id: id, // Filters the members table. If we would load the members, only the member with this id is present
@@ -167,7 +167,6 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
             },
         });
 
-        /* THIS IS I THINK THE SOLUTION FOR THE BUG, BUT THIS IS COMMENTED TO REPRODUCE THE BUG
         const classIds = classModels.map(classModel => classModel.id);
 
         // Then load those classes with all members
@@ -177,7 +176,7 @@ export class DatasourceClassTypeORM extends DatasourceTypeORM {
                 members: true,
             },
         });
-        */
+
         return classModels.map(classModel => classModel.toClassEntity());
     }
 

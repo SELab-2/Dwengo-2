@@ -6,9 +6,11 @@ describe("Test class API endpoints", () => {
     let authDetails: AuthDetails;
     let mockClass: object;
     let classId: string;
-    
+    let studentAuthDetails: AuthDetails;
+
     beforeEach(async () => {
         authDetails = await initializeUser("teacher", app);
+        studentAuthDetails = await initializeUser("student", app, "student@ugent.be");
         mockClass = {
             "name": "class_123",
             "description": "string",
@@ -39,7 +41,7 @@ describe("Test class API endpoints", () => {
                 .send(mockClass)
                 .set("Content-Type", "application/json")
                 .set("Authorization", "Bearer " + authDetails.token);
-            
+
             classId = response.body.id;
         });
 
@@ -49,7 +51,7 @@ describe("Test class API endpoints", () => {
                     .get("/classes/" + classId)
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + authDetails.token)
-    
+
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
                     "id": classId,
@@ -64,7 +66,7 @@ describe("Test class API endpoints", () => {
                     .get("/users/" + authDetails.id + "/classes")
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + authDetails.token)
-    
+
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
                     "classes": [classId]
@@ -72,18 +74,17 @@ describe("Test class API endpoints", () => {
             });
 
             it("should return a list of classes for a student with status 200", async () => {
-                const studentAuthDetails = await initializeUser("student", app);
-                
+
                 const joinRequestResponse = await request(app)
                     .post("/requests")
                     .send({
                         "requester": studentAuthDetails.id,
                         "class": classId,
-                        "userType": "student"    
+                        "userType": "student"
                     })
                     .set("Content-Type", "application/json")
                     .set("Authorization", "Bearer " + studentAuthDetails.token);
-                
+
                 await request(app)
                     .patch("/requests/" + joinRequestResponse.body.id)
                     .set("Authorization", "Bearer " + authDetails.token);
@@ -93,7 +94,7 @@ describe("Test class API endpoints", () => {
                     .get("/users/" + studentAuthDetails.id + "/classes")
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + studentAuthDetails.token)
-    
+
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
                     "classes": [classId]
@@ -111,7 +112,7 @@ describe("Test class API endpoints", () => {
                 .send(mockClass)
                 .set("Content-Type", "application/json")
                 .set("Authorization", "Bearer " + authDetails.token);
-            
+
             classId = response.body.id;
 
             updatedClass = {
@@ -125,21 +126,21 @@ describe("Test class API endpoints", () => {
                 .send(updatedClass)
                 .set("Content-Type", "application/json")
                 .set("Authorization", "Bearer " + authDetails.token);
-            
+
             expect(response.status).toBe(204);
 
             const checkResponse = await request(app)
                 .get("/classes/" + classId)
                 .set("Accept", "application/json")
-                .set("Authorization", "Bearer " + authDetails.token); 
-                
+                .set("Authorization", "Bearer " + authDetails.token);
+
             expect(checkResponse.status).toBe(200);
             expect(checkResponse.body).toEqual({
                 "id": classId,
                 "name": "newName",
                 "description": "string",
                 "targetAudience": "string",
-                "teacherId": authDetails.id  
+                "teacherId": authDetails.id
             });
         });
     });
@@ -151,7 +152,7 @@ describe("Test class API endpoints", () => {
                 .send(mockClass)
                 .set("Content-Type", "application/json")
                 .set("Authorization", "Bearer " + authDetails.token);
-            
+
             classId = response.body.id;
         });
 
@@ -159,19 +160,19 @@ describe("Test class API endpoints", () => {
             const response = await request(app)
                 .delete("/classes/" + classId)
                 .set("Authorization", "Bearer " + authDetails.token);
-            
+
             expect(response.status).toBe(204);
 
             const checkResponse = await request(app)
-                    .get("/classes/" + classId)
-                    .set("Accept", "application/json")
-                    .set("Authorization", "Bearer " + authDetails.token);
-                
-                expect(checkResponse.status).toBe(404);
-                expect(checkResponse.body).toEqual({
-                    "code": "NOT_FOUND",
-                    "message": "Class with ID " + classId +" not found",
-                });
+                .get("/classes/" + classId)
+                .set("Accept", "application/json")
+                .set("Authorization", "Bearer " + authDetails.token);
+
+            expect(checkResponse.status).toBe(404);
+            expect(checkResponse.body).toEqual({
+                "code": "NOT_FOUND",
+                "message": "Class with ID " + classId + " not found",
+            });
         });
     });
 });
