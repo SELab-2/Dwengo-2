@@ -17,7 +17,7 @@
     "@angular-eslint/eslint-plugin-template": "^19.1.0",
     "@angular-eslint/schematics": "^19.1.0",
     "@angular-eslint/template-parser": "^19.1.0",
-    "@angular/cdk": "^19.2.6",
+    "@angular/cdk": "^19.2.16",
     "@angular/cli": "^19.1.0",
     "@angular/compiler-cli": "^19.1.0",
     "@angular/core": "^19.1.0",
