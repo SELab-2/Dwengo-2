@@ -27,7 +27,7 @@ import { AssignmentStatsComponent } from '../assignment-stats/assignment-stats.c
 import { SubmissionService } from '../../services/submission.service';
 import { UserService } from '../../services/user.service';
 import { forkJoin, of, switchMap } from 'rxjs';
-import { Submission } from '../../interfaces/submissions';
+import { Submission, SubmissionStatus } from '../../interfaces/submissions';
 
 @Component({
   selector: 'app-assignment',
@@ -70,6 +70,7 @@ export class AssignmentComponent implements OnInit {
   public taskId!: string | null;
   public taskObject!: AssignmentTask;
   public alreadySubmitted!: boolean;
+  public submissionIsCorrect: boolean = false;
 
   // A list for each User: every list is the list of submissions with index corresponding to assignment step
   public fullSubmissionData: Submission[][] = [];
@@ -204,7 +205,9 @@ export class AssignmentComponent implements OnInit {
         this.taskObject = this.taskService.responseToObject(task);
         this.taskFetched = true;
 
-        if (this.isStudent) return of([]); // Students will not see submissions of others
+        if (this.isStudent) {
+          return of([]);
+        } // Students will not see submissions of others
 
         return this.userService.assignmentUserIds(this.assignmentId).pipe(
           switchMap(userIds => forkJoin(
@@ -217,6 +220,16 @@ export class AssignmentComponent implements OnInit {
       })
     ).subscribe(submissions => {
       this.submissionsForStep = submissions.filter(s => s !== null);
+      if (this.isStudent) {
+        this.submissionService.userSubmissionForStep(this.authService.retrieveUserId()!, this.assignmentId, this.taskId!).subscribe(
+          submission => {
+            if (submission) {
+              this.alreadySubmitted = true;
+              this.submissionIsCorrect = submission.status === SubmissionStatus.ACCEPTED;
+            }
+          }
+        )
+      }
       this.submissionStatsReady = true;
     });
   }
