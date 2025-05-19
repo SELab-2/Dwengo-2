@@ -19,7 +19,15 @@
     [learningObjectId]="currentLearningObjectId" (submissionCreated)="onSubmissionCreated()"></app-create-submission>
   }
   }@else if(isStudent) {
-  <h2 i18n>Already Submitted</h2>
+  @if(submissionType === 'accepted') {
+  <h2 i18n>Your submission is marked Correct!</h2>
+  }
+  @else if(submissionType === 'rejected'){
+  <h2 i18n>Your submission has been marked as Incorrect!</h2>
+  }
+  @else {
+  <h2 i18n>Already submitted!</h2>
+  }
   } @else if(!isStudent && !initializeTasks && submissionStatsReady) {
   <app-assignment-stats class="stats" [submissions]="submissionsForStep" [task]="task!"
     (patched)="reloadStats()"></app-assignment-stats>
@@ -38,7 +46,7 @@
         <mat-progress-bar class="custom-progress" mode="determinate" value="{{getProgressPercentage()}}"
           color="primary"></mat-progress-bar>
       </mat-card-content>
-      <mat-card-title>{{step}}/{{maxStep}}</mat-card-title>
+      <mat-card-title>{{step + 1}}/{{maxStep}}</mat-card-title>
 
     </mat-card>
   </div>

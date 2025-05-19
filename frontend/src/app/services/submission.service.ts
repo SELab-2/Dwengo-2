@@ -102,7 +102,7 @@ export class SubmissionService {
         const headers = this.authService.retrieveAuthenticationHeaders();
         return this.http.patch<void>(
             `${this.API_URL}/submissions/${submission.id}`,
-            submission, //-> for when we actually use this, now its just a toggle function
+            { status: submission.status },
             headers
         ).pipe(
             this.errorService.pipeHandler(

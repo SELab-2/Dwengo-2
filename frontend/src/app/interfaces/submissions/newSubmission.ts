@@ -12,7 +12,8 @@ export interface NewSubmission {
 
 export enum SubmissionStatus {
     ACCEPTED = "accepted",
-    NOT_ACCEPTED = "not_accepted"
+    NOT_ACCEPTED = "not_accepted",
+    REJECTED = "rejected",
 }
 
 export interface Submission {
