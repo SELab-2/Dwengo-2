@@ -204,8 +204,6 @@ export class AssignmentComponent implements OnInit {
         this.taskObject = this.taskService.responseToObject(task);
         this.taskFetched = true;
 
-        console.log(this.assignmentId, this.taskId)
-
         if (this.isStudent) return of([]); // Students will not see submissions of others
 
         return this.userService.assignmentUserIds(this.assignmentId).pipe(
@@ -230,7 +228,6 @@ export class AssignmentComponent implements OnInit {
     const locale: string = window.location.pathname.split("/")[1];
     this.language = locale.split("-")[0]
 
-    console.log("in assignment", this.assignmentId)
     if (this.assignmentId) {
       const assignmentObservable = this.assignmentService.retrieveAssignmentById(this.assignmentId);
       assignmentObservable.subscribe(

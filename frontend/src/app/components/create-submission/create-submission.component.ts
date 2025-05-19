@@ -89,7 +89,6 @@ export class CreateSubmissionComponent implements OnInit {
         (obj as NormalQuestion).answer! :
         (obj as MultipleChoice).selected.toString()
     }
-    console.log((obj as NormalQuestion).answer!);
 
     this.submissionService.createSubmission(submission).subscribe(
       value => value ? this.submissionCreated.emit() : this.openSnackBar(this.errorMessage)

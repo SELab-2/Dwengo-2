@@ -42,7 +42,6 @@ export class AssignmentCardComponent implements OnInit {
     onDelete() {
         this.assignmentService.deleteAssignment(this.assignment).subscribe(
             (deleted) => {
-                console.log(deleted)
                 if (deleted) {
                     window.location.reload();
                 }

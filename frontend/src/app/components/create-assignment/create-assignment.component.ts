@@ -145,7 +145,6 @@ export class CreateAssignmentComponent implements OnInit {
   }
 
   groupsCreated() {
-    console.log(this.assignmentId)
     this.initializeTasks = true;
   }
 

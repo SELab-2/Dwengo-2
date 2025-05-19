@@ -59,11 +59,6 @@ export class AssignmentStatsComponent implements OnInit {
     ) { }
 
     parseNumberList(input: string): number[] {
-        console.log('check', input)
-        console.log(input
-            .split(/[\s,;]+/)           // split on stuff
-            .map(s => parseFloat(s))    // try parse
-            .filter(n => !isNaN(n)))
         return input
             .split(/[\s,;]+/)           // split on stuff
             .map(s => parseFloat(s))    // try parse

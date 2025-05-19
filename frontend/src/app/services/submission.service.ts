@@ -20,7 +20,6 @@ export class SubmissionService {
     ) { }
 
     createSubmission(submission: NewSubmission) {
-        console.log("here1")
         const headers = this.authService.retrieveAuthenticationHeaders();
         return this.http.post<NewSubmissionResponse>(
             `${this.API_URL}/submissions`,
@@ -50,8 +49,6 @@ export class SubmissionService {
 
 
     getOneSubmission(submId: string) {
-        console.log("here2", submId)
-
         const headers = this.authService.retrieveAuthenticationHeaders();
         return this.http.get<Submission>(
             `${this.API_URL}/submissions/${submId}`,
@@ -88,8 +85,6 @@ export class SubmissionService {
     }
 
     getSubmissionsForUserInAssignment(userId: string, assignmentId: string) {
-        console.log("here4")
-
         const headers = this.authService.retrieveAuthenticationHeaders();
         return this.http.get<GetSubmissionsResponse>(
             `${this.API_URL}/users/${userId}/submissions?assignmentId=${assignmentId}`,
