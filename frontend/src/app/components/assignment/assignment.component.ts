@@ -70,7 +70,7 @@ export class AssignmentComponent implements OnInit {
   public taskId!: string | null;
   public taskObject!: AssignmentTask;
   public alreadySubmitted!: boolean;
-  public submissionIsCorrect: boolean = false;
+  public submissionType: string = "not-accepted";
 
   // A list for each User: every list is the list of submissions with index corresponding to assignment step
   public fullSubmissionData: Submission[][] = [];
@@ -225,7 +225,7 @@ export class AssignmentComponent implements OnInit {
           submission => {
             if (submission) {
               this.alreadySubmitted = true;
-              this.submissionIsCorrect = submission.status === SubmissionStatus.ACCEPTED;
+              this.submissionType = submission.status;
             }
           }
         )
