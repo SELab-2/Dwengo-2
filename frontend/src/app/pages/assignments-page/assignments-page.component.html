@@ -1,15 +1,6 @@
 <app-authenticated-header></app-authenticated-header>
 <div class="assignments">
 
-    @if (isTeacher) {
-    <div class="tool-container">
-        <button mat-fab extended routerLink="/explore">
-            <mat-icon>add</mat-icon>
-            <p i18n>Create</p>
-        </button>
-    </div>
-    }
-
     <div class="center-container">
         <h2 i18n>Your assignments</h2>            
             <mat-list class="grid" id="assignments-list">
@@ -25,5 +16,14 @@
                 }
             </mat-list>
     </div>
+
+    @if (isTeacher) {
+    <div class="tool-container">
+        <button mat-fab extended routerLink="/explore">
+            <mat-icon>add</mat-icon>
+            <p i18n>Create</p>
+        </button>
+    </div>
+    }
 
 </div>
