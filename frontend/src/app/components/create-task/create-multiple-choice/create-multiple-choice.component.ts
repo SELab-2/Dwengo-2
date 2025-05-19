@@ -9,6 +9,7 @@ import { MatList, MatListItem } from '@angular/material/list';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MultipleChoice } from '../../../interfaces/assignment/tasks';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TaskType } from '../../../interfaces/tasks';
 @Component({
   selector: 'app-create-multiple-choice',
   imports: [MatButtonModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, MatCardModule, ReactiveFormsModule, MatListItem, MatList, MatCheckbox, MatTooltipModule],
@@ -22,6 +23,8 @@ export class CreateMultipleChoiceComponent {
   allowMultipleOptions: boolean = false;
   options: string[] = [];
   correctAnswers: boolean[] = [];
+  edit: boolean = true;
+  amountSelected: number = 0;
 
   constructor() { }
   @Output() taskCreated: EventEmitter<MultipleChoice> = new EventEmitter<MultipleChoice>();
@@ -32,27 +35,40 @@ export class CreateMultipleChoiceComponent {
       const trimmed = val.trim();
       if (trimmed) {
         this.options.push(trimmed);
-        this.correctAnswers.push(false);
+        this.correctAnswers.push(true);
         this.newOption.setValue('');
+        this.amountSelected++;
       }
     }
   }
 
   deleteOption(idx: number) {
     this.options.splice(idx, 1);
+    if (this.correctAnswers[idx]) this.amountSelected--;
     this.correctAnswers.splice(idx, 1);
   }
 
   selectCorrect(idx: number) {
     this.correctAnswers[idx] = true;
+    this.amountSelected++;
   }
   selectIncorrect(idx: number) {
     this.correctAnswers[idx] = false;
+    this.amountSelected--;
   }
 
   update(change: boolean): void {
     this.allowMultipleOptions = change;
 
+  }
+
+  ready() {
+    this.edit = false;
+    this.title.disable();
+  }
+  setEdit() {
+    this.edit = true;
+    this.title.enable();
   }
 
   submitQuestion(): void {
@@ -66,8 +82,8 @@ export class CreateMultipleChoiceComponent {
       allowMultipleAnswers: this.allowMultipleOptions,
       options: this.options,
       selected: [],
-      correctAnswers: l.filter(o => Number.isInteger(o))
-
+      correctAnswers: l.filter(o => Number.isInteger(o)),
+      type: TaskType.MULTIPLECHOICE,
     } as MultipleChoice;
     this.taskCreated.emit(obj)
   }

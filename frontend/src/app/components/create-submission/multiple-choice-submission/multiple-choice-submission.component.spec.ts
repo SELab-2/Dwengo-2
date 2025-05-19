@@ -9,6 +9,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { By } from '@angular/platform-browser';
 import { MultipleChoiceSubmissionComponent } from './multiple-choice-submission.component';
+import { TaskType } from '../../../interfaces/tasks';
 
 
 describe('CreateSubmissionComponent', () => {
@@ -32,7 +33,8 @@ describe('CreateSubmissionComponent', () => {
             allowMultipleAnswers: false,
             options: ['Test answer 1', 'Test answer 2', 'Test answer 3'],
             correctAnswers: [5],
-            selected: [1, 2]
+            selected: [1, 2],
+            type: TaskType.MULTIPLECHOICE
         }
         fixture.detectChanges();
     });
