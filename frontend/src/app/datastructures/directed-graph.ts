@@ -44,6 +44,24 @@ export class DirectedGraph<T> {
         return this.getOutgoingEdges(value).map(edge => edge.to);
     }
 
+    // Get incoming edges to a node
+    public getIncomingEdges(value: T): Edge<T>[] {
+        const result: Edge<T>[] = [];
+        for (const [fromValue, edges] of this._adjacencyList.entries()) {
+            for (const edge of edges) {
+                if (edge.to.value === value) {
+                    result.push(edge);
+                }
+            }
+        }
+        return result;
+    }
+
+    // Get nodes that point to this node
+    public getIncomingNodes(value: T): Node<T>[] {
+        return this.getIncomingEdges(value).map(edge => edge.from);
+    }
+
     // Check if the nodes exists
     public hasNode(value: T): boolean {
         return this._nodes.has(value);
@@ -57,7 +75,7 @@ export class DirectedGraph<T> {
         this._root = node;
     }
 
-    public searchNode(value: T): Node<T> | null{
+    public searchNode(value: T): Node<T> | null {
         return this._nodes.get(value) ?? null;
     }
 }
