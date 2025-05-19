@@ -146,4 +146,20 @@ export class ClassesService {
         );
     }
 
+    public deleteUserFromClass(classId: string, userId: string): Observable<boolean> {
+        const headers = this.authService.retrieveAuthenticationHeaders();
+
+        return this.http.delete(
+            `${this.API_URL}/classes/${classId}/users/${userId}`, {
+            ...headers,
+            observe: 'response'
+        }
+        ).pipe(
+            this.errorService.pipeHandler(),
+            switchMap(
+                response => of(response.status === 204)
+            )
+        );
+    }
+
 }
