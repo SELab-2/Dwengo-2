@@ -70,6 +70,7 @@ export class AssignmentComponent implements OnInit {
   public taskId!: string | null;
   public taskObject!: AssignmentTask;
   public alreadySubmitted!: boolean;
+  public submissionType: string = "not-accepted";
 
   // A list for each User: every list is the list of submissions with index corresponding to assignment step
   public fullSubmissionData: Submission[][] = [];
@@ -206,7 +207,9 @@ export class AssignmentComponent implements OnInit {
         this.taskObject = this.taskService.responseToObject(task);
         this.taskFetched = true;
 
-        if (this.isStudent) return of([]); // Students will not see submissions of others
+        if (this.isStudent) {
+          return of([]);
+        } // Students will not see submissions of others
 
         return this.userService.assignmentUserIds(this.assignmentId).pipe(
           switchMap(userIds => forkJoin(
@@ -219,6 +222,16 @@ export class AssignmentComponent implements OnInit {
       })
     ).subscribe(submissions => {
       this.submissionsForStep = submissions.filter(s => s !== null);
+      if (this.isStudent) {
+        this.submissionService.userSubmissionForStep(this.authService.retrieveUserId()!, this.assignmentId, this.taskId!).subscribe(
+          submission => {
+            if (submission) {
+              this.alreadySubmitted = true;
+              this.submissionType = submission.status;
+            }
+          }
+        )
+      }
       this.submissionStatsReady = true;
     });
   }
