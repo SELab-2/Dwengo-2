@@ -22,7 +22,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { ProgressService } from '../../services/progress.service';
 import { UsersOfClass } from '../../interfaces/user/usersOfClass';
 import { ClassActivity } from '../../interfaces/progress/activity';
-import { LoadingComponent } from '../loading/loading.component';
 import { ClassCompletion } from '../../interfaces/progress/completion';
 import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-loader/card-skeleton-loader.component';
 
@@ -43,7 +42,6 @@ import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-l
     ClassOverviewWidgetComponent,
     DeadlinesWidgetComponent,
     MatButtonModule,
-    LoadingComponent,
     CardSkeletonLoaderComponent
   ],
   templateUrl: './teacher-dashboard.component.html',
@@ -139,9 +137,10 @@ export class TeacherDashboardComponent implements OnInit {
     ).subscribe(enrichedClasses => {
       // Update the classes with the extra data
       this.classes = enrichedClasses;
-      this.loadingData = false
       // With this data we can display analytics (if possible)
       this.fillCharts();
+    }).add(() => {
+      this.loadingData = false
     });
   }
 

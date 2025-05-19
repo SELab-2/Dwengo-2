@@ -12,7 +12,6 @@ import { MiniAssignmentComponent } from '../mini-assignment/mini-assignment.comp
 import { PaginatedGridComponent } from '../paginated-grid/paginated-grid.component';
 import { MiniClassComponent } from '../mini-class/mini-class.component';
 import { RouterLink } from '@angular/router';
-import { GroupCardComponent } from '../group-card/group-card.component';
 import { Group } from '../../interfaces/group/group';
 import { GroupService } from '../../services/group.service';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -31,7 +30,6 @@ import { forkJoin } from 'rxjs';
     MatIconModule,
     MiniAssignmentComponent,
     MiniClassComponent,
-    GroupCardComponent,
     MatPaginatorModule,
     MatButtonModule,
     PaginatedGridComponent,
@@ -75,10 +73,11 @@ export class StudentDashboardComponent implements OnInit {
 
     this.classesService.classesOfUser().subscribe({
       next: (classes: Class[]) => {
-        this.loadingClasses = false;
         this._classes = classes;
-      }
-      
+      },
+      complete: () => {
+        this.loadingClasses = false;
+      }  
     });
 
     this.assignmentService.retrieveAssignments().subscribe({
@@ -95,6 +94,7 @@ export class StudentDashboardComponent implements OnInit {
           });
         });
         this.updatePagedAssignments();
+
         if(userId) {
           const progressObservables = this.assignments.map(a =>
             this.progressService.getUserAssignmentProgress(userId, a.id)
@@ -104,17 +104,32 @@ export class StudentDashboardComponent implements OnInit {
               results.forEach((progress, index) => {
                 this._assignmentToProgress[this.assignments[index].id] = progress;
               });
+            },
+            complete: () => {
               this.loadingProgress = false;
-            }
+            } 
           });
           this.groupService.getAllGroupsFromUser(userId)
-            .subscribe(response => {
-              response.forEach(g => {
+          .subscribe({
+            next: (groups: Group[]) => {
+              groups.forEach(g => {
                 this._assignmentToGroup[g.assignment.id] = g
               })
+            },
+            complete: () => {
               this.loadingGroups = false;
-            });
+            }
+          })
         }
+      },
+      complete: () => {
+        // No assignments, so the complete of the progress and groups were not executed
+        // so set the loading to false here
+        if (this.assignments.length === 0) {
+          this.loadingGroups = false;
+          this.loadingProgress = false;
+        }
+        
       }
     });
 
