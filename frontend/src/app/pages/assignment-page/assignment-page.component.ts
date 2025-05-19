@@ -22,7 +22,17 @@ import { AssignmentTask, MultipleChoice } from '../../interfaces/assignment/task
 
 @Component({
   selector: 'app-assignment-page',
-  imports: [AuthenticatedHeaderComponent, LearningPathComponent, CreateSubmissionComponent, MatProgressBar, MatCardModule, LoadingComponent, CreateTaskComponent],
+  imports: [
+    AuthenticatedHeaderComponent,
+    LearningPathComponent, 
+    CreateSubmissionComponent, 
+    LoadingComponent, 
+    CreateTaskComponent,
+
+    // Angular material
+    MatProgressBar, 
+    MatCardModule
+  ],
   templateUrl: './assignment-page.component.html',
   styleUrl: './assignment-page.component.less'
 })

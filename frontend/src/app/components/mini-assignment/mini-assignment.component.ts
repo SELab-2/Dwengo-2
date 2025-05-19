@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Assignment } from '../../interfaces/assignment/assignment';
 import { CommonModule } from '@angular/common'
 import { MatCardModule } from '@angular/material/card'
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { GroupDialogComponent } from '../group-dialog/group-dialog.component';
 import { Group } from '../../interfaces/group/group';
@@ -24,7 +24,6 @@ enum Urgence {
   selector: 'app-mini-assignment',
   imports: [
     CommonModule,
-    RouterLink,
 
     // Material design
     MatCardModule,

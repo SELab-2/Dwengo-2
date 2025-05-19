@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card'
+import { MatCard, MatCardContent } from '@angular/material/card'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../services/authentication.service';
 
@@ -22,8 +22,7 @@ import { AuthenticationService } from '../../services/authentication.service';
     MatInputModule,
     MatButtonModule,
     MatCard,
-    MatCardContent,
-    MatCardTitle
+    MatCardContent
   ],
   templateUrl: './create-class.component.html',
   styleUrl: './create-class.component.less'

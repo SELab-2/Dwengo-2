@@ -12,7 +12,6 @@ import { MiniAssignmentComponent } from '../mini-assignment/mini-assignment.comp
 import { PaginatedGridComponent } from '../paginated-grid/paginated-grid.component';
 import { MiniClassComponent } from '../mini-class/mini-class.component';
 import { RouterLink } from '@angular/router';
-import { GroupCardComponent } from '../group-card/group-card.component';
 import { Group } from '../../interfaces/group/group';
 import { GroupService } from '../../services/group.service';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -31,7 +30,6 @@ import { forkJoin } from 'rxjs';
     MatIconModule,
     MiniAssignmentComponent,
     MiniClassComponent,
-    GroupCardComponent,
     MatPaginatorModule,
     MatButtonModule,
     PaginatedGridComponent,

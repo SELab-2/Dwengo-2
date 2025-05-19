@@ -10,7 +10,6 @@ import { User } from '../../interfaces';
 import { MiniUserComponent } from '../mini-user/mini-user.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { AuthenticatedHeaderComponent } from '../authenticated-header/authenticated-header.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GroupService } from '../../services/group.service';
 
@@ -19,7 +18,6 @@ import { GroupService } from '../../services/group.service';
   selector: 'app-create-group',
   imports: [
     MiniUserComponent,
-    AuthenticatedHeaderComponent,
 
     // Angular material
     CdkDropList,

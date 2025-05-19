@@ -12,7 +12,6 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthenticationService } from '../../services/authentication.service';
 import { UserType } from '../../interfaces';
 import { AuthenticatedHeaderComponent } from '../../components/authenticated-header/authenticated-header.component';
-import { CreateRequestComponent } from '../../components/create-request/create-request.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RequestClassModalComponent } from '../../components/request-class-modal/request-class-modal.component';
 
@@ -28,7 +27,6 @@ type classFilterType = (c: Class) => boolean;
     MiniClassComponent,
     CreateClassComponent,
     AuthenticatedHeaderComponent,
-    CreateRequestComponent,
 
     // Angular material
     MatList,
