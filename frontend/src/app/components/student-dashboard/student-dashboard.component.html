@@ -19,7 +19,9 @@
             <app-paginated-grid
                 [items]="assignmentsWithGroup"
                 [pageSize]="6"
-                [itemTemplate]="assignmentCard">
+                [itemTemplate]="assignmentCard"
+                [showPagination]="assignmentsWithGroup.length > 6"
+                >
             </app-paginated-grid>
 
             <ng-template #assignmentCard let-data>

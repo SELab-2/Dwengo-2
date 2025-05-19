@@ -137,9 +137,10 @@ export class TeacherDashboardComponent implements OnInit {
     ).subscribe(enrichedClasses => {
       // Update the classes with the extra data
       this.classes = enrichedClasses;
-      this.loadingData = false
       // With this data we can display analytics (if possible)
       this.fillCharts();
+    }).add(() => {
+      this.loadingData = false
     });
   }
 
