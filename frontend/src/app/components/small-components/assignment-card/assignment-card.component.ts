@@ -16,7 +16,7 @@ import { UserType } from "../../../interfaces";
     standalone: true,
     imports: [CommonModule, MatIconModule, MatCardModule, MatRippleModule, MatButtonModule, MatTooltipModule, MatIcon],
     templateUrl: './assignment-card.component.html',
-    styleUrls: ['./assignment-card.component.less']
+    styleUrls: ['./assignment-card.component.scss']
 })
 export class AssignmentCardComponent implements OnInit {
     @Input() assignment!: Assignment;

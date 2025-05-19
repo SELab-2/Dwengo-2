@@ -3,7 +3,7 @@
 
     <div class="deadline-list">
         @for(assignment of getSortedAssignments(); track assignment){
-            <mat-card class="deadline-item" routerLink="/teacher/assignments/{{assignment.id}}">
+            <mat-card class="secondary-mat-card deadline-item" routerLink="/teacher/assignments/{{assignment.id}}">
                 <mat-card-title>{{ assignment.name }}</mat-card-title>
                 <mat-card-content>
                     <p><strong i18n="@@deadline">Deadline:</strong> {{ assignment.deadline | date }}</p>
