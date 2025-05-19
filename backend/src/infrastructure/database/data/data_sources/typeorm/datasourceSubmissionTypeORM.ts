@@ -191,7 +191,6 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         return submissionModels.map(model => model.toEntity());
     }
 
-
     public async getByStudentId(studentId: string): Promise<Submission[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
