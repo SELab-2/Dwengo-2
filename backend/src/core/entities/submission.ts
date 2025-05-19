@@ -3,6 +3,7 @@ import { Buffer } from "buffer";
 export enum StatusType {
     NOT_ACCEPTED = "not_accepted",
     ACCEPTED = "accepted",
+    REJECTED = "rejected",
 }
 
 export class Submission {

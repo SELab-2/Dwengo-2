@@ -1,5 +1,5 @@
 import { AbstractRepository } from "./abstractRepository";
-import { Submission } from "../entities/submission";
+import { StatusType, Submission } from "../entities/submission";
 
 export abstract class ISubmissionRepository extends AbstractRepository {
     /**
@@ -24,7 +24,7 @@ export abstract class ISubmissionRepository extends AbstractRepository {
      * @param id - The submission to update.
      * @returns A promise that resolves when the submission is deleted.
      */
-    public abstract update(id: string): Promise<void>;
+    public abstract update(id: string, status: StatusType): Promise<void>;
 
     /**
      * Deletes a submission from the repository.

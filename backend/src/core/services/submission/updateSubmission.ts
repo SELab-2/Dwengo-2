@@ -13,7 +13,12 @@ export class UpdateSubmission extends SubmissionBaseService<UpdateSubmissionInpu
      * @throws {ApiError} If the submission with the given id is not found.
      */
     async execute(input: UpdateSubmissionInput): Promise<object> {
-        await tryRepoEntityOperation(this.submissionRepository.update(input.id), "Submission", input.id, true);
+        await tryRepoEntityOperation(
+            this.submissionRepository.update(input.id, input.status),
+            "Submission",
+            input.id,
+            true,
+        );
         return {};
     }
 }

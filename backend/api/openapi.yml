@@ -1837,6 +1837,16 @@ paths:
       summary: Update submission
       description: Change status type, from not_accepted to accepted and vice versa, of a submission using its unique identifier.
       operationId: updateSubmission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                status:
+                  type: string
+                  enum: [ACCEPTED, NOT_ACCEPTED, REJECTED]
+                  description: Updated status of the submission.
       parameters:
         - in: path
           name: id
@@ -1903,12 +1913,12 @@ paths:
           name: idParent
           required: true
           schema:
-            type: stringj
+            type: string
             format: uuid
         - $ref: "#/components/parameters/PageParam"
         - $ref: "#/components/parameters/PageSizeParam"
         - in: query
-          name: asssignmentId
+          name: assignmentId
           description: Optional param to get the user's submission for a certain assignment.
           schema:
             type: string
@@ -3448,6 +3458,7 @@ components:
           enum:
             - not_accepted
             - accepted
+            - rejected
           default: not_accepted
         id:
           type: string
@@ -3491,7 +3502,7 @@ components:
             but student proceeded to next step (used to keep progress in an assignment).
         status:
           type: string
-          enum: [ACCEPTED, NOT_ACCEPTED]
+          enum: [ACCEPTED, NOT_ACCEPTED, REJECTED]
           description: Current status of the submission. Defaults to NOT_ACCEPTED if no explicit status is given.
     TaskCreate:
       type: object
