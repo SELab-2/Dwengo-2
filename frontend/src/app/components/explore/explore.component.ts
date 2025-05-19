@@ -39,7 +39,17 @@ const CATEGORY_CONFIGS: { key: string; title: string }[] = [
 @Component({
     selector: 'app-explore',
     standalone: true,
-    imports: [LearningPathListComponent, LearningPathComponent, FormsModule, LearningPathFilterComponent, MatCardModule, MatButtonModule, CardSkeletonLoaderComponent],
+    imports: [
+        LearningPathListComponent, 
+        LearningPathComponent, 
+        FormsModule, 
+        LearningPathFilterComponent,
+        CardSkeletonLoaderComponent,
+        
+        // Angular material
+        MatCardModule, 
+        MatButtonModule
+    ],
     templateUrl: './explore.component.html',
     styleUrl: './explore.component.less'
 })

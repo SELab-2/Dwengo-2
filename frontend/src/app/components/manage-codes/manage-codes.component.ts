@@ -64,24 +64,39 @@ export class ManageCodesComponent implements OnInit {
   public expireClassCode(code: Code): void {
     this.classCodeService.expireClassCode(code)
       .subscribe(response => {
-        if(!response) this.openSnackBar($localize`Could not expire code`);
-        else this.openSnackBar($localize`Code expired successfully`);
+        if(!response) {
+          this.openSnackBar($localize`Could not expire code`);
+        }
+        else {
+          this.openSnackBar($localize`Code expired successfully`);
+          location.reload();
+        }
       });
   }
 
   public deleteClassCode(code: Code): void {
     this.classCodeService.deleteClassCode(code)
       .subscribe(response => {
-        if(!response) this.openSnackBar($localize`Could not delete code`);
-        else this.openSnackBar($localize`Code deleted successfully`);
+        if(!response) {
+          this.openSnackBar($localize`Could not delete code`);
+        }
+        else {
+          this.openSnackBar($localize`Code deleted successfully`);
+          this.codes = this.codes.filter(c => c.code !== code.code);
+        }
       });
   }
 
   public createClassCode(): void {
     if(this._classId) this.classCodeService.createClassCode(this._classId)
         .subscribe(response => {
-          if(!response) this.openSnackBar($localize`Could not create code`);
-          else this.openSnackBar($localize`Code created successfully`);
+          if(!response) {
+            this.openSnackBar($localize`Could not create code`);
+          }
+          else {
+            this.openSnackBar($localize`Code created successfully`);
+            location.reload();
+          };
       });
   }
 

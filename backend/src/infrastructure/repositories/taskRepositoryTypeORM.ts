@@ -2,7 +2,7 @@ import { Task } from "../../core/entities/task";
 import { ITaskRepository } from "../../core/repositories/taskRepositoryInterface";
 import { DatasourceTaskTypeORM } from "../database/data/data_sources/typeorm/datasourceTaskTypeORM";
 
-export class TaskRepository extends ITaskRepository {
+export class TaskRepositoryTypeORM extends ITaskRepository {
     private datasourceTask: DatasourceTaskTypeORM;
 
     public constructor() {
