@@ -6,7 +6,14 @@
 
     <mat-form-field class="login-password">
         <mat-label>Password</mat-label>
-        <input matInput i18n-placeholder="@@loginPassword" placeholder="password" type="password" formControlName="password" required>
+        <input matInput i18n-placeholder="@@loginPassword" placeholder="password" [type]="passwordVisible ? 'text' : 'password'" formControlName="password" required>
+        <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()">
+            <mat-icon>{{passwordVisible ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
     </mat-form-field>
 
     <div class="login-submit">
