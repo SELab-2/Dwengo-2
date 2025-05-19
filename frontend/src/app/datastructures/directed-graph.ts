@@ -47,7 +47,7 @@ export class DirectedGraph<T> {
     // Get incoming edges to a node
     public getIncomingEdges(value: T): Edge<T>[] {
         const result: Edge<T>[] = [];
-        for (const [fromValue, edges] of this._adjacencyList.entries()) {
+        for (const [_, edges] of this._adjacencyList.entries()) {
             for (const edge of edges) {
                 if (edge.to.value === value) {
                     result.push(edge);
