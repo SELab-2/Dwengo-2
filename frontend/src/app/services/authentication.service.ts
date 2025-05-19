@@ -99,6 +99,11 @@ export class AuthenticationService {
         this.storeRefreshToken(response.refreshToken);
         this.storeUserId(response.id);
         this.router.navigateByUrl(url);
+      } else {
+        // CLEAR stored credentials if refresh fails
+        this.removeToken();
+        this.removeUserId();
+        this.removeRefreshToken();
       }
 
     });
