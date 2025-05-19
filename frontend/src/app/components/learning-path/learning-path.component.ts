@@ -122,24 +122,10 @@ export class LearningPathComponent implements OnInit {
     getCleanHTML(): string {
         const parser = new DOMParser();
         const doc = parser.parseFromString(this.selectedNode!.value.htmlContent, 'text/html');
-
-        // Remvoe all <nav> elements
+        // Remove all <nav> elements
         doc.querySelectorAll('nav').forEach(nav => nav.remove());
-
         const cleanedHtml = doc.body.innerHTML;
-        return `
-            <html>
-              <head>
-                <style>
-                  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-                  body { font-family: 'Roboto', sans-serif; }
-                </style>
-              </head>
-              <body>
-                ${cleanedHtml}
-              </body>
-            </html>
-        `;
+        return cleanedHtml
     }
 
     // Navigate to the next node
