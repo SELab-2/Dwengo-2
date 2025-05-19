@@ -27,7 +27,7 @@ import { AssignmentStatsComponent } from '../assignment-stats/assignment-stats.c
 import { SubmissionService } from '../../services/submission.service';
 import { UserService } from '../../services/user.service';
 import { forkJoin, of, switchMap } from 'rxjs';
-import { Submission, SubmissionStatus } from '../../interfaces/submissions';
+import { Submission } from '../../interfaces/submissions';
 
 @Component({
   selector: 'app-assignment',
