@@ -134,6 +134,7 @@
     "deadline": "Échéance :",
     "deadlinesClass": "Classe :",
     "noDeadlines": "Aucune échéance (pour l'instant ?)",
+    "sessionRefreshed": "La session a été actualisée avec succès",
     "studentDashboardHome": "Accueil",
     "studentDashboardAssignmentsOverview": "Vos devoirs",
     "studentDashboardClassOverview": "Vos classes",
