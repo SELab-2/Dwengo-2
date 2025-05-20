@@ -112,7 +112,6 @@ export class AssignmentComponent implements OnInit {
     this.submissionStatsReady = false;
     this.currentLearningObjectId = node.value.metadata.hruid!;
     this.step = node.value.metadata.step!;
-    console.log(this.step, this.furthestStep);
     this.alreadySubmitted = this.step < this.furthestStep;
     this.fetchTaskAndSubmissions();
   }

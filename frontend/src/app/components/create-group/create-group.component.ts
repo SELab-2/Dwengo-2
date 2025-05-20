@@ -112,17 +112,21 @@ export class CreateGroupComponent {
   public createGroups(): void {
     const nonEmptyGroups = this.groups.filter(group => group.length > 0);
 
-    console.log(nonEmptyGroups)
+    if (nonEmptyGroups.length === 0) {
+      this.openSnackBar($localize`You need to assign students!.`);
+    } else {
+      this.groupService.createGroups(nonEmptyGroups, this.assignmentId!)
+        .subscribe((response) => {
+          if (response) {
+            this.openSnackBar($localize`Groups created successfully.`);
+            this.groupsCreated.emit();
+          } else {
+            this.openSnackBar($localize`Failed to create groups.`);
+          }
+        });
+    }
 
-    this.groupService.createGroups(nonEmptyGroups, this.assignmentId!)
-      .subscribe((response) => {
-        if (response) {
-          this.openSnackBar($localize`Groups created successfully.`);
-          this.groupsCreated.emit();
-        } else {
-          this.openSnackBar($localize`Failed to create groups.`);
-        }
-      });
+
   }
 
   /**

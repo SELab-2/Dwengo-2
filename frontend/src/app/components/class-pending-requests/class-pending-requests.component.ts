@@ -27,15 +27,15 @@ export class ClassPendingRequestsComponent implements OnInit {
   public joinRequests: JoinRequestWithUser[] = [];
 
   // Messages for the snackbar
-  private readonly acceptedMessage: string = $localize `:@@accepted:Accepted!`;
-  private readonly rejectedMessage: string = $localize `:@@rejected:Rejected!`;
+  private readonly acceptedMessage: string = $localize`:@@accepted:Accepted!`;
+  private readonly rejectedMessage: string = $localize`:@@rejected:Rejected!`;
 
   // Snackbar
   private readonly snackBar = inject(MatSnackBar);
 
   public constructor(
     private joinRequestService: JoinRequestService
-  ) {}
+  ) { }
 
   /**
    * Requests the join requests for this class 
@@ -44,7 +44,7 @@ export class ClassPendingRequestsComponent implements OnInit {
   public ngOnInit(): void {
     const classId: string | null = this._class?.id || null;
 
-    if(classId) {
+    if (classId) {
       // Get all join requests
       const joinRequests$ = this.joinRequestService.getJoinRequestsForClass(classId);
 
@@ -53,7 +53,6 @@ export class ClassPendingRequestsComponent implements OnInit {
         // Fill users of those join requests
         const joinRequestWithUser$ = this.joinRequestService.fillUsers(response);
         joinRequestWithUser$.subscribe(joinRequests => {
-          console.log(joinRequests);
           this.joinRequests = joinRequests;
         });
       });
@@ -68,7 +67,7 @@ export class ClassPendingRequestsComponent implements OnInit {
     const accepted$ = this.joinRequestService.acceptRequest(requestId);
 
     accepted$.subscribe((response) => {
-      if(response) this.openSnackBar(this.acceptedMessage);
+      if (response) this.openSnackBar(this.acceptedMessage);
       window.location.reload();
     });
   }
@@ -80,15 +79,15 @@ export class ClassPendingRequestsComponent implements OnInit {
   public rejectRequest(requestId: string): void {
     const rejected$ = this.joinRequestService.rejectRequest(requestId);
 
-      rejected$.subscribe((response) => {
-        if(response) this.openSnackBar(this.rejectedMessage);
-        window.location.reload();
-      });
+    rejected$.subscribe((response) => {
+      if (response) this.openSnackBar(this.rejectedMessage);
+      window.location.reload();
+    });
   }
 
-  private openSnackBar(message: string, action: string="Ok") {
+  private openSnackBar(message: string, action: string = "Ok") {
     this.snackBar.open(message, action, {
-        duration: 2500
+      duration: 2500
     });
   }
 

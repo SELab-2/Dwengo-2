@@ -148,7 +148,6 @@ export class LearningPathComponent implements OnInit {
         const resultNode = this.trajectoryGraph!.nodes[i];
         if (resultNode) {
             this.selectedNode = resultNode;
-            console.log("in learning path", this.step)
             this.selectedNodeChanged.emit(resultNode);
         } else {
             // First node, navigate back to assignments

@@ -37,7 +37,7 @@ import { TaskService } from '../../services/task.service';
     MatInputModule,
     MatDateRangeInput,
     MatNativeDateModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './create-assignment.component.html',
   styleUrl: './create-assignment.component.less',
@@ -62,6 +62,8 @@ export class CreateAssignmentComponent implements OnInit {
   public assignmentId: string = '';
   public classMembers: User[] = [];
 
+  public enableCreate: boolean = true;
+
   constructor(
     private formBuilder: FormBuilder,
     private classesService: ClassesService,
@@ -84,6 +86,12 @@ export class CreateAssignmentComponent implements OnInit {
 
   }
 
+  checkNonEmpty(classId: string) {
+    this.classesService.usersInClass(classId).subscribe(
+      value => this.enableCreate = value.students.length > 0
+    )
+  }
+
   create(): void {
     const newAssignment: NewAssignment | null = this.extractFormValues();
 
@@ -100,6 +108,7 @@ export class CreateAssignmentComponent implements OnInit {
       });
     }
   }
+
 
   private getClasses(): void {
     this.classesService.classesOfUser().subscribe((response: Class[]) => {
@@ -164,4 +173,5 @@ export class CreateAssignmentComponent implements OnInit {
     // we can redirect to assignments page
     this.router.navigate(['/teacher/assignments']);
   }
+
 }
