@@ -13,9 +13,9 @@ export class GetClassScore implements Service<GetClassScoreInput> {
     constructor(
         private _submissionRepository: ISubmissionRepository,
         private _assignmentRepository: IAssignmentRepository,
-    ) {}
+    ) { }
 
-    public async execute(input: GetClassScoreInput): Promise<object> {
+    public async execute(_userId: string, input: GetClassScoreInput): Promise<object> {
         // Get all users in the class
         const assignments: Assignment[] = await tryRepoEntityOperation(
             this._assignmentRepository.getByClassId(input.idParent),
