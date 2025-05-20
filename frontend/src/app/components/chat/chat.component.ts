@@ -143,7 +143,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
 
     navigateToAssignment() {
         if (this.currentThread?.assignmentId) {
-            let userType = this.authService.retrieveUserType();
+            const userType = this.authService.retrieveUserType();
             if (userType === 'teacher') {
                 this.router.navigate(['teacher', 'assignments', this.currentThread.assignmentId]);
             } else {

@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { AssignmentService } from './assignment.service';
 import { MessageService } from './message.service';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, catchError, combineLatest, defer, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 import { QuestionThread, NewQuestionThread, QuestionThreadUpdate, VisibilityType } from '../interfaces/questionThread';
 import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
 import { ClassesService } from './classes.service';
 import { LearningObjectService } from './learningObject.service';
-import { HtmlType, LearningObjectRequest } from '../interfaces/learning-object';
 
 @Injectable({
   providedIn: 'root'

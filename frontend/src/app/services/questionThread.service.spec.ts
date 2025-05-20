@@ -7,15 +7,18 @@ import { of } from 'rxjs';
 import { QuestionThread, NewQuestionThread, VisibilityType } from '../interfaces/questionThread';
 import { QuestionThreadUpdate } from '../interfaces/questionThread/questionThreadUpdate';
 import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
+import { MessageService } from './message.service';
+import { ClassesService } from './classes.service';
+import { LearningObjectService } from './learningObject.service';
 
 describe('QuestionThreadService', () => {
   const questionThread: QuestionThread = {
     id: 'question-id',
     creatorId: 'creator-id',
     assignmentId: 'assignment-id',
-    learningObjectId: undefined,
+    learningObjectId: 'object-id',
     isClosed: false,
-    visibility: VisibilityType.PUBLIC,
+    visibility: VisibilityType.GROUP,
     messageIds: [],
   };
 
@@ -24,7 +27,7 @@ describe('QuestionThreadService', () => {
     assignmentId: 'assignment-id',
     learningObjectId: 'learning-object-id',
     isClosed: false,
-    visibility: VisibilityType.PUBLIC,
+    visibility: VisibilityType.GROUP,
   };
 
   const updatedQuestionThread: QuestionThreadUpdate = {
@@ -44,6 +47,9 @@ describe('QuestionThreadService', () => {
   let authenticationService: jasmine.SpyObj<AuthenticationService>;
   let errorService: jasmine.SpyObj<ErrorService>;
   let assignmentService: jasmine.SpyObj<AssignmentService>;
+  let messageService: jasmine.SpyObj<MessageService>;
+  let classesService: jasmine.SpyObj<ClassesService>;
+  let learningObjectService: jasmine.SpyObj<LearningObjectService>;
   let service: QuestionThreadService;
 
   beforeEach(() => {
@@ -56,8 +62,11 @@ describe('QuestionThreadService', () => {
       headers: new HttpHeaders().append('Authorization', `Bearer token`).append('Content-Type', 'application/json'),
     });
     assignmentService = jasmine.createSpyObj('AssignmentService', ['retrieveAssignmentById']);
+    messageService = jasmine.createSpyObj('MessageService', ['retrieveMessageById']);
+    classesService = jasmine.createSpyObj('ClassesService', ['classWithId']);
+    learningObjectService = jasmine.createSpyObj('LearningObjectService', ['getTitleOrFallback']);
 
-    service = new QuestionThreadService(http, authenticationService, errorService, assignmentService);
+    service = new QuestionThreadService(http, authenticationService, errorService, assignmentService, messageService, classesService, learningObjectService);
   });
 
   it('should be created', () => {

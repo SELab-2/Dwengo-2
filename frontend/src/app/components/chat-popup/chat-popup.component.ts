@@ -9,6 +9,7 @@ import { ChatComponent } from '../../components/chat/chat.component';
 import { TemplateRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { QuestionThread } from '../../interfaces/questionThread';
 
 @Component({
   selector: 'app-chat-popup',
@@ -106,7 +107,7 @@ export class ChatPopupComponent implements OnDestroy {
       this.assignmentId,
       this.currentLearningObjectId
     ).subscribe({
-      next: (thread: any) => {
+      next: (thread: QuestionThread | null) => {
         if (thread && thread.id) {
           this.currentThreadId = thread.id;
         } else {
