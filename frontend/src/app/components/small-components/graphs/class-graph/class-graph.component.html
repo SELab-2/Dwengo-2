@@ -1,20 +1,21 @@
 <mat-card class="charts-card">
     <mat-card-header class="chart-header">
         <mat-card-title i18n="@@classProgress">Progress</mat-card-title>
-        <span i18n-matTooltip="@@averageScoreToolTip" matTooltip="This chart shows the average score of each student in each class.">
+        <span i18n-matTooltip="@@averageScoreToolTip"
+            matTooltip="This chart shows the average score in percentage of each student in each class.">
             <mat-icon class="info-icon">info</mat-icon>
         </span>
     </mat-card-header>
     <mat-card-content>
         @if(displayContent){
-            <apx-chart class="chart" [series]="barChartOptions.series!" [chart]="barChartOptions.chart!"
-                [dataLabels]="barChartOptions.dataLabels!" [xaxis]="barChartOptions.xaxis!"
-                [legend]="barChartOptions.legend!" [fill]="barChartOptions.fill!" [tooltip]="barChartOptions.tooltip!">
-            </apx-chart>
+        <apx-chart class="chart" [series]="barChartOptions.series!" [chart]="barChartOptions.chart!"
+            [dataLabels]="barChartOptions.dataLabels!" [xaxis]="barChartOptions.xaxis!"
+            [legend]="barChartOptions.legend!" [fill]="barChartOptions.fill!" [tooltip]="barChartOptions.tooltip!">
+        </apx-chart>
         } @else {
-            <div class="no-data-container">
-                <p i18n="@@classGraphNoData">No data available</p>
-            </div>
+        <div class="no-data-container">
+            <p i18n="@@classGraphNoData">No data available</p>
+        </div>
         }
     </mat-card-content>
 </mat-card>
