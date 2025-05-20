@@ -3,15 +3,20 @@
 
     <div class="explore-container">
         <mat-card class="intro-card">
-            <mat-card-header>
-                <mat-card-title i18n="@@exploreLearningPaths">Explore Learning Paths</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <p i18n="@@exploreLearningPathsDescription">
-                    Welcome! Here you can explore all available learning paths. You can either view all available
-                    options or search for specific paths using the filters.
-                </p>
-            </mat-card-content>
+            <div class="card-title">
+                <div class="card">
+                    <mat-card-header>
+                        <mat-card-title i18n="@@exploreLearningPaths">Explore Learning Paths</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <p i18n="@@exploreLearningPathsDescription">
+                            Welcome! Here you can explore all available learning paths. You can either view all available
+                            options or search for specific paths using the filters.
+                        </p>
+                    </mat-card-content>
+                </div>
+                <img class="explorer" loading="lazy" src="../../../assets/images/explorer.png" alt="Explorer image" />
+            </div>
             <mat-card-actions>
                 <button mat-raised-button color="primary" (click)="setBasic()" i18n="@@exploreButton">Explore our
                     Learning Paths</button>
