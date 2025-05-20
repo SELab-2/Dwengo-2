@@ -8,65 +8,50 @@
         </div>
 
         @if (loadingProgress || loadingGroups) {
-            <app-paginated-grid
-                [items]="LOADINGDATA"
-                [pageSize]="6"
-                [itemTemplate]="skeletonCard">
-            </app-paginated-grid>
-            <ng-template #skeletonCard let-card>
-                <app-card-skeleton-loader class="skeleton-loader">
+        <app-paginated-grid [items]="LOADINGDATA" [pageSize]="6" [itemTemplate]="skeletonCard">
+        </app-paginated-grid>
+        <ng-template #skeletonCard let-card>
+            <app-card-skeleton-loader class="skeleton-loader">
 
-                </app-card-skeleton-loader>
-            </ng-template>  
+            </app-card-skeleton-loader>
+        </ng-template>
         } @else {
-            <app-paginated-grid
-                [items]="assignmentsWithGroup"
-                [pageSize]="6"
-                [itemTemplate]="assignmentCard"
-                [showPagination]="assignmentsWithGroup.length > 6"
-                >
-            </app-paginated-grid>
+        <app-paginated-grid [items]="assignmentsWithGroup" [pageSize]="6" [itemTemplate]="assignmentCard"
+            [showPagination]="assignmentsWithGroup.length > 6">
+        </app-paginated-grid>
 
-            <ng-template #assignmentCard let-data>
-                <app-mini-assignment
-                    [assignment]="data.assignment" 
-                    [group]="data.group"
-                    [progress]="data.progress" 
-                >
-                </app-mini-assignment>
-            </ng-template>
+        <ng-template #assignmentCard let-data>
+            <app-mini-assignment [assignment]="data.assignment" [group]="data.group" [progress]="data.progress">
+            </app-mini-assignment>
+        </ng-template>
         }
-        
+
     </div>
 
     <div class="classes">
         <div class="header-container">
             <h2 i18n="@@studentDashboardClassOverview">Your classes</h2>
-            <a routerLink="/student/classes" i18n="@@studentDashboardViewAll">View all</a>
+            <button mat-fab extended color="secondary-mat-card viewClasses" routerLink="/student/classes"
+                i18n="@@studentDashboardViewAll">
+                View all classes
+            </button>
         </div>
 
         @if (loadingClasses) {
-            <app-paginated-grid
-                [items]="LOADINGDATA"
-                [pageSize]="6"
-                [itemTemplate]="skeletonCard">
-            </app-paginated-grid>
-            <ng-template #skeletonCard let-card>
-                <app-card-skeleton-loader class="skeleton-loader">
+        <app-paginated-grid [items]="LOADINGDATA" [pageSize]="6" [itemTemplate]="skeletonCard">
+        </app-paginated-grid>
+        <ng-template #skeletonCard let-card>
+            <app-card-skeleton-loader class="skeleton-loader">
 
-                </app-card-skeleton-loader>
-            </ng-template>
+            </app-card-skeleton-loader>
+        </ng-template>
         } @else {
-            <app-paginated-grid
-                [items]="classes"
-                [pageSize]="6"
-                [itemTemplate]="classCard"
-                [showPagination]="false">
-            </app-paginated-grid>
+        <app-paginated-grid [items]="classes" [pageSize]="6" [itemTemplate]="classCard" [showPagination]="false">
+        </app-paginated-grid>
 
-            <ng-template #classCard let-class>
-                <app-mini-class [_class]="class" _type="student"></app-mini-class>
-            </ng-template>
+        <ng-template #classCard let-class>
+            <app-mini-class [_class]="class" _type="student"></app-mini-class>
+        </ng-template>
         }
     </div>
 </main>

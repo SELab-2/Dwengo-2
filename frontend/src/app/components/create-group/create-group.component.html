@@ -5,12 +5,13 @@
         <p i18n="@@createGroupsDescription">
             Here you can divide the members of your class into groups.
             Drag a member into an existing group or onto the new group.
+            If you do not wish to assign a student to this assignment, you can keep them into the "Members" section.
         </p>
 
         <span style="display: flex; align-items: center;">
             <h2 i18n="@@createGroupMembers">Members</h2>
             <button mat-raised-button (click)="partitionMembers()" id="assign-all-button" style="margin-left: 75px;">
-                <p>Assign all</p>
+                <p i18n="@@assignAllGroupMembers">Assign all</p>
             </button>
         </span>
 
