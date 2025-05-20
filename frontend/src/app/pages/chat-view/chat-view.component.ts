@@ -80,8 +80,7 @@ export class ChatViewComponent implements OnInit, OnChanges {
         }
         return thread;
       });
-      // Visibility change of a thread in the list doesn't require re-validating current selection
-      // unless the selected thread itself is modified in a way that affects its validity (e.g., deleted).
+      // Visibility change of a thread in the list doesn't require reloding the whole list.
       // For visibility, the badge will just update.
     });
   }

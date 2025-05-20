@@ -42,6 +42,10 @@ export class QuestionThreadService {
   private questionThreadsMessage = $localize `:@@questionThreads:question threads`;
   private questionMessage = $localize `:@@question:question`;
 
+  private allThreadsCache: QuestionThread[] = [];
+  private threadsInitialized = false;
+
+
   /**
    * Retrieve a single question thread by ID
    */
@@ -111,44 +115,118 @@ export class QuestionThreadService {
     )
   }
 
-  /**
-  * Load and filter question threads for the authenticated user or current learning object
-  */
+  initializeAllThreads(): Observable<void> {
+    if (this.allThreadsCache.length > 0) {
+      return of(undefined); // already cached
+    }
+
+    return this.assignmentService.retrieveAssignments().pipe(
+      switchMap(assignments => {
+        const threadRequests = assignments.map(a =>
+          this.retrieveQuestionThreadsByAssignment(a.id).pipe(
+            map(threads => threads.map(thread => ({ ...thread, assignmentId: a.id, assignmentName: a.name })))
+          )
+        );
+        return forkJoin(threadRequests).pipe(
+          tap(threadGroups => {
+            this.allThreadsCache = threadGroups.flat();
+          }),
+          map(() => void 0)
+        );
+      })
+    );
+  }
+
   loadSideBarQuestionThreads(
     currentAssignmentId: string,
     showOtherChats: boolean
   ): Observable<QuestionThread[]> {
-    return this.assignmentService.retrieveAssignments().pipe(
-      switchMap(assignments => {
-        if (!assignments?.length) {
-          return of([]);
-        }
+    const userId = this.authService.retrieveUserId() || '';
 
-        const threadRequests = assignments.map(a => 
-          this.retrieveQuestionThreadsByAssignment(a.id).pipe(
-            switchMap(threads => {
-              if (!threads.length) return of([]);
-              
-              const threadWithNames$ = threads.map(thread => 
-                this.getThreadNameWithTimestamp(thread, a.name).pipe(
-                  map(name => ({ ...thread, name }))
-              ));
-              return forkJoin(threadWithNames$);
-            })
-          )
-        );
-        return forkJoin(threadRequests);
-      }),
-      map(threadArrays => threadArrays.flat()),
-      map(allThreads => {
-        const userId = this.authService.retrieveUserId() || '';
-        return this.filterThreads(allThreads, userId, currentAssignmentId, showOtherChats);
-      }),
-      this.errorService.pipeHandler(
-        this.errorService.retrieveError($localize`loading user threads`)
+    return this.initializeAllThreads().pipe(
+      switchMap(() =>
+        this.filterAndNameThreads(this.allThreadsCache, userId, currentAssignmentId, showOtherChats)
       )
     );
   }
+
+  filterAndNameThreads(
+    allThreads: QuestionThread[],
+    userId: string,
+    currentAssignmentId: string,
+    showOtherChats: boolean
+  ): Observable<QuestionThread[]> {
+    const userType = this.authService.retrieveUserType();
+    const sortByLatestMessage = (a: QuestionThread, b: QuestionThread) =>
+      new Date(b.lastMessageDate || 0).getTime() - new Date(a.lastMessageDate || 0).getTime();
+
+    let filteredThreads = allThreads.filter(t => {
+      if (showOtherChats) {
+        return userType === 'student'
+          ? t.visibility === VisibilityType.GROUP
+          : t.assignmentId === currentAssignmentId;
+      } else {
+        return userType === 'student' ? t.creatorId === userId : true;
+      }
+    });
+
+    const unnamedThreads = filteredThreads.filter(t => !t.name);
+
+    if (!unnamedThreads.length) {
+      return of(filteredThreads.sort(sortByLatestMessage));
+    }
+
+    const namingOps$ = unnamedThreads.map(thread =>
+      this.getThreadNameWithTimestamp(thread, thread.assignmentName || '').pipe(
+        tap(name => (thread.name = name))
+      )
+    );
+
+    return forkJoin(namingOps$).pipe(
+      map(() => filteredThreads.sort(sortByLatestMessage))
+    );
+  }
+
+
+
+  // /**
+  // * Load and filter question threads for the authenticated user based on the chat toggle and user type
+  // */
+  // loadSideBarQuestionThreads(
+  //   currentAssignmentId: string,
+  //   showOtherChats: boolean
+  // ): Observable<QuestionThread[]> {
+  //   return this.assignmentService.retrieveAssignments().pipe(
+  //     switchMap(assignments => {
+  //       if (!assignments?.length) {
+  //         return of([]);
+  //       }
+
+  //       const threadRequests = assignments.map(a => 
+  //         this.retrieveQuestionThreadsByAssignment(a.id).pipe(
+  //           switchMap(threads => {
+  //             if (!threads.length) return of([]);
+              
+  //             const threadWithNames$ = threads.map(thread => 
+  //               this.getThreadNameWithTimestamp(thread, a.name).pipe(
+  //                 map(name => ({ ...thread, name }))
+  //             ));
+  //             return forkJoin(threadWithNames$);
+  //           })
+  //         )
+  //       );
+  //       return forkJoin(threadRequests);
+  //     }),
+  //     map(threadArrays => threadArrays.flat()),
+  //     map(allThreads => {
+  //       const userId = this.authService.retrieveUserId() || '';
+  //       return this.filterThreads(allThreads, userId, currentAssignmentId, showOtherChats);
+  //     }),
+  //     this.errorService.pipeHandler(
+  //       this.errorService.retrieveError($localize`loading user threads`)
+  //     )
+  //   );
+  // }
 
   /**
   * Filter threads based on visibility or ownership

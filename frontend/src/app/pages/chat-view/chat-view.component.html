@@ -1,7 +1,8 @@
 <div class="sidebar">
     <button mat-stroked-button
             class="toggle-button"
-            (click)="toggleChatVisibility()">
+            (click)="toggleChatVisibility()"
+            [disabled]="userType === 'teacher' && !validChatId">
         {{ showOtherChats ? USER_CHATS : OTHER_CHATS }}
     </button>
 

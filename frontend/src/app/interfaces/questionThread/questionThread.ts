@@ -18,6 +18,7 @@ export interface QuestionThread {
     messageIds?: string[],
     name?: string,
     lastMessageDate?: Date,
+    assignmentName?: string,
 }
 
 /**
