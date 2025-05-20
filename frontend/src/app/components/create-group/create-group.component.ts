@@ -110,21 +110,19 @@ export class CreateGroupComponent {
    * Make a call to the API to create the made groups.
    */
   public createGroups(): void {
-    if (this.members.length > 0) {
-      this.openSnackBar($localize`There are still members not assigned to a group.`);
-    } else {
-      const nonEmptyGroups = this.groups.filter(group => group.length > 0);
+    const nonEmptyGroups = this.groups.filter(group => group.length > 0);
 
-      this.groupService.createGroups(nonEmptyGroups, this.assignmentId!)
-        .subscribe((response) => {
-          if (response) {
-            this.openSnackBar($localize`Groups created successfully.`);
-            this.groupsCreated.emit();
-          } else {
-            this.openSnackBar($localize`Failed to create groups.`);
-          }
-        })
-    }
+    console.log(nonEmptyGroups)
+
+    this.groupService.createGroups(nonEmptyGroups, this.assignmentId!)
+      .subscribe((response) => {
+        if (response) {
+          this.openSnackBar($localize`Groups created successfully.`);
+          this.groupsCreated.emit();
+        } else {
+          this.openSnackBar($localize`Failed to create groups.`);
+        }
+      });
   }
 
   /**
