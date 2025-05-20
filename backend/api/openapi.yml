@@ -1936,6 +1936,31 @@ paths:
           $ref: "#/components/responses/SubmissionsOK"
         "401":
           $ref: "#/components/responses/Unauthorized"
+  
+  "/classes/{idParent}/score":
+    get:
+      tags:
+        - progress
+      summary: Get the score percentage of a class.
+      description: |
+        The score percentage equals the amount of accecpted submissions in the class divided by
+        the total submissions in a class.
+      parameters:
+        - in: path
+          name: idParent
+          description: The id of the class to get the score of
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          $ref: "#/components/responses/ScoreOK"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  
   "/classes/{idParent}/completion":
     get:
       tags:
@@ -2437,6 +2462,16 @@ components:
               id:
                 type: string
                 format: uuid
+    ScoreOK:
+      description: Class score request completed sucessfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              score:
+                type: number
+                description: null if no assignments/submission are present for class
     CompletionOK:
       description: Class completion request completed sucessfully.
       content:

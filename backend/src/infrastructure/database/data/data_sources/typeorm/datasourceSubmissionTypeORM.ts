@@ -167,6 +167,30 @@ export class DatasourceSubmissionTypeORM extends DatasourceTypeORM {
         return this.getSubmissions(studentId, assignmentId, taskId);
     }
 
+    public async getAllForAssignment(assignmentId: string): Promise<Submission[]> {
+        const datasource = await DatasourceTypeORM.datasourcePromise;
+
+        const assignmentRepository = datasource.getRepository(AssignmentTypeORM);
+        const submissionRepository = datasource.getRepository(SubmissionTypeORM);
+
+        // Check if assignment exists
+        const assignmentModel: AssignmentTypeORM | null = await assignmentRepository.findOne({
+            where: { id: assignmentId },
+        });
+
+        if (!assignmentModel) {
+            throw new EntityNotFoundError(`Assignment with id ${assignmentId} not found`);
+        }
+
+        // Get all submissions from assignment
+        const submissionModels: SubmissionTypeORM[] = await submissionRepository.find({
+            where: { assignment: assignmentModel },
+            relations: ["user", "assignment", "task"],
+        });
+
+        return submissionModels.map(model => model.toEntity());
+    }
+
     public async getByStudentId(studentId: string): Promise<Submission[]> {
         const datasource = await DatasourceTypeORM.datasourcePromise;
 
