@@ -3,5 +3,5 @@ import { IJoinRequestRepository } from "../../repositories/joinRequestRepository
 
 export abstract class JoinRequestService<T> implements Service<T> {
     constructor(protected joinRequestRepository: IJoinRequestRepository) {}
-    abstract execute(input: T): Promise<object>;
+    abstract execute(userId: string, input: T): Promise<object>;
 }

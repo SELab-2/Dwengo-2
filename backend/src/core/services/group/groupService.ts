@@ -3,5 +3,5 @@ import { IGroupRepository } from "../../repositories/groupRepositoryInterface";
 
 export abstract class GroupService<T> implements Service<T> {
     constructor(protected groupRepository: IGroupRepository) {}
-    abstract execute(input: T): Promise<object>;
+    abstract execute(userId: string, input: T): Promise<object>;
 }

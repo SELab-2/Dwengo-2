@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { JoinRequestService } from "./joinRequestService";
 import { deleteJoinRequestSchema } from "../../../application/schemas";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type DeleteJoinRequestInput = z.infer<typeof deleteJoinRequestSchema>;
 
@@ -12,7 +13,8 @@ export class DeleteJoinRequest extends JoinRequestService<DeleteJoinRequestInput
      * @returns An empty object.
      * @throws {ApiError} If the group with the given id is not found.
      */
-    async execute(input: DeleteJoinRequestInput): Promise<object> {
+    async execute(userId: string, input: DeleteJoinRequestInput): Promise<object> {
+        await validateUserRights(userId, UserType.TEACHER);
         await tryRepoEntityOperation(this.joinRequestRepository.delete(input.id), "JoinRequest", input.id, true);
         return {};
     }

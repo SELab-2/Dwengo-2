@@ -7,7 +7,7 @@ const mockLearningObjectRepository: jest.Mocked<ILearningObjectRepository> = {
     getLanguages: jest.fn(),
     getWrappedLearningObject: jest.fn(),
     getRawLearningObject: jest.fn(),
-    getLearningObjects: jest.fn(), 
+    getLearningObjects: jest.fn(),
 } as unknown as jest.Mocked<ILearningObjectRepository>;
 
 
@@ -27,7 +27,7 @@ describe("GetLearningObject Service", () => {
         ));
 
         const input = { id: "123", type: HTMLType.RAW };
-        const result = await service.execute(input) as { metadata: any; htmlContent?: string };
+        const result = await service.execute("", input) as { metadata: any; htmlContent?: string };
 
         expect(mockLearningObjectRepository.getVersions).toHaveBeenCalledWith("123");
         expect(mockLearningObjectRepository.getLanguages).toHaveBeenCalledWith("123");
@@ -39,11 +39,11 @@ describe("GetLearningObject Service", () => {
         mockLearningObjectRepository.getVersions.mockResolvedValue(["1", "2", "3"]);
         mockLearningObjectRepository.getLanguages.mockResolvedValue(["en", "nl"]);
         mockLearningObjectRepository.getRawLearningObject.mockResolvedValue(new LearningObject(
-            "hruid", "id", 2, "en", "uuid","title", "desc", "", LearningObjectContentType.PLAIN_TEXT
+            "hruid", "id", 2, "en", "uuid", "title", "desc", "", LearningObjectContentType.PLAIN_TEXT
         ));
 
         const input = { id: "123", type: HTMLType.RAW, version: "2" };
-        const result = await service.execute(input) as { metadata: any; htmlContent?: string };
+        const result = await service.execute("", input) as { metadata: any; htmlContent?: string };
 
         expect(mockLearningObjectRepository.getRawLearningObject).toHaveBeenCalledWith("123", "en", 2);
         expect(result.metadata.version).toBe(2);
@@ -57,7 +57,7 @@ describe("GetLearningObject Service", () => {
         ));
 
         const input = { id: "123", type: HTMLType.WRAPPED, language: "de" };
-        const result = await service.execute(input) as { metadata: any; htmlContent?: string };
+        const result = await service.execute("", input) as { metadata: any; htmlContent?: string };
 
         expect(mockLearningObjectRepository.getWrappedLearningObject).toHaveBeenCalledWith("123", "nl", 1);
         expect(result.metadata.language).toBe("nl");
@@ -71,7 +71,7 @@ describe("GetLearningObject Service", () => {
         ));
 
         const input = { id: "123", type: HTMLType.WRAPPED };
-        const result = await service.execute(input) as { metadata: any; htmlContent?: string };
+        const result = await service.execute("", input) as { metadata: any; htmlContent?: string };
 
         expect(mockLearningObjectRepository.getWrappedLearningObject).toHaveBeenCalled();
         expect(result.htmlContent).toBe("<div>content</div>");
@@ -85,7 +85,7 @@ describe("GetLearningObject Service", () => {
         ));
 
         const input = { id: "123", type: HTMLType.RAW };
-        const result = await service.execute(input) as { metadata: any; htmlContent?: string };
+        const result = await service.execute("", input) as { metadata: any; htmlContent?: string };
 
         expect(mockLearningObjectRepository.getRawLearningObject).toHaveBeenCalled();
         expect(result.htmlContent).toBe("Raw content");

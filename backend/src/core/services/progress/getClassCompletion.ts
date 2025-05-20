@@ -5,7 +5,8 @@ import { Assignment } from "../../entities/assignment";
 import { LearningPath } from "../../entities/learningPath";
 import { Student } from "../../entities/student";
 import { Submission } from "../../entities/submission";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
 import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
 import { ISubmissionRepository } from "../../repositories/submissionRepositoryInterface";
@@ -21,7 +22,8 @@ export class GetClassCompletion implements Service<GetClassCompletionInput> {
         private _learningPathRepository: ILearningPathRepository,
     ) {}
 
-    public async execute(input: GetClassCompletionInput): Promise<object> {
+    public async execute(userId: string, input: GetClassCompletionInput): Promise<object> {
+        await validateUserRights(userId, UserType.TEACHER);
         // Get the assignments of the class
         const assignments: Assignment[] = await tryRepoEntityOperation(
             this._assignmentRepository.getByClassId(input.idParent),

@@ -2,6 +2,9 @@ import { Assignment } from "../../../../../src/core/entities/assignment";
 import { LearningPath } from "../../../../../src/core/entities/learningPath";
 import { Submission } from "../../../../../src/core/entities/submission";
 import { GetUserProgress } from "../../../../../src/core/services/progress";
+import * as RightsValidator from "../../../../../src/core/helpers";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 // Mock repositories
 const assignmentRepository = { getByUserId: jest.fn() };
@@ -17,6 +20,7 @@ class TestableGetUserProgress extends GetUserProgress {
 
 describe("GetUserProgress", () => {
   it("returns correct progress for a user with multiple assignments and submissions", async () => {
+    mockValidateUserRights.mockResolvedValue();
     const mockAssignments: Assignment[] = [
       { id: "a1", learningPathId: "lp1" } as Assignment,
       { id: "a2", learningPathId: "lp2" } as Assignment,
@@ -80,7 +84,7 @@ describe("GetUserProgress", () => {
     });
 
     const service = new TestableGetUserProgress();
-    const result = await service.execute({ idParent: "u1" });
+    const result = await service.execute("", { idParent: "u1" });
 
     expect(result).toEqual({
       progresses: [
@@ -118,7 +122,7 @@ describe("GetUserProgress", () => {
     submissionRepository.getAllForStudentInAssignment.mockResolvedValue([]);
 
     const service = new TestableGetUserProgress();
-    const result = await service.execute({ idParent: "u1" });
+    const result = await service.execute("", { idParent: "u1" });
 
     expect(result).toEqual({
       progresses: [

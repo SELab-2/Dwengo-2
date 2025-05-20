@@ -1,9 +1,11 @@
 import { ErrorCode } from "../../../../../src/application/types";
 import { Student } from "../../../../../src/core/entities/student";
 import { Teacher } from "../../../../../src/core/entities/teacher";
-import { UserType } from "../../../../../src/core/entities/user";
 import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { RemoveUserFromGroup } from "../../../../../src/core/services/user";
+import * as RightsValidator from "../../../../../src/core/helpers";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 describe("RemoveStudentFromGroup", () => {
     let userRepository: jest.Mocked<IUserRepository>;
@@ -15,6 +17,7 @@ describe("RemoveStudentFromGroup", () => {
             removeFromGroup: jest.fn()
         } as unknown as jest.Mocked<IUserRepository>;
         removeStudentFromGroup = new RemoveUserFromGroup(userRepository);
+        mockValidateUserRights.mockResolvedValue();
     });
 
     it("should call removeStudentFromGroup on the repository with correct parameters", async () => {
@@ -25,7 +28,7 @@ describe("RemoveStudentFromGroup", () => {
 
         userRepository.getById.mockResolvedValue(student);
 
-        await removeStudentFromGroup.execute(params);
+        await removeStudentFromGroup.execute("", params);
 
         expect(userRepository.removeFromGroup).toHaveBeenCalledWith(id, idParent);
         expect(userRepository.removeFromGroup).toHaveBeenCalledTimes(1);
@@ -40,7 +43,7 @@ describe("RemoveStudentFromGroup", () => {
 
         userRepository.getById.mockResolvedValue(teacher);
 
-        await expect(removeStudentFromGroup.execute(params)).rejects.toEqual({
+        await expect(removeStudentFromGroup.execute("", params)).rejects.toEqual({
             code: ErrorCode.BAD_REQUEST,
             message: "Only students can be part of a group.",
         });
@@ -55,6 +58,6 @@ describe("RemoveStudentFromGroup", () => {
 
         userRepository.getById.mockResolvedValue(student);
 
-        await expect(removeStudentFromGroup.execute(params)).rejects.toThrow("Student not found");
+        await expect(removeStudentFromGroup.execute("", params)).rejects.toThrow("Student not found");
     });
 });

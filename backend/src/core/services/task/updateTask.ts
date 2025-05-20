@@ -2,7 +2,8 @@ import { z } from "zod";
 import { TaskService } from "./taskService";
 import { updateTaskSchema } from "../../../application/schemas";
 import { Task } from "../../entities/task";
-import { tryRepoEntityOperation } from "../../helpers"; // Adjust the path if needed
+import { User, UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers"; // Adjust the path if needed
 
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
 
@@ -13,7 +14,8 @@ export class UpdateTask extends TaskService<UpdateTaskInput> {
      * @returns A promise resolving to an empty object.
      * @throws {ApiError} If the task with the given id is not found.
      */
-    async execute(input: UpdateTaskInput): Promise<object> {
+    async execute(userId: string, input: UpdateTaskInput): Promise<object> {
+        await validateUserRights(userId, UserType.TEACHER);
         const task: Task = await tryRepoEntityOperation(this.taskRepository.getById(input.id), "Task", input.id, true);
         task.assignmentId = input.assignmentId || task.assignmentId;
         task.step = input.step || task.step;

@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { AssignmentService } from "./assignmentService";
 import { deleteAssignmentSchema } from "../../../application/schemas/assignmentSchemas";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type DeleteAssignmentInput = z.infer<typeof deleteAssignmentSchema>;
 
@@ -15,7 +16,9 @@ export class DeleteAssignment extends AssignmentService<DeleteAssignmentInput> {
      * @returns An empty object.
      * @throws {ApiError} If the assignment with the given id is not found.
      */
-    async execute(input: DeleteAssignmentInput): Promise<object> {
+    async execute(userId: string, input: DeleteAssignmentInput): Promise<object> {
+        await validateUserRights(userId, UserType.TEACHER);
+
         await tryRepoEntityOperation(this.assignmentRepository.delete(input.id), "Assignment", input.id, true);
         return {};
     }

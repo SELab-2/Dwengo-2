@@ -3,7 +3,7 @@ import { updateUserSchema } from "../../../application/schemas/userSchemas";
 import { ApiError, ErrorCode } from "../../../application/types";
 import { Service } from "../../../config/service";
 import { User } from "../../entities/user";
-import { tryRepoEntityOperation } from "../../helpers";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
@@ -22,7 +22,8 @@ export class UpdateUser implements Service<UpdateUserInput> {
      * @returns A promise resolving to an empty object.
      * @throws {ApiError} If the user with the given id is not found or when a bad request is given.
      */
-    async execute(input: UpdateUserInput): Promise<object> {
+    async execute(userId: string, input: UpdateUserInput): Promise<object> {
+        await validateUserRights(userId, undefined, input.id);
         // Get the old info of the user
         const oldUser = await tryRepoEntityOperation(this.userRepository.getById(input.id), "User", input.id, true);
 

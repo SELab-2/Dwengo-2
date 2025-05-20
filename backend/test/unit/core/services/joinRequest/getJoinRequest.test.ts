@@ -8,6 +8,9 @@ import {
     GetUserJoinRequestsInput,
     GetJoinRequestInput,
 } from "../../../../../src/core/services/joinRequest/getJoinRequest";
+import * as RightsValidator from "../../../../../src/core/helpers";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 describe("GetClassJoinRequests Service", () => {
     let getJoinRequestsService: GetClassJoinRequests;
@@ -24,6 +27,7 @@ describe("GetClassJoinRequests Service", () => {
         input = {
             idParent: "class1",
         };
+        mockValidateUserRights.mockResolvedValue();
     });
 
     test("Should return all join requests for a class", async () => {
@@ -34,7 +38,7 @@ describe("GetClassJoinRequests Service", () => {
 
         mockJoinRequestRepository.getByClassId.mockResolvedValue(joinRequests);
 
-        await expect(getJoinRequestsService.execute(input)).resolves.toEqual({
+        await expect(getJoinRequestsService.execute("", input)).resolves.toEqual({
             requests: joinRequests.map(request => request.id),
         });
         expect(mockJoinRequestRepository.getByClassId).toHaveBeenCalledWith(input.idParent);
@@ -56,6 +60,8 @@ describe("GetUserJoinRequests Service", () => {
         input = {
             idParent: "user1",
         };
+
+        mockValidateUserRights.mockResolvedValue();
     });
 
     test("Should return all join requests for a user", async () => {
@@ -66,7 +72,7 @@ describe("GetUserJoinRequests Service", () => {
 
         mockJoinRequestRepository.getByRequesterId.mockResolvedValue(joinRequests);
 
-        await expect(getJoinRequestsService.execute(input)).resolves.toEqual({
+        await expect(getJoinRequestsService.execute("", input)).resolves.toEqual({
             requests: joinRequests.map(request => request.id),
         });
         expect(mockJoinRequestRepository.getByRequesterId).toHaveBeenCalledWith(input.idParent);
@@ -99,7 +105,7 @@ describe("GetJoinRequest Service", () => {
 
         mockJoinRequestRepository.getById.mockResolvedValue(joinRequests[0]);
 
-        await expect(getJoinRequestService.execute(input)).resolves.toEqual(joinRequests[0].toObject());
+        await expect(getJoinRequestService.execute("", input)).resolves.toEqual(joinRequests[0].toObject());
         expect(mockJoinRequestRepository.getById).toHaveBeenCalledWith(input.id);
     });
 });

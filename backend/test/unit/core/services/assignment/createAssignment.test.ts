@@ -1,6 +1,9 @@
 import { DatabaseError } from "../../../../../src/config/error";
 import { Assignment } from "../../../../../src/core/entities/assignment";
 import { CreateAssignment, CreateAssignmentInput } from "../../../../../src/core/services/assignment";
+import * as RightsValidator from "../../../../../src/core/helpers";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 // Mock repository
 const mockAssignmentRepository = {
@@ -31,12 +34,13 @@ describe("CreateAssignment", () => {
         };
         inputAssignment = new Assignment("1", "1", startDate, deadline, "Name", "Extra Instructions");
         createdAssignment = new Assignment("1", "1", startDate, deadline, "Name", "Extra Instructions", "1");
+        mockValidateUserRights.mockResolvedValue();
     });
 
     test("Should create a Assignment and return its ID", async () => {
         mockAssignmentRepository.create.mockResolvedValue(createdAssignment);
 
-        const result = await create.execute(inputAssignmentParams);
+        const result = await create.execute("", inputAssignmentParams);
 
         expect(result).toEqual({ id: "1" });
         expect(mockAssignmentRepository.create).toHaveBeenCalledWith(inputAssignment);
@@ -45,7 +49,7 @@ describe("CreateAssignment", () => {
     test("Should throw a DatabaseError if creation fails", async () => {
         mockAssignmentRepository.create.mockRejectedValue(new DatabaseError("Creation failed"));
 
-        await expect(create.execute(inputAssignmentParams)).rejects.toThrow(DatabaseError);
+        await expect(create.execute("", inputAssignmentParams)).rejects.toThrow(DatabaseError);
         expect(mockAssignmentRepository.create).toHaveBeenCalledWith(inputAssignment);
     });
 });

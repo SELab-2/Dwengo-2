@@ -81,7 +81,7 @@ describe("GetProgress", () => {
       idParent: "assignment1",
     };
 
-    const result = await service.execute(input) as { progresses: object[] };
+    const result = await service.execute("", input) as { progresses: object[] };
 
     expect(result.progresses).toHaveLength(2);
     expect(result.progresses[0]).toMatchObject({
@@ -102,38 +102,38 @@ describe("GetProgress", () => {
 
   it("should return empty progress list if there are no students", async () => {
     studentRepository.getByAssignmentId.mockResolvedValueOnce([]);
-  
+
     const service = new GetAssignmentProgress(
       studentRepository,
       submissionRepository,
       assignmentRepository,
       learningPathRepository
     );
-  
-    const result = await service.execute({ idParent: "assignment1" }) as { progresses: object[] };
-  
+
+    const result = await service.execute("", { idParent: "assignment1" }) as { progresses: object[] };
+
     expect(result.progresses).toEqual([]);
   });
 
   it("should handle students with no submissions", async () => {
     studentRepository.getByAssignmentId.mockResolvedValueOnce(mockUsers);
     submissionRepository.getAllForStudentInAssignment.mockResolvedValue([]);
-  
+
     const service = new GetAssignmentProgress(
       studentRepository,
       submissionRepository,
       assignmentRepository,
       learningPathRepository
     );
-  
-    const result = await service.execute({ idParent: "assignment1" }) as {
-        progresses: {
-            id: string | null,
-            step: number,
-            learningObjectId: string | null,
-        } [] 
+
+    const result = await service.execute("", { idParent: "assignment1" }) as {
+      progresses: {
+        id: string | null,
+        step: number,
+        learningObjectId: string | null,
+      }[]
     };
-  
+
     expect(result.progresses).toHaveLength(2);
     for (const progress of result.progresses) {
       expect(progress.id).toBeNull();
@@ -141,7 +141,7 @@ describe("GetProgress", () => {
       expect(progress.learningObjectId).toBeNull();
     }
   });
-  
+
   it("should pick latest submission for the furthest step", async () => {
     const doubleSub = [
       {
@@ -157,31 +157,31 @@ describe("GetProgress", () => {
         time: new Date("2023-01-03"),
       },
     ] as Submission[];
-  
+
     studentRepository.getByAssignmentId.mockResolvedValueOnce([mockUsers[0]]);
     submissionRepository.getAllForStudentInAssignment.mockResolvedValue(doubleSub);
-  
+
     const service = new GetAssignmentProgress(
       studentRepository,
       submissionRepository,
       assignmentRepository,
       learningPathRepository
     );
-  
-    const result = await service.execute({ idParent: "assignment1" })  as {
-        progresses: {
-            id: string | null,
-            step: number,
-        } [] 
+
+    const result = await service.execute("", { idParent: "assignment1" }) as {
+      progresses: {
+        id: string | null,
+        step: number,
+      }[]
     };
-  
+
     expect(result.progresses[0].id).toBe("latest");
     expect(result.progresses[0].step).toBe(2); // node2 = index 1 + 1
   });
-  
+
   it("should pick one submission if two have the same time on same node", async () => {
     const sameTime = new Date("2023-01-04");
-  
+
     const twinSubs: Submission[] = [
       {
         id: "subA",
@@ -196,25 +196,25 @@ describe("GetProgress", () => {
         time: sameTime,
       },
     ] as Submission[];
-  
+
     studentRepository.getByAssignmentId.mockResolvedValueOnce([mockUsers[0]]);
     submissionRepository.getAllForStudentInAssignment.mockResolvedValueOnce(twinSubs);
-  
+
     const service = new GetAssignmentProgress(
       studentRepository,
       submissionRepository,
       assignmentRepository,
       learningPathRepository
     );
-  
-    const result = await service.execute({ idParent: "assignment1" }) as {
-        progresses: {
-            id: string | null,
-        } [] 
+
+    const result = await service.execute("", { idParent: "assignment1" }) as {
+      progresses: {
+        id: string | null,
+      }[]
     };
-  
+
     const chosenId = result.progresses[0].id;
     expect(["subA", "subB"]).toContain(chosenId);
   });
-  
+
 });

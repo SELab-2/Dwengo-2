@@ -12,7 +12,7 @@ export class GetMessage extends MessageService<GetMessageInput> {
      * @returns A promise resolving to a message transformed into an object.
      * @throws {ApiError} If the message with the given id was not found.
      */
-    async execute(input: GetMessageInput): Promise<object> {
+    async execute(_userId: string, input: GetMessageInput): Promise<object> {
         return (
             await tryRepoEntityOperation(this.messageRepository.getById(input.id), "Message", input.id, true)
         ).toObject();

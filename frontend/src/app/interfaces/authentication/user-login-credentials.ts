@@ -1,3 +1,5 @@
+import { UserType } from "../user";
+
 /**
  * Interface for the body of a login request.
  * Based on the curl request in our internal communication channels
@@ -5,5 +7,6 @@
  */
 export interface UserLoginCredentials {
     email: string,
-    password: string
+    password: string,
+    userType: UserType
 }

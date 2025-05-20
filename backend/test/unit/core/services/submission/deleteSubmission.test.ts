@@ -21,7 +21,7 @@ describe("DeleteSubmission", () => {
     test("Should delete a submission successfully", async () => {
         mockSubmissionRepository.delete.mockResolvedValue(undefined);
 
-        const result = await deleteSubmission.execute(input);
+        const result = await deleteSubmission.execute("", input);
 
         expect(result).toEqual({});
         expect(mockSubmissionRepository.delete).toHaveBeenCalledWith("submission-123");
@@ -30,7 +30,7 @@ describe("DeleteSubmission", () => {
     test("Should throw a DatabaseError if deletion fails", async () => {
         mockSubmissionRepository.delete.mockRejectedValue(new DatabaseError("Deletion failed"));
 
-        await expect(deleteSubmission.execute(input)).rejects.toThrow(DatabaseError);
+        await expect(deleteSubmission.execute("", input)).rejects.toThrow(DatabaseError);
         expect(mockSubmissionRepository.delete).toHaveBeenCalledWith("submission-123");
     });
 });

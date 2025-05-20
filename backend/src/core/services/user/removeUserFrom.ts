@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { removeUserFromSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type RemoveUserFromInput = z.infer<typeof removeUserFromSchema>;
 
@@ -24,7 +25,8 @@ export abstract class RemoveUserFrom implements Service<RemoveUserFromInput> {
      * @returns An empty object.
      * @throws {ApiError} If the collection or user with the given id is not found.
      */
-    async execute(input: RemoveUserFromInput): Promise<object> {
+    async execute(userId: string, input: RemoveUserFromInput): Promise<object> {
+        await validateUserRights(userId, UserType.TEACHER);
         await tryRepoEntityOperation(
             this.removeUser(input.id, input.idParent),
             "User | Collection",

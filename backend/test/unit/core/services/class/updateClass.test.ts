@@ -1,5 +1,8 @@
 import { Class } from "../../../../../src/core/entities/class";
 import { UpdateClass } from "../../../../../src/core/services/class";
+import * as RightsValidator from "../../../../../src/core/helpers";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 // Mock repository
 const mockClassRepository = {
@@ -11,6 +14,7 @@ describe("UpdateClass Service", () => {
 
     beforeEach(() => {
         updateClassService = new UpdateClass(mockClassRepository as any);
+        mockValidateUserRights.mockResolvedValue();
     });
 
     it("should update a class and return the updated object", async () => {
@@ -34,7 +38,7 @@ describe("UpdateClass Service", () => {
             targetAudience: "Target Audience",
         };
 
-        const result = await updateClassService.execute(params);
+        const result = await updateClassService.execute("", params);
 
         expect(mockClassRepository.update).toHaveBeenCalledWith(id, {
             name: updatedName,
@@ -62,7 +66,7 @@ describe("UpdateClass Service", () => {
             targetAudience: updatedTargetAudience,
         };
 
-        const result = await updateClassService.execute(params);
+        const result = await updateClassService.execute("", params);
 
         expect(mockClassRepository.update).toHaveBeenCalledWith(id, {
             targetAudience: updatedTargetAudience,

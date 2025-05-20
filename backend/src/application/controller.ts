@@ -1,5 +1,5 @@
 import { createErrorHandler, defaultResponder, ResponderFunction } from "./helpersExpress";
-import { ApiError, Request, Response, ErrorCode } from "./types";
+import { ApiError, Request, Response, ErrorCode, AuthenticatedRequestBody } from "./types";
 import { logger } from "../config/logger";
 import { Service, Services } from "../config/service";
 
@@ -60,6 +60,7 @@ export abstract class Controller {
         data: T,
         statusCode: number,
         operationName: string,
+        userId: string,
     ): Promise<Response> {
         if (!service) {
             this.logger.warn(`${operationName} operation not implemented`);
@@ -69,7 +70,7 @@ export abstract class Controller {
             });
         }
         this.logger.info(`Executing service: ${operationName}`, { statusCode });
-        const body = await service.execute(data);
+        const body = await service.execute(userId, data);
         return this.respond(statusCode, body);
     }
 
@@ -80,7 +81,13 @@ export abstract class Controller {
      * @returns Response with status 200 and entity data
      */
     public async getOne<T>(req: Request, data: T): Promise<Response> {
-        return this._executeService(this.services.get, data, 200, "Get");
+        return this._executeService(
+            this.services.get,
+            data,
+            200,
+            "Get",
+            (req.body as AuthenticatedRequestBody).authenticatedUserId,
+        );
     }
 
     /**
@@ -90,7 +97,13 @@ export abstract class Controller {
      * @returns Response with status 200 and list of entities
      */
     public async getAll<T>(req: Request, data: T): Promise<Response> {
-        return this._executeService(this.services.getAll, data, 200, "GetAll");
+        return this._executeService(
+            this.services.getAll,
+            data,
+            200,
+            "GetAll",
+            (req.body as AuthenticatedRequestBody).authenticatedUserId,
+        );
     }
 
     /**
@@ -101,7 +114,13 @@ export abstract class Controller {
      * @returns Response with status 200 and list of child entities
      */
     public async getChildren<T>(req: Request, data: T, service: Service<T>): Promise<Response> {
-        return this._executeService(service, data, 200, "GetChildren");
+        return this._executeService(
+            service,
+            data,
+            200,
+            "GetChildren",
+            (req.body as AuthenticatedRequestBody).authenticatedUserId,
+        );
     }
 
     /**
@@ -112,7 +131,13 @@ export abstract class Controller {
      * @returns Response with status 201 and created child entity data
      */
     public async addChild<T>(req: Request, data: T, service: Service<T>): Promise<Response> {
-        return this._executeService(service, data, 201, "AddChild");
+        return this._executeService(
+            service,
+            data,
+            201,
+            "AddChild",
+            (req.body as AuthenticatedRequestBody).authenticatedUserId,
+        );
     }
 
     /**
@@ -123,7 +148,13 @@ export abstract class Controller {
      * @returns Response with status 204 (No Content)
      */
     public async removeChild<T>(req: Request, data: T, service: Service<T>): Promise<Response> {
-        return this._executeService(service, data, 204, "RemoveChild");
+        return this._executeService(
+            service,
+            data,
+            204,
+            "RemoveChild",
+            (req.body as AuthenticatedRequestBody).authenticatedUserId,
+        );
     }
 
     /**
@@ -133,7 +164,13 @@ export abstract class Controller {
      * @returns Response with status 200 and updated entity data
      */
     public async update<T>(req: Request, data: T): Promise<Response> {
-        return this._executeService(this.services.update, data, 204, "Update");
+        return this._executeService(
+            this.services.update,
+            data,
+            204,
+            "Update",
+            (req.body as AuthenticatedRequestBody).authenticatedUserId,
+        );
     }
 
     /**
@@ -143,7 +180,13 @@ export abstract class Controller {
      * @returns Response with status 204 (No Content)
      */
     public async delete<T>(req: Request, data: T): Promise<Response> {
-        return this._executeService(this.services.remove, data, 204, "Delete");
+        return this._executeService(
+            this.services.remove,
+            data,
+            204,
+            "Delete",
+            (req.body as AuthenticatedRequestBody).authenticatedUserId,
+        );
     }
 
     /**
@@ -153,6 +196,12 @@ export abstract class Controller {
      * @returns Response with status 201 and created entity data
      */
     public async create<T>(req: Request, data: T): Promise<Response> {
-        return this._executeService(this.services.create, data, 201, "Create");
+        return this._executeService(
+            this.services.create,
+            data,
+            201,
+            "Create",
+            (req.body as AuthenticatedRequestBody).authenticatedUserId,
+        );
     }
 }

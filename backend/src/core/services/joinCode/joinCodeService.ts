@@ -3,5 +3,5 @@ import { IJoinCodeRepository } from "../../repositories/joinCodeRepositoryInterf
 
 export abstract class JoinCodeService<T> implements Service<T> {
     constructor(protected JoinCodeRepository: IJoinCodeRepository) {}
-    abstract execute(input: T): Promise<object>;
+    abstract execute(userId: string, input: T): Promise<object>;
 }

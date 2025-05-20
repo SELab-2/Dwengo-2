@@ -40,7 +40,7 @@ describe("CreateQuestionThread", () => {
 
         mockQuestionThreadRepository.create.mockResolvedValue(createdQuestionThread);
 
-        const result = await createQuestionThread.execute(input);
+        const result = await createQuestionThread.execute("", input);
 
         expect(result).toEqual({ id: createdQuestionThread.id });
         expect(mockQuestionThreadRepository.create).toHaveBeenCalledWith(expect.any(QuestionThread));
@@ -49,7 +49,7 @@ describe("CreateQuestionThread", () => {
     test("Should throw a DatabaseError if creation fails", async () => {
         mockQuestionThreadRepository.create.mockRejectedValue(new DatabaseError("Creation failed"));
 
-        await expect(createQuestionThread.execute(input)).rejects.toThrow(DatabaseError);
+        await expect(createQuestionThread.execute("", input)).rejects.toThrow(DatabaseError);
         expect(mockQuestionThreadRepository.create).toHaveBeenCalledWith(expect.any(QuestionThread));
     });
 });

@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { SubmissionBaseService } from "./submissionBaseService";
 import { updateSubmissionSchema } from "../../../application/schemas";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type UpdateSubmissionInput = z.infer<typeof updateSubmissionSchema>;
 
@@ -12,7 +13,8 @@ export class UpdateSubmission extends SubmissionBaseService<UpdateSubmissionInpu
      * @returns An empty object.
      * @throws {ApiError} If the submission with the given id is not found.
      */
-    async execute(input: UpdateSubmissionInput): Promise<object> {
+    async execute(userId: string, input: UpdateSubmissionInput): Promise<object> {
+        await validateUserRights(userId, UserType.TEACHER);
         await tryRepoEntityOperation(
             this.submissionRepository.update(input.id, input.status),
             "Submission",

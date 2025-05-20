@@ -1,5 +1,8 @@
 import { Assignment } from "../../../../../src/core/entities/assignment";
 import { UpdateAssignment } from "../../../../../src/core/services/assignment";
+import * as RightsValidator from "../../../../../src/core/helpers";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 // Mock repository
 const mockAssignmentRepository = {
@@ -16,6 +19,7 @@ describe("UpdateAssignment Service", () => {
         updateAssignmentService = new UpdateAssignment(mockAssignmentRepository as any);
         startDate = new Date();
         deadline = new Date();
+        mockValidateUserRights.mockResolvedValue();
     });
 
     it("should update an Assignment and return the updated object", async () => {
@@ -32,7 +36,7 @@ describe("UpdateAssignment Service", () => {
             id: assignmentId,
             extraInstructions: updatedExtraInstructions,
         };
-        const result = await updateAssignmentService.execute(params);
+        const result = await updateAssignmentService.execute("", params);
 
         expect(mockAssignmentRepository.update).toHaveBeenCalledWith(mockUpdatedAssignment);
         expect(result).toEqual({});

@@ -56,7 +56,7 @@ describe("GetUserAssignmentProgress", () => {
         submissionRepository.getAllForStudentInAssignment.mockResolvedValue(submissions);
 
         const service = new TestableGetUserAssignmentProgress();
-        const result = await service.execute({ userId: "u1", assignmentId: "a1" });
+        const result = await service.execute("", { userId: "u1", assignmentId: "a1" });
 
         expect(result).toEqual({
             id: "s3",
@@ -73,7 +73,7 @@ describe("GetUserAssignmentProgress", () => {
         submissionRepository.getAllForStudentInAssignment.mockResolvedValue([]);
 
         const service = new TestableGetUserAssignmentProgress();
-        const result = await service.execute({ userId: "u1", assignmentId: "a1" });
+        const result = await service.execute("", { userId: "u1", assignmentId: "a1" });
 
         expect(result).toEqual({
             id: null,
@@ -109,7 +109,7 @@ describe("GetUserAssignmentProgress", () => {
         submissionRepository.getAllForStudentInAssignment.mockResolvedValue(submissions);
 
         const service = new TestableGetUserAssignmentProgress();
-        const result = await service.execute({ userId: "u1", assignmentId: "a1" }) as { id: string };
+        const result = await service.execute("", { userId: "u1", assignmentId: "a1" }) as { id: string };
 
         // s1 or s2 could be picked since timestamps are same
         expect(result).toMatchObject({

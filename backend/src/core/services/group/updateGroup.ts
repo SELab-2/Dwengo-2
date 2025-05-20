@@ -2,7 +2,8 @@ import { z } from "zod";
 import { GroupService } from "./groupService";
 import { updateGroupSchema } from "../../../application/schemas/groupSchemas";
 import { Group } from "../../entities/group";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type UpdateGroupInput = z.infer<typeof updateGroupSchema>;
 
@@ -13,7 +14,8 @@ export class UpdateGroup extends GroupService<UpdateGroupInput> {
      * @returns A promise resolving to an empty object.
      * @throws {ApiError} If the group with the given id is not found.
      */
-    async execute(input: UpdateGroupInput): Promise<object> {
+    async execute(userId: string, input: UpdateGroupInput): Promise<object> {
+        await validateUserRights(userId, UserType.TEACHER);
         const group: Group = await tryRepoEntityOperation(
             this.groupRepository.getById(input.id),
             "Group",

@@ -18,7 +18,7 @@ export class GetAllLearningObjects implements Service<GetAllLearningObjectsInput
      * @param input containing the input following the defined zod schema.
      * @returns an object containing an array of (metadata of) learningObjects
      */
-    async execute(input: GetAllLearningObjectsInput): Promise<object> {
+    async execute(_userId: string, input: GetAllLearningObjectsInput): Promise<object> {
         const params: string[] = [];
         for (const key of learningObjectSearchParams) {
             // Convert the camelCase param to snake_case for Dwengo API

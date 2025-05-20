@@ -16,7 +16,7 @@ export class GetGroupUsers implements Service<GetGroupUsersInput> {
      * @returns A promise resolving to an object with a list of users.
      * @throws {ApiError} If the group with the given id is not found.
      */
-    async execute(input: GetGroupUsersInput): Promise<object> {
+    async execute(_userId: string, input: GetGroupUsersInput): Promise<object> {
         const students: Student[] = await tryRepoEntityOperation(
             this.userRepository.getByGroupId(input.idParent),
             "Group",

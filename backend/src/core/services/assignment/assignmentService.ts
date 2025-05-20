@@ -6,5 +6,5 @@ import { IAssignmentRepository } from "../../repositories/assignmentRepositoryIn
  */
 export abstract class AssignmentService<T> implements Service<T> {
     constructor(protected assignmentRepository: IAssignmentRepository) {}
-    abstract execute(input: T): Promise<object>;
+    abstract execute(userId: string, input: T): Promise<object>;
 }

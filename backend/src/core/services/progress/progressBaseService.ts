@@ -9,5 +9,5 @@ export abstract class ProgressBaseService<T> implements Service<T> {
         protected assignmentRepository: IAssignmentRepository,
         protected learningPathRepository: ILearningPathRepository,
     ) {}
-    abstract execute(input: T): Promise<object>;
+    abstract execute(userId: string, input: T): Promise<object>;
 }

@@ -1,6 +1,9 @@
 import { UserType } from "../../../../../src/core/entities/user";
 import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { RemoveUserFromClass } from "../../../../../src/core/services/user";
+import * as RightsValidator from "../../../../../src/core/helpers";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 describe("RemoveStudentFromClass", () => {
     let userRepository: IUserRepository;
@@ -11,6 +14,7 @@ describe("RemoveStudentFromClass", () => {
             removeFromClass: jest.fn(),
         } as unknown as jest.Mocked<IUserRepository>;
         removeStudentFromClass = new RemoveUserFromClass(userRepository);
+        mockValidateUserRights.mockResolvedValue();
     });
 
     it("should remove a student from a class", async () => {
@@ -18,7 +22,7 @@ describe("RemoveStudentFromClass", () => {
         const idParent = "class456";
         const userType = UserType.STUDENT;
 
-        await removeStudentFromClass.execute({ id, idParent });
+        await removeStudentFromClass.execute("", { id, idParent });
 
         expect(userRepository.removeFromClass).toHaveBeenCalledWith(id, idParent);
     });
@@ -29,7 +33,7 @@ describe("RemoveStudentFromClass", () => {
         const userType = UserType.STUDENT;
         const params = { id, idParent, userType };
 
-        const result = await removeStudentFromClass.execute(params);
+        const result = await removeStudentFromClass.execute("", params);
 
         expect(result).toEqual({});
     });

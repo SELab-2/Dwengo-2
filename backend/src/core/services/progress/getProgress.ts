@@ -28,7 +28,7 @@ export abstract class GetProgress extends ProgressBaseService<GetProgressInput> 
         return await tryRepoEntityOperation(this.assignmentRepository.getById(id), "Assignment", id, true);
     }
 
-    public async execute(input: GetProgressInput): Promise<object> {
+    public async execute(_userId: string, input: GetProgressInput): Promise<object> {
         // Get all users for the assignment
         const students: User[] = await this.getUsers(input.idParent);
         // Get the corresponding learningPath

@@ -3,5 +3,5 @@ import { ITaskRepository } from "../../repositories/taskRepositoryInterface";
 
 export abstract class TaskService<T> implements Service<T> {
     constructor(protected taskRepository: ITaskRepository) {}
-    abstract execute(input: T): Promise<object>;
+    abstract execute(userId: string, input: T): Promise<object>;
 }

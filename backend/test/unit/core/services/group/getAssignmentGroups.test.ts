@@ -24,7 +24,7 @@ describe("GetAssignmentGroups", () => {
 
         mockGroupRepository.getByAssignmentId.mockResolvedValue(groups);
 
-        const result = await getAssignmentGroups.execute({ idParent });
+        const result = await getAssignmentGroups.execute("", { idParent });
 
         expect(result).toEqual({ groups: groups.map(group => group.id) });
         expect(mockGroupRepository.getByAssignmentId).toHaveBeenCalledWith(idParent);
@@ -34,7 +34,7 @@ describe("GetAssignmentGroups", () => {
         const idParent = "assignment-123";
         mockGroupRepository.getByAssignmentId.mockRejectedValue(new DatabaseError("Retrieval failed"));
 
-        await expect(getAssignmentGroups.execute({ idParent })).rejects.toThrow(DatabaseError);
+        await expect(getAssignmentGroups.execute("", { idParent })).rejects.toThrow(DatabaseError);
         expect(mockGroupRepository.getByAssignmentId).toHaveBeenCalledWith(idParent);
     });
 });

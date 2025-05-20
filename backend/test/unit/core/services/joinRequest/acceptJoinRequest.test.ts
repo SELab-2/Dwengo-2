@@ -4,6 +4,9 @@ import { JoinRequest, JoinRequestType } from "../../../../../src/core/entities/j
 import { IClassRepository } from "../../../../../src/core/repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../../../../src/core/repositories/joinRequestRepositoryInterface";
 import { AcceptJoinRequest, AcceptJoinRequestInput } from "../../../../../src/core/services/joinRequest/acceptJoinRequest";
+import * as RightsValidator from "../../../../../src/core/helpers";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 describe("AcceptJoinRequest Service", () => {
     let acceptJoinRequestService: AcceptJoinRequest;
@@ -26,12 +29,13 @@ describe("AcceptJoinRequest Service", () => {
         params = {
             id: "1",
         };
+        mockValidateUserRights.mockResolvedValue();
     });
 
     test("Should throw error if join request not found", async () => {
         mockJoinRequestRepository.getById.mockRejectedValue(new EntityNotFoundError("Join request not found"));
 
-        await expect(acceptJoinRequestService.execute(params)).rejects.toMatchObject({
+        await expect(acceptJoinRequestService.execute("", params)).rejects.toMatchObject({
             code: ErrorCode.NOT_FOUND,
         });
     });
@@ -43,7 +47,7 @@ describe("AcceptJoinRequest Service", () => {
         mockClassRepository.addUserToClass.mockResolvedValue(undefined);
         mockJoinRequestRepository.delete.mockResolvedValue(undefined);
 
-        await expect(acceptJoinRequestService.execute(params)).resolves.toEqual({});
+        await expect(acceptJoinRequestService.execute("", params)).resolves.toEqual({});
         expect(mockJoinRequestRepository.getById).toHaveBeenCalledWith(params.id);
         expect(mockClassRepository.addUserToClass).toHaveBeenCalledWith(
             joinRequest.classId,

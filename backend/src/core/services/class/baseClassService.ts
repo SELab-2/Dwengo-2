@@ -6,5 +6,5 @@ import { IClassRepository } from "../../repositories/classRepositoryInterface";
  */
 export abstract class ClassBaseService<T> implements Service<T> {
     constructor(protected classRepository: IClassRepository) {}
-    abstract execute(input: T): Promise<object>;
+    abstract execute(userId: string, input: T): Promise<object>;
 }

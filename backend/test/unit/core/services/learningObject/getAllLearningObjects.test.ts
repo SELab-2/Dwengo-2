@@ -26,7 +26,7 @@ describe("GetAllLearningObjects", () => {
         );
         mockRepo.getLearningObjects.mockResolvedValue([mockLO]);
 
-        const result = await service.execute(input);
+        const result = await service.execute("", input);
 
         expect(mockRepo.getLearningObjects).toHaveBeenCalledWith("?searchTerm=robot&language=nl&min_difficulty=2");
 
@@ -39,7 +39,7 @@ describe("GetAllLearningObjects", () => {
         const input = {};
         mockRepo.getLearningObjects.mockResolvedValue([]);
 
-        const result = await service.execute(input);
+        const result = await service.execute("", input);
 
         expect(mockRepo.getLearningObjects).toHaveBeenCalledWith("");
         expect(result).toEqual({ learningObjects: [] });
@@ -54,7 +54,7 @@ describe("GetAllLearningObjects", () => {
 
         mockRepo.getLearningObjects.mockResolvedValue([]);
 
-        await service.execute(input);
+        await service.execute("", input);
 
         expect(mockRepo.getLearningObjects).toHaveBeenCalledWith("?language=en");
     });

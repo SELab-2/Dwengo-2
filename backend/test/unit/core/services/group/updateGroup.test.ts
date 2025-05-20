@@ -1,6 +1,9 @@
 import { DatabaseError } from "../../../../../src/config/error";
 import { Group } from "../../../../../src/core/entities/group";
 import { UpdateGroup } from "../../../../../src/core/services/group/updateGroup";
+import * as RightsValidator from "../../../../../src/core/helpers";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 // Mock repository
 const mockGroupRepository = {
@@ -14,6 +17,7 @@ describe("UpdateGroup", () => {
     beforeEach(() => {
         updateGroup = new UpdateGroup(mockGroupRepository as any);
         jest.clearAllMocks();
+        mockValidateUserRights.mockResolvedValue();
     });
 
     test("Should update group members successfully", async () => {
@@ -26,7 +30,7 @@ describe("UpdateGroup", () => {
         mockGroupRepository.getById.mockResolvedValue(existingGroup);
         mockGroupRepository.update.mockResolvedValue(existingGroup);
 
-        const result = await updateGroup.execute(inputParams);
+        const result = await updateGroup.execute("", inputParams);
 
         expect(result).toEqual({});
         expect(mockGroupRepository.getById).toHaveBeenCalledWith("group-123");
@@ -40,7 +44,7 @@ describe("UpdateGroup", () => {
         };
         mockGroupRepository.getById.mockRejectedValue(new DatabaseError("Retrieval failed"));
 
-        await expect(updateGroup.execute(inputParams)).rejects.toThrow(DatabaseError);
+        await expect(updateGroup.execute("", inputParams)).rejects.toThrow(DatabaseError);
         expect(mockGroupRepository.getById).toHaveBeenCalledWith("group-123");
     });
 });

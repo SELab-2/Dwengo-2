@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { deleteUserSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
-import { tryRepoEntityOperation } from "../../helpers";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type DeleteUserInput = z.infer<typeof deleteUserSchema>;
@@ -15,7 +15,8 @@ export class DeleteUser implements Service<DeleteUserInput> {
      * @returns An empty object.
      * @throws {ApiError} If the user with the given id is not found.
      */
-    async execute(input: DeleteUserInput): Promise<object> {
+    async execute(userId: string, input: DeleteUserInput): Promise<object> {
+        await validateUserRights(userId, undefined, input.id);
         await tryRepoEntityOperation(this.userRepository.delete(input.id), "User", input.id, true);
         return {};
     }

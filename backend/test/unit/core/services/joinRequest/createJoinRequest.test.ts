@@ -45,33 +45,18 @@ describe("CreateJoinRequest", () => {
             new JoinRequest("user1", "class1", JoinRequestType.STUDENT),
         ]);
 
-        await expect(service.execute(input)).rejects.toEqual({
+        await expect(service.execute("", input)).rejects.toEqual({
             code: ErrorCode.CONFLICT,
             message: "User already has a join request for this class.",
         } as ApiError);
     });
-
-    //TODO: needs query in repository (check services)
-    // it('should throw an error if user is already part of the class', async () => {
-    //   joinRequestRepository.getJoinRequestByClassId.mockResolvedValue([]);
-    //   classRepository.getAllClassesByStudentId.mockResolvedValue([
-    //     { id: 'class1' } as Class,
-    //   ]);
-    //
-    //   await expect(service.execute(input)).resolves.toEqual({
-    //     "_classId": "class1",
-    //     "_id": undefined,
-    //     "_requester": "user1",
-    //     "_type": "student"
-    //   });
-    // });
 
     it("should create a join request successfully", async () => {
         joinRequestRepository.getByClassId.mockResolvedValue([]);
         classRepository.getByStudentId.mockResolvedValue([]);
         joinRequestRepository.create.mockResolvedValue(new JoinRequest("user1", "class1", JoinRequestType.STUDENT));
 
-        const result = await service.execute(input);
+        const result = await service.execute("", input);
 
         expect(result).toEqual({ id: undefined });
         expect(joinRequestRepository.create).toHaveBeenCalledTimes(1);

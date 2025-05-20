@@ -9,7 +9,7 @@ describe("Tests for join requests API Endpoints", () => {
     let mockRequest: object;
     let classId: string;
 
-    beforeEach(async () =>  {
+    beforeEach(async () => {
         studentAuthDetails = await initializeUser("student", app);
         teacherAuthDetails = await initializeUser("teacher", app, "teacher@gmail.com");
 
@@ -67,7 +67,7 @@ describe("Tests for join requests API Endpoints", () => {
                     .get("/requests/" + requestId)
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
+
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
                     "id": requestId,
@@ -83,7 +83,7 @@ describe("Tests for join requests API Endpoints", () => {
                 const response = await request(app)
                     .get("/users/" + studentAuthDetails.id + "/requests?page=1&pageSize=20")
                     .set("Accept", "application/json")
-                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
+                    .set("Authorization", "Bearer " + studentAuthDetails.token);
 
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
@@ -110,19 +110,19 @@ describe("Tests for join requests API Endpoints", () => {
             const response = await request(app)
                 .patch("/requests/" + requestId)
                 .set("Authorization", "Bearer " + teacherAuthDetails.token);
-            
+
             expect(response.status).toBe(204);
 
             const checkResponse = await request(app)
-                    .get("/requests/" + requestId)
-                    .set("Accept", "application/json")
-                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
-                expect(checkResponse.status).toBe(404);
-                expect(checkResponse.body).toEqual({
-                    "code": "NOT_FOUND",
-                    "message": "JoinRequest with ID " + requestId +" not found",
-                });
+                .get("/requests/" + requestId)
+                .set("Accept", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(checkResponse.status).toBe(404);
+            expect(checkResponse.body).toEqual({
+                "code": "NOT_FOUND",
+                "message": "JoinRequest with ID " + requestId + " not found",
+            });
         });
     });
 
@@ -143,19 +143,19 @@ describe("Tests for join requests API Endpoints", () => {
             const response = await request(app)
                 .delete("/requests/" + requestId)
                 .set("Authorization", "Bearer " + teacherAuthDetails.token);
-            
+
             expect(response.status).toBe(204);
 
             const checkResponse = await request(app)
-                    .get("/requests/" + requestId)
-                    .set("Accept", "application/json")
-                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
-                expect(checkResponse.status).toBe(404);
-                expect(checkResponse.body).toEqual({
-                    "code": "NOT_FOUND",
-                    "message": "JoinRequest with ID " + requestId +" not found",
-                });
+                .get("/requests/" + requestId)
+                .set("Accept", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(checkResponse.status).toBe(404);
+            expect(checkResponse.body).toEqual({
+                "code": "NOT_FOUND",
+                "message": "JoinRequest with ID " + requestId + " not found",
+            });
         });
     });
 });

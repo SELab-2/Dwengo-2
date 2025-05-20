@@ -18,7 +18,7 @@ export class GetLearningObject implements Service<GetObjectInput> {
      * @param input containing the input following the defined zod schema.
      * @returns an object containing the metadata + raw/wrapped html-content
      */
-    async execute(input: GetObjectInput): Promise<object> {
+    async execute(_userId: string, input: GetObjectInput): Promise<object> {
         // Get the versions and available languages of this object
         const versions: string[] = await this._learningObjectRepository.getVersions(input.id);
         const languages: string[] = await this._learningObjectRepository.getLanguages(input.id);

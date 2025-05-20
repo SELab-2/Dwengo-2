@@ -3,6 +3,9 @@ import { Student } from "../../../../../src/core/entities/student";
 import { UserType } from "../../../../../src/core/entities/user";
 import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { UpdateUser } from "../../../../../src/core/services/user";
+import * as RightsValidator from "../../../../../src/core/helpers";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 describe("UpdateStudent Service", () => {
     let userRepository: jest.Mocked<IUserRepository>;
@@ -16,6 +19,7 @@ describe("UpdateStudent Service", () => {
         } as unknown as jest.Mocked<IUserRepository>;
 
         updateStudent = new UpdateUser(userRepository);
+        mockValidateUserRights.mockResolvedValue();
     });
 
     it("should update student info successfully", async () => {
@@ -41,7 +45,7 @@ describe("UpdateStudent Service", () => {
             schoolName: "newSchool",
         };
 
-        const result = await updateStudent.execute(params);
+        const result = await updateStudent.execute("", params);
 
         expect(userRepository.getById).toHaveBeenCalledWith("1");
         expect(userRepository.checkByEmail).toHaveBeenCalledWith("newemail@example.com");
@@ -78,7 +82,7 @@ describe("UpdateStudent Service", () => {
             email: "newemail@example.com",
         };
 
-        const result = await updateStudent.execute(params);
+        const result = await updateStudent.execute("", params);
 
         expect(userRepository.getById).toHaveBeenCalledWith("1");
         expect(userRepository.checkByEmail).toHaveBeenCalledWith("newemail@example.com");
@@ -111,7 +115,7 @@ describe("UpdateStudent Service", () => {
             schoolName: "newSchool",
         };
 
-        await expect(updateStudent.execute(params)).rejects.toEqual({
+        await expect(updateStudent.execute("", params)).rejects.toEqual({
             code: ErrorCode.BAD_REQUEST,
             message: "Email cannot be the same as old one.",
         });
@@ -133,7 +137,7 @@ describe("UpdateStudent Service", () => {
             schoolName: "newSchool",
         };
 
-        await expect(updateStudent.execute(params)).rejects.toEqual({
+        await expect(updateStudent.execute("", params)).rejects.toEqual({
             code: ErrorCode.BAD_REQUEST,
             message: "Email already in use.",
         });
@@ -161,7 +165,7 @@ describe("UpdateStudent Service", () => {
             schoolName: "newSchool",
         };
 
-        await expect(updateStudent.execute(params)).rejects.toEqual({
+        await expect(updateStudent.execute("", params)).rejects.toEqual({
             code: ErrorCode.BAD_REQUEST,
             message: "Password cannot be the same as old one.",
         });

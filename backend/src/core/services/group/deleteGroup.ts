@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { GroupService } from "./groupService";
 import { deleteGroupSchema } from "../../../application/schemas/groupSchemas";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type DeleteGroupInput = z.infer<typeof deleteGroupSchema>;
 
@@ -12,7 +13,8 @@ export class DeleteGroup extends GroupService<DeleteGroupInput> {
      * @returns An empty object.
      * @throws {ApiError} If the group with the given id is not found.
      */
-    async execute(input: DeleteGroupInput): Promise<object> {
+    async execute(userId: string, input: DeleteGroupInput): Promise<object> {
+        await validateUserRights(userId, UserType.TEACHER);
         await tryRepoEntityOperation(this.groupRepository.delete(input.id), "Group", input.id, true);
         return {};
     }

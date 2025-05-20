@@ -1,6 +1,9 @@
 import { DatabaseError } from "../../../../../src/config/error";
 import { Group } from "../../../../../src/core/entities/group";
 import { CreateGroup } from "../../../../../src/core/services/group/createGroup";
+import * as RightsValidator from "../../../../../src/core/helpers";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 // Mock repository
 const mockGroupRepository = {
@@ -13,6 +16,7 @@ describe("CreateGroup", () => {
     beforeEach(() => {
         createGroup = new CreateGroup(mockGroupRepository as any);
         jest.clearAllMocks();
+        mockValidateUserRights.mockResolvedValue();
     });
 
     test("Should create a group successfully", async () => {
@@ -24,7 +28,7 @@ describe("CreateGroup", () => {
 
         mockGroupRepository.create.mockResolvedValue(createdGroup);
 
-        const result = await createGroup.execute(inputParams);
+        const result = await createGroup.execute("", inputParams);
 
         expect(result).toEqual({ id: "group-999" });
         expect(mockGroupRepository.create).toHaveBeenCalledWith(expect.any(Group));
@@ -37,7 +41,7 @@ describe("CreateGroup", () => {
         };
         mockGroupRepository.create.mockRejectedValue(new DatabaseError("Creation failed"));
 
-        await expect(createGroup.execute(inputParams)).rejects.toThrow(DatabaseError);
+        await expect(createGroup.execute("", inputParams)).rejects.toThrow(DatabaseError);
         expect(mockGroupRepository.create).toHaveBeenCalledWith(expect.any(Group));
     });
 });

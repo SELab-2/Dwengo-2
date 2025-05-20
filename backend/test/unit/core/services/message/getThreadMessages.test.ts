@@ -32,7 +32,7 @@ describe("GetThreadMessages", () => {
 
         mockQuestionThreadRepository.getById.mockResolvedValue(threadData);
 
-        const result = await getThreadMessages.execute(input);
+        const result = await getThreadMessages.execute("", input);
 
         expect(result).toEqual({ messages: retrievedMessages.map(msg => msg.id) });
         expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-456");
@@ -41,7 +41,7 @@ describe("GetThreadMessages", () => {
     test("Should throw a DatabaseError if retrieval fails", async () => {
         mockQuestionThreadRepository.getById.mockRejectedValue(new DatabaseError("Retrieval failed"));
 
-        await expect(getThreadMessages.execute(input)).rejects.toThrow(DatabaseError);
+        await expect(getThreadMessages.execute("", input)).rejects.toThrow(DatabaseError);
         expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-456");
     });
 });

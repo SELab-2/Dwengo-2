@@ -18,7 +18,7 @@ describe("GetClassByClassId", () => {
         const id = "123";
         const classInstance = new Class("Math", "Basic Math", "8th grade", id);
         mockRepository.getById.mockResolvedValue(classInstance);
-        const result = await getClass.execute({ id });
+        const result = await getClass.execute("", { id });
 
         expect(mockRepository.getById).toHaveBeenCalledWith(id);
         expect(result).toEqual(classInstance.toObject());
