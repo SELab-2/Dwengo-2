@@ -108,6 +108,7 @@ export const services = {
         ),
         getClassCompletion: new GetClassCompletion(repos.submission, repos.user, repos.assignment, repos.learningPath),
         getSubmissionActivity: new GetSubmissionActivity(repos.submission, repos.user),
+        getClassScore: new ProgressServices.GetClassScore(repos.submission, repos.assignment),
     },
     user: {
         get: new UserServices.GetUser(repos.user),
