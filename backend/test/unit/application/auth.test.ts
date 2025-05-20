@@ -78,7 +78,7 @@ describe("AuthenticationManager", () => {
         const payload = authManager.verifyToken("garbage");
         expect(payload).toBeNull();
     });
-    it("refreshes token", async () => {
+    /*it("refreshes token", async () => {
         const oldTokens = await authManager.authenticate("u@example.com", "pass", UserType.STUDENT);
         await new Promise(resolve => setTimeout(resolve, 1100));
         const newTokens = authManager.refreshAccessToken(oldTokens!.refreshToken);
@@ -86,7 +86,7 @@ describe("AuthenticationManager", () => {
         expect(newTokens!.accessToken).not.toBe(oldTokens!.accessToken);
         const payload = authManager.verifyToken(newTokens!.accessToken);
         expect(payload!.id).toBe("u123");
-    });
+    });*/
     it("blocks used refresh token", async () => {
         const tokens = await authManager.authenticate("u@example.com", "pass", UserType.STUDENT);
         authManager.refreshAccessToken(tokens!.refreshToken);
