@@ -69,6 +69,7 @@ export const controllers = {
         services.progress.getAssignmentProgress,
         services.progress.getGroupProgress,
         services.progress.get,
+        services.progress.getClassScore,
         services.progress.getClassCompletion,
         services.progress.getSubmissionActivity,
     ),

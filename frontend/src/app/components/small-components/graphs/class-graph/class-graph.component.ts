@@ -113,6 +113,13 @@ export class ClassChartComponent implements OnInit {
       fill: {
         opacity: 1
       },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return val + ' %';
+          }
+        }
+      }
     };
   }
 

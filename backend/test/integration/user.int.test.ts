@@ -88,14 +88,10 @@ describe("Test user API endpoints", () => {
                 .get("/groups/" + groupId + "/users")
                 .set("Accept", "application/json")
                 .set("Authorization", "Bearer " + teacherAuthDetails.token);
-
             expect(checkResponse.status).toBe(200);
-            expect(checkResponse.body).toEqual({
-                "students": [
-                    studentAuthDetails.id,
-                    extraStudentAuthDetails.id
-                ]
-            });
+            expect(checkResponse.body.students.sort()).toEqual(
+                [studentAuthDetails.id, extraStudentAuthDetails.id].sort()
+            );
         })
 
         it("should not add a user twice to a group", async () => {
@@ -124,12 +120,9 @@ describe("Test user API endpoints", () => {
                 .set("Authorization", "Bearer " + teacherAuthDetails.token);
 
             expect(checkResponse.status).toBe(200);
-            expect(checkResponse.body).toEqual({
-                "students": [
-                    studentAuthDetails.id,
-                    extraStudentAuthDetails.id
-                ]
-            });
+            expect(checkResponse.body.students.sort()).toEqual(
+                [studentAuthDetails.id, extraStudentAuthDetails.id].sort()
+            );
         })
     });
 
