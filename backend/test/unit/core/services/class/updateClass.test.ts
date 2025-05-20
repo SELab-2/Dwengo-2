@@ -1,6 +1,7 @@
 import { Class } from "../../../../../src/core/entities/class";
 import { UpdateClass } from "../../../../../src/core/services/class";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -9,11 +10,15 @@ const mockClassRepository = {
     update: jest.fn(),
 };
 
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
+
 describe("UpdateClass Service", () => {
     let updateClassService: UpdateClass;
 
     beforeEach(() => {
-        updateClassService = new UpdateClass(mockClassRepository as any);
+        updateClassService = new UpdateClass(mockClassRepository as any, mockUserRepository);
         mockValidateUserRights.mockResolvedValue();
     });
 

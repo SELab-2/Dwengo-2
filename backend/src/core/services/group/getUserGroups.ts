@@ -14,7 +14,7 @@ export class GetUserGroups extends GroupService<GetUserGroupsInput> {
      * @throws {ApiError} If the user with the given id is not found.
      */
     async execute(userId: string, input: GetUserGroupsInput): Promise<object> {
-        await validateUserRights(userId, undefined, input.idParent);
+        await validateUserRights(userId, this.userRepository, undefined, input.idParent);
         const groups: Group[] = await tryRepoEntityOperation(
             this.groupRepository.getByUserId(input.idParent),
             "User",

@@ -15,7 +15,7 @@ export class UpdateClass extends ClassBaseService<UpdateClassInput> {
      * @throws {ApiError} If the class with the given id is not found.
      */
     async execute(userId: string, input: UpdateClassInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         // Object met alleen de velden die worden bijgewerkt
         const updatedFields: Partial<Class> = {};
         if (input.name) updatedFields.name = input.name;

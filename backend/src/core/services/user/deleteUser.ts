@@ -16,7 +16,7 @@ export class DeleteUser implements Service<DeleteUserInput> {
      * @throws {ApiError} If the user with the given id is not found.
      */
     async execute(userId: string, input: DeleteUserInput): Promise<object> {
-        await validateUserRights(userId, undefined, input.id);
+        await validateUserRights(userId, this.userRepository, undefined, input.id);
         await tryRepoEntityOperation(this.userRepository.delete(input.id), "User", input.id, true);
         return {};
     }

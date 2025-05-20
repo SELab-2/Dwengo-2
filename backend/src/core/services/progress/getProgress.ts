@@ -5,23 +5,10 @@ import { Assignment } from "../../entities/assignment";
 import { Submission } from "../../entities/submission";
 import { User } from "../../entities/user";
 import { tryRepoEntityOperation } from "../../helpers";
-import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
-import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
-import { ISubmissionRepository } from "../../repositories/submissionRepositoryInterface";
-import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type GetProgressInput = z.infer<typeof getProgressSchema>;
 
 export abstract class GetProgress extends ProgressBaseService<GetProgressInput> {
-    constructor(
-        protected userRepository: IUserRepository,
-        submissionRepository: ISubmissionRepository,
-        assignmentRepository: IAssignmentRepository,
-        learningPathRepository: ILearningPathRepository,
-    ) {
-        super(submissionRepository, assignmentRepository, learningPathRepository);
-    }
-
     public abstract getUsers(id: string): Promise<User[]>;
 
     public async getAssignment(id: string): Promise<Assignment> {

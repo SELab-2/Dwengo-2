@@ -1,6 +1,7 @@
 import { DatabaseError } from "../../../../../src/config/error";
 import { DeleteJoinCode, DeleteJoinCodeInput } from "../../../../../src/core/services/joinCode/deleteJoinCode";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -9,12 +10,16 @@ const mockJoinCodeRepository = {
     delete: jest.fn(),
 };
 
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
+
 describe("DeleteJoinCode", () => {
     let deleteJoinCode: DeleteJoinCode;
     let input: DeleteJoinCodeInput;
 
     beforeEach(() => {
-        deleteJoinCode = new DeleteJoinCode(mockJoinCodeRepository as any);
+        deleteJoinCode = new DeleteJoinCode(mockJoinCodeRepository as any, mockUserRepository);
         jest.clearAllMocks();
         input = {
             id: "joincode-123",

@@ -1,5 +1,6 @@
 import { DatabaseError } from "../../../../../src/config/error";
 import { Group } from "../../../../../src/core/entities/group";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { GetGroup } from "../../../../../src/core/services/group/getGroup";
 
 // Mock repository
@@ -7,11 +8,15 @@ const mockGroupRepository = {
     getById: jest.fn(),
 };
 
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
+
 describe("GetGroup", () => {
     let getGroup: GetGroup;
 
     beforeEach(() => {
-        getGroup = new GetGroup(mockGroupRepository as any);
+        getGroup = new GetGroup(mockGroupRepository as any, mockUserRepository);
         jest.clearAllMocks();
     });
 

@@ -2,6 +2,7 @@ import { DatabaseError } from "../../../../../src/config/error";
 import { Class } from "../../../../../src/core/entities/class";
 import { CreateClass } from "../../../../../src/core/services/class/createClass";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -9,6 +10,10 @@ const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights")
 const mockClassRepository = {
     create: jest.fn(),
 };
+
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
 
 describe("CreateClass", () => {
     let createClass: CreateClass;
@@ -20,7 +25,7 @@ describe("CreateClass", () => {
     };
 
     beforeEach(() => {
-        createClass = new CreateClass(mockClassRepository as any);
+        createClass = new CreateClass(mockClassRepository as any, mockUserRepository);
         jest.clearAllMocks(); // Reset mocks voor elke test
         mockValidateUserRights.mockResolvedValue();
     });

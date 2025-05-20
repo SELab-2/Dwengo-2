@@ -3,6 +3,7 @@ import { EntityNotFoundError } from "../../../../../src/config/error";
 import { IJoinRequestRepository } from "../../../../../src/core/repositories/joinRequestRepositoryInterface";
 import { DeleteJoinRequest, DeleteJoinRequestInput } from "../../../../../src/core/services/joinRequest/deleteJoinRequest";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -16,7 +17,11 @@ describe("DeleteJoinRequest Service", () => {
             delete: jest.fn(),
         } as unknown as jest.Mocked<IJoinRequestRepository>;
 
-        deleteJoinRequestService = new DeleteJoinRequest(mockJoinRequestRepository);
+        const mockUserRepository = {
+            getById: jest.fn(),
+        } as unknown as jest.Mocked<IUserRepository>;
+
+        deleteJoinRequestService = new DeleteJoinRequest(mockJoinRequestRepository, mockUserRepository);
 
         input = {
             id: "1",

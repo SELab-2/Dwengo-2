@@ -49,11 +49,6 @@ const mockSubmissions: Submission[] = [
   },
 ] as Submission[];
 
-// Mocks
-const studentRepository: jest.Mocked<IUserRepository> = {
-  getByAssignmentId: jest.fn().mockResolvedValue(mockUsers),
-} as any;
-
 const submissionRepository: jest.Mocked<ISubmissionRepository> = {
   getAllForStudentInAssignment: jest.fn().mockImplementation((studentId: string) => {
     return Promise.resolve(mockSubmissions.filter((s) => s.studentId === studentId));
@@ -68,13 +63,18 @@ const learningPathRepository: jest.Mocked<ILearningPathRepository> = {
   getLearningPath: jest.fn().mockResolvedValue(mockLearningPath),
 } as any;
 
+const mockUserRepository = {
+  getById: jest.fn(),
+  getByAssignmentId: jest.fn().mockResolvedValue(mockUsers),
+} as unknown as jest.Mocked<IUserRepository>;
+
 describe("GetProgress", () => {
   it("should return correct progress for students", async () => {
     const service = new GetAssignmentProgress(
-      studentRepository,
       submissionRepository,
       assignmentRepository,
-      learningPathRepository
+      learningPathRepository,
+      mockUserRepository
     );
 
     const input = {
@@ -101,13 +101,13 @@ describe("GetProgress", () => {
   });
 
   it("should return empty progress list if there are no students", async () => {
-    studentRepository.getByAssignmentId.mockResolvedValueOnce([]);
+    mockUserRepository.getByAssignmentId.mockResolvedValueOnce([]);
 
     const service = new GetAssignmentProgress(
-      studentRepository,
       submissionRepository,
       assignmentRepository,
-      learningPathRepository
+      learningPathRepository,
+      mockUserRepository,
     );
 
     const result = await service.execute("", { idParent: "assignment1" }) as { progresses: object[] };
@@ -116,14 +116,14 @@ describe("GetProgress", () => {
   });
 
   it("should handle students with no submissions", async () => {
-    studentRepository.getByAssignmentId.mockResolvedValueOnce(mockUsers);
+    mockUserRepository.getByAssignmentId.mockResolvedValueOnce(mockUsers);
     submissionRepository.getAllForStudentInAssignment.mockResolvedValue([]);
 
     const service = new GetAssignmentProgress(
-      studentRepository,
       submissionRepository,
       assignmentRepository,
-      learningPathRepository
+      learningPathRepository,
+      mockUserRepository
     );
 
     const result = await service.execute("", { idParent: "assignment1" }) as {
@@ -158,14 +158,14 @@ describe("GetProgress", () => {
       },
     ] as Submission[];
 
-    studentRepository.getByAssignmentId.mockResolvedValueOnce([mockUsers[0]]);
+    mockUserRepository.getByAssignmentId.mockResolvedValueOnce([mockUsers[0]]);
     submissionRepository.getAllForStudentInAssignment.mockResolvedValue(doubleSub);
 
     const service = new GetAssignmentProgress(
-      studentRepository,
       submissionRepository,
       assignmentRepository,
-      learningPathRepository
+      learningPathRepository,
+      mockUserRepository
     );
 
     const result = await service.execute("", { idParent: "assignment1" }) as {
@@ -197,14 +197,14 @@ describe("GetProgress", () => {
       },
     ] as Submission[];
 
-    studentRepository.getByAssignmentId.mockResolvedValueOnce([mockUsers[0]]);
+    mockUserRepository.getByAssignmentId.mockResolvedValueOnce([mockUsers[0]]);
     submissionRepository.getAllForStudentInAssignment.mockResolvedValueOnce(twinSubs);
 
     const service = new GetAssignmentProgress(
-      studentRepository,
       submissionRepository,
       assignmentRepository,
-      learningPathRepository
+      learningPathRepository,
+      mockUserRepository
     );
 
     const result = await service.execute("", { idParent: "assignment1" }) as {

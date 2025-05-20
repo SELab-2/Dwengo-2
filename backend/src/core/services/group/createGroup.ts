@@ -15,7 +15,7 @@ export class CreateGroup extends GroupService<CreateGroupInput> {
      * @throws {ApiError} If the given assignment or members are not found or if the creation fails.
      */
     async execute(userId: string, input: CreateGroupInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         const newGroup = new Group(input.members, input.assignment);
 
         const createdGroup = await tryRepoEntityOperation(

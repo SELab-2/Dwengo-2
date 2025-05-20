@@ -17,7 +17,7 @@ export class UpdateAssignment extends AssignmentService<UpdateAssignmentInput> {
      * @throws {ApiError} If the assignment with the given id is not found.
      */
     async execute(userId: string, input: UpdateAssignmentInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
 
         const assignment = await this.assignmentRepository.getById(input.id);
 

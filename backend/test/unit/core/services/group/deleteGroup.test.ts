@@ -1,6 +1,7 @@
 import { DatabaseError } from "../../../../../src/config/error";
 import { DeleteGroup } from "../../../../../src/core/services/group/deleteGroup";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -9,11 +10,15 @@ const mockGroupRepository = {
     delete: jest.fn(),
 };
 
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
+
 describe("DeleteGroup", () => {
     let deleteGroup: DeleteGroup;
 
     beforeEach(() => {
-        deleteGroup = new DeleteGroup(mockGroupRepository as any);
+        deleteGroup = new DeleteGroup(mockGroupRepository as any, mockUserRepository);
         jest.clearAllMocks();
         mockValidateUserRights.mockResolvedValue();
     });

@@ -23,7 +23,7 @@ export class GetClassCompletion implements Service<GetClassCompletionInput> {
     ) {}
 
     public async execute(userId: string, input: GetClassCompletionInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this._userRepository, UserType.TEACHER, undefined);
         // Get the assignments of the class
         const assignments: Assignment[] = await tryRepoEntityOperation(
             this._assignmentRepository.getByClassId(input.idParent),

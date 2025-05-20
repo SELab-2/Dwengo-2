@@ -3,6 +3,7 @@ import { LearningPath } from "../../../../../src/core/entities/learningPath";
 import { Submission } from "../../../../../src/core/entities/submission";
 import { GetUserProgress } from "../../../../../src/core/services/progress";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -10,11 +11,15 @@ const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights")
 const assignmentRepository = { getByUserId: jest.fn() };
 const learningPathRepository = { getLearningPath: jest.fn() };
 const submissionRepository = { getAllForStudentInAssignment: jest.fn() };
+const mockUserRepository = {
+  getById: jest.fn(),
+  getByAssignmentId: jest.fn()
+} as unknown as jest.Mocked<IUserRepository>;
 
 // Mock inheritance base class constructor
 class TestableGetUserProgress extends GetUserProgress {
   constructor() {
-    super(submissionRepository as any, assignmentRepository as any, learningPathRepository as any);
+    super(submissionRepository as any, assignmentRepository as any, learningPathRepository as any, mockUserRepository);
   }
 }
 

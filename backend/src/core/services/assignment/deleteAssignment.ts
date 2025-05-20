@@ -17,7 +17,7 @@ export class DeleteAssignment extends AssignmentService<DeleteAssignmentInput> {
      * @throws {ApiError} If the assignment with the given id is not found.
      */
     async execute(userId: string, input: DeleteAssignmentInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
 
         await tryRepoEntityOperation(this.assignmentRepository.delete(input.id), "Assignment", input.id, true);
         return {};

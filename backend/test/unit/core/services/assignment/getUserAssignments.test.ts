@@ -4,12 +4,17 @@ import { Assignment } from "../../../../../src/core/entities/assignment";
 import { IAssignmentRepository } from "../../../../../src/core/repositories/assignmentRepositoryInterface";
 import { GetUserAssignments, GetUserAssignmentsInput } from "../../../../../src/core/services/assignment";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 const mockAssignmentRepository = {
     getByUserId: jest.fn(),
 } as unknown as jest.Mocked<IAssignmentRepository>;
+
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
 
 describe("GetUserAssignments Service", () => {
     let idParent: string;
@@ -23,7 +28,7 @@ describe("GetUserAssignments Service", () => {
         jest.clearAllMocks();
         idParent = "1";
         params = { idParent: idParent };
-        getUserAssignments = new GetUserAssignments(mockAssignmentRepository);
+        getUserAssignments = new GetUserAssignments(mockAssignmentRepository, mockUserRepository);
         startDate = new Date();
         deadline = new Date();
         assignments = [];

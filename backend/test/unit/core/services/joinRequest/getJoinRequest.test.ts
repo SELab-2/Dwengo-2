@@ -9,6 +9,7 @@ import {
     GetJoinRequestInput,
 } from "../../../../../src/core/services/joinRequest/getJoinRequest";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -22,7 +23,11 @@ describe("GetClassJoinRequests Service", () => {
             getByClassId: jest.fn(),
         } as unknown as jest.Mocked<IJoinRequestRepository>;
 
-        getJoinRequestsService = new GetClassJoinRequests(mockJoinRequestRepository);
+        const mockUserRepository = {
+            getById: jest.fn(),
+        } as unknown as jest.Mocked<IUserRepository>;
+
+        getJoinRequestsService = new GetClassJoinRequests(mockJoinRequestRepository, mockUserRepository);
 
         input = {
             idParent: "class1",
@@ -55,7 +60,11 @@ describe("GetUserJoinRequests Service", () => {
             getByRequesterId: jest.fn(),
         } as unknown as jest.Mocked<IJoinRequestRepository>;
 
-        getJoinRequestsService = new GetUserJoinRequests(mockJoinRequestRepository);
+        const mockUserRepository = {
+            getById: jest.fn(),
+        } as unknown as jest.Mocked<IUserRepository>;
+
+        getJoinRequestsService = new GetUserJoinRequests(mockJoinRequestRepository, mockUserRepository);
 
         input = {
             idParent: "user1",
@@ -90,7 +99,11 @@ describe("GetJoinRequest Service", () => {
             getByRequesterId: jest.fn(),
         } as unknown as jest.Mocked<IJoinRequestRepository>;
 
-        getJoinRequestService = new GetJoinRequest(mockJoinRequestRepository);
+        const mockUserRepository = {
+            getById: jest.fn(),
+        } as unknown as jest.Mocked<IUserRepository>;
+
+        getJoinRequestService = new GetJoinRequest(mockJoinRequestRepository, mockUserRepository);
 
         input = {
             id: "1",

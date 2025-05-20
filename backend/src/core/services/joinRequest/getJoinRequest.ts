@@ -41,7 +41,7 @@ export class GetClassJoinRequests extends JoinRequestService<GetClassJoinRequest
      * @throws {ApiError} If the class with the given id is not found.
      */
     async execute(userId: string, input: GetClassJoinRequestsInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         // Get all requests for user
         const requests: JoinRequest[] = await tryRepoEntityOperation(
             this.joinRequestRepository.getByClassId(input.idParent),
@@ -65,7 +65,7 @@ export class GetUserJoinRequests extends JoinRequestService<GetUserJoinRequestsI
      * @throws {ApiError} If the user with the given id is not found.
      */
     async execute(userId: string, input: GetUserJoinRequestsInput): Promise<object> {
-        await validateUserRights(userId, undefined, input.idParent);
+        await validateUserRights(userId, this.userRepository, undefined, input.idParent);
         // Get all requests for user
         const requests: JoinRequest[] = await tryRepoEntityOperation(
             this.joinRequestRepository.getByRequesterId(input.idParent),

@@ -14,7 +14,7 @@ export class DeleteJoinRequest extends JoinRequestService<DeleteJoinRequestInput
      * @throws {ApiError} If the group with the given id is not found.
      */
     async execute(userId: string, input: DeleteJoinRequestInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         await tryRepoEntityOperation(this.joinRequestRepository.delete(input.id), "JoinRequest", input.id, true);
         return {};
     }

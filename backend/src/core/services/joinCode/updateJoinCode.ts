@@ -17,7 +17,7 @@ export class UpdateJoinCode extends JoinCodeService<UpdateJoinCodeInput> {
      * @throws {ApiError} If the JoinCode with the given id is not found.
      */
     async execute(userId: string, input: UpdateJoinCodeInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         const joinCode = await tryRepoEntityOperation(
             this.JoinCodeRepository.getById(input.id),
             "JoinCode",

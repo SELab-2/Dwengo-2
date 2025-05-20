@@ -14,7 +14,7 @@ export class DeleteJoinCode extends JoinCodeService<DeleteJoinCodeInput> {
      * @throws {ApiError} If the code with the given id is not found.
      */
     async execute(userId: string, input: DeleteJoinCodeInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         await tryRepoEntityOperation(this.JoinCodeRepository.delete(input.id), "JoinCode", input.id, true);
         return {};
     }

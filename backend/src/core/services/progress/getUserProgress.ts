@@ -10,7 +10,7 @@ export type GetUserProgressInput = z.infer<typeof getProgressSchema>;
 
 export class GetUserProgress extends ProgressBaseService<GetUserProgressInput> {
     public async execute(userId: string, input: GetUserProgressInput): Promise<object> {
-        await validateUserRights(userId, undefined, input.idParent);
+        await validateUserRights(userId, this.userRepository, undefined, input.idParent);
         // Get the users assignments and corresponding learning paths
         const assignments: Assignment[] = await this.assignmentRepository.getByUserId(input.idParent);
         const learningPaths: LearningPath[] = await Promise.all(

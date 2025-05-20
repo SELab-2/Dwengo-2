@@ -3,6 +3,7 @@ import { removeUserFromSchema } from "../../../application/schemas/userSchemas";
 import { Service } from "../../../config/service";
 import { UserType } from "../../entities/user";
 import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type RemoveUserFromInput = z.infer<typeof removeUserFromSchema>;
 
@@ -10,7 +11,7 @@ export type RemoveUserFromInput = z.infer<typeof removeUserFromSchema>;
  * @description Abstract class for removing a user from a group or class.
  */
 export abstract class RemoveUserFrom implements Service<RemoveUserFromInput> {
-    public constructor() {}
+    public constructor(protected userRepository: IUserRepository) {}
 
     /** Function that calls the appropriate method of the repository.
      *
@@ -26,7 +27,7 @@ export abstract class RemoveUserFrom implements Service<RemoveUserFromInput> {
      * @throws {ApiError} If the collection or user with the given id is not found.
      */
     async execute(userId: string, input: RemoveUserFromInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         await tryRepoEntityOperation(
             this.removeUser(input.id, input.idParent),
             "User | Collection",

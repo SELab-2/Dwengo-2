@@ -2,6 +2,7 @@ import { DatabaseError } from "../../../../../src/config/error";
 import { Message } from "../../../../../src/core/entities/message";
 import { UpdateMessage, UpdateMessageInput } from "../../../../../src/core/services/message/updateMessage";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -11,12 +12,16 @@ const mockMessageRepository = {
     update: jest.fn(),
 };
 
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
+
 describe("UpdateMessage", () => {
     let updateMessage: UpdateMessage;
     let input: UpdateMessageInput;
 
     beforeEach(() => {
-        updateMessage = new UpdateMessage(mockMessageRepository as any);
+        updateMessage = new UpdateMessage(mockMessageRepository as any, mockUserRepository);
         jest.clearAllMocks();
         input = {
             id: "message-123",

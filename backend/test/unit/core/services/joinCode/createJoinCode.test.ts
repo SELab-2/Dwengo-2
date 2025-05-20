@@ -2,6 +2,7 @@ import { DatabaseError } from "../../../../../src/config/error";
 import { JoinCode } from "../../../../../src/core/entities/joinCode";
 import { CreateJoinCode, CreateJoinCodeInput } from "../../../../../src/core/services/joinCode/createJoinCode";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -10,12 +11,16 @@ const mockJoinCodeRepository = {
     create: jest.fn(),
 };
 
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
+
 describe("createJoinCode", () => {
     let createJoinCode: CreateJoinCode;
     let input: CreateJoinCodeInput;
 
     beforeEach(() => {
-        createJoinCode = new CreateJoinCode(mockJoinCodeRepository as any);
+        createJoinCode = new CreateJoinCode(mockJoinCodeRepository as any, mockUserRepository);
         jest.clearAllMocks();
         input = {
             classId: "class-123",

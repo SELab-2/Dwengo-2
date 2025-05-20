@@ -2,6 +2,7 @@ import { DatabaseError } from "../../../../../src/config/error";
 import { JoinCode } from "../../../../../src/core/entities/joinCode";
 import { UpdateJoinCode, UpdateJoinCodeInput } from "../../../../../src/core/services/joinCode/updateJoinCode";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -11,12 +12,16 @@ const mockJoinCodeRepository = {
     update: jest.fn(),
 };
 
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
+
 describe("UpdateJoinCode", () => {
     let updateJoinCode: UpdateJoinCode;
     let input: UpdateJoinCodeInput;
 
     beforeEach(() => {
-        updateJoinCode = new UpdateJoinCode(mockJoinCodeRepository as any);
+        updateJoinCode = new UpdateJoinCode(mockJoinCodeRepository as any, mockUserRepository);
         jest.clearAllMocks();
         input = {
             id: "joincode-123",

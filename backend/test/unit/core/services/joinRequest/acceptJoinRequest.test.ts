@@ -5,6 +5,7 @@ import { IClassRepository } from "../../../../../src/core/repositories/classRepo
 import { IJoinRequestRepository } from "../../../../../src/core/repositories/joinRequestRepositoryInterface";
 import { AcceptJoinRequest, AcceptJoinRequestInput } from "../../../../../src/core/services/joinRequest/acceptJoinRequest";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -24,7 +25,11 @@ describe("AcceptJoinRequest Service", () => {
             addUserToClass: jest.fn(),
         } as unknown as jest.Mocked<IClassRepository>;
 
-        acceptJoinRequestService = new AcceptJoinRequest(mockJoinRequestRepository, mockClassRepository);
+        const mockUserRepository = {
+            getById: jest.fn(),
+        } as unknown as jest.Mocked<IUserRepository>;
+
+        acceptJoinRequestService = new AcceptJoinRequest(mockJoinRequestRepository, mockUserRepository, mockClassRepository);
 
         params = {
             id: "1",

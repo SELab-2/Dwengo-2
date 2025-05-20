@@ -6,15 +6,17 @@ import { JoinRequest } from "../../entities/joinRequest";
 import { tryRepoEntityOperation } from "../../helpers";
 import { IClassRepository } from "../../repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type CreateJoinRequestInput = z.infer<typeof createJoinRequestSchema>;
 
 export class CreateJoinRequest extends JoinRequestService<CreateJoinRequestInput> {
     constructor(
         _joinRequestRepository: IJoinRequestRepository,
+        _userRepository: IUserRepository,
         private _classRepository: IClassRepository,
     ) {
-        super(_joinRequestRepository);
+        super(_joinRequestRepository, _userRepository);
     }
 
     /**

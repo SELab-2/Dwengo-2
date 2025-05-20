@@ -32,7 +32,7 @@ export class GetUserClasses extends ClassBaseService<GetUserClassInput> {
      * @throws {ApiError} If the user with the given id is not found.
      */
     async execute(userId: string, input: GetUserClassInput): Promise<object> {
-        await validateUserRights(userId, undefined, input.idParent);
+        await validateUserRights(userId, this.userRepository, undefined, input.idParent);
         const classes: Class[] = await tryRepoEntityOperation(
             this.classRepository.getByUserId(input.idParent),
             "User",

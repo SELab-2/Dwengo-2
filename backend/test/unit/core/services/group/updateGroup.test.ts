@@ -2,6 +2,7 @@ import { DatabaseError } from "../../../../../src/config/error";
 import { Group } from "../../../../../src/core/entities/group";
 import { UpdateGroup } from "../../../../../src/core/services/group/updateGroup";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -11,11 +12,15 @@ const mockGroupRepository = {
     update: jest.fn(),
 };
 
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
+
 describe("UpdateGroup", () => {
     let updateGroup: UpdateGroup;
 
     beforeEach(() => {
-        updateGroup = new UpdateGroup(mockGroupRepository as any);
+        updateGroup = new UpdateGroup(mockGroupRepository as any, mockUserRepository);
         jest.clearAllMocks();
         mockValidateUserRights.mockResolvedValue();
     });

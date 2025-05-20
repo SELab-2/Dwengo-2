@@ -15,7 +15,7 @@ export class CreateClass extends ClassBaseService<CreateClassInput> {
      * @throws {ApiError} If the class with the given teacherId is not found or if the creation fails.
      */
     async execute(userId: string, input: CreateClassInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
 
         const newClass = new Class(input.name, input.description, input.targetAudience, input.teacherId);
 

@@ -8,7 +8,7 @@ export type DeleteTaskInput = z.infer<typeof deleteTaskSchema>;
 
 export class DeleteTask extends TaskService<DeleteTaskInput> {
     async execute(userId: string, input: DeleteTaskInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         await tryRepoEntityOperation(this.taskRepository.delete(input.id), "Task", input.id, true);
         return {};
     }

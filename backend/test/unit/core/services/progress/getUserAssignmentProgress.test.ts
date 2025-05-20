@@ -2,16 +2,21 @@ import { Assignment } from "../../../../../src/core/entities/assignment";
 import { PathLearningObject } from "../../../../../src/core/entities/learningObject";
 import { LearningPath } from "../../../../../src/core/entities/learningPath";
 import { Submission } from "../../../../../src/core/entities/submission";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { GetUserAssignmentProgress } from "../../../../../src/core/services/progress";
 
 // Mock repositories
 const assignmentRepository = { getById: jest.fn() };
 const learningPathRepository = { getLearningPath: jest.fn() };
 const submissionRepository = { getAllForStudentInAssignment: jest.fn() };
+const mockUserRepository = {
+    getById: jest.fn(),
+    getByAssignmentId: jest.fn()
+} as unknown as jest.Mocked<IUserRepository>;
 
 class TestableGetUserAssignmentProgress extends GetUserAssignmentProgress {
     constructor() {
-        super(submissionRepository as any, assignmentRepository as any, learningPathRepository as any);
+        super(submissionRepository as any, assignmentRepository as any, learningPathRepository as any, mockUserRepository);
     }
 }
 

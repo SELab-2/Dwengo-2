@@ -1,6 +1,7 @@
 import { ISubmissionRepository } from "../../../../../src/core/repositories/submissionRepositoryInterface";
 import { GetSubmissionActivity } from "../../../../../src/core/services/progress";
 import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 
 const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
@@ -9,7 +10,11 @@ describe("GetSubmissionActivity", () => {
         getMonthlySubmissionCounts: jest.fn(),
     } as any;
 
-    const service = new GetSubmissionActivity(mockRepo);
+    const mockUserRepository = {
+        getById: jest.fn(),
+    } as unknown as jest.Mocked<IUserRepository>;
+
+    const service = new GetSubmissionActivity(mockRepo, mockUserRepository);
 
     const input = {
         idParent: "class-id-123",

@@ -15,7 +15,7 @@ export class UpdateTask extends TaskService<UpdateTaskInput> {
      * @throws {ApiError} If the task with the given id is not found.
      */
     async execute(userId: string, input: UpdateTaskInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         const task: Task = await tryRepoEntityOperation(this.taskRepository.getById(input.id), "Task", input.id, true);
         task.assignmentId = input.assignmentId || task.assignmentId;
         task.step = input.step || task.step;

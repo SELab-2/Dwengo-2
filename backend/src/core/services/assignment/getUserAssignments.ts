@@ -17,7 +17,7 @@ export class GetUserAssignments extends AssignmentService<GetUserAssignmentsInpu
      * @throws {ApiError} If the user with the given id is not found.
      */
     async execute(userId: string, input: GetUserAssignmentsInput): Promise<object> {
-        await validateUserRights(userId, undefined, input.idParent);
+        await validateUserRights(userId, this.userRepository, undefined, input.idParent);
 
         const assignments: Assignment[] = await tryRepoEntityOperation(
             this.assignmentRepository.getByUserId(input.idParent),

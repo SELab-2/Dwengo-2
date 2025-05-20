@@ -23,7 +23,7 @@ export class UpdateUser implements Service<UpdateUserInput> {
      * @throws {ApiError} If the user with the given id is not found or when a bad request is given.
      */
     async execute(userId: string, input: UpdateUserInput): Promise<object> {
-        await validateUserRights(userId, undefined, input.id);
+        await validateUserRights(userId, this.userRepository, undefined, input.id);
         // Get the old info of the user
         const oldUser = await tryRepoEntityOperation(this.userRepository.getById(input.id), "User", input.id, true);
 

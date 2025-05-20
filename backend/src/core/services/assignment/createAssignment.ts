@@ -18,7 +18,7 @@ export class CreateAssignment extends AssignmentService<CreateAssignmentInput> {
      * @throws {ApiError} If the class with the given classId is not found or if the creation fails.
      */
     async execute(userId: string, input: CreateAssignmentInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
 
         const assignment: Assignment = new Assignment(
             input.classId,

@@ -1,5 +1,6 @@
 import { DatabaseError } from "../../../../../src/config/error";
 import { JoinCode } from "../../../../../src/core/entities/joinCode";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import {
     GetJoinCode,
     GetJoinCodeInput,
@@ -13,12 +14,16 @@ const mockJoinCodeRepository = {
     getByClassId: jest.fn(),
 };
 
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
+
 describe("GetJoinCode", () => {
     let getJoinCode: GetJoinCode;
     let input: GetJoinCodeInput;
 
     beforeEach(() => {
-        getJoinCode = new GetJoinCode(mockJoinCodeRepository as any);
+        getJoinCode = new GetJoinCode(mockJoinCodeRepository as any, mockUserRepository);
         jest.clearAllMocks();
         input = {
             id: "joincode-123",
@@ -49,7 +54,7 @@ describe("GetClassJoinCodes", () => {
     let input: GetClassJoinCodesInput;
 
     beforeEach(() => {
-        getClassJoinCodes = new GetClassJoinCodes(mockJoinCodeRepository as any);
+        getClassJoinCodes = new GetClassJoinCodes(mockJoinCodeRepository as any, mockUserRepository);
         jest.clearAllMocks();
         input = {
             idParent: "class-456",

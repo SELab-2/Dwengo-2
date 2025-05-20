@@ -14,7 +14,7 @@ export class DeleteGroup extends GroupService<DeleteGroupInput> {
      * @throws {ApiError} If the group with the given id is not found.
      */
     async execute(userId: string, input: DeleteGroupInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         await tryRepoEntityOperation(this.groupRepository.delete(input.id), "Group", input.id, true);
         return {};
     }

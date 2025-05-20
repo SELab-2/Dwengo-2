@@ -15,7 +15,7 @@ export class UpdateGroup extends GroupService<UpdateGroupInput> {
      * @throws {ApiError} If the group with the given id is not found.
      */
     async execute(userId: string, input: UpdateGroupInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         const group: Group = await tryRepoEntityOperation(
             this.groupRepository.getById(input.id),
             "Group",

@@ -3,6 +3,7 @@ import { Class } from "../../../../../src/core/entities/class";
 import { JoinRequest, JoinRequestType } from "../../../../../src/core/entities/joinRequest";
 import { IClassRepository } from "../../../../../src/core/repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../../../../src/core/repositories/joinRequestRepositoryInterface";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
 import { CreateJoinRequest, CreateJoinRequestInput } from "../../../../../src/core/services/joinRequest";
 
 describe("CreateJoinRequest", () => {
@@ -32,7 +33,11 @@ describe("CreateJoinRequest", () => {
             deleteById: jest.fn(),
         } as unknown as jest.Mocked<IClassRepository>;
 
-        service = new CreateJoinRequest(joinRequestRepository, classRepository);
+        const mockUserRepository = {
+            getById: jest.fn(),
+        } as unknown as jest.Mocked<IUserRepository>;
+
+        service = new CreateJoinRequest(joinRequestRepository, mockUserRepository, classRepository);
         input = {
             requester: "user1",
             class: "class1",

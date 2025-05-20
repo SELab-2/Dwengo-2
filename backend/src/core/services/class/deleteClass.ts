@@ -14,7 +14,7 @@ export class DeleteClass extends ClassBaseService<DeleteClassInput> {
      * @throws {ApiError} If the class with the given id is not found.
      */
     async execute(userId: string, input: DeleteClassInput): Promise<object> {
-        await validateUserRights(userId, UserType.TEACHER);
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         await tryRepoEntityOperation(this.classRepository.delete(input.id), "Class", input.id, true);
         return {};
     }

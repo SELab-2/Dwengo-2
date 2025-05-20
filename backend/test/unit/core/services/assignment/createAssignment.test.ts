@@ -9,6 +9,9 @@ const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights")
 const mockAssignmentRepository = {
     create: jest.fn(),
 };
+const mockUserRepository = {
+    getById: jest.fn(),
+}
 
 describe("CreateAssignment", () => {
     let create: CreateAssignment;
@@ -19,7 +22,7 @@ describe("CreateAssignment", () => {
     let createdAssignment: Assignment;
 
     beforeEach(() => {
-        create = new CreateAssignment(mockAssignmentRepository as any);
+        create = new CreateAssignment(mockAssignmentRepository as any, mockUserRepository as any);
         jest.clearAllMocks();
         startDate = new Date();
         deadline = new Date();

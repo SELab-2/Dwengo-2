@@ -7,11 +7,15 @@ const mockGroupRepository = {
     getByAssignmentId: jest.fn(),
 };
 
+const mockUserRepository = {
+    getById: jest.fn(),
+}
+
 describe("GetAssignmentGroups", () => {
     let getAssignmentGroups: GetAssignmentGroups;
 
     beforeEach(() => {
-        getAssignmentGroups = new GetAssignmentGroups(mockGroupRepository as any);
+        getAssignmentGroups = new GetAssignmentGroups(mockGroupRepository as any, mockUserRepository as any);
         jest.clearAllMocks();
     });
 
