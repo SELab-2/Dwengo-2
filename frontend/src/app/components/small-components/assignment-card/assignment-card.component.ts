@@ -20,6 +20,8 @@ import { UserType } from "../../../interfaces";
 })
 export class AssignmentCardComponent implements OnInit {
     @Input() assignment!: Assignment;
+    @Input() disabled: boolean = false;
+
     @Output() clicked = new EventEmitter<string>()
 
     isTeacher: boolean = false;

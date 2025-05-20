@@ -1,4 +1,5 @@
-<mat-card class="menu-card" matRipple (click)="onClick()">
+<mat-card class="menu-card" matRipple [ngClass]="{ 'disabled': disabled, 'enabled': !disabled }"
+    (click)="!disabled && onClick()" [class.disabled-card]="disabled">
     <div>
         <h3>{{ assignment.name }}</h3>
         <p>
@@ -8,7 +9,7 @@
     </div>
     @if(isTeacher){
     <div>
-        <button mat-icon-button i18n-matTooltip matTooltip="Delete Assignment" color="primary"
+        <button mat-icon-button i18n-matTooltip matTooltip="Delete Assignment" color="primary" [disabled]="disabled"
             (click)="onDelete(); $event.stopPropagation()">
             <mat-icon>delete</mat-icon>
         </button>
