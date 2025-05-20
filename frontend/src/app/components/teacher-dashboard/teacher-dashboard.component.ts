@@ -24,6 +24,7 @@ import { UsersOfClass } from '../../interfaces/user/usersOfClass';
 import { ClassActivity } from '../../interfaces/progress/activity';
 import { ClassCompletion } from '../../interfaces/progress/completion';
 import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-loader/card-skeleton-loader.component';
+import { ChatViewComponent } from '../../pages/chat-view/chat-view.component';
 
 
 
@@ -42,7 +43,8 @@ import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-l
     ClassOverviewWidgetComponent,
     DeadlinesWidgetComponent,
     MatButtonModule,
-    CardSkeletonLoaderComponent
+    CardSkeletonLoaderComponent,
+    ChatViewComponent,
   ],
   templateUrl: './teacher-dashboard.component.html',
   styleUrls: ['./teacher-dashboard.component.less']
