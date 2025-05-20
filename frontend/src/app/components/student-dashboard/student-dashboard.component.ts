@@ -19,6 +19,7 @@ import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-l
 import { Progress } from '../../interfaces/progress/progress';
 import { ProgressService } from '../../services/progress.service';
 import { forkJoin } from 'rxjs';
+import { MatCardModule } from '@angular/material/card';
 
 
 @Component({
@@ -33,6 +34,7 @@ import { forkJoin } from 'rxjs';
     MatPaginatorModule,
     MatButtonModule,
     PaginatedGridComponent,
+    MatCardModule,
     CardSkeletonLoaderComponent
   ],
   templateUrl: './student-dashboard.component.html',
@@ -47,9 +49,9 @@ export class StudentDashboardComponent implements OnInit {
 
   public pagedAssignments: Assignment[] = [];
   // Array with useless info to render skeleton loaders 
-  public LOADINGDATA: {id: number}[] = Array(6).fill(0).map((v, i) => ({id: i}))
-  public loadingProgress: boolean = true; 
-  public loadingGroups: boolean = true; 
+  public LOADINGDATA: { id: number }[] = Array(6).fill(0).map((v, i) => ({ id: i }))
+  public loadingProgress: boolean = true;
+  public loadingGroups: boolean = true;
   public loadingClasses: boolean = true;
 
   pageSize = 12;
@@ -77,7 +79,7 @@ export class StudentDashboardComponent implements OnInit {
       },
       complete: () => {
         this.loadingClasses = false;
-      }  
+      }
     });
 
     this.assignmentService.retrieveAssignments().subscribe({
@@ -95,7 +97,7 @@ export class StudentDashboardComponent implements OnInit {
         });
         this.updatePagedAssignments();
 
-        if(userId) {
+        if (userId) {
           const progressObservables = this.assignments.map(a =>
             this.progressService.getUserAssignmentProgress(userId, a.id)
           );
@@ -107,19 +109,19 @@ export class StudentDashboardComponent implements OnInit {
             },
             complete: () => {
               this.loadingProgress = false;
-            } 
+            }
           });
           this.groupService.getAllGroupsFromUser(userId)
-          .subscribe({
-            next: (groups: Group[]) => {
-              groups.forEach(g => {
-                this._assignmentToGroup[g.assignment.id] = g
-              })
-            },
-            complete: () => {
-              this.loadingGroups = false;
-            }
-          })
+            .subscribe({
+              next: (groups: Group[]) => {
+                groups.forEach(g => {
+                  this._assignmentToGroup[g.assignment.id] = g
+                })
+              },
+              complete: () => {
+                this.loadingGroups = false;
+              }
+            })
         }
       },
       complete: () => {
@@ -129,7 +131,7 @@ export class StudentDashboardComponent implements OnInit {
           this.loadingGroups = false;
           this.loadingProgress = false;
         }
-        
+
       }
     });
 

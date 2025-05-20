@@ -1,12 +1,14 @@
 import { z } from "zod";
 import { TaskService } from "./taskService";
 import { deleteTaskSchema } from "../../../application/schemas/taskSchemas";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type DeleteTaskInput = z.infer<typeof deleteTaskSchema>;
 
 export class DeleteTask extends TaskService<DeleteTaskInput> {
-    async execute(input: DeleteTaskInput): Promise<object> {
+    async execute(userId: string, input: DeleteTaskInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         await tryRepoEntityOperation(this.taskRepository.delete(input.id), "Task", input.id, true);
         return {};
     }

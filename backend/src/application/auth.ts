@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { AuthenticationTokenPayload, TokenResponse } from "./types";
-import { User } from "../core/entities/user";
+import { User, UserType } from "../core/entities/user";
 import { GetUser, GetUserInput } from "../core/services/user";
 
 // TODO - Consider allowing only one active token per user (probably not)
@@ -33,7 +33,12 @@ export class AuthenticationManager {
         this.refreshExpiresIn = refreshExpiresIn;
     }
 
-    async authenticate(email: string, password: string, refreshToken?: string): Promise<TokenResponse | null> {
+    async authenticate(
+        email: string,
+        password: string,
+        userType?: UserType,
+        refreshToken?: string,
+    ): Promise<TokenResponse | null> {
         if (refreshToken) {
             const refreshResult = this.refreshAccessToken(refreshToken);
             if (refreshResult) {
@@ -43,14 +48,13 @@ export class AuthenticationManager {
         const input: GetUserInput = { email: email };
         let user = undefined;
         try {
-            user = (await this.getUserService.execute(input)) as User;
+            user = (await this.getUserService.execute("", input)) as User;
         } catch (e) {
             return null;
         }
-        if (user && (await bcrypt.compare(password, user.passwordHash))) {
+        if (user && userType && user.userType === userType && (await bcrypt.compare(password, user.passwordHash))) {
             return this.generateTokens(user.id!);
         }
-        console.log("not supposed to be here");
         return null;
     }
 

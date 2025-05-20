@@ -3,10 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { AssignmentService } from './assignment.service';
+import { MessageService } from './message.service';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 import { QuestionThread, NewQuestionThread, QuestionThreadUpdate, VisibilityType } from '../interfaces/questionThread';
 import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
+import { ClassesService } from './classes.service';
+import { LearningObjectService } from './learningObject.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +32,10 @@ export class QuestionThreadService {
     private http: HttpClient,
     private authService: AuthenticationService,
     private errorService: ErrorService,
-    private assignmentService: AssignmentService
+    private assignmentService: AssignmentService,
+    private messageService: MessageService,
+    private classesService: ClassesService,
+    private learningObjectService: LearningObjectService
   ) {}
 
   private questionThreadMessage = $localize `:@@questionThread:question thread`;
@@ -51,6 +57,29 @@ export class QuestionThreadService {
       this.errorService.pipeHandler(
         this.errorService.retrieveError(this.questionThreadMessage)
       )
+    );
+  }
+
+  retrieveQuestionThreadByStep(
+    assignmentId: string,
+    learningObjectId: string
+  ): Observable<QuestionThread | null> {
+    const userId = this.authService.retrieveUserId() || '';
+    return this.retrieveQuestionThreadsByAssignment(assignmentId).pipe(
+      switchMap(threads => {
+        if (!threads || threads.length === 0) {
+            return of(null);
+        }
+        const filteredThreads = threads.filter(thread =>
+            thread.learningObjectId === learningObjectId && thread.creatorId === userId
+        );
+        if (filteredThreads.length === 0) {
+            return of(null); // No specific thread found for this step/user
+        }
+        const foundThread = filteredThreads[0];
+        // If a thread object is found but has no ID, it's problematic; treat as not found for ID-based retrieval.
+        return foundThread.id ? of(foundThread) : of(null);
+      })
     );
   }
 
@@ -86,25 +115,34 @@ export class QuestionThreadService {
   * Load and filter question threads for the authenticated user or current learning object
   */
   loadSideBarQuestionThreads(
-    userId: string,
-    currentLearningObjectId: string,
-    showPublicChats: boolean
+    currentAssignmentId: string,
+    showOtherChats: boolean
   ): Observable<QuestionThread[]> {
     return this.assignmentService.retrieveAssignments().pipe(
       switchMap(assignments => {
-        if (!assignments || !Array.isArray(assignments)) {
+        if (!assignments?.length) {
           return of([]);
         }
 
-        const threadRequests = assignments.map(a =>
-          this.retrieveQuestionThreadsByAssignment(a.id)
+        const threadRequests = assignments.map(a => 
+          this.retrieveQuestionThreadsByAssignment(a.id).pipe(
+            switchMap(threads => {
+              if (!threads.length) return of([]);
+              
+              const threadWithNames$ = threads.map(thread => 
+                this.getThreadNameWithTimestamp(thread, a.name).pipe(
+                  map(name => ({ ...thread, name }))
+              ));
+              return forkJoin(threadWithNames$);
+            })
+          )
         );
         return forkJoin(threadRequests);
       }),
       map(threadArrays => threadArrays.flat()),
       map(allThreads => {
         const userId = this.authService.retrieveUserId() || '';
-        return this.filterThreads(allThreads, userId, currentLearningObjectId, showPublicChats);
+        return this.filterThreads(allThreads, userId, currentAssignmentId, showOtherChats);
       }),
       this.errorService.pipeHandler(
         this.errorService.retrieveError($localize`loading user threads`)
@@ -118,28 +156,87 @@ export class QuestionThreadService {
   filterThreads(
     allThreads: QuestionThread[],
     userId: string,
-    currentLearningObjectId: string,
-    showPublicChats: boolean
+    currentAssignmentId: string,
+    showOtherChats: boolean
   ): QuestionThread[] {
-    if (showPublicChats) {
-      return allThreads
-        .filter(t =>
-          t.learningObjectId === currentLearningObjectId &&
-          (t.visibility === VisibilityType.GROUP || t.visibility === VisibilityType.PUBLIC)
-        )
-        .sort((a, b) => {
-          if (a.visibility === VisibilityType.GROUP && b.visibility !== VisibilityType.GROUP) return -1;
-          if (b.visibility === VisibilityType.GROUP && a.visibility !== VisibilityType.GROUP) return 1;
-          return 0;
-        });
-    } else {
+    const sortByLatestMessage = (a: QuestionThread, b: QuestionThread) => {
+      const dateA = new Date(a.lastMessageDate || 0).getTime();
+      const dateB = new Date(b.lastMessageDate || 0).getTime();
+      return dateB - dateA; // descending order
+    };
+
+    if (showOtherChats) {
       if (this.authService.retrieveUserType() === 'student') {
-        return allThreads.filter(t => t.creatorId === userId);
+        return allThreads
+          .filter(t =>
+            // t.learningObjectId === currentLearningObjectId &&
+            (t.visibility === VisibilityType.GROUP)
+          )
+          .sort(sortByLatestMessage);
       } else {
         return allThreads
+          .filter(t =>
+            t.assignmentId === currentAssignmentId
+          )
+          .sort(sortByLatestMessage);
+      }
+    } else {
+      if (this.authService.retrieveUserType() === 'student') {
+        return allThreads
+          .filter(t => t.creatorId === userId)
+          .sort(sortByLatestMessage);
+      } else {
+        return allThreads
+          .sort(sortByLatestMessage);
       }
     }
   }
+
+  getThreadTitle(thread: QuestionThread): Observable<string> {
+    return this.assignmentService.retrieveAssignmentById(thread.assignmentId).pipe(
+      switchMap(assignment => {
+        if (!assignment) return of('The spiders are back.'); // this should never happen
+
+        return this.classesService.classWithId(assignment.classId).pipe(
+          map(ci => ci?.name ?? assignment.className ?? '???'),
+          catchError(() => of(assignment.className ?? '???')),
+          switchMap(className =>
+            this.learningObjectService
+              .getTitleOrFallback(thread.learningObjectId, thread.learningObjectId)
+              .pipe(
+                map(lot => `${className} > ${assignment.name} > ${lot}`),
+              )
+          )
+        );
+      })
+    );
+  }
+
+  private getThreadNameWithTimestamp(thread: QuestionThread, assignmentName: string): Observable<string> {
+  // If no messages, just return basic name
+  if (!thread.messageIds || thread.messageIds.length === 0) {
+    return of(`${assignmentName} - ${thread.id}`);
+  }
+
+  // Retrieve all messages and find the latest one
+  return forkJoin(thread.messageIds.map(id => this.messageService.retrieveMessageById(id))).pipe(
+    map(messages => {
+      const latestMessage = messages.reduce((latest, current) => {
+        const latestDate = new Date(latest.createdAt || 0);
+        const currentDate = new Date(current.createdAt || 0);
+        return currentDate > latestDate ? current : latest;
+      });
+      thread.lastMessageDate = latestMessage.createdAt;
+      const dateStr = latestMessage.createdAt ? 
+        new Date(latestMessage.createdAt).toLocaleDateString() : 
+        '';
+      return `${dateStr} - ${assignmentName} - ${thread.id}`;
+    }),
+    this.errorService.pipeHandler(
+      this.errorService.retrieveError(this.questionMessage)
+    )
+  );
+}
 
   /**
    * Create a new question thread

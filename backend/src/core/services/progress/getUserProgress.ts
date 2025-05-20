@@ -4,12 +4,13 @@ import { getProgressSchema } from "../../../application/schemas";
 import { Assignment } from "../../entities/assignment";
 import { LearningPath } from "../../entities/learningPath";
 import { Submission } from "../../entities/submission";
-import { tryRepoEntityOperation } from "../../helpers";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type GetUserProgressInput = z.infer<typeof getProgressSchema>;
 
 export class GetUserProgress extends ProgressBaseService<GetUserProgressInput> {
-    public async execute(input: GetUserProgressInput): Promise<object> {
+    public async execute(userId: string, input: GetUserProgressInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, undefined, input.idParent);
         // Get the users assignments and corresponding learning paths
         const assignments: Assignment[] = await this.assignmentRepository.getByUserId(input.idParent);
         const learningPaths: LearningPath[] = await Promise.all(

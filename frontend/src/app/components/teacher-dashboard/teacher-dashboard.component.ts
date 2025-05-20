@@ -22,7 +22,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { ProgressService } from '../../services/progress.service';
 import { UsersOfClass } from '../../interfaces/user/usersOfClass';
 import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-loader/card-skeleton-loader.component';
-import { ClassActivity, ClassCompletion, ClassScore } from '../../interfaces/progress';
+import { ChatViewComponent } from '../../pages/chat-view/chat-view.component';
+import { ClassActivity } from '../../interfaces/progress/activity';
+import { ClassCompletion } from '../../interfaces/progress/completion';
+import { ClassScore } from '../../interfaces/progress';
 
 
 
@@ -41,7 +44,8 @@ import { ClassActivity, ClassCompletion, ClassScore } from '../../interfaces/pro
     ClassOverviewWidgetComponent,
     DeadlinesWidgetComponent,
     MatButtonModule,
-    CardSkeletonLoaderComponent
+    CardSkeletonLoaderComponent,
+    ChatViewComponent,
   ],
   templateUrl: './teacher-dashboard.component.html',
   styleUrls: ['./teacher-dashboard.component.less']

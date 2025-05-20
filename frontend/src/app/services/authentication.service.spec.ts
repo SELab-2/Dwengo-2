@@ -17,6 +17,7 @@ describe('AuthenticationService', () => {
   const email: string = "baldur@asgard.no";
   const password: string = "Thor sucks";
   const token: string = "I am the one true god";
+  const userType: UserType = UserType.STUDENT;
 
   const userDetails: UserRegistration = {
     email: email,
@@ -33,7 +34,8 @@ describe('AuthenticationService', () => {
 
   const loginCredentials: UserLoginCredentials = {
     email: email,
-    password: password
+    password: password,
+    userType: userType
   }
 
   const loginResponse: LoginResponse = {

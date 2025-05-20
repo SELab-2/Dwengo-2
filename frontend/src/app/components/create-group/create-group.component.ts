@@ -110,11 +110,11 @@ export class CreateGroupComponent {
    * Make a call to the API to create the made groups.
    */
   public createGroups(): void {
-    if (this.members.length > 0) {
-      this.openSnackBar($localize`There are still members not assigned to a group.`);
-    } else {
-      const nonEmptyGroups = this.groups.filter(group => group.length > 0);
+    const nonEmptyGroups = this.groups.filter(group => group.length > 0);
 
+    if (nonEmptyGroups.length === 0) {
+      this.openSnackBar($localize`You need to assign students!.`);
+    } else {
       this.groupService.createGroups(nonEmptyGroups, this.assignmentId!)
         .subscribe((response) => {
           if (response) {
@@ -123,8 +123,10 @@ export class CreateGroupComponent {
           } else {
             this.openSnackBar($localize`Failed to create groups.`);
           }
-        })
+        });
     }
+
+
   }
 
   /**

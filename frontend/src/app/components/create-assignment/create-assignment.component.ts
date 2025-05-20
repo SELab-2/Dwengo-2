@@ -19,6 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentComponent } from '../assignment/assignment.component';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskService } from '../../services/task.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-create-assignment',
@@ -37,7 +38,7 @@ import { TaskService } from '../../services/task.service';
     MatInputModule,
     MatDateRangeInput,
     MatNativeDateModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './create-assignment.component.html',
   styleUrl: './create-assignment.component.less',
@@ -48,6 +49,7 @@ export class CreateAssignmentComponent implements OnInit {
   @Output() showGroups: EventEmitter<void> = new EventEmitter<void>
 
   private readonly route = inject(ActivatedRoute);
+  private readonly snackBar = inject(MatSnackBar);
 
   public learningPathId: string = "";
   public language: string = "nl";
@@ -61,6 +63,8 @@ export class CreateAssignmentComponent implements OnInit {
   public showCreateGroup: boolean = false;
   public assignmentId: string = '';
   public classMembers: User[] = [];
+
+  public enableCreate: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -84,9 +88,14 @@ export class CreateAssignmentComponent implements OnInit {
 
   }
 
+  checkNonEmpty(classId: string) {
+    this.classesService.usersInClass(classId).subscribe(
+      value => this.enableCreate = value.students.length > 0
+    )
+  }
+
   create(): void {
     const newAssignment: NewAssignment | null = this.extractFormValues();
-
     if (newAssignment) {
       this.assignmentService.createAssignment(newAssignment).subscribe((response) => {
 
@@ -100,6 +109,7 @@ export class CreateAssignmentComponent implements OnInit {
       });
     }
   }
+
 
   private getClasses(): void {
     this.classesService.classesOfUser().subscribe((response: Class[]) => {
@@ -131,11 +141,26 @@ export class CreateAssignmentComponent implements OnInit {
     const extraInstructions = this.createForm.get('extraInstructions')?.value;
 
     if (classId && startDate && deadline) {
+      // Make this safe date so converting to UTC doesn't change the day
+      // This can be done in a beter way and should be done in the future, but for now this fix works
+      const safeStart = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      startDate.getDate(),
+      12, 0, 0
+    );
+
+    const safeDeadline = new Date(
+      deadline.getFullYear(),
+      deadline.getMonth(),
+      deadline.getDate(),
+      12, 0, 0
+    );
       return {
         classId,
         learningPathId: this.learningPathId,
-        startDate,
-        deadline,
+        startDate: safeStart,
+        deadline: safeDeadline,
         extraInstructions,
         name
       };
@@ -152,10 +177,10 @@ export class CreateAssignmentComponent implements OnInit {
     // Initialize all empty tasks with an 'other'-type task without details
     this.taskService.fillRestWithEmptyTasks(this.assignmentId).subscribe({
       next: () => {
-        console.log($localize`Assignment Created!`);
+        this.snackBar.open($localize`Assignment Created!`);
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
+        this.snackBar.open($localize`Something went wrong!`);
       }
     });
 
@@ -164,4 +189,5 @@ export class CreateAssignmentComponent implements OnInit {
     // we can redirect to assignments page
     this.router.navigate(['/teacher/assignments']);
   }
+
 }

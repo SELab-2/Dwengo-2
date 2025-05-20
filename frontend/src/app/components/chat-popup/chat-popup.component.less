@@ -1,0 +1,55 @@
+.chat-fab {
+  margin-left: 3rem;
+}
+
+.chat-dialog-container {
+  .mat-mdc-dialog-container {
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+
+    .mdc-dialog__surface {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.chat-dialog {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+
+  app-chat {
+    flex: 1;
+    overflow-y: auto;
+  }
+}
+
+.chat-custom-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: 64px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .spacer {
+    flex: 1;
+  }
+
+  .mat-icon-button {
+    background: transparent !important;
+    border: none !important;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+}

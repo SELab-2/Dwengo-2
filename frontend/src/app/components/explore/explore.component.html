@@ -3,15 +3,20 @@
 
     <div class="explore-container">
         <mat-card class="intro-card">
-            <mat-card-header>
-                <mat-card-title i18n="@@exploreLearningPaths">Explore Learning Paths</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <p i18n="@@exploreLearningPathsDescription">
-                    Welcome! Here you can explore all available learning paths. You can either view all available
-                    options or search for specific paths using the filters.
-                </p>
-            </mat-card-content>
+            <div class="card-title">
+                <div class="card">
+                    <mat-card-header>
+                        <mat-card-title i18n="@@exploreLearningPaths">Explore Learning Paths</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <p i18n="@@exploreLearningPathsDescription">
+                            Welcome! Here you can explore all available learning paths. You can either view all available
+                            options or search for specific paths using the filters.
+                        </p>
+                    </mat-card-content>
+                </div>
+                <img class="explorer" loading="lazy" src="../../../assets/images/explorer.png" alt="Explorer image" />
+            </div>
             <mat-card-actions>
                 <button mat-raised-button color="primary" (click)="setBasic()" i18n="@@exploreButton">Explore our
                     Learning Paths</button>
@@ -39,17 +44,19 @@
     }
 
     @if (visualize === "CUSTOM") {
-    @if (loading) {
-    <app-card-skeleton-loader title="Your results"></app-card-skeleton-loader>
-    } @else {
-    <app-learning-path-list [learningPaths]="data" [isTeacher]="isTeacher" i18n-title title="Your Results"
-        (showPopup)="showPopup($event)"></app-learning-path-list>
-    }
+        @if (loading) {
+            <app-card-skeleton-loader title="Your results"></app-card-skeleton-loader>
+        } @else {
+        <app-learning-path-list [learningPaths]="data" [isTeacher]="isTeacher" i18n-title title="Your Results"
+            (showPopup)="showPopup($event)"></app-learning-path-list>
+        }
     }
     @if (detail && detailPath) {
-    <div class="popup">
-        <app-learning-path [hruid]="detailPath.hruid" [language]="detailPath.language" [popup]="true"
-            (back)="hidePopup()"></app-learning-path>
-    </div>
+        <div class="popup">
+            <button class="back" color="primary" mat-mini-fab i18n (click)="hidePopup()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <app-learning-path [hruid]="detailPath.hruid" [language]="detailPath.language"></app-learning-path>
+        </div>
     }
 </div>

@@ -2555,6 +2555,7 @@ components:
       required:
         - email
         - password
+        - userType
       additionalProperties: false
       properties:
         email:
@@ -2564,6 +2565,11 @@ components:
         password:
           type: string
           description: User's password.
+        userType:
+          type: string
+          enum: [student, teacher]
+          default: student
+          description: User's type in the system.
 
     RegisterResponse:
       type: object

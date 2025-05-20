@@ -14,7 +14,7 @@ export class GetSubmission extends SubmissionBaseService<GetSubmissionInput> {
      * @returns A promise resolving to a submission transformed into an object.
      * @throws {ApiError} If the submission with the given id was not found.
      */
-    async execute(input: GetSubmissionInput): Promise<object> {
+    async execute(_userId: string, input: GetSubmissionInput): Promise<object> {
         return (
             await tryRepoEntityOperation(this.submissionRepository.getById(input.id), "Submission", input.id, true)
         ).toObject();
@@ -33,7 +33,7 @@ export class GetUserSubmissions extends SubmissionBaseService<GetUserSubmissions
      * @returns A promise resolving to an object containing an array with the IDs of the submissions.
      * @throws {ApiError} If the assignmentId is not provided when learningObjectId is provided.
      */
-    async execute(input: GetUserSubmissionsInput): Promise<object> {
+    async execute(_userId: string, input: GetUserSubmissionsInput): Promise<object> {
         let submissions: Submission[];
         // Check when taskId is provided the assignmentId is also provided
         if (!input.assignmentId && input.taskId) {

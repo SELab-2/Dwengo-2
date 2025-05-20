@@ -2,7 +2,8 @@ import { z } from "zod";
 import { ClassBaseService } from "./baseClassService";
 import { updateClassSchema } from "../../../application/schemas/classSchemas";
 import { Class } from "../../entities/class";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type UpdateClassInput = z.infer<typeof updateClassSchema>;
 
@@ -13,7 +14,8 @@ export class UpdateClass extends ClassBaseService<UpdateClassInput> {
      * @returns A promise resolving to an empty object.
      * @throws {ApiError} If the class with the given id is not found.
      */
-    async execute(input: UpdateClassInput): Promise<object> {
+    async execute(userId: string, input: UpdateClassInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         // Object met alleen de velden die worden bijgewerkt
         const updatedFields: Partial<Class> = {};
         if (input.name) updatedFields.name = input.name;

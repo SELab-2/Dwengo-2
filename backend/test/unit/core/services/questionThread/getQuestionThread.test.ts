@@ -37,7 +37,7 @@ describe("GetQuestionThread", () => {
 
         mockQuestionThreadRepository.getById.mockResolvedValue(existingQuestionThread);
 
-        const result = await getQuestionThread.execute(input);
+        const result = await getQuestionThread.execute("", input);
 
         expect(result).toEqual(existingQuestionThread.toObject());
         expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-999");
@@ -46,7 +46,7 @@ describe("GetQuestionThread", () => {
     test("Should throw an EntityNotFoundError if the question thread does not exist", async () => {
         mockQuestionThreadRepository.getById.mockRejectedValue(new EntityNotFoundError("Thread not found"));
 
-        await expect(getQuestionThread.execute(input)).rejects.toMatchObject({
+        await expect(getQuestionThread.execute("", input)).rejects.toMatchObject({
             code: ErrorCode.NOT_FOUND,
         });
         expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-999");
@@ -55,7 +55,7 @@ describe("GetQuestionThread", () => {
     test("Should throw a DatabaseError if database retrieval fails", async () => {
         mockQuestionThreadRepository.getById.mockRejectedValue(new DatabaseError("Database error"));
 
-        await expect(getQuestionThread.execute(input)).rejects.toThrow(DatabaseError);
+        await expect(getQuestionThread.execute("", input)).rejects.toThrow(DatabaseError);
         expect(mockQuestionThreadRepository.getById).toHaveBeenCalledWith("thread-999");
     });
 });

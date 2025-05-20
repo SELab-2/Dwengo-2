@@ -17,7 +17,7 @@ export class CreateUser implements Service<CreateUserInput> {
      * @returns A promise resolving to an object containing the ID of the created user.
      * @throws {ApiError} If the creation fails.
      */
-    async execute(input: CreateUserInput): Promise<object> {
+    async execute(_userId: string, input: CreateUserInput): Promise<object> {
         const emailInUse = await this.userRepository.checkByEmail(input.email.toLowerCase());
 
         if (emailInUse) {

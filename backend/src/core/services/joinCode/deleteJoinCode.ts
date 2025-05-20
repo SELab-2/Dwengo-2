@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { JoinCodeService } from "./joinCodeService";
 import { deleteJoinCodeSchema } from "../../../application/schemas";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type DeleteJoinCodeInput = z.infer<typeof deleteJoinCodeSchema>;
 
@@ -12,7 +13,8 @@ export class DeleteJoinCode extends JoinCodeService<DeleteJoinCodeInput> {
      * @returns An empty object.
      * @throws {ApiError} If the code with the given id is not found.
      */
-    async execute(input: DeleteJoinCodeInput): Promise<object> {
+    async execute(userId: string, input: DeleteJoinCodeInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         await tryRepoEntityOperation(this.JoinCodeRepository.delete(input.id), "JoinCode", input.id, true);
         return {};
     }

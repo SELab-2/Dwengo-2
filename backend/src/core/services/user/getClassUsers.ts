@@ -18,7 +18,7 @@ export class GetClassUsers implements Service<GetClassUsersInput> {
      * @returns A promise resolving to an object with a list of users.
      * @throws {ApiError} If the class with the given id is not found.
      */
-    async execute(input: GetClassUsersInput): Promise<object> {
+    async execute(_userId: string, input: GetClassUsersInput): Promise<object> {
         const students: Student[] = await tryRepoEntityOperation(
             this.userRepository.getStudentsByClassId(input.idParent),
             "Class",

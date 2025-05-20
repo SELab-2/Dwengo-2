@@ -28,10 +28,27 @@ import { SubmissionService } from '../../services/submission.service';
 import { UserService } from '../../services/user.service';
 import { forkJoin, of, switchMap } from 'rxjs';
 import { Submission } from '../../interfaces/submissions';
+import { ChatPopupComponent } from '../chat-popup/chat-popup.component';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-assignment',
-  imports: [LearningPathComponent, MatSelectModule, MatFormFieldModule, MatOptionModule, CreateSubmissionComponent, MatProgressBar, MatCardModule, LoadingComponent, CreateTaskComponent, AssignmentStatsComponent],
+  imports: [
+    LearningPathComponent,
+    MatSelectModule,
+    MatIcon, MatIconModule, MatTooltipModule, MatButtonModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    CreateSubmissionComponent,
+    MatProgressBar,
+    MatCardModule,
+    LoadingComponent,
+    CreateTaskComponent,
+    AssignmentStatsComponent,
+    ChatPopupComponent,
+  ],
   templateUrl: './assignment.component.html',
   styleUrl: './assignment.component.less'
 })
@@ -94,7 +111,15 @@ export class AssignmentComponent implements OnInit {
 
 
   getProgressPercentage(): number {
-    return (this.step / this.maxStep) * 100;
+    return ((this.step + 1) / this.maxStep) * 100;
+  }
+
+  navigateBack() {
+    this.learningPathComponent.goToSpecificNode(this.step - 1);
+  }
+
+  navigateNext() {
+    this.learningPathComponent.goToSpecificNode(this.step + 1);
   }
 
   onSelectedNodeChanged(node: Node<LearningObject>) {
@@ -166,11 +191,12 @@ export class AssignmentComponent implements OnInit {
     progressObservable.subscribe(
       (res) => {
         this.progress = res;
-        this.step = 0;
+        this.step = this.progress.step - 1;
         this.furthestStep = this.progress.step; // furthest step is always returned by progress
         this.alreadySubmitted = this.step < this.furthestStep
         this.maxStep = this.progress.maxStep;
         this.loading = false;
+        console.log(this.step, this.furthestStep, this.maxStep)
       }
     )
   }

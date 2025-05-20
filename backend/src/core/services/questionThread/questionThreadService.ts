@@ -3,5 +3,5 @@ import { IQuestionThreadRepository } from "../../repositories/questionThreadRepo
 
 export abstract class QuestionThreadService<T> implements Service<T> {
     constructor(protected questionThreadRepository: IQuestionThreadRepository) {}
-    abstract execute(input: T): Promise<object>;
+    abstract execute(userId: string, input: T): Promise<object>;
 }

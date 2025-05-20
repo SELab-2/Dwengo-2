@@ -12,7 +12,7 @@ export class GetGroup extends GroupService<GetGroupInput> {
      * @returns A promise resolving to a group transformed into an object.
      * @throws {ApiError} If the group with the given id was not found.
      */
-    async execute(input: GetGroupInput): Promise<object> {
+    async execute(_userId: string, input: GetGroupInput): Promise<object> {
         return (
             await tryRepoEntityOperation(this.groupRepository.getById(input.id), "Group", input.id, true)
         ).toObject();

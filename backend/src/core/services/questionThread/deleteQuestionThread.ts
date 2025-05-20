@@ -12,7 +12,7 @@ export class DeleteQuestionThread extends QuestionThreadService<DeleteQuestionTh
      * @returns An empty object.
      * @throws {ApiError} If the thread with the given id is not found.
      */
-    async execute(input: DeleteQuestionThreadInput): Promise<object> {
+    async execute(_userId: string, input: DeleteQuestionThreadInput): Promise<object> {
         await tryRepoEntityOperation(this.questionThreadRepository.delete(input.id), "Thread", input.id, true);
         return {};
     }

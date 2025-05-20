@@ -1,4 +1,5 @@
 import { Request as ExpressRequest, Response as ExpressResponse } from "express";
+import { UserType } from "../../core/entities/user";
 import { AuthenticationManager } from "../auth";
 import { defaultErrorHandler, defaultResponder, responseToExpress } from "../helpersExpress";
 import { ErrorCode } from "../types";
@@ -21,18 +22,23 @@ export function loginMiddleware(
             return;
         }
 
-        const { email, password, refreshToken } = req.body || {};
-        if (!((email && password) || (!email && !password && refreshToken))) {
+        const { email, password, userType, refreshToken } = req.body || {};
+        if (!((email && password && userType) || (!email && !password && !userType && refreshToken))) {
             const response = defaultErrorHandler({
                 code: ErrorCode.BAD_REQUEST,
-                message: "Email and password or refresh token are required",
+                message: "Email, password and userType or refresh token are required",
             });
             responseToExpress(response, res);
             return;
         }
 
         try {
-            const tokens = await authManager.authenticate(email || "", password || "", refreshToken);
+            const tokens = await authManager.authenticate(
+                email || "",
+                password || "",
+                userType as UserType,
+                refreshToken,
+            );
             if (!tokens) {
                 const response = defaultErrorHandler({
                     code: ErrorCode.UNAUTHORIZED,

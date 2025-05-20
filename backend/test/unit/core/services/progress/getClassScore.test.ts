@@ -54,7 +54,7 @@ describe("GetClassScore", () => {
         mockAssignmentRepository.getByClassId.mockResolvedValue(assignments);
         mockSubmissionRepository.getAllForAssignment.mockResolvedValue(submissions);
 
-        const result = await getClassScoreService.execute(input);
+        const result = await getClassScoreService.execute("", input);
 
         expect(result).toEqual({ score: 100 });
     });
@@ -72,7 +72,7 @@ describe("GetClassScore", () => {
         mockAssignmentRepository.getByClassId.mockResolvedValue(assignments);
         mockSubmissionRepository.getAllForAssignment.mockResolvedValue(submissions);
 
-        const result = await getClassScoreService.execute(input);
+        const result = await getClassScoreService.execute("", input);
 
         expect(result).toEqual({ score: 50 });
     });
@@ -90,7 +90,7 @@ describe("GetClassScore", () => {
         mockAssignmentRepository.getByClassId.mockResolvedValue(assignments);
         mockSubmissionRepository.getAllForAssignment.mockResolvedValue(submissions);
 
-        const result = await getClassScoreService.execute(input);
+        const result = await getClassScoreService.execute("", input);
 
         expect(result).toEqual({ score: 0 });
     });
@@ -98,7 +98,7 @@ describe("GetClassScore", () => {
     it("should handle empty assignments list (0/0)", async () => {
         mockAssignmentRepository.getByClassId.mockResolvedValue([]);
 
-        const result = await getClassScoreService.execute(input);
+        const result = await getClassScoreService.execute("", input);
 
         expect(result).toEqual({ score: null });
     });

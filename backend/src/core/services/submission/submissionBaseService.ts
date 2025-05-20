@@ -6,5 +6,5 @@ import { ISubmissionRepository } from "../../repositories/submissionRepositoryIn
  */
 export abstract class SubmissionBaseService<T> implements Service<T> {
     constructor(protected submissionRepository: ISubmissionRepository) {}
-    abstract execute(input: T): Promise<object>;
+    abstract execute(userId: string, input: T): Promise<object>;
 }

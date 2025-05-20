@@ -13,7 +13,7 @@ export class UpdateQuestionThread extends QuestionThreadService<UpdateQuestionTh
      * @returns A promise resolving to an empty object.
      * @throws {ApiError} If the thread with the given id is not found.
      */
-    async execute(input: UpdateQuestionThreadInput): Promise<object> {
+    async execute(_userId: string, input: UpdateQuestionThreadInput): Promise<object> {
         const updatedFields: Partial<QuestionThread> = {};
 
         if (input.isClosed !== undefined) updatedFields.isClosed = input.isClosed;

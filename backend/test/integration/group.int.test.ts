@@ -30,7 +30,7 @@ describe("Test group API Endpoints", () => {
 
         classId = classReponse.body.id;
 
-         const assignmentResponse = await request(app)
+        const assignmentResponse = await request(app)
             .post("/assignments")
             .send({
                 "classId": classReponse.body.id,
@@ -48,8 +48,8 @@ describe("Test group API Endpoints", () => {
         mockGroup = {
             "assignment": assignmentId,
             "members": [
-              student1AuthDetails.id,
-              student2AuthDetails.id
+                student1AuthDetails.id,
+                student2AuthDetails.id
             ]
         }
     });
@@ -70,14 +70,14 @@ describe("Test group API Endpoints", () => {
     });
 
     describe("GET", () => {
-        
+
         beforeEach(async () => {
             const response = await request(app)
                 .post("/groups")
                 .send(mockGroup)
                 .set("Content-Type", "application/json")
                 .set("Authorization", "Bearer " + teacherAuthDetails.token);
-            
+
             groupId = response.body.id;
         });
 
@@ -87,7 +87,7 @@ describe("Test group API Endpoints", () => {
                     .get("/groups/" + groupId)
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
+
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
                     "id": groupId,
@@ -96,14 +96,13 @@ describe("Test group API Endpoints", () => {
             });
         });
 
-        //TODO: No check if student is already in group or other group
         describe("/users/{idParent}/groups", () => {
             it("should return a list of groups of user with status 200", async () => {
                 const response1 = await request(app)
                     .get("/users/" + student1AuthDetails.id + "/groups")
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + student1AuthDetails.token)
-    
+
                 expect(response1.status).toBe(200);
                 expect(response1.body).toEqual({
                     "groups": [groupId]
@@ -113,7 +112,7 @@ describe("Test group API Endpoints", () => {
                     .get("/users/" + student2AuthDetails.id + "/groups")
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + student2AuthDetails.token)
-    
+
                 expect(response2.status).toBe(200);
                 expect(response2.body).toEqual({
                     "groups": [groupId]
@@ -127,7 +126,7 @@ describe("Test group API Endpoints", () => {
                     .get("/assignments/" + assignmentId + "/groups")
                     .set("Accept", "application/json")
                     .set("Authorization", "Bearer " + student1AuthDetails.token)
-    
+
                 expect(response.status).toBe(200);
                 expect(response.body).toEqual({
                     "groups": [groupId]
@@ -137,73 +136,73 @@ describe("Test group API Endpoints", () => {
     });
 
     describe("PATCH /groups/{id}", () => {
-            let updatedGroup: object;
-    
-            beforeEach(async () => {
-                const response = await request(app)
-                    .post("/groups")
-                    .send(mockGroup)
-                    .set("Content-Type", "application/json")
-                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
-                groupId = response.body.id;
-                //TODO: implement logic to update members and assignment of group, not only use patch group to add or remove members (we already have an endpoint for this)
-                updatedGroup= {
-                    "members": [student1AuthDetails.id] //TODO: why are members required with group PATCH?
-                }
-            });
-    
-            it("should update a group with status 204", async () => {
-                const response = await request(app)
-                    .patch("/groups/" + groupId)
-                    .send(updatedGroup)
-                    .set("Content-Type", "application/json")
-                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
-                expect(response.status).toBe(204);
-    
-                const checkResponse = await request(app)
-                    .get("/groups/" + groupId)
-                    .set("Accept", "application/json")
-                    .set("Authorization", "Bearer " + teacherAuthDetails.token); 
-                    
-                expect(checkResponse.status).toBe(200);
-                expect(checkResponse.body).toEqual({
-                    "id": groupId,
-                    "assignment": assignmentId,
-                    "members": [student1AuthDetails.id]
-                });
+        let updatedGroup: object;
+
+        beforeEach(async () => {
+            const response = await request(app)
+                .post("/groups")
+                .send(mockGroup)
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            groupId = response.body.id;
+            //TODO: implement logic to update members and assignment of group, not only use patch group to add or remove members (we already have an endpoint for this)
+            updatedGroup = {
+                "members": [student1AuthDetails.id] //TODO: why are members required with group PATCH?
+            }
+        });
+
+        it("should update a group with status 204", async () => {
+            const response = await request(app)
+                .patch("/groups/" + groupId)
+                .send(updatedGroup)
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(response.status).toBe(204);
+
+            const checkResponse = await request(app)
+                .get("/groups/" + groupId)
+                .set("Accept", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(checkResponse.status).toBe(200);
+            expect(checkResponse.body).toEqual({
+                "id": groupId,
+                "assignment": assignmentId,
+                "members": [student1AuthDetails.id]
             });
         });
-    
-        describe("DELETE /groups/{id}", () => {
-            beforeEach(async () => {
-                const response = await request(app)
-                    .post("/groups")
-                    .send(mockGroup)
-                    .set("Content-Type", "application/json")
-                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
-                groupId = response.body.id;
-            });
-    
-            it("should delete a group with status 204", async () => {
-                const response = await request(app)
-                    .delete("/groups/" + groupId)
-                    .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                
-                expect(response.status).toBe(204);
-    
-                const checkResponse = await request(app)
-                        .get("/groups/" + groupId)
-                        .set("Accept", "application/json")
-                        .set("Authorization", "Bearer " + teacherAuthDetails.token);
-                    
-                    expect(checkResponse.status).toBe(404);
-                    expect(checkResponse.body).toEqual({
-                        "code": "NOT_FOUND",
-                        "message": "Group with ID " + groupId +" not found",
-                    });
+    });
+
+    describe("DELETE /groups/{id}", () => {
+        beforeEach(async () => {
+            const response = await request(app)
+                .post("/groups")
+                .send(mockGroup)
+                .set("Content-Type", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            groupId = response.body.id;
+        });
+
+        it("should delete a group with status 204", async () => {
+            const response = await request(app)
+                .delete("/groups/" + groupId)
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(response.status).toBe(204);
+
+            const checkResponse = await request(app)
+                .get("/groups/" + groupId)
+                .set("Accept", "application/json")
+                .set("Authorization", "Bearer " + teacherAuthDetails.token);
+
+            expect(checkResponse.status).toBe(404);
+            expect(checkResponse.body).toEqual({
+                "code": "NOT_FOUND",
+                "message": "Group with ID " + groupId + " not found",
             });
         });
+    });
 });

@@ -17,7 +17,7 @@ export class GetGroupProgress extends GetProgress {
         assignmentRepository: IAssignmentRepository,
         learningPathRepository: ILearningPathRepository,
     ) {
-        super(userRepository, submissionRepository, assignmentRepository, learningPathRepository);
+        super(submissionRepository, assignmentRepository, learningPathRepository, userRepository);
     }
 
     public async getUsers(id: string): Promise<User[]> {

@@ -33,7 +33,7 @@ describe("GetSubmission", () => {
 
         mockSubmissionRepository.getById.mockResolvedValue(submission);
 
-        const result = await getSubmission.execute(input);
+        const result = await getSubmission.execute("", input);
 
         expect(result).toEqual(submission.toObject());
         expect(mockSubmissionRepository.getById).toHaveBeenCalledWith("submission-123");
@@ -42,7 +42,7 @@ describe("GetSubmission", () => {
     test("Should throw a DatabaseError if retrieval fails", async () => {
         mockSubmissionRepository.getById.mockRejectedValue(new DatabaseError("Retrieval failed"));
 
-        await expect(getSubmission.execute(input)).rejects.toThrow(DatabaseError);
+        await expect(getSubmission.execute("", input)).rejects.toThrow(DatabaseError);
         expect(mockSubmissionRepository.getById).toHaveBeenCalledWith("submission-123");
     });
 });

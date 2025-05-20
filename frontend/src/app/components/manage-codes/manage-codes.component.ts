@@ -34,16 +34,14 @@ export class ManageCodesComponent implements OnInit {
   public constructor(
     private activeRoute: ActivatedRoute,
     private classCodeService: ClassCodeService
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     const id: string | null = this.activeRoute.snapshot.paramMap.get('id');
 
-    console.log(id);
+    if (id) this._classId = id;
 
-    if(id) this._classId = id;
-
-    if(this._classId) {
+    if (this._classId) {
       this.classCodeService.getClassCodes(this._classId)
         .subscribe((codes: Code[]) => {
           this._codes = codes;
@@ -64,7 +62,7 @@ export class ManageCodesComponent implements OnInit {
   public expireClassCode(code: Code): void {
     this.classCodeService.expireClassCode(code)
       .subscribe(response => {
-        if(!response) {
+        if (!response) {
           this.openSnackBar($localize`Could not expire code`);
         }
         else {
@@ -77,7 +75,7 @@ export class ManageCodesComponent implements OnInit {
   public deleteClassCode(code: Code): void {
     this.classCodeService.deleteClassCode(code)
       .subscribe(response => {
-        if(!response) {
+        if (!response) {
           this.openSnackBar($localize`Could not delete code`);
         }
         else {
@@ -88,15 +86,15 @@ export class ManageCodesComponent implements OnInit {
   }
 
   public createClassCode(): void {
-    if(this._classId) this.classCodeService.createClassCode(this._classId)
-        .subscribe(response => {
-          if(!response) {
-            this.openSnackBar($localize`Could not create code`);
-          }
-          else {
-            this.openSnackBar($localize`Code created successfully`);
-            location.reload();
-          };
+    if (this._classId) this.classCodeService.createClassCode(this._classId)
+      .subscribe(response => {
+        if (!response) {
+          this.openSnackBar($localize`Could not create code`);
+        }
+        else {
+          this.openSnackBar($localize`Code created successfully`);
+          location.reload();
+        };
       });
   }
 
@@ -112,9 +110,9 @@ export class ManageCodesComponent implements OnInit {
     this._codes = codes;
   }
 
-  private openSnackBar(message: string, action: string="Ok") {
+  private openSnackBar(message: string, action: string = "Ok") {
     this.snackBar.open(message, action, {
-        duration: 2500
+      duration: 2500
     });
   }
 

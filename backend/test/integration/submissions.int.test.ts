@@ -38,7 +38,7 @@ describe('Test submission API endpoints', () => {
             .post('/assignments')
             .send(assignment)
             .set('Content-Type', 'application/json')
-            .set("Authorization", "Bearer " + studentDetails.token);
+            .set("Authorization", "Bearer " + teacherDetails.token);
         assignmentId = assignmentRes.body.id; // save for later tests
 
         const task = {
@@ -131,7 +131,7 @@ describe('Test submission API endpoints', () => {
             const naRes = await request(app)
                 .get(`/submissions/${createdSubmissionId}`)
                 .set('Content-Type', 'application/json')
-                .set("Authorization", "Bearer " + studentDetails.token);
+                .set("Authorization", "Bearer " + teacherDetails.token);
 
             expect(naRes.status).toBe(200);
             expect(naRes.body.status).toBe("not_accepted");
@@ -142,7 +142,7 @@ describe('Test submission API endpoints', () => {
                     status: "accepted",
                 })
                 .set('Content-Type', 'application/json')
-                .set("Authorization", "Bearer " + studentDetails.token);
+                .set("Authorization", "Bearer " + teacherDetails.token);
 
             expect(update1.status).toBe(204);
 
@@ -160,7 +160,7 @@ describe('Test submission API endpoints', () => {
                     status: "rejected",
                 })
                 .set('Content-Type', 'application/json')
-                .set("Authorization", "Bearer " + studentDetails.token);
+                .set("Authorization", "Bearer " + teacherDetails.token);
 
             expect(update2.status).toBe(204);
 

@@ -13,7 +13,7 @@ export class CreateQuestionThread extends QuestionThreadService<CreateQuestionTh
      * @returns A promise resolving to an object containing the ID of the created thread.
      * @throws {ApiError} If the given user, assignment, learning-object or messages are not found or if the creation fails.
      */
-    async execute(input: CreateQuestionThreadInput): Promise<object> {
+    async execute(_userId: string, input: CreateQuestionThreadInput): Promise<object> {
         const questionThread = new QuestionThread(
             input.creatorId,
             input.assignmentId,

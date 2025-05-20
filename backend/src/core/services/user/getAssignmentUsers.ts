@@ -16,7 +16,7 @@ export class GetAssignmentUsers implements Service<GetAssignmentUsersInput> {
      * @returns A promise resolving to an object with a list of users.
      * @throws {ApiError} If the assignment with the given id is not found.
      */
-    async execute(input: GetAssignmentUsersInput): Promise<object> {
+    async execute(_userId: string, input: GetAssignmentUsersInput): Promise<object> {
         const students: Student[] = await tryRepoEntityOperation(
             this.userRepository.getByAssignmentId(input.idParent),
             "Assignment",

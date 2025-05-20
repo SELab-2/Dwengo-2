@@ -2,9 +2,11 @@ import { z } from "zod";
 import { JoinRequestService } from "./joinRequestService";
 import { acceptJoinRequestSchema } from "../../../application/schemas";
 import { JoinRequest } from "../../entities/joinRequest";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 import { IClassRepository } from "../../repositories/classRepositoryInterface";
 import { IJoinRequestRepository } from "../../repositories/joinRequestRepositoryInterface";
+import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 /**
  * Parameters required to accept a join request.
@@ -17,9 +19,10 @@ export type AcceptJoinRequestInput = z.infer<typeof acceptJoinRequestSchema>;
 export class AcceptJoinRequest extends JoinRequestService<AcceptJoinRequestInput> {
     constructor(
         _joinRequestRepository: IJoinRequestRepository,
+        _userRepository: IUserRepository,
         private _classRepository: IClassRepository,
     ) {
-        super(_joinRequestRepository);
+        super(_joinRequestRepository, _userRepository);
     }
 
     /**
@@ -28,7 +31,8 @@ export class AcceptJoinRequest extends JoinRequestService<AcceptJoinRequestInput
      * @returns A promise resolving to an empty object.
      * @throws {ApiError} If the join-request with the given id is not found.
      */
-    async execute(input: AcceptJoinRequestInput): Promise<object> {
+    async execute(userId: string, input: AcceptJoinRequestInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         // Get the info of the join request
         const joinRequest: JoinRequest = await tryRepoEntityOperation(
             this.joinRequestRepository.getById(input.id),

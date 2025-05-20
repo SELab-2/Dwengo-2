@@ -7,10 +7,10 @@ describe("GetClassUsers Service", () => {
     let getClassUsers: GetClassUsers;
 
     beforeEach(() => {
-        userRepository = { 
+        userRepository = {
             getStudentsByClassId: jest.fn(),
             getTeachersByClassId: jest.fn()
-         } as unknown as jest.Mocked<IUserRepository>;
+        } as unknown as jest.Mocked<IUserRepository>;
 
         getClassUsers = new GetClassUsers(userRepository);
     });
@@ -31,7 +31,7 @@ describe("GetClassUsers Service", () => {
         userRepository.getTeachersByClassId.mockResolvedValue([mockTeacher as unknown as User]);
 
         const idParent = "class-123";
-        const result = await getClassUsers.execute({ idParent });
+        const result = await getClassUsers.execute("", { idParent });
 
         expect(result).toEqual({
             teachers: ["t1"],
@@ -47,7 +47,7 @@ describe("GetClassUsers Service", () => {
         userRepository.getTeachersByClassId.mockResolvedValue([]);
 
         const idParent = "class-456";
-        const result = await getClassUsers.execute({ idParent });
+        const result = await getClassUsers.execute("", { idParent });
 
         expect(result).toEqual({ teachers: [], students: [] });
     });

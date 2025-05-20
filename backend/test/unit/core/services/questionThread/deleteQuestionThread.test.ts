@@ -24,7 +24,7 @@ describe("DeleteQuestionThread", () => {
     test("Should delete a question thread and return an empty object", async () => {
         mockQuestionThreadRepository.delete.mockResolvedValue(undefined);
 
-        const result = await deleteQuestionThread.execute(input);
+        const result = await deleteQuestionThread.execute("", input);
 
         expect(result).toEqual({});
         expect(mockQuestionThreadRepository.delete).toHaveBeenCalledWith("thread-123");
@@ -33,7 +33,7 @@ describe("DeleteQuestionThread", () => {
     test("Should throw a DatabaseError if deletion fails", async () => {
         mockQuestionThreadRepository.delete.mockRejectedValue(new DatabaseError("Deletion failed"));
 
-        await expect(deleteQuestionThread.execute(input)).rejects.toThrow(DatabaseError);
+        await expect(deleteQuestionThread.execute("", input)).rejects.toThrow(DatabaseError);
         expect(mockQuestionThreadRepository.delete).toHaveBeenCalledWith("thread-123");
     });
 });

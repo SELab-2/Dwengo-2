@@ -1,0 +1,37 @@
+<div class="sidebar">
+    <button mat-stroked-button
+            class="toggle-button"
+            (click)="toggleChatVisibility()">
+        {{ showOtherChats ? USER_CHATS : OTHER_CHATS }}
+    </button>
+
+    <mat-nav-list>
+        @for (thread of questionThreads; track thread.id) {
+            <a mat-list-item
+               (click)="handleChatItemClick(thread.id)"
+               [class.active]="thread.id === currentSelectedChatId"
+               [attr.aria-current]="thread.id === currentSelectedChatId ? 'page' : null"
+               role="link"
+               tabindex="0"
+               (keydown.enter)="handleChatItemClick(thread.id)"
+               (keydown.space)="handleChatItemClick(thread.id)">
+                <span class="visibility-badge"
+                      [class.private]="thread.visibility === VisibilityType.PRIVATE"
+                      [class.group]="thread.visibility === VisibilityType.GROUP">
+                    {{ thread.visibility === VisibilityType.PRIVATE ? '💬' : '👥' }}
+                </span>
+                {{ thread.name?.slice(0, 50) || UNNAMED_CHAT }}
+            </a>
+        }
+        </mat-nav-list>
+</div>
+
+<div class="chatbox">
+    @if (!validChatId) {
+        <mat-toolbar color="primary" class="toolbar">
+            <span>{{ INVALID_CHAT_ID }}</span>
+        </mat-toolbar>
+    } @else {
+        <app-chat [questionThreadId]="currentSelectedChatId"></app-chat>
+    }
+</div>

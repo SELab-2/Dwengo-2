@@ -4,8 +4,9 @@ import { LoadingComponent } from '../loading/loading.component';
 import { User, UserType } from '../../interfaces';
 import { ClassesService } from '../../services/classes.service';
 import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { AuthenticationService } from '../../services/authentication.service';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
@@ -15,7 +16,9 @@ import { AuthenticationService } from '../../services/authentication.service';
 
     // Angular material
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule,
+    MatIcon
   ],
   templateUrl: './class-members-list.component.html',
   styleUrl: './class-members-list.component.less'

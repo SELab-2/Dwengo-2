@@ -13,7 +13,7 @@ export class CreateMessage extends MessageService<CreateMessageInput> {
      * @returns A promise resolving to an object containing the ID of the created message.
      * @throws {ApiError} If the given user or thread is not found or if the creation fails.
      */
-    async execute(input: CreateMessageInput): Promise<object> {
+    async execute(_userId: string, input: CreateMessageInput): Promise<object> {
         const newMessage = new Message(input.senderId, input.createdAt, input.threadId, input.content);
 
         const createdMessage = await tryRepoEntityOperation(
