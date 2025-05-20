@@ -37,7 +37,7 @@ export class ProgressController extends deps.Controller {
         getAssignmentProgress: ProgressServices.GetAssignmentProgress,
         getGroupProgress: ProgressServices.GetGroupProgress,
         get: ProgressServices.GetUserAssignmentProgress,
-        getClassSCore: ProgressServices.GetClassScore,
+        getClassScore: ProgressServices.GetClassScore,
         getClassCompletion: ProgressServices.GetClassCompletion,
         getSubmissionActivity: ProgressServices.GetSubmissionActivity,
     ) {
@@ -46,7 +46,7 @@ export class ProgressController extends deps.Controller {
             getAssignmentProgress,
             getGroupProgress,
             get,
-            getClassSCore,
+            getClassScore,
             getClassCompletion,
             getSubmissionActivity,
         });
@@ -103,7 +103,7 @@ export function progressRoutes(
                 method: deps.HttpMethod.GET,
                 urlPattern: "/classes/:idParent/score",
                 controller,
-                extractor: extractors.getSubmissionActivity,
+                extractor: extractors.getClassScore,
                 handler: (req, data) => controller.getChildren(req, data, controller.services.getClassScore),
                 middleware,
             },
