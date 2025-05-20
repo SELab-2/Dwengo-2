@@ -69,6 +69,11 @@ export class AssignmentsPageComponent implements OnInit {
     return this._assignments.filter(this.filter);
   }
 
+  get assignmentsInOrder(): Assignment[] {
+    return this.assignments
+      .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
+  }
+
   set assignments(assignments: Assignment[]) {
     this._assignments = assignments;
   }
@@ -98,6 +103,14 @@ export class AssignmentsPageComponent implements OnInit {
   onAssignmentClick(id: string): void {
     const role = this.isTeacher ? "teacher" : "student";
     this.router.navigateByUrl(`${role}/assignments/${id}`);
+  }
+
+  /**
+   * Function to return if assignment is accessible
+   */
+  assignmentIsAccessible(assignment: Assignment) {
+    const now: number = new Date().getTime();
+    return now >= new Date(assignment.startDate).getTime() && new Date(assignment.deadline).getTime() >= now;
   }
 
 }

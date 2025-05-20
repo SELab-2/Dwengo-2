@@ -1,7 +1,14 @@
 <!-- Main -->
 <main class="main-container">
 
-    <h1 class="main-title" i18n="@@teacherDashboardTitle">Your Dashboard</h1>
+    <div class="title-div">
+        <h1 class="main-title" i18n="@@teacherDashboardTitle">Your Dashboard </h1>
+        <div class="button-widget">
+                <button mat-raised-button color="primary" [routerLink]="learningPathsLink" class="paths-link" i18n="@@teacherDashBoardExplorePaths">
+                    Explore Paths
+                </button>
+        </div>
+    </div>
 
     <div class="main-info">
 
@@ -29,15 +36,6 @@
             <app-menu-card [title]="questionsTitle" [count]="0" icon="contact_support"
                 [selected]="selectedView === 'questions'" color="yellow" (cardClick)="setView('questions')">
             </app-menu-card>
-
-            <div class="button-widget">
-                <button mat-raised-button color="primary" [routerLink]="learningPathsLink" class="paths-link" i18n="@@teacherDashBoardExplorePaths">
-                    Explore Paths
-                </button>
-                <button mat-raised-button color="primary" [routerLink]="createClassLink" class="paths-link" i18n="@@teacherDashBoardCreateClass">
-                    Create a class
-                </button>
-            </div>
         </div>
     </div>
 

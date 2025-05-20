@@ -40,6 +40,17 @@
     }
   </div>
 
+  <div class="arrows">
+    <button mat-icon-button color="warn" [disabled]="step === 0" (click)="navigateBack()" i18n-matTooltip
+      matTooltip="Go Back">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <button mat-icon-button color="warn" [disabled]="step + 1 >= maxStep || (isStudent && step >= furthestStep)"
+      (click)="navigateNext()" i18n-matTooltip matTooltip="Go Further">
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </div>
+
   <div class="progress-container">
     <mat-card class="progress-card">
       <mat-card-content>

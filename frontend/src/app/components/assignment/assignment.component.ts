@@ -29,12 +29,16 @@ import { UserService } from '../../services/user.service';
 import { forkJoin, of, switchMap } from 'rxjs';
 import { Submission } from '../../interfaces/submissions';
 import { ChatPopupComponent } from '../chat-popup/chat-popup.component';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-assignment',
   imports: [
     LearningPathComponent,
     MatSelectModule,
+    MatIcon, MatIconModule, MatTooltipModule, MatButtonModule,
     MatFormFieldModule,
     MatOptionModule,
     CreateSubmissionComponent,
@@ -110,10 +114,19 @@ export class AssignmentComponent implements OnInit {
     return ((this.step + 1) / this.maxStep) * 100;
   }
 
+  navigateBack() {
+    this.learningPathComponent.goToSpecificNode(this.step - 1);
+  }
+
+  navigateNext() {
+    this.learningPathComponent.goToSpecificNode(this.step + 1);
+  }
+
   onSelectedNodeChanged(node: Node<LearningObject>) {
     this.submissionStatsReady = false;
     this.currentLearningObjectId = node.value.metadata.hruid!;
     this.step = node.value.metadata.step!;
+    console.log(this.step, this.furthestStep);
     this.alreadySubmitted = this.step < this.furthestStep;
     this.fetchTaskAndSubmissions();
   }
@@ -179,7 +192,7 @@ export class AssignmentComponent implements OnInit {
     progressObservable.subscribe(
       (res) => {
         this.progress = res;
-        this.step = 0;
+        this.step = this.progress.step;
         this.furthestStep = this.progress.step; // furthest step is always returned by progress
         this.alreadySubmitted = this.step < this.furthestStep
         this.maxStep = this.progress.maxStep;

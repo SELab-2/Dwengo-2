@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { User } from '../../interfaces';
 import { MatCardTitle } from '@angular/material/card'
 import { MatIcon } from '@angular/material/icon';
@@ -19,8 +19,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
   templateUrl: './mini-user.component.html',
   styleUrl: './mini-user.component.less'
 })
-export class MiniUserComponent {
-
+export class MiniUserComponent implements OnInit {
   @Input() user!: User;
 
+
+  ngOnInit(): void {
+    this.user.firstName = this.user.firstName.length > 15 ? `${this.user.firstName.slice(0, 13)}...` : this.user.firstName;
+    this.user.familyName = this.user.familyName.length > 15 ? `${this.user.familyName.slice(0, 13)}...` : this.user.familyName;
+  }
 }
