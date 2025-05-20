@@ -88,7 +88,6 @@ describe("Test user API endpoints", () => {
                 .get("/groups/" + groupId + "/users")
                 .set("Accept", "application/json")
                 .set("Authorization", "Bearer " + teacherAuthDetails.token);
-            console.log(checkResponse.body)
             expect(checkResponse.status).toBe(200);
             expect(checkResponse.body.students.sort()).toEqual(
                 [studentAuthDetails.id, extraStudentAuthDetails.id].sort()
