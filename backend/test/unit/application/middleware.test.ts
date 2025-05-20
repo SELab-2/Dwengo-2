@@ -8,8 +8,9 @@ import { passwordMiddleware } from "../../../src/application/middleware/password
 import { ApiError, ErrorCode } from "../../../src/application/types";
 import { GetUser } from "../../../src/core/services/user";
 import { IUserRepository } from "../../../src/core/repositories/userRepositoryInterface";
+import { UserType } from "../../../src/core/entities/user";
 
-type mockUser = { id: string; email: string; passwordHash: string };
+type mockUser = { id: string; email: string; passwordHash: string, userType: UserType };
 
 async function generatePasswordHash(password: string, saltRounds: number = 10): Promise<string> {
     return await bcrypt.hash(password, saltRounds);
@@ -48,7 +49,7 @@ const { responseToExpress, defaultErrorHandler, defaultResponder } = jest.requir
 );
 
 const mockUsers: Record<string, mockUser> = {
-    user: { id: "s123", email: "s@example.com", passwordHash: "" },
+    user: { id: "s123", email: "s@example.com", passwordHash: "", userType: UserType.STUDENT },
 };
 let authManager: AuthenticationManager;
 let authMiddlewareFn: (
@@ -99,7 +100,7 @@ describe("authMiddleware", () => {
 
     it("should return 400 if authenticatedUserId is in req", async () => {
         // eslint-disable-next-line prettier/prettier
-        check(() => {(req as any).authenticatedUserId = "someId"}, false, { code: ErrorCode.BAD_REQUEST, message: "Request manipulation detected" });
+        check(() => { (req as any).authenticatedUserId = "someId" }, false, { code: ErrorCode.BAD_REQUEST, message: "Request manipulation detected" });
     });
     it("should return 400 if authenticatedUserId is in body", async () => {
         // eslint-disable-next-line prettier/prettier
@@ -115,7 +116,7 @@ describe("authMiddleware", () => {
     });
     it("should return 401 if no Authorization header is provided", async () => {
         // eslint-disable-next-line prettier/prettier
-        await check( () => {}, false, { code: ErrorCode.UNAUTHORIZED, message: "No authentication token provided" } );
+        await check(() => { }, false, { code: ErrorCode.UNAUTHORIZED, message: "No authentication token provided" });
     });
     it("should return 401 if Authorization header has wrong prefix", async () => {
         // eslint-disable-next-line prettier/prettier
@@ -126,7 +127,7 @@ describe("authMiddleware", () => {
         await check(() => { req.headers.authorization = "Bearer invalidToken"; }, false, { code: ErrorCode.UNAUTHORIZED, message: "Invalid or expired token" });
     });
     it("should set authenticatedUserId and call next for a valid token", async () => {
-        const tokens = await authManager.authenticate(mockUsers.user.email, "pass");
+        const tokens = await authManager.authenticate(mockUsers.user.email, "pass", UserType.STUDENT);
         // eslint-disable-next-line prettier/prettier
         await check(() => { req.headers.authorization = `Bearer ${tokens!.accessToken}`; }, true, undefined);
         expect(req.body.authenticatedUserId).toBe(mockUsers.user.id);
@@ -163,43 +164,43 @@ describe("loginMiddleware", () => {
 
     it("rejects if authenticatedUserId is in req", async () => {
         // eslint-disable-next-line prettier/prettier
-        await check(() => {(req as any).authenticatedUserId = "someId";}, true, { code: ErrorCode.BAD_REQUEST, message: "Request manipulation detected" });
+        await check(() => { (req as any).authenticatedUserId = "someId"; }, true, { code: ErrorCode.BAD_REQUEST, message: "Request manipulation detected" });
     });
     it("rejects if authenticatedUserId is in body", async () => {
         // eslint-disable-next-line prettier/prettier
-        await check(() => {req.body.authenticatedUserId = "someId";}, true, { code: ErrorCode.BAD_REQUEST, message: "Request manipulation detected" });
+        await check(() => { req.body.authenticatedUserId = "someId"; }, true, { code: ErrorCode.BAD_REQUEST, message: "Request manipulation detected" });
     });
     it("rejects if authenticatedUserId is in params", async () => {
         // eslint-disable-next-line prettier/prettier
-        await check(() => {req.params.authenticatedUserId = "someId";}, true, { code: ErrorCode.BAD_REQUEST, message: "Request manipulation detected" });
+        await check(() => { req.params.authenticatedUserId = "someId"; }, true, { code: ErrorCode.BAD_REQUEST, message: "Request manipulation detected" });
     });
     it("rejects if authenticatedUserId is in query", async () => {
         // eslint-disable-next-line prettier/prettier
-        await check(() => {req.query.authenticatedUserId = "someId";}, true, { code: ErrorCode.BAD_REQUEST, message: "Request manipulation detected" });
+        await check(() => { req.query.authenticatedUserId = "someId"; }, true, { code: ErrorCode.BAD_REQUEST, message: "Request manipulation detected" });
     });
     it("rejects if neither email/password nor refreshToken is provided", async () => {
         // eslint-disable-next-line prettier/prettier
-        await check(() => {req.body = {};}, true, { code: ErrorCode.BAD_REQUEST, message: "Email and password or refresh token are required" });
+        await check(() => { req.body = {}; }, true, { code: ErrorCode.BAD_REQUEST, message: "Email, password and userType or refresh token are required" });
     });
     it("rejects if only email is provided", async () => {
         // eslint-disable-next-line prettier/prettier
-        await check(() => {req.body = { email: "s@example.com" };}, true, { code: ErrorCode.BAD_REQUEST, message: "Email and password or refresh token are required" });
+        await check(() => { req.body = { email: "s@example.com" }; }, true, { code: ErrorCode.BAD_REQUEST, message: "Email, password and userType or refresh token are required" });
     });
     it("rejects invalid credentials", async () => {
         // eslint-disable-next-line prettier/prettier
-        await check(() => {req.body = { email: "wrong@example.com", password: "wrong" };}, true, { code: ErrorCode.UNAUTHORIZED, message: "Invalid credentials" });
+        await check(() => { req.body = { email: "wrong@example.com", password: "wrong", userType: UserType.STUDENT }; }, true, { code: ErrorCode.UNAUTHORIZED, message: "Invalid credentials" });
     });
     it("accepts valid email/password and returns tokens", async () => {
         // eslint-disable-next-line prettier/prettier
-        await check(() => {req.body = { email: mockUsers.user.email, password: "pass" };}, true, undefined,
+        await check(() => { req.body = { email: mockUsers.user.email, password: "pass", userType: UserType.STUDENT }; }, true, undefined,
             { id: mockUsers.user.id, message: "Authentication successful" },
         );
         expect(req.body.authenticatedUserId).toBe(mockUsers.user.id);
     });
     it("accepts valid refreshToken and returns new tokens", async () => {
-        const tokens = await authManager.authenticate(mockUsers.user.email, "pass");
+        const tokens = await authManager.authenticate(mockUsers.user.email, "pass", UserType.STUDENT);
         // eslint-disable-next-line prettier/prettier
-        await check(() => {req.body = { refreshToken: tokens!.refreshToken };}, true, undefined,
+        await check(() => { req.body = { refreshToken: tokens!.refreshToken }; }, true, undefined,
             { id: mockUsers.user.id, message: "Authentication successful" },
         );
         expect(req.body.authenticatedUserId).toBe(mockUsers.user.id);

@@ -21,7 +21,7 @@ describe("GetGroupUsers Service", () => {
         userRepository.getByGroupId.mockResolvedValue([mockStudent as unknown as User]);
 
         const idParent = "group-123";
-        const result = await getGroupUsers.execute({ idParent });
+        const result = await getGroupUsers.execute("", { idParent });
 
         expect(result).toEqual({
             students: ["s2"],
@@ -34,7 +34,7 @@ describe("GetGroupUsers Service", () => {
         userRepository.getByGroupId.mockResolvedValue([]);
 
         const idParent = "group-456";
-        const result = await getGroupUsers.execute({ idParent });
+        const result = await getGroupUsers.execute("", { idParent });
 
         expect(result).toEqual({ students: [] });
     });

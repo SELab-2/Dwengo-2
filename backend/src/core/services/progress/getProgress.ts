@@ -5,30 +5,17 @@ import { Assignment } from "../../entities/assignment";
 import { Submission } from "../../entities/submission";
 import { User } from "../../entities/user";
 import { tryRepoEntityOperation } from "../../helpers";
-import { IAssignmentRepository } from "../../repositories/assignmentRepositoryInterface";
-import { ILearningPathRepository } from "../../repositories/learningPathRepositoryInterface";
-import { ISubmissionRepository } from "../../repositories/submissionRepositoryInterface";
-import { IUserRepository } from "../../repositories/userRepositoryInterface";
 
 export type GetProgressInput = z.infer<typeof getProgressSchema>;
 
 export abstract class GetProgress extends ProgressBaseService<GetProgressInput> {
-    constructor(
-        protected userRepository: IUserRepository,
-        submissionRepository: ISubmissionRepository,
-        assignmentRepository: IAssignmentRepository,
-        learningPathRepository: ILearningPathRepository,
-    ) {
-        super(submissionRepository, assignmentRepository, learningPathRepository);
-    }
-
     public abstract getUsers(id: string): Promise<User[]>;
 
     public async getAssignment(id: string): Promise<Assignment> {
         return await tryRepoEntityOperation(this.assignmentRepository.getById(id), "Assignment", id, true);
     }
 
-    public async execute(input: GetProgressInput): Promise<object> {
+    public async execute(_userId: string, input: GetProgressInput): Promise<object> {
         // Get all users for the assignment
         const students: User[] = await this.getUsers(input.idParent);
         // Get the corresponding learningPath

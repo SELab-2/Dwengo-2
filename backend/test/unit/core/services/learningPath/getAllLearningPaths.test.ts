@@ -38,7 +38,7 @@ describe("GetAllLearningPaths", () => {
 
         mockRepo.getLearningPaths.mockResolvedValue([fakePath]);
 
-        const result = await service.execute(input);
+        const result = await service.execute("", input);
 
         expect(mockRepo.getLearningPaths).toHaveBeenCalledWith("?language=nl&title=robotica", false);
         expect(result).toEqual({
@@ -50,7 +50,7 @@ describe("GetAllLearningPaths", () => {
         const input = {};
         mockRepo.getLearningPaths.mockResolvedValue([]);
 
-        const result = await service.execute(input);
+        const result = await service.execute("", input);
 
         expect(mockRepo.getLearningPaths).toHaveBeenCalledWith("", false);
         expect(result).toEqual({ learningPaths: [] });
@@ -65,7 +65,7 @@ describe("GetAllLearningPaths", () => {
 
         mockRepo.getLearningPaths.mockResolvedValue([]);
 
-        await service.execute(input);
+        await service.execute("", input);
 
         expect(mockRepo.getLearningPaths).toHaveBeenCalledWith("?language=en", false);
     });

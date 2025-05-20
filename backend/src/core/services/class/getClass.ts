@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ClassBaseService } from "./baseClassService";
 import { getAllClassesSchema, getClassSchema, getUserClassesSchema } from "../../../application/schemas/classSchemas";
 import { Class } from "../../entities/class";
-import { tryRepoEntityOperation } from "../../helpers";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type GetClassInput = z.infer<typeof getClassSchema>;
 
@@ -13,7 +13,7 @@ export class GetClass extends ClassBaseService<GetClassInput> {
      * @returns A promise resolving to a class transformed into an object.
      * @throws {ApiError} If the class with the given identifier was not found.
      */
-    async execute(input: GetClassInput): Promise<object> {
+    async execute(_userId: string, input: GetClassInput): Promise<object> {
         const { id, name } = input;
         if (id) {
             return (await tryRepoEntityOperation(this.classRepository.getById(id), "Class", id, true)).toObject();
@@ -31,7 +31,8 @@ export class GetUserClasses extends ClassBaseService<GetUserClassInput> {
      * @returns A promise resolving to an object with a list of classes.
      * @throws {ApiError} If the user with the given id is not found.
      */
-    async execute(input: GetUserClassInput): Promise<object> {
+    async execute(userId: string, input: GetUserClassInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, undefined, input.idParent);
         const classes: Class[] = await tryRepoEntityOperation(
             this.classRepository.getByUserId(input.idParent),
             "User",

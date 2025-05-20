@@ -6,7 +6,8 @@ import {
     getClassJoinRequestsSchema,
 } from "../../../application/schemas";
 import { JoinRequest } from "../../entities/joinRequest";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 /**
  * @description paramaters to get all joinRequests of a class
@@ -39,7 +40,8 @@ export class GetClassJoinRequests extends JoinRequestService<GetClassJoinRequest
      * @returns A promise resolving to an object with a list of join-request.
      * @throws {ApiError} If the class with the given id is not found.
      */
-    async execute(input: GetClassJoinRequestsInput): Promise<object> {
+    async execute(userId: string, input: GetClassJoinRequestsInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         // Get all requests for user
         const requests: JoinRequest[] = await tryRepoEntityOperation(
             this.joinRequestRepository.getByClassId(input.idParent),
@@ -62,7 +64,8 @@ export class GetUserJoinRequests extends JoinRequestService<GetUserJoinRequestsI
      * @returns A promise resolving to an object with a list of join-request.
      * @throws {ApiError} If the user with the given id is not found.
      */
-    async execute(input: GetUserJoinRequestsInput): Promise<object> {
+    async execute(userId: string, input: GetUserJoinRequestsInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, undefined, input.idParent);
         // Get all requests for user
         const requests: JoinRequest[] = await tryRepoEntityOperation(
             this.joinRequestRepository.getByRequesterId(input.idParent),
@@ -84,7 +87,7 @@ export class GetJoinRequest extends JoinRequestService<GetJoinRequestInput> {
      * @returns A promise resolving to a join-request transformed into an object.
      * @throws {ApiError} If the join-request with the given id was not found.
      */
-    async execute(input: GetJoinRequestInput): Promise<object> {
+    async execute(_userId: string, input: GetJoinRequestInput): Promise<object> {
         return (
             await tryRepoEntityOperation(this.joinRequestRepository.getById(input.id), "JoinRequest", input.id, true)
         ).toObject();

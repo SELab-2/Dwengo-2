@@ -28,7 +28,7 @@ export class GetClassJoinCodes extends JoinCodeService<GetClassJoinCodesInput> {
      * @returns A promise resolving to an object with a list of join-code.
      * @throws {ApiError} If the class with the given id is not found.
      */
-    async execute(input: GetClassJoinCodesInput): Promise<object> {
+    async execute(_userId: string, input: GetClassJoinCodesInput): Promise<object> {
         // Get all requests for user
         const requests: JoinCode[] = await tryRepoEntityOperation(
             this.JoinCodeRepository.getByClassId(input.idParent),
@@ -50,7 +50,7 @@ export class GetJoinCode extends JoinCodeService<GetJoinCodeInput> {
      * @returns A promise resolving to a join-request transformed into an object.
      * @throws {ApiError} If the join-code with the given id was not found.
      */
-    async execute(input: GetJoinCodeInput): Promise<object> {
+    async execute(_userId: string, input: GetJoinCodeInput): Promise<object> {
         return (
             await tryRepoEntityOperation(this.JoinCodeRepository.getById(input.id), "JoinCode", input.id, true)
         ).toObject();

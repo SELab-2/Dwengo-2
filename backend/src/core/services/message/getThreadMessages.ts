@@ -17,7 +17,7 @@ export class GetThreadMessages implements Service<GetThreadMessagesInput> {
      * @throws {ApiError} If the thread with the given id is not found.
      */
     constructor(private questionThreadRepository: IQuestionThreadRepository) {}
-    async execute(input: GetThreadMessagesInput): Promise<object> {
+    async execute(_userId: string, input: GetThreadMessagesInput): Promise<object> {
         const thread = await tryRepoEntityOperation(
             this.questionThreadRepository.getById(input.idParent),
             "Thread",

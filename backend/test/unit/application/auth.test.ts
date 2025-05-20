@@ -33,7 +33,7 @@ jest.mock("../../../src/infrastructure/repositories/userRepositoryTypeORM", () =
 const { UserRepositoryTypeORM } = jest.requireMock("../../../src/infrastructure/repositories/userRepositoryTypeORM");
 
 const mockUsers = {
-    user: { id: "u123", email: "u@example.com", passwordHash: "" },
+    user: { id: "u123", email: "u@example.com", passwordHash: "", userType: UserType.STUDENT },
 };
 
 let authManager: AuthenticationManager;
@@ -57,7 +57,7 @@ describe("AuthenticationManager", () => {
     });
 
     it("authenticates with email/pass", async () => {
-        const tokens = await authManager.authenticate("u@example.com", "pass");
+        const tokens = await authManager.authenticate("u@example.com", "pass", UserType.STUDENT);
         expect(tokens).not.toBeNull();
         expect(tokens!.accessToken).toBeDefined();
         expect(tokens!.refreshToken).toBeDefined();
@@ -65,7 +65,7 @@ describe("AuthenticationManager", () => {
         expect(payload!.id).toBe("u123");
     });
     it("fails bad creds", async () => {
-        const tokens = await authManager.authenticate("u@example.com", "wrong");
+        const tokens = await authManager.authenticate("u@example.com", "wrong", UserType.STUDENT);
         expect(tokens).toBeNull();
     });
     it("verifies good token", async () => {
@@ -79,7 +79,7 @@ describe("AuthenticationManager", () => {
         expect(payload).toBeNull();
     });
     it("refreshes token", async () => {
-        const oldTokens = await authManager.authenticate("u@example.com", "pass");
+        const oldTokens = await authManager.authenticate("u@example.com", "pass", UserType.STUDENT);
         await new Promise(resolve => setTimeout(resolve, 1100));
         const newTokens = authManager.refreshAccessToken(oldTokens!.refreshToken);
         expect(newTokens).not.toBeNull();
@@ -88,7 +88,7 @@ describe("AuthenticationManager", () => {
         expect(payload!.id).toBe("u123");
     });
     it("blocks used refresh token", async () => {
-        const tokens = await authManager.authenticate("u@example.com", "pass");
+        const tokens = await authManager.authenticate("u@example.com", "pass", UserType.STUDENT);
         authManager.refreshAccessToken(tokens!.refreshToken);
         const retry = authManager.refreshAccessToken(tokens!.refreshToken);
         expect(retry).toBeNull();
@@ -101,7 +101,7 @@ describe("AuthenticationManager", () => {
             "refresh",
             "1s",
         );
-        const tokens = await authShort.authenticate("u@example.com", "pass");
+        const tokens = await authShort.authenticate("u@example.com", "pass", UserType.STUDENT);
         authShort.refreshAccessToken(tokens!.refreshToken);
         await new Promise(resolve => setTimeout(resolve, 1100));
         expect((authShort as any).usedRefreshTokens.size).toBe(0);

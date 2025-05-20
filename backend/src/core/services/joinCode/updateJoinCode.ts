@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { JoinCodeService } from "./joinCodeService";
 import { updateJoinCodeSchema } from "../../../application/schemas";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type UpdateJoinCodeInput = z.infer<typeof updateJoinCodeSchema>;
 
@@ -15,7 +16,8 @@ export class UpdateJoinCode extends JoinCodeService<UpdateJoinCodeInput> {
      * @returns A promise resolving to an empty object.
      * @throws {ApiError} If the JoinCode with the given id is not found.
      */
-    async execute(input: UpdateJoinCodeInput): Promise<object> {
+    async execute(userId: string, input: UpdateJoinCodeInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
         const joinCode = await tryRepoEntityOperation(
             this.JoinCodeRepository.getById(input.id),
             "JoinCode",

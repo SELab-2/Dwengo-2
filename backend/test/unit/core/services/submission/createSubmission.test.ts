@@ -40,7 +40,7 @@ describe("CreateSubmission", () => {
 
         mockSubmissionRepository.create.mockResolvedValue("submission-999");
 
-        const result = await createSubmission.execute(input);
+        const result = await createSubmission.execute("", input);
 
         expect(result).toEqual({ id: "submission-999" });
         expect(mockSubmissionRepository.create).toHaveBeenCalledWith(expect.any(Submission));
@@ -49,7 +49,7 @@ describe("CreateSubmission", () => {
     test("Should throw a DatabaseError if creation fails", async () => {
         mockSubmissionRepository.create.mockRejectedValue(new DatabaseError("Creation failed"));
 
-        await expect(createSubmission.execute(input)).rejects.toThrow(DatabaseError);
+        await expect(createSubmission.execute("", input)).rejects.toThrow(DatabaseError);
         expect(mockSubmissionRepository.create).toHaveBeenCalledWith(expect.any(Submission));
     });
 });

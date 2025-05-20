@@ -8,8 +8,8 @@ import { IUserRepository } from "../../repositories/userRepositoryInterface";
  * @param userRepository - Repository for student data.
  */
 export class RemoveUserFromGroup extends RemoveUserFrom {
-    constructor(private userRepository: IUserRepository) {
-        super();
+    constructor(userRepository: IUserRepository) {
+        super(userRepository);
     }
 
     /**

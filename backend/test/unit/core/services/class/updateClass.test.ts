@@ -1,16 +1,25 @@
 import { Class } from "../../../../../src/core/entities/class";
 import { UpdateClass } from "../../../../../src/core/services/class";
+import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 // Mock repository
 const mockClassRepository = {
     update: jest.fn(),
 };
 
+const mockUserRepository = {
+    getById: jest.fn(),
+} as unknown as jest.Mocked<IUserRepository>;
+
 describe("UpdateClass Service", () => {
     let updateClassService: UpdateClass;
 
     beforeEach(() => {
-        updateClassService = new UpdateClass(mockClassRepository as any);
+        updateClassService = new UpdateClass(mockClassRepository as any, mockUserRepository);
+        mockValidateUserRights.mockResolvedValue();
     });
 
     it("should update a class and return the updated object", async () => {
@@ -34,7 +43,7 @@ describe("UpdateClass Service", () => {
             targetAudience: "Target Audience",
         };
 
-        const result = await updateClassService.execute(params);
+        const result = await updateClassService.execute("", params);
 
         expect(mockClassRepository.update).toHaveBeenCalledWith(id, {
             name: updatedName,
@@ -62,7 +71,7 @@ describe("UpdateClass Service", () => {
             targetAudience: updatedTargetAudience,
         };
 
-        const result = await updateClassService.execute(params);
+        const result = await updateClassService.execute("", params);
 
         expect(mockClassRepository.update).toHaveBeenCalledWith(id, {
             targetAudience: updatedTargetAudience,

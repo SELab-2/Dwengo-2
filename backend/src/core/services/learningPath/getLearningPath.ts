@@ -18,7 +18,7 @@ export class GetLearningPath implements Service<GetLearningPathInput> {
      * @param input containing the input following the defined zod schema.
      * @returns an object containing the path.
      */
-    async execute(input: GetLearningPathInput): Promise<object> {
+    async execute(_userId: string, input: GetLearningPathInput): Promise<object> {
         // When inclusion of nodes is not specified, default to false
         const includeNodes = input.includeNodes ?? false;
         // Get the available languages of this path

@@ -23,7 +23,7 @@ describe("getStudent Service", () => {
         const params = { id: "1", userType: UserType.STUDENT };
 
         userRepository.getById.mockResolvedValue(student);
-        const result = await getStudentService.execute(params);
+        const result = await getStudentService.execute("", params);
 
         expect(result).toEqual(student.toObject());
         expect(userRepository.getById).toHaveBeenCalledWith("1");
@@ -34,7 +34,7 @@ describe("getStudent Service", () => {
 
         const params = { id: "999", userType: UserType.STUDENT };
 
-        await expect(getStudentService.execute(params)).rejects.toMatchObject({
+        await expect(getStudentService.execute("", params)).rejects.toMatchObject({
             code: ErrorCode.NOT_FOUND,
         });
         expect(userRepository.getById).toHaveBeenCalledWith("999");

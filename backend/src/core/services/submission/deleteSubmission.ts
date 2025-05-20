@@ -12,7 +12,7 @@ export class DeleteSubmission extends SubmissionBaseService<DeleteSubmissionInpu
      * @returns An empty object.
      * @throws {ApiError} If the submission with the given id is not found.
      */
-    async execute(input: DeleteSubmissionInput): Promise<object> {
+    async execute(_userId: string, input: DeleteSubmissionInput): Promise<object> {
         await tryRepoEntityOperation(this.submissionRepository.delete(input.id), "Submission", input.id, true);
         return {};
     }

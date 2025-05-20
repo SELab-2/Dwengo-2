@@ -84,6 +84,11 @@ export interface TokenResponse {
     refreshToken: string;
 }
 
+export interface AuthenticatedRequestBody {
+    authenticatedUserId: string;
+    [key: string]: string;
+}
+
 /* ************* Path/Routing Types ************* */
 
 /**

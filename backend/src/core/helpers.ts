@@ -1,5 +1,7 @@
 import { ApiError, ErrorCode } from "../application/types";
 import { EntityNotFoundError, ExpiredError } from "../config/error";
+import { UserType } from "./entities/user";
+import { IUserRepository } from "./repositories/userRepositoryInterface";
 
 /**
  * @description Tiny helper to wrap repo calls and handle errors.
@@ -32,5 +34,26 @@ export async function tryRepoEntityOperation<T>(
             } as ApiError;
         }
         throw e;
+    }
+}
+
+export async function validateUserRights(
+    userId: string,
+    userRepository: IUserRepository,
+    supposedUserType?: UserType,
+    supposedUserId?: string,
+): Promise<void> {
+    if (supposedUserId && userId !== supposedUserId) {
+        throw {
+            code: ErrorCode.FORBIDDEN,
+            message: `User with id ${userId} can not access this information`,
+        };
+    }
+    const user = await userRepository.getById(userId);
+    if (supposedUserType && user.userType !== supposedUserType) {
+        throw {
+            code: ErrorCode.FORBIDDEN,
+            message: `User with id ${userId} can not access this information`,
+        };
     }
 }

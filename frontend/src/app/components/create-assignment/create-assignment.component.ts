@@ -86,7 +86,6 @@ export class CreateAssignmentComponent implements OnInit {
 
   create(): void {
     const newAssignment: NewAssignment | null = this.extractFormValues();
-
     if (newAssignment) {
       this.assignmentService.createAssignment(newAssignment).subscribe((response) => {
 
@@ -131,11 +130,26 @@ export class CreateAssignmentComponent implements OnInit {
     const extraInstructions = this.createForm.get('extraInstructions')?.value;
 
     if (classId && startDate && deadline) {
+      // Make this safe date so converting to UTC doesn't change the day
+      // This can be done in a beter way and should be done in the future, but for now this fix works
+      const safeStart = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      startDate.getDate(),
+      12, 0, 0
+    );
+
+    const safeDeadline = new Date(
+      deadline.getFullYear(),
+      deadline.getMonth(),
+      deadline.getDate(),
+      12, 0, 0
+    );
       return {
         classId,
         learningPathId: this.learningPathId,
-        startDate,
-        deadline,
+        startDate: safeStart,
+        deadline: safeDeadline,
         extraInstructions,
         name
       };

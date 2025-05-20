@@ -18,7 +18,7 @@ export class GetAssignment implements Service<GetAssignmentInput> {
      * @returns A promise resolving to an assignment transformed into an object.
      * @throws {ApiError} If the assignment with the given id is not found.
      */
-    async execute(input: GetAssignmentInput): Promise<object> {
+    async execute(_userId: string, input: GetAssignmentInput): Promise<object> {
         const queriedAssignment = await tryRepoEntityOperation(
             this.assignmentRepository.getById(input.id),
             "Assignment",

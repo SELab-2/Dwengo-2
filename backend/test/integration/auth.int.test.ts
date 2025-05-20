@@ -42,7 +42,8 @@ describe("Test authentication API endpoints", () => {
                 .post('/login')
                 .send({
                     "email": "jan12@gmail.com",
-                    "password": "12345678"
+                    "password": "12345678",
+                    "userType": "student"
                 })
                 .set("Content-Type", "application/json");
 

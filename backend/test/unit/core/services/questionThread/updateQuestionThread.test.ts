@@ -37,7 +37,7 @@ describe("UpdateQuestionThread", () => {
 
         mockQuestionThreadRepository.update.mockResolvedValue(updatedThread);
 
-        const result = await updateQuestionThread.execute(input);
+        const result = await updateQuestionThread.execute("", input);
 
         expect(result).toEqual({});
         expect(mockQuestionThreadRepository.update).toHaveBeenCalledWith("thread-123", {
@@ -49,7 +49,7 @@ describe("UpdateQuestionThread", () => {
     test("Should throw a DatabaseError if update fails", async () => {
         mockQuestionThreadRepository.update.mockRejectedValue(new DatabaseError("Update failed"));
 
-        await expect(updateQuestionThread.execute(input)).rejects.toThrow(DatabaseError);
+        await expect(updateQuestionThread.execute("", input)).rejects.toThrow(DatabaseError);
         expect(mockQuestionThreadRepository.update).toHaveBeenCalledWith("thread-123", {
             isClosed: true,
             visibility: VisibilityType.PRIVATE,

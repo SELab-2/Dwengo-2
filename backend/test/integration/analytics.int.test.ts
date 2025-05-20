@@ -41,7 +41,7 @@ describe("Test analytics endpoints", () => {
             .post('/assignments')
             .send(assignment)
             .set('Content-Type', 'application/json')
-            .set("Authorization", "Bearer " + studentDetails.token);
+            .set("Authorization", "Bearer " + teacherDetails.token);
         assignmentId = assignmentRes.body.id; // save for later tests
 
         const task = {
