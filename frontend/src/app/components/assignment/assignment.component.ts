@@ -192,11 +192,12 @@ export class AssignmentComponent implements OnInit {
     progressObservable.subscribe(
       (res) => {
         this.progress = res;
-        this.step = this.progress.step;
+        this.step = this.progress.step - 1;
         this.furthestStep = this.progress.step; // furthest step is always returned by progress
         this.alreadySubmitted = this.step < this.furthestStep
         this.maxStep = this.progress.maxStep;
         this.loading = false;
+        console.log(this.step, this.furthestStep, this.maxStep)
       }
     )
   }
