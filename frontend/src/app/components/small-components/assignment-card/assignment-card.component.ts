@@ -20,6 +20,8 @@ import { UserType } from "../../../interfaces";
 })
 export class AssignmentCardComponent implements OnInit {
     @Input() assignment!: Assignment;
+
+    // We mock the disabled property
     @Input() disabled: boolean = false;
 
     @Output() clicked = new EventEmitter<string>()
