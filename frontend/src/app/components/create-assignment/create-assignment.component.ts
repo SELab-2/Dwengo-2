@@ -19,6 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AssignmentComponent } from '../assignment/assignment.component';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskService } from '../../services/task.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-create-assignment',
@@ -48,6 +49,7 @@ export class CreateAssignmentComponent implements OnInit {
   @Output() showGroups: EventEmitter<void> = new EventEmitter<void>
 
   private readonly route = inject(ActivatedRoute);
+  private readonly snackBar = inject(MatSnackBar);
 
   public learningPathId: string = "";
   public language: string = "nl";
@@ -161,10 +163,10 @@ export class CreateAssignmentComponent implements OnInit {
     // Initialize all empty tasks with an 'other'-type task without details
     this.taskService.fillRestWithEmptyTasks(this.assignmentId).subscribe({
       next: () => {
-        console.log($localize`Assignment Created!`);
+        this.snackBar.open($localize`Assignment Created!`);
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
+        this.snackBar.open($localize`Something went wrong!`);
       }
     });
 
