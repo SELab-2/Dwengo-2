@@ -8,6 +8,7 @@ import { QuestionThreadService } from '../../services/questionThread.service';
 import { ChatComponent } from '../../components/chat/chat.component';
 import { TemplateRef } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-chat-popup',
@@ -16,7 +17,8 @@ import { Subscription } from 'rxjs';
     MatDialogModule,
     MatIconModule,
     MatToolbarModule,
-    ChatComponent
+    MatButtonModule,
+    ChatComponent,
   ],
   templateUrl: './chat-popup.component.html',
   styleUrls: ['./chat-popup.component.less']

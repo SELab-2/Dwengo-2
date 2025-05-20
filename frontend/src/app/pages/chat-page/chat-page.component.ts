@@ -42,6 +42,7 @@ export class ChatPageComponent implements OnInit {
     readonly ASSIGNMENT_CHATS = $localize`:@@otherChats:Show chats for current assignment`;
     readonly GROUP_CHATS = $localize`:@@otherChats:Show group chats`;
     readonly OTHER_CHATS: string = this.userType === 'teacher' ? this.ASSIGNMENT_CHATS : this.GROUP_CHATS;
+    readonly UNNAMED_CHAT = $localize`:@@unnamedChatFallback:Unnamed Chat`;
     readonly INVALID_CHAT_ID = $localize`:@@invalidChatId:Select a chat`;
 
     constructor(

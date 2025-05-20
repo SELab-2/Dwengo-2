@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { environment } from '../../environments/environment';
-import { forkJoin, Observable, switchMap } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { SpecificLearningPathRequest } from '../interfaces/learning-path';
 import { HtmlType, LearningObject, LearningObjectRequest } from '../interfaces/learning-object';
 import { LearningPathService } from './learningPath.service';
@@ -51,6 +51,35 @@ export class LearningObjectService {
         return forkJoin(nodes.map(node => this.retrieveOneLearningObject(node)));
     }
 
+    /**
+     * Fetches the LO and emits its title, or falls back to the provided default.
+     */
+    getTitleOrFallback(
+        hruid: string,
+        // htmlType: HtmlType,
+        fallback: string
+    ): Observable<string> {
+        const headers = this.authenticationService.retrieveAuthenticationHeaders();
+
+        let params = new HttpParams();
+        params = params.set('type', HtmlType.WRAPPED);
+
+        return this.http.get<LearningObject>(
+            `${this.API_URL}/learningObject/${hruid}`,
+            { ...headers, params }
+        ).pipe(
+            map((response: LearningObject) => {
+                if (response && response.metadata.title) {
+                    return response.metadata.title;
+                } else {
+                    return fallback;
+                }
+            }),
+            catchError(() => {
+                return of(fallback);
+            })
+        );
+    }
 
     /**
      * Give the basic information for a learning path (hruid, language) and receive the full learning objects

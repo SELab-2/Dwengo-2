@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { ErrorService } from './error.service';
 import { AssignmentService } from './assignment.service';
 import { MessageService } from './message.service';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, defer, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 import { QuestionThread, NewQuestionThread, QuestionThreadUpdate, VisibilityType } from '../interfaces/questionThread';
 import { QuestionThreadResponse, QuestionThreadResponseSingle } from '../interfaces/questionThread/questionThreadResponse';
 import { ClassesService } from './classes.service';
+import { LearningObjectService } from './learningObject.service';
+import { HtmlType, LearningObjectRequest } from '../interfaces/learning-object';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +35,8 @@ export class QuestionThreadService {
     private errorService: ErrorService,
     private assignmentService: AssignmentService,
     private messageService: MessageService,
-    private classService: ClassesService
+    private classesService: ClassesService,
+    private learningObjectService: LearningObjectService
   ) {}
 
   private questionThreadMessage = $localize `:@@questionThread:question thread`;
@@ -193,22 +196,17 @@ export class QuestionThreadService {
   getThreadTitle(thread: QuestionThread): Observable<string> {
     return this.assignmentService.retrieveAssignmentById(thread.assignmentId).pipe(
       switchMap(assignment => {
-        if (!assignment) {
-          return of('The spiders are back.'); // this should never happen
-        }
-        
-        // If assignment has className, use it directly
-        if (assignment.className) {
-          return of(`${assignment.className} : ${assignment.name}`);
-        }
-        
-        // Otherwise fetch class name from classesService
-        return this.classService.classWithId(assignment.classId).pipe(
-          map(classInfo => {
-            return `${classInfo?.name + ' - ' || ""} ${assignment.name}`; //prepends class name if possible
-          }),
-          this.errorService.pipeHandler(
-            this.errorService.retrieveError(this.questionMessage)
+        if (!assignment) return of('The spiders are back.'); // this should never happen
+
+        return this.classesService.classWithId(assignment.classId).pipe(
+          map(ci => ci?.name ?? assignment.className ?? '???'),
+          catchError(() => of(assignment.className ?? '???')),
+          switchMap(className =>
+            this.learningObjectService
+              .getTitleOrFallback(thread.learningObjectId, thread.learningObjectId)
+              .pipe(
+                map(lot => `${className} > ${assignment.name} > ${lot}`),
+              )
           )
         );
       })

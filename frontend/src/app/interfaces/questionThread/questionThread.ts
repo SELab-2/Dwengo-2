@@ -12,7 +12,7 @@ export interface QuestionThread {
     id: string,
     creatorId: string,
     assignmentId: string,
-    learningObjectId?: string,
+    learningObjectId: string,
     isClosed: boolean,
     visibility: VisibilityType,
     messageIds?: string[],
