@@ -137,6 +137,10 @@ export class LearningPathComponent implements OnInit {
         }
     }
 
+    navigateBack(): void {
+
+    }
+
     onNodeSelected(): void {
         this.selectedNodeChanged.emit(this.selectedNode!);
     }

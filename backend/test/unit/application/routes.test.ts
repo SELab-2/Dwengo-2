@@ -573,6 +573,14 @@ const routeConfigs: Record<
         },
         {
             method: HttpMethod.GET,
+            path: "/classes/:idParent/score",
+            hasController: true,
+            request: {
+                pathParams: { idParent: "class-1" },
+            },
+        },
+        {
+            method: HttpMethod.GET,
             path: "/classes/:idParent/completion",
             hasController: true,
             request: {

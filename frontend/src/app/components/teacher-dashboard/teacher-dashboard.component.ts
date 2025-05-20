@@ -21,9 +21,8 @@ import { catchError, defaultIfEmpty, forkJoin, map, of, switchMap } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { ProgressService } from '../../services/progress.service';
 import { UsersOfClass } from '../../interfaces/user/usersOfClass';
-import { ClassActivity } from '../../interfaces/progress/activity';
-import { ClassCompletion } from '../../interfaces/progress/completion';
 import { CardSkeletonLoaderComponent } from '../small-components/card-skeleton-loader/card-skeleton-loader.component';
+import { ClassActivity, ClassCompletion, ClassScore } from '../../interfaces/progress';
 
 
 
@@ -117,15 +116,21 @@ export class TeacherDashboardComponent implements OnInit {
               catchError(() => of({ percentage: 0 } as ClassCompletion)), // Default percentage to zero
               defaultIfEmpty({ percentage: 0 } as ClassCompletion)
             ),
+            classScore: this.progressService.getClassScore(cls.id).pipe(
+              catchError(() => of({ score: 0 } as ClassScore)), // Default percentage to zero
+              defaultIfEmpty({ score: 0 } as ClassScore)
+            )
+            // classScore: this.progressService
           }).pipe(
             // Map the pipe-response, add studentcount and assignment
-            map(({ users, classActivity, classCompletion }) => {
+            map(({ users, classActivity, classCompletion, classScore }) => {
               return {
                 ...cls,
                 studentCount: users.students.length,
                 assignments: this.assignments.filter(a => a.classId === cls.id),
                 submissionActivity: classActivity.activity,
-                completionPercentage: classCompletion.percentage
+                completionPercentage: classCompletion.percentage,
+                averageScore: classScore.score
               };
             })
           )
