@@ -80,7 +80,7 @@ export async function seedDatabase(): Promise<void> {
       const teacherInput: Teacher = new Teacher(
         email,
         firstName,
-        lastName,
+        'T. '+lastName,
         passwordHash,
         schoolName,
       )
@@ -113,7 +113,7 @@ export async function seedDatabase(): Promise<void> {
       const studentInput: Student = new Student(
         email,
         firstName,
-        lastName,
+        'S. '+lastName,
         passwordHash,
         schoolName,
       )
@@ -231,12 +231,11 @@ export async function seedDatabase(): Promise<void> {
     const visibilityOptions = [
       VisibilityType.PRIVATE,
       VisibilityType.GROUP,
-      VisibilityType.PUBLIC
     ];
 
     for (const { id: assignmentId, classId } of assignments) {
-      const students = await userRep.getByClassId(classId);
-      const teachers = await userRep.getByClassId(classId);
+      const students = await userRep.getStudentsByClassId(classId);
+      const teachers = await userRep.getTeachersByClassId(classId);
       const teacherIds = teachers.map(t => t.id);
 
       // Select 5–6 students for threads
@@ -257,7 +256,6 @@ export async function seedDatabase(): Promise<void> {
           usedSteps.add(stepId); // track it to avoid reuse
 
           const visibility = faker.helpers.arrayElement(visibilityOptions);
-
 
           const thread = new QuestionThread(
             student.id!,
@@ -287,27 +285,6 @@ export async function seedDatabase(): Promise<void> {
           await messageRep.create(studentMessage);
           await messageRep.create(teacherMessage);
         }
-      }
-
-      // Bonus: Add 2 public/global threads for this assignment
-      for (let k = 0; k < 2; k++) {
-        const globalThread = new QuestionThread(
-          faker.helpers.arrayElement(students).id!,
-          assignmentId,
-          `step-${faker.number.int({ min: 1, max: 5 })}`,
-          false,
-          VisibilityType.PUBLIC,
-          []
-        );
-        const savedThread = await threadRep.create(globalThread) as { id: string };
-
-        const msg = new Message(
-          faker.helpers.arrayElement(teacherIds)!,
-          new Date(),
-          savedThread.id!,
-          faker.lorem.sentence()
-        );
-        await messageRep.create(msg);
       }
     }
   } catch (err) {
