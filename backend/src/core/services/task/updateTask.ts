@@ -2,7 +2,7 @@ import { z } from "zod";
 import { TaskService } from "./taskService";
 import { updateTaskSchema } from "../../../application/schemas";
 import { Task } from "../../entities/task";
-import { User, UserType } from "../../entities/user";
+import { UserType } from "../../entities/user";
 import { tryRepoEntityOperation, validateUserRights } from "../../helpers"; // Adjust the path if needed
 
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
