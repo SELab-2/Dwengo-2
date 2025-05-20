@@ -4,9 +4,10 @@
     <div class="center-container">
         <h2 i18n>Your assignments</h2>
         <mat-list class="grid" id="assignments-list">
-            @for (assignment of filteredAssignments; track assignment.id) {
+            @for (assignment of assignmentsInOrder; track assignment.id) {
             <li>
                 <app-assignment-card [assignment]="assignment"
+                    [disabled]="!isTeacher && !assignmentIsAccessible(assignment)"
                     (clicked)="onAssignmentClick($event)"></app-assignment-card>
 
             </li>

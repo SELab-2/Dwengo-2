@@ -36,7 +36,7 @@
     flex-direction: column;
     gap: 5%;
     min-width: 200px;
-    max-width: 200px;
+    max-width: fit-content;
     flex-shrink: 0;
 
     height: 30vh;
@@ -68,6 +68,10 @@
     overflow-x: hidden;
 }
 
+.shorten {
+    max-width: 90%;
+}
+
 #new-group {
     display: flex;
     flex-direction: column;
@@ -75,4 +79,11 @@
     justify-content: center;
 
     border: 2px dashed #000000;
+}
+
+@media screen and (max-width: 1200px) {
+    .create-group {
+        flex-direction: column;
+        width: 100%;
+    }
 }

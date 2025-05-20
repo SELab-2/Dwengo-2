@@ -1,6 +1,6 @@
 <app-authenticated-header></app-authenticated-header>
 <div class="wrap">
-    <mat-card class="base">
+    <div class="base">
         @if(showLearningPath){
         <app-learning-path [hruid]="learningPathId" [language]="language" [assignment]="false"></app-learning-path>
 
@@ -10,5 +10,5 @@
             <app-create-assignment (showGroups)="showGroups()"></app-create-assignment>
         </div>
 
-    </mat-card>
+    </div>
 </div>
