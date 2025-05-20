@@ -10,14 +10,14 @@ $_palettes: (
     10: #042104,
     20: #1a3717,
     25: #254221,
-    30: #304e2b,
+    30: #000000, //letter primary-containers
     35: #3b5a36,
     40: #476641,
     50: #5f7f58,
     60: #789970,
     70: #92b489,
     80: #add0a3,
-    90: #c8ecbd, //primary-containers
+    90: #f6fcf2, //primary-containers
     95: #d6fbcb,
     98: #ecffe3,
     99: #f7ffef,
@@ -33,9 +33,9 @@ $_palettes: (
     50: #637f52,
     60: #7c996a,
     70: #96b483,
-    80: #b1d09c,
-    90: #cdecb6,
-    95: #dbfac4,
+    80: #e0e4dc,
+    90: #e0e4dc, //secondary
+    95: #e0e4dc,
     98: #eeffde,
     99: #f7ffec,
     100: #ffffff,
@@ -67,10 +67,10 @@ $_palettes: (
     50: #747872,
     60: #8d928b,
     70: #a8aca5,
-    80: #c3c8c0,
+    80: #e0e4dc,
     90: #e0e4dc,
     95: #eef2ea,
-    98: #f7fbf3, //little buttons
+    98: #e4f1d9, //little buttons
     99: #fafef5,
     100: #ffffff,
     4: #0b0f0b,
@@ -82,7 +82,7 @@ $_palettes: (
     87: #d7dbd4,
     92: #e5e9e2,
     94: #ebefe7,
-    96: #f1f5ed,
+    96: #f1f8f1,
   ),
   neutral-variant: (0: #000000,
     10: #161e13,
