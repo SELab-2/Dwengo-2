@@ -19,7 +19,7 @@ export class GetAllLearningPaths implements Service<GetAllLearningPathsInput> {
      * @param input containing the input following the defined zod schema.
      * @returns an object containing an array of learningPaths
      */
-    async execute(input: GetAllLearningPathsInput): Promise<object> {
+    async execute(_userId: string, input: GetAllLearningPathsInput): Promise<object> {
         // When inclusion of nodes is not specified, default to false
         const includeNodes = input.includeNodes ?? false;
         const params: string[] = [];

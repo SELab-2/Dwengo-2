@@ -13,7 +13,7 @@ export class CreateSubmission extends SubmissionBaseService<CreateSubmissionInpu
      * @returns A promise resolving to an object containing the ID of the created submission.
      * @throws {ApiError} If the given user, assignment, learning-object or messages are not found or if the creation fails.
      */
-    async execute(input: CreateSubmissionInput): Promise<object> {
+    async execute(_userId: string, input: CreateSubmissionInput): Promise<object> {
         const submission = new Submission(
             input.studentId,
             input.assignmentId,

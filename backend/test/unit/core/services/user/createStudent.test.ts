@@ -21,7 +21,7 @@ describe("CreateStudent", () => {
 
     test("Should throw error because of invalid email", async () => {
         await expect(
-            createStudent.execute({
+            createStudent.execute("", {
                 email: "incorrect-email",
                 firstName: "John",
                 familyName: "Doe",
@@ -45,7 +45,7 @@ describe("CreateStudent", () => {
             schoolName: "Oxford",
             userType: UserType.STUDENT,
         };
-        await expect(createStudent.execute(params)).rejects.toEqual({
+        await expect(createStudent.execute("", params)).rejects.toEqual({
             code: ErrorCode.CONFLICT,
             message: "Email already in use.",
         });
@@ -64,7 +64,7 @@ describe("CreateStudent", () => {
             schoolName: "Oxford",
             userType: UserType.STUDENT,
         };
-        await expect(createStudent.execute(params)).rejects.toEqual({
+        await expect(createStudent.execute("", params)).rejects.toEqual({
             code: ErrorCode.CONFLICT,
             message: "Email already in use.",
         });

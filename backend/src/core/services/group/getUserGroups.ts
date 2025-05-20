@@ -2,7 +2,7 @@ import { z } from "zod";
 import { GroupService } from "./groupService";
 import { getUserGroupsSchema } from "../../../application/schemas/groupSchemas";
 import { Group } from "../../entities/group";
-import { tryRepoEntityOperation } from "../../helpers";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type GetUserGroupsInput = z.infer<typeof getUserGroupsSchema>;
 
@@ -13,7 +13,8 @@ export class GetUserGroups extends GroupService<GetUserGroupsInput> {
      * @returns A promise resolving to an object with a list of groups.
      * @throws {ApiError} If the user with the given id is not found.
      */
-    async execute(input: GetUserGroupsInput): Promise<object> {
+    async execute(userId: string, input: GetUserGroupsInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, undefined, input.idParent);
         const groups: Group[] = await tryRepoEntityOperation(
             this.groupRepository.getByUserId(input.idParent),
             "User",

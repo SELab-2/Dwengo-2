@@ -2,21 +2,30 @@ import { Assignment } from "../../../../../src/core/entities/assignment";
 import { LearningPath } from "../../../../../src/core/entities/learningPath";
 import { Submission } from "../../../../../src/core/entities/submission";
 import { GetUserProgress } from "../../../../../src/core/services/progress";
+import * as RightsValidator from "../../../../../src/core/helpers";
+import { IUserRepository } from "../../../../../src/core/repositories/userRepositoryInterface";
+
+const mockValidateUserRights = jest.spyOn(RightsValidator, "validateUserRights");
 
 // Mock repositories
 const assignmentRepository = { getByUserId: jest.fn() };
 const learningPathRepository = { getLearningPath: jest.fn() };
 const submissionRepository = { getAllForStudentInAssignment: jest.fn() };
+const mockUserRepository = {
+  getById: jest.fn(),
+  getByAssignmentId: jest.fn()
+} as unknown as jest.Mocked<IUserRepository>;
 
 // Mock inheritance base class constructor
 class TestableGetUserProgress extends GetUserProgress {
   constructor() {
-    super(submissionRepository as any, assignmentRepository as any, learningPathRepository as any);
+    super(submissionRepository as any, assignmentRepository as any, learningPathRepository as any, mockUserRepository);
   }
 }
 
 describe("GetUserProgress", () => {
   it("returns correct progress for a user with multiple assignments and submissions", async () => {
+    mockValidateUserRights.mockResolvedValue();
     const mockAssignments: Assignment[] = [
       { id: "a1", learningPathId: "lp1" } as Assignment,
       { id: "a2", learningPathId: "lp2" } as Assignment,
@@ -80,7 +89,7 @@ describe("GetUserProgress", () => {
     });
 
     const service = new TestableGetUserProgress();
-    const result = await service.execute({ idParent: "u1" });
+    const result = await service.execute("", { idParent: "u1" });
 
     expect(result).toEqual({
       progresses: [
@@ -118,7 +127,7 @@ describe("GetUserProgress", () => {
     submissionRepository.getAllForStudentInAssignment.mockResolvedValue([]);
 
     const service = new TestableGetUserProgress();
-    const result = await service.execute({ idParent: "u1" });
+    const result = await service.execute("", { idParent: "u1" });
 
     expect(result).toEqual({
       progresses: [

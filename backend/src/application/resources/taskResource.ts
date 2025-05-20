@@ -79,6 +79,7 @@ export function taskRoutes(
                 controller,
                 extractor: extractors.getTask,
                 handler: (req, data) => controller.getOne(req, data),
+                middleware,
             },
             {
                 app,
@@ -87,6 +88,7 @@ export function taskRoutes(
                 controller,
                 extractor: extractors.getTask,
                 handler: (req, data) => controller.delete(req, data),
+                middleware,
             },
             {
                 app,

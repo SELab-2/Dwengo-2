@@ -19,7 +19,7 @@ export class GetUser implements Service<GetUserInput> {
      * @returns A promise resolving to a user transformed into an object.
      * @throws {ApiError} If the user with the given id was not found.
      */
-    async execute(input: GetUserInput): Promise<object> {
+    async execute(_userId: string, input: GetUserInput): Promise<object> {
         const { getById, getByEmail } = {
             getById: (id: string) => this.userRepository.getById(id),
             getByEmail: (email: string) => this.userRepository.getByEmail(email),

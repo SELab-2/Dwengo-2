@@ -24,7 +24,7 @@ describe("GetMessage", () => {
 
         mockMessageRepository.getById.mockResolvedValue(retrievedMessage);
 
-        const result = await getMessage.execute(input);
+        const result = await getMessage.execute("", input);
 
         expect(result).toEqual(retrievedMessage.toObject());
         expect(mockMessageRepository.getById).toHaveBeenCalledWith("message-123");
@@ -33,7 +33,7 @@ describe("GetMessage", () => {
     test("Should throw a DatabaseError if retrieval fails", async () => {
         mockMessageRepository.getById.mockRejectedValue(new DatabaseError("Retrieval failed"));
 
-        await expect(getMessage.execute(input)).rejects.toThrow(DatabaseError);
+        await expect(getMessage.execute("", input)).rejects.toThrow(DatabaseError);
         expect(mockMessageRepository.getById).toHaveBeenCalledWith("message-123");
     });
 });

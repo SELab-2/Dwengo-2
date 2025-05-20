@@ -12,7 +12,7 @@ export class DeleteMessage extends MessageService<DeleteMessageInput> {
      * @returns An empty object.
      * @throws {ApiError} If the message with the given id is not found.
      */
-    async execute(input: DeleteMessageInput): Promise<object> {
+    async execute(_userId: string, input: DeleteMessageInput): Promise<object> {
         await tryRepoEntityOperation(this.messageRepository.delete(input.id), "Message", input.id, true);
         return {};
     }

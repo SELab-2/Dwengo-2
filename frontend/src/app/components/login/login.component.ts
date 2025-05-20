@@ -45,7 +45,7 @@ export class LoginComponent {
 
   public login() {
     if(this.loginForm.valid) {
-      const loginData = this.extractLoginFormValues();
+      const loginData = this.extractLoginFormValues(this.userType());
       this.sendLoginData(loginData);
     }
   }
@@ -54,10 +54,11 @@ export class LoginComponent {
     this.authenticationService.login(loginData, this.userType());
   }
 
-  private extractLoginFormValues(): UserLoginCredentials {
+  private extractLoginFormValues(userType: UserType): UserLoginCredentials {
     return {
       email: this.loginForm.value.email,
-      password: this.loginForm.value.password
+      password: this.loginForm.value.password,
+      userType: userType
     }
   }
 

@@ -13,7 +13,7 @@ export class GetAssignmentQuestionThreads extends QuestionThreadService<GetAssig
      * @returns A promise resolving to an object with a list of threads.
      * @throws {ApiError} If the assignment with the given id is not found.
      */
-    async execute(input: GetAssignmentQuestionThreadsInput): Promise<object> {
+    async execute(_userId: string, input: GetAssignmentQuestionThreadsInput): Promise<object> {
         const threads: QuestionThread[] = await tryRepoEntityOperation(
             this.questionThreadRepository.getByAssignmentId(input.idParent),
             "Assignment",

@@ -12,7 +12,7 @@ export class GetQuestionThread extends QuestionThreadService<GetQuestionThreadIn
      * @returns A promise resolving to a thread transformed into an object.
      * @throws {ApiError} If the thread with the given id was not found.
      */
-    async execute(input: GetQuestionThreadInput): Promise<object> {
+    async execute(_userId: string, input: GetQuestionThreadInput): Promise<object> {
         return (
             await tryRepoEntityOperation(this.questionThreadRepository.getById(input.id), "Thread", input.id, true)
         ).toObject();

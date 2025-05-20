@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { AssignmentService } from "./assignmentService";
 import { updateAssignmentSchema } from "../../../application/schemas/assignmentSchemas";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type UpdateAssignmentInput = z.infer<typeof updateAssignmentSchema>;
 
@@ -15,7 +16,9 @@ export class UpdateAssignment extends AssignmentService<UpdateAssignmentInput> {
      * @returns A promise resolving to an empty object.
      * @throws {ApiError} If the assignment with the given id is not found.
      */
-    async execute(input: UpdateAssignmentInput): Promise<object> {
+    async execute(userId: string, input: UpdateAssignmentInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
+
         const assignment = await this.assignmentRepository.getById(input.id);
 
         if (input.classId) assignment.classId = input.classId;

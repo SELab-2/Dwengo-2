@@ -21,7 +21,7 @@ describe("GetAssignmentUsers Service", () => {
         userRepository.getByAssignmentId.mockResolvedValue([mockStudent as unknown as User]);
 
         const idParent = "assignment-123";
-        const result = await getAssignmentUsers.execute({ idParent });
+        const result = await getAssignmentUsers.execute("", { idParent });
 
         expect(result).toEqual({ students: ["s3"] });
 
@@ -33,7 +33,7 @@ describe("GetAssignmentUsers Service", () => {
 
         const idParent = "assignment-456";
 
-        const result = await getAssignmentUsers.execute({ idParent });
+        const result = await getAssignmentUsers.execute("", { idParent });
 
         expect(result).toEqual({ students: [] });
     });

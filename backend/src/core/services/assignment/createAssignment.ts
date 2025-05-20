@@ -2,7 +2,8 @@ import { z } from "zod";
 import { AssignmentService } from "./assignmentService";
 import { createAssignmentSchema } from "../../../application/schemas";
 import { Assignment } from "../../entities/assignment";
-import { tryRepoEntityOperation } from "../../helpers";
+import { UserType } from "../../entities/user";
+import { tryRepoEntityOperation, validateUserRights } from "../../helpers";
 
 export type CreateAssignmentInput = z.infer<typeof createAssignmentSchema>;
 
@@ -16,7 +17,9 @@ export class CreateAssignment extends AssignmentService<CreateAssignmentInput> {
      * @returns A promise resolving to an object containing the ID of the created assignment.
      * @throws {ApiError} If the class with the given classId is not found or if the creation fails.
      */
-    async execute(input: CreateAssignmentInput): Promise<object> {
+    async execute(userId: string, input: CreateAssignmentInput): Promise<object> {
+        await validateUserRights(userId, this.userRepository, UserType.TEACHER, undefined);
+
         const assignment: Assignment = new Assignment(
             input.classId,
             input.learningPathId,

@@ -9,7 +9,7 @@ export type AssignStudentToGroupInput = z.infer<typeof assignStudentToGroupSchem
 export class AssignStudentToGroup implements Service<AssignStudentToGroupInput> {
     constructor(private userRepository: IUserRepository) {}
 
-    async execute(input: AssignStudentToGroupInput): Promise<object> {
+    async execute(_userId: string, input: AssignStudentToGroupInput): Promise<object> {
         await tryRepoEntityOperation(
             this.userRepository.assignToGroup(input.id, input.idParent),
             "Student | Group",

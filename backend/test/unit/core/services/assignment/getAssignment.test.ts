@@ -1,6 +1,7 @@
 import { ErrorCode } from "../../../../../src/application/types";
 import { EntityNotFoundError } from "../../../../../src/config/error";
 import { Assignment } from "../../../../../src/core/entities/assignment";
+import { validateUserRights } from "../../../../../src/core/helpers";
 import { IAssignmentRepository } from "../../../../../src/core/repositories/assignmentRepositoryInterface";
 import { GetAssignment, GetAssignmentInput } from "../../../../../src/core/services/assignment/getAssignment";
 
@@ -28,7 +29,7 @@ describe("getAssignment Service", () => {
         const assignment = new Assignment("1", "1", date, date, "name", "extra_instructions", "1");
 
         mockAssignmentRepository.getById.mockResolvedValue(assignment);
-        const result = await getAssignmentService.execute(getAssignmentParams);
+        const result = await getAssignmentService.execute("", getAssignmentParams);
 
         expect(result).toEqual({
             id: "1",
@@ -45,7 +46,7 @@ describe("getAssignment Service", () => {
     test("Should throw error", async () => {
         mockAssignmentRepository.getById.mockRejectedValue(new EntityNotFoundError("Assignment not found"));
 
-        await expect(getAssignmentService.execute(getAssignmentParams)).rejects.toMatchObject({
+        await expect(getAssignmentService.execute("", getAssignmentParams)).rejects.toMatchObject({
             code: ErrorCode.NOT_FOUND,
         });
         expect(mockAssignmentRepository.getById).toHaveBeenCalledWith("1");

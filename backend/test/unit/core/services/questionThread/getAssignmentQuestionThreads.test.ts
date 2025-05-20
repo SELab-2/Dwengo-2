@@ -46,7 +46,7 @@ describe("GetAssignmentQuestionThreads", () => {
 
         mockQuestionThreadRepository.getByAssignmentId.mockResolvedValue(questionThreads);
 
-        const result = await getAssignmentQuestionThreads.execute(input);
+        const result = await getAssignmentQuestionThreads.execute("", input);
 
         expect(result).toEqual({
             threads: questionThreads.map(qt => qt.id),
@@ -58,7 +58,7 @@ describe("GetAssignmentQuestionThreads", () => {
     test("Should return an empty list if no threads are found", async () => {
         mockQuestionThreadRepository.getByAssignmentId.mockResolvedValue([]);
 
-        const result = await getAssignmentQuestionThreads.execute(input);
+        const result = await getAssignmentQuestionThreads.execute("", input);
 
         expect(result).toEqual({ threads: [] });
 
@@ -68,7 +68,7 @@ describe("GetAssignmentQuestionThreads", () => {
     test("Should throw a DatabaseError if database retrieval fails", async () => {
         mockQuestionThreadRepository.getByAssignmentId.mockRejectedValue(new DatabaseError("Database error"));
 
-        await expect(getAssignmentQuestionThreads.execute(input)).rejects.toThrow(DatabaseError);
+        await expect(getAssignmentQuestionThreads.execute("", input)).rejects.toThrow(DatabaseError);
         expect(mockQuestionThreadRepository.getByAssignmentId).toHaveBeenCalledWith("assignment-123");
     });
 });

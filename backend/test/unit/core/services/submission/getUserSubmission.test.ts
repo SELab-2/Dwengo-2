@@ -27,7 +27,7 @@ describe('GetUserSubmissions', () => {
     mockSubmissionRepo.getByStudentId.mockResolvedValue([dummySubmission]);
 
     const service = createService();
-    const result = await service.execute({ idParent: 'user123' });
+    const result = await service.execute("", { idParent: 'user123' });
 
     expect(result).toEqual({ submissions: ['sub1'] });
     expect(mockSubmissionRepo.getByStudentId).toHaveBeenCalledWith('user123');
@@ -37,7 +37,7 @@ describe('GetUserSubmissions', () => {
     mockSubmissionRepo.getAllForStudentInAssignment.mockResolvedValue([dummySubmission]);
 
     const service = createService();
-    const result = await service.execute({
+    const result = await service.execute("", {
       idParent: 'user123',
       assignmentId: 'assign456',
     });
@@ -50,7 +50,7 @@ describe('GetUserSubmissions', () => {
     mockSubmissionRepo.getAllForStudentInAssignmentStep.mockResolvedValue([dummySubmission]);
 
     const service = createService();
-    const result = await service.execute({
+    const result = await service.execute("", {
       idParent: 'user123',
       assignmentId: 'assign456',
       taskId: 'step789',
@@ -63,7 +63,7 @@ describe('GetUserSubmissions', () => {
   it('should throw if learningObjectId is provided without assignmentId', async () => {
     const service = createService();
 
-    await expect(service.execute({
+    await expect(service.execute("", {
       idParent: 'user123',
       taskId: 'step789',
     })).rejects.toMatchObject({

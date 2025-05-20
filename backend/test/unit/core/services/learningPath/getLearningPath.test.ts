@@ -17,7 +17,7 @@ const parsedInput = getLearningPathSchema.parse(validInput);
 
 describe("GetLearningPath", () => {
     let service: GetLearningPath;
-    const mockValue: LearningPath = new LearningPath(validInput.id,validInput.language,"","","","",0,[],[],0,0,[],)
+    const mockValue: LearningPath = new LearningPath(validInput.id, validInput.language, "", "", "", "", 0, [], [], 0, 0, [],)
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -27,9 +27,9 @@ describe("GetLearningPath", () => {
 
     it("Gets a learningPath in requested language", async () => {
         mockLearningPathRepository.getLanguages.mockResolvedValue(["nl", "en"]);
-        
 
-        const result = await service.execute(parsedInput);
+
+        const result = await service.execute("", parsedInput);
 
         expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", false, "nl");
         expect(result).toEqual(mockValue.toObject(false));
@@ -38,7 +38,7 @@ describe("GetLearningPath", () => {
     it("Should default to English if requested language is not available", async () => {
         mockLearningPathRepository.getLanguages.mockResolvedValue(["en", "fr"]);
 
-        const result = await service.execute({ id: "123", language: "nl" });
+        const result = await service.execute("", { id: "123", language: "nl" });
 
         expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", false, "en");
         expect(result).toEqual(mockValue.toObject(false));
@@ -47,7 +47,7 @@ describe("GetLearningPath", () => {
     it("Falls back to first language if English and requested is not available", async () => {
         mockLearningPathRepository.getLanguages.mockResolvedValue(["nl", "de"]);
 
-        const result = await service.execute({ id: "123", language: "fr" });
+        const result = await service.execute("", { id: "123", language: "fr" });
 
         expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", false, "nl");
     });
@@ -55,7 +55,7 @@ describe("GetLearningPath", () => {
     it("Defaults to English when no specific language is requested", async () => {
         mockLearningPathRepository.getLanguages.mockResolvedValue(["nl", "en"]);
 
-        const result = await service.execute({ id: "123" });
+        const result = await service.execute("", { id: "123" });
 
         expect(mockLearningPathRepository.getLearningPath).toHaveBeenCalledWith("123", false, "en");
     });

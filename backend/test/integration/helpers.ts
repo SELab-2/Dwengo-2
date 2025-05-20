@@ -27,11 +27,12 @@ export async function initializeUser(userType: string, app: Express, _email: str
         .post("/login")
         .send({
             email: _email,
-            password: password
+            password: password,
+            userType: userType
         })
         .set("Content-Type", "application/json");
     const token = loginResponse.body.token;
     const id = loginResponse.body.id;
 
-    return {password, token, id};
+    return { password, token, id };
 }

@@ -3,5 +3,5 @@ import { IMessageRepository } from "../../repositories/messageRepositoryInterfac
 
 export abstract class MessageService<T> implements Service<T> {
     constructor(protected messageRepository: IMessageRepository) {}
-    abstract execute(input: T): Promise<object>;
+    abstract execute(userId: string, input: T): Promise<object>;
 }

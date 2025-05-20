@@ -43,7 +43,7 @@ describe('Test progress API endpoints', () => {
             .post('/assignments')
             .send(assignment)
             .set('Content-Type', 'application/json')
-            .set("Authorization", "Bearer " + studentDetails.token);
+            .set("Authorization", "Bearer " + teacherDetails.token);
         assignmentId = assignmentRes.body.id; // save for later tests
 
         const task = {
@@ -162,7 +162,7 @@ describe('Test progress API endpoints', () => {
             const res = await request(app)
                 .get(`/users/${studentDetails.id}/progress`)
                 .set('Content-Type', 'application/json')
-                .set("Authorization", "Bearer " + teacherDetails.token);
+                .set("Authorization", "Bearer " + studentDetails.token);
             expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('progresses');
             expect(res.body.progresses.length).toBe(1);
