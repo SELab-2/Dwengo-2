@@ -11,7 +11,8 @@ export type GetUserAssignmentProgressInput = z.infer<typeof getUserAssignmentPro
 
 export class GetUserAssignmentProgress
     extends ProgressBaseService<GetUserAssignmentProgressInput>
-    implements Service<GetUserAssignmentProgressInput> {
+    implements Service<GetUserAssignmentProgressInput>
+{
     async execute(_userId: string, input: GetUserAssignmentProgressInput): Promise<object> {
         const assignment: Assignment = await tryRepoEntityOperation(
             this.assignmentRepository.getById(input.assignmentId),
