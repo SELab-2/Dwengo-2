@@ -52,7 +52,7 @@
         "@typescript-eslint/eslint-plugin": "^8.25.0",
         "@typescript-eslint/parser": "^8.25.0",
         "chromedriver": "^136.0.0",
-        "eslint": "^9.21.0",
+        "eslint": "^9.28.0",
         "geckodriver": "^5.0.0",
         "jasmine-core": "~5.1.0",
         "karma": "~6.4.0",
