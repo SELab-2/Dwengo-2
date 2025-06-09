@@ -14,7 +14,7 @@
     "private": true,
     "dependencies": {
         "@angular-devkit/core": "^19.2.10",
-        "@angular-eslint/builder": "^19.1.0",
+        "@angular-eslint/builder": "^20.0.0",
         "@angular-eslint/eslint-plugin": "^19.1.0",
         "@angular-eslint/eslint-plugin-template": "^19.1.0",
         "@angular-eslint/schematics": "^19.1.0",
@@ -36,7 +36,7 @@
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^19.2.9",
-        "@angular-eslint/builder": "^19.1.0",
+        "@angular-eslint/builder": "^20.0.0",
         "@angular-eslint/eslint-plugin": "^19.1.0",
         "@angular-eslint/eslint-plugin-template": "^19.1.0",
         "@angular-eslint/schematics": "^19.1.0",
